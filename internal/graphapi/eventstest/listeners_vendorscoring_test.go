@@ -1,10 +1,12 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
 	"testing"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -25,26 +27,26 @@ const (
 )
 
 func TestVendorScoringConfigListenerRecompute(t *testing.T) {
-	scoringUser := suite.userBuilder(context.Background(), t)
-	ctx := setContext(scoringUser.UserCtx, suite.client.db)
+	scoringUser := suite.UserBuilder(context.Background(), t)
+	ctx := th.SetContext(scoringUser.UserCtx, suite.Client.DB)
 
-	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.VendorScoringListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.VendorScoringListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
-	entity := (&EntityBuilder{client: suite.client, Tier: enums.VendorTierStandard}).MustNew(scoringUser.UserCtx, t)
+	entity := (&th.EntityBuilder{Client: suite.Client, Tier: enums.VendorTierStandard}).MustNew(scoringUser.UserCtx, t)
 
-	configResp, err := suite.client.api.CreateVendorScoringConfig(scoringUser.UserCtx, testclient.CreateVendorScoringConfigInput{
+	configResp, err := suite.Client.API.CreateVendorScoringConfig(scoringUser.UserCtx, testclient.CreateVendorScoringConfigInput{
 		OwnerID: &scoringUser.OrganizationID,
 	})
 	assert.NilError(t, err)
 
 	configID := configResp.CreateVendorScoringConfig.VendorScoringConfig.ID
 
-	question := mustVendorQuestion(t, "IAM-05.1")
+	question := th.MustVendorQuestion(t, "IAM-05.1")
 	falseAnswer := "false"
 
-	_, err = suite.client.api.CreateVendorRiskScore(scoringUser.UserCtx, testclient.CreateVendorRiskScoreInput{
+	_, err = suite.Client.API.CreateVendorRiskScore(scoringUser.UserCtx, testclient.CreateVendorRiskScoreInput{
 		OwnerID:               &scoringUser.OrganizationID,
 		VendorScoringConfigID: &configID,
 		EntityID:              entity.ID,
@@ -57,21 +59,21 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	baseline, err := suite.client.db.Entity.Get(ctx, entity.ID)
+	baseline, err := suite.Client.DB.Entity.Get(ctx, entity.ID)
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(answeredQuestionScore, baseline.RiskScore))
 	assert.Check(t, is.Equal("MEDIUM", baseline.RiskRating))
 	assert.Check(t, is.Equal(1, baseline.RiskScoreCoverage))
 
 	t.Run("update without scoring_mode or risk_thresholds does not recompute", func(t *testing.T) {
-		err := suite.client.db.Entity.UpdateOneID(entity.ID).
+		err := suite.Client.DB.Entity.UpdateOneID(entity.ID).
 			SetRiskScore(sentinelRiskScore).
 			SetRiskRating(sentinelRiskRating).
 			Exec(ctx)
 		assert.NilError(t, err)
 
 		// disabled so it never contributes to the FULL_QUESTIONNAIRE penalty arithmetic later
-		_, err = suite.client.api.UpdateVendorScoringConfig(scoringUser.UserCtx, configID, testclient.UpdateVendorScoringConfigInput{
+		_, err = suite.Client.API.UpdateVendorScoringConfig(scoringUser.UserCtx, configID, testclient.UpdateVendorScoringConfigInput{
 			Questions: &models.VendorScoringQuestionsConfig{
 				Custom: []models.VendorScoringQuestionDef{{
 					Name:            "Disabled custom probe",
@@ -84,9 +86,9 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
-		unchanged, err := suite.client.db.Entity.Get(ctx, entity.ID)
+		unchanged, err := suite.Client.DB.Entity.Get(ctx, entity.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(sentinelRiskScore, unchanged.RiskScore))
 		assert.Check(t, is.Equal(sentinelRiskRating, unchanged.RiskRating))
@@ -99,13 +101,13 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 			},
 		}
 
-		_, err := suite.client.api.UpdateVendorScoringConfig(scoringUser.UserCtx, configID, testclient.UpdateVendorScoringConfigInput{
+		_, err := suite.Client.API.UpdateVendorScoringConfig(scoringUser.UserCtx, configID, testclient.UpdateVendorScoringConfigInput{
 			RiskThresholds: &widened,
 		})
 		assert.NilError(t, err)
 
 		recomputed, err := listenerPoll(func() (*generated.Entity, error) {
-			return suite.client.db.Entity.Get(ctx, entity.ID)
+			return suite.Client.DB.Entity.Get(ctx, entity.ID)
 		}, func(e *generated.Entity) bool {
 			return e.RiskRating == "LOW"
 		})
@@ -117,7 +119,7 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 	t.Run("scoring_mode update recomputes with unanswered penalties", func(t *testing.T) {
 		fullMode := enums.VendorScoringModeFullQuestionnaire
 
-		_, err := suite.client.api.UpdateVendorScoringConfig(scoringUser.UserCtx, configID, testclient.UpdateVendorScoringConfigInput{
+		_, err := suite.Client.API.UpdateVendorScoringConfig(scoringUser.UserCtx, configID, testclient.UpdateVendorScoringConfigInput{
 			ScoringMode: &fullMode,
 		})
 		assert.NilError(t, err)
@@ -125,7 +127,7 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 		expected := answeredQuestionScore + (len(models.DefaultVendorScoringQuestions)-1)*unansweredPenalty
 
 		recomputed, err := listenerPoll(func() (*generated.Entity, error) {
-			return suite.client.db.Entity.Get(ctx, entity.ID)
+			return suite.Client.DB.Entity.Get(ctx, entity.ID)
 		}, func(e *generated.Entity) bool {
 			return e.RiskScore == expected
 		})
@@ -134,5 +136,5 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 		assert.Check(t, is.Equal(1, recomputed.RiskScoreCoverage))
 	})
 
-	cleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(scoringUser.UserCtx, t)
 }

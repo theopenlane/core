@@ -1,11 +1,13 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
 	"testing"
 	"time"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
 
@@ -17,17 +19,17 @@ import (
 )
 
 func TestCampaignRecurringListener(t *testing.T) {
-	user := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	ctx := setContext(user.UserCtx, suite.client.db)
+	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
 
-	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.CampaignRecurringListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.CampaignRecurringListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
 	newCampaign := func(t *testing.T, name string, active bool) *generated.CampaignCreate {
 		t.Helper()
 
-		return suite.client.db.Campaign.Create().
+		return suite.Client.DB.Campaign.Create().
 			SetName(name).
 			SetOwnerID(user.OrganizationID).
 			SetStatus(enums.CampaignStatusActive).
@@ -40,7 +42,7 @@ func TestCampaignRecurringListener(t *testing.T) {
 	nextRunAt := func(t *testing.T, id string) *models.DateTime {
 		t.Helper()
 
-		camp, err := suite.client.db.Campaign.Get(ctx, id)
+		camp, err := suite.Client.DB.Campaign.Get(ctx, id)
 		assert.NilError(t, err)
 
 		return camp.NextRunAt
@@ -51,9 +53,9 @@ func TestCampaignRecurringListener(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Check(t, camp.NextRunAt == nil)
 
-		assert.NilError(t, suite.client.db.Campaign.UpdateOneID(camp.ID).SetIsActive(true).Exec(ctx))
+		assert.NilError(t, suite.Client.DB.Campaign.UpdateOneID(camp.ID).SetIsActive(true).Exec(ctx))
 
-		waitForCondition(t, func() bool { return nextRunAt(t, camp.ID) != nil }, "activation should set next_run_at")
+		th.WaitForCondition(t, func() bool { return nextRunAt(t, camp.ID) != nil }, "activation should set next_run_at")
 		assert.Check(t, time.Time(*nextRunAt(t, camp.ID)).After(time.Now()))
 	})
 
@@ -63,9 +65,9 @@ func TestCampaignRecurringListener(t *testing.T) {
 			Save(ctx)
 		assert.NilError(t, err)
 
-		assert.NilError(t, suite.client.db.Campaign.UpdateOneID(camp.ID).SetIsActive(false).Exec(ctx))
+		assert.NilError(t, suite.Client.DB.Campaign.UpdateOneID(camp.ID).SetIsActive(false).Exec(ctx))
 
-		waitForCondition(t, func() bool { return nextRunAt(t, camp.ID) == nil }, "deactivation should clear next_run_at")
+		th.WaitForCondition(t, func() bool { return nextRunAt(t, camp.ID) == nil }, "deactivation should clear next_run_at")
 	})
 
 	t.Run("recurrence shape change recomputes next run", func(t *testing.T) {
@@ -76,9 +78,9 @@ func TestCampaignRecurringListener(t *testing.T) {
 			Save(ctx)
 		assert.NilError(t, err)
 
-		assert.NilError(t, suite.client.db.Campaign.UpdateOneID(camp.ID).SetRecurrenceInterval(2).Exec(ctx))
+		assert.NilError(t, suite.Client.DB.Campaign.UpdateOneID(camp.ID).SetRecurrenceInterval(2).Exec(ctx))
 
-		waitForCondition(t, func() bool {
+		th.WaitForCondition(t, func() bool {
 			next := nextRunAt(t, camp.ID)
 
 			return next != nil && time.Time(*next).Sub(seeded) > time.Hour
@@ -93,9 +95,9 @@ func TestCampaignRecurringListener(t *testing.T) {
 			Save(ctx)
 		assert.NilError(t, err)
 
-		assert.NilError(t, suite.client.db.Campaign.UpdateOneID(camp.ID).SetDescription("no schedule fields touched").Exec(ctx))
+		assert.NilError(t, suite.Client.DB.Campaign.UpdateOneID(camp.ID).SetDescription("no schedule fields touched").Exec(ctx))
 
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
 		next := nextRunAt(t, camp.ID)
 		assert.Assert(t, next != nil)

@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
@@ -22,17 +24,17 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users for workflow testing
-	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	approver := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	approver := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 
 	// Add approver to initiator's organization
-	suite.addUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
+	suite.AddUserToOrganization(initiator.UserCtx, t, &approver, enums.RoleAdmin, initiator.OrganizationID)
 
 	// Use initiator's context for creating workflow definitions (has user + org)
-	// Then use setContext for bypassing privacy on engine operations
-	ctx := setContext(initiator.UserCtx, suite.client.db)
+	// Then use th.SetContext for bypassing privacy on engine operations
+	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
 
-	workflowEngine, workflowRuntime := suite.acquireWorkflowRuntime(t)
+	workflowEngine, workflowRuntime := suite.AcquireWorkflowRuntime(t)
 
 	// Create workflow definition with approval action targeting the approver user
 	targets := []workflows.TargetConfig{
@@ -55,7 +57,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 	paramsBytes, err := json.Marshal(params)
 	assert.NilError(t, err)
 
-	workflowDef, err := suite.client.db.WorkflowDefinition.Create().
+	workflowDef, err := suite.Client.DB.WorkflowDefinition.Create().
 		SetName("Control Approval Workflow").
 		SetSchemaType("Control").
 		SetWorkflowKind(enums.WorkflowKindApproval).
@@ -81,7 +83,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 
 	t.Run("complete approval workflow", func(t *testing.T) {
 		// Create a control in NOT_IMPLEMENTED status
-		control, err := suite.client.db.Control.Create().
+		control, err := suite.Client.DB.Control.Create().
 			SetRefCode("CTL-" + ulids.New().String()).
 			SetTitle("Test Control for Approval").
 			SetStatus(enums.ControlStatusNotImplemented).
@@ -107,10 +109,10 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.Equal(t, workflowDef.ID, instance.WorkflowDefinitionID)
 
 		// Wait for all cascading events to complete before checking state
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Verify assignment was created
-		assignments, err := graphapi.WaitForAssignments(ctx, suite.client.db, instance.ID, 1)
+		assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
 		assert.NilError(t, err)
 		assert.Check(t, len(assignments) >= 1, "expected at least one assignment")
 
@@ -119,7 +121,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.Check(t, assignment.AssignmentKey != "")
 
 		// Verify WorkflowObjectRef was created
-		objectRef, err := suite.client.db.WorkflowObjectRef.Query().
+		objectRef, err := suite.Client.DB.WorkflowObjectRef.Query().
 			Where(workflowobjectref.WorkflowInstanceIDEQ(instance.ID)).
 			Only(ctx)
 		assert.NilError(t, err)
@@ -133,15 +135,15 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events to complete
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Verify workflow instance completed
-		instance, err = graphapi.WaitForInstanceState(ctx, suite.client.db, instance.ID, enums.WorkflowInstanceStateCompleted)
+		instance, err = graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateCompleted)
 		assert.NilError(t, err)
 		assert.Equal(t, enums.WorkflowInstanceStateCompleted, instance.State)
 
 		// Verify assignment was updated
-		assignment, err = suite.client.db.WorkflowAssignment.Get(ctx, assignment.ID)
+		assignment, err = suite.Client.DB.WorkflowAssignment.Get(ctx, assignment.ID)
 		assert.NilError(t, err)
 		assert.Equal(t, enums.WorkflowAssignmentStatusApproved, assignment.Status)
 		assert.Assert(t, assignment.ApprovalMetadata.ApprovedAt != "")
@@ -149,7 +151,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 
 	t.Run("rejection workflow", func(t *testing.T) {
 		// Create another control
-		control, err := suite.client.db.Control.Create().
+		control, err := suite.Client.DB.Control.Create().
 			SetRefCode("CTL-" + ulids.New().String()).
 			SetTitle("Test Control for Rejection").
 			SetStatus(enums.ControlStatusNotImplemented).
@@ -171,10 +173,10 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.Check(t, instance != nil)
 
 		// Wait for all cascading events to complete
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Verify assignments were created
-		assignments, err := graphapi.WaitForAssignments(ctx, suite.client.db, instance.ID, 1)
+		assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
 		assert.NilError(t, err)
 		assert.Check(t, len(assignments) >= 1)
 
@@ -187,15 +189,15 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events to complete
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Verify workflow instance failed
-		instance, err = graphapi.WaitForInstanceState(ctx, suite.client.db, instance.ID, enums.WorkflowInstanceStateFailed)
+		instance, err = graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateFailed)
 		assert.NilError(t, err)
 		assert.Equal(t, enums.WorkflowInstanceStateFailed, instance.State)
 
 		// Verify assignment was updated
-		assignment, err = suite.client.db.WorkflowAssignment.Get(ctx, assignment.ID)
+		assignment, err = suite.Client.DB.WorkflowAssignment.Get(ctx, assignment.ID)
 		assert.NilError(t, err)
 		assert.Equal(t, enums.WorkflowAssignmentStatusRejected, assignment.Status)
 		assert.Equal(t, "Control needs more details", assignment.RejectionMetadata.RejectionReason)
@@ -206,19 +208,19 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 	t.Parallel()
 
 	// Create dedicated test users
-	initiator := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	approver1 := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
-	approver2 := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	initiator := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	approver1 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
+	approver2 := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 
 	// Add approvers to initiator's organization
-	suite.addUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
-	suite.addUserToOrganization(initiator.UserCtx, t, &approver2, enums.RoleAdmin, initiator.OrganizationID)
+	suite.AddUserToOrganization(initiator.UserCtx, t, &approver1, enums.RoleAdmin, initiator.OrganizationID)
+	suite.AddUserToOrganization(initiator.UserCtx, t, &approver2, enums.RoleAdmin, initiator.OrganizationID)
 
 	// Use initiator's context for creating workflow definitions (has user + org)
-	// Then use setContext for bypassing privacy on engine operations
-	ctx := setContext(initiator.UserCtx, suite.client.db)
+	// Then use th.SetContext for bypassing privacy on engine operations
+	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
 
-	workflowEngine, workflowRuntime := suite.acquireWorkflowRuntime(t)
+	workflowEngine, workflowRuntime := suite.AcquireWorkflowRuntime(t)
 
 	// Create workflow with two sequential approval actions
 	targets1 := []workflows.TargetConfig{
@@ -261,7 +263,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 	params2Bytes, err := json.Marshal(params2)
 	assert.NilError(t, err)
 
-	workflowDef, err := suite.client.db.WorkflowDefinition.Create().
+	workflowDef, err := suite.Client.DB.WorkflowDefinition.Create().
 		SetName("Multi-Approval Workflow").
 		SetSchemaType("Control").
 		SetWorkflowKind(enums.WorkflowKindApproval).
@@ -292,7 +294,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 
 	t.Run("sequential approvals", func(t *testing.T) {
 		// Create a control
-		control, err := suite.client.db.Control.Create().
+		control, err := suite.Client.DB.Control.Create().
 			SetRefCode("CTL-" + ulids.New().String()).
 			SetTitle("Multi-Approval Control").
 			SetStatus(enums.ControlStatusNotImplemented).
@@ -314,10 +316,10 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.Check(t, instance != nil)
 
 		// Wait for all cascading events from trigger to complete
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Wait for first assignment to be created (only first approval action runs initially)
-		assignments, err := graphapi.WaitForAssignments(ctx, suite.client.db, instance.ID, 1)
+		assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
 		assert.NilError(t, err)
 		assert.Check(t, len(assignments) >= 1)
 
@@ -331,10 +333,10 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events from first approval to complete
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Wait for second assignment to be created (workflow resumes after first approval)
-		assignments, err = graphapi.WaitForAssignments(ctx, suite.client.db, instance.ID, 2)
+		assignments, err = graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 2)
 		assert.NilError(t, err)
 		assert.Check(t, len(assignments) >= 2, "should have at least 2 assignments after first approval")
 
@@ -356,17 +358,17 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events from second approval to complete
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Verify workflow completed
-		instance, err = graphapi.WaitForInstanceState(ctx, suite.client.db, instance.ID, enums.WorkflowInstanceStateCompleted)
+		instance, err = graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateCompleted)
 		assert.NilError(t, err)
 		assert.Equal(t, enums.WorkflowInstanceStateCompleted, instance.State)
 	})
 
 	t.Run("first approver rejects", func(t *testing.T) {
 		// Create another control
-		control, err := suite.client.db.Control.Create().
+		control, err := suite.Client.DB.Control.Create().
 			SetRefCode("CTL-" + ulids.New().String()).
 			SetTitle("Rejection Test Control").
 			SetStatus(enums.ControlStatusNotImplemented).
@@ -388,10 +390,10 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.Check(t, instance != nil)
 
 		// Wait for all cascading events from trigger to complete
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Wait for first assignment
-		assignments, err := graphapi.WaitForAssignments(ctx, suite.client.db, instance.ID, 1)
+		assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
 		assert.NilError(t, err)
 		assert.Check(t, len(assignments) >= 1)
 
@@ -404,10 +406,10 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events from rejection to complete
-		waitForGala(t, workflowRuntime)
+		th.WaitForGala(t, workflowRuntime)
 
 		// Verify workflow failed
-		instance, err = graphapi.WaitForInstanceState(ctx, suite.client.db, instance.ID, enums.WorkflowInstanceStateFailed)
+		instance, err = graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateFailed)
 		assert.NilError(t, err)
 		assert.Equal(t, enums.WorkflowInstanceStateFailed, instance.State)
 	})

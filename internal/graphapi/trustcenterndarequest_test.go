@@ -6,6 +6,8 @@ import (
 	"strings"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
@@ -19,13 +21,13 @@ import (
 )
 
 func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenterNoApproval := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenterNoApproval := tcOrg.TrustCenter
 
-	tcOrg2 := createFreshOrgWithTrustCenter(t, withNDATemplate(), withAllUserTypes())
-	trustCenterWithApproval := tcOrg2.trustCenter
+	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
+	trustCenterWithApproval := tcOrg2.TrustCenter
 
-	_, err := suite.client.api.UpdateTrustCenter(tcOrg2.admin.UserCtx, trustCenterWithApproval.ID, testclient.UpdateTrustCenterInput{
+	_, err := suite.Client.API.UpdateTrustCenter(tcOrg2.Admin.UserCtx, trustCenterWithApproval.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 			NdaApprovalRequired: lo.ToPtr(true),
 		},
@@ -73,16 +75,16 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		{
 			name:            "happy path - no approval required, status should be REQUESTED",
 			input:           noApprovalRequiredRequest,
-			client:          suite.client.api,
-			ctx:             tcOrg.owner.UserCtx,
+			client:          suite.Client.API,
+			ctx:             tcOrg.Owner.UserCtx,
 			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
 			expectEmailSent: ndaEmail,
 		},
 		{
 			name:            "happy path - resend request with no approval required, status should be REQUESTED",
 			input:           noApprovalRequiredRequest,
-			client:          suite.client.api,
-			ctx:             tcOrg.owner.UserCtx,
+			client:          suite.Client.API,
+			ctx:             tcOrg.Owner.UserCtx,
 			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
 			expectEmailSent: ndaEmail,
 			setStatus:       &enums.TrustCenterNDARequestStatusSigned,
@@ -90,8 +92,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		{
 			name:                   "happy path - approval required, status should be NEEDS_APPROVAL, set to approved",
 			input:                  emailApprovedRequest,
-			client:                 suite.client.api,
-			ctx:                    tcOrg2.owner.UserCtx,
+			client:                 suite.Client.API,
+			ctx:                    tcOrg2.Owner.UserCtx,
 			expectedStatus:         enums.TrustCenterNDARequestStatusNeedsApproval,
 			expectEmailSent:        approvalEmail, // approvers notified the request is pending approval
 			setStatus:              &enums.TrustCenterNDARequestStatusApproved,
@@ -100,8 +102,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		{
 			name:            "happy path - sign after approval",
 			input:           emailApprovedRequest,
-			client:          suite.client.api,
-			ctx:             tcOrg2.admin.UserCtx,
+			client:          suite.Client.API,
+			ctx:             tcOrg2.Admin.UserCtx,
 			expectedStatus:  enums.TrustCenterNDARequestStatusApproved,
 			expectEmailSent: ndaEmail,
 			setStatus:       &enums.TrustCenterNDARequestStatusSigned,
@@ -109,8 +111,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		{
 			name:            "happy path - re-request after approval",
 			input:           emailApprovedRequest,
-			client:          suite.client.api,
-			ctx:             tcOrg2.superAdmin.UserCtx,
+			client:          suite.Client.API,
+			ctx:             tcOrg2.SuperAdmin.UserCtx,
 			expectedStatus:  enums.TrustCenterNDARequestStatusSigned,
 			expectEmailSent: authEmail, // no email because already signed and not updating in the request here
 
@@ -118,8 +120,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		{
 			name:                   "happy path - approval required, status should be NEEDS_APPROVAL, set to declined for next test",
 			input:                  emailDeclinedRequest,
-			client:                 suite.client.api,
-			ctx:                    tcOrg2.owner.UserCtx,
+			client:                 suite.Client.API,
+			ctx:                    tcOrg2.Owner.UserCtx,
 			expectedStatus:         enums.TrustCenterNDARequestStatusNeedsApproval,
 			expectEmailSent:        approvalEmail, // approvers notified the request is pending approval
 			setStatus:              &enums.TrustCenterNDARequestStatusDeclined,
@@ -135,8 +137,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				Reason:        lo.ToPtr("Need access to security documentation"),
 				TrustCenterID: &trustCenterNoApproval.ID,
 			},
-			client:          suite.client.api,
-			ctx:             tcOrg.owner.UserCtx,
+			client:          suite.Client.API,
+			ctx:             tcOrg.Owner.UserCtx,
 			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
 			expectEmailSent: ndaEmail,
 		},
@@ -148,9 +150,9 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				Email:         gofakeit.Email(),
 				TrustCenterID: &trustCenterNoApproval.ID,
 			},
-			client:      suite.client.api,
-			ctx:         tcOrg.member.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Member.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "user cannot create in another org's trust center",
@@ -160,9 +162,9 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				Email:         gofakeit.Email(),
 				TrustCenterID: &trustCenterWithApproval.ID,
 			},
-			client:      suite.client.api,
-			ctx:         tcOrg.owner.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Owner.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "invalid email",
@@ -172,8 +174,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				Email:         "invalid-email",
 				TrustCenterID: &trustCenterNoApproval.ID,
 			},
-			client:      suite.client.api,
-			ctx:         tcOrg.owner.UserCtx,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Owner.UserCtx,
 			expectedErr: "validator failed",
 		},
 		{
@@ -184,8 +186,8 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				Email:         gofakeit.Email(),
 				TrustCenterID: &trustCenterNoApproval.ID,
 			},
-			client:      suite.client.api,
-			ctx:         tcOrg.owner.UserCtx,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Owner.UserCtx,
 			expectedErr: "first_name",
 		},
 	}
@@ -193,10 +195,10 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			// Clear any existing jobs and emails
-			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			suite.mockEmailSender().Reset()
+			suite.MockEmailSender().Reset()
 
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
@@ -224,7 +226,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			suite.WaitForEvents()
 
 			if tc.expectEmailSent != "" {
-				msgs := suite.mockEmailSender().Messages()
+				msgs := suite.MockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
 				found := strings.Contains(msgs[0].Subject, tc.expectEmailSent) ||
@@ -232,18 +234,18 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 					strings.Contains(msgs[0].Text, tc.expectEmailSent)
 				assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectEmailSent)
 			} else {
-				msgs := suite.mockEmailSender().Messages()
+				msgs := suite.MockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 
 			if tc.setStatus != nil || tc.setEmptyStatus {
 				// Clear any existing jobs and emails
-				err = suite.client.db.Job.TruncateRiverTables(tc.ctx)
+				err = suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 				assert.NilError(t, err)
 
-				suite.mockEmailSender().Reset()
+				suite.MockEmailSender().Reset()
 
-				resp, err := suite.client.api.UpdateTrustCenterNDARequest(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+				resp, err := suite.Client.API.UpdateTrustCenterNDARequest(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
 					Status: tc.setStatus,
 				})
 				assert.NilError(t, err)
@@ -262,7 +264,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				suite.WaitForEvents()
 
 				if tc.expectedSecondaryEmail != "" {
-					msgs := suite.mockEmailSender().Messages()
+					msgs := suite.MockEmailSender().Messages()
 					assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
 					found := strings.Contains(msgs[0].Subject, tc.expectedSecondaryEmail) ||
@@ -270,7 +272,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 						strings.Contains(msgs[0].Text, tc.expectedSecondaryEmail)
 					assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectedSecondaryEmail)
 				} else {
-					msgs := suite.mockEmailSender().Messages()
+					msgs := suite.MockEmailSender().Messages()
 					assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 				}
 			}
@@ -283,16 +285,16 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
-	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg2.Owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterNDARequest(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate(), withAllUserTypes())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
+	trustCenter := tcOrg.TrustCenter
 
-	ndaRequest, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaRequest, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -310,28 +312,28 @@ func TestQueryTrustCenterNDARequest(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
-			client:  suite.client.api,
-			ctx:     tcOrg.admin.UserCtx,
+			client:  suite.Client.API,
+			ctx:     tcOrg.Admin.UserCtx,
 		},
 		{
 			name:    "happy path, view only user",
 			queryID: ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
-			client:  suite.client.api,
-			ctx:     tcOrg.member.UserCtx,
+			client:  suite.Client.API,
+			ctx:     tcOrg.Member.UserCtx,
 		},
 		{
 			name:     "not found, different org",
 			queryID:  ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "not found, invalid id",
 			queryID:  ulids.New().String(),
-			client:   suite.client.api,
-			ctx:      tcOrg.superAdmin.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      tcOrg.SuperAdmin.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -349,15 +351,15 @@ func TestQueryTrustCenterNDARequest(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterNDARequests(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
 
-	_, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	_, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -365,7 +367,7 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	_, err = suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -381,20 +383,20 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 	}{
 		{
 			name:        "happy path",
-			client:      suite.client.api,
-			ctx:         tcOrg.admin.UserCtx,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Admin.UserCtx,
 			expectCount: 2,
 		},
 		{
 			name:        "happy path, view only user",
-			client:      suite.client.api,
-			ctx:         tcOrg.member.UserCtx,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Member.UserCtx,
 			expectCount: 2,
 		},
 		{
 			name:        "different org, no results",
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
 			expectCount: 0,
 		},
 	}
@@ -408,21 +410,21 @@ func TestQueryTrustCenterNDARequests(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
 
-	_, err := suite.client.api.UpdateTrustCenter(tcOrg.owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+	_, err := suite.Client.API.UpdateTrustCenter(tcOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 			NdaApprovalRequired: lo.ToPtr(true),
 		},
 	})
 	assert.NilError(t, err)
 
-	ndaRequest, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaRequest, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -444,8 +446,8 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 			input: testclient.UpdateTrustCenterNDARequestInput{
 				FirstName: lo.ToPtr("UpdatedFirstName"),
 			},
-			client:          suite.client.api,
-			ctx:             tcOrg.owner.UserCtx,
+			client:          suite.Client.API,
+			ctx:             tcOrg.Owner.UserCtx,
 			expectEmailSent: false,
 		},
 		{
@@ -453,8 +455,8 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 			input: testclient.UpdateTrustCenterNDARequestInput{
 				Status: lo.ToPtr(enums.TrustCenterNDARequestStatusApproved),
 			},
-			client:          suite.client.api,
-			ctx:             tcOrg.admin.UserCtx,
+			client:          suite.Client.API,
+			ctx:             tcOrg.Admin.UserCtx,
 			expectEmailSent: true,
 		},
 		{
@@ -462,9 +464,9 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 			input: testclient.UpdateTrustCenterNDARequestInput{
 				FirstName: lo.ToPtr("ShouldNotUpdate"),
 			},
-			client:          suite.client.api,
-			ctx:             tcOrg.member.UserCtx,
-			expectedErr:     notAuthorizedErrorMsg,
+			client:          suite.Client.API,
+			ctx:             tcOrg.Member.UserCtx,
+			expectedErr:     th.NotAuthorizedErrorMsg,
 			expectEmailSent: false,
 		},
 		{
@@ -472,9 +474,9 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 			input: testclient.UpdateTrustCenterNDARequestInput{
 				FirstName: lo.ToPtr("ShouldNotUpdate"),
 			},
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
-			expectedErr:     notFoundErrorMsg,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
+			expectedErr:     th.NotFoundErrorMsg,
 			expectEmailSent: false,
 		},
 	}
@@ -482,10 +484,10 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			// Clear any existing jobs and emails
-			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			suite.mockEmailSender().Reset()
+			suite.MockEmailSender().Reset()
 
 			resp, err := tc.client.UpdateTrustCenterNDARequest(tc.ctx, ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, tc.input)
 			if tc.expectedErr != "" {
@@ -512,26 +514,26 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 			suite.WaitForEvents()
 
 			if tc.expectEmailSent {
-				msgs := suite.mockEmailSender().Messages()
+				msgs := suite.MockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 			} else {
-				msgs := suite.mockEmailSender().Messages()
+				msgs := suite.MockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testing.T) {
-	trustcenterOrg := createFreshOrgWithTrustCenter(t, withNDATemplate(), withAllUserTypes())
-	trustCenter := trustcenterOrg.trustCenter
+	trustcenterOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
+	trustCenter := trustcenterOrg.TrustCenter
 
-	group := (&GroupBuilder{client: suite.client}).MustNew(trustcenterOrg.owner.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, GroupID: group.ID, UserID: trustcenterOrg.member.ID}).MustNew(trustcenterOrg.owner.UserCtx, t)
+	group := (&th.GroupBuilder{Client: suite.Client}).MustNew(trustcenterOrg.Owner.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, GroupID: group.ID, UserID: trustcenterOrg.Member.ID}).MustNew(trustcenterOrg.Owner.UserCtx, t)
 
-	_, err := suite.client.api.UpdateTrustCenter(trustcenterOrg.owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+	_, err := suite.Client.API.UpdateTrustCenter(trustcenterOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 			NdaApprovalRequired: lo.ToPtr(true),
 			NdaApproverGroupID:  &group.ID,
@@ -539,11 +541,11 @@ func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testin
 	})
 	assert.NilError(t, err)
 
-	err = suite.client.db.Job.TruncateRiverTables(trustcenterOrg.owner.UserCtx)
+	err = suite.Client.DB.Job.TruncateRiverTables(trustcenterOrg.Owner.UserCtx)
 	assert.NilError(t, err)
-	suite.mockEmailSender().Reset()
+	suite.MockEmailSender().Reset()
 
-	req, err := suite.client.api.CreateTrustCenterNDARequest(trustcenterOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	req, err := suite.Client.API.CreateTrustCenterNDARequest(trustcenterOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -554,32 +556,32 @@ func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testin
 
 	suite.WaitForEvents()
 
-	msgs := suite.mockEmailSender().Messages()
+	msgs := suite.MockEmailSender().Messages()
 	assert.Assert(t, len(msgs) == 1, "expected 1 email, got multiple ( %d )", len(msgs))
-	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.member.UserInfo.Email), "expected approval email to go to configured group member")
-	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.owner.UserInfo.Email), "expected owner not to receive approval email when group is configured")
-	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.admin.UserInfo.Email), "expected admin not to receive approval email when group is configured")
-	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.superAdmin.UserInfo.Email), "expected super admin not to receive approval email when group is configured")
+	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.Member.UserInfo.Email), "expected approval email to go to configured group member")
+	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.Owner.UserInfo.Email), "expected owner not to receive approval email when group is configured")
+	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.Admin.UserInfo.Email), "expected admin not to receive approval email when group is configured")
+	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.SuperAdmin.UserInfo.Email), "expected super admin not to receive approval email when group is configured")
 
-	cleanupOrganizationDataWithContext(trustcenterOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(trustcenterOrg.Owner.UserCtx, t)
 }
 
 func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *testing.T) {
-	trustcenterOrg := createFreshOrgWithTrustCenter(t, withNDATemplate(), withAllUserTypes())
-	trustCenter := trustcenterOrg.trustCenter
+	trustcenterOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
+	trustCenter := trustcenterOrg.TrustCenter
 
-	_, err := suite.client.api.UpdateTrustCenter(trustcenterOrg.owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
+	_, err := suite.Client.API.UpdateTrustCenter(trustcenterOrg.Owner.UserCtx, trustCenter.ID, testclient.UpdateTrustCenterInput{
 		UpdateTrustCenterSetting: &testclient.UpdateTrustCenterSettingInput{
 			NdaApprovalRequired: lo.ToPtr(true),
 		},
 	})
 	assert.NilError(t, err)
 
-	err = suite.client.db.Job.TruncateRiverTables(trustcenterOrg.owner.UserCtx)
+	err = suite.Client.DB.Job.TruncateRiverTables(trustcenterOrg.Owner.UserCtx)
 	assert.NilError(t, err)
-	suite.mockEmailSender().Reset()
+	suite.MockEmailSender().Reset()
 
-	req, err := suite.client.api.CreateTrustCenterNDARequest(trustcenterOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	req, err := suite.Client.API.CreateTrustCenterNDARequest(trustcenterOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -589,27 +591,27 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 	suite.WaitForEvents()
 
-	msgs := suite.mockEmailSender().Messages()
+	msgs := suite.MockEmailSender().Messages()
 	assert.Assert(t, len(msgs) == 1, "expected 1 email, got multiple ( %d )", len(msgs))
-	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.owner.UserInfo.Email), "expected approval email to go to owner when no group is configured")
-	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.admin.UserInfo.Email), "expected approval email to go to admin when no group is configured")
-	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.superAdmin.UserInfo.Email), "expected approval email to go to super admin when no group is configured")
-	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.member.UserInfo.Email), "expected member not to receive approval email when no group is configured")
+	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.Owner.UserInfo.Email), "expected approval email to go to owner when no group is configured")
+	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.Admin.UserInfo.Email), "expected approval email to go to admin when no group is configured")
+	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.SuperAdmin.UserInfo.Email), "expected approval email to go to super admin when no group is configured")
+	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.Member.UserInfo.Email), "expected member not to receive approval email when no group is configured")
 
-	cleanupOrganizationDataWithContext(trustcenterOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(trustcenterOrg.Owner.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenter := tcOrg.trustCenter
-	pdfHash := getMD5Hash(t, pdfFilePath)
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
+	pdfHash := th.GetMD5Hash(t, th.PdfFilePath)
 
-	tcOrg2 := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	otherTrustCenter := tcOrg2.trustCenter
+	tcOrg2 := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	otherTrustCenter := tcOrg2.TrustCenter
 
 	anonEmail := gofakeit.Email()
-	anonCtx, anonUser := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, anonEmail)
-	wrongTrustCenterAnonCtx := createAnonymousTrustCenterContext(otherTrustCenter.ID, otherTrustCenter.OwnerID)
+	anonCtx, anonUser := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, anonEmail)
+	wrongTrustCenterAnonCtx := th.CreateAnonymousTrustCenterContext(otherTrustCenter.ID, otherTrustCenter.OwnerID)
 
 	companyName := gofakeit.Company()
 
@@ -632,7 +634,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 				Email:         anonEmail,
 				TrustCenterID: &trustCenter.ID,
 			},
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             anonCtx,
 			expectedStatus:  enums.TrustCenterNDARequestStatusRequested,
 			expectEmailSent: true,
@@ -647,9 +649,9 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 				Email:         gofakeit.Email(),
 				TrustCenterID: &otherTrustCenter.ID,
 			},
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             anonCtx,
-			expectedErr:     notAuthorizedErrorMsg,
+			expectedErr:     th.NotAuthorizedErrorMsg,
 			expectEmailSent: false,
 		},
 		{
@@ -661,9 +663,9 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 				CompanyName:   &companyName,
 				TrustCenterID: &trustCenter.ID,
 			},
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             wrongTrustCenterAnonCtx,
-			expectedErr:     notAuthorizedErrorMsg,
+			expectedErr:     th.NotAuthorizedErrorMsg,
 			expectEmailSent: false,
 		},
 	}
@@ -671,10 +673,10 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			// Clear any existing jobs and emails
-			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			suite.mockEmailSender().Reset()
+			suite.MockEmailSender().Reset()
 
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
@@ -694,19 +696,19 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			suite.WaitForEvents()
 
 			if tc.expectEmailSent {
-				msgs := suite.mockEmailSender().Messages()
+				msgs := suite.MockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 			} else {
-				msgs := suite.mockEmailSender().Messages()
+				msgs := suite.MockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 
 			if tc.testResponse {
-				expectAttestedUpload(t, suite.client.mockProvider)
+				th.ExpectAttestedUpload(t, suite.Client.MockProvider)
 
 				// now sign the nda to ensure status is set correctly
-				_, err = suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, testclient.SubmitTrustCenterNDAResponseInput{
-					TemplateID: *tcOrg.ndaTemplateID,
+				_, err = suite.Client.API.SubmitTrustCenterNDAResponse(anonCtx, testclient.SubmitTrustCenterNDAResponseInput{
+					TemplateID: *tcOrg.NDATemplateID,
 					Response: map[string]any{
 						"signatory_info": map[string]any{
 							"email": anonUser.SubjectEmail,
@@ -718,32 +720,32 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 							"pdf_hash":   pdfHash,
 							"user_id":    anonUser.SubjectID,
 						},
-						"pdf_file_id":     *tcOrg.ndaFileID,
+						"pdf_file_id":     *tcOrg.NDAFileID,
 						"trust_center_id": trustCenter.ID,
 					},
 				})
 				assert.NilError(t, err)
 
 				// Fetch the updated request as org owner to verify status — anon TC users cannot read NDA requests
-				updatedReq, err := suite.client.api.GetTrustCenterNDARequestByID(tcOrg.owner.UserCtx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
+				updatedReq, err := suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
 				assert.NilError(t, err)
 				assert.Equal(t, enums.TrustCenterNDARequestStatusSigned, *updatedReq.TrustCenterNDARequest.Status)
 			}
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
-	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg2.Owner.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
 
 	email := gofakeit.Email()
 
-	originalRequest, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	originalRequest, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         email,
@@ -752,7 +754,7 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 	assert.NilError(t, err)
 
 	t.Run("duplicate email returns existing request with REQUESTED status", func(t *testing.T) {
-		resp, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     gofakeit.FirstName(),
 			LastName:      gofakeit.LastName(),
 			Email:         email,
@@ -763,12 +765,12 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 	})
 
 	t.Run("duplicate email returns existing request with NEEDS_APPROVAL status", func(t *testing.T) {
-		_, err := suite.client.api.UpdateTrustCenterNDARequest(tcOrg.owner.UserCtx, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+		_, err := suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
 			Status: lo.ToPtr(enums.TrustCenterNDARequestStatusNeedsApproval),
 		})
 		assert.NilError(t, err)
 
-		resp, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     gofakeit.FirstName(),
 			LastName:      gofakeit.LastName(),
 			Email:         email,
@@ -779,12 +781,12 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 	})
 
 	t.Run("duplicate email returns existing request with APPROVED status", func(t *testing.T) {
-		_, err := suite.client.api.UpdateTrustCenterNDARequest(tcOrg.owner.UserCtx, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+		_, err := suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
 			Status: lo.ToPtr(enums.TrustCenterNDARequestStatusApproved),
 		})
 		assert.NilError(t, err)
 
-		resp, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     gofakeit.FirstName(),
 			LastName:      gofakeit.LastName(),
 			Email:         email,
@@ -795,7 +797,7 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 	})
 
 	t.Run("different email creates new request", func(t *testing.T) {
-		resp, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     gofakeit.FirstName(),
 			LastName:      gofakeit.LastName(),
 			Email:         gofakeit.Email(),
@@ -805,15 +807,15 @@ func TestMutationCreateTrustCenterNDARequestDuplicateEmail(t *testing.T) {
 		assert.Assert(t, originalRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID != resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
 	})
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate(), withAllUserTypes())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate(), th.WithAllUserTypes())
+	trustCenter := tcOrg.TrustCenter
 
-	ndaRequest1, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaRequest1, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -821,7 +823,7 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	ndaRequest2, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaRequest2, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -829,7 +831,7 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	_, err = suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -847,42 +849,42 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 		{
 			name:        "member cannot delete",
 			idToDelete:  ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
-			client:      suite.client.api,
-			ctx:         tcOrg.member.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Member.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:        "different org cannot delete",
 			idToDelete:  ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:       "admin can delete",
 			idToDelete: ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
-			client:     suite.client.api,
-			ctx:        tcOrg.admin.UserCtx,
+			client:     suite.Client.API,
+			ctx:        tcOrg.Admin.UserCtx,
 		},
 		{
 			name:       "super admin can delete",
 			idToDelete: ndaRequest2.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
-			client:     suite.client.api,
-			ctx:        tcOrg.superAdmin.UserCtx,
+			client:     suite.Client.API,
+			ctx:        tcOrg.SuperAdmin.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  ndaRequest1.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID,
-			client:      suite.client.api,
-			ctx:         tcOrg.owner.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Owner.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "invalid id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         tcOrg.owner.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Owner.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -900,12 +902,12 @@ func TestMutationDeleteTrustCenterNDARequest(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationRequestNewTrustCenterToken(t *testing.T) {
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
 
 	ndaSigned := testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
@@ -928,29 +930,29 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 		TrustCenterID: &trustCenter.ID,
 	}
 
-	ndaRequestSigned, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, ndaSigned)
+	ndaRequestSigned, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, ndaSigned)
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, ndaRequested)
+	_, err = suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, ndaRequested)
 	assert.NilError(t, err)
 
-	ndaRequestNeedsApproval, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, ndaNeedsApproval)
+	ndaRequestNeedsApproval, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, ndaNeedsApproval)
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.UpdateTrustCenterNDARequest(tcOrg.owner.UserCtx, ndaRequestSigned.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+	_, err = suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, ndaRequestSigned.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
 		Status: lo.ToPtr(enums.TrustCenterNDARequestStatusSigned),
 	})
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.UpdateTrustCenterNDARequest(tcOrg.owner.UserCtx, ndaRequestNeedsApproval.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
+	_, err = suite.Client.API.UpdateTrustCenterNDARequest(tcOrg.Owner.UserCtx, ndaRequestNeedsApproval.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
 		Status: lo.ToPtr(enums.TrustCenterNDARequestStatusNeedsApproval),
 	})
 	assert.NilError(t, err)
 
-	anonCtxSigned, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaSigned.Email)
-	anonCtxRequested, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaRequested.Email)
-	anonCtxNeedsApproval, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaNeedsApproval.Email)
-	anonCtxRandom, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
+	anonCtxSigned, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaSigned.Email)
+	anonCtxRequested, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaRequested.Email)
+	anonCtxNeedsApproval, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, ndaNeedsApproval.Email)
+	anonCtxRandom, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, gofakeit.Email())
 
 	ndaEmail := "Trust Center NDA Request"
 	authEmail := "Access"
@@ -966,46 +968,46 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 		{
 			name:            "happy path - already signed, request new token, email sent with NDA in it",
 			email:           ndaSigned.Email,
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             anonCtxSigned,
 			expectEmailSent: authEmail,
 		},
 		{
 			name:            "happy path - not signed, resends nda email",
 			email:           ndaRequested.Email,
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             anonCtxRequested,
 			expectEmailSent: ndaEmail,
 		},
 		{
 			name:            "needs approval, approver notification email sent, requester not emailed because not approved yet",
 			email:           ndaNeedsApproval.Email,
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             anonCtxNeedsApproval,
 			expectEmailSent: approvalEmail,
 		},
 		{
 			name:   "no nda request, no-op",
 			email:  gofakeit.Email(),
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    anonCtxRandom,
 		},
 		{
 			name:        "not anonymous context, error",
 			email:       gofakeit.Email(),
-			client:      suite.client.api,
-			ctx:         tcOrg.owner.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Owner.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			// Clear any existing jobs and emails
-			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			suite.mockEmailSender().Reset()
+			suite.MockEmailSender().Reset()
 
 			resp, err := tc.client.RequestNewTrustCenterToken(tc.ctx, tc.email)
 			if tc.expectedErr != "" {
@@ -1022,7 +1024,7 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 			suite.WaitForEvents()
 
 			if tc.expectEmailSent != "" {
-				msgs := suite.mockEmailSender().Messages()
+				msgs := suite.MockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
 				found := strings.Contains(msgs[0].Subject, tc.expectEmailSent) ||
@@ -1030,28 +1032,28 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 					strings.Contains(msgs[0].Text, tc.expectEmailSent)
 				assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectEmailSent)
 			} else {
-				msgs := suite.mockEmailSender().Messages()
+				msgs := suite.MockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
 
-	protectedDoc := (&TrustCenterDocBuilder{
-		client:        suite.client,
+	protectedDoc := (&th.TrustCenterDocBuilder{
+		Client:        suite.Client,
 		TrustCenterID: trustCenter.ID,
 		Visibility:    enums.TrustCenterDocumentVisibilityProtected,
-	}).MustNew(tcOrg.owner.UserCtx, t)
+	}).MustNew(tcOrg.Owner.UserCtx, t)
 
 	// create two NDA requests
-	ndaReq1, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaReq1, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -1059,7 +1061,7 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	ndaReq2, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+	ndaReq2, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
 		LastName:      gofakeit.LastName(),
 		Email:         gofakeit.Email(),
@@ -1080,7 +1082,7 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 		subjectID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, id)
 
 		anonCaller := auth.NewTrustCenterCaller(trustCenter.OwnerID, subjectID, "Anonymous User", "")
-		anonCtx := newAnonTrustCenterCtxFromCaller(anonCaller, trustCenter.ID)
+		anonCtx := th.NewAnonTrustCenterCtxFromCaller(anonCaller, trustCenter.ID)
 
 		anonCtxs = append(anonCtxs, anonCtx)
 
@@ -1092,42 +1094,42 @@ func TestMutationRevokeNDARequestsRemovesDocAccess(t *testing.T) {
 			Relation:    "nda_signed",
 		})
 
-		_, err := suite.client.db.Authz.WriteTupleKeys(tcOrg.owner.UserCtx, []fgax.TupleKey{tuple}, nil)
+		_, err := suite.Client.DB.Authz.WriteTupleKeys(tcOrg.Owner.UserCtx, []fgax.TupleKey{tuple}, nil)
 		assert.NilError(t, err)
 	}
 
 	// verify both anon users CAN see protected doc file details
 	for _, ctx := range anonCtxs {
-		resp, err := suite.client.api.GetTrustCenterDocByID(ctx, protectedDoc.ID)
+		resp, err := suite.Client.API.GetTrustCenterDocByID(ctx, protectedDoc.ID)
 		assert.NilError(t, err)
 		assert.Assert(t, resp.TrustCenterDoc.OriginalFile != nil, "anon user should see file details before revocation")
 	}
 
 	// now we are revoking the NDA requests
-	revokeResp, err := suite.client.api.DeleteBulkTrustCenterNDARequest(tcOrg.owner.UserCtx, ndaReqIDs)
+	revokeResp, err := suite.Client.API.DeleteBulkTrustCenterNDARequest(tcOrg.Owner.UserCtx, ndaReqIDs)
 	assert.NilError(t, err)
 	assert.Equal(t, len(ndaReqIDs), len(revokeResp.DeleteBulkTrustCenterNDARequest.DeletedIDs))
 
 	// anon users should not be able to see the file after we revoked their access
 	for _, anonCtx := range anonCtxs {
-		resp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, protectedDoc.ID)
+		resp, err := suite.Client.API.GetTrustCenterDocByID(anonCtx, protectedDoc.ID)
 		assert.NilError(t, err)
 		assert.Assert(t, resp.TrustCenterDoc.OriginalFile == nil, "anon user should NOT see file details after revocation")
 	}
 
 	// verify the NDA requests are actually deleted
 	for _, id := range ndaReqIDs {
-		_, err = suite.client.api.GetTrustCenterNDARequestByID(tcOrg.owner.UserCtx, id)
-		assert.ErrorContains(t, err, notFoundErrorMsg)
+		_, err = suite.Client.API.GetTrustCenterNDARequestByID(tcOrg.Owner.UserCtx, id)
+		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationBulkDeleteTrustCenterNDARequest(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
 
 	count := 5
 	// members cannot bulk delete anymore
@@ -1135,7 +1137,7 @@ func TestMutationBulkDeleteTrustCenterNDARequest(t *testing.T) {
 
 	ids := make([]string, 0, count)
 	for range count {
-		resp, err := suite.client.api.CreateTrustCenterNDARequest(tcOrg.owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
+		resp, err := suite.Client.API.CreateTrustCenterNDARequest(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     gofakeit.FirstName(),
 			LastName:      gofakeit.LastName(),
 			Email:         gofakeit.Email(),
@@ -1146,9 +1148,9 @@ func TestMutationBulkDeleteTrustCenterNDARequest(t *testing.T) {
 		ids = append(ids, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID)
 	}
 
-	resp, err := suite.client.api.DeleteBulkTrustCenterNDARequest(tcOrg.member.UserCtx, ids)
+	resp, err := suite.Client.API.DeleteBulkTrustCenterNDARequest(tcOrg.Member.UserCtx, ids)
 	assert.NilError(t, err)
 	assert.Equal(t, expectedDeletedItems, len(resp.DeleteBulkTrustCenterNDARequest.DeletedIDs))
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }

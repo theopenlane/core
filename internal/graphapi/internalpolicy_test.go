@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/fgax"
@@ -18,15 +20,15 @@ import (
 )
 
 func TestQueryInternalPolicy(t *testing.T) {
-	// create an InternalPolicy to be queried using sharedTestUser1
-	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create an InternalPolicy to be queried using th.SharedTestUser1
+	internalPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// setup a blocked group with a view only user
-	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID, GroupID: blockedGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	blockedGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID, GroupID: blockedGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	internalPolicy2 := (&InternalPolicyBuilder{client: suite.client, BlockedGroupIDs: []string{blockedGroup.ID}}).MustNew(sharedTestUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
+	internalPolicy2 := (&th.InternalPolicyBuilder{Client: suite.Client, BlockedGroupIDs: []string{blockedGroup.ID}}).MustNew(th.SharedTestUser1.UserCtx, t)
+	anonymousContext := th.CreateAnonymousTrustCenterContext(ulids.New().String(), th.SharedTestUser1.OrganizationID)
 
 	// add test cases for querying the internal policy
 	testCases := []struct {
@@ -40,55 +42,55 @@ func TestQueryInternalPolicy(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: internalPolicy.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: internalPolicy.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:               "happy path, read only user but blocked",
 			queryID:            internalPolicy2.ID,
-			client:             suite.client.api,
-			ctx:                sharedViewOnlyUser.UserCtx,
-			errorMsg:           notFoundErrorMsg, // should not be able to access the policy due to blocked group
+			client:             suite.Client.API,
+			ctx:                th.SharedViewOnlyUser.UserCtx,
+			errorMsg:           th.NotFoundErrorMsg, // should not be able to access the policy due to blocked group
 			updateBlockedGroup: true,
 		},
 		{
 			name:    "happy path, read only user no longer blocked",
 			queryID: internalPolicy2.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: internalPolicy.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "internalPolicy not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "internal policy not found, using not authorized user",
 			queryID:  internalPolicy.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, anonymous user",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      anonymousContext,
 			queryID:  internalPolicy.ID,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -100,7 +102,7 @@ func TestQueryInternalPolicy(t *testing.T) {
 				assert.ErrorContains(t, err, tc.errorMsg)
 
 				if tc.updateBlockedGroup {
-					_, err := suite.client.api.UpdateInternalPolicy(sharedTestUser1.UserCtx, internalPolicy2.ID,
+					_, err := suite.Client.API.UpdateInternalPolicy(th.SharedTestUser1.UserCtx, internalPolicy2.ID,
 						testclient.UpdateInternalPolicyInput{
 							RemoveBlockedGroupIDs: []string{blockedGroup.ID},
 						})
@@ -119,19 +121,19 @@ func TestQueryInternalPolicy(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy.ID, internalPolicy2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: []string{internalPolicy.ID, internalPolicy2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryInternalPolicies(t *testing.T) {
-	// create multiple policies to be queried using sharedTestUser1
-	ip1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	ip2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create multiple policies to be queried using th.SharedTestUser1
+	ip1 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	ip2 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// setup a blocked group with a view only user
-	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID, GroupID: blockedGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	blockedGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID, GroupID: blockedGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	ip3 := (&InternalPolicyBuilder{client: suite.client, BlockedGroupIDs: []string{blockedGroup.ID}}).MustNew(sharedTestUser1.UserCtx, t)
+	ip3 := (&th.InternalPolicyBuilder{Client: suite.Client, BlockedGroupIDs: []string{blockedGroup.ID}}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name               string
@@ -142,39 +144,39 @@ func TestQueryInternalPolicies(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:               "happy path, using read only user of the same org, one policy blocked",
-			client:             suite.client.api,
-			ctx:                sharedViewOnlyUser.UserCtx,
+			client:             suite.Client.API,
+			ctx:                th.SharedViewOnlyUser.UserCtx,
 			expectedResults:    2,    // should not see the policy that is blocked for them
 			updateBlockedGroup: true, // update the blocked group to allow the view only user to see the policy
 		},
 		{
 			name:            "happy path, using read only user of the same org, no blocked group",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 3, // should now see all policies after removing the blocked group
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          suite.Client.APIWithToken,
 			ctx:             context.Background(),
 			expectedResults: 3,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: 3,
 		},
 		{
 			name:            "another user, no policies should be returned",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -189,7 +191,7 @@ func TestQueryInternalPolicies(t *testing.T) {
 
 			if tc.updateBlockedGroup {
 				// do it the opposite, remove the policy from the group
-				_, err := suite.client.api.UpdateGroup(sharedTestUser1.UserCtx, blockedGroup.ID,
+				_, err := suite.Client.API.UpdateGroup(th.SharedTestUser1.UserCtx, blockedGroup.ID,
 					testclient.UpdateGroupInput{
 						RemoveInternalPolicyBlockedGroupIDs: []string{ip3.ID},
 					},
@@ -201,28 +203,28 @@ func TestQueryInternalPolicies(t *testing.T) {
 	}
 
 	// delete created policies
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{ip1.ID, ip2.ID, ip3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: []string{ip1.ID, ip2.ID, ip3.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateInternalPolicy(t *testing.T) {
 	// create a system owned standard with a control
-	systemStandard := (&StandardBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemStandard := (&th.StandardBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 	// create a control and add it to the system standard
-	systemControl := (&ControlBuilder{client: suite.client, StandardID: systemStandard.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemControl := (&th.ControlBuilder{Client: suite.Client, StandardID: systemStandard.ID}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
-	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	anotherGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// group for the view only user
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	groupMember := (&th.GroupMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// approver and delegator groups for the test user
-	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	approverGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	delegateGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// edges to add
-	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	subcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	task := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	subcontrol := (&th.SubcontrolBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	task := (&th.TaskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name                       string
@@ -238,8 +240,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name: "Test InternalPolicy",
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input except edges",
@@ -251,8 +253,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				ApproverID: &approverGroup.ID,
 				DelegateID: &delegateGroup.ID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, long details",
@@ -264,8 +266,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				ApproverID: &approverGroup.ID,
 				DelegateID: &delegateGroup.ID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, with control edges",
@@ -278,8 +280,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				SubcontrolIDs: []string{subcontrol.ID},
 				TaskIDs:       []string{task.ID},
 			},
-			client:                     suite.client.api,
-			ctx:                        sharedTestUser1.UserCtx,
+			client:                     suite.Client.API,
+			ctx:                        th.SharedTestUser1.UserCtx,
 			controlEdgeShouldBeCreated: true,
 		},
 		{
@@ -289,19 +291,19 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				Status:     &enums.DocumentDraft,
 				ControlIDs: []string{systemControl.ID},
 			},
-			client:                     suite.client.api,
-			ctx:                        sharedTestUser1.UserCtx,
-			expectedErr:                notFoundErrorMsg,
+			client:                     suite.Client.API,
+			ctx:                        th.SharedTestUser1.UserCtx,
+			expectedErr:                th.NotFoundErrorMsg,
 			controlEdgeShouldBeCreated: false, // user does not have edit access to the control, it is owned by the system
 		},
 		{
 			name: "happy path, add editor group",
 			request: testclient.CreateInternalPolicyInput{
 				Name:      "Test Policy",
-				EditorIDs: []string{sharedTestUser1.GroupID},
+				EditorIDs: []string{th.SharedTestUser1.GroupID},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, add same task to another policy",
@@ -309,8 +311,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				Name:    "Test Policy",
 				TaskIDs: []string{task.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, add same control to another policy",
@@ -318,8 +320,8 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				Name:       "Test Policy",
 				ControlIDs: []string{control.ID},
 			},
-			client:                     suite.client.api,
-			ctx:                        sharedTestUser1.UserCtx,
+			client:                     suite.Client.API,
+			ctx:                        th.SharedTestUser1.UserCtx,
 			controlEdgeShouldBeCreated: true,
 		},
 		{
@@ -328,26 +330,26 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				Name:          "Test Policy",
 				SubcontrolIDs: []string{subcontrol.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "add editor group, again - ensures the same group can be added to multiple policies",
 			request: testclient.CreateInternalPolicyInput{
 				Name:            "Test Policy",
-				EditorIDs:       []string{sharedTestUser1.GroupID},
+				EditorIDs:       []string{th.SharedTestUser1.GroupID},
 				BlockedGroupIDs: []string{anotherGroup.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateInternalPolicyInput{
 				Name:    "Test Internal Policy",
-				OwnerID: &sharedTestUser1.OrganizationID,
+				OwnerID: &th.SharedTestUser1.OrganizationID,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -355,7 +357,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name: "Test InternalPolicy",
 			},
-			client: suite.client.apiWithToken,
+			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
 		{
@@ -363,9 +365,9 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			request: testclient.CreateInternalPolicyInput{
 				Name: "Test InternalPolicy",
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "user now authorized, added to group with creator permissions",
@@ -373,16 +375,16 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 				Name: "Test InternalPolicy",
 			},
 			addGroupToOrg: true,
-			client:        suite.client.api,
-			ctx:           sharedViewOnlyUser.UserCtx,
+			client:        suite.Client.API,
+			ctx:           th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "missing required field",
 			request: testclient.CreateInternalPolicyInput{
 				Details: lo.ToPtr("instructions on how to release a new version"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -390,7 +392,7 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
-				_, err := suite.client.api.UpdateOrganization(sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID,
+				_, err := suite.Client.API.UpdateOrganization(th.SharedTestUser1.UserCtx, th.SharedTestUser1.OrganizationID,
 					testclient.UpdateOrganizationInput{
 						AddInternalPolicyCreatorIDs: []string{groupMember.GroupID},
 					}, nil, nil)
@@ -461,18 +463,18 @@ func TestMutationCreateInternalPolicy(t *testing.T) {
 			}
 
 			// cleanup
-			(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{resp.CreateInternalPolicy.InternalPolicy.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: []string{resp.CreateInternalPolicy.InternalPolicy.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		})
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID, subcontrol.ControlID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{anotherGroup.ID, groupMember.GroupID, approverGroup.ID, delegateGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{control.ID, subcontrol.ControlID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, IDs: []string{subcontrol.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, IDs: []string{task.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{anotherGroup.ID, groupMember.GroupID, approverGroup.ID, delegateGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
 	// cleanup the system standard and control
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{systemStandard.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, IDs: []string{systemStandard.ID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateInternalPolicy(t *testing.T) {
@@ -485,31 +487,31 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 		}
 	}
 
-	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	internalPolicyAdminUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	internalPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	internalPolicyAdminUser := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 
-	// create a viewer user and add them to the same organization as sharedTestUser1
-	// also add them to the same group as sharedTestUser1, this should still allow them to edit the policy
+	// create a viewer user and add them to the same organization as th.SharedTestUser1
+	// also add them to the same group as th.SharedTestUser1, this should still allow them to edit the policy
 	// despite not not being an organization admin
-	anotherViewerUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
+	anotherViewerUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, th.SharedTestUser1.OrganizationID)
 
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherViewerUser.ID, GroupID: th.SharedTestUser1.GroupID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// group admins should also have edit permissions when added to the group
-	anotherViewerGroupAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerGroupAdminUser, enums.RoleMember, sharedTestUser1.OrganizationID)
+	anotherViewerGroupAdminUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &anotherViewerGroupAdminUser, enums.RoleMember, th.SharedTestUser1.OrganizationID)
 
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerGroupAdminUser.ID, GroupID: sharedTestUser1.GroupID, Role: enums.RoleAdmin.String()}).MustNew(sharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherViewerGroupAdminUser.ID, GroupID: th.SharedTestUser1.GroupID, Role: enums.RoleAdmin.String()}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
-	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	blockGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// edges to add
-	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	subcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	task := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	subcontrol := (&th.SubcontrolBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	task := (&th.TaskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name             string
@@ -526,8 +528,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
-			client:           suite.client.api,
-			ctx:              sharedTestUser1.UserCtx,
+			client:           suite.Client.API,
+			ctx:              th.SharedTestUser1.UserCtx,
 			expectedRevision: "v0.1.0", // details updated, should be a minor update
 		},
 		{
@@ -536,19 +538,19 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
-			client:           suite.client.api,
-			ctx:              sharedTestUser1.UserCtx, // org owner should always be able to update the policy
-			expectedRevision: "v0.1.0",                // details updated, should be a minor update (different policy than test 1)
+			client:           suite.Client.API,
+			ctx:              th.SharedTestUser1.UserCtx, // org owner should always be able to update the policy
+			expectedRevision: "v0.1.0",                   // details updated, should be a minor update (different policy than test 1)
 		},
 		{
 			name:     "happy path, update name field",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
 				Name:         lo.ToPtr("Updated InternalPolicy Name"),
-				AddEditorIDs: []string{sharedTestUser1.GroupID}, // add the group to the editor groups for subsequent tests
+				AddEditorIDs: []string{th.SharedTestUser1.GroupID}, // add the group to the editor groups for subsequent tests
 			},
-			client:           suite.client.api,
-			ctx:              sharedTestUser1.UserCtx,
+			client:           suite.Client.API,
+			ctx:              th.SharedTestUser1.UserCtx,
 			expectedRevision: "v0.1.1", // no details updated, should be a patch update
 		},
 		{
@@ -562,7 +564,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 				AddSubcontrolIDs: []string{subcontrol.ID},
 				AddTaskIDs:       []string{task.ID},
 			},
-			client:           suite.client.apiWithPAT,
+			client:           suite.Client.APIWithPAT,
 			ctx:              context.Background(),
 			expectedRevision: "v1.0.0", // details updated, but revision bump set to major
 		},
@@ -574,8 +576,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 					Text: "This is a comment from a member user",
 				},
 			},
-			client:           suite.client.api,
-			ctx:              sharedViewOnlyUser.UserCtx,
+			client:           suite.Client.API,
+			ctx:              th.SharedViewOnlyUser.UserCtx,
 			expectedRevision: "v1.0.1", // only comment added, should be a patch update
 		},
 		{
@@ -587,9 +589,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 				},
 				DetailsJSON: makeSlate(map[string]any{"text": "hello"}), // should not be allowed to update the details, only add a comment
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:     "update not allowed, not enough permissions",
@@ -597,9 +599,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated InternalPolicy Name"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:     "update allowed, org admins have edit access to all policies in the org",
@@ -607,8 +609,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
-			client:           suite.client.api,
-			ctx:              sharedAdminUser.UserCtx,
+			client:           suite.Client.API,
+			ctx:              th.SharedAdminUser.UserCtx,
 			expectedRevision: "v1.0.2", // no details updated, should be a patch update
 		},
 		{
@@ -617,7 +619,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
-			client:           suite.client.api,
+			client:           suite.Client.API,
 			ctx:              anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
 			expectedRevision: "v1.0.3",                  // no details updated, should be a patch update
 		},
@@ -627,7 +629,7 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again by Group Admin"),
 			},
-			client:           suite.client.api,
+			client:           suite.Client.API,
 			ctx:              anotherViewerGroupAdminUser.UserCtx, // user assigned to the group which has editor permissions as admin
 			expectedRevision: "v1.0.4",                            // no details updated, should be a patch update
 		},
@@ -637,8 +639,8 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				AddBlockedGroupIDs: []string{blockGroup.ID}, // block the group
 			},
-			client:           suite.client.api,
-			ctx:              sharedTestUser1.UserCtx,
+			client:           suite.Client.API,
+			ctx:              th.SharedTestUser1.UserCtx,
 			expectedRevision: "v1.0.5", // no details updated, should be a patch update
 		},
 		{
@@ -647,18 +649,18 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         anotherViewerUser.UserCtx, // user assigned to the group which was blocked
-			expectedErr: notFoundErrorMsg,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "happy path, remove the group",
 			policyID: internalPolicy.ID,
 			request: testclient.UpdateInternalPolicyInput{
-				RemoveEditorIDs: []string{sharedTestUser1.GroupID}, // remove the group from the editor groups
+				RemoveEditorIDs: []string{th.SharedTestUser1.GroupID}, // remove the group from the editor groups
 			},
-			client:           suite.client.api,
-			ctx:              sharedTestUser1.UserCtx,
+			client:           suite.Client.API,
+			ctx:              th.SharedTestUser1.UserCtx,
 			expectedRevision: "v1.0.6", // no details updated, should be a patch update
 		},
 		{
@@ -667,9 +669,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("Updated Procedure Name Again Again"),
 			},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         anotherViewerUser.UserCtx, // user assigned to the group which no longer has editor permissions
-			expectedErr: notFoundErrorMsg,          // TODO: this will change back to not authorized on the new permissions branch
+			expectedErr: th.NotFoundErrorMsg,       // TODO: this will change back to not authorized on the new permissions branch
 		},
 		{
 			name:     "update not allowed, no permissions",
@@ -677,9 +679,9 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 			request: testclient.UpdateInternalPolicyInput{
 				Details: lo.ToPtr("Updated details"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -721,17 +723,17 @@ func TestMutationUpdateInternalPolicy(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy.ID, internalPolicyAdminUser.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control.ID, subcontrol.ControlID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: []string{internalPolicy.ID, internalPolicyAdminUser.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{control.ID, subcontrol.ControlID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, IDs: []string{subcontrol.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, IDs: []string{task.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{blockGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteInternalPolicy(t *testing.T) {
 	// create internal policies to be deleted
-	internalPolicy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	internalPolicy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	internalPolicy1 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	internalPolicy2 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -743,35 +745,35 @@ func TestMutationDeleteInternalPolicy(t *testing.T) {
 		{
 			name:        "not authorized, delete",
 			idToDelete:  internalPolicy1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: internalPolicy1.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  internalPolicy1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: internalPolicy2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -809,42 +811,42 @@ func TestMutationRoleChangesCanAccessPolicy(t *testing.T) {
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 
-			localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
-			defer cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+			localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+			defer th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
 
-			policyToUpdate := (&InternalPolicyBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
-			policyToDelete := (&InternalPolicyBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+			policyToUpdate := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
+			policyToDelete := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
 
-			_, err := suite.client.api.UpdateInternalPolicy(localTestOrg.member.UserCtx, policyToUpdate.ID, testclient.UpdateInternalPolicyInput{
+			_, err := suite.Client.API.UpdateInternalPolicy(localTestOrg.Member.UserCtx, policyToUpdate.ID, testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr("member cannot edit or delete without policy role"),
 			})
-			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 
-			_, err = suite.client.api.DeleteInternalPolicy(localTestOrg.member.UserCtx, policyToDelete.ID)
-			assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+			_, err = suite.Client.API.DeleteInternalPolicy(localTestOrg.Member.UserCtx, policyToDelete.ID)
+			assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 
 			// manually add the tuple that the api does
 			tuple := fgax.GetTupleKey(fgax.TupleRequest{
-				SubjectID:   localTestOrg.member.ID,
+				SubjectID:   localTestOrg.Member.ID,
 				SubjectType: "user",
-				ObjectID:    localTestOrg.owner.OrganizationID,
+				ObjectID:    localTestOrg.Owner.OrganizationID,
 				ObjectType:  "organization",
 				Relation:    tc.role,
 			})
 
-			_, err = suite.client.db.Authz.WriteTupleKeys(localTestOrg.owner.UserCtx, []fgax.TupleKey{tuple}, nil)
+			_, err = suite.Client.DB.Authz.WriteTupleKeys(localTestOrg.Owner.UserCtx, []fgax.TupleKey{tuple}, nil)
 			assert.NilError(t, err)
 
 			updatedName := tc.role + " can edit or delete any policy"
 
-			updateResp, err := suite.client.api.UpdateInternalPolicy(localTestOrg.member.UserCtx, policyToUpdate.ID, testclient.UpdateInternalPolicyInput{
+			updateResp, err := suite.Client.API.UpdateInternalPolicy(localTestOrg.Member.UserCtx, policyToUpdate.ID, testclient.UpdateInternalPolicyInput{
 				Name: lo.ToPtr(updatedName),
 			})
 			assert.NilError(t, err)
 			assert.Assert(t, updateResp != nil)
 			assert.Check(t, is.Equal(updatedName, updateResp.UpdateInternalPolicy.InternalPolicy.Name))
 
-			deleteResp, err := suite.client.api.DeleteInternalPolicy(localTestOrg.member.UserCtx, policyToDelete.ID)
+			deleteResp, err := suite.Client.API.DeleteInternalPolicy(localTestOrg.Member.UserCtx, policyToDelete.ID)
 			assert.NilError(t, err)
 			assert.Assert(t, deleteResp != nil)
 			assert.Check(t, is.Equal(policyToDelete.ID, deleteResp.DeleteInternalPolicy.DeletedID))
@@ -854,25 +856,25 @@ func TestMutationRoleChangesCanAccessPolicy(t *testing.T) {
 
 func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 	// create internal policies to be updated
-	policy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	policy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	policy3 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	policy1 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	policy2 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	policy3 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	subcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	task := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	subcontrol := (&th.SubcontrolBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	task := (&th.TaskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	// create another user and add them to the same organization and group as sharedTestUser1
+	// create another user and add them to the same organization and group as th.SharedTestUser1
 	// this will allow us to test the group editor permissions
-	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, sharedTestUser1.OrganizationID)
+	anotherAdminUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, th.SharedTestUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	groupMember := (&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherAdminUser.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	policyAnotherUser := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	policyAnotherUser := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the policy
-	res, err := suite.client.api.UpdateBulkInternalPolicy(sharedTestUser2.UserCtx, []string{policy1.ID}, testclient.UpdateInternalPolicyInput{
+	res, err := suite.Client.API.UpdateBulkInternalPolicy(th.SharedTestUser2.UserCtx, []string{policy1.ID}, testclient.UpdateInternalPolicyInput{
 		Status: lo.ToPtr(enums.DocumentPublished),
 	})
 
@@ -895,8 +897,8 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 			input: testclient.UpdateInternalPolicyInput{
 				Status: &enums.DocumentPublished,
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
@@ -906,16 +908,16 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 				AddEditorIDs: []string{groupMember.GroupID},
 				RevisionBump: &models.Major,
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
 			name:        "empty ids array",
 			ids:         []string{},
 			input:       testclient.UpdateInternalPolicyInput{Details: lo.ToPtr("test")},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "ids is required",
 		},
 		{
@@ -924,8 +926,8 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 			input: testclient.UpdateInternalPolicyInput{
 				Status: &enums.DocumentDraft,
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedUpdatedCount: 1, // only policy1 should be updated
 		},
 		{
@@ -934,8 +936,8 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 			input: testclient.UpdateInternalPolicyInput{
 				Status: &enums.DocumentPublished,
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser2.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser2.UserCtx,
 			expectedUpdatedCount: 0, // should not find any policies to update
 		},
 		{
@@ -947,8 +949,8 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 				AddSubcontrolIDs: []string{subcontrol.ID},
 				AddTaskIDs:       []string{task.ID},
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 	}
@@ -992,7 +994,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 
 				if len(tc.input.AddEditorIDs) > 0 {
 					// ensure the user has access to the policy now
-					res, err := suite.client.api.UpdateInternalPolicy(anotherAdminUser.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
+					res, err := suite.Client.API.UpdateInternalPolicy(anotherAdminUser.UserCtx, policy.ID, testclient.UpdateInternalPolicyInput{
 						Tags: []string{"bulk-test-tag"},
 					})
 					assert.NilError(t, err)
@@ -1001,7 +1003,7 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 				}
 
 				// ensure the org owner has access to the policy that was updated
-				checkResp, err := suite.client.api.GetInternalPolicyByID(sharedTestUser1.UserCtx, policy.ID)
+				checkResp, err := suite.Client.API.GetInternalPolicyByID(th.SharedTestUser1.UserCtx, policy.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Equal(policy.ID, checkResp.InternalPolicy.ID))
 			}
@@ -1020,12 +1022,12 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{policy1.ID, policy2.ID, policy3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policyAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: task.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: groupMember.GroupID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: []string{policy1.ID, policy2.ID, policy3.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: policyAnotherUser.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: control.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, ID: subcontrol.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, ID: task.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, ID: groupMember.GroupID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryInternalPolicyDiscussionComments(t *testing.T) {

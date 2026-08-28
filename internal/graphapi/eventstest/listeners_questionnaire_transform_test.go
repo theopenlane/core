@@ -1,11 +1,13 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
 	"testing"
 	"time"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -23,16 +25,16 @@ import (
 )
 
 func TestQuestionnaireTransformListener(t *testing.T) {
-	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.QuestionnaireTransformListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.QuestionnaireTransformListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
-	user := suite.userBuilder(context.Background(), t)
+	user := suite.UserBuilder(context.Background(), t)
 	orgID := user.OrganizationID
-	allowCtx := privacy.DecisionContext(setContext(user.UserCtx, suite.client.db), privacy.Allow)
+	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
-	template := (&TemplateBuilder{client: suite.client}).MustNew(user.UserCtx, t)
-	assert.NilError(t, suite.client.db.Template.UpdateOneID(template.ID).SetTransformConfiguration(models.TemplateProjectionConfig{
+	template := (&th.TemplateBuilder{Client: suite.Client}).MustNew(user.UserCtx, t)
+	assert.NilError(t, suite.Client.DB.Template.UpdateOneID(template.ID).SetTransformConfiguration(models.TemplateProjectionConfig{
 		Enabled: true,
 		Mappings: []models.TemplateProjectionFieldMapping{
 			{From: "vendorName", To: "name"},
@@ -40,37 +42,37 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 		},
 	}).Exec(allowCtx))
 
-	assessment := (&AssessmentBuilder{client: suite.client, TemplateID: template.ID}).MustNew(user.UserCtx, t)
+	assessment := (&th.AssessmentBuilder{Client: suite.Client, TemplateID: template.ID}).MustNew(user.UserCtx, t)
 
 	vendorName := "acme-vendor-" + ulids.New().String()
 	noteText := "vendor context from the questionnaire submission"
 
-	doc, err := suite.client.db.DocumentData.Create().
+	doc, err := suite.Client.DB.DocumentData.Create().
 		SetOwnerID(orgID).
 		SetTemplateID(template.ID).
 		SetData(map[string]any{"vendorName": vendorName, "vendorNotes": noteText}).
 		Save(allowCtx)
 	assert.NilError(t, err)
 
-	response := (&AssessmentResponseBuilder{client: suite.client, AssessmentID: assessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
+	response := (&th.AssessmentResponseBuilder{Client: suite.Client, AssessmentID: assessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
 	noteRef := "questionnaire_transform:" + response.ID
 
 	var entityID string
 
 	t.Run("completed response transforms into entity", func(t *testing.T) {
-		assert.NilError(t, suite.client.db.AssessmentResponse.UpdateOneID(response.ID).
+		assert.NilError(t, suite.Client.DB.AssessmentResponse.UpdateOneID(response.ID).
 			SetDocumentDataID(doc.ID).
 			SetStatus(enums.AssessmentResponseStatusCompleted).
 			Exec(allowCtx))
 
-		waitForCondition(t, func() bool {
-			updated, err := suite.client.db.AssessmentResponse.Get(allowCtx, response.ID)
+		th.WaitForCondition(t, func() bool {
+			updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response.ID)
 			return err == nil && updated.EntityID != ""
 		}, "assessment response should link the transformed entity")
 
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
-		record, err := suite.client.db.Entity.Query().
+		record, err := suite.Client.DB.Entity.Query().
 			Where(entity.ExternalIDEQ(vendorName), entity.OwnerIDEQ(orgID)).
 			Only(allowCtx)
 		assert.NilError(t, err)
@@ -83,24 +85,24 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 		assert.Check(t, is.Equal(template.ID, meta["template_id"]))
 		assert.Check(t, is.Equal(doc.ID, meta["document_data_id"]))
 
-		updated, err := suite.client.db.AssessmentResponse.Get(allowCtx, response.ID)
+		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(record.ID, updated.EntityID))
 		assert.Check(t, is.Equal(vendorName, updated.DisplayName))
 
-		notes, err := suite.client.db.Note.Query().
+		notes, err := suite.Client.DB.Note.Query().
 			Where(note.NoteRefEQ(noteRef), note.OwnerIDEQ(orgID)).
 			All(allowCtx)
 		assert.NilError(t, err)
 		assert.Assert(t, is.Len(notes, 1))
 		assert.Check(t, is.Equal(noteText, notes[0].Text))
 
-		linkedNotes, err := suite.client.db.Entity.QueryNotes(record).All(allowCtx)
+		linkedNotes, err := suite.Client.DB.Entity.QueryNotes(record).All(allowCtx)
 		assert.NilError(t, err)
 		assert.Assert(t, is.Len(linkedNotes, 1))
 		assert.Check(t, is.Equal(notes[0].ID, linkedNotes[0].ID))
 
-		linkedEntities, err := suite.client.db.DocumentData.QueryEntities(doc).All(allowCtx)
+		linkedEntities, err := suite.Client.DB.DocumentData.QueryEntities(doc).All(allowCtx)
 		assert.NilError(t, err)
 		assert.Assert(t, is.Len(linkedEntities, 1))
 		assert.Check(t, is.Equal(record.ID, linkedEntities[0].ID))
@@ -110,52 +112,52 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 
 	t.Run("redelivery after entity link is a no-op", func(t *testing.T) {
 		// completed is a terminal status, so the second qualifying update touches completed_at
-		assert.NilError(t, suite.client.db.AssessmentResponse.UpdateOneID(response.ID).
+		assert.NilError(t, suite.Client.DB.AssessmentResponse.UpdateOneID(response.ID).
 			SetCompletedAt(time.Now()).
 			Exec(allowCtx))
 
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
-		entityCount, err := suite.client.db.Entity.Query().
+		entityCount, err := suite.Client.DB.Entity.Query().
 			Where(entity.ExternalIDEQ(vendorName), entity.OwnerIDEQ(orgID)).
 			Count(allowCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(1, entityCount))
 
-		noteCount, err := suite.client.db.Note.Query().
+		noteCount, err := suite.Client.DB.Note.Query().
 			Where(note.NoteRefEQ(noteRef), note.OwnerIDEQ(orgID)).
 			Count(allowCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(1, noteCount))
 
-		updated, err := suite.client.db.AssessmentResponse.Get(allowCtx, response.ID)
+		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(entityID, updated.EntityID))
 	})
 
 	vendorName2 := "acme-vendor-" + ulids.New().String()
 
-	doc2, err := suite.client.db.DocumentData.Create().
+	doc2, err := suite.Client.DB.DocumentData.Create().
 		SetOwnerID(orgID).
 		SetTemplateID(template.ID).
 		SetData(map[string]any{"vendorName": vendorName2}).
 		Save(allowCtx)
 	assert.NilError(t, err)
 
-	response2 := (&AssessmentResponseBuilder{client: suite.client, AssessmentID: assessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
+	response2 := (&th.AssessmentResponseBuilder{Client: suite.Client, AssessmentID: assessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
 
 	t.Run("update without gate fields does not transform", func(t *testing.T) {
-		assert.NilError(t, suite.client.db.AssessmentResponse.UpdateOneID(response2.ID).
+		assert.NilError(t, suite.Client.DB.AssessmentResponse.UpdateOneID(response2.ID).
 			SetSendAttempts(2).
 			Exec(allowCtx))
 
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
-		updated, err := suite.client.db.AssessmentResponse.Get(allowCtx, response2.ID)
+		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response2.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal("", updated.EntityID))
 
-		entityCount, err := suite.client.db.Entity.Query().
+		entityCount, err := suite.Client.DB.Entity.Query().
 			Where(entity.ExternalIDEQ(vendorName2), entity.OwnerIDEQ(orgID)).
 			Count(allowCtx)
 		assert.NilError(t, err)
@@ -163,25 +165,25 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 	})
 
 	t.Run("uncompleted response does not transform", func(t *testing.T) {
-		assert.NilError(t, suite.client.db.AssessmentResponse.UpdateOneID(response2.ID).
+		assert.NilError(t, suite.Client.DB.AssessmentResponse.UpdateOneID(response2.ID).
 			SetDocumentDataID(doc2.ID).
 			Exec(allowCtx))
 
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
-		updated, err := suite.client.db.AssessmentResponse.Get(allowCtx, response2.ID)
+		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response2.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal("", updated.EntityID))
 
-		entityCount, err := suite.client.db.Entity.Query().
+		entityCount, err := suite.Client.DB.Entity.Query().
 			Where(entity.ExternalIDEQ(vendorName2), entity.OwnerIDEQ(orgID)).
 			Count(allowCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(0, entityCount))
 	})
 
-	dateTemplate := (&TemplateBuilder{client: suite.client}).MustNew(user.UserCtx, t)
-	assert.NilError(t, suite.client.db.Template.UpdateOneID(dateTemplate.ID).SetTransformConfiguration(models.TemplateProjectionConfig{
+	dateTemplate := (&th.TemplateBuilder{Client: suite.Client}).MustNew(user.UserCtx, t)
+	assert.NilError(t, suite.Client.DB.Template.UpdateOneID(dateTemplate.ID).SetTransformConfiguration(models.TemplateProjectionConfig{
 		Enabled: true,
 		Mappings: []models.TemplateProjectionFieldMapping{
 			{From: "vendorName", To: "name"},
@@ -189,40 +191,40 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 		},
 	}).Exec(allowCtx))
 
-	dateAssessment := (&AssessmentBuilder{client: suite.client, TemplateID: dateTemplate.ID}).MustNew(user.UserCtx, t)
+	dateAssessment := (&th.AssessmentBuilder{Client: suite.Client, TemplateID: dateTemplate.ID}).MustNew(user.UserCtx, t)
 	vendorName3 := "acme-vendor-" + ulids.New().String()
 
-	dateDoc, err := suite.client.db.DocumentData.Create().
+	dateDoc, err := suite.Client.DB.DocumentData.Create().
 		SetOwnerID(orgID).
 		SetTemplateID(dateTemplate.ID).
 		SetData(map[string]any{"vendorName": vendorName3, "contractStart": "not-a-date"}).
 		Save(allowCtx)
 	assert.NilError(t, err)
 
-	response3 := (&AssessmentResponseBuilder{client: suite.client, AssessmentID: dateAssessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
+	response3 := (&th.AssessmentResponseBuilder{Client: suite.Client, AssessmentID: dateAssessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
 
 	t.Run("invalid date value fails validation and acks without retry", func(t *testing.T) {
-		assert.NilError(t, suite.client.db.AssessmentResponse.UpdateOneID(response3.ID).
+		assert.NilError(t, suite.Client.DB.AssessmentResponse.UpdateOneID(response3.ID).
 			SetDocumentDataID(dateDoc.ID).
 			SetStatus(enums.AssessmentResponseStatusCompleted).
 			Exec(allowCtx))
 
 		// WaitIdle counts retrying jobs as active, so returning proves the ack
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
-		updated, err := suite.client.db.AssessmentResponse.Get(allowCtx, response3.ID)
+		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response3.ID)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal("", updated.EntityID))
 
-		entityCount, err := suite.client.db.Entity.Query().
+		entityCount, err := suite.Client.DB.Entity.Query().
 			Where(entity.ExternalIDEQ(vendorName3), entity.OwnerIDEQ(orgID)).
 			Count(allowCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(0, entityCount))
 	})
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{response.ID, response2.ID, response3.ID}}).MustDelete(user.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entityID}).MustDelete(user.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment.ID, dateAssessment.ID}}).MustDelete(user.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{template.ID, dateTemplate.ID}}).MustDelete(user.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: []string{response.ID, response2.ID, response3.ID}}).MustDelete(user.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, ID: entityID}).MustDelete(user.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, IDs: []string{assessment.ID, dateAssessment.ID}}).MustDelete(user.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, IDs: []string{template.ID, dateTemplate.ID}}).MustDelete(user.UserCtx, t)
 }

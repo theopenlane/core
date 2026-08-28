@@ -1,14 +1,17 @@
-package graphapi_test
+//go:build test
+
+package testharness
 
 import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"path/filepath"
+	"runtime"
 	"sync"
 	"testing"
 	"time"
@@ -80,66 +83,64 @@ import (
 )
 
 const (
-	fgaModuleFile = "../../fga/model/fga.mod"
-
-	redacted = "*****************************"
+	Redacted = "*****************************"
 
 	// common error message strings
-	notFoundErrorMsg         = "not found"
-	notAuthorizedErrorMsg    = "you are not authorized to perform this action"
-	missingScopeErrorMsg     = "lacks the required scopes"
-	invalidInputErrorMsg     = "invalid input"
+	NotFoundErrorMsg         = "not found"
+	NotAuthorizedErrorMsg    = "you are not authorized to perform this action"
+	MissingScopeErrorMsg     = "lacks the required scopes"
+	InvalidInputErrorMsg     = "invalid input"
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
 
-	mappableDomainZoneTestID = "mappable-domain-zone-id"
-	cnameTargetTest          = "cname-target.test.com"
-	previewCnameTargetTest   = "preview-cname-target.test.com"
-	defaultDomainTest        = "test.default.domain"
+	MappableDomainZoneTestID = "mappable-domain-zone-id"
+	CnameTargetTest          = "cname-target.test.com"
+	PreviewCnameTargetTest   = "preview-cname-target.test.com"
+	DefaultDomainTest        = "test.default.domain"
 )
 
 // GraphTestSuite handles the setup and teardown between tests
 type GraphTestSuite struct {
-	client               *client
-	tf                   *testutils.TestFixture
-	ofgaTF               *fgatest.OpenFGATestFixture
-	stripeMockBackend    *mocks.MockStripeBackend
-	cacheRefreshServer   *httptest.Server
-	galaRuntime          *gala.Gala
-	integrationsRT       *intruntime.Runtime
-	workflowEngine       *engine.WorkflowEngine
-	workflowListenersMu  sync.Mutex
-	workflowListenerRefs int
-	workflowListenerIDs  []gala.ListenerID
+	Client               *Client
+	TF                   *testutils.TestFixture
+	OFGATF               *fgatest.OpenFGATestFixture
+	StripeMockBackend    *mocks.MockStripeBackend
+	CacheRefreshServer   *httptest.Server
+	GalaRuntime          *gala.Gala
+	IntegrationsRT       *intruntime.Runtime
+	WorkflowEngine       *engine.WorkflowEngine
+	WorkflowListenersMu  sync.Mutex
+	WorkflowListenerRefs int
+	WorkflowListenerIDs  []gala.ListenerID
 }
 
-// client contains all the clients the test need to interact with
-type client struct {
-	db                 *ent.Client
-	api                *testclient.TestClient
-	apiWithPAT         *testclient.TestClient
-	apiWithToken       *testclient.TestClient
-	apiWithTokenOrg2   *testclient.TestClient
-	fga                *fgax.Client
-	objectStore        *objects.Service
-	mockProvider       *mock_shared.MockProvider
-	deletedStorageKeys *deletedKeys
+// Client contains all the clients the test need to interact with
+type Client struct {
+	DB                 *ent.Client
+	API                *testclient.TestClient
+	APIWithPAT         *testclient.TestClient
+	APIWithToken       *testclient.TestClient
+	APIWithTokenOrg2   *testclient.TestClient
+	FGA                *fgax.Client
+	ObjectStore        *objects.Service
+	MockProvider       *mock_shared.MockProvider
+	DeletedStorageKeys *DeletedKeys
 }
 
-// deletedKeys is a concurrency safe set of the storage keys removed from object storage, the gala
+// DeletedKeys is a concurrency safe set of the storage keys removed from object storage, the gala
 // workers deleting them run on their own goroutines while the test asserts on the main one
-type deletedKeys struct {
+type DeletedKeys struct {
 	mu   sync.Mutex
 	keys map[string]struct{}
 }
 
-// newDeletedKeys returns an empty set
-func newDeletedKeys() *deletedKeys {
-	return &deletedKeys{keys: map[string]struct{}{}}
+// NewDeletedKeys returns an empty set
+func NewDeletedKeys() *DeletedKeys {
+	return &DeletedKeys{keys: map[string]struct{}{}}
 }
 
 // Add records a storage key that was deleted
-func (d *deletedKeys) Add(key string) {
+func (d *DeletedKeys) Add(key string) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
@@ -147,7 +148,7 @@ func (d *deletedKeys) Add(key string) {
 }
 
 // Has reports whether the given storage key was deleted
-func (d *deletedKeys) Has(key string) bool {
+func (d *DeletedKeys) Has(key string) bool {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 
@@ -156,31 +157,22 @@ func (d *deletedKeys) Has(key string) bool {
 	return ok
 }
 
-var suite = &GraphTestSuite{}
+// repoRoot resolves the repository root from this file's own location so paths below do
+// not depend on the working directory of whichever suite is running
+func repoRoot() string {
+	_, thisFile, _, ok := runtime.Caller(0)
+	if !ok {
+		panic("unable to determine testharness source location")
+	}
 
-func TestMain(m *testing.M) {
-	flag.Parse()
-
-	// Create a new testing.T instance
-	// Note: this is only to seed data; you should not use this instance for actual tests
-	// this also cannot be used with a t.FailNow(), you must os.Exit when using this t
-	t := &testing.T{}
-
-	// Setup code here (e.g., initialize database connection)
-	suite.SetupSuite(t)
-
-	// Setup test data, most tests can reuse this same data
-	suite.setupTestData(context.Background(), t)
-
-	// Run the tests
-	exitCode := m.Run()
-
-	// Teardown code here (e.g., close database connection)
-	suite.TearDownSuite(t)
-
-	// Exit with the result of the tests
-	os.Exit(exitCode)
+	return filepath.Join(filepath.Dir(thisFile), "..", "..", "..")
 }
+
+// fgaModuleFile is the fga model the test containers are seeded with
+var fgaModuleFile = filepath.Join(repoRoot(), "fga", "model", "fga.mod")
+
+// Suite is the shared harness instance used by each graphapi test suite
+var Suite = &GraphTestSuite{}
 
 func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	zerolog.SetGlobalLevel(zerolog.Disabled)
@@ -190,12 +182,12 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	}
 
 	// setup test server for cache refresh requests
-	suite.cacheRefreshServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	suite.CacheRefreshServer = httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 	}))
 
 	// Extract host from test server URL (e.g., "127.0.0.1:12345" from "http://127.0.0.1:12345")
-	testServerHost := suite.cacheRefreshServer.URL[len("http://"):]
+	testServerHost := suite.CacheRefreshServer.URL[len("http://"):]
 
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
 		CacheRefreshScheme:       "http",
@@ -203,13 +195,13 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	})
 
 	// setup db container
-	suite.tf = entdb.NewTestFixture()
+	suite.TF = entdb.NewTestFixture()
 
 	version, err := fgaversion.GetVersion()
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	// setup openFGA container
-	suite.ofgaTF = fgatest.NewFGATestcontainer(context.Background(),
+	suite.OFGATF = fgatest.NewFGATestcontainer(context.Background(),
 		fgatest.WithModuleFile(fgaModuleFile),
 		fgatest.WithEnvVars(coreutils.GetDefaultFGAEnvs()),
 		fgatest.WithVersion(version),
@@ -218,11 +210,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	ctx := context.Background()
 
 	// setup fga client
-	fgaClient, err := suite.ofgaTF.NewFgaClient(ctx)
-	requireNoError(t, err)
+	fgaClient, err := suite.OFGATF.NewFgaClient(ctx)
+	RequireNoError(t, err)
 
-	c := &client{
-		fga: fgaClient,
+	c := &Client{
+		FGA: fgaClient,
 	}
 
 	// setup otp manager
@@ -236,7 +228,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	}
 
 	tm, err := coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	sm := coreutils.CreateSessionManager()
 	rc := coreutils.NewRedisClient()
@@ -273,7 +265,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	entCfg.EmailValidation.Enabled = false
 
 	summarizerClient, err := summarizer.NewSummarizer(entCfg.Summarizer)
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	pool := gala.NewPool(
 		gala.WithWorkers(200), //nolint:mnd
@@ -281,33 +273,33 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	)
 
 	// setup history client
-	hc, err := entdb.NewTestHistoryClient(ctx, suite.tf)
-	requireNoError(t, err)
+	hc, err := entdb.NewTestHistoryClient(ctx, suite.TF)
+	RequireNoError(t, err)
 
 	// setup mock entitlements client
-	entitlements, err := suite.mockStripeClient()
-	requireNoError(t, err)
+	entitlements, err := suite.MockStripeClient()
+	RequireNoError(t, err)
 
-	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
-	requireNoError(t, err)
+	c.ObjectStore, c.MockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
+	RequireNoError(t, err)
 
-	c.deletedStorageKeys = newDeletedKeys()
+	c.DeletedStorageKeys = NewDeletedKeys()
 
-	c.mockProvider.On("GetPresignedURL", mock.Anything, mock.Anything, mock.Anything).Return("file:///tmp/test-presigned", nil).Maybe()
-	c.mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-		File: testPDFBytes(),
+	c.MockProvider.On("GetPresignedURL", mock.Anything, mock.Anything, mock.Anything).Return("file:///tmp/test-presigned", nil).Maybe()
+	c.MockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
+		File: TestPDFBytes(),
 		Size: 1024,
 	}, nil).Maybe()
 
 	// record the storage keys removed so tests can assert the objects backing deleted files are
 	// cleaned up out of object storage and not just orphaned
-	c.mockProvider.On("Delete", mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+	c.MockProvider.On("Delete", mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
 		f, ok := args.Get(1).(*storagetypes.File)
 		if !ok || f == nil {
 			return
 		}
 
-		c.deletedStorageKeys.Add(f.Key)
+		c.DeletedStorageKeys.Add(f.Key)
 	}).Return(nil).Maybe()
 
 	opts := []ent.Option{
@@ -323,40 +315,40 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		ent.EntitlementManager(entitlements),
 		ent.EmailVerifier(ev),
 		ent.HistoryClient(hc),
-		ent.ObjectManager(c.objectStore),
+		ent.ObjectManager(c.ObjectStore),
 	}
 
 	// create database connection
-	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
+	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.TF.URI)}
 
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
-	requireNoError(t, err)
+	db, err := entdb.NewTestClient(ctx, suite.TF, jobOpts, nil, opts)
+	RequireNoError(t, err)
 
 	// assign values
-	c.db = db
-	c.api, err = coreutils.TestClient(c.db, c.objectStore)
-	requireNoError(t, err)
+	c.DB = db
+	c.API, err = coreutils.TestClient(c.DB, c.ObjectStore)
+	RequireNoError(t, err)
 
 	// durable gala runtime for integration dispatch
 	galaInstance, err := gala.NewGala(ctx, gala.Config{
 		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     suite.tf.URI,
+		ConnectionURI:     suite.TF.URI,
 		QueueName:         "graphapi_integration_test",
 		WorkerCount:       5, //nolint:mnd
 		RunMigrations:     true,
 		FetchCooldown:     time.Millisecond,
 		FetchPollInterval: 10 * time.Millisecond, //nolint:mnd
 	})
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	db.Use(hooks.EmitGalaEventHook(galaInstance))
 
-	wfEngine, err := engine.NewWorkflowEngine(c.db, galaInstance)
-	requireNoError(t, err)
+	wfEngine, err := engine.NewWorkflowEngine(c.DB, galaInstance)
+	RequireNoError(t, err)
 
-	requireNoError(t, galaInstance.Attach(
+	RequireNoError(t, galaInstance.Attach(
 		gala.WithValue(galaInstance),
-		gala.WithValue(c.db),
+		gala.WithValue(c.DB),
 		gala.WithValue(entitlements),
 		gala.WithValue(wfEngine),
 		// without the restored ent client every durable mutation listener fails
@@ -364,23 +356,23 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	))
 
 	_, err = gala.Register(galaInstance, hooks.EntitlementListeners()...)
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	_, err = gala.Register(galaInstance, hooks.NDAAttestationListeners()...)
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	_, err = gala.Register(galaInstance, hooks.OrganizationCleanupListeners()...)
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	_, err = gala.Register(galaInstance, hooks.IntegrationCleanupListeners()...)
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	// wire integration runtime with mock email provider
-	credStore, err := keystore.NewStore(c.db)
-	requireNoError(t, err)
+	credStore, err := keystore.NewStore(c.DB)
+	RequireNoError(t, err)
 
 	rt, err := intruntime.New(intruntime.Config{
-		DB:          c.db,
+		DB:          c.DB,
 		Gala:        galaInstance,
 		Keystore:    credStore,
 		RedisClient: coreutils.NewRedisClient(),
@@ -391,131 +383,131 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 			testint.Builder(),
 		},
 	})
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
 	intruntime.SetDefault(rt)
-	suite.integrationsRT = rt
+	suite.IntegrationsRT = rt
 
 	// cleanup/reseed listeners resolve the runtime from the gala injector as in production
-	requireNoError(t, galaInstance.Attach(gala.WithValue(rt)))
-	requireNoError(t, wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: rt}))
+	RequireNoError(t, galaInstance.Attach(gala.WithValue(rt)))
+	RequireNoError(t, wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: rt}))
 
 	// Start workers after attaching all shared dependencies
-	requireNoError(t, galaInstance.StartWorkers(ctx))
+	RequireNoError(t, galaInstance.StartWorkers(ctx))
 
-	suite.galaRuntime = galaInstance
-	suite.workflowEngine = wfEngine
+	suite.GalaRuntime = galaInstance
+	suite.WorkflowEngine = wfEngine
 
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		CnameTarget:              cnameTargetTest,
-		PreviewCnameTarget:       previewCnameTargetTest,
-		DefaultTrustCenterDomain: defaultDomainTest,
+		CnameTarget:              CnameTargetTest,
+		PreviewCnameTarget:       PreviewCnameTargetTest,
+		DefaultTrustCenterDomain: DefaultDomainTest,
 	})
 
-	_, err = c.db.MappableDomain.Create().
-		SetName(previewCnameTargetTest).
-		SetZoneID(mappableDomainZoneTestID).
+	_, err = c.DB.MappableDomain.Create().
+		SetName(PreviewCnameTargetTest).
+		SetZoneID(MappableDomainZoneTestID).
 		Save(privacy.DecisionContext(ctx, privacy.Allow))
-	requireNoError(t, err)
+	RequireNoError(t, err)
 
-	suite.client = c
+	suite.Client = c
 }
 
 func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
-	if suite.galaRuntime != nil {
-		err := suite.galaRuntime.StopWorkers(context.Background())
-		requireNoError(t, err)
+	if suite.GalaRuntime != nil {
+		err := suite.GalaRuntime.StopWorkers(context.Background())
+		RequireNoError(t, err)
 
-		err = suite.galaRuntime.Close()
-		requireNoError(t, err)
+		err = suite.GalaRuntime.Close()
+		RequireNoError(t, err)
 	}
 
 	// close the database connection
-	err := suite.client.db.Close()
-	requireNoError(t, err)
+	err := suite.Client.DB.Close()
+	RequireNoError(t, err)
 
 	// close the database container
-	testutils.TeardownFixture(suite.tf)
+	testutils.TeardownFixture(suite.TF)
 
 	// terminate all fga containers
-	err = suite.ofgaTF.TeardownFixture()
-	requireNoError(t, err)
+	err = suite.OFGATF.TeardownFixture()
+	RequireNoError(t, err)
 
 	// close the cache refresh test server
-	if suite.cacheRefreshServer != nil {
-		suite.cacheRefreshServer.Close()
+	if suite.CacheRefreshServer != nil {
+		suite.CacheRefreshServer.Close()
 	}
 }
 
-// acquireWorkflowRuntime shares one workflow listener registration across parallel tests
-func (suite *GraphTestSuite) acquireWorkflowRuntime(t *testing.T) (*engine.WorkflowEngine, *gala.Gala) {
+// AcquireWorkflowRuntime shares one workflow listener registration across parallel tests
+func (suite *GraphTestSuite) AcquireWorkflowRuntime(t *testing.T) (*engine.WorkflowEngine, *gala.Gala) {
 	t.Helper()
 
-	suite.workflowListenersMu.Lock()
-	if suite.workflowListenerRefs == 0 {
-		listenerIDs, err := gala.Register(suite.galaRuntime, hooks.WorkflowListeners()...)
+	suite.WorkflowListenersMu.Lock()
+	if suite.WorkflowListenerRefs == 0 {
+		listenerIDs, err := gala.Register(suite.GalaRuntime, hooks.WorkflowListeners()...)
 		if err != nil {
-			suite.workflowListenersMu.Unlock()
-			requireNoError(t, err)
+			suite.WorkflowListenersMu.Unlock()
+			RequireNoError(t, err)
 
 			return nil, nil
 		}
 
-		suite.workflowListenerIDs = listenerIDs
+		suite.WorkflowListenerIDs = listenerIDs
 	}
 
-	suite.workflowListenerRefs++
-	workflowEngine := suite.workflowEngine
-	runtime := suite.galaRuntime
-	suite.workflowListenersMu.Unlock()
+	suite.WorkflowListenerRefs++
+	workflowEngine := suite.WorkflowEngine
+	runtime := suite.GalaRuntime
+	suite.WorkflowListenersMu.Unlock()
 
 	t.Cleanup(func() {
-		suite.releaseWorkflowRuntime(t)
+		suite.ReleaseWorkflowRuntime(t)
 	})
 
 	return workflowEngine, runtime
 }
 
-// releaseWorkflowRuntime removes workflow listeners after the last borrowing test
-func (suite *GraphTestSuite) releaseWorkflowRuntime(t *testing.T) {
+// ReleaseWorkflowRuntime removes workflow listeners after the last borrowing test
+func (suite *GraphTestSuite) ReleaseWorkflowRuntime(t *testing.T) {
 	t.Helper()
 
-	suite.workflowListenersMu.Lock()
-	defer suite.workflowListenersMu.Unlock()
+	suite.WorkflowListenersMu.Lock()
+	defer suite.WorkflowListenersMu.Unlock()
 
-	if suite.workflowListenerRefs == 0 {
+	if suite.WorkflowListenerRefs == 0 {
 		return
 	}
 
-	suite.workflowListenerRefs--
-	if suite.workflowListenerRefs > 0 {
+	suite.WorkflowListenerRefs--
+	if suite.WorkflowListenerRefs > 0 {
 		return
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), gala.DefaultSoftStopTimeout)
 	defer cancel()
 
-	err := suite.galaRuntime.RemoveListeners(ctx, suite.workflowListenerIDs...)
-	requireNoError(t, err)
-	suite.workflowListenerIDs = nil
+	err := suite.GalaRuntime.RemoveListeners(ctx, suite.WorkflowListenerIDs...)
+	RequireNoError(t, err)
+	suite.WorkflowListenerIDs = nil
 }
 
 // WaitForEvents blocks until runnable and in-flight Gala jobs complete
 func (suite *GraphTestSuite) WaitForEvents() {
-	if err := suite.galaRuntime.WaitIdle(context.Background()); err != nil {
+	if err := suite.GalaRuntime.WaitIdle(context.Background()); err != nil {
 		panic(err)
 	}
 }
 
-func waitForGala(t *testing.T, runtime *gala.Gala) {
+func WaitForGala(t *testing.T, runtime *gala.Gala) {
 	t.Helper()
 	assert.NilError(t, runtime.WaitIdle(t.Context()))
 }
 
-// mockEmailSender extracts the mock email sender from the integration runtime
-func (suite *GraphTestSuite) mockEmailSender() *mockprovider.EmailSender {
-	rc, ok := suite.integrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
+// MockEmailSender extracts the mock email sender from the integration runtime
+func (suite *GraphTestSuite) MockEmailSender() *mockprovider.EmailSender {
+	rc, ok := suite.IntegrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
 	if !ok {
 		panic("email runtime client not found")
 	}
@@ -528,15 +520,15 @@ func (suite *GraphTestSuite) mockEmailSender() *mockprovider.EmailSender {
 	return ms
 }
 
-func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
+func (suite *GraphTestSuite) EnableGalaForTestSuite(t *testing.T) {
 	t.Helper()
 
-	if suite.galaRuntime != nil {
+	if suite.GalaRuntime != nil {
 		return
 	}
 
 	runtime, err := gala.NewGala(context.Background(), gala.Config{
-		ConnectionURI:     suite.tf.URI,
+		ConnectionURI:     suite.TF.URI,
 		QueueName:         fmt.Sprintf("graphapi_test_%d", time.Now().UnixNano()),
 		WorkerCount:       1,
 		RunMigrations:     true,
@@ -547,8 +539,8 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 
 	require.NoError(t, runtime.Attach(
 		gala.WithValue(runtime),
-		gala.WithValue(suite.client.db),
-		gala.WithValue(suite.client.db.EntitlementManager),
+		gala.WithValue(suite.Client.DB),
+		gala.WithValue(suite.Client.DB.EntitlementManager),
 	))
 
 	_, err = gala.Register(runtime, hooks.EntitlementListeners()...)
@@ -557,25 +549,25 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 	err = runtime.StartWorkers(context.Background())
 	require.NoError(t, err)
 
-	suite.galaRuntime = runtime
+	suite.GalaRuntime = runtime
 
 	t.Cleanup(func() {
-		if suite.galaRuntime == nil {
+		if suite.GalaRuntime == nil {
 			return
 		}
 
-		err := suite.galaRuntime.StopWorkers(context.Background())
+		err := suite.GalaRuntime.StopWorkers(context.Background())
 		require.NoError(t, err)
 
-		err = suite.galaRuntime.Close()
+		err = suite.GalaRuntime.Close()
 		require.NoError(t, err)
 
-		suite.galaRuntime = nil
+		suite.GalaRuntime = nil
 	})
 }
 
-// expectUpload sets up the mock object store to expect an upload and related operations
-func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload) {
+// ExpectUpload sets up the mock object store to expect an upload and related operations
+func ExpectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload) {
 	assert.Assert(t, mockProvider != nil)
 
 	mockScheme := "file://"
@@ -597,14 +589,14 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 
 		// Allow document hooks to download the just-uploaded content for parsing
 		mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-			File: testPDFBytes(),
+			File: TestPDFBytes(),
 			Size: upload.Size,
 		}, nil).Maybe()
 	}
 }
 
-// expectAttestedUpload sets up mock expectations for the attested PDF upload triggered by attestNDADocument
-func expectAttestedUpload(t *testing.T, mockProvider *mock_shared.MockProvider) {
+// ExpectAttestedUpload sets up mock expectations for the attested PDF upload triggered by attestNDADocument
+func ExpectAttestedUpload(t *testing.T, mockProvider *mock_shared.MockProvider) {
 	assert.Assert(t, mockProvider != nil)
 
 	mockScheme := "file://"
@@ -623,7 +615,7 @@ func expectAttestedUpload(t *testing.T, mockProvider *mock_shared.MockProvider) 
 	}, nil).Once()
 }
 
-func expectUploadWithTemplateKind(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload, kind enums.TemplateKind) {
+func ExpectUploadWithTemplateKind(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload, kind enums.TemplateKind) {
 	assert.Assert(t, mockProvider != nil)
 
 	mockScheme := "file://"
@@ -652,14 +644,14 @@ func expectUploadWithTemplateKind(t *testing.T, mockProvider *mock_shared.MockPr
 
 		// Allow document hooks to download the just-uploaded content for parsing
 		mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
-			File: testPDFBytes(),
+			File: TestPDFBytes(),
 			Size: upload.Size,
 		}, nil).Maybe()
 	}
 }
 
-// expectDelete sets up the mock object store to expect a delete and related operations
-func expectDelete(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload) {
+// ExpectDelete sets up the mock object store to expect a delete and related operations
+func ExpectDelete(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []graphql.Upload) {
 	assert.Assert(t, mockProvider != nil)
 
 	mockScheme := "file://"
@@ -670,8 +662,8 @@ func expectDelete(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 	}
 }
 
-// expectUploadNillable sets up the mock object store to expect an upload and related operations
-func expectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []*graphql.Upload) {
+// ExpectUploadNillable sets up the mock object store to expect an upload and related operations
+func ExpectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, expectedUploads []*graphql.Upload) {
 	assert.Check(t, mockProvider != nil)
 
 	mockScheme := "file://"
@@ -701,9 +693,9 @@ func expectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, 
 	}
 }
 
-// expectUploadCheckOnly sets up the mock object store to expect an upload check only operation
+// ExpectUploadCheckOnly sets up the mock object store to expect an upload check only operation
 // but fails before the upload is attempted
-func expectUploadCheckOnly(t *testing.T, mockProvider *mock_shared.MockProvider) {
+func ExpectUploadCheckOnly(t *testing.T, mockProvider *mock_shared.MockProvider) {
 	assert.Assert(t, mockProvider != nil)
 
 	mockScheme := "file://"
@@ -711,8 +703,8 @@ func expectUploadCheckOnly(t *testing.T, mockProvider *mock_shared.MockProvider)
 	mockProvider.On("GetScheme").Return(&mockScheme).Once()
 }
 
-// parseClientError parses the error response from the client and returns a slice of gqlerror.Error
-func parseClientError(t *testing.T, err error) []*gqlerror.Error {
+// ParseClientError parses the error response from the client and returns a slice of gqlerror.Error
+func ParseClientError(t *testing.T, err error) []*gqlerror.Error {
 	t.Helper()
 
 	if err == nil {
@@ -736,21 +728,21 @@ func parseClientError(t *testing.T, err error) []*gqlerror.Error {
 	return gqlErrors
 }
 
-// assertErrorCode checks if the error code matches the expected code
-func assertErrorCode(t *testing.T, err *gqlerror.Error, code string) {
+// AssertErrorCode checks if the error code matches the expected code
+func AssertErrorCode(t *testing.T, err *gqlerror.Error, code string) {
 	t.Helper()
 
 	assert.Equal(t, code, testclient.GetErrorCode(err))
 }
 
-// assertErrorMessage checks if the error message matches the expected message
-func assertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
+// AssertErrorMessage checks if the error message matches the expected message
+func AssertErrorMessage(t *testing.T, err *gqlerror.Error, msg string) {
 	t.Helper()
 
 	assert.Equal(t, msg, testclient.GetErrorMessage(err))
 }
 
-func requireNoError(t *testing.T, err error) {
+func RequireNoError(t *testing.T, err error) {
 	t.Helper()
 	if err != nil {
 		log.Error().Err(err).Msg("fatal error during test setup or teardown")
@@ -759,7 +751,7 @@ func requireNoError(t *testing.T, err error) {
 	}
 }
 
-func failNow(t *testing.T, msgs ...string) {
+func FailNow(t *testing.T, msgs ...string) {
 	t.Helper()
 	logMsg := log.Error()
 
@@ -772,7 +764,7 @@ func failNow(t *testing.T, msgs ...string) {
 	os.Exit(1)
 }
 
-func testPDFBytes() []byte {
+func TestPDFBytes() []byte {
 	page := map[string]any{
 		"paper":  "A4P",
 		"origin": "UpperLeft",
@@ -798,16 +790,16 @@ func testPDFBytes() []byte {
 	return buf.Bytes()
 }
 
-// mockStripeClient creates a new stripe client with mock backend
-func (suite *GraphTestSuite) mockStripeClient() (*entitlements.StripeClient, error) {
-	suite.stripeMockBackend = new(mocks.MockStripeBackend)
+// MockStripeClient creates a new stripe client with mock backend
+func (suite *GraphTestSuite) MockStripeClient() (*entitlements.StripeClient, error) {
+	suite.StripeMockBackend = new(mocks.MockStripeBackend)
 	stripeTestBackends := &stripe.Backends{
-		API:     suite.stripeMockBackend,
-		Connect: suite.stripeMockBackend,
-		Uploads: suite.stripeMockBackend,
+		API:     suite.StripeMockBackend,
+		Connect: suite.StripeMockBackend,
+		Uploads: suite.StripeMockBackend,
 	}
 
-	suite.orgSubscriptionMocks()
+	suite.OrgSubscriptionMocks()
 
 	return entitlements.NewStripeClient(entitlements.WithAPIKey("sk_test_testing"),
 		entitlements.WithConfig(entitlements.Config{
@@ -819,7 +811,7 @@ func (suite *GraphTestSuite) mockStripeClient() (*entitlements.StripeClient, err
 	)
 }
 
-var mockItems = []*stripe.SubscriptionItem{
+var MockItems = []*stripe.SubscriptionItem{
 	{
 		Price: &stripe.Price{
 			Product: &stripe.Product{
@@ -835,8 +827,8 @@ var mockItems = []*stripe.SubscriptionItem{
 	},
 }
 
-// mockCustomer for webhook tests
-var mockCustomer = &stripe.Customer{
+// MockCustomer for webhook tests
+var MockCustomer = &stripe.Customer{
 	ID: "cus_test_customer",
 	Subscriptions: &stripe.SubscriptionList{
 		Data: []*stripe.Subscription{
@@ -846,18 +838,18 @@ var mockCustomer = &stripe.Customer{
 				},
 				ID: seedStripeSubscriptionID,
 				Items: &stripe.SubscriptionItemList{
-					Data: mockItems,
+					Data: MockItems,
 				},
 			},
 		},
 	},
 }
 
-var mockSubscription = &stripe.Subscription{
+var MockSubscription = &stripe.Subscription{
 	ID:     "sub_test_subscription",
 	Status: "active",
 	Items: &stripe.SubscriptionItemList{
-		Data: mockItems,
+		Data: MockItems,
 	},
 	Metadata: map[string]string{
 		"organization_id": ulids.New().String(),
@@ -869,37 +861,37 @@ var mockSubscription = &stripe.Subscription{
 	DaysUntilDue: 15,
 }
 
-var mockProduct = &stripe.Product{
+var MockProduct = &stripe.Product{
 	ID:   "prod_test_product",
 	Name: "Test Product",
 }
 
-// orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
-func (suite *GraphTestSuite) orgSubscriptionMocks() {
+// OrgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
+func (suite *GraphTestSuite) OrgSubscriptionMocks() {
 	// setup mocks for get customer by id
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerRetrieveParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerRetrieveParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
 
-		*mockCustomerSearchResult = *mockCustomer
+		*mockCustomerSearchResult = *MockCustomer
 
 	}).Return(nil)
 
 	// setup mocks for creating customer params
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerCreateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerCreateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.Customer)
 
-		*mockCustomerSearchResult = *mockCustomer
+		*mockCustomerSearchResult = *MockCustomer
 
 	}).Return(nil)
 
 	// mock customer search
-	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v86.Customer]")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v86.Customer]")).Run(func(args mock.Arguments) {
 		out := args.Get(4) // this is *v1SearchPage[*stripe.Customer] now, but unexported
 
 		// Build a payload that matches Stripe search response shape
 		payload := map[string]any{
 			"object":   "search_result",
-			"data":     []*stripe.Customer{mockCustomer},
+			"data":     []*stripe.Customer{MockCustomer},
 			"has_more": false,
 		}
 
@@ -908,31 +900,31 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// mock for subscription create params
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionCreateParams"), mock.AnythingOfType("*stripe.Subscription")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionCreateParams"), mock.AnythingOfType("*stripe.Subscription")).Run(func(args mock.Arguments) {
 		mockSubscriptionSearchResult := args.Get(4).(*stripe.Subscription)
 
-		*mockSubscriptionSearchResult = *mockSubscription
+		*mockSubscriptionSearchResult = *MockSubscription
 
 	}).Return(nil)
 
 	// mock for product retrieve params
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.ProductRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.ProductRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
 		mockProductRetrieveResult := args.Get(4).(*stripe.Product)
 
-		*mockProductRetrieveResult = *mockProduct
+		*mockProductRetrieveResult = *MockProduct
 
 	}).Return(nil)
 
 	// mock for product params
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionRetrieveParams"), mock.AnythingOfType("*stripe.Product")).Run(func(args mock.Arguments) {
 		mockSubscriptionRetrieveResult := args.Get(4).(*stripe.Subscription)
 
-		*mockSubscriptionRetrieveResult = *mockSubscription
+		*mockSubscriptionRetrieveResult = *MockSubscription
 
 	}).Return(nil)
 
 	// setup mocks for getting entitlements
-	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
 		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
 
 		*mockCustomerSearchResult = stripe.EntitlementsActiveEntitlementList{
@@ -949,7 +941,7 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// setup mocks for subscription schedule creation
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionScheduleCreateParams"), mock.AnythingOfType("*stripe.SubscriptionSchedule")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.SubscriptionScheduleCreateParams"), mock.AnythingOfType("*stripe.SubscriptionSchedule")).Run(func(args mock.Arguments) {
 		mockSubscriptionScheduleResult := args.Get(4).(*stripe.SubscriptionSchedule)
 
 		*mockSubscriptionScheduleResult = stripe.SubscriptionSchedule{
@@ -960,28 +952,28 @@ func (suite *GraphTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// setup mocks for customer update params
-	suite.stripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerUpdateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
+	suite.StripeMockBackend.On("Call", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.CustomerUpdateParams"), mock.AnythingOfType("*stripe.Customer")).Run(func(args mock.Arguments) {
 		mockCustomerUpdateResult := args.Get(4).(*stripe.Customer)
 
-		*mockCustomerUpdateResult = *mockCustomer
+		*mockCustomerUpdateResult = *MockCustomer
 
 	}).Return(nil)
 }
 
-// newTestGraphServer creates a new GraphQL server for testing
+// NewTestGraphServer creates a new GraphQL server for testing
 // this is used when the test client can't be used such as subscriptions
-func newTestGraphServer(t *testing.T) http.Handler {
+func NewTestGraphServer(t *testing.T) http.Handler {
 	cfg := config.Config{}
 	defaults.SetDefaults(&cfg)
 
 	// get keys from the token manager
-	keys, err := suite.client.db.TokenManager.Keys()
+	keys, err := Suite.Client.DB.TokenManager.Keys()
 	require.NoError(t, err)
 
 	// local validator to avoid JWK cache issues
 	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
 
-	r := graphapi.NewResolver(suite.client.db, nil).
+	r := graphapi.NewResolver(Suite.Client.DB, nil).
 		WithExtensions(true).
 		WithDevelopment(true).
 		WithSubscriptions(true, nil).
@@ -991,7 +983,7 @@ func newTestGraphServer(t *testing.T) http.Handler {
 					return authmw.AuthenticateSkipperFuncForWebsockets(c)
 				},
 			),
-			authmw.WithDBClient(suite.client.db),
+			authmw.WithDBClient(Suite.Client.DB),
 			authmw.WithValidator(validator),
 		)
 

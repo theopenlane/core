@@ -1,6 +1,6 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"net/http"
@@ -8,6 +8,8 @@ import (
 	"strings"
 	"sync/atomic"
 	"testing"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -37,25 +39,25 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 	// the http scheme puts trustcenterurl.BuildURL in test mode, routing every refresh to the
 	// local server so refreshes succeed instead of retrying against unresolvable hosts
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		CnameTarget:              cnameTargetTest,
-		PreviewCnameTarget:       previewCnameTargetTest,
+		CnameTarget:              th.CnameTargetTest,
+		PreviewCnameTarget:       th.PreviewCnameTargetTest,
 		DefaultTrustCenterDomain: strings.TrimPrefix(refreshServer.URL, "http://"),
 		CacheRefreshScheme:       "http",
 	})
 	t.Cleanup(func() {
 		hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-			CnameTarget:              cnameTargetTest,
-			PreviewCnameTarget:       previewCnameTargetTest,
-			DefaultTrustCenterDomain: defaultDomainTest,
+			CnameTarget:              th.CnameTargetTest,
+			PreviewCnameTarget:       th.PreviewCnameTargetTest,
+			DefaultTrustCenterDomain: th.DefaultDomainTest,
 		})
 	})
 
-	tcOrg := createFreshOrgWithTrustCenter(t)
-	trustCenter := tcOrg.trustCenter
-	dbCtx := privacy.DecisionContext(setContext(tcOrg.owner.UserCtx, suite.client.db), privacy.Allow)
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t)
+	trustCenter := tcOrg.TrustCenter
+	dbCtx := privacy.DecisionContext(th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	// the runtime is created after seeding so only the mutations under test dispatch
-	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.TrustCenterCacheListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.TrustCenterCacheListeners())
 	assert.NilError(t, err)
 	t.Cleanup(setup.Teardown)
 
@@ -64,7 +66,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 		before := refreshHits.Load()
 		mutate()
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
 		return refreshHits.Load() - before
 	}
@@ -73,11 +75,11 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 	t.Run("not visible doc create skips refresh", func(t *testing.T) {
 		delta := refreshDelta(t, func() {
-			privateDoc = (&TrustCenterDocBuilder{
-				client:        suite.client,
+			privateDoc = (&th.TrustCenterDocBuilder{
+				Client:        suite.Client,
 				TrustCenterID: trustCenter.ID,
 				Visibility:    enums.TrustCenterDocumentVisibilityNotVisible,
-			}).MustNew(tcOrg.owner.UserCtx, t)
+			}).MustNew(tcOrg.Owner.UserCtx, t)
 		})
 
 		assert.Check(t, is.Equal(enums.TrustCenterDocumentVisibilityNotVisible, privateDoc.Visibility))
@@ -86,7 +88,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 	t.Run("doc update without visibility change skips refresh", func(t *testing.T) {
 		delta := refreshDelta(t, func() {
-			err := suite.client.db.TrustCenterDoc.UpdateOneID(privateDoc.ID).
+			err := suite.Client.DB.TrustCenterDoc.UpdateOneID(privateDoc.ID).
 				SetTitle("Cache Listener Private Doc Renamed").
 				Exec(dbCtx)
 			assert.NilError(t, err)
@@ -97,11 +99,11 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 	t.Run("publicly visible doc create refreshes", func(t *testing.T) {
 		delta := refreshDelta(t, func() {
-			publicDoc = (&TrustCenterDocBuilder{
-				client:        suite.client,
+			publicDoc = (&th.TrustCenterDocBuilder{
+				Client:        suite.Client,
 				TrustCenterID: trustCenter.ID,
 				Visibility:    enums.TrustCenterDocumentVisibilityPubliclyVisible,
-			}).MustNew(tcOrg.owner.UserCtx, t)
+			}).MustNew(tcOrg.Owner.UserCtx, t)
 		})
 
 		assert.Check(t, is.Equal(int64(1), delta))
@@ -111,7 +113,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 		// the API path pre-caches the mutation's old row, which the post-mutation
 		// visibility-tuple hook requires; a bare ent update trips ent's old-value guard
 		delta := refreshDelta(t, func() {
-			_, err := suite.client.api.UpdateTrustCenterDoc(tcOrg.owner.UserCtx, publicDoc.ID, testclient.UpdateTrustCenterDocInput{
+			_, err := suite.Client.API.UpdateTrustCenterDoc(tcOrg.Owner.UserCtx, publicDoc.ID, testclient.UpdateTrustCenterDocInput{
 				Visibility: &enums.TrustCenterDocumentVisibilityProtected,
 			}, nil, nil)
 			assert.NilError(t, err)
@@ -122,7 +124,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 	t.Run("soft deleted doc refreshes", func(t *testing.T) {
 		delta := refreshDelta(t, func() {
-			err := suite.client.db.TrustCenterDoc.DeleteOneID(privateDoc.ID).Exec(dbCtx)
+			err := suite.Client.DB.TrustCenterDoc.DeleteOneID(privateDoc.ID).Exec(dbCtx)
 			assert.NilError(t, err)
 		})
 
@@ -133,16 +135,16 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 		var note *generated.Note
 
 		delta := refreshDelta(t, func() {
-			note = (&NoteBuilder{
-				client:        suite.client,
+			note = (&th.NoteBuilder{
+				Client:        suite.Client,
 				TrustCenterID: trustCenter.ID,
-			}).MustNew(tcOrg.owner.UserCtx, t)
+			}).MustNew(tcOrg.Owner.UserCtx, t)
 		})
 
 		assert.Check(t, is.Equal(int64(1), delta))
 
 		delta = refreshDelta(t, func() {
-			err := suite.client.db.Note.UpdateOneID(note.ID).
+			err := suite.Client.DB.Note.UpdateOneID(note.ID).
 				SetText("cache listener note update without linkage change").
 				Exec(dbCtx)
 			assert.NilError(t, err)
@@ -153,10 +155,10 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 	t.Run("trust center entity create refreshes", func(t *testing.T) {
 		delta := refreshDelta(t, func() {
-			(&TrustCenterEntityBuilder{
-				client:        suite.client,
+			(&th.TrustCenterEntityBuilder{
+				Client:        suite.Client,
 				TrustCenterID: trustCenter.ID,
-			}).MustNew(tcOrg.owner.UserCtx, t)
+			}).MustNew(tcOrg.Owner.UserCtx, t)
 		})
 
 		assert.Check(t, is.Equal(int64(1), delta))
@@ -166,13 +168,13 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 		var sub *generated.Subprocessor
 
 		delta := refreshDelta(t, func() {
-			sub = (&SubprocessorBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+			sub = (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(tcOrg.Owner.UserCtx, t)
 		})
 
 		assert.Check(t, is.Equal(int64(0), delta))
 
 		delta = refreshDelta(t, func() {
-			err := suite.client.db.TrustCenterSubprocessor.Create().
+			err := suite.Client.DB.TrustCenterSubprocessor.Create().
 				SetTrustCenterID(trustCenter.ID).
 				SetSubprocessorID(sub.ID).
 				SetCountries([]string{"US"}).
@@ -183,7 +185,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 		assert.Check(t, is.Equal(int64(1), delta))
 
 		delta = refreshDelta(t, func() {
-			err := suite.client.db.Subprocessor.UpdateOneID(sub.ID).
+			err := suite.Client.DB.Subprocessor.UpdateOneID(sub.ID).
 				SetName("cache-listener-renamed-vendor").
 				Exec(dbCtx)
 			assert.NilError(t, err)
@@ -192,7 +194,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 		assert.Check(t, is.Equal(int64(1), delta))
 
 		delta = refreshDelta(t, func() {
-			err := suite.client.db.Subprocessor.UpdateOneID(sub.ID).
+			err := suite.Client.DB.Subprocessor.UpdateOneID(sub.ID).
 				SetDescription("update on a field the listener does not gate on").
 				Exec(dbCtx)
 			assert.NilError(t, err)
@@ -205,7 +207,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 		// cascaded child soft deletes emit their own events and each resolves back to the
 		// still-loadable trust center, so the delta is at least one
 		delta := refreshDelta(t, func() {
-			err := suite.client.db.TrustCenter.DeleteOneID(trustCenter.ID).Exec(dbCtx)
+			err := suite.Client.DB.TrustCenter.DeleteOneID(trustCenter.ID).Exec(dbCtx)
 			assert.NilError(t, err)
 		})
 
@@ -214,12 +216,12 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 	t.Run("hard deleted trust center acks without refresh", func(t *testing.T) {
 		delta := refreshDelta(t, func() {
-			err := suite.client.db.TrustCenter.DeleteOneID(trustCenter.ID).Exec(entx.SkipSoftDelete(dbCtx))
+			err := suite.Client.DB.TrustCenter.DeleteOneID(trustCenter.ID).Exec(entx.SkipSoftDelete(dbCtx))
 			assert.NilError(t, err)
 		})
 
 		assert.Check(t, is.Equal(int64(0), delta))
 	})
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }

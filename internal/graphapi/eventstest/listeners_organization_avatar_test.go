@@ -1,6 +1,6 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
@@ -12,6 +12,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -56,22 +58,22 @@ func TestOrganizationAvatarListener(t *testing.T) {
 	requester, err := urlx.NewRequester(httpsling.WithHTTPClient(client))
 	assert.NilError(t, err)
 
-	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.OrganizationAvatarListeners(
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.OrganizationAvatarListeners(
 		hooks.WithOrganizationAvatarRequester(requester),
 	))
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
-	user := suite.userBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(setContext(user.UserCtx, suite.client.db), privacy.Allow)
+	user := suite.UserBuilder(context.Background(), t)
+	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
 	t.Run("create without domains keeps default avatar", func(t *testing.T) {
-		org := (&OrganizationBuilder{client: suite.client}).MustNew(user.UserCtx, t)
+		org := (&th.OrganizationBuilder{Client: suite.Client}).MustNew(user.UserCtx, t)
 		assert.Assert(t, org.AvatarRemoteURL != nil)
 
 		assert.NilError(t, setup.Runtime.WaitIdle(t.Context()))
 
-		reloaded, err := suite.client.db.Organization.Query().
+		reloaded, err := suite.Client.DB.Organization.Query().
 			Where(organization.IDEQ(org.ID)).
 			WithSetting().
 			Only(allowCtx)
@@ -85,7 +87,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 	t.Run("local avatar discovery updates the organization", func(t *testing.T) {
 		domain := "avatar-" + strings.ToLower(ulids.New().String()) + ".test"
 
-		resp, err := suite.client.api.CreateOrganization(user.UserCtx, testclient.CreateOrganizationInput{
+		resp, err := suite.Client.API.CreateOrganization(user.UserCtx, testclient.CreateOrganizationInput{
 			Name: "avatar-listener-" + ulids.New().String(),
 			CreateOrgSettings: &testclient.CreateOrganizationSettingInput{
 				Domains: []string{domain},
@@ -98,7 +100,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 
 		assert.NilError(t, setup.Runtime.WaitIdle(t.Context()))
 
-		reloaded, err := suite.client.db.Organization.Query().
+		reloaded, err := suite.Client.DB.Organization.Query().
 			Where(organization.IDEQ(created.ID)).
 			WithSetting().
 			Only(allowCtx)
@@ -112,7 +114,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 	t.Run("local transport failure acks without avatar update", func(t *testing.T) {
 		domain := "unreachable-" + strings.ToLower(ulids.New().String()) + ".test"
 
-		resp, err := suite.client.api.CreateOrganization(user.UserCtx, testclient.CreateOrganizationInput{
+		resp, err := suite.Client.API.CreateOrganization(user.UserCtx, testclient.CreateOrganizationInput{
 			Name: "avatar-listener-unreachable-" + ulids.New().String(),
 			CreateOrgSettings: &testclient.CreateOrganizationSettingInput{
 				Domains: []string{domain},
@@ -125,7 +127,7 @@ func TestOrganizationAvatarListener(t *testing.T) {
 
 		assert.NilError(t, setup.Runtime.WaitIdle(t.Context()))
 
-		reloaded, err := suite.client.db.Organization.Query().
+		reloaded, err := suite.Client.DB.Organization.Query().
 			Where(organization.IDEQ(created.ID)).
 			WithSetting().
 			Only(allowCtx)

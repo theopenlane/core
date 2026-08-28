@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
@@ -11,7 +13,7 @@ import (
 )
 
 func TestQueryPasskeys(t *testing.T) {
-	w := (&WebauthnBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	w := (&th.WebauthnBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -23,24 +25,24 @@ func TestQueryPasskeys(t *testing.T) {
 	}{
 		{
 			name:          "happy path user",
-			client:        suite.client.api,
-			ctx:           sharedTestUser1.UserCtx,
+			client:        suite.Client.API,
+			ctx:           th.SharedTestUser1.UserCtx,
 			expectedCount: 1,
 		},
 		{
 			name:          "happy path, using personal access token",
-			client:        suite.client.apiWithPAT,
+			client:        suite.Client.APIWithPAT,
 			ctx:           context.Background(),
 			expectedCount: 1,
 		},
 		{
 			name:   "valid user, but no passkeys",
-			client: suite.client.api,
-			ctx:    sharedTestUser2.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser2.UserCtx,
 		},
 		{
 			name:     "no auth",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      context.Background(),
 			errorMsg: "could not identify authenticated user",
 		},
@@ -63,12 +65,12 @@ func TestQueryPasskeys(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.WebauthnDeleteOne]{client: suite.client.db.Webauthn, ID: w.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.WebauthnDeleteOne]{Client: suite.Client.DB.Webauthn, ID: w.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeletePasskeys(t *testing.T) {
-	passkey := (&WebauthnBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	secondPasskey := (&WebauthnBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	passkey := (&th.WebauthnBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	secondPasskey := (&th.WebauthnBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -81,22 +83,22 @@ func TestMutationDeletePasskeys(t *testing.T) {
 	}{
 		{
 			name:          "happy path user",
-			client:        suite.client.api,
-			ctx:           sharedTestUser1.UserCtx,
+			client:        suite.Client.API,
+			ctx:           th.SharedTestUser1.UserCtx,
 			passkeyID:     passkey.ID,
 			expectedCount: 1, // we are deleting 1
 		},
 		{
 			// the first test case should have deleted the passkey
 			name:      "happy path, but deleted passkey",
-			client:    suite.client.apiWithPAT,
+			client:    suite.Client.APIWithPAT,
 			ctx:       context.Background(),
 			passkeyID: passkey.ID,
-			errorMsg:  notFoundErrorMsg,
+			errorMsg:  th.NotFoundErrorMsg,
 		},
 		{
 			name:          "happy path user with pat",
-			client:        suite.client.apiWithPAT,
+			client:        suite.Client.APIWithPAT,
 			ctx:           context.Background(),
 			passkeyID:     secondPasskey.ID,
 			expectedCount: 0,

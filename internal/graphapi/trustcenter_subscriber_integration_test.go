@@ -9,6 +9,8 @@ import (
 	"testing"
 	"time"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
@@ -29,47 +31,47 @@ import (
 // the subscription is scoped to the trust center and its owning org from the JWT, and that a
 // mismatched trust center in the input is rejected
 func TestTrustCenterAnonymousSubscribe(t *testing.T) {
-	tc := createFreshOrgWithTrustCenter(t)
+	tc := th.CreateFreshOrgWithTrustCenter(t)
 
 	subscriberEmail := gofakeit.Email()
-	anonCtx, _ := createAnonymousTrustCenterContextWithEmail(tc.trustCenter.ID, tc.trustCenter.OwnerID, subscriberEmail)
+	anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(tc.TrustCenter.ID, tc.TrustCenter.OwnerID, subscriberEmail)
 
-	resp, err := suite.client.api.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
+	resp, err := suite.Client.API.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
 		Email:         subscriberEmail,
-		TrustCenterID: &tc.trustCenter.ID,
+		TrustCenterID: &tc.TrustCenter.ID,
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, strings.ToLower(subscriberEmail), resp.CreateSubscriber.Subscriber.Email)
 
-	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
-	sub, err := suite.client.db.Subscriber.Get(dbCtx, resp.CreateSubscriber.Subscriber.ID)
+	sub, err := suite.Client.DB.Subscriber.Get(dbCtx, resp.CreateSubscriber.Subscriber.ID)
 	assert.NilError(t, err)
-	assert.Equal(t, tc.trustCenter.ID, lo.FromPtr(sub.TrustCenterID))
-	assert.Equal(t, tc.trustCenter.OwnerID, sub.OwnerID)
+	assert.Equal(t, tc.TrustCenter.ID, lo.FromPtr(sub.TrustCenterID))
+	assert.Equal(t, tc.TrustCenter.OwnerID, sub.OwnerID)
 
 	t.Run("rejects mismatched trust center", func(t *testing.T) {
-		other := createFreshOrgWithTrustCenter(t)
+		other := th.CreateFreshOrgWithTrustCenter(t)
 
-		_, err := suite.client.api.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
+		_, err := suite.Client.API.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
 			Email:         gofakeit.Email(),
-			TrustCenterID: &other.trustCenter.ID,
+			TrustCenterID: &other.TrustCenter.ID,
 		})
 		assert.Assert(t, err != nil)
 	})
 
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(tc.owner.UserCtx, t)
+	(&th.Cleanup[*generated.SubscriberDeleteOne]{Client: suite.Client.DB.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(tc.Owner.UserCtx, t)
 }
 
 // TestTrustCenterSubscriberGate verifies the trust center allow_subscribers flag gates subscriber
 // creation: when disabled the create is rejected, and when re-enabled it succeeds
 func TestTrustCenterSubscriberGate(t *testing.T) {
-	tc := createFreshOrgWithTrustCenter(t)
+	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
-	tcLoaded, err := suite.client.db.TrustCenter.Query().
-		Where(trustcenter.IDEQ(tc.trustCenter.ID)).
+	tcLoaded, err := suite.Client.DB.TrustCenter.Query().
+		Where(trustcenter.IDEQ(tc.TrustCenter.ID)).
 		WithSetting().
 		Only(dbCtx)
 	assert.NilError(t, err)
@@ -78,91 +80,91 @@ func TestTrustCenterSubscriberGate(t *testing.T) {
 	assert.Assert(t, setting != nil)
 
 	subscriberEmail := gofakeit.Email()
-	anonCtx, _ := createAnonymousTrustCenterContextWithEmail(tc.trustCenter.ID, tc.trustCenter.OwnerID, subscriberEmail)
+	anonCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(tc.TrustCenter.ID, tc.TrustCenter.OwnerID, subscriberEmail)
 
 	t.Run("blocked when disabled", func(t *testing.T) {
-		assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).SetAllowSubscribers(false).Exec(dbCtx))
+		assert.NilError(t, suite.Client.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetAllowSubscribers(false).Exec(dbCtx))
 
-		_, err := suite.client.api.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
+		_, err := suite.Client.API.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
 			Email:         subscriberEmail,
-			TrustCenterID: &tc.trustCenter.ID,
+			TrustCenterID: &tc.TrustCenter.ID,
 		})
 		assert.Assert(t, err != nil)
 	})
 
 	t.Run("allowed when enabled", func(t *testing.T) {
-		assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).SetAllowSubscribers(true).Exec(dbCtx))
+		assert.NilError(t, suite.Client.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetAllowSubscribers(true).Exec(dbCtx))
 
-		resp, err := suite.client.api.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
+		resp, err := suite.Client.API.CreateSubscriber(anonCtx, testclient.CreateSubscriberInput{
 			Email:         subscriberEmail,
-			TrustCenterID: &tc.trustCenter.ID,
+			TrustCenterID: &tc.TrustCenter.ID,
 		})
 		assert.NilError(t, err)
 		assert.Equal(t, strings.ToLower(subscriberEmail), resp.CreateSubscriber.Subscriber.Email)
 
-		(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(tc.owner.UserCtx, t)
+		(&th.Cleanup[*generated.SubscriberDeleteOne]{Client: suite.Client.DB.Subscriber, ID: resp.CreateSubscriber.Subscriber.ID}).MustDelete(tc.Owner.UserCtx, t)
 	})
 }
 
 // TestTrustCenterSubscriberScopedPerTrustCenter verifies the same email can subscribe to different
 // trust centers, producing distinct subscriptions scoped to each trust center
 func TestTrustCenterSubscriberScopedPerTrustCenter(t *testing.T) {
-	tc1 := createFreshOrgWithTrustCenter(t)
-	tc2 := createFreshOrgWithTrustCenter(t)
+	tc1 := th.CreateFreshOrgWithTrustCenter(t)
+	tc2 := th.CreateFreshOrgWithTrustCenter(t)
 
 	sharedEmail := gofakeit.Email()
 
-	ctx1, _ := createAnonymousTrustCenterContextWithEmail(tc1.trustCenter.ID, tc1.trustCenter.OwnerID, sharedEmail)
-	ctx2, _ := createAnonymousTrustCenterContextWithEmail(tc2.trustCenter.ID, tc2.trustCenter.OwnerID, sharedEmail)
+	ctx1, _ := th.CreateAnonymousTrustCenterContextWithEmail(tc1.TrustCenter.ID, tc1.TrustCenter.OwnerID, sharedEmail)
+	ctx2, _ := th.CreateAnonymousTrustCenterContextWithEmail(tc2.TrustCenter.ID, tc2.TrustCenter.OwnerID, sharedEmail)
 
-	resp1, err := suite.client.api.CreateSubscriber(ctx1, testclient.CreateSubscriberInput{
+	resp1, err := suite.Client.API.CreateSubscriber(ctx1, testclient.CreateSubscriberInput{
 		Email:         sharedEmail,
-		TrustCenterID: &tc1.trustCenter.ID,
+		TrustCenterID: &tc1.TrustCenter.ID,
 	})
 	assert.NilError(t, err)
 
-	resp2, err := suite.client.api.CreateSubscriber(ctx2, testclient.CreateSubscriberInput{
+	resp2, err := suite.Client.API.CreateSubscriber(ctx2, testclient.CreateSubscriberInput{
 		Email:         sharedEmail,
-		TrustCenterID: &tc2.trustCenter.ID,
+		TrustCenterID: &tc2.TrustCenter.ID,
 	})
 	assert.NilError(t, err)
 
 	assert.Assert(t, resp1.CreateSubscriber.Subscriber.ID != resp2.CreateSubscriber.Subscriber.ID)
 
-	dbCtx := privacy.DecisionContext(setContext(tc1.owner.UserCtx, suite.client.db), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetContext(tc1.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
-	sub1, err := suite.client.db.Subscriber.Get(dbCtx, resp1.CreateSubscriber.Subscriber.ID)
+	sub1, err := suite.Client.DB.Subscriber.Get(dbCtx, resp1.CreateSubscriber.Subscriber.ID)
 	assert.NilError(t, err)
-	assert.Equal(t, tc1.trustCenter.ID, lo.FromPtr(sub1.TrustCenterID))
+	assert.Equal(t, tc1.TrustCenter.ID, lo.FromPtr(sub1.TrustCenterID))
 
-	sub2, err := suite.client.db.Subscriber.Get(dbCtx, resp2.CreateSubscriber.Subscriber.ID)
+	sub2, err := suite.Client.DB.Subscriber.Get(dbCtx, resp2.CreateSubscriber.Subscriber.ID)
 	assert.NilError(t, err)
-	assert.Equal(t, tc2.trustCenter.ID, lo.FromPtr(sub2.TrustCenterID))
+	assert.Equal(t, tc2.TrustCenter.ID, lo.FromPtr(sub2.TrustCenterID))
 
 	// each subscriber is owned by its own org, so clean up with each org's context
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: sub1.ID}).MustDelete(tc1.owner.UserCtx, t)
-	(&Cleanup[*generated.SubscriberDeleteOne]{client: suite.client.db.Subscriber, ID: sub2.ID}).MustDelete(tc2.owner.UserCtx, t)
+	(&th.Cleanup[*generated.SubscriberDeleteOne]{Client: suite.Client.DB.Subscriber, ID: sub1.ID}).MustDelete(tc1.Owner.UserCtx, t)
+	(&th.Cleanup[*generated.SubscriberDeleteOne]{Client: suite.Client.DB.Subscriber, ID: sub2.ID}).MustDelete(tc2.Owner.UserCtx, t)
 }
 
 // TestTrustCenterCampaignDispatchBranding verifies a trust center update campaign renders one email
 // per target branded from the trust center setting, with the per-recipient unsubscribe link resolved
 func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
-	tc := createFreshOrgWithTrustCenter(t)
+	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	// ensure the trust center has a branded setting linked via the setting edge
-	tcLoaded, err := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().Only(dbCtx)
+	tcLoaded, err := suite.Client.DB.TrustCenter.Query().Where(trustcenter.IDEQ(tc.TrustCenter.ID)).WithSetting().Only(dbCtx)
 	assert.NilError(t, err)
 
 	setting := tcLoaded.Edges.Setting
 	if setting == nil {
-		setting, err = suite.client.db.TrustCenterSetting.Create().SetTrustCenterID(tc.trustCenter.ID).Save(dbCtx)
+		setting, err = suite.Client.DB.TrustCenterSetting.Create().SetTrustCenterID(tc.TrustCenter.ID).Save(dbCtx)
 		assert.NilError(t, err)
-		assert.NilError(t, suite.client.db.TrustCenter.UpdateOneID(tc.trustCenter.ID).SetSettingID(setting.ID).Exec(dbCtx))
+		assert.NilError(t, suite.Client.DB.TrustCenter.UpdateOneID(tc.TrustCenter.ID).SetSettingID(setting.ID).Exec(dbCtx))
 	}
 
-	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.Client.DB.TrustCenterSetting.UpdateOneID(setting.ID).
 		SetCompanyName("SecureCorp").
 		SetPrimaryColor("#0f3d3a").
 		SetAccentColor("#3fc2b4").
@@ -170,11 +172,11 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 		Exec(dbCtx))
 
 	// the campaign metadata carries the post data, as the automated triggers supply it
-	campaignObj, err := suite.client.db.Campaign.Create().
+	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("June Update").
-		SetOwnerID(tc.organizationID).
+		SetOwnerID(tc.OrganizationID).
 		SetCampaignType(enums.CampaignTypeTrustCenterUpdate).
-		SetTrustCenterID(tc.trustCenter.ID).
+		SetTrustCenterID(tc.TrustCenter.ID).
 		SetMetadata(map[string]any{
 			"postTitle":      "June update",
 			"postText":       "We updated our subprocessors.",
@@ -184,18 +186,18 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 		Save(dbCtx)
 	assert.NilError(t, err)
 
-	targetA, err := suite.client.db.CampaignTarget.Create().
+	targetA, err := suite.Client.DB.CampaignTarget.Create().
 		SetCampaignID(campaignObj.ID).
-		SetOwnerID(tc.organizationID).
+		SetOwnerID(tc.OrganizationID).
 		SetEmail("ada@example.com").
 		SetFullName("Ada Lovelace").
 		SetMetadata(map[string]any{email.MetadataUnsubscribeTokenKey: "tok_ada"}).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
-	targetGrace, err := suite.client.db.CampaignTarget.Create().
+	targetGrace, err := suite.Client.DB.CampaignTarget.Create().
 		SetCampaignID(campaignObj.ID).
-		SetOwnerID(tc.organizationID).
+		SetOwnerID(tc.OrganizationID).
 		SetEmail("grace@example.com").
 		SetFullName("Grace Hopper").
 		SetMetadata(map[string]any{email.MetadataUnsubscribeTokenKey: "tok_grace"}).
@@ -203,8 +205,8 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 	assert.NilError(t, err)
 
 	defer func() {
-		(&Cleanup[*generated.CampaignTargetDeleteOne]{client: suite.client.db.CampaignTarget, IDs: []string{targetA.ID, targetGrace.ID}}).MustDelete(tc.owner.UserCtx, t)
-		(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignObj.ID}).MustDelete(tc.owner.UserCtx, t)
+		(&th.Cleanup[*generated.CampaignTargetDeleteOne]{Client: suite.Client.DB.CampaignTarget, IDs: []string{targetA.ID, targetGrace.ID}}).MustDelete(tc.Owner.UserCtx, t)
+		(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, ID: campaignObj.ID}).MustDelete(tc.Owner.UserCtx, t)
 	}()
 
 	mockSender, err := mock.New("")
@@ -222,7 +224,7 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 
 	req := types.OperationRequest{
 		Client: emailClient,
-		DB:     suite.client.db,
+		DB:     suite.Client.DB,
 		Config: configBytes,
 	}
 
@@ -258,26 +260,26 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 // subscriber notification, once stable past the grace window, dispatches a branded update email to the
 // trust center's active subscribers rendering the post content, branding, and an unsubscribe link
 func TestTrustCenterPostNotificationEmail(t *testing.T) {
-	tc := createFreshOrgWithTrustCenter(t)
+	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
 	// brand the live trust center setting so the email pulls trust center branding
-	tcLoaded, err := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().Only(dbCtx)
+	tcLoaded, err := suite.Client.DB.TrustCenter.Query().Where(trustcenter.IDEQ(tc.TrustCenter.ID)).WithSetting().Only(dbCtx)
 	assert.NilError(t, err)
 
 	setting := tcLoaded.Edges.Setting
 	assert.Assert(t, setting != nil)
 
-	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.Client.DB.TrustCenterSetting.UpdateOneID(setting.ID).
 		SetCompanyName("SecureCorp").
 		SetLogoRemoteURL("https://securecorp.example.com/logo.png").
 		Exec(dbCtx))
 
 	// an active, verified subscriber to the trust center
-	sub, err := suite.client.db.Subscriber.Create().
-		SetOwnerID(tc.trustCenter.OwnerID).
-		SetTrustCenterID(tc.trustCenter.ID).
+	sub, err := suite.Client.DB.Subscriber.Create().
+		SetOwnerID(tc.TrustCenter.OwnerID).
+		SetTrustCenterID(tc.TrustCenter.ID).
 		SetEmail("ada@example.com").
 		SetActive(true).
 		SetVerifiedEmail(true).
@@ -286,9 +288,9 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 
 	// a published post flagged for notification, back-dated so it is stable past the grace window
 	stale := time.Now().Add(-2 * time.Hour)
-	assert.NilError(t, suite.client.db.Note.Create().
-		SetOwnerID(tc.trustCenter.OwnerID).
-		SetTrustCenterID(tc.trustCenter.ID).
+	assert.NilError(t, suite.Client.DB.Note.Create().
+		SetOwnerID(tc.TrustCenter.OwnerID).
+		SetTrustCenterID(tc.TrustCenter.ID).
 		SetTitle("June trust center update").
 		SetText("We added a new subprocessor and refreshed our security documentation.").
 		SetNotifySubscribers(true).
@@ -298,9 +300,9 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 	// let the subscriber create hook's confirmation email settle, then clear it so only the post
 	// notification remains
 	suite.WaitForEvents()
-	suite.mockEmailSender().Reset()
+	suite.MockEmailSender().Reset()
 
-	_, err = suite.integrationsRT.HandleReconcile(context.Background(), operations.ReconcileEnvelope{
+	_, err = suite.IntegrationsRT.HandleReconcile(context.Background(), operations.ReconcileEnvelope{
 		OperationContext: types.NewOperationContext("", email.TrustCenterNotificationOp.Name(), types.IntegrationSource{
 			DefinitionID: email.DefinitionID.ID(),
 			RunType:      enums.IntegrationRunTypeScheduled,
@@ -311,7 +313,7 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 
 	suite.WaitForEvents()
 
-	messages := suite.mockEmailSender().Messages()
+	messages := suite.MockEmailSender().Messages()
 	assert.Assert(t, len(messages) >= 1)
 
 	var allHTML, allTo []string
@@ -340,11 +342,11 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 // that opted in, once stable past the grace window, sends the controlled subprocessor system email to
 // the trust center's active subscribers, rendering the changed vendor and a per-recipient unsubscribe link
 func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
-	tc := createFreshOrgWithTrustCenter(t)
+	tc := th.CreateFreshOrgWithTrustCenter(t)
 
-	dbCtx := privacy.DecisionContext(setContext(tc.owner.UserCtx, suite.client.db), privacy.Allow)
+	dbCtx := privacy.DecisionContext(th.SetContext(tc.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
-	tcLoaded, err := suite.client.db.TrustCenter.Query().Where(trustcenter.IDEQ(tc.trustCenter.ID)).WithSetting().Only(dbCtx)
+	tcLoaded, err := suite.Client.DB.TrustCenter.Query().Where(trustcenter.IDEQ(tc.TrustCenter.ID)).WithSetting().Only(dbCtx)
 	assert.NilError(t, err)
 
 	setting := tcLoaded.Edges.Setting
@@ -352,7 +354,7 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 
 	// opt the trust center into subprocessor notifications and brand it; the watermark is backdated
 	// past the change created below, since enabling the flag stamps it to now otherwise
-	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(setting.ID).
+	assert.NilError(t, suite.Client.DB.TrustCenterSetting.UpdateOneID(setting.ID).
 		SetNotifySubscribersOnSubprocessorChange(true).
 		SetSubprocessorsNotifiedAt(time.Now().Add(-3*time.Hour)).
 		SetCompanyName("SecureCorp").
@@ -360,17 +362,17 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 		Exec(dbCtx))
 
 	// an active, verified subscriber to the trust center
-	sub, err := suite.client.db.Subscriber.Create().
-		SetOwnerID(tc.trustCenter.OwnerID).
-		SetTrustCenterID(tc.trustCenter.ID).
+	sub, err := suite.Client.DB.Subscriber.Create().
+		SetOwnerID(tc.TrustCenter.OwnerID).
+		SetTrustCenterID(tc.TrustCenter.ID).
 		SetEmail("ada@example.com").
 		SetActive(true).
 		SetVerifiedEmail(true).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
-	vendor, err := suite.client.db.Subprocessor.Create().
-		SetOwnerID(tc.trustCenter.OwnerID).
+	vendor, err := suite.Client.DB.Subprocessor.Create().
+		SetOwnerID(tc.TrustCenter.OwnerID).
 		SetName("Amazon Web Services").
 		SetLogoRemoteURL("https://securecorp.example.com/logos/aws.png").
 		Save(dbCtx)
@@ -379,17 +381,17 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 	// create the change already stable past the grace window (set on create, since the audit mixin
 	// resets updated_at to now on any update)
 	stale := time.Now().Add(-2 * time.Hour)
-	assert.NilError(t, suite.client.db.TrustCenterSubprocessor.Create().
-		SetTrustCenterID(tc.trustCenter.ID).
+	assert.NilError(t, suite.Client.DB.TrustCenterSubprocessor.Create().
+		SetTrustCenterID(tc.TrustCenter.ID).
 		SetSubprocessorID(vendor.ID).
 		SetCountries([]string{"US", "DE"}).
 		SetUpdatedAt(stale).
 		Exec(dbCtx))
 
 	suite.WaitForEvents()
-	suite.mockEmailSender().Reset()
+	suite.MockEmailSender().Reset()
 
-	_, err = suite.integrationsRT.HandleReconcile(context.Background(), operations.ReconcileEnvelope{
+	_, err = suite.IntegrationsRT.HandleReconcile(context.Background(), operations.ReconcileEnvelope{
 		OperationContext: types.NewOperationContext("", email.TrustCenterNotificationOp.Name(), types.IntegrationSource{
 			DefinitionID: email.DefinitionID.ID(),
 			RunType:      enums.IntegrationRunTypeScheduled,
@@ -400,7 +402,7 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 
 	suite.WaitForEvents()
 
-	messages := suite.mockEmailSender().Messages()
+	messages := suite.MockEmailSender().Messages()
 	assert.Assert(t, len(messages) >= 1)
 
 	var allHTML, allTo []string

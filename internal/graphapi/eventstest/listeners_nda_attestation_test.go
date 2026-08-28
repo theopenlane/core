@@ -1,10 +1,12 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
 	"testing"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman"
@@ -20,17 +22,17 @@ const signedNDAAttachmentName = "signed_nda_file.pdf"
 
 func TestNDAAttestationListener(t *testing.T) {
 	t.Run("signed nda stamps file on the signed request and emails the signer", func(t *testing.T) {
-		tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-		trustCenter := tcOrg.trustCenter
-		allowCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
+		tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+		trustCenter := tcOrg.TrustCenter
+		allowCtx := th.SetContext(tcOrg.Owner.UserCtx, suite.Client.DB)
 
 		signerEmail := "nda-signer@listenerpin.io"
 		bystanderEmail := "nda-bystander@listenerpin.io"
 
-		signerCtx, signerCaller := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, signerEmail)
-		bystanderCtx, _ := createAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, bystanderEmail)
+		signerCtx, signerCaller := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, signerEmail)
+		bystanderCtx, _ := th.CreateAnonymousTrustCenterContextWithEmail(trustCenter.ID, trustCenter.OwnerID, bystanderEmail)
 
-		_, err := suite.client.api.CreateTrustCenterNDARequest(signerCtx, testclient.CreateTrustCenterNDARequestInput{
+		_, err := suite.Client.API.CreateTrustCenterNDARequest(signerCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     "Signer",
 			LastName:      "User",
 			CompanyName:   lo.ToPtr("Signer Co"),
@@ -39,7 +41,7 @@ func TestNDAAttestationListener(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		_, err = suite.client.api.CreateTrustCenterNDARequest(bystanderCtx, testclient.CreateTrustCenterNDARequestInput{
+		_, err = suite.Client.API.CreateTrustCenterNDARequest(bystanderCtx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     "Bystander",
 			LastName:      "User",
 			CompanyName:   lo.ToPtr("Bystander Co"),
@@ -49,11 +51,11 @@ func TestNDAAttestationListener(t *testing.T) {
 		assert.NilError(t, err)
 
 		suite.WaitForEvents()
-		suite.mockEmailSender().Reset()
-		expectAttestedUpload(t, suite.client.mockProvider)
+		suite.MockEmailSender().Reset()
+		th.ExpectAttestedUpload(t, suite.Client.MockProvider)
 
-		resp, err := suite.client.api.SubmitTrustCenterNDAResponse(signerCtx, testclient.SubmitTrustCenterNDAResponseInput{
-			TemplateID: *tcOrg.ndaTemplateID,
+		resp, err := suite.Client.API.SubmitTrustCenterNDAResponse(signerCtx, testclient.SubmitTrustCenterNDAResponseInput{
+			TemplateID: *tcOrg.NDATemplateID,
 			Response: map[string]any{
 				"signatory_info": map[string]any{
 					"email": signerEmail,
@@ -62,10 +64,10 @@ func TestNDAAttestationListener(t *testing.T) {
 				"signature_metadata": map[string]any{
 					"ip_address": "192.168.1.100",
 					"timestamp":  "2025-09-22T19:37:59.988Z",
-					"pdf_hash":   getMD5Hash(t, pdfFilePath),
+					"pdf_hash":   th.GetMD5Hash(t, th.PdfFilePath),
 					"user_id":    signerCaller.SubjectID,
 				},
-				"pdf_file_id":     *tcOrg.ndaFileID,
+				"pdf_file_id":     *tcOrg.NDAFileID,
 				"trust_center_id": trustCenter.ID,
 			},
 		})
@@ -75,16 +77,16 @@ func TestNDAAttestationListener(t *testing.T) {
 
 		suite.WaitForEvents()
 
-		signed, err := suite.client.db.TrustCenterNDARequest.Query().Where(
+		signed, err := suite.Client.DB.TrustCenterNDARequest.Query().Where(
 			trustcenterndarequest.EmailEqualFold(signerEmail),
 			trustcenterndarequest.TrustCenterID(trustCenter.ID),
 		).Only(allowCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusSigned, signed.Status))
 		assert.Assert(t, signed.FileID != nil)
-		assert.Check(t, is.Equal(*tcOrg.ndaFileID, *signed.FileID))
+		assert.Check(t, is.Equal(*tcOrg.NDAFileID, *signed.FileID))
 
-		bystander, err := suite.client.db.TrustCenterNDARequest.Query().Where(
+		bystander, err := suite.Client.DB.TrustCenterNDARequest.Query().Where(
 			trustcenterndarequest.EmailEqualFold(bystanderEmail),
 			trustcenterndarequest.TrustCenterID(trustCenter.ID),
 		).Only(allowCtx)
@@ -92,17 +94,17 @@ func TestNDAAttestationListener(t *testing.T) {
 		assert.Check(t, is.Equal(enums.TrustCenterNDARequestStatusRequested, bystander.Status))
 		assert.Check(t, bystander.FileID == nil)
 
-		docData, err := suite.client.db.DocumentData.Get(allowCtx, docDataID)
+		docData, err := suite.Client.DB.DocumentData.Get(allowCtx, docDataID)
 		assert.NilError(t, err)
 
 		attestedHash, _ := docData.Data["attested_pdf_hash"].(string)
 		assert.Check(t, attestedHash != "")
 
-		fileCount, err := suite.client.db.DocumentData.QueryFiles(docData).Count(allowCtx)
+		fileCount, err := suite.Client.DB.DocumentData.QueryFiles(docData).Count(allowCtx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(1, fileCount))
 
-		signedEmails := lo.Filter(suite.mockEmailSender().Messages(), func(msg *newman.EmailMessage, _ int) bool {
+		signedEmails := lo.Filter(suite.MockEmailSender().Messages(), func(msg *newman.EmailMessage, _ int) bool {
 			return lo.Contains(msg.To, signerEmail) &&
 				len(msg.Attachments) == 1 &&
 				msg.Attachments[0].Filename == signedNDAAttachmentName
@@ -110,16 +112,16 @@ func TestNDAAttestationListener(t *testing.T) {
 		assert.Assert(t, is.Len(signedEmails, 1))
 		assert.Check(t, len(signedEmails[0].Attachments[0].Content) > 0)
 
-		cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 	})
 
 	t.Run("document data for a non-nda template is skipped", func(t *testing.T) {
-		docUser := suite.userBuilder(context.Background(), t)
-		ctx := setContext(docUser.UserCtx, suite.client.db)
+		docUser := suite.UserBuilder(context.Background(), t)
+		ctx := th.SetContext(docUser.UserCtx, suite.Client.DB)
 
-		tmpl := (&TemplateBuilder{client: suite.client}).MustNew(docUser.UserCtx, t)
+		tmpl := (&th.TemplateBuilder{Client: suite.Client}).MustNew(docUser.UserCtx, t)
 
-		docData, err := suite.client.db.DocumentData.Create().
+		docData, err := suite.Client.DB.DocumentData.Create().
 			SetTemplateID(tmpl.ID).
 			SetOwnerID(docUser.OrganizationID).
 			SetData(map[string]any{"question": "answer"}).
@@ -128,16 +130,16 @@ func TestNDAAttestationListener(t *testing.T) {
 
 		suite.WaitForEvents()
 
-		reloaded, err := suite.client.db.DocumentData.Get(ctx, docData.ID)
+		reloaded, err := suite.Client.DB.DocumentData.Get(ctx, docData.ID)
 		assert.NilError(t, err)
 
 		_, hasAttestedHash := reloaded.Data["attested_pdf_hash"]
 		assert.Check(t, !hasAttestedHash)
 
-		fileCount, err := suite.client.db.DocumentData.QueryFiles(reloaded).Count(ctx)
+		fileCount, err := suite.Client.DB.DocumentData.QueryFiles(reloaded).Count(ctx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(0, fileCount))
 
-		cleanupOrganizationDataWithContext(docUser.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(docUser.UserCtx, t)
 	})
 }

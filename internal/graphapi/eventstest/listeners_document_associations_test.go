@@ -1,12 +1,14 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
 	"errors"
 	"testing"
 	"time"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
@@ -50,21 +52,21 @@ func listenerPoll[T any](query func() (T, error), condition func(T) bool) (T, er
 }
 
 func TestDocumentAssociationListeners(t *testing.T) {
-	docUser := suite.userBuilder(context.Background(), t)
-	ctx := setContext(docUser.UserCtx, suite.client.db)
+	docUser := suite.UserBuilder(context.Background(), t)
+	ctx := th.SetContext(docUser.UserCtx, suite.Client.DB)
 
-	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.DocumentAssociationListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.DocumentAssociationListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
-	control := (&ControlBuilder{client: suite.client, RefCode: "CC-2"}).MustNew(docUser.UserCtx, t)
-	parentControl := (&ControlBuilder{client: suite.client}).MustNew(docUser.UserCtx, t)
-	subcontrol := (&SubcontrolBuilder{client: suite.client, Name: "AC-1.1", ControlID: parentControl.ID}).MustNew(docUser.UserCtx, t)
+	control := (&th.ControlBuilder{Client: suite.Client, RefCode: "CC-2"}).MustNew(docUser.UserCtx, t)
+	parentControl := (&th.ControlBuilder{Client: suite.Client}).MustNew(docUser.UserCtx, t)
+	subcontrol := (&th.SubcontrolBuilder{Client: suite.Client, Name: "AC-1.1", ControlID: parentControl.ID}).MustNew(docUser.UserCtx, t)
 
 	t.Run("policy create links referenced controls and subcontrols without bumping revision", func(t *testing.T) {
 		details := "This policy is governed by CC-2\nand implements AC-1.1 for access reviews"
 
-		resp, err := suite.client.api.CreateInternalPolicy(docUser.UserCtx, testclient.CreateInternalPolicyInput{
+		resp, err := suite.Client.API.CreateInternalPolicy(docUser.UserCtx, testclient.CreateInternalPolicyInput{
 			Name:    "doc assoc policy",
 			Details: &details,
 		})
@@ -73,22 +75,22 @@ func TestDocumentAssociationListeners(t *testing.T) {
 		policyID := resp.CreateInternalPolicy.InternalPolicy.ID
 
 		controlIDs, err := listenerPoll(func() ([]string, error) {
-			policy, err := suite.client.db.InternalPolicy.Get(ctx, policyID)
+			policy, err := suite.Client.DB.InternalPolicy.Get(ctx, policyID)
 			if err != nil {
 				return nil, err
 			}
 
-			return suite.client.db.InternalPolicy.QueryControls(policy).IDs(ctx)
+			return suite.Client.DB.InternalPolicy.QueryControls(policy).IDs(ctx)
 		}, func(ids []string) bool {
 			return len(ids) > 0
 		})
 		assert.NilError(t, err)
 		assert.Check(t, is.DeepEqual([]string{control.ID}, controlIDs))
 
-		policy, err := suite.client.db.InternalPolicy.Get(ctx, policyID)
+		policy, err := suite.Client.DB.InternalPolicy.Get(ctx, policyID)
 		assert.NilError(t, err)
 
-		subcontrolIDs, err := suite.client.db.InternalPolicy.QuerySubcontrols(policy).IDs(ctx)
+		subcontrolIDs, err := suite.Client.DB.InternalPolicy.QuerySubcontrols(policy).IDs(ctx)
 		assert.NilError(t, err)
 		assert.Check(t, is.DeepEqual([]string{subcontrol.ID}, subcontrolIDs))
 
@@ -102,7 +104,7 @@ func TestDocumentAssociationListeners(t *testing.T) {
 	t.Run("procedure create links referenced controls", func(t *testing.T) {
 		details := "Follow the steps required by CC-2 during onboarding"
 
-		resp, err := suite.client.api.CreateProcedure(docUser.UserCtx, testclient.CreateProcedureInput{
+		resp, err := suite.Client.API.CreateProcedure(docUser.UserCtx, testclient.CreateProcedureInput{
 			Name:    "doc assoc procedure",
 			Details: &details,
 		})
@@ -111,12 +113,12 @@ func TestDocumentAssociationListeners(t *testing.T) {
 		procedureID := resp.CreateProcedure.Procedure.ID
 
 		controlIDs, err := listenerPoll(func() ([]string, error) {
-			procedure, err := suite.client.db.Procedure.Get(ctx, procedureID)
+			procedure, err := suite.Client.DB.Procedure.Get(ctx, procedureID)
 			if err != nil {
 				return nil, err
 			}
 
-			return suite.client.db.Procedure.QueryControls(procedure).IDs(ctx)
+			return suite.Client.DB.Procedure.QueryControls(procedure).IDs(ctx)
 		}, func(ids []string) bool {
 			return len(ids) > 0
 		})
@@ -127,7 +129,7 @@ func TestDocumentAssociationListeners(t *testing.T) {
 	t.Run("action plan create links referenced controls", func(t *testing.T) {
 		details := "Remediation tracked against CC-2"
 
-		resp, err := suite.client.api.CreateActionPlan(docUser.UserCtx, testclient.CreateActionPlanInput{
+		resp, err := suite.Client.API.CreateActionPlan(docUser.UserCtx, testclient.CreateActionPlanInput{
 			Name:    "doc assoc action plan",
 			Title:   "doc assoc action plan",
 			Details: &details,
@@ -137,12 +139,12 @@ func TestDocumentAssociationListeners(t *testing.T) {
 		actionPlanID := resp.CreateActionPlan.ActionPlan.ID
 
 		controlIDs, err := listenerPoll(func() ([]string, error) {
-			actionPlan, err := suite.client.db.ActionPlan.Get(ctx, actionPlanID)
+			actionPlan, err := suite.Client.DB.ActionPlan.Get(ctx, actionPlanID)
 			if err != nil {
 				return nil, err
 			}
 
-			return suite.client.db.ActionPlan.QueryControls(actionPlan).IDs(ctx)
+			return suite.Client.DB.ActionPlan.QueryControls(actionPlan).IDs(ctx)
 		}, func(ids []string) bool {
 			return len(ids) > 0
 		})
@@ -153,7 +155,7 @@ func TestDocumentAssociationListeners(t *testing.T) {
 	t.Run("no control references means no association write", func(t *testing.T) {
 		details := "General guidance without any framework references"
 
-		resp, err := suite.client.api.CreateInternalPolicy(docUser.UserCtx, testclient.CreateInternalPolicyInput{
+		resp, err := suite.Client.API.CreateInternalPolicy(docUser.UserCtx, testclient.CreateInternalPolicyInput{
 			Name:    "doc assoc no match policy",
 			Details: &details,
 		})
@@ -161,17 +163,17 @@ func TestDocumentAssociationListeners(t *testing.T) {
 
 		policyID := resp.CreateInternalPolicy.InternalPolicy.ID
 
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
-		policy, err := suite.client.db.InternalPolicy.Get(ctx, policyID)
+		policy, err := suite.Client.DB.InternalPolicy.Get(ctx, policyID)
 		assert.NilError(t, err)
 
-		controlIDs, err := suite.client.db.InternalPolicy.QueryControls(policy).IDs(ctx)
+		controlIDs, err := suite.Client.DB.InternalPolicy.QueryControls(policy).IDs(ctx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(controlIDs, 0))
 
 		assert.Check(t, is.Equal(lo.FromPtr(resp.CreateInternalPolicy.InternalPolicy.Revision), policy.Revision))
 	})
 
-	cleanupOrganizationDataWithContext(docUser.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(docUser.UserCtx, t)
 }

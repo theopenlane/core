@@ -1,11 +1,13 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
 	"fmt"
 	"testing"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -26,25 +28,25 @@ import (
 const taskRuleOrganizationReadyObjectType = "organization.ready"
 
 func TestTaskRuleListenersRealMutations(t *testing.T) {
-	user := suite.userBuilder(context.Background(), t)
-	allowCtx := privacy.DecisionContext(setContext(user.UserCtx, suite.client.db), privacy.Allow)
+	user := suite.UserBuilder(context.Background(), t)
+	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
-	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.TaskRuleListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.TaskRuleListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
-	onboarding, err := suite.client.db.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+	onboarding, err := suite.Client.DB.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Task Rule Listener Co",
 	}).Save(allowCtx)
 	assert.NilError(t, err)
 
 	orgID := onboarding.OrganizationID
-	orgCtx := privacy.DecisionContext(setContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.client.db), privacy.Allow)
+	orgCtx := privacy.DecisionContext(th.SetContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.Client.DB), privacy.Allow)
 
 	taskCount := func(t *testing.T) int {
 		t.Helper()
 
-		count, err := suite.client.db.Task.Query().Where(task.OwnerIDEQ(orgID)).Count(orgCtx)
+		count, err := suite.Client.DB.Task.Query().Where(task.OwnerIDEQ(orgID)).Count(orgCtx)
 		assert.NilError(t, err)
 
 		return count
@@ -53,7 +55,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	notificationCount := func(t *testing.T) int {
 		t.Helper()
 
-		count, err := suite.client.db.Notification.Query().
+		count, err := suite.Client.DB.Notification.Query().
 			Where(
 				notification.OwnerIDEQ(orgID),
 				notification.ObjectTypeEQ(taskRuleOrganizationReadyObjectType),
@@ -65,8 +67,8 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	}
 
 	t.Run("create mutations fire schema task rules", func(t *testing.T) {
-		waitForCondition(t, func() bool {
-			tasks, err := suite.client.db.Task.Query().Where(task.OwnerIDEQ(orgID)).All(orgCtx)
+		th.WaitForCondition(t, func() bool {
+			tasks, err := suite.Client.DB.Task.Query().Where(task.OwnerIDEQ(orgID)).All(orgCtx)
 			if err != nil {
 				return false
 			}
@@ -82,7 +84,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 			return orgRule && onboardingRule
 		}, "organization and onboarding task rules should create suggested tasks")
 
-		exists, err := suite.client.db.Task.Query().
+		exists, err := suite.Client.DB.Task.Query().
 			Where(task.IdempotencyKeyEQ(fmt.Sprintf("entityops:organization:%s-%s", orgID, taskrules.RuleSecureOrganization))).
 			Exist(orgCtx)
 		assert.NilError(t, err)
@@ -90,11 +92,11 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	})
 
 	t.Run("organization ready notification emitted", func(t *testing.T) {
-		waitForCondition(t, func() bool { return notificationCount(t) == 1 }, "organization ready notification should exist once suggested tasks land")
+		th.WaitForCondition(t, func() bool { return notificationCount(t) == 1 }, "organization ready notification should exist once suggested tasks land")
 	})
 
 	t.Run("redelivery does not duplicate tasks", func(t *testing.T) {
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
 		before := taskCount(t)
 
@@ -104,7 +106,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 			EntityID:     orgID,
 		})
 
-		waitForGala(t, setup.Runtime)
+		th.WaitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(before, taskCount(t)))
 		assert.Check(t, is.Equal(1, notificationCount(t)))

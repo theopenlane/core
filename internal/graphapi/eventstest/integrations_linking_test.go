@@ -1,9 +1,11 @@
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
 	"encoding/json"
 	"testing"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
 
@@ -56,7 +58,7 @@ func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integrat
 	t.Helper()
 
 	reg := intregistry.New()
-	requireNoError(t, reg.Register(def))
+	th.RequireNoError(t, reg.Register(def))
 
 	envelopes := lo.Map(payloads, func(p string, _ int) integrationtypes.MappingEnvelope {
 		return integrationtypes.MappingEnvelope{Payload: json.RawMessage(p)}
@@ -64,7 +66,7 @@ func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integrat
 
 	_, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,
-		DB:          suite.client.db,
+		DB:          suite.Client.DB,
 		Integration: integration,
 	}, linkTestOperationName, def.Operations[0].Ingest, []integrationtypes.IngestPayloadSet{
 		{Schema: entityops.SchemaFinding.Name, Envelopes: envelopes},
@@ -77,55 +79,55 @@ func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integrat
 func findingControls(ctx context.Context, t *testing.T, externalID string) (*ent.Finding, []string) {
 	t.Helper()
 
-	f, err := suite.client.db.Finding.Query().
+	f, err := suite.Client.DB.Finding.Query().
 		Where(finding.ExternalID(externalID)).
 		WithControls().
 		Only(ctx)
-	requireNoError(t, err)
+	th.RequireNoError(t, err)
 
 	return f, lo.Map(f.Edges.Controls, func(c *ent.Control, _ int) string { return c.RefCode })
 }
 
 func TestIntegrationCrossObjectLinking(t *testing.T) {
-	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
 	// seed link targets with stable ref codes; other tests' controls use random UUID ref codes
 	controlIDs := make([]string, 0, 4)
 	for _, refCode := range []string{"LINK-CC-1", "LINK-CC-2", "LINK-CC-3", "LINK-EXPR-1"} {
-		seeded := (&ControlBuilder{client: suite.client, RefCode: refCode}).MustNew(sharedTestUser1.UserCtx, t)
+		seeded := (&th.ControlBuilder{Client: suite.Client, RefCode: refCode}).MustNew(th.SharedTestUser1.UserCtx, t)
 		controlIDs = append(controlIDs, seeded.ID)
 	}
 
-	integration, err := suite.client.db.Integration.Create().
+	integration, err := suite.Client.DB.Integration.Create().
 		SetName("Link Test Integration").
 		SetKind("linktest").
 		SetDefinitionID("def_linktest").
 		Save(ctx)
-	requireNoError(t, err)
+	th.RequireNoError(t, err)
 	assert.Assert(t, integration.OwnerID != "", "seeded integration must be org-owned")
 
 	// other tests assert exact integration/record counts in the shared org, so remove everything
 	// this test creates: join rows first (their FKs block finding deletion), then findings,
 	// controls, and the integration
 	t.Cleanup(func() {
-		findings, err := suite.client.db.Finding.Query().Where(finding.ExternalIDHasPrefix("link-f-")).All(ctx)
-		requireNoError(t, err)
+		findings, err := suite.Client.DB.Finding.Query().Where(finding.ExternalIDHasPrefix("link-f-")).All(ctx)
+		th.RequireNoError(t, err)
 
 		findingIDs := lo.Map(findings, func(f *ent.Finding, _ int) string { return f.ID })
 
-		joinRows, err := suite.client.db.FindingControl.Query().Where(findingcontrol.FindingIDIn(findingIDs...)).All(ctx)
-		requireNoError(t, err)
+		joinRows, err := suite.Client.DB.FindingControl.Query().Where(findingcontrol.FindingIDIn(findingIDs...)).All(ctx)
+		th.RequireNoError(t, err)
 
 		if len(joinRows) > 0 {
-			(&Cleanup[*ent.FindingControlDeleteOne]{client: suite.client.db.FindingControl, IDs: lo.Map(joinRows, func(fc *ent.FindingControl, _ int) string { return fc.ID })}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*ent.FindingControlDeleteOne]{Client: suite.Client.DB.FindingControl, IDs: lo.Map(joinRows, func(fc *ent.FindingControl, _ int) string { return fc.ID })}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		}
 
 		if len(findingIDs) > 0 {
-			(&Cleanup[*ent.FindingDeleteOne]{client: suite.client.db.Finding, IDs: findingIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*ent.FindingDeleteOne]{Client: suite.Client.DB.Finding, IDs: findingIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		}
 
-		(&Cleanup[*ent.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-		(&Cleanup[*ent.IntegrationDeleteOne]{client: suite.client.db.Integration, ID: integration.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*ent.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: controlIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*ent.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: integration.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
 	fieldMatchRules := []integrationtypes.LinkRule{
@@ -141,7 +143,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		def := linkTestDefinition("def_linktest", fieldMatchRules)
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-1","display_name":"f1","category":"LINK-CC-1"}`)
-		requireNoError(t, err)
+		th.RequireNoError(t, err)
 
 		_, refCodes := findingControls(ctx, t, "link-f-1")
 		assert.DeepEqual(t, refCodes, []string{"LINK-CC-1"})
@@ -151,7 +153,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		def := linkTestDefinition("def_linktest", fieldMatchRules)
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-2","display_name":"f2","categories":["LINK-CC-2","LINK-CC-3"]}`)
-		requireNoError(t, err)
+		th.RequireNoError(t, err)
 
 		_, refCodes := findingControls(ctx, t, "link-f-2")
 		assert.Equal(t, len(refCodes), 2)
@@ -162,7 +164,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		def := linkTestDefinition("def_linktest", fieldMatchRules)
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-3","display_name":"f3","category":"LINK-CC-1","categories":["LINK-CC-1","LINK-CC-2"]}`)
-		requireNoError(t, err)
+		th.RequireNoError(t, err)
 
 		_, refCodes := findingControls(ctx, t, "link-f-3")
 		assert.Equal(t, len(refCodes), 2)
@@ -173,7 +175,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		def := linkTestDefinition("def_linktest", fieldMatchRules)
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-4","display_name":"f4","category":"LINK-NOPE"}`)
-		requireNoError(t, err)
+		th.RequireNoError(t, err)
 
 		f, refCodes := findingControls(ctx, t, "link-f-4")
 		assert.Equal(t, len(refCodes), 0)
@@ -189,7 +191,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		})
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-5","display_name":"f5","category":"LINK-EXPR-1-sub"}`)
-		requireNoError(t, err)
+		th.RequireNoError(t, err)
 
 		_, refCodes := findingControls(ctx, t, "link-f-5")
 		assert.DeepEqual(t, refCodes, []string{"LINK-EXPR-1"})
@@ -199,13 +201,13 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		def := linkTestDefinition("def_linktest", fieldMatchRules)
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-6","display_name":"first","category":"LINK-CC-1"}`)
-		requireNoError(t, err)
+		th.RequireNoError(t, err)
 
 		first, refCodes := findingControls(ctx, t, "link-f-6")
 		assert.DeepEqual(t, refCodes, []string{"LINK-CC-1"})
 
 		err = ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-6","display_name":"second","category":"LINK-CC-2"}`)
-		requireNoError(t, err)
+		th.RequireNoError(t, err)
 
 		second, refCodes := findingControls(ctx, t, "link-f-6")
 		assert.Equal(t, second.ID, first.ID, "re-ingest must update the same record, not create a duplicate")
@@ -230,7 +232,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		})
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-7","display_name":"f7","category":"LINK-CC-1","categories":["LINK-CC-3"]}`)
-		requireNoError(t, err)
+		th.RequireNoError(t, err)
 
 		_, refCodes := findingControls(ctx, t, "link-f-7")
 		assert.Equal(t, len(refCodes), 2)

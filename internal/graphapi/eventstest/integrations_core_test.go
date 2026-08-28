@@ -1,8 +1,10 @@
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
 	"testing"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -14,11 +16,11 @@ import (
 
 func TestIntegrationBuilder(t *testing.T) {
 	// setup user context
-	orgUser := suite.userBuilder(context.Background(), t)
+	orgUser := suite.UserBuilder(context.Background(), t)
 
 	// Test that we can create an integration using the builder
 	t.Run("Create integration with builder", func(t *testing.T) {
-		integration := (&IntegrationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+		integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(orgUser.UserCtx, t)
 
 		assert.Check(t, integration.ID != "")
 		assert.Check(t, is.DeepEqual("GitHub Integration Test", integration.Name))
@@ -27,14 +29,14 @@ func TestIntegrationBuilder(t *testing.T) {
 
 		// Clean up
 		ctx := privacy.DecisionContext(orgUser.UserCtx, privacy.Allow)
-		err := suite.client.db.Integration.DeleteOneID(integration.ID).Exec(ctx)
+		err := suite.Client.DB.Integration.DeleteOneID(integration.ID).Exec(ctx)
 		assert.NilError(t, err)
 	})
 
 	// Test custom integration creation
 	t.Run("Create custom integration with builder", func(t *testing.T) {
-		integration := (&IntegrationBuilder{
-			client:      suite.client,
+		integration := (&th.IntegrationBuilder{
+			Client:      suite.Client,
 			Name:        "Slack Integration Test",
 			Description: "Custom Slack integration",
 			Kind:        "slack",
@@ -46,22 +48,22 @@ func TestIntegrationBuilder(t *testing.T) {
 		assert.Check(t, is.DeepEqual("Custom Slack integration", integration.Description))
 
 		// Clean up, add the client to the context for fga checks instead of just allowing
-		ctx := setContext(orgUser.UserCtx, suite.client.db)
-		err := suite.client.db.Integration.DeleteOneID(integration.ID).Exec(ctx)
+		ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
+		err := suite.Client.DB.Integration.DeleteOneID(integration.ID).Exec(ctx)
 		assert.NilError(t, err)
 	})
 }
 
 func TestSecretBuilder(t *testing.T) {
 	// setup user context
-	orgUser := suite.userBuilder(context.Background(), t)
-	ctx := setContext(orgUser.UserCtx, suite.client.db)
+	orgUser := suite.UserBuilder(context.Background(), t)
+	ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
 
 	// Create integration first
-	integration := (&IntegrationBuilder{client: suite.client}).MustNew(ctx, t)
+	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(ctx, t)
 
 	t.Run("Create secret with builder", func(t *testing.T) {
-		secret := (&SecretBuilder{client: suite.client}).
+		secret := (&th.SecretBuilder{Client: suite.Client}).
 			WithIntegration(integration.ID).
 			WithSecretName("github_access_token").
 			WithSecretValue("gho_test_token_123").
@@ -73,50 +75,50 @@ func TestSecretBuilder(t *testing.T) {
 		assert.Check(t, is.DeepEqual(orgUser.OrganizationID, secret.OwnerID))
 
 		// Verify it's associated with the integration
-		integrationSecrets, err := suite.client.db.Integration.QuerySecrets(integration).All(ctx)
+		integrationSecrets, err := suite.Client.DB.Integration.QuerySecrets(integration).All(ctx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(integrationSecrets, 1))
 		assert.Check(t, is.DeepEqual(secret.ID, integrationSecrets[0].ID))
 
 		// Clean up
-		err = suite.client.db.Hush.DeleteOneID(secret.ID).Exec(ctx)
+		err = suite.Client.DB.Hush.DeleteOneID(secret.ID).Exec(ctx)
 		assert.NilError(t, err)
 	})
 
 	// Clean up
-	err := suite.client.db.Integration.DeleteOneID(integration.ID).Exec(ctx)
+	err := suite.Client.DB.Integration.DeleteOneID(integration.ID).Exec(ctx)
 	assert.NilError(t, err)
 }
 
 func TestIntegrationWithSecretsRelationship(t *testing.T) {
 	// setup user context
-	orgUser := suite.userBuilder(context.Background(), t)
-	ctx := setContext(orgUser.UserCtx, suite.client.db)
+	orgUser := suite.UserBuilder(context.Background(), t)
+	ctx := th.SetContext(orgUser.UserCtx, suite.Client.DB)
 
 	// Create integration
-	integration := (&IntegrationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(orgUser.UserCtx, t)
 
 	// Create multiple secrets for OAuth tokens
-	accessToken := (&SecretBuilder{client: suite.client}).
+	accessToken := (&th.SecretBuilder{Client: suite.Client}).
 		WithIntegration(integration.ID).
 		WithSecretName("github_access_token").
 		WithSecretValue("gho_access_123").
 		MustNew(orgUser.UserCtx, t)
 
-	(&SecretBuilder{client: suite.client}).
+	(&th.SecretBuilder{Client: suite.Client}).
 		WithIntegration(integration.ID).
 		WithSecretName("github_refresh_token").
 		WithSecretValue("ghr_refresh_456").
 		MustNew(orgUser.UserCtx, t)
 
-	(&SecretBuilder{client: suite.client}).
+	(&th.SecretBuilder{Client: suite.Client}).
 		WithIntegration(integration.ID).
 		WithSecretName("github_expires_at").
 		WithSecretValue("2024-12-31T23:59:59Z").
 		MustNew(orgUser.UserCtx, t)
 
 	t.Run("Integration can query its secrets", func(t *testing.T) {
-		secrets, err := suite.client.db.Integration.QuerySecrets(integration).All(ctx)
+		secrets, err := suite.Client.DB.Integration.QuerySecrets(integration).All(ctx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Len(secrets, 3))
 
@@ -132,19 +134,19 @@ func TestIntegrationWithSecretsRelationship(t *testing.T) {
 
 	t.Run("Secrets can query their integration", func(t *testing.T) {
 		// Query integration from secret
-		integrationFromSecret, err := suite.client.db.Hush.QueryIntegrations(accessToken).Only(ctx)
+		integrationFromSecret, err := suite.Client.DB.Hush.QueryIntegrations(accessToken).Only(ctx)
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(integration.ID, integrationFromSecret.ID))
 	})
 
 	// Clean up
-	cleanupOrganizationDataWithContext(ctx, t)
+	th.CleanupOrganizationDataWithContext(ctx, t)
 }
 
 func TestMutationDeleteIntegration(t *testing.T) {
 	// Create integrations with different kinds (unique constraint on owner_id + kind)
-	integration1 := (&IntegrationBuilder{client: suite.client, Kind: "github"}).MustNew(sharedTestUser1.UserCtx, t)
-	integration2 := (&IntegrationBuilder{client: suite.client, Kind: "jira"}).MustNew(sharedTestUser1.UserCtx, t)
+	integration1 := (&th.IntegrationBuilder{Client: suite.Client, Kind: "github"}).MustNew(th.SharedTestUser1.UserCtx, t)
+	integration2 := (&th.IntegrationBuilder{Client: suite.Client, Kind: "jira"}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -156,35 +158,35 @@ func TestMutationDeleteIntegration(t *testing.T) {
 
 		{
 			name:          "delete integration, happy path using api token",
-			client:        suite.client.apiWithToken,
+			client:        suite.Client.APIWithToken,
 			ctx:           context.Background(),
 			integrationID: integration1.ID,
-			errorMsg:      notAuthorizedErrorMsg,
+			errorMsg:      th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:          "delete integration, happy path using personal access token",
-			client:        suite.client.apiWithPAT,
+			client:        suite.Client.APIWithPAT,
 			ctx:           context.Background(),
 			integrationID: integration1.ID,
 		},
 		{
 			name:          "delete integration, no access",
-			client:        suite.client.api,
-			ctx:           sharedViewOnlyUser.UserCtx,
+			client:        suite.Client.API,
+			ctx:           th.SharedViewOnlyUser.UserCtx,
 			integrationID: integration2.ID,
-			errorMsg:      notAuthorizedErrorMsg,
+			errorMsg:      th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:          "delete integration, no access another org",
-			client:        suite.client.api,
-			ctx:           sharedTestUser2.UserCtx,
+			client:        suite.Client.API,
+			ctx:           th.SharedTestUser2.UserCtx,
 			integrationID: integration2.ID,
-			errorMsg:      notFoundErrorMsg,
+			errorMsg:      th.NotFoundErrorMsg,
 		},
 		{
 			name:          "delete integration, happy path",
-			client:        suite.client.api,
-			ctx:           sharedTestUser1.UserCtx,
+			client:        suite.Client.API,
+			ctx:           th.SharedTestUser1.UserCtx,
 			integrationID: integration2.ID,
 		},
 	}
@@ -210,8 +212,8 @@ func TestMutationDeleteIntegration(t *testing.T) {
 }
 
 func TestQueryIntegration(t *testing.T) {
-	// create an integration to be queried using sharedTestUser1
-	integration := (&IntegrationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create an integration to be queried using th.SharedTestUser1
+	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the Integration
 	testCases := []struct {
@@ -224,34 +226,34 @@ func TestQueryIntegration(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: integration.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: integration.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: integration.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "integration not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "integration not found, using not authorized user",
 			queryID:  integration.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -278,30 +280,30 @@ func TestQueryIntegration(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.IntegrationDeleteOne]{client: suite.client.db.Integration, ID: integration.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: integration.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryIntegrationWithSecrets(t *testing.T) {
-	// create an integration to be queried using sharedTestUser1
-	integration := (&IntegrationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create an integration to be queried using th.SharedTestUser1
+	integration := (&th.IntegrationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	// Create multiple secrets for OAuth tokens
-	accessToken := (&SecretBuilder{client: suite.client}).
+	accessToken := (&th.SecretBuilder{Client: suite.Client}).
 		WithIntegration(integration.ID).
 		WithSecretName("github_access_token").
 		WithSecretValue("gho_access_123").
-		MustNew(sharedTestUser1.UserCtx, t)
+		MustNew(th.SharedTestUser1.UserCtx, t)
 
-	refreshToken := (&SecretBuilder{client: suite.client}).
+	refreshToken := (&th.SecretBuilder{Client: suite.Client}).
 		WithIntegration(integration.ID).
 		WithSecretName("github_refresh_token").
 		WithSecretValue("ghr_refresh_456").
-		MustNew(sharedTestUser1.UserCtx, t)
+		MustNew(th.SharedTestUser1.UserCtx, t)
 
-	expiresAt := (&SecretBuilder{client: suite.client}).
+	expiresAt := (&th.SecretBuilder{Client: suite.Client}).
 		WithIntegration(integration.ID).
 		WithSecretName("github_expires_at").
 		WithSecretValue("2024-12-31T23:59:59Z").
-		MustNew(sharedTestUser1.UserCtx, t)
+		MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the Integration
 	testCases := []struct {
@@ -314,35 +316,35 @@ func TestQueryIntegrationWithSecrets(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: integration.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:     "read only user, cannot query secrets, only the integration",
 			queryID:  integration.ID,
-			client:   suite.client.api,
-			ctx:      sharedViewOnlyUser.UserCtx,
-			errorMsg: notAuthorizedErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedViewOnlyUser.UserCtx,
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: integration.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "integration not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "integration not found, using not authorized user",
 			queryID:  integration.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -370,14 +372,14 @@ func TestQueryIntegrationWithSecrets(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.IntegrationDeleteOne]{client: suite.client.db.Integration, ID: integration.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.HushDeleteOne]{client: suite.client.db.Hush, IDs: []string{accessToken.ID, refreshToken.ID, expiresAt.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, ID: integration.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.HushDeleteOne]{Client: suite.Client.DB.Hush, IDs: []string{accessToken.ID, refreshToken.ID, expiresAt.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestListIntegrations(t *testing.T) {
 	// create integrations with different kinds (unique constraint on owner_id + kind)
-	integration1 := (&IntegrationBuilder{client: suite.client, Kind: "github"}).MustNew(sharedTestUser1.UserCtx, t)
-	integration2 := (&IntegrationBuilder{client: suite.client, Kind: "slack"}).MustNew(sharedTestUser1.UserCtx, t)
+	integration1 := (&th.IntegrationBuilder{Client: suite.Client, Kind: "github"}).MustNew(th.SharedTestUser1.UserCtx, t)
+	integration2 := (&th.IntegrationBuilder{Client: suite.Client, Kind: "slack"}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the Integration
 	testCases := []struct {
@@ -388,32 +390,32 @@ func TestListIntegrations(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          suite.Client.APIWithToken,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "another user, no integrations should be returned",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -428,5 +430,5 @@ func TestListIntegrations(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.IntegrationDeleteOne]{client: suite.client.db.Integration, IDs: []string{integration1.ID, integration2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, IDs: []string{integration1.ID, integration2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
