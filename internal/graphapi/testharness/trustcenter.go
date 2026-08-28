@@ -14,36 +14,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 )
-
-// CleanupTrustCenterData for the SharedTestUser1 context
-func CleanupTrustCenterData(t *testing.T) {
-	t.Helper()
-	CleanupTrustCenterDataWithContext(SharedTestUser1.UserCtx, t)
-}
-
-// CleanupTrustCenterData removes all trust centers and watermark configs for the context of the passed in user context.
-// This ensures the Only() query in hooks works correctly when tests expect a single watermark config.
-func CleanupTrustCenterDataWithContext(ctx context.Context, t *testing.T) {
-	t.Helper()
-	ctx = SetContext(ctx, Suite.Client.DB)
-
-	wcs, err := Suite.Client.DB.TrustCenterWatermarkConfig.Query().All(ctx)
-	RequireNoError(t, err)
-	for _, wc := range wcs {
-		err := Suite.Client.DB.TrustCenterWatermarkConfig.DeleteOneID(wc.ID).Exec(ctx)
-		RequireNoError(t, err)
-	}
-
-	tcs, err := Suite.Client.DB.TrustCenter.Query().All(ctx)
-	RequireNoError(t, err)
-	for _, tc := range tcs {
-		err := Suite.Client.DB.TrustCenter.DeleteOneID(tc.ID).Exec(ctx)
-		RequireNoError(t, err)
-	}
-}
 
 type TrustCenterOrg struct {
 	OrganizationID string
@@ -179,26 +151,6 @@ func CreateFreshOrgWithTrustCenter(t *testing.T, opts ...TrustCenterOption) *Tru
 		SupportCtx:     supportCtx,
 		TestOrgUsers:   localUsers,
 	}
-}
-
-func CleanupWatermarkConfigsWithContext(ctx context.Context, t *testing.T) {
-	t.Helper()
-	wcs, err := Suite.Client.DB.TrustCenterWatermarkConfig.Query().All(ctx)
-	RequireNoError(t, err)
-
-	for _, wc := range wcs {
-		err := Suite.Client.DB.TrustCenterWatermarkConfig.DeleteOneID(wc.ID).Exec(ctx)
-		RequireNoError(t, err)
-	}
-}
-
-// CleanupWatermarkConfigs removes all watermark configs for the test user's organization.
-func CleanupWatermarkConfigs(t *testing.T) {
-	t.Helper()
-
-	ctx := privacy.DecisionContext(SetContext(SharedTestUser1.UserCtx, Suite.Client.DB), privacy.Allow)
-
-	CleanupWatermarkConfigsWithContext(ctx, t)
 }
 
 // NewAnonTrustCenterCtxFromCaller wraps an existing trust center caller in a properly initialized echo context
