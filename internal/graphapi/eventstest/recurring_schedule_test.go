@@ -1,6 +1,6 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
@@ -18,7 +18,7 @@ import (
 
 // waitForInstallationErrored polls until the installation is marked unhealthy; the exhausting
 // loop reschedules through River's scheduler across several cycles, so it needs a longer window
-// than the shared th.WaitForCondition helper allows
+// than the shared waitForCondition helper allows
 func waitForInstallationErrored(t *testing.T, ctx context.Context, id string) {
 	t.Helper()
 
@@ -42,7 +42,7 @@ func TestReconcileLoopExhaustsToUnhealthy(t *testing.T) {
 	allowCtx := privacy.DecisionContext(th.SetContext(org.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 	ownerCtx := th.SetContext(org.Owner.UserCtx, suite.Client.DB)
 
-	installation, fragment := th.NewHarnessInstallation(t, allowCtx, testint.ModeExhausting)
+	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeExhausting)
 
 	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, installation))
 
@@ -50,8 +50,8 @@ func TestReconcileLoopExhaustsToUnhealthy(t *testing.T) {
 
 	suite.WaitForEvents()
 
-	require.Equal(t, 0, th.ActiveReconcileJobs(t, fragment))
-	require.Equal(t, 1, th.IntegrationNotificationCount(t, ownerCtx, installation.OwnerID, th.IntegrationReconfigurationRequiredObjectType))
+	require.Equal(t, 0, activeReconcileJobs(t, fragment))
+	require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 }
 
 // TestReconcileLoopUnresolvableClientMarksUnhealthy asserts a loop whose client cannot be built
@@ -61,15 +61,15 @@ func TestReconcileLoopUnresolvableClientMarksUnhealthy(t *testing.T) {
 	allowCtx := privacy.DecisionContext(th.SetContext(org.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 	ownerCtx := th.SetContext(org.Owner.UserCtx, suite.Client.DB)
 
-	installation, fragment := th.NewHarnessInstallation(t, allowCtx, testint.ModeUnresolvable)
+	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeUnresolvable)
 
 	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, installation))
 
 	suite.WaitForEvents()
 
-	require.Equal(t, 0, th.ActiveReconcileJobs(t, fragment))
+	require.Equal(t, 0, activeReconcileJobs(t, fragment))
 
-	reloaded := th.ReloadIntegration(t, allowCtx, installation.ID)
+	reloaded := reloadIntegration(t, allowCtx, installation.ID)
 	require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
-	require.Equal(t, 1, th.IntegrationNotificationCount(t, ownerCtx, installation.OwnerID, th.IntegrationReconfigurationRequiredObjectType))
+	require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 }

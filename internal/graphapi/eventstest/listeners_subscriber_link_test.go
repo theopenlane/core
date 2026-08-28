@@ -48,7 +48,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 
 		th.WaitForGala(t, setup.Runtime)
 
-		th.WaitForCondition(t, func() bool {
+		waitForCondition(t, func() bool {
 			return reload(t, sub.ID).ContactID == linked.ID
 		}, "subscriber should link to the matching contact")
 
@@ -60,7 +60,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 
 		th.WaitForGala(t, setup.Runtime)
 
-		th.WaitForCondition(t, func() bool {
+		waitForCondition(t, func() bool {
 			return reload(t, sub.ID).UserID == org.Member.ID
 		}, "subscriber should link to the matching org member")
 
@@ -75,7 +75,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 
 		th.WaitForGala(t, setup.Runtime)
 
-		th.WaitForCondition(t, func() bool {
+		waitForCondition(t, func() bool {
 			s := reload(t, sub.ID)
 			return s.ContactID == linked.ID && s.UserID == org.Admin.ID
 		}, "subscriber should link to both the contact and the org member")
@@ -95,7 +95,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 
 		th.WaitForGala(t, setup.Runtime)
 
-		th.WaitForCondition(t, func() bool {
+		waitForCondition(t, func() bool {
 			return reload(t, sentinel.ID).ContactID == sentinelContact.ID
 		}, "sentinel subscriber should link once the queue drains")
 

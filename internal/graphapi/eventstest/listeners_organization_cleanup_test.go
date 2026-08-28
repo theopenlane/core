@@ -34,7 +34,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	task1 := (&th.TaskBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
 	contact1 := (&th.ContactBuilder{Client: suite.Client}).MustNew(ownerCtx, t)
 
-	installation, fragment := th.SeedHarnessLoop(t, allowCtx)
+	installation, fragment := seedHarnessLoop(t, allowCtx)
 	assert.Equal(t, orgID, installation.OwnerID)
 
 	resp, err := suite.Client.API.DeleteOrganization(ownerCtx, orgID)
@@ -45,12 +45,12 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 
 	purgedCtx := entx.SkipSoftDelete(allowCtx)
 
-	th.WaitForCondition(t, func() bool {
+	waitForCondition(t, func() bool {
 		exists, err := suite.Client.DB.Organization.Query().Where(organization.ID(orgID)).Exist(purgedCtx)
 		return err == nil && !exists
 	}, "organization row should be hard deleted by the cascade")
 
-	assert.Equal(t, 0, th.ActiveReconcileJobs(t, fragment))
+	assert.Equal(t, 0, activeReconcileJobs(t, fragment))
 
 	taskExists, err := suite.Client.DB.Task.Query().Where(task.ID(task1.ID)).Exist(purgedCtx)
 	assert.NilError(t, err)

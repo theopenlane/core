@@ -55,7 +55,7 @@ func TestCampaignRecurringListener(t *testing.T) {
 
 		assert.NilError(t, suite.Client.DB.Campaign.UpdateOneID(camp.ID).SetIsActive(true).Exec(ctx))
 
-		th.WaitForCondition(t, func() bool { return nextRunAt(t, camp.ID) != nil }, "activation should set next_run_at")
+		waitForCondition(t, func() bool { return nextRunAt(t, camp.ID) != nil }, "activation should set next_run_at")
 		assert.Check(t, time.Time(*nextRunAt(t, camp.ID)).After(time.Now()))
 	})
 
@@ -67,7 +67,7 @@ func TestCampaignRecurringListener(t *testing.T) {
 
 		assert.NilError(t, suite.Client.DB.Campaign.UpdateOneID(camp.ID).SetIsActive(false).Exec(ctx))
 
-		th.WaitForCondition(t, func() bool { return nextRunAt(t, camp.ID) == nil }, "deactivation should clear next_run_at")
+		waitForCondition(t, func() bool { return nextRunAt(t, camp.ID) == nil }, "deactivation should clear next_run_at")
 	})
 
 	t.Run("recurrence shape change recomputes next run", func(t *testing.T) {
@@ -80,7 +80,7 @@ func TestCampaignRecurringListener(t *testing.T) {
 
 		assert.NilError(t, suite.Client.DB.Campaign.UpdateOneID(camp.ID).SetRecurrenceInterval(2).Exec(ctx))
 
-		th.WaitForCondition(t, func() bool {
+		waitForCondition(t, func() bool {
 			next := nextRunAt(t, camp.ID)
 
 			return next != nil && time.Time(*next).Sub(seeded) > time.Hour

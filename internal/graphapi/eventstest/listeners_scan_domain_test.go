@@ -100,7 +100,7 @@ func TestDomainScanListeners(t *testing.T) {
 			Save(ctx)
 		assert.NilError(t, err)
 
-		th.WaitForCondition(t, func() bool { return countRuns(t) == baseline+1 }, "matching scan create should dispatch one domain scan run")
+		waitForCondition(t, func() bool { return countRuns(t) == baseline+1 }, "matching scan create should dispatch one domain scan run")
 	})
 
 	t.Run("scan create without the system marker dispatches nothing", func(t *testing.T) {
@@ -130,6 +130,6 @@ func TestDomainScanListeners(t *testing.T) {
 			SetDomains(domains).
 			Exec(allowCtx))
 
-		th.WaitForCondition(t, func() bool { return countRuns(t) == baseline+1+len(domains) }, "domains update should dispatch one run per current domain")
+		waitForCondition(t, func() bool { return countRuns(t) == baseline+1+len(domains) }, "domains update should dispatch one run per current domain")
 	})
 }

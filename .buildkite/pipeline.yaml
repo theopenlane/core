@@ -345,8 +345,10 @@ steps:
           - pkg/gala/**
           # every ent listener and the hooks that emit the events they consume
           - internal/ent/hooks/**
-          # the integrations feature and its test fixtures
+          - internal/ent/taskrules/**
+          # the integrations and workflow feature and its test fixtures
           - internal/integrations/**
+          - internal/workflows/**
           - internal/testutils/integrations/**
           # graphql resolvers and listener helpers for integrations
           - internal/graphapi/integration*.go

@@ -79,13 +79,13 @@ func TestEntitlementListenerOrganizationDeleted(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(user.OrganizationID, resp.DeleteOrganization.DeletedID))
 
-	th.WaitForCondition(t, func() bool {
+	waitForCondition(t, func() bool {
 		return stripeSubscriptionCancelCalls.Load() > before
 	}, "organization delete should deactivate the stripe subscription")
 
 	purgedCtx := entx.SkipSoftDelete(allowCtx)
 
-	th.WaitForCondition(t, func() bool {
+	waitForCondition(t, func() bool {
 		exists, err := suite.Client.DB.Organization.Query().Where(organization.ID(user.OrganizationID)).Exist(purgedCtx)
 		return err == nil && !exists
 	}, "cascade should still purge the organization")
@@ -107,7 +107,7 @@ func TestEntitlementListenerOrganizationDeletedWithoutCustomer(t *testing.T) {
 
 	purgedCtx := entx.SkipSoftDelete(allowCtx)
 
-	th.WaitForCondition(t, func() bool {
+	waitForCondition(t, func() bool {
 		exists, err := suite.Client.DB.Organization.Query().Where(organization.ID(user.OrganizationID)).Exist(purgedCtx)
 		return err == nil && !exists
 	}, "delete without a stripe customer should skip deactivation and still purge the organization")

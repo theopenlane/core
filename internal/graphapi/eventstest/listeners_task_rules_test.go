@@ -67,7 +67,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	}
 
 	t.Run("create mutations fire schema task rules", func(t *testing.T) {
-		th.WaitForCondition(t, func() bool {
+		waitForCondition(t, func() bool {
 			tasks, err := suite.Client.DB.Task.Query().Where(task.OwnerIDEQ(orgID)).All(orgCtx)
 			if err != nil {
 				return false
@@ -92,7 +92,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	})
 
 	t.Run("organization ready notification emitted", func(t *testing.T) {
-		th.WaitForCondition(t, func() bool { return notificationCount(t) == 1 }, "organization ready notification should exist once suggested tasks land")
+		waitForCondition(t, func() bool { return notificationCount(t) == 1 }, "organization ready notification should exist once suggested tasks land")
 	})
 
 	t.Run("redelivery does not duplicate tasks", func(t *testing.T) {

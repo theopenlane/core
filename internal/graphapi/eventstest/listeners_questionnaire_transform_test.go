@@ -65,7 +65,7 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 			SetStatus(enums.AssessmentResponseStatusCompleted).
 			Exec(allowCtx))
 
-		th.WaitForCondition(t, func() bool {
+		waitForCondition(t, func() bool {
 			updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response.ID)
 			return err == nil && updated.EntityID != ""
 		}, "assessment response should link the transformed entity")

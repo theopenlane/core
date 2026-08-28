@@ -16,58 +16,58 @@ import (
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
-// th.HarnessReconcileOperation returns the reconcile operation name for one harness mode
+// harnessReconcileOperation returns the reconcile operation name for one harness mode
 func TestIntegrationLifecycle(t *testing.T) {
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 
 	allowCtx := privacy.DecisionContext(th.SetContext(org.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 	ownerCtx := th.SetContext(org.Owner.UserCtx, suite.Client.DB)
 
-	installation, fragment := th.NewHarnessInstallation(t, allowCtx, testint.ModeRecurring)
+	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
 	require.Equal(t, org.Owner.OrganizationID, installation.OwnerID)
 
-	opName := th.HarnessReconcileOperation(t, testint.ModeRecurring)
+	opName := harnessReconcileOperation(t, testint.ModeRecurring)
 
 	t.Run("seeding creates exactly one loop", func(t *testing.T) {
 		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, installation))
 
 		suite.WaitForEvents()
 
-		require.Equal(t, 1, th.ActiveReconcileJobs(t, fragment))
+		require.Equal(t, 1, activeReconcileJobs(t, fragment))
 	})
 
 	t.Run("unhealthy errors the installation and cancels the loop", func(t *testing.T) {
 		require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, installation, "credentials revoked"))
 
-		reloaded := th.ReloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, allowCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
-		require.Equal(t, 1, th.IntegrationNotificationCount(t, ownerCtx, installation.OwnerID, th.IntegrationReconfigurationRequiredObjectType))
+		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 
 		suite.WaitForEvents()
 
-		require.Equal(t, 0, th.ActiveReconcileJobs(t, fragment))
+		require.Equal(t, 0, activeReconcileJobs(t, fragment))
 	})
 
 	t.Run("unhealthy is idempotent", func(t *testing.T) {
 		require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, installation, "credentials revoked again"))
 
-		require.Equal(t, 1, th.IntegrationNotificationCount(t, ownerCtx, installation.OwnerID, th.IntegrationReconfigurationRequiredObjectType))
+		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 	})
 
 	t.Run("recovery reconnects and reseeds a single loop", func(t *testing.T) {
-		reloaded := th.ReloadIntegration(t, allowCtx, installation.ID)
+		reloaded := reloadIntegration(t, allowCtx, installation.ID)
 
 		require.NoError(t, suite.IntegrationsRT.ClearIntegrationUnhealthy(allowCtx, reloaded))
 
-		reloaded = th.ReloadIntegration(t, allowCtx, installation.ID)
+		reloaded = reloadIntegration(t, allowCtx, installation.ID)
 		require.Equal(t, enums.IntegrationStatusConnected, reloaded.Status)
-		require.Equal(t, 1, th.IntegrationNotificationCount(t, ownerCtx, installation.OwnerID, th.IntegrationReconnectedObjectType))
+		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconnectedObjectType))
 
 		// the direct seed and the async status-change listener reseed must collapse
 		// to exactly one loop
 		suite.WaitForEvents()
 
-		require.Equal(t, 1, th.ActiveReconcileJobs(t, fragment))
+		require.Equal(t, 1, activeReconcileJobs(t, fragment))
 	})
 
 	t.Run("listener alone cancels and reseeds on direct status flips", func(t *testing.T) {
@@ -77,7 +77,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		suite.WaitForEvents()
 
-		require.Equal(t, 0, th.ActiveReconcileJobs(t, fragment))
+		require.Equal(t, 0, activeReconcileJobs(t, fragment))
 
 		require.NoError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).
 			SetStatus(enums.IntegrationStatusConnected).
@@ -85,7 +85,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		suite.WaitForEvents()
 
-		require.Equal(t, 1, th.ActiveReconcileJobs(t, fragment))
+		require.Equal(t, 1, activeReconcileJobs(t, fragment))
 	})
 
 	t.Run("duplicate loops collapse to one on reset", func(t *testing.T) {
@@ -105,13 +105,13 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		suite.WaitForEvents()
 
-		require.Equal(t, 2, th.ActiveReconcileJobs(t, fragment))
+		require.Equal(t, 2, activeReconcileJobs(t, fragment))
 
-		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, th.ReloadIntegration(t, allowCtx, installation.ID)))
+		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, reloadIntegration(t, allowCtx, installation.ID)))
 
 		suite.WaitForEvents()
 
-		require.Equal(t, 1, th.ActiveReconcileJobs(t, fragment))
+		require.Equal(t, 1, activeReconcileJobs(t, fragment))
 	})
 
 	t.Run("soft delete cancels the loop", func(t *testing.T) {
@@ -119,6 +119,6 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		suite.WaitForEvents()
 
-		require.Equal(t, 0, th.ActiveReconcileJobs(t, fragment))
+		require.Equal(t, 0, activeReconcileJobs(t, fragment))
 	})
 }

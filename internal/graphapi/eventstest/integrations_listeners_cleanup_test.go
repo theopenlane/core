@@ -18,7 +18,7 @@ func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 	allowCtx := privacy.DecisionContext(th.SetContext(org.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
-	installation, fragment := th.SeedHarnessLoop(t, allowCtx)
+	installation, fragment := seedHarnessLoop(t, allowCtx)
 
 	hardDeleteCtx := entx.SkipSoftDelete(allowCtx)
 
@@ -26,7 +26,7 @@ func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 
 	suite.WaitForEvents()
 
-	assert.Equal(t, 0, th.ActiveReconcileJobs(t, fragment))
+	assert.Equal(t, 0, activeReconcileJobs(t, fragment))
 
 	exists, err := suite.Client.DB.Integration.Query().Where(integration.ID(installation.ID)).Exist(hardDeleteCtx)
 	assert.NilError(t, err)
@@ -37,17 +37,17 @@ func TestIntegrationCleanupListenerNonStatusUpdateKeepsLoops(t *testing.T) {
 	org := suite.SeedFreshMinimalOrgUsers(t, false)
 	allowCtx := privacy.DecisionContext(th.SetContext(org.Owner.UserCtx, suite.Client.DB), privacy.Allow)
 
-	installation, fragment := th.SeedHarnessLoop(t, allowCtx)
+	installation, fragment := seedHarnessLoop(t, allowCtx)
 
 	assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).SetName(th.RandomName(t)).Exec(allowCtx))
 
 	suite.WaitForEvents()
 
-	assert.Equal(t, 1, th.ActiveReconcileJobs(t, fragment))
+	assert.Equal(t, 1, activeReconcileJobs(t, fragment))
 
 	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(allowCtx))
 
 	suite.WaitForEvents()
 
-	assert.Equal(t, 0, th.ActiveReconcileJobs(t, fragment))
+	assert.Equal(t, 0, activeReconcileJobs(t, fragment))
 }
