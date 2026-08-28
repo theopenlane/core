@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/theopenlane/core/internal/integrations/cli/config/config.-config",
+  "$id": "https://github.com/theopenlane/core/v2/internal/integrations/cli/config/config.-config",
   "$defs": {
     "config.OpenlaneAuthConfig": {
       "properties": {

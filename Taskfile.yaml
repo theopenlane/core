@@ -406,7 +406,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:graph']
     cmds:
-      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-graph.out -tags test
+      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-graph.out -tags test
 
   go:testsum:ci:handlers:
     desc: runs tests only graph tests using gotestsum for CI
@@ -415,7 +415,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:handlers']
     cmds:
-      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-handlers.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-handlers.out -tags test
+      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-handlers.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-handlers.out -tags test
 
   go:testsum:ci:no-api:
     desc: runs tests using gotestsum for CI
@@ -457,7 +457,7 @@ tasks:
     silent: true
     aliases: ['testsum:graph']
     cmds:
-      - gotestsum --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+      - gotestsum --packages "github.com/theopenlane/core/v2/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
 
   go:testsum:handlers:
     desc: runs only the httpserve handlers tests using gotestsum
@@ -466,7 +466,7 @@ tasks:
     silent: true
     aliases: ['testsum:graph']
     cmds:
-      - gotestsum --packages "github.com/theopenlane/core/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+      - gotestsum --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
 
   go:fmt:
     desc: format all go code

@@ -34,7 +34,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.107.2
 	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/cenkalti/backoff/v5 v5.0.3
-	github.com/cloudflare/cloudflare-go/v7 v7.6.0
+	github.com/cloudflare/cloudflare-go/v7 v7.9.0
 	github.com/coder/websocket v1.8.15
 	github.com/didasy/tldr v0.7.0
 	github.com/elimity-com/scim v0.0.0-20260728105928-2641426a1539
@@ -53,7 +53,7 @@ require (
 	github.com/google/go-github/v88 v88.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gqlgo/gqlgenc v0.38.0
+	github.com/gqlgo/gqlgenc v0.38.1
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/invopop/jsonschema v0.14.0
 	github.com/invopop/yaml v0.3.1
@@ -79,16 +79,16 @@ require (
 	github.com/okta/okta-sdk-golang/v6 v6.1.7
 	github.com/openfga/go-sdk v0.8.2
 	github.com/oracle/oci-go-sdk/v65 v65.123.2
-	github.com/pdfcpu/pdfcpu v0.13.0
+	github.com/pdfcpu/pdfcpu v0.15.0
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/pquerna/otp v1.5.0
 	github.com/pressly/goose/v3 v3.27.3
 	github.com/prometheus/client_golang v1.24.1
 	github.com/redis/go-redis/v9 v9.22.0
-	github.com/riverqueue/river v0.43.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.43.0
-	github.com/riverqueue/river/rivertype v0.43.0
+	github.com/riverqueue/river v0.44.1
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.44.1
+	github.com/riverqueue/river/rivertype v0.44.1
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/do/v2 v2.1.0
 	github.com/samber/lo v1.53.0
@@ -103,12 +103,12 @@ require (
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.33.0
-	github.com/theopenlane/go-client v0.13.0
+	github.com/theopenlane/go-client v0.13.1
 	github.com/theopenlane/gqlgen-plugins v0.17.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.37.0
 	github.com/theopenlane/newman v0.4.3
-	github.com/theopenlane/riverboat v0.13.2
+	github.com/theopenlane/riverboat v0.13.3
 	github.com/theopenlane/utils v0.7.1
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.10.1
@@ -140,9 +140,7 @@ require (
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/gofrs/flock v0.10.0 // indirect
 	github.com/google/go-github/v90 v90.0.0 // indirect
-	github.com/hhrutter/lzw v1.0.0 // indirect
-	github.com/hhrutter/pkcs7 v0.2.2 // indirect
-	github.com/hhrutter/tiff v1.0.3 // indirect
+	github.com/hhrutter/tiff v1.0.6 // indirect
 	github.com/inbucket/html2text v1.0.0 // indirect
 	github.com/kelseyhightower/envconfig v1.4.0 // indirect
 	github.com/labstack/echo/v5 v5.3.1 // indirect
@@ -172,14 +170,13 @@ require (
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/std-uritemplate/std-uritemplate/go/v2 v2.0.8 // indirect
 	github.com/tailscale/hujson v0.0.0-20220506213045-af5ed07155e5 // indirect
-	github.com/theopenlane/core v1.26.1 // indirect
+	github.com/theopenlane/core v1.34.0 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/vanng822/css v1.0.1 // indirect
 	github.com/vanng822/go-premailer v1.35.0 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	go.yaml.in/yaml/v4 v4.0.0-rc.2 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (
@@ -198,7 +195,7 @@ require (
 	github.com/wundergraph/astjson v1.1.0
 	github.com/wundergraph/go-arena v0.0.0-20251008210416-55cb97e6f68f // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/image v0.44.0 // indirect
+	golang.org/x/image v0.45.0 // indirect
 	golang.org/x/term v0.45.0 // indirect
 )
 
@@ -312,13 +309,13 @@ require (
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.3.3 // indirect
 	github.com/felixge/httpsnoop v1.1.0 // indirect
-	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
+	github.com/fxamacker/cbor/v2 v2.9.3 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/inflect v1.0.0 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/go-webauthn/x v0.2.6 // indirect
+	github.com/go-webauthn/x v0.3.0 // indirect
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/cel-go v0.31.0
@@ -345,8 +342,8 @@ require (
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
 	github.com/magiconair/properties v1.8.10 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
-	github.com/mattn/go-isatty v0.0.23 // indirect
-	github.com/mattn/go-runewidth v0.0.24 // indirect
+	github.com/mattn/go-isatty v0.0.24 // indirect
+	github.com/mattn/go-runewidth v0.0.28 // indirect
 	github.com/mfridman/interpolate v0.0.2 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
@@ -359,7 +356,7 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.6 // indirect
-	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
+	github.com/openfga/api/proto v0.0.0-20260723150800-6981fff8d33b // indirect
 	github.com/openfga/language/pkg/go v0.3.2-0.20260730144454-83fedf8a4e70
 	github.com/openfga/openfga v1.18.3 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
@@ -368,8 +365,8 @@ require (
 	github.com/prometheus/common v0.70.1 // indirect
 	github.com/prometheus/procfs v0.21.1 // indirect
 	github.com/resend/resend-go/v3 v3.14.0
-	github.com/riverqueue/river/riverdriver v0.43.0 // indirect
-	github.com/riverqueue/river/rivershared v0.43.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.44.1 // indirect
+	github.com/riverqueue/river/rivershared v0.44.1 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
 	github.com/samber/mo v1.17.0
 	github.com/segmentio/asm v1.2.1 // indirect
@@ -401,13 +398,13 @@ require (
 	go.opentelemetry.io/otel/trace v1.45.0 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20260718201538-764159d718ef // indirect
+	golang.org/x/exp v0.0.0-20260820142414-ca536658362e // indirect
 	golang.org/x/net v0.58.0
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20260803160001-6ac0973c030d // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260803160001-6ac0973c030d // indirect
-	google.golang.org/grpc v1.83.0 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20260819154853-08b0e4226688 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260819154853-08b0e4226688 // indirect
+	google.golang.org/grpc v1.83.1 // indirect
 	google.golang.org/protobuf v1.36.12
 )

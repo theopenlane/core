@@ -8,6 +8,6 @@ pkgname: mocks
 recursive: false
 template: testify
 packages:
-  github.com/theopenlane/core/pkg/objects:
+  github.com/theopenlane/core/v2/pkg/objects:
     config:
       all: true
