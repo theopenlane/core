@@ -81,7 +81,7 @@ modules:
         price_id: price_1Tm5QPBvxky1R7Sv1ZJwq41b
     audience: private
     product_id: prod_Ulcf3iUMbFB4R4
-    include_with_trial: true
+    include_with_trial: false
   trust_center_module:
     display_name: Trust Center
     lookup_key: trust_center_module
