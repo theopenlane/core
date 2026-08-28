@@ -63,8 +63,8 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 
 	// let the subscriber create hook's confirmation email settle, then clear it so only the post
 	// notification remains
-	suite.WaitForEvents()
-	suite.MockEmailSender().Reset()
+	waitForEvents()
+	mockEmailSender().Reset()
 
 	_, err = suite.IntegrationsRT.HandleReconcile(context.Background(), operations.ReconcileEnvelope{
 		OperationContext: types.NewOperationContext("", email.TrustCenterNotificationOp.Name(), types.IntegrationSource{
@@ -75,9 +75,9 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
-	messages := suite.MockEmailSender().Messages()
+	messages := mockEmailSender().Messages()
 	assert.Assert(t, len(messages) >= 1)
 
 	var allHTML, allTo []string
@@ -152,8 +152,8 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 		SetUpdatedAt(stale).
 		Exec(dbCtx))
 
-	suite.WaitForEvents()
-	suite.MockEmailSender().Reset()
+	waitForEvents()
+	mockEmailSender().Reset()
 
 	_, err = suite.IntegrationsRT.HandleReconcile(context.Background(), operations.ReconcileEnvelope{
 		OperationContext: types.NewOperationContext("", email.TrustCenterNotificationOp.Name(), types.IntegrationSource{
@@ -164,9 +164,9 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
-	messages := suite.MockEmailSender().Messages()
+	messages := mockEmailSender().Messages()
 	assert.Assert(t, len(messages) >= 1)
 
 	var allHTML, allTo []string

@@ -17,7 +17,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
@@ -34,7 +33,7 @@ func TestQueryContact(t *testing.T) {
 		queryID   string
 		client    *testclient.TestClient
 		ctx       context.Context
-		expected  *ent.Contact
+		expected  *generated.Contact
 		errorMsg  string
 		errorCode string
 	}{

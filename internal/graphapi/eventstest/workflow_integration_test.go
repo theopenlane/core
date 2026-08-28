@@ -34,7 +34,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 	// Then use th.SetContext for bypassing privacy on engine operations
 	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
 
-	workflowEngine, workflowRuntime := suite.AcquireWorkflowRuntime(t)
+	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)
 
 	// Create workflow definition with approval action targeting the approver user
 	targets := []workflows.TargetConfig{
@@ -109,7 +109,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.Equal(t, workflowDef.ID, instance.WorkflowDefinitionID)
 
 		// Wait for all cascading events to complete before checking state
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Verify assignment was created
 		assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
@@ -135,7 +135,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events to complete
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Verify workflow instance completed
 		instance, err = graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateCompleted)
@@ -173,7 +173,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.Check(t, instance != nil)
 
 		// Wait for all cascading events to complete
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Verify assignments were created
 		assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
@@ -189,7 +189,7 @@ func TestWorkflowIntegrationApproval(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events to complete
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Verify workflow instance failed
 		instance, err = graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateFailed)
@@ -220,7 +220,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 	// Then use th.SetContext for bypassing privacy on engine operations
 	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
 
-	workflowEngine, workflowRuntime := suite.AcquireWorkflowRuntime(t)
+	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)
 
 	// Create workflow with two sequential approval actions
 	targets1 := []workflows.TargetConfig{
@@ -316,7 +316,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.Check(t, instance != nil)
 
 		// Wait for all cascading events from trigger to complete
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Wait for first assignment to be created (only first approval action runs initially)
 		assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
@@ -333,7 +333,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events from first approval to complete
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Wait for second assignment to be created (workflow resumes after first approval)
 		assignments, err = graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 2)
@@ -358,7 +358,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events from second approval to complete
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Verify workflow completed
 		instance, err = graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateCompleted)
@@ -390,7 +390,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.Check(t, instance != nil)
 
 		// Wait for all cascading events from trigger to complete
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Wait for first assignment
 		assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
@@ -406,7 +406,7 @@ func TestWorkflowIntegrationMultipleApprovers(t *testing.T) {
 		assert.NilError(t, err)
 
 		// Wait for all cascading events from rejection to complete
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		// Verify workflow failed
 		instance, err = graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateFailed)

@@ -71,7 +71,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 		assert.Assert(t, doc.WatermarkingEnabled)
 		assert.Assert(t, doc.OriginalFileID != nil)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(1, watermarkJobCount(ctx, t, doc.ID)))
 	})
@@ -82,7 +82,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 			Exec(dbCtx)
 		assert.NilError(t, err)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(1, watermarkJobCount(ctx, t, doc.ID)))
 	})
@@ -98,7 +98,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 			Exec(dbCtx)
 		assert.NilError(t, err)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(2, watermarkJobCount(ctx, t, doc.ID)))
 	})
@@ -112,7 +112,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 			Save(dbCtx)
 		assert.NilError(t, err)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(0, watermarkJobCount(ctx, t, disabledDoc.ID)))
 	})

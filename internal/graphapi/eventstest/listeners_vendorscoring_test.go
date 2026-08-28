@@ -86,7 +86,7 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		unchanged, err := suite.Client.DB.Entity.Get(ctx, entity.ID)
 		assert.NilError(t, err)

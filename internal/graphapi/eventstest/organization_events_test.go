@@ -26,8 +26,6 @@ import (
 )
 
 func TestMutationOrganizationCascadeDelete(t *testing.T) {
-	suite.EnableGalaForTestSuite(t)
-
 	orgUser := suite.UserBuilder(context.Background(), t)
 
 	org := (&th.OrganizationBuilder{Client: suite.Client}).MustNew(orgUser.UserCtx, t)

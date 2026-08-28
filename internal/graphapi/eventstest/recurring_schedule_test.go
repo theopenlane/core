@@ -48,7 +48,7 @@ func TestReconcileLoopExhaustsToUnhealthy(t *testing.T) {
 
 	waitForInstallationErrored(t, allowCtx, installation.ID)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	require.Equal(t, 0, activeReconcileJobs(t, fragment))
 	require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
@@ -65,7 +65,7 @@ func TestReconcileLoopUnresolvableClientMarksUnhealthy(t *testing.T) {
 
 	require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, installation))
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	require.Equal(t, 0, activeReconcileJobs(t, fragment))
 

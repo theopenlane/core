@@ -70,7 +70,7 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 			return err == nil && updated.EntityID != ""
 		}, "assessment response should link the transformed entity")
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		record, err := suite.Client.DB.Entity.Query().
 			Where(entity.ExternalIDEQ(vendorName), entity.OwnerIDEQ(orgID)).
@@ -116,7 +116,7 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 			SetCompletedAt(time.Now()).
 			Exec(allowCtx))
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		entityCount, err := suite.Client.DB.Entity.Query().
 			Where(entity.ExternalIDEQ(vendorName), entity.OwnerIDEQ(orgID)).
@@ -151,7 +151,7 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 			SetSendAttempts(2).
 			Exec(allowCtx))
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response2.ID)
 		assert.NilError(t, err)
@@ -169,7 +169,7 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 			SetDocumentDataID(doc2.ID).
 			Exec(allowCtx))
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response2.ID)
 		assert.NilError(t, err)
@@ -210,7 +210,7 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 			Exec(allowCtx))
 
 		// WaitIdle counts retrying jobs as active, so returning proves the ack
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		updated, err := suite.Client.DB.AssessmentResponse.Get(allowCtx, response3.ID)
 		assert.NilError(t, err)

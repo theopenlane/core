@@ -28,7 +28,7 @@ func TestWorkflowAssignmentMutationListener(t *testing.T) {
 
 	ctx := th.SetContext(initiator.UserCtx, suite.Client.DB)
 
-	workflowEngine, workflowRuntime := suite.AcquireWorkflowRuntime(t)
+	workflowEngine, workflowRuntime := acquireWorkflowRuntime(t)
 
 	params, err := json.Marshal(struct {
 		Targets  []workflows.TargetConfig `json:"targets"`
@@ -73,7 +73,7 @@ func TestWorkflowAssignmentMutationListener(t *testing.T) {
 	}, engine.TriggerInput{EventType: "UPDATE", ChangedFields: []string{"status"}})
 	assert.NilError(t, err)
 
-	th.WaitForGala(t, workflowRuntime)
+	waitForGala(t, workflowRuntime)
 
 	assignments, err := graphapi.WaitForAssignments(ctx, suite.Client.DB, instance.ID, 1)
 	assert.NilError(t, err)
@@ -86,7 +86,7 @@ func TestWorkflowAssignmentMutationListener(t *testing.T) {
 	assertStillPending := func(t *testing.T) {
 		t.Helper()
 
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		current, err := suite.Client.DB.WorkflowInstance.Get(ctx, instance.ID)
 		assert.NilError(t, err)
@@ -118,7 +118,7 @@ func TestWorkflowAssignmentMutationListener(t *testing.T) {
 			SetStatus(enums.WorkflowAssignmentStatusApproved).
 			Exec(ctx))
 
-		th.WaitForGala(t, workflowRuntime)
+		waitForGala(t, workflowRuntime)
 
 		completed, err := graphapi.WaitForInstanceState(ctx, suite.Client.DB, instance.ID, enums.WorkflowInstanceStateCompleted)
 		assert.NilError(t, err)

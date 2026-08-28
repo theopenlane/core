@@ -25,7 +25,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	ownerCtx := org.Owner.UserCtx
 	allowCtx := privacy.DecisionContext(th.SetContext(ownerCtx, suite.Client.DB), privacy.Allow)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	// the suite mocks no stripe subscription cancel call, so keep the entitlements_deleted
 	// listener on its skip path to avoid parking a retrying job on the shared runtime
@@ -41,7 +41,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(orgID, resp.DeleteOrganization.DeletedID))
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	purgedCtx := entx.SkipSoftDelete(allowCtx)
 

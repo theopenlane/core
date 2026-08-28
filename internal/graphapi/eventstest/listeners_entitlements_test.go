@@ -51,7 +51,7 @@ func TestEntitlementListenerOrganizationCreated(t *testing.T) {
 	// the suite's search mock resolves every org to the one shared cus_test_customer, which
 	// the first seeded org claims; reconcile for every later org hits the unique constraint
 	// and must terminally ack — WaitForEvents returning proves no parked retry
-	suite.WaitForEvents()
+	waitForEvents()
 
 	org, err := suite.Client.DB.Organization.Get(allowCtx, user.OrganizationID)
 	assert.NilError(t, err)
@@ -68,7 +68,7 @@ func TestEntitlementListenerOrganizationDeleted(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
 	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	customerID := fakeStripeCustomerID()
 	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).SetStripeCustomerID(customerID).Exec(allowCtx))
@@ -95,7 +95,7 @@ func TestEntitlementListenerOrganizationDeletedWithoutCustomer(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
 	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).ClearStripeCustomerID().Exec(allowCtx))
 
@@ -103,7 +103,7 @@ func TestEntitlementListenerOrganizationDeletedWithoutCustomer(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(user.OrganizationID, resp.DeleteOrganization.DeletedID))
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	purgedCtx := entx.SkipSoftDelete(allowCtx)
 
@@ -117,7 +117,7 @@ func TestEntitlementListenerBillingUpdate(t *testing.T) {
 	user := suite.UserBuilder(context.Background(), t)
 	allowCtx := privacy.DecisionContext(th.SetContext(user.UserCtx, suite.Client.DB), privacy.Allow)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	customerID := fakeStripeCustomerID()
 	assert.NilError(t, suite.Client.DB.Organization.UpdateOneID(user.OrganizationID).SetStripeCustomerID(customerID).Exec(allowCtx))
@@ -131,7 +131,7 @@ func TestEntitlementListenerBillingUpdate(t *testing.T) {
 
 	// the billing listener pushes the change through the mocked CustomerUpdate then
 	// reconciles; the drain proves neither call parked a retrying job
-	suite.WaitForEvents()
+	waitForEvents()
 
 	org, err := suite.Client.DB.Organization.Get(allowCtx, user.OrganizationID)
 	assert.NilError(t, err)

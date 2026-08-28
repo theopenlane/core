@@ -113,7 +113,7 @@ func TestDomainScanListeners(t *testing.T) {
 			Save(ctx)
 		assert.NilError(t, err)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(baseline+1, countRuns(t)))
 	})

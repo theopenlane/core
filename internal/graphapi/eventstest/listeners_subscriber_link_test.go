@@ -46,7 +46,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 
 		sub := (&th.SubscriberBuilder{Client: suite.Client, Email: strings.ToUpper(email)}).MustNew(ownerCtx, t)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		waitForCondition(t, func() bool {
 			return reload(t, sub.ID).ContactID == linked.ID
@@ -58,7 +58,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 	t.Run("links matching org member user", func(t *testing.T) {
 		sub := (&th.SubscriberBuilder{Client: suite.Client, Email: org.Member.UserInfo.Email}).MustNew(ownerCtx, t)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		waitForCondition(t, func() bool {
 			return reload(t, sub.ID).UserID == org.Member.ID
@@ -73,7 +73,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 
 		sub := (&th.SubscriberBuilder{Client: suite.Client, Email: adminEmail}).MustNew(ownerCtx, t)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		waitForCondition(t, func() bool {
 			s := reload(t, sub.ID)
@@ -93,7 +93,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 		sentinelContact := (&th.ContactBuilder{Client: suite.Client, Email: sentinelEmail}).MustNew(ownerCtx, t)
 		sentinel := (&th.SubscriberBuilder{Client: suite.Client, Email: sentinelEmail}).MustNew(ownerCtx, t)
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		waitForCondition(t, func() bool {
 			return reload(t, sentinel.ID).ContactID == sentinelContact.ID

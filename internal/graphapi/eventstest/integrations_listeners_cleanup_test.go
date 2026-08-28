@@ -24,7 +24,7 @@ func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 
 	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(hardDeleteCtx))
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	assert.Equal(t, 0, activeReconcileJobs(t, fragment))
 
@@ -41,13 +41,13 @@ func TestIntegrationCleanupListenerNonStatusUpdateKeepsLoops(t *testing.T) {
 
 	assert.NilError(t, suite.Client.DB.Integration.UpdateOneID(installation.ID).SetName(th.RandomName(t)).Exec(allowCtx))
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	assert.Equal(t, 1, activeReconcileJobs(t, fragment))
 
 	assert.NilError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(allowCtx))
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	assert.Equal(t, 0, activeReconcileJobs(t, fragment))
 }

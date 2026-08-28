@@ -163,7 +163,7 @@ func TestDocumentAssociationListeners(t *testing.T) {
 
 		policyID := resp.CreateInternalPolicy.InternalPolicy.ID
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		policy, err := suite.Client.DB.InternalPolicy.Get(ctx, policyID)
 		assert.NilError(t, err)

@@ -31,7 +31,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 	t.Run("seeding creates exactly one loop", func(t *testing.T) {
 		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, installation))
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.Equal(t, 1, activeReconcileJobs(t, fragment))
 	})
@@ -43,7 +43,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 		require.Equal(t, enums.IntegrationStatusErrored, reloaded.Status)
 		require.Equal(t, 1, integrationNotificationCount(t, ownerCtx, installation.OwnerID, integrationReconfigurationRequiredObjectType))
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.Equal(t, 0, activeReconcileJobs(t, fragment))
 	})
@@ -65,7 +65,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 
 		// the direct seed and the async status-change listener reseed must collapse
 		// to exactly one loop
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.Equal(t, 1, activeReconcileJobs(t, fragment))
 	})
@@ -75,7 +75,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 			SetStatus(enums.IntegrationStatusErrored).
 			Exec(allowCtx))
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.Equal(t, 0, activeReconcileJobs(t, fragment))
 
@@ -83,7 +83,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 			SetStatus(enums.IntegrationStatusConnected).
 			Exec(allowCtx))
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.Equal(t, 1, activeReconcileJobs(t, fragment))
 	})
@@ -103,13 +103,13 @@ func TestIntegrationLifecycle(t *testing.T) {
 		_, err := suite.GalaRuntime.EmitWithHeaders(emitCtx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
 		require.NoError(t, err)
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.Equal(t, 2, activeReconcileJobs(t, fragment))
 
 		require.NoError(t, suite.IntegrationsRT.ResetReconcileLoops(allowCtx, reloadIntegration(t, allowCtx, installation.ID)))
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.Equal(t, 1, activeReconcileJobs(t, fragment))
 	})
@@ -117,7 +117,7 @@ func TestIntegrationLifecycle(t *testing.T) {
 	t.Run("soft delete cancels the loop", func(t *testing.T) {
 		require.NoError(t, suite.Client.DB.Integration.DeleteOneID(installation.ID).Exec(allowCtx))
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.Equal(t, 0, activeReconcileJobs(t, fragment))
 	})

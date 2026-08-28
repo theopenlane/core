@@ -84,7 +84,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	err = suite.Client.DB.Job.TruncateRiverTables(tcOrg.Owner.UserCtx)
 	assert.NilError(t, err)
 
-	suite.MockEmailSender().Reset()
+	mockEmailSender().Reset()
 	th.ExpectAttestedUpload(t, suite.Client.MockProvider)
 
 	resp, err := suite.Client.API.SubmitTrustCenterNDAResponse(anonCtx, input)
@@ -102,10 +102,10 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.Check(t, ndaRequest.TrustCenterNdaRequests.Edges[0].Node.SignedAt != nil)
 
 	// wait for the NDA attestation listener to process the document data creation
-	suite.WaitForEvents()
+	waitForEvents()
 
 	// verify the signed NDA email was sent with the attested PDF attached
-	msgs := suite.MockEmailSender().Messages()
+	msgs := mockEmailSender().Messages()
 	assert.Assert(t, len(msgs) == 1, "expected 1 email after NDA signing, got %d", len(msgs))
 	assert.Assert(t, len(msgs[0].Attachments) == 1, "expected signed PDF attachment")
 	assert.Equal(t, "signed_nda_file.pdf", msgs[0].Attachments[0].Filename)

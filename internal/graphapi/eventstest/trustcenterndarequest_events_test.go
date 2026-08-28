@@ -193,7 +193,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			suite.MockEmailSender().Reset()
+			mockEmailSender().Reset()
 
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
@@ -218,10 +218,10 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 			}
 
 			// Verify the email was or was not sent based on expectation
-			suite.WaitForEvents()
+			waitForEvents()
 
 			if tc.expectEmailSent != "" {
-				msgs := suite.MockEmailSender().Messages()
+				msgs := mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
 				found := strings.Contains(msgs[0].Subject, tc.expectEmailSent) ||
@@ -229,7 +229,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 					strings.Contains(msgs[0].Text, tc.expectEmailSent)
 				assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectEmailSent)
 			} else {
-				msgs := suite.MockEmailSender().Messages()
+				msgs := mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 
@@ -238,7 +238,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 				err = suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 				assert.NilError(t, err)
 
-				suite.MockEmailSender().Reset()
+				mockEmailSender().Reset()
 
 				resp, err := suite.Client.API.UpdateTrustCenterNDARequest(tc.ctx, resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, testclient.UpdateTrustCenterNDARequestInput{
 					Status: tc.setStatus,
@@ -256,10 +256,10 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 					assert.Check(t, resp.UpdateTrustCenterNDARequest.TrustCenterNDARequest.SignedAt != nil, "signed_at should be set when status is signed")
 				}
 
-				suite.WaitForEvents()
+				waitForEvents()
 
 				if tc.expectedSecondaryEmail != "" {
-					msgs := suite.MockEmailSender().Messages()
+					msgs := mockEmailSender().Messages()
 					assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
 					found := strings.Contains(msgs[0].Subject, tc.expectedSecondaryEmail) ||
@@ -267,7 +267,7 @@ func TestMutationCreateTrustCenterNDARequest(t *testing.T) {
 						strings.Contains(msgs[0].Text, tc.expectedSecondaryEmail)
 					assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectedSecondaryEmail)
 				} else {
-					msgs := suite.MockEmailSender().Messages()
+					msgs := mockEmailSender().Messages()
 					assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 				}
 			}
@@ -358,7 +358,7 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			suite.MockEmailSender().Reset()
+			mockEmailSender().Reset()
 
 			resp, err := tc.client.UpdateTrustCenterNDARequest(tc.ctx, ndaRequest.CreateTrustCenterNDARequest.TrustCenterNDARequest.ID, tc.input)
 			if tc.expectedErr != "" {
@@ -382,13 +382,13 @@ func TestMutationUpdateTrustCenterNDARequest(t *testing.T) {
 			}
 
 			// Verify the email was or was not sent based on expectation
-			suite.WaitForEvents()
+			waitForEvents()
 
 			if tc.expectEmailSent {
-				msgs := suite.MockEmailSender().Messages()
+				msgs := mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 			} else {
-				msgs := suite.MockEmailSender().Messages()
+				msgs := mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 		})
@@ -414,7 +414,7 @@ func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testin
 
 	err = suite.Client.DB.Job.TruncateRiverTables(trustcenterOrg.Owner.UserCtx)
 	assert.NilError(t, err)
-	suite.MockEmailSender().Reset()
+	mockEmailSender().Reset()
 
 	req, err := suite.Client.API.CreateTrustCenterNDARequest(trustcenterOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
@@ -425,9 +425,9 @@ func TestMutationTrustCenterNDARequestApprovalEmailsUseConfiguredGroup(t *testin
 	assert.NilError(t, err)
 	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
-	msgs := suite.MockEmailSender().Messages()
+	msgs := mockEmailSender().Messages()
 	assert.Assert(t, len(msgs) == 1, "expected 1 email, got multiple ( %d )", len(msgs))
 	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.Member.UserInfo.Email), "expected approval email to go to configured group member")
 	assert.Assert(t, !lo.Contains(msgs[0].To, trustcenterOrg.Owner.UserInfo.Email), "expected owner not to receive approval email when group is configured")
@@ -450,7 +450,7 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 
 	err = suite.Client.DB.Job.TruncateRiverTables(trustcenterOrg.Owner.UserCtx)
 	assert.NilError(t, err)
-	suite.MockEmailSender().Reset()
+	mockEmailSender().Reset()
 
 	req, err := suite.Client.API.CreateTrustCenterNDARequest(trustcenterOrg.Owner.UserCtx, testclient.CreateTrustCenterNDARequestInput{
 		FirstName:     gofakeit.FirstName(),
@@ -460,9 +460,9 @@ func TestMutationTrustCenterNDARequestApprovalEmailsFallBackToApproverRoles(t *t
 	})
 	assert.NilError(t, err)
 	assert.Equal(t, enums.TrustCenterNDARequestStatusNeedsApproval, *req.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
-	suite.WaitForEvents()
+	waitForEvents()
 
-	msgs := suite.MockEmailSender().Messages()
+	msgs := mockEmailSender().Messages()
 	assert.Assert(t, len(msgs) == 1, "expected 1 email, got multiple ( %d )", len(msgs))
 	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.Owner.UserInfo.Email), "expected approval email to go to owner when no group is configured")
 	assert.Assert(t, lo.Contains(msgs[0].To, trustcenterOrg.Admin.UserInfo.Email), "expected approval email to go to admin when no group is configured")
@@ -547,7 +547,7 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			suite.MockEmailSender().Reset()
+			mockEmailSender().Reset()
 
 			resp, err := tc.client.CreateTrustCenterNDARequest(tc.ctx, tc.input)
 			if tc.expectedErr != "" {
@@ -564,13 +564,13 @@ func TestMutationCreateTrustCenterNDARequestAsAnonymousUser(t *testing.T) {
 			assert.Equal(t, tc.expectedStatus, *resp.CreateTrustCenterNDARequest.TrustCenterNDARequest.Status)
 
 			// Verify the email was or was not sent based on expectation
-			suite.WaitForEvents()
+			waitForEvents()
 
 			if tc.expectEmailSent {
-				msgs := suite.MockEmailSender().Messages()
+				msgs := mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 			} else {
-				msgs := suite.MockEmailSender().Messages()
+				msgs := mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 
@@ -711,7 +711,7 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 			err := suite.Client.DB.Job.TruncateRiverTables(tc.ctx)
 			assert.NilError(t, err)
 
-			suite.MockEmailSender().Reset()
+			mockEmailSender().Reset()
 
 			resp, err := tc.client.RequestNewTrustCenterToken(tc.ctx, tc.email)
 			if tc.expectedErr != "" {
@@ -725,10 +725,10 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 			assert.Check(t, resp.RequestNewTrustCenterToken.Success == true)
 
 			// Verify the email was or was not sent based on expectation
-			suite.WaitForEvents()
+			waitForEvents()
 
 			if tc.expectEmailSent != "" {
-				msgs := suite.MockEmailSender().Messages()
+				msgs := mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 1, "expected 1 email, got %d", len(msgs))
 
 				found := strings.Contains(msgs[0].Subject, tc.expectEmailSent) ||
@@ -736,7 +736,7 @@ func TestMutationRequestNewTrustCenterToken(t *testing.T) {
 					strings.Contains(msgs[0].Text, tc.expectEmailSent)
 				assert.Assert(t, found, "expected email containing '%s' to be sent", tc.expectEmailSent)
 			} else {
-				msgs := suite.MockEmailSender().Messages()
+				msgs := mockEmailSender().Messages()
 				assert.Assert(t, len(msgs) == 0, "expected no emails, got %d", len(msgs))
 			}
 		})

@@ -96,7 +96,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	})
 
 	t.Run("redelivery does not duplicate tasks", func(t *testing.T) {
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		before := taskCount(t)
 
@@ -106,7 +106,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 			EntityID:     orgID,
 		})
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(before, taskCount(t)))
 		assert.Check(t, is.Equal(1, notificationCount(t)))

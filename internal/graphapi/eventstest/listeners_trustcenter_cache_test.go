@@ -66,7 +66,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 		before := refreshHits.Load()
 		mutate()
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		return refreshHits.Load() - before
 	}

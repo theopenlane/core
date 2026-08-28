@@ -4,17 +4,25 @@ package eventstest_test
 
 import (
 	"context"
+	"sync"
 	"testing"
 	"time"
 
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	mockprovider "github.com/theopenlane/newman/providers/mock"
+
 	"github.com/stretchr/testify/require"
+	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // notification object types mirrored from internal/integrations/runtime/health.go
@@ -74,7 +82,7 @@ func seedHarnessLoop(t *testing.T, ctx context.Context) (*ent.Integration, strin
 
 	installation, fragment := newHarnessInstallation(t, ctx, testint.ModeRecurring)
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	require.Equal(t, 1, activeReconcileJobs(t, fragment))
 
@@ -149,4 +157,93 @@ func waitForCondition(t *testing.T, condition func() bool, msg string) {
 	}
 
 	t.Fatalf("timed out waiting for condition: %s", msg)
+}
+
+// waitForEvents blocks until runnable and in-flight Gala jobs complete
+func waitForEvents() {
+	if err := suite.GalaRuntime.WaitIdle(context.Background()); err != nil {
+		panic(err)
+	}
+}
+
+// waitForGala blocks until the given runtime has no outstanding jobs
+func waitForGala(t *testing.T, runtime *gala.Gala) {
+	t.Helper()
+
+	assert.NilError(t, runtime.WaitIdle(t.Context()))
+}
+
+// mockEmailSender extracts the mock email sender from the integration runtime
+func mockEmailSender() *mockprovider.EmailSender {
+	rc, ok := suite.IntegrationsRT.Registry().RuntimeClient(emaildef.DefinitionID.ID())
+	if !ok {
+		panic("email runtime client not found")
+	}
+
+	ms := emaildef.MockSenderFromClient(rc)
+	if ms == nil {
+		panic("mock sender not found")
+	}
+
+	return ms
+}
+
+// workflow listener registration is shared across parallel tests in this suite
+var (
+	workflowListenersMu  sync.Mutex
+	workflowListenerRefs int
+	workflowListenerIDs  []gala.ListenerID
+)
+
+// acquireWorkflowRuntime shares one workflow listener registration across parallel tests
+func acquireWorkflowRuntime(t *testing.T) (*engine.WorkflowEngine, *gala.Gala) {
+	t.Helper()
+
+	workflowListenersMu.Lock()
+	if workflowListenerRefs == 0 {
+		listenerIDs, err := gala.Register(suite.GalaRuntime, hooks.WorkflowListeners()...)
+		if err != nil {
+			workflowListenersMu.Unlock()
+			th.RequireNoError(t, err)
+
+			return nil, nil
+		}
+
+		workflowListenerIDs = listenerIDs
+	}
+
+	workflowListenerRefs++
+	workflowEngine := suite.WorkflowEngine
+	runtime := suite.GalaRuntime
+	workflowListenersMu.Unlock()
+
+	t.Cleanup(func() {
+		releaseWorkflowRuntime(t)
+	})
+
+	return workflowEngine, runtime
+}
+
+// releaseWorkflowRuntime removes workflow listeners after the last borrowing test
+func releaseWorkflowRuntime(t *testing.T) {
+	t.Helper()
+
+	workflowListenersMu.Lock()
+	defer workflowListenersMu.Unlock()
+
+	if workflowListenerRefs == 0 {
+		return
+	}
+
+	workflowListenerRefs--
+	if workflowListenerRefs > 0 {
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), gala.DefaultSoftStopTimeout)
+	defer cancel()
+
+	err := suite.GalaRuntime.RemoveListeners(ctx, workflowListenerIDs...)
+	th.RequireNoError(t, err)
+	workflowListenerIDs = nil
 }

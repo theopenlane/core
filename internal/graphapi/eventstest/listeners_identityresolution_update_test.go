@@ -44,7 +44,7 @@ func TestIdentityResolutionUpdateCascade(t *testing.T) {
 			OwnerID:        idUser.OrganizationID,
 		}).MustNew(ctx, t)
 
-		th.WaitForGala(t, irSetup.Runtime)
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.Client.DB, da.ID)
 		assert.NilError(t, err)
@@ -58,7 +58,7 @@ func TestIdentityResolutionUpdateCascade(t *testing.T) {
 			Exec(ctx)
 		assert.NilError(t, err)
 
-		th.WaitForGala(t, irSetup.Runtime)
+		waitForGala(t, irSetup.Runtime)
 
 		account, err := suite.Client.DB.DirectoryAccount.Get(ctx, da.ID)
 		assert.NilError(t, err)
@@ -82,7 +82,7 @@ func TestIdentityResolutionUpdateCascade(t *testing.T) {
 			OwnerID:        idUser.OrganizationID,
 		}).MustNew(ctx, t)
 
-		th.WaitForGala(t, irSetup.Runtime)
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.Client.DB, da.ID)
 		assert.NilError(t, err)
@@ -134,7 +134,7 @@ func TestIdentityResolutionUpdateCascade(t *testing.T) {
 			OwnerID:       idUser.OrganizationID,
 		}).MustNew(ctx, t)
 
-		th.WaitForGala(t, irSetup.Runtime)
+		waitForGala(t, irSetup.Runtime)
 
 		account, err := suite.Client.DB.DirectoryAccount.Get(ctx, da.ID)
 		assert.NilError(t, err)

@@ -97,7 +97,7 @@ func TestCampaignRecurringListener(t *testing.T) {
 
 		assert.NilError(t, suite.Client.DB.Campaign.UpdateOneID(camp.ID).SetDescription("no schedule fields touched").Exec(ctx))
 
-		th.WaitForGala(t, setup.Runtime)
+		waitForGala(t, setup.Runtime)
 
 		next := nextRunAt(t, camp.ID)
 		assert.Assert(t, next != nil)

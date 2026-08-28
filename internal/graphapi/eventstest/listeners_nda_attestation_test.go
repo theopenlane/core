@@ -50,8 +50,8 @@ func TestNDAAttestationListener(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		suite.WaitForEvents()
-		suite.MockEmailSender().Reset()
+		waitForEvents()
+		mockEmailSender().Reset()
 		th.ExpectAttestedUpload(t, suite.Client.MockProvider)
 
 		resp, err := suite.Client.API.SubmitTrustCenterNDAResponse(signerCtx, testclient.SubmitTrustCenterNDAResponseInput{
@@ -75,7 +75,7 @@ func TestNDAAttestationListener(t *testing.T) {
 
 		docDataID := resp.SubmitTrustCenterNDAResponse.DocumentData.ID
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		signed, err := suite.Client.DB.TrustCenterNDARequest.Query().Where(
 			trustcenterndarequest.EmailEqualFold(signerEmail),
@@ -104,7 +104,7 @@ func TestNDAAttestationListener(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Check(t, is.Equal(1, fileCount))
 
-		signedEmails := lo.Filter(suite.MockEmailSender().Messages(), func(msg *newman.EmailMessage, _ int) bool {
+		signedEmails := lo.Filter(mockEmailSender().Messages(), func(msg *newman.EmailMessage, _ int) bool {
 			return lo.Contains(msg.To, signerEmail) &&
 				len(msg.Attachments) == 1 &&
 				msg.Attachments[0].Filename == signedNDAAttachmentName
@@ -128,7 +128,7 @@ func TestNDAAttestationListener(t *testing.T) {
 			Save(ctx)
 		assert.NilError(t, err)
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		reloaded, err := suite.Client.DB.DocumentData.Get(ctx, docData.ID)
 		assert.NilError(t, err)
