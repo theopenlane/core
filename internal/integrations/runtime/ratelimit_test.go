@@ -12,9 +12,9 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // newRuntimeWithMiniredis builds a Runtime backed by a miniredis instance so rate limit enforcement

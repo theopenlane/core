@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // sendSystemEmail marshals the input and executes a system email operation via

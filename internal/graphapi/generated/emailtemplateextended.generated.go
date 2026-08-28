@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -37,7 +37,7 @@ func (ec *executionContext) _EmailTemplateCatalog_entries(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.EmailTemplateCatalogEntry) graphql.Marshaler {
-			return ec.marshalNEmailTemplateCatalogEntry2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntryᚄ(ctx, selections, v)
+			return ec.marshalNEmailTemplateCatalogEntry2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntryᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -161,7 +161,7 @@ func (ec *executionContext) _EmailTemplateCatalogEntry_variables(ctx context.Con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.TemplateVariable) graphql.Marshaler {
-			return ec.marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx, selections, v)
+			return ec.marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -348,11 +348,11 @@ func (ec *executionContext) _EmailTemplateCatalogEntry(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNEmailTemplateCatalog2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalog(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateCatalog) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateCatalog2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalog(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateCatalog) graphql.Marshaler {
 	return ec._EmailTemplateCatalog(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateCatalog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalog(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateCatalog) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateCatalog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalog(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateCatalog) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -362,11 +362,11 @@ func (ec *executionContext) marshalNEmailTemplateCatalog2ᚖgithubᚗcomᚋtheop
 	return ec._EmailTemplateCatalog(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateCatalogEntry2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EmailTemplateCatalogEntry) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateCatalogEntry2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EmailTemplateCatalogEntry) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNEmailTemplateCatalogEntry2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntry(ctx, sel, v[i])
+		return ec.marshalNEmailTemplateCatalogEntry2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntry(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -378,7 +378,7 @@ func (ec *executionContext) marshalNEmailTemplateCatalogEntry2ᚕᚖgithubᚗcom
 	return ret
 }
 
-func (ec *executionContext) marshalNEmailTemplateCatalogEntry2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntry(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateCatalogEntry) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateCatalogEntry2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCatalogEntry(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateCatalogEntry) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

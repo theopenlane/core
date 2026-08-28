@@ -9,13 +9,13 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/notification"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	intobvs "github.com/theopenlane/core/internal/integrations/observability"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
-	testint "github.com/theopenlane/core/internal/testutils/integrations"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
 // notification object types mirrored from internal/integrations/runtime/health.go

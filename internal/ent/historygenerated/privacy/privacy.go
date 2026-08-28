@@ -7,7 +7,7 @@ package privacy
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 
 	"entgo.io/ent/entql"
 	"entgo.io/ent/privacy"

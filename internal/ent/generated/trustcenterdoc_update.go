@@ -13,12 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
 )
 
 // TrustCenterDocUpdate is the builder for updating TrustCenterDoc entities.

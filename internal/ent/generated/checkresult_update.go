@@ -14,11 +14,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // CheckResultUpdate is the builder for updating CheckResult entities.

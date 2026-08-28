@@ -6,8 +6,8 @@ import (
 
 	"github.com/theopenlane/iam/sessions"
 
-	coreconfig "github.com/theopenlane/core/config"
-	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
+	coreconfig "github.com/theopenlane/core/v2/config"
+	serverconfig "github.com/theopenlane/core/v2/internal/httpserve/config"
 )
 
 func TestWithGeneratedKeys(t *testing.T) {

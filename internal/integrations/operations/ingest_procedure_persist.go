@@ -3,8 +3,8 @@ package operations
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // persistProcedureInput upserts one Procedure record through the catalog-driven entityops upsert

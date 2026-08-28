@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // Subscriber is the model entity for the Subscriber schema.

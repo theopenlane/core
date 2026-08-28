@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/middleware/mime"
+	"github.com/theopenlane/core/v2/pkg/middleware/mime"
 )
 
 func TestNewWithConfig(t *testing.T) {

@@ -7,12 +7,12 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

@@ -18,9 +18,9 @@ import (
 	gh "github.com/google/go-github/v88/github"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 const (

@@ -9,12 +9,12 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 )
 
 // InterceptorOrganization is middleware to change the Organization query

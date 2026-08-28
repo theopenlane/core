@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/keymaker"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/keymaker"
 )
 
 // installationResolverFunc matches the signature of Runtime.ResolveIntegration for testability

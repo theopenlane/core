@@ -4,8 +4,8 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/cloudguard"
 	"github.com/oracle/oci-go-sdk/v65/identity"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (

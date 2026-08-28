@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
 )
 
 // ProgramHistoryUpdate is the builder for updating ProgramHistory entities.

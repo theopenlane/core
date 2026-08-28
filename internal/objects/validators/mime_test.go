@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 func TestMimeTypeValidatorFieldSpecific(t *testing.T) {

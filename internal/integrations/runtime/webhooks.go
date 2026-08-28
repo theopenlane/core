@@ -12,15 +12,15 @@ import (
 	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	intobvs "github.com/theopenlane/core/internal/integrations/observability"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/jsonx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // reconcileInstallationWebhooks ensures the persisted webhook rows match the definition contract for one integration

@@ -14,17 +14,17 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
-	"github.com/theopenlane/core/pkg/shortlinks"
-	"github.com/theopenlane/core/pkg/summarizer"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/metrics"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
+	"github.com/theopenlane/core/v2/pkg/summarizer"
 )
 
 // SchemaRegistry interface for dynamic schema registration

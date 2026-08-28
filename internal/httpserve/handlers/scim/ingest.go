@@ -8,11 +8,11 @@ import (
 	scimerrors "github.com/elimity-com/scim/errors"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
-	integrationops "github.com/theopenlane/core/internal/integrations/operations"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
+	integrationops "github.com/theopenlane/core/v2/internal/integrations/operations"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 const (

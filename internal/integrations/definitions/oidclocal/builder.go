@@ -5,10 +5,10 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/integrations/auth"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the local Dex-backed OIDC definition builder with the supplied operator config applied

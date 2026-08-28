@@ -6,8 +6,8 @@ import (
 
 	"github.com/stripe/stripe-go/v86"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/entitlements"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 func TestNew_MissingDeps(t *testing.T) {

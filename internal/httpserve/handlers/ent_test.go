@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 func TestCreateUserInput(t *testing.T) {

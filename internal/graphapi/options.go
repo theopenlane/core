@@ -3,7 +3,7 @@ package graphapi
 import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // WithTransactions adds the transactioner to the ent db client

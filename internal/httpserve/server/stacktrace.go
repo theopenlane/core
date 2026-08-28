@@ -7,7 +7,7 @@ import (
 	"github.com/pkg/errors"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 type stackTracer interface {

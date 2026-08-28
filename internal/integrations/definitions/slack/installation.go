@@ -5,8 +5,8 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // resolveInstallationMetadata derives Slack workspace metadata from whichever credential is bound

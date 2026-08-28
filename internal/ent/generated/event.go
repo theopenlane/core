@@ -10,7 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
 )
 
 // Event is the model entity for the Event schema.

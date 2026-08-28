@@ -12,11 +12,11 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	fgamodel "github.com/theopenlane/core/fga/model"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/testutils"
+	fgamodel "github.com/theopenlane/core/v2/fga/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/testutils"
 )
 
 func TestQueryApiToken(t *testing.T) {

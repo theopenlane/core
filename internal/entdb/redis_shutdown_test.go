@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	coreutils "github.com/theopenlane/core/internal/testutils"
+	coreutils "github.com/theopenlane/core/v2/internal/testutils"
 )
 
 // TestRedisClientClose verifies that the redis client is closed when the context is cancelled.

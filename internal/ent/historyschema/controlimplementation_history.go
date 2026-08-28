@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/schema"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"

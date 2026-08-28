@@ -9,14 +9,14 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/entitlements/reconciler"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/entitlements/reconciler"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // EntitlementListeners keeps Stripe customers and subscriptions in sync with organization

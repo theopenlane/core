@@ -10,10 +10,10 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // EmailTemplateCatalog is the resolver for the emailTemplateCatalog field.

@@ -3,8 +3,8 @@ package hooks
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // organizationDisplayNameByID loads and returns an organization's display name.

@@ -13,10 +13,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // DNSVerificationUpdate is the builder for updating DNSVerification entities.

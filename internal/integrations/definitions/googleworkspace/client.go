@@ -8,7 +8,7 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 	"google.golang.org/api/option"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // Client builds Google Workspace Admin SDK clients for one installation

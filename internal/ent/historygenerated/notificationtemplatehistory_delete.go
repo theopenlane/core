@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // NotificationTemplateHistoryDelete is the builder for deleting a NotificationTemplateHistory entity.

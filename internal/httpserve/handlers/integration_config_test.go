@@ -17,14 +17,14 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 const (

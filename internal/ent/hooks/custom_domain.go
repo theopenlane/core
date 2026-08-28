@@ -10,13 +10,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookCustomDomain runs on create mutations

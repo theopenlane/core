@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // MappableDomainUpdate is the builder for updating MappableDomain entities.

@@ -9,12 +9,12 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/middleware/cors"
-	"github.com/theopenlane/core/pkg/middleware/impersonation"
-	"github.com/theopenlane/core/pkg/middleware/mime"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/pkg/middleware/cors"
+	"github.com/theopenlane/core/v2/pkg/middleware/impersonation"
+	"github.com/theopenlane/core/v2/pkg/middleware/mime"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
+	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 )
 
 // convertEchoPathToOpenAPI converts Echo's :param syntax to OpenAPI's {param} syntax

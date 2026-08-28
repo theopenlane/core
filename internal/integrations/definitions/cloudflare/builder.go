@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Cloudflare definition builder with the supplied runtime config applied.

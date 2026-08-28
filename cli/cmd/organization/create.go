@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cli/cmd"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/go-client/graphclient"
 )
 
@@ -31,10 +31,6 @@ func init() {
 	createCmd.Flags().StringP("parent-org-id", "p", "", "parent organization id, leave empty to create a root org")
 	createCmd.Flags().StringSlice("tags", []string{}, "tags associated with the organization")
 	createCmd.Flags().StringP("avatar-file", "a", "", "local of avatar file to upload")
-
-	// TODO: https://github.com/theopenlane/core/issues/734
-	// remove flag once the feature is implemented
-	createCmd.Flags().BoolP("dedicated-db", "D", false, "create a dedicated database for the organization")
 }
 
 // createValidation validates the required fields for the command

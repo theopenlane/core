@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/internal/consts"
-	"github.com/theopenlane/core/pkg/logx"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/internal/consts"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/iam/auth"
 )

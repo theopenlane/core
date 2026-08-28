@@ -6,7 +6,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // createControlImplementation creates a control implementation for the given control ID and owner ID with the provided implementation guidance and makes it verified and published

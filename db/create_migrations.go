@@ -18,9 +18,9 @@ import (
 
 	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
-	"github.com/theopenlane/core/internal/ent/generated/migrate"
-	historymigrate "github.com/theopenlane/core/internal/ent/historygenerated/migrate"
-	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/v2/internal/ent/generated/migrate"
+	historymigrate "github.com/theopenlane/core/v2/internal/ent/historygenerated/migrate"
+	"github.com/theopenlane/core/v2/internal/entdb"
 	"github.com/theopenlane/utils/testutils"
 )
 

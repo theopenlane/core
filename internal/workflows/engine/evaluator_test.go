@@ -10,8 +10,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/workflows"
 )
 
 // TestWorkflowEngineEvaluator verifies the workflow engine's CEL evaluator is properly initialized.

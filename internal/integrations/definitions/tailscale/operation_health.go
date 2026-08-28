@@ -6,9 +6,9 @@ import (
 
 	tsclient "github.com/tailscale/tailscale-client-go/v2"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HealthCheck holds the result of a Tailscale API health check

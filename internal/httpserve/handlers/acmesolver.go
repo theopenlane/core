@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 )

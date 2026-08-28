@@ -11,7 +11,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -32067,7 +32067,7 @@ input NarrativeHistoryWhereInput {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/theopenlane/core/internal/ent/historygenerated.Noder") {
+interface Node @goModel(model: "github.com/theopenlane/core/v2/internal/ent/historygenerated.Noder") {
   """
   The id of the object.
   """

@@ -8,9 +8,9 @@ import (
 	objectv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/object/v2"
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HealthCheck holds the result of a Zitadel health check

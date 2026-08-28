@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _DocumentDataBulkCreatePayload_documentData(ctx cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DocumentData) graphql.Marshaler {
-			return ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ(ctx, selections, v)
+			return ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _DocumentDataBulkUpdatePayload_documentData(ctx cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DocumentData) graphql.Marshaler {
-			return ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ(ctx, selections, v)
+			return ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _DocumentDataCreatePayload_documentData(ctx context.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.DocumentData) graphql.Marshaler {
-			return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, selections, v)
+			return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _DocumentDataUpdatePayload_documentData(ctx context.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.DocumentData) graphql.Marshaler {
-			return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, selections, v)
+			return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _DocumentDataUpdatePayload(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkCreatePayload) graphql.Marshaler {
 	return ec._DocumentDataBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNDocumentDataBulkCreatePayload2ᚖgithubᚗco
 	return ec._DocumentDataBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkDeletePayload) graphql.Marshaler {
 	return ec._DocumentDataBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNDocumentDataBulkDeletePayload2ᚖgithubᚗco
 	return ec._DocumentDataBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
 	return ec._DocumentDataBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNDocumentDataBulkUpdatePayload2ᚖgithubᚗco
 	return ec._DocumentDataBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDocumentDataCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataCreatePayload) graphql.Marshaler {
 	return ec._DocumentDataCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDocumentDataCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNDocumentDataCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._DocumentDataCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDocumentDataDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataDeletePayload) graphql.Marshaler {
 	return ec._DocumentDataDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDocumentDataDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNDocumentDataDeletePayload2ᚖgithubᚗcomᚋ
 	return ec._DocumentDataDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDocumentDataUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DocumentDataUpdatePayload) graphql.Marshaler {
 	return ec._DocumentDataUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDocumentDataUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDocumentDataUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDocumentDataUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DocumentDataUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

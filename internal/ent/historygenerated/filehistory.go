@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/historygenerated/filehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/filehistory"
 	"github.com/theopenlane/entx/history"
 )
 

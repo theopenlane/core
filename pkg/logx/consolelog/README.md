@@ -12,7 +12,7 @@ package main
 import (
   "github.com/rs/zerolog"
 
-  "github.com/theopenlane/core/pkg/logx/consolelog"
+  "github.com/theopenlane/core/v2/pkg/logx/consolelog"
 )
 
 func main() {
@@ -37,7 +37,7 @@ import (
 
   "github.com/rs/zerolog"
 
-  "github.com/theopenlane/core/pkg/logx/consolelog"
+  "github.com/theopenlane/core/v2/pkg/logx/consolelog"
 )
 
 func main() {

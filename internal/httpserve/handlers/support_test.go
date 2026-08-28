@@ -17,13 +17,13 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/middleware/impersonation"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/pkg/middleware/impersonation"
 	"github.com/theopenlane/utils/ulids"
 )
 

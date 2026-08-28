@@ -14,10 +14,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subcontrolhistory"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // SubcontrolHistoryQuery is the builder for querying SubcontrolHistory entities.

@@ -6,9 +6,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // healthHandler validates the bound credential, failing on the marker values

@@ -9,8 +9,8 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // rateLimitKeyPrefix namespaces per-operation cooldown keys in redis

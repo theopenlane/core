@@ -5,7 +5,7 @@ import (
 	opt "github.com/elimity-com/scim/optional"
 	"github.com/elimity-com/scim/schema"
 
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 )
 
 const (

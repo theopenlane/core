@@ -11,7 +11,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"

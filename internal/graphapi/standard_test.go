@@ -13,10 +13,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/testutils"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/testutils"
 )
 
 func TestQueryStandard(t *testing.T) {

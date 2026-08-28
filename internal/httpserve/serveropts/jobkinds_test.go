@@ -5,10 +5,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // TestJobTopicRenames verifies the merged map carries the bare-schema mutation renames, the

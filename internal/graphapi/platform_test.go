@@ -11,8 +11,8 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/google/uuid"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 )
 

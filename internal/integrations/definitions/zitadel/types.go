@@ -3,8 +3,8 @@ package zitadel
 import (
 	"github.com/zitadel/zitadel-go/v3/pkg/client"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (

@@ -17,9 +17,9 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
 	"github.com/olekukonko/tablewriter"
 
-	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
-	"github.com/theopenlane/core/pkg/domainscan"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
+	"github.com/theopenlane/core/v2/pkg/domainscan"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 func main() {

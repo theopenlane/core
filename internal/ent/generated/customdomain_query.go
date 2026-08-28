@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // CustomDomainQuery is the builder for querying CustomDomain entities.

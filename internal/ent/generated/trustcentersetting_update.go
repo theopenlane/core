@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 )
 
 // TrustCenterSettingUpdate is the builder for updating TrustCenterSetting entities.

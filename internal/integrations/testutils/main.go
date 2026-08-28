@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 const (

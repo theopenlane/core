@@ -8,11 +8,11 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 )
 
 // isDeleteOp checks if the mutation is a deletion operation.

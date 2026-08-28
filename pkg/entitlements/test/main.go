@@ -8,7 +8,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 // main is a test script to fetch plans from Stripe and write them to a YAML file

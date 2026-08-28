@@ -5,15 +5,15 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
 // IntegrationLookup holds the query constraints for resolving an integration

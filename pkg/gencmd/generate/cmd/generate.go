@@ -5,8 +5,8 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/pkg/gencmd"
-	"github.com/theopenlane/core/pkg/gencmd/generate/prompts"
+	"github.com/theopenlane/core/v2/pkg/gencmd"
+	"github.com/theopenlane/core/v2/pkg/gencmd/generate/prompts"
 )
 
 var generateCmd = &cobra.Command{

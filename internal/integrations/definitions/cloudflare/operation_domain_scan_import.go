@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // DomainScanImportVendor is one vendor the reviewer accepted, keyed by a client-assigned

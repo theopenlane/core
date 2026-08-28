@@ -12,15 +12,15 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookRisks sets fields on the risk based on changes to fields

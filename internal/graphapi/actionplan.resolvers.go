@@ -10,13 +10,13 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/csvgenerated"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

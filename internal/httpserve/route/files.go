@@ -10,7 +10,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 // registerUploadsHandler serves up static files from the upload directory

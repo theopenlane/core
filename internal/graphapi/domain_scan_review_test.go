@@ -7,7 +7,7 @@ import (
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 )
 
 func TestValidateDomainScanReviewRefs(t *testing.T) {

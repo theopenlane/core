@@ -9,7 +9,7 @@ var (
 	// TrustCenterDocumentVisibilityPubliclyVisible indicates that the document is publicly visible
 	TrustCenterDocumentVisibilityPubliclyVisible TrustCenterDocumentVisibility = "PUBLICLY_VISIBLE"
 	// TrustCenterDocumentVisibilityProtected indicates that the document is
-	// protected and only visible to certain users that have signed ANDAs
+	// protected and only visible to certain users that have signed NDAs
 	TrustCenterDocumentVisibilityProtected TrustCenterDocumentVisibility = "PROTECTED"
 	// TrustCenterDocumentVisibilityNotVisible indicates that the document is not visible to anyone
 	TrustCenterDocumentVisibilityNotVisible TrustCenterDocumentVisibility = "NOT_VISIBLE"

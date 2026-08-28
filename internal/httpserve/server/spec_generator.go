@@ -7,8 +7,8 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/httpserve/route"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/route"
 )
 
 // GenerateOpenAPISpecDocument builds a fully-registered OpenAPI document

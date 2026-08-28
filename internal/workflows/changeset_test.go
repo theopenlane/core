@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 )
 
 // TestTriggerChangeSet verifies trigger change-set extraction marshals map-backed proposed

@@ -7,10 +7,10 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 // Builder builds one manifest-backed definition

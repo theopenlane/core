@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/ulids"

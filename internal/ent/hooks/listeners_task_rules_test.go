@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/taskrules"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 	"github.com/theopenlane/iam/auth"
 )
 

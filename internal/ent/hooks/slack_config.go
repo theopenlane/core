@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/integrations/definitions/slack"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // sendSystemSlack marshals the input and executes a system Slack operation via

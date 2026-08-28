@@ -3,8 +3,8 @@ package resolver
 import (
 	"fmt"
 
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // providerEnabled returns whether a provider can be used based on configuration.

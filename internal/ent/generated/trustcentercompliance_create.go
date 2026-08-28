@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
 )
 
 // TrustCenterComplianceCreate is the builder for creating a TrustCenterCompliance entity.

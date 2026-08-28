@@ -8,11 +8,11 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/httpserve/serveropts"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/httpserve/serveropts"
 )
 
 // TestBackfillDirectoryDuplicates seeds forked directory rows the way racing syncs stored them -

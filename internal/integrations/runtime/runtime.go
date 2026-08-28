@@ -8,15 +8,15 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/samber/do/v2"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/singleton"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keymaker"
+	"github.com/theopenlane/core/v2/internal/keystore"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/singleton"
 )
 
 const (

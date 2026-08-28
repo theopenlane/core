@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 var (

@@ -10,9 +10,9 @@ import (
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 type mockQuery struct {

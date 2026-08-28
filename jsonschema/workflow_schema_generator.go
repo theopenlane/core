@@ -11,7 +11,7 @@ import (
 	"github.com/invopop/jsonschema"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows"
 )
 
 const (

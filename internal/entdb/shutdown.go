@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect"
 	entsql "entgo.io/ent/dialect/sql"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	hintercept "github.com/theopenlane/core/internal/ent/historygenerated/intercept"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	hintercept "github.com/theopenlane/core/v2/internal/ent/historygenerated/intercept"
 )
 
 // ShutdownFlag tracks whether a shutdown is in progress

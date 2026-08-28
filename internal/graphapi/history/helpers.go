@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	ent "github.com/theopenlane/core/internal/ent/historygenerated"
+	ent "github.com/theopenlane/core/v2/internal/ent/historygenerated"
 )
 
 // common.WithTransactionalMutation automatically wrap the GraphQL mutations with a database transaction.

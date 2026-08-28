@@ -8,9 +8,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
 )
 
 // WorkflowObjectRef is the resolver for the workflowObjectRef field.

@@ -5,13 +5,13 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 // unhealthyReasonMetadataKey is the Integration.Metadata key recording why the installation

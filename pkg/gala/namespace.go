@@ -3,7 +3,7 @@ package gala
 import (
 	"strings"
 
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // uniqueKeySeparator delimits unique key segments

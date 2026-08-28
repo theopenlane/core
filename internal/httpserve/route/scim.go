@@ -3,7 +3,7 @@ package route
 import (
 	"net/http"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers/scim"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers/scim"
 )
 
 const (

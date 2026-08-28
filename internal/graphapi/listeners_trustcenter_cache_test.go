@@ -15,11 +15,11 @@ import (
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/graphapi"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func TestTrustCenterCacheListeners(t *testing.T) {

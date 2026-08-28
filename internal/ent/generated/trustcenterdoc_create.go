@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
 )
 
 // TrustCenterDocCreate is the builder for creating a TrustCenterDoc entity.

@@ -8,8 +8,8 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/contextx"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/logx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 const (

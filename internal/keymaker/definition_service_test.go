@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var keymakerTestCredentialRef = types.NewCredentialSlotID("test_auth")

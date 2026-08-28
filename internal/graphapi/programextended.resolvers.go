@@ -8,14 +8,14 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/controls"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/controls"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )

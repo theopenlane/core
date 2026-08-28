@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // Entity is the model entity for the Entity schema.

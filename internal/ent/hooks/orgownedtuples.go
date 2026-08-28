@@ -5,8 +5,8 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // OrgOwnedTuplesHook is a hook that adds organization owned tuples for the object being created

@@ -9,7 +9,7 @@ import (
 
 	"github.com/riverqueue/river"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 const (

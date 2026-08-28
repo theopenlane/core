@@ -10,8 +10,8 @@ import (
 	"github.com/google/cel-go/common/decls"
 	celtypes "github.com/google/cel-go/common/types"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/celx"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/celx"
 )
 
 const (

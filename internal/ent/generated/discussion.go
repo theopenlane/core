@@ -9,13 +9,13 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 )
 
 // Discussion is the model entity for the Discussion schema.

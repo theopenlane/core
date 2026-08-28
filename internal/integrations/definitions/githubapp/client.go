@@ -9,7 +9,7 @@ import (
 	"github.com/shurcooL/graphql"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // GraphQLClient is the subset of the GitHub GraphQL client used by this definition

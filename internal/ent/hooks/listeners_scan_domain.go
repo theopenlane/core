@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // DomainScanListeners submits pending domain scans and requests scans for changed

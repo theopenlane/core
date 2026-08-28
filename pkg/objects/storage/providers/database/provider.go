@@ -7,12 +7,12 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/metrics"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/objects/storage/proxy"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/pkg/metrics"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
 )
 
 const (

@@ -24,13 +24,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/internal/objects/store"
-	"github.com/theopenlane/core/internal/objects/upload"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/internal/objects/store"
+	"github.com/theopenlane/core/v2/internal/objects/upload"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
 // CSV and GraphQL defaults used across helper functions.

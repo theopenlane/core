@@ -14,9 +14,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 )
 
 // WorkflowEventUpdate is the builder for updating WorkflowEvent entities.

@@ -13,12 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // EntityTypeQuery is the builder for querying EntityType entities.

@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _GroupBulkCreatePayload_groups(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Group) graphql.Marshaler {
-			return ec.marshalOGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupᚄ(ctx, selections, v)
+			return ec.marshalOGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _GroupBulkUpdatePayload_groups(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Group) graphql.Marshaler {
-			return ec.marshalOGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupᚄ(ctx, selections, v)
+			return ec.marshalOGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _GroupCreatePayload_group(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Group) graphql.Marshaler {
-			return ec.marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
+			return ec.marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _GroupUpdatePayload_group(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Group) graphql.Marshaler {
-			return ec.marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
+			return ec.marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _GroupUpdatePayload(ctx context.Context, sel ast.Sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNGroupBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupBulkCreatePayload) graphql.Marshaler {
 	return ec._GroupBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNGroupBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNGroupBulkCreatePayload2ᚖgithubᚗcomᚋthe
 	return ec._GroupBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupBulkDeletePayload) graphql.Marshaler {
 	return ec._GroupBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNGroupBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNGroupBulkDeletePayload2ᚖgithubᚗcomᚋthe
 	return ec._GroupBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupBulkUpdatePayload) graphql.Marshaler {
 	return ec._GroupBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNGroupBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNGroupBulkUpdatePayload2ᚖgithubᚗcomᚋthe
 	return ec._GroupBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupCreatePayload) graphql.Marshaler {
 	return ec._GroupCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNGroupCreatePayload2ᚖgithubᚗcomᚋtheopen
 	return ec._GroupCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupDeletePayload) graphql.Marshaler {
 	return ec._GroupDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNGroupDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNGroupDeletePayload2ᚖgithubᚗcomᚋtheopen
 	return ec._GroupDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupUpdatePayload) graphql.Marshaler {
 	return ec._GroupUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNGroupUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

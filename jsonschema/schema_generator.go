@@ -18,9 +18,9 @@ import (
 
 	"github.com/theopenlane/utils/envparse"
 
-	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/internal/genhelpers"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
+	"github.com/theopenlane/core/v2/config"
+	"github.com/theopenlane/core/v2/internal/genhelpers"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
 )
 
 // const values used for the schema generator

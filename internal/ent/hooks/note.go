@@ -5,12 +5,12 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
 // HookNoteFiles runs on note mutations to check for uploaded files

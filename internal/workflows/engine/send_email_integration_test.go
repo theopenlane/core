@@ -10,12 +10,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 )
 
 // mustMarshalSendEmailParams encodes SendEmailActionParams or fails the suite

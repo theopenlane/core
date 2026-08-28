@@ -12,10 +12,10 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {

@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 )
 
 // User is the model entity for the User schema.

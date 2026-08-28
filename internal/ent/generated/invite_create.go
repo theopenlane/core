@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // InviteCreate is the builder for creating a Invite entity.

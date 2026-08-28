@@ -9,9 +9,9 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/templatekit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // MessageSendOperation holds per-invocation parameters for the message.send operation

@@ -10,8 +10,8 @@ import (
 	entsql "entgo.io/ent/dialect/sql"
 	"github.com/stretchr/testify/require"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/enttest"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/enttest"
 	"github.com/theopenlane/utils/testutils"
 )
 

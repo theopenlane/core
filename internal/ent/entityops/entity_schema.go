@@ -11,7 +11,7 @@ import (
 
 	"github.com/theopenlane/entx"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // SchemaDescriptor is the canonical identity for an entity schema

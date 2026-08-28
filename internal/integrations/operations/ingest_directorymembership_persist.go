@@ -9,12 +9,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/logx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // persistDirectoryMembershipInput upserts one DirectoryMembership record using the ingest lookup key fields

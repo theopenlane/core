@@ -10,13 +10,13 @@
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/hooks/contextx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/entx/history"
 	{{- range $node := $.Nodes }}
 		{{- if or ( not $node.Annotations.History ) (eq $node.Annotations.History.Exclude false) }}
-	"github.com/theopenlane/core/internal/ent/historygenerated/{{ $node.Name | lower }}history"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/{{ $node.Name | lower }}history"
 		{{- end }}
 	{{- end }}
 )

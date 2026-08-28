@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustCenterSettingBulkCreatePayload_trustCenterSett
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterSetting) graphql.Marshaler {
-			return ec.marshalOTrustCenterSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingᚄ(ctx, selections, v)
+			return ec.marshalOTrustCenterSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _TrustCenterSettingCreatePayload_trustCenterSetting(
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterSetting) graphql.Marshaler {
-			return ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx, selections, v)
+			return ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _TrustCenterSettingUpdatePayload_trustCenterSetting(
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterSetting) graphql.Marshaler {
-			return ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx, selections, v)
+			return ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _TrustCenterSettingUpdatePayload(ctx context.Context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNTrustCenterSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterSettingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterSettingCreatePayload) graphql.Marshaler {
 	return ec._TrustCenterSettingCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSettingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSettingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNTrustCenterSettingCreatePayload2ᚖgithubᚗ
 	return ec._TrustCenterSettingCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterSettingDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterSettingDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterSettingDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterSettingDeletePayload) graphql.Marshaler {
 	return ec._TrustCenterSettingDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterSettingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSettingDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterSettingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSettingDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNTrustCenterSettingDeletePayload2ᚖgithubᚗ
 	return ec._TrustCenterSettingDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterSettingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterSettingUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterSettingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterSettingUpdatePayload) graphql.Marshaler {
 	return ec._TrustCenterSettingUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSettingUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterSettingUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _OrganizationSettingBulkCreatePayload_organizationSe
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.OrganizationSetting) graphql.Marshaler {
-			return ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ(ctx, selections, v)
+			return ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _OrganizationSettingBulkUpdatePayload_organizationSe
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.OrganizationSetting) graphql.Marshaler {
-			return ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ(ctx, selections, v)
+			return ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _OrganizationSettingCreatePayload_organizationSettin
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.OrganizationSetting) graphql.Marshaler {
-			return ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx, selections, v)
+			return ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _OrganizationSettingUpdatePayload_organizationSettin
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.OrganizationSetting) graphql.Marshaler {
-			return ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx, selections, v)
+			return ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _OrganizationSettingUpdatePayload(ctx context.Contex
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNOrganizationSettingBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingBulkCreatePayload) graphql.Marshaler {
 	return ec._OrganizationSettingBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNOrganizationSettingBulkCreatePayload2ᚖgith
 	return ec._OrganizationSettingBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
 	return ec._OrganizationSettingBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNOrganizationSettingBulkDeletePayload2ᚖgith
 	return ec._OrganizationSettingBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
 	return ec._OrganizationSettingBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNOrganizationSettingBulkUpdatePayload2ᚖgith
 	return ec._OrganizationSettingBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingCreatePayload) graphql.Marshaler {
 	return ec._OrganizationSettingCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNOrganizationSettingCreatePayload2ᚖgithub�
 	return ec._OrganizationSettingCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingDeletePayload) graphql.Marshaler {
 	return ec._OrganizationSettingDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNOrganizationSettingDeletePayload2ᚖgithub�
 	return ec._OrganizationSettingDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationSettingUpdatePayload) graphql.Marshaler {
 	return ec._OrganizationSettingUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrganizationSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationSettingUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

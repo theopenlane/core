@@ -6,10 +6,10 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 

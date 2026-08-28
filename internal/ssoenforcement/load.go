@@ -5,12 +5,12 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	sso "github.com/theopenlane/core/pkg/ssoutils"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
 // LoadEnforcement loads the organization setting and, when a userID is provided, the subject's

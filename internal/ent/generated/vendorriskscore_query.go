@@ -12,14 +12,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // VendorRiskScoreQuery is the builder for querying VendorRiskScore entities.

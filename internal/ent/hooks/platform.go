@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/logx"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
 var platformFileKeys = []string{"architectureDiagrams", "dataFlowDiagrams", "trustBoundaryDiagrams"}

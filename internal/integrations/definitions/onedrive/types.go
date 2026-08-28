@@ -6,9 +6,9 @@ import (
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 var (

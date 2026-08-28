@@ -14,13 +14,13 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	enums "github.com/theopenlane/core/common/enums"
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	group "github.com/theopenlane/core/internal/ent/generated/group"
-	orgmembership "github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	gala "github.com/theopenlane/core/pkg/gala"
-	jsonx "github.com/theopenlane/core/pkg/jsonx"
-	logx "github.com/theopenlane/core/pkg/logx"
-	slateparser "github.com/theopenlane/core/pkg/slateparser"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	group "github.com/theopenlane/core/v2/internal/ent/generated/group"
+	orgmembership "github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	gala "github.com/theopenlane/core/v2/pkg/gala"
+	jsonx "github.com/theopenlane/core/v2/pkg/jsonx"
+	logx "github.com/theopenlane/core/v2/pkg/logx"
+	slateparser "github.com/theopenlane/core/v2/pkg/slateparser"
 )
 
 // NotificationContent is the in-code notification content contract; its fields mirror the

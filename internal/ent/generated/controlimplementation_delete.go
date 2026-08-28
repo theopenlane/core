@@ -8,8 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ControlImplementationDelete is the builder for deleting a ControlImplementation entity.

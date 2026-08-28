@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _FindingBulkCreatePayload_findings(ctx context.Conte
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Finding) graphql.Marshaler {
-			return ec.marshalOFinding2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingᚄ(ctx, selections, v)
+			return ec.marshalOFinding2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _FindingBulkUpdatePayload_findings(ctx context.Conte
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Finding) graphql.Marshaler {
-			return ec.marshalOFinding2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingᚄ(ctx, selections, v)
+			return ec.marshalOFinding2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _FindingCreatePayload_finding(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Finding) graphql.Marshaler {
-			return ec.marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFinding(ctx, selections, v)
+			return ec.marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFinding(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _FindingUpdatePayload_finding(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Finding) graphql.Marshaler {
-			return ec.marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFinding(ctx, selections, v)
+			return ec.marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFinding(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _FindingUpdatePayload(ctx context.Context, sel ast.S
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNFindingBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkCreatePayload) graphql.Marshaler {
 	return ec._FindingBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋt
 	return ec._FindingBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkDeletePayload) graphql.Marshaler {
 	return ec._FindingBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFindingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNFindingBulkDeletePayload2ᚖgithubᚗcomᚋt
 	return ec._FindingBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingBulkUpdatePayload) graphql.Marshaler {
 	return ec._FindingBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFindingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNFindingBulkUpdatePayload2ᚖgithubᚗcomᚋt
 	return ec._FindingBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingCreatePayload) graphql.Marshaler {
 	return ec._FindingCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFindingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNFindingCreatePayload2ᚖgithubᚗcomᚋtheop
 	return ec._FindingCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingDeletePayload) graphql.Marshaler {
 	return ec._FindingDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFindingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNFindingDeletePayload2ᚖgithubᚗcomᚋtheop
 	return ec._FindingDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingUpdatePayload) graphql.Marshaler {
 	return ec._FindingUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNFindingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNFindingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

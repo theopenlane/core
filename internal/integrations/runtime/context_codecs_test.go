@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // codecRoundTripPayload is the fixture payload dispatched through the in-memory runtime

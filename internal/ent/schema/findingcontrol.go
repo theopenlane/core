@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
 
 // FindingControl defines the mapping between findings and controls.

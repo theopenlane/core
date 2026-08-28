@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ImpersonationEventUpdate is the builder for updating ImpersonationEvent entities.

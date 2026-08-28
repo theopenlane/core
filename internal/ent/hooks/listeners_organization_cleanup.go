@@ -6,11 +6,11 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/hooks/contextx"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // OrganizationCleanupListeners cascades an organization soft delete by hard-deleting everything it owns

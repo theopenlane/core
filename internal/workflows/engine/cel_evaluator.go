@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/cel-go/cel"
 
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/celx"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/pkg/celx"
 )
 
 // CELEvaluator handles CEL expression compilation and evaluation with caching

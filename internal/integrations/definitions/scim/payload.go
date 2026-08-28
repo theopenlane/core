@@ -7,8 +7,8 @@ import (
 
 	"github.com/elimity-com/scim"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // DeleteAction is the action string used to indicate a SCIM delete operation

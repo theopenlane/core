@@ -12,16 +12,16 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/internal/graphsubscriptions"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/gala"
-	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/v2/internal/graphsubscriptions"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	mwauth "github.com/theopenlane/core/v2/pkg/middleware/auth"
 )
 
 // This file will not be regenerated automatically.

@@ -8,8 +8,8 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 // AllowIfSelf determines whether a query or mutation operation should be allowed based on whether the requested data is for the viewer

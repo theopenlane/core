@@ -1,8 +1,8 @@
 package graphapi
 
 import (
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 )
 
 // emailRuntimeClient resolves the runtime email client from the process-wide integrations runtime

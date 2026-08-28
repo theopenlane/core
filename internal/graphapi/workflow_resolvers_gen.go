@@ -7,13 +7,13 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/workflows"
 )
 
 // workflowResolverHasPending checks if the object has any pending workflow proposals (draft or submitted).

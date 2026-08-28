@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 var ErrAuthenticationRequired = errors.New("authentication required")

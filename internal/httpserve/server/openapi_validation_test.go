@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/httpserve/route"
-	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/route"
+	"github.com/theopenlane/core/v2/internal/httpserve/server"
 )
 
 // TestOpenAPISpecValidation builds the full OpenAPI document the same way spec

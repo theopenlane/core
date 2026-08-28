@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // TFASetting is the model entity for the TFASetting schema.

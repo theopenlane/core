@@ -9,7 +9,7 @@ import (
 
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 // This file provides examples for testing the basic CRUD operations for the Openlane API for a given object

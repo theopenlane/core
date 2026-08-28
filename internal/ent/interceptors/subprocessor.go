@@ -5,10 +5,10 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/iam/auth"
 )
 

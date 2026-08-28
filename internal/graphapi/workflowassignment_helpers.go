@@ -5,11 +5,11 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )

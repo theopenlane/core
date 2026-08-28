@@ -8,10 +8,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/mapx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 // RunResult captures the terminal state of one run

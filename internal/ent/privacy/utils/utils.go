@@ -7,10 +7,10 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 )
 
 // GenericMutation is an interface for getting a mutation ID and type

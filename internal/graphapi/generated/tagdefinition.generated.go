@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _TagDefinitionBulkCreatePayload_tagDefinitions(ctx c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TagDefinition) graphql.Marshaler {
-			return ec.marshalOTagDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionᚄ(ctx, selections, v)
+			return ec.marshalOTagDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _TagDefinitionCreatePayload_tagDefinition(ctx contex
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TagDefinition) graphql.Marshaler {
-			return ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx, selections, v)
+			return ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _TagDefinitionUpdatePayload_tagDefinition(ctx contex
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TagDefinition) graphql.Marshaler {
-			return ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx, selections, v)
+			return ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _TagDefinitionUpdatePayload(ctx context.Context, sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionBulkCreatePayload) graphql.Marshaler {
 	return ec._TagDefinitionBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗc
 	return ec._TagDefinitionBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTagDefinitionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTagDefinitionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionCreatePayload) graphql.Marshaler {
 	return ec._TagDefinitionCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTagDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTagDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNTagDefinitionCreatePayload2ᚖgithubᚗcom�
 	return ec._TagDefinitionCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTagDefinitionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTagDefinitionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionDeletePayload) graphql.Marshaler {
 	return ec._TagDefinitionDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTagDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTagDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -354,11 +354,11 @@ func (ec *executionContext) marshalNTagDefinitionDeletePayload2ᚖgithubᚗcom�
 	return ec._TagDefinitionDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTagDefinitionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTagDefinitionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionUpdatePayload) graphql.Marshaler {
 	return ec._TagDefinitionUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTagDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTagDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

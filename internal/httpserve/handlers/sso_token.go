@@ -6,8 +6,8 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"

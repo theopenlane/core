@@ -10,8 +10,8 @@ import (
 	cf "github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/option"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/domainscan"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/domainscan"
 )
 
 // CloudflareClient wraps the Cloudflare SDK client with the account it's scoped to:

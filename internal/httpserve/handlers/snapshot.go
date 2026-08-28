@@ -6,7 +6,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/utils/rout"
@@ -51,27 +51,20 @@ func (h *Handler) SnapshotHandler(ctx echo.Context) error {
 // getSnapshotParams converts the input SnapshotRequest into Cloudflare SnapshotNewParams
 // for use with the Cloudflare API
 func (h *Handler) getSnapshotParams(in *models.SnapshotRequest) browser_rendering.SnapshotNewParams {
-	params := browser_rendering.SnapshotNewParams{}
-	params.AccountID = cloudflare.F(h.CloudflareConfig.AccountID)
-	params.CacheTTL = cloudflare.Float(snapshotCacheTTL)
-
-	body := browser_rendering.SnapshotNewParamsBody{}
-	body.URL = cloudflare.F(in.URL)
-	body.ScreenshotOptions = cloudflare.F[interface{}](
-		browser_rendering.SnapshotNewParamsBodyObjectScreenshotOptions{
-			Type: cloudflare.F(browser_rendering.SnapshotNewParamsBodyObjectScreenshotOptionsTypePNG),
-		},
-	)
-
-	if in.WaitForSelector != "" {
-		body.WaitForSelector = cloudflare.F[interface{}](
-			browser_rendering.SnapshotNewParamsBodyObjectWaitForSelector{
-				Selector: cloudflare.F(in.WaitForSelector),
-			},
-		)
+	params := browser_rendering.SnapshotNewParams{
+		AccountID: cloudflare.F(h.CloudflareConfig.AccountID),
+		CacheTTL:  cloudflare.Float(snapshotCacheTTL),
+		URL:       cloudflare.F(in.URL),
+		ScreenshotOptions: cloudflare.F(browser_rendering.SnapshotNewParamsScreenshotOptions{
+			Type: cloudflare.F(browser_rendering.SnapshotNewParamsScreenshotOptionsTypePNG),
+		}),
 	}
 
-	params.Body = body
+	if in.WaitForSelector != "" {
+		params.WaitForSelector = cloudflare.F(browser_rendering.SnapshotNewParamsWaitForSelector{
+			Selector: cloudflare.F(in.WaitForSelector),
+		})
+	}
 
 	return params
 }

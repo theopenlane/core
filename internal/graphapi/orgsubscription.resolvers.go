@@ -8,9 +8,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
 )
 
 // OrgSubscription is the resolver for the orgSubscription field.

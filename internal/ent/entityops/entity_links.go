@@ -9,8 +9,8 @@ import (
 
 	"github.com/samber/lo"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/jsonx"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // InjectCreateLinks resolves each link's target entities via selectTargets and writes the matched

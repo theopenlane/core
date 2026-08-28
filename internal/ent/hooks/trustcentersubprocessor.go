@@ -7,9 +7,9 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/fgax"
 )
 

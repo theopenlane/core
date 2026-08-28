@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // Option configures the database provider builder.

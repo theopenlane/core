@@ -11,9 +11,9 @@ import (
 
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/pkg/objects/examples/common"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	s3local "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
+	"github.com/theopenlane/core/v2/pkg/objects/examples/common"
+	s3local "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 func simpleS3Command() *cli.Command {

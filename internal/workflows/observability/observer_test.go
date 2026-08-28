@@ -15,9 +15,9 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
 type testPayload struct {

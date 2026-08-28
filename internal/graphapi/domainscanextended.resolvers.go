@@ -8,7 +8,7 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 )
 
 // ImportDomainScanReview is the resolver for the importDomainScanReview field.

@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/customdomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // CustomDomainHistoryUpdate is the builder for updating CustomDomainHistory entities.

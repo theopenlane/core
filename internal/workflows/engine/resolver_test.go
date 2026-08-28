@@ -6,10 +6,10 @@ import (
 	"github.com/oklog/ulid/v2"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 )
 
 // TestResolveTargetsRequiresEngine verifies the target resolver is properly initialized

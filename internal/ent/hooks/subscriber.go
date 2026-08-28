@@ -9,15 +9,15 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/trustcenterurl"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/trustcenterurl"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookSubscriberCreate runs on subscriber create mutations

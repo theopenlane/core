@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )

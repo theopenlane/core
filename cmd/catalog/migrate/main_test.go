@@ -10,7 +10,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v86"
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 // mockClient is a mock implementation of the stripeClient interface

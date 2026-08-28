@@ -7,8 +7,8 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/httpserve/specs"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/specs"
 )
 
 // registerOpenAPIHandler embeds our generated open api specs and serves it behind /api-docs

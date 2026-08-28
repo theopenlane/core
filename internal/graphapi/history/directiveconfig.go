@@ -1,8 +1,8 @@
 package graphapihistory
 
 import (
-	"github.com/theopenlane/core/internal/graphapi/directives"
-	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
+	"github.com/theopenlane/core/v2/internal/graphapi/directives"
+	gqlhistorygenerated "github.com/theopenlane/core/v2/internal/graphapi/historygenerated"
 )
 
 // ImplementAllHistoryDirectives adds all active directives to the gqlgen config in the resolver

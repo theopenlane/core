@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
-	fgamodel "github.com/theopenlane/core/fga/model"
+	fgamodel "github.com/theopenlane/core/v2/fga/model"
 
 	"github.com/theopenlane/utils/passwd"
 )

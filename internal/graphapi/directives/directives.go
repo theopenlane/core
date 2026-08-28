@@ -9,11 +9,11 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"
 )

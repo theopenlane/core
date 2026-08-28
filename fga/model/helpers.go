@@ -14,7 +14,7 @@ import (
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/theopenlane/core/fga/generate/modelparse"
+	"github.com/theopenlane/core/v2/fga/generate/modelparse"
 )
 
 const (

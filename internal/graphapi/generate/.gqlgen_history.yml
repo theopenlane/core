@@ -55,8 +55,8 @@ skip_validation: true
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
 autobind:
-  - "github.com/theopenlane/core/internal/graphapi/history"
-  - "github.com/theopenlane/core/internal/ent/historygenerated"
+  - "github.com/theopenlane/core/v2/internal/graphapi/history"
+  - "github.com/theopenlane/core/v2/internal/ent/historygenerated"
 # This section declares type mapping between the GraphQL and go type systems
 #
 # The first line in each type will be used as defaults for resolver arguments and
@@ -76,10 +76,10 @@ models:
       - github.com/99designs/gqlgen/graphql.Uint
       - github.com/99designs/gqlgen/graphql.Uint64
       - github.com/99designs/gqlgen/graphql.Uint32
-      - github.com/theopenlane/core/internal/ent/customtypes.Uint8
+      - github.com/theopenlane/core/v2/internal/ent/customtypes.Uint8
   Node:
     model:
-      - github.com/theopenlane/core/internal/ent/historygenerated.Noder
+      - github.com/theopenlane/core/v2/internal/ent/historygenerated.Noder
   JSON:
     model:
       - github.com/theopenlane/entx.RawMessage

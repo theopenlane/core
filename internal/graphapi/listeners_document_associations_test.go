@@ -13,9 +13,9 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/graphapi"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 const (

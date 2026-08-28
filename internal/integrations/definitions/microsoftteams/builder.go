@@ -1,10 +1,10 @@
 package microsoftteams
 
 import (
-	"github.com/theopenlane/core/internal/integrations/auth"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/integrations/auth"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Builder returns the Microsoft Teams definition builder with the supplied operator config applied

@@ -6,11 +6,11 @@ import (
 
 	authentikSDK "goauthentik.io/api/v3"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // directoryDefaultPageSize is the number of records requested per Authentik API page

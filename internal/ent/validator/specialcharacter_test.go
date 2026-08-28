@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
 
 func TestValidateName(t *testing.T) {

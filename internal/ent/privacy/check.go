@@ -3,7 +3,7 @@ package access
 import (
 	"errors"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 // Allow is a wrapper around privacy decision errors that will return true for privacy.Allow

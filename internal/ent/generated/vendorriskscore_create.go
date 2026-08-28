@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
 )
 
 // VendorRiskScoreCreate is the builder for creating a VendorRiskScore entity.

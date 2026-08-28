@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // CampaignTargetHistoryUpdate is the builder for updating CampaignTargetHistory entities.

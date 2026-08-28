@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _MappableDomainBulkCreatePayload_mappableDomains(ctx
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.MappableDomain) graphql.Marshaler {
-			return ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx, selections, v)
+			return ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _MappableDomainBulkUpdatePayload_mappableDomains(ctx
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.MappableDomain) graphql.Marshaler {
-			return ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx, selections, v)
+			return ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _MappableDomainCreatePayload_mappableDomain(ctx cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.MappableDomain) graphql.Marshaler {
-			return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, selections, v)
+			return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _MappableDomainUpdatePayload_mappableDomain(ctx cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.MappableDomain) graphql.Marshaler {
-			return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, selections, v)
+			return ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _MappableDomainUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkCreatePayload) graphql.Marshaler {
 	return ec._MappableDomainBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNMappableDomainBulkCreatePayload2ᚖgithubᚗ
 	return ec._MappableDomainBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkDeletePayload) graphql.Marshaler {
 	return ec._MappableDomainBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNMappableDomainBulkDeletePayload2ᚖgithubᚗ
 	return ec._MappableDomainBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
 	return ec._MappableDomainBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNMappableDomainBulkUpdatePayload2ᚖgithubᚗ
 	return ec._MappableDomainBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappableDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainCreatePayload) graphql.Marshaler {
 	return ec._MappableDomainCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMappableDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNMappableDomainCreatePayload2ᚖgithubᚗcom�
 	return ec._MappableDomainCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappableDomainDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainDeletePayload) graphql.Marshaler {
 	return ec._MappableDomainDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMappableDomainDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNMappableDomainDeletePayload2ᚖgithubᚗcom�
 	return ec._MappableDomainDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMappableDomainUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.MappableDomainUpdatePayload) graphql.Marshaler {
 	return ec._MappableDomainUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNMappableDomainUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappableDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNMappableDomainUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐMappableDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappableDomainUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

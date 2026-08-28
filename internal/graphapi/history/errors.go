@@ -4,10 +4,10 @@ import (
 	"context"
 	"strings"
 
-	generated "github.com/theopenlane/core/internal/ent/historygenerated"
-	access "github.com/theopenlane/core/internal/ent/privacy"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/pkg/logx"
+	generated "github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	access "github.com/theopenlane/core/v2/internal/ent/privacy"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

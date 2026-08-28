@@ -6,11 +6,11 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	intobvs "github.com/theopenlane/core/internal/integrations/observability"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // emitReconcileLoop starts one operation's loop unless a live one exists; the metadata guard is

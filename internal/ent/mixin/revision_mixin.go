@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 )
 
 // RevisionMixin implements the revision pattern for schemas.

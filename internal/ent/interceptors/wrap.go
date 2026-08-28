@@ -7,10 +7,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	hintercept "github.com/theopenlane/core/internal/ent/historygenerated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	hintercept "github.com/theopenlane/core/v2/internal/ent/historygenerated/intercept"
 )
 
 // These wrappers allow interceptors to work with multiple ent query packages (e.g., generated and historygenerated)

@@ -13,9 +13,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // IntegrationWebhookUpdate is the builder for updating IntegrationWebhook entities.

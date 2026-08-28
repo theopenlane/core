@@ -11,13 +11,13 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // integrationOperationQueueDetails captures queue response details for integration operation requests

@@ -9,7 +9,7 @@ import (
 	kiotaauth "github.com/microsoft/kiota-authentication-azure-go"
 	msgraphsdk "github.com/microsoftgraph/msgraph-sdk-go"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // teamsGraphScope is the Microsoft Graph scope used for Teams operations

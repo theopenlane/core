@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -37,7 +37,7 @@ func (ec *executionContext) _OnboardingCreatePayload_onboarding(ctx context.Cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Onboarding) graphql.Marshaler {
-			return ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOnboarding(ctx, selections, v)
+			return ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOnboarding(ctx, selections, v)
 		},
 		true,
 		true,
@@ -110,11 +110,11 @@ func (ec *executionContext) _OnboardingCreatePayload(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNOnboardingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOnboardingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OnboardingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOnboardingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOnboardingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.OnboardingCreatePayload) graphql.Marshaler {
 	return ec._OnboardingCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOnboardingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOnboardingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OnboardingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOnboardingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOnboardingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OnboardingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

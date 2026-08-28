@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _WorkflowDefinitionBulkCreatePayload_workflowDefinit
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.WorkflowDefinition) graphql.Marshaler {
-			return ec.marshalOWorkflowDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionᚄ(ctx, selections, v)
+			return ec.marshalOWorkflowDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _WorkflowDefinitionCreatePayload_workflowDefinition(
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowDefinition) graphql.Marshaler {
-			return ec.marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition(ctx, selections, v)
+			return ec.marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _WorkflowDefinitionUpdatePayload_workflowDefinition(
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowDefinition) graphql.Marshaler {
-			return ec.marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition(ctx, selections, v)
+			return ec.marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _WorkflowDefinitionUpdatePayload(ctx context.Context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNWorkflowDefinitionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowDefinitionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionBulkCreatePayload) graphql.Marshaler {
 	return ec._WorkflowDefinitionBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNWorkflowDefinitionBulkCreatePayload2ᚖgithu
 	return ec._WorkflowDefinitionBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowDefinitionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowDefinitionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionCreatePayload) graphql.Marshaler {
 	return ec._WorkflowDefinitionCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNWorkflowDefinitionCreatePayload2ᚖgithubᚗ
 	return ec._WorkflowDefinitionCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowDefinitionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowDefinitionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionDeletePayload) graphql.Marshaler {
 	return ec._WorkflowDefinitionDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -354,11 +354,11 @@ func (ec *executionContext) marshalNWorkflowDefinitionDeletePayload2ᚖgithubᚗ
 	return ec._WorkflowDefinitionDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowDefinitionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowDefinitionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionUpdatePayload) graphql.Marshaler {
 	return ec._WorkflowDefinitionUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

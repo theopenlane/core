@@ -7,7 +7,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
 
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // legalEntitySuffixes are corporate suffixes stripped from a raw company/organization name

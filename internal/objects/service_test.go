@@ -11,8 +11,8 @@ import (
 	"github.com/samber/mo"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/iam/auth"
 )

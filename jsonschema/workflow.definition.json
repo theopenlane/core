@@ -4,7 +4,7 @@
   "$defs": {
     "ApprovalActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/approval-action-params",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/approval-action-params",
       "properties": {
         "targets": {
           "items": {
@@ -62,7 +62,7 @@
     },
     "CreateObjectActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/create-object-action-params",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/create-object-action-params",
       "properties": {
         "object_type": {
           "type": "string",
@@ -84,7 +84,7 @@
     },
     "FieldUpdateActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/field-update-action-params",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/field-update-action-params",
       "properties": {
         "updates": {
           "type": "object",
@@ -98,7 +98,7 @@
     },
     "IntegrationActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/integration-action-params",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/integration-action-params",
       "properties": {
         "installation_id": {
           "type": "string"
@@ -135,7 +135,7 @@
     },
     "NotificationActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/notification-action-params",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/notification-action-params",
       "properties": {
         "targets": {
           "items": {
@@ -190,7 +190,7 @@
     },
     "ReviewActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/review-action-params",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/review-action-params",
       "properties": {
         "targets": {
           "items": {
@@ -241,7 +241,7 @@
     },
     "SendEmailActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/send-email-action-params",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/send-email-action-params",
       "properties": {
         "targets": {
           "items": {
@@ -295,7 +295,7 @@
     },
     "TargetConfig": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/target-config",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/target-config",
       "properties": {
         "type": {
           "type": "string",
@@ -327,7 +327,7 @@
     },
     "WebhookActionParams": {
       "$schema": "https://json-schema.org/draft/2020-12/schema",
-      "$id": "https://github.com/theopenlane/core/internal/workflows/webhook-action-params",
+      "$id": "https://github.com/theopenlane/core/v2/internal/workflows/webhook-action-params",
       "properties": {
         "url": {
           "type": "string",

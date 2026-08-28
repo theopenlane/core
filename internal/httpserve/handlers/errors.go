@@ -11,9 +11,9 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
 var (

@@ -25,9 +25,9 @@ import (
     "context"
     "strings"
 
-    "github.com/theopenlane/core/pkg/objects"
-    "github.com/theopenlane/core/pkg/objects/storage"
-    disk "github.com/theopenlane/core/pkg/objects/storage/providers/disk"
+    "github.com/theopenlane/core/v2/pkg/objects"
+    "github.com/theopenlane/core/v2/pkg/objects/storage"
+    disk "github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
 )
 
 func main() {

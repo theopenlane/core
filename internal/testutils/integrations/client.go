@@ -5,7 +5,7 @@ package integrations
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // Client is the functional test client built from the stored token credential

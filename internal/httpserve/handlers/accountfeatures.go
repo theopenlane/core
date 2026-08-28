@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // AccountFeaturesHandler lists all features the authenticated user has access to in relation to an organization

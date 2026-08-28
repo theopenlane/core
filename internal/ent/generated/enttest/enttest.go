@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	// required by schema hooks.
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/theopenlane/core/internal/ent/generated/migrate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/migrate"
 )
 
 type (

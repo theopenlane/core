@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 // TestUnsubscribeHandler verifies the unsubscribe endpoint marks the subscriber unsubscribed (which the

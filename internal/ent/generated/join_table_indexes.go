@@ -5,7 +5,7 @@ package generated
 import (
 	"entgo.io/ent/dialect/sql/schema"
 
-	"github.com/theopenlane/core/internal/ent/generated/migrate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/migrate"
 )
 
 // maxJoinIndexNameLen is the maximum length of an identifier in postgres, longer names are

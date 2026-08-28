@@ -13,10 +13,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 )
 
 // UserSettingUpdate is the builder for updating UserSetting entities.

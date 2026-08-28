@@ -13,11 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 )
 
 // WorkflowAssignmentTargetUpdate is the builder for updating WorkflowAssignmentTarget entities.

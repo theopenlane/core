@@ -12,8 +12,8 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // SlackTestMessage represents a message captured by the mock Slack server

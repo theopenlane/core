@@ -13,10 +13,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/newman/providers/mock"
 )
 

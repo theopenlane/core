@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
 
 func TestValidateIPAddress(t *testing.T) {

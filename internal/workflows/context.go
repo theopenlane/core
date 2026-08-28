@@ -7,8 +7,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // WithContext sets the workflow bypass flag in the context.

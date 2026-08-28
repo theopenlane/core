@@ -4,7 +4,7 @@ import (
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/utils/rout"
 )
 

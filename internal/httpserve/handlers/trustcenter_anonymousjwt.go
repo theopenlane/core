@@ -8,11 +8,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {

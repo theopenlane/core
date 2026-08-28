@@ -14,7 +14,7 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // ErrorReplySchemaName is the component schema name for the error body (rout.Reply) returned by all handler error helpers

@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // ProgramMembershipCreate is the builder for creating a ProgramMembership entity.

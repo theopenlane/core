@@ -7,8 +7,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )

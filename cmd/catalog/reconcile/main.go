@@ -10,13 +10,13 @@ import (
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/config"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
-	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/internal/entitlements/reconciler"
-	"github.com/theopenlane/core/pkg/entitlements"
+	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
+	"github.com/theopenlane/core/v2/internal/entdb"
+	"github.com/theopenlane/core/v2/internal/entitlements/reconciler"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 // main is the entry point for the reconcile CLI application

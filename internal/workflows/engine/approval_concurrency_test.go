@@ -11,11 +11,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 )
 
 // TestApprovalFlowConcurrentApprovalsResumesOnce verifies that when multiple approvers submit

@@ -8,8 +8,8 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 )
 
 // ProposalPreview is the resolver for the proposalPreview field.

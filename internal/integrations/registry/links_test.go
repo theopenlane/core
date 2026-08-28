@@ -6,9 +6,9 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 func TestResolveLinkEdge(t *testing.T) {

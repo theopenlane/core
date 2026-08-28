@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // TestOrganizationOwnerIDsEmpty verifies error behavior when client is missing

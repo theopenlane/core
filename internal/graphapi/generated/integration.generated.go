@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -101,11 +101,11 @@ func (ec *executionContext) _IntegrationDeletePayload(ctx context.Context, sel a
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNIntegrationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIntegrationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.IntegrationDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNIntegrationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIntegrationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.IntegrationDeletePayload) graphql.Marshaler {
 	return ec._IntegrationDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNIntegrationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIntegrationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.IntegrationDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNIntegrationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐIntegrationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.IntegrationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

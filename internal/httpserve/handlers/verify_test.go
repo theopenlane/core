@@ -17,11 +17,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 func (suite *HandlerTestSuite) TestVerifyHandler() {

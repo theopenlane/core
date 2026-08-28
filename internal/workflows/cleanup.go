@@ -4,15 +4,15 @@ import (
 	"context"
 	"maps"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 // FindOrphanWorkflowInstanceIDs returns workflow instance IDs whose definitions are missing or soft-deleted.

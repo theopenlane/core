@@ -5,7 +5,7 @@ import (
 
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
 func TestMappingExpressionsValid(t *testing.T) {

@@ -11,11 +11,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/graphapi"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/graphapi"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/utils/ulids"
 )
 

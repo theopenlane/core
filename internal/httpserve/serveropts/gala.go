@@ -6,12 +6,12 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/notifications"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/notifications"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // NewGalaRuntimes creates the main and notification gala runtimes from configuration.

@@ -7,7 +7,7 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 )

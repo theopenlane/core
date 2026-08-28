@@ -3,7 +3,7 @@ package route
 import (
 	"net/http"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 // registerWebhookHandler registers a webhook endpoint handler behind the /stripe/ path for handling inbound event receivers from stripe

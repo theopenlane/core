@@ -6,9 +6,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/objects/resolver"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/objects/resolver"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 func TestResolveProviderUsesConfigWhenCredentialSyncDisabled(t *testing.T) {

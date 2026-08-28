@@ -12,7 +12,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/theopenlane/core/pkg/middleware/ratelimiter"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimiter"
 )
 
 func main() {

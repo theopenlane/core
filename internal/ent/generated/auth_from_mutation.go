@@ -10,9 +10,9 @@ import (
 	"entgo.io/ent"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/fgax"
 )

@@ -10,10 +10,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/handlers/scim"
-	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers/scim"
+	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 )
 
 // SCIMHandler resolves the SCIM endpoint, authenticates the bearer token,

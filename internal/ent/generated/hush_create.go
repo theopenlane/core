@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // HushCreate is the builder for creating a Hush entity.

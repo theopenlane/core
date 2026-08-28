@@ -6,8 +6,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/internal/integrations/cli/cmd"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/cmd"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 )
 
 var listCmd = &cobra.Command{

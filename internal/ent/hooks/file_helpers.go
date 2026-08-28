@@ -3,7 +3,7 @@ package hooks
 import (
 	"context"
 
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects"
 )
 
 // processSingleMutationFile applies a single uploaded file to a mutation and processes it

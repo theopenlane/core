@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 )
 
 // NarrativeUpdate is the builder for updating Narrative entities.

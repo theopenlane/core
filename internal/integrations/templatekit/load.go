@@ -3,8 +3,8 @@ package templatekit
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
 )
 
 // LoadNotificationTemplate loads an active notification template by ID or key for the given owner

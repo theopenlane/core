@@ -5,7 +5,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/entx"
 )
 

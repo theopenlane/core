@@ -11,9 +11,9 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 )
 
 func cleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {

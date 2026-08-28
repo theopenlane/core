@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // runtimeIDPrefix is prepended to the key when synthesizing ent IDs for runtime definitions

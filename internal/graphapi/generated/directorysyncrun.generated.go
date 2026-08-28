@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _DirectorySyncRunBulkCreatePayload_directorySyncRuns
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DirectorySyncRun) graphql.Marshaler {
-			return ec.marshalODirectorySyncRun2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunᚄ(ctx, selections, v)
+			return ec.marshalODirectorySyncRun2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _DirectorySyncRunCreatePayload_directorySyncRun(ctx 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectorySyncRun) graphql.Marshaler {
-			return ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx, selections, v)
+			return ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _DirectorySyncRunUpdatePayload_directorySyncRun(ctx 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.DirectorySyncRun) graphql.Marshaler {
-			return ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx, selections, v)
+			return ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _DirectorySyncRunUpdatePayload(ctx context.Context, 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNDirectorySyncRunBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectorySyncRunBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDirectorySyncRunBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectorySyncRunBulkCreatePayload) graphql.Marshaler {
 	return ec._DirectorySyncRunBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRunBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectorySyncRunBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDirectorySyncRunBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectorySyncRunBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNDirectorySyncRunBulkCreatePayload2ᚖgithub�
 	return ec._DirectorySyncRunBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRunCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectorySyncRunCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDirectorySyncRunCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectorySyncRunCreatePayload) graphql.Marshaler {
 	return ec._DirectorySyncRunCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRunCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectorySyncRunCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDirectorySyncRunCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectorySyncRunCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNDirectorySyncRunCreatePayload2ᚖgithubᚗco
 	return ec._DirectorySyncRunCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRunDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectorySyncRunDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDirectorySyncRunDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectorySyncRunDeletePayload) graphql.Marshaler {
 	return ec._DirectorySyncRunDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRunDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectorySyncRunDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDirectorySyncRunDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectorySyncRunDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -354,11 +354,11 @@ func (ec *executionContext) marshalNDirectorySyncRunDeletePayload2ᚖgithubᚗco
 	return ec._DirectorySyncRunDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRunUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectorySyncRunUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDirectorySyncRunUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DirectorySyncRunUpdatePayload) graphql.Marshaler {
 	return ec._DirectorySyncRunUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRunUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectorySyncRunUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDirectorySyncRunUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDirectorySyncRunUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectorySyncRunUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

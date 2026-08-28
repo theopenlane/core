@@ -7,9 +7,9 @@ import (
 
 	"github.com/theopenlane/newman"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/templatekit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // SendEmailRequest is the operation config for dispatching a single templated email.

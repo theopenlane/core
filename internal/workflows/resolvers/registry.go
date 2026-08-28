@@ -5,8 +5,8 @@ import (
 	"sync"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/workflows"
 )
 
 // ResolverFunc resolves a target configuration to a list of user IDs

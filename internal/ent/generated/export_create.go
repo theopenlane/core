@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/export"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/export"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // ExportCreate is the builder for creating a Export entity.

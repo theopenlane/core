@@ -3,9 +3,9 @@ package operations
 import (
 	"context"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // persistCheckResultInput upserts one CheckResult record using the ingest lookup key fields

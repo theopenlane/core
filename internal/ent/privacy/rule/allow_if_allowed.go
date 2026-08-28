@@ -3,7 +3,7 @@ package rule
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 // AllowIfContextAllowRule allows the query to proceed if the context has an allow rule

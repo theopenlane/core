@@ -5,7 +5,7 @@ import (
 
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 func TestDomainScanReportSchemaReflects(t *testing.T) {

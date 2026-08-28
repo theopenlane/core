@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/theopenlane/core/pkg/objects/examples/app"
+	"github.com/theopenlane/core/v2/pkg/objects/examples/app"
 )
 
 func main() {

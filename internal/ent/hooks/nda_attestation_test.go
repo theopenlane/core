@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	storagetypes "github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 )
 
 var (

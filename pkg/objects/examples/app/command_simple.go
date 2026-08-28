@@ -12,8 +12,8 @@ import (
 
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/objects/storage/providers/disk"
+	"github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 func simpleCommand() *cli.Command {

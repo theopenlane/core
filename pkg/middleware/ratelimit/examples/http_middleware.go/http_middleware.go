@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
 )
 
 // GetRemoteIP returns the remote IP address of the request

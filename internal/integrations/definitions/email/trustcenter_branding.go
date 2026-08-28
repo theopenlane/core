@@ -3,7 +3,7 @@ package email
 import (
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // TrustCenterBranding carries the trust center identity applied to subscriber-facing emails. Trust

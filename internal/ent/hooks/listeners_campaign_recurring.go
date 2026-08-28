@@ -10,11 +10,11 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // CampaignRecurringListeners keeps recurring campaign scheduling in sync when activation or recurrence fields change

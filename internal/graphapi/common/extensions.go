@@ -6,7 +6,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"

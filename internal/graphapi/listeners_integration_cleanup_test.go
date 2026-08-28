@@ -8,8 +8,8 @@ import (
 	"github.com/theopenlane/entx"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func TestIntegrationCleanupListenerHardDelete(t *testing.T) {

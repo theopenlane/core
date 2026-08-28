@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	r2provider "github.com/theopenlane/core/pkg/objects/storage/providers/r2"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
 )
 
 func TestR2Provider_UploadAndDownload_EmptyFile(t *testing.T) {

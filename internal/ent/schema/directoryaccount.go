@@ -18,10 +18,10 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
 
 // DirectoryAccount captures one normalized identity fetched from an external directory provider

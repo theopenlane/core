@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/net/publicsuffix"
 
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // userAgent identifies this scanner to servers it probes

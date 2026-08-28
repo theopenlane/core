@@ -11,7 +11,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterentityhistory"
 	"github.com/theopenlane/entx/history"
 )
 

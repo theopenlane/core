@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 )
 
 // AuthEnforcementAttribution stamps the grantor and timestamp when a membership's SSO exemption or

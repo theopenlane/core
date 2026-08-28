@@ -12,11 +12,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // TrustCenterNDARequest is the model entity for the TrustCenterNDARequest schema.

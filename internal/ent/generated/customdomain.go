@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // CustomDomain is the model entity for the CustomDomain schema.
