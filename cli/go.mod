@@ -2,9 +2,6 @@ module github.com/theopenlane/core/cli
 
 go 1.26.6
 
-// temp fix while core/v2 is released and can be picked up by external deps
-replace github.com/theopenlane/core/v2 => ..
-
 require (
 	github.com/99designs/gqlgen v0.17.94
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
@@ -21,7 +18,7 @@ require (
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core/common v1.0.25
-	github.com/theopenlane/core/v2 v2.2.3
+	github.com/theopenlane/core/v2 v2.3.0
 	github.com/theopenlane/go-client v0.13.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.37.0
