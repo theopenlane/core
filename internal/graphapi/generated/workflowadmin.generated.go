@@ -38,7 +38,7 @@ func (ec *executionContext) _WorkflowAssignmentReassignPayload_workflowAssignmen
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowAssignment) graphql.Marshaler {
-			return ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx, selections, v)
+			return ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx, selections, v)
 		},
 		true,
 		true,
@@ -70,7 +70,7 @@ func (ec *executionContext) _WorkflowInstanceAdminPayload_workflowInstance(ctx c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowInstance) graphql.Marshaler {
-			return ec.marshalNWorkflowInstance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowInstance(ctx, selections, v)
+			return ec.marshalNWorkflowInstance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstance(ctx, selections, v)
 		},
 		true,
 		true,
@@ -143,7 +143,7 @@ func (ec *executionContext) unmarshalInputReassignWorkflowAssignmentInput(ctx co
 			it.ID = data
 		case "targets":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("targets"))
-			data, err := ec.unmarshalNWorkflowAssignmentTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInputᚄ(ctx, v)
+			data, err := ec.unmarshalNWorkflowAssignmentTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -323,16 +323,16 @@ func (ec *executionContext) _WorkflowInstanceBulkAdminPayload(ctx context.Contex
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNReassignWorkflowAssignmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReassignWorkflowAssignmentInput(ctx context.Context, v any) (model.ReassignWorkflowAssignmentInput, error) {
+func (ec *executionContext) unmarshalNReassignWorkflowAssignmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐReassignWorkflowAssignmentInput(ctx context.Context, v any) (model.ReassignWorkflowAssignmentInput, error) {
 	res, err := ec.unmarshalInputReassignWorkflowAssignmentInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentReassignPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentReassignPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentReassignPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentReassignPayload) graphql.Marshaler {
 	return ec._WorkflowAssignmentReassignPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentReassignPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentReassignPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentReassignPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentReassignPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -342,13 +342,13 @@ func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2ᚖgithub�
 	return ec._WorkflowAssignmentReassignPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNWorkflowAssignmentTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInputᚄ(ctx context.Context, v any) ([]*model.WorkflowAssignmentTargetInput, error) {
+func (ec *executionContext) unmarshalNWorkflowAssignmentTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInputᚄ(ctx context.Context, v any) ([]*model.WorkflowAssignmentTargetInput, error) {
 	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.WorkflowAssignmentTargetInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNWorkflowAssignmentTargetInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNWorkflowAssignmentTargetInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -356,16 +356,16 @@ func (ec *executionContext) unmarshalNWorkflowAssignmentTargetInput2ᚕᚖgithub
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNWorkflowAssignmentTargetInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInput(ctx context.Context, v any) (*model.WorkflowAssignmentTargetInput, error) {
+func (ec *executionContext) unmarshalNWorkflowAssignmentTargetInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInput(ctx context.Context, v any) (*model.WorkflowAssignmentTargetInput, error) {
 	res, err := ec.unmarshalInputWorkflowAssignmentTargetInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowInstanceAdminPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowInstanceAdminPayload) graphql.Marshaler {
 	return ec._WorkflowInstanceAdminPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowInstanceAdminPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceAdminPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowInstanceAdminPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -375,11 +375,11 @@ func (ec *executionContext) marshalNWorkflowInstanceAdminPayload2ᚖgithubᚗcom
 	return ec._WorkflowInstanceAdminPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowInstanceBulkAdminPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowInstanceBulkAdminPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowInstanceBulkAdminPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowInstanceBulkAdminPayload) graphql.Marshaler {
 	return ec._WorkflowInstanceBulkAdminPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowInstanceBulkAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowInstanceBulkAdminPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowInstanceBulkAdminPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowInstanceBulkAdminPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowInstanceBulkAdminPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

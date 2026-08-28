@@ -132,7 +132,7 @@ func (ec *executionContext) _ControlEvidence_countByStatus(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.EvidenceCountByStatus) graphql.Marshaler {
-			return ec.marshalOEvidenceCountByStatus2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatusᚄ(ctx, selections, v)
+			return ec.marshalOEvidenceCountByStatus2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatusᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -379,7 +379,7 @@ func (ec *executionContext) _ControlInfo_controlOwner(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Group) graphql.Marshaler {
-			return ec.marshalOGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
+			return ec.marshalOGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
 		},
 		true,
 		false,
@@ -549,7 +549,7 @@ func (ec *executionContext) _ControlPolicies_internalPolicies(ctx context.Contex
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.PolicySummary) graphql.Marshaler {
-			return ec.marshalOPolicySummary2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPolicySummaryᚄ(ctx, selections, v)
+			return ec.marshalOPolicySummary2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPolicySummaryᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -773,7 +773,7 @@ func (ec *executionContext) _ControlReport_controlOwner(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Group) graphql.Marshaler {
-			return ec.marshalOGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
+			return ec.marshalOGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx, selections, v)
 		},
 		true,
 		false,
@@ -874,7 +874,7 @@ func (ec *executionContext) _ControlReport_relatedControls(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlInfo) graphql.Marshaler {
-			return ec.marshalOControlInfo2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlInfoᚄ(ctx, selections, v)
+			return ec.marshalOControlInfo2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlInfoᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -906,7 +906,7 @@ func (ec *executionContext) _ControlReport_evidenceStatus(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ControlEvidence) graphql.Marshaler {
-			return ec.marshalOControlEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlEvidence(ctx, selections, v)
+			return ec.marshalOControlEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlEvidence(ctx, selections, v)
 		},
 		true,
 		false,
@@ -938,7 +938,7 @@ func (ec *executionContext) _ControlReport_linkedPolicies(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ControlPolicies) graphql.Marshaler {
-			return ec.marshalOControlPolicies2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlPolicies(ctx, selections, v)
+			return ec.marshalOControlPolicies2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlPolicies(ctx, selections, v)
 		},
 		true,
 		false,
@@ -970,7 +970,7 @@ func (ec *executionContext) _ControlReport_subcontrols(ctx context.Context, fiel
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlReport) graphql.Marshaler {
-			return ec.marshalOControlReport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportᚄ(ctx, selections, v)
+			return ec.marshalOControlReport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1048,7 +1048,7 @@ func (ec *executionContext) _ControlReportCategory_controls(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlReport) graphql.Marshaler {
-			return ec.marshalNControlReport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportᚄ(ctx, selections, v)
+			return ec.marshalNControlReport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -1080,7 +1080,7 @@ func (ec *executionContext) _ControlReportConnection_edges(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlReportEdge) graphql.Marshaler {
-			return ec.marshalOControlReportEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportEdge(ctx, selections, v)
+			return ec.marshalOControlReportEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportEdge(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1167,7 +1167,7 @@ func (ec *executionContext) _ControlReportEdge_node(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ControlReport) graphql.Marshaler {
-			return ec.marshalOControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx, selections, v)
+			return ec.marshalOControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1382,7 +1382,7 @@ func (ec *executionContext) unmarshalInputControlReportOrder(ctx context.Context
 			it.Direction = data
 		case "field":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			data, err := ec.unmarshalNControlReportOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportOrderField(ctx, v)
+			data, err := ec.unmarshalNControlReportOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportOrderField(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1941,7 +1941,7 @@ func (ec *executionContext) _PolicySummary(ctx context.Context, sel ast.Selectio
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNControlInfo2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlInfo(ctx context.Context, sel ast.SelectionSet, v *model.ControlInfo) graphql.Marshaler {
+func (ec *executionContext) marshalNControlInfo2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlInfo(ctx context.Context, sel ast.SelectionSet, v *model.ControlInfo) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1951,11 +1951,11 @@ func (ec *executionContext) marshalNControlInfo2ᚖgithubᚗcomᚋtheopenlaneᚋ
 	return ec._ControlInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlReport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlReport) graphql.Marshaler {
+func (ec *executionContext) marshalNControlReport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlReport) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx, sel, v[i])
+		return ec.marshalNControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -1967,7 +1967,7 @@ func (ec *executionContext) marshalNControlReport2ᚕᚖgithubᚗcomᚋtheopenla
 	return ret
 }
 
-func (ec *executionContext) marshalNControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx context.Context, sel ast.SelectionSet, v *model.ControlReport) graphql.Marshaler {
+func (ec *executionContext) marshalNControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx context.Context, sel ast.SelectionSet, v *model.ControlReport) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1977,11 +1977,11 @@ func (ec *executionContext) marshalNControlReport2ᚖgithubᚗcomᚋtheopenlane�
 	return ec._ControlReport(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlReportCategory2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportCategoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlReportCategory) graphql.Marshaler {
+func (ec *executionContext) marshalNControlReportCategory2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportCategoryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlReportCategory) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNControlReportCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportCategory(ctx, sel, v[i])
+		return ec.marshalNControlReportCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportCategory(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -1993,7 +1993,7 @@ func (ec *executionContext) marshalNControlReportCategory2ᚕᚖgithubᚗcomᚋt
 	return ret
 }
 
-func (ec *executionContext) marshalNControlReportCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportCategory(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportCategory) graphql.Marshaler {
+func (ec *executionContext) marshalNControlReportCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportCategory(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportCategory) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -2003,11 +2003,11 @@ func (ec *executionContext) marshalNControlReportCategory2ᚖgithubᚗcomᚋtheo
 	return ec._ControlReportCategory(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlReportConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportConnection(ctx context.Context, sel ast.SelectionSet, v model.ControlReportConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNControlReportConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportConnection(ctx context.Context, sel ast.SelectionSet, v model.ControlReportConnection) graphql.Marshaler {
 	return ec._ControlReportConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNControlReportConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNControlReportConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -2017,22 +2017,22 @@ func (ec *executionContext) marshalNControlReportConnection2ᚖgithubᚗcomᚋth
 	return ec._ControlReportConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNControlReportOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportOrder(ctx context.Context, v any) (*model.ControlReportOrder, error) {
+func (ec *executionContext) unmarshalNControlReportOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportOrder(ctx context.Context, v any) (*model.ControlReportOrder, error) {
 	res, err := ec.unmarshalInputControlReportOrder(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNControlReportOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportOrderField(ctx context.Context, v any) (model.ControlReportOrderField, error) {
+func (ec *executionContext) unmarshalNControlReportOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportOrderField(ctx context.Context, v any) (model.ControlReportOrderField, error) {
 	var res model.ControlReportOrderField
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNControlReportOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportOrderField(ctx context.Context, sel ast.SelectionSet, v model.ControlReportOrderField) graphql.Marshaler {
+func (ec *executionContext) marshalNControlReportOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportOrderField(ctx context.Context, sel ast.SelectionSet, v model.ControlReportOrderField) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatus(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceCountByStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatus(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceCountByStatus) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -2042,7 +2042,7 @@ func (ec *executionContext) marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheo
 	return ec._EvidenceCountByStatus(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPolicySummary2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPolicySummary(ctx context.Context, sel ast.SelectionSet, v *model.PolicySummary) graphql.Marshaler {
+func (ec *executionContext) marshalNPolicySummary2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPolicySummary(ctx context.Context, sel ast.SelectionSet, v *model.PolicySummary) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -2052,21 +2052,21 @@ func (ec *executionContext) marshalNPolicySummary2ᚖgithubᚗcomᚋtheopenlane�
 	return ec._PolicySummary(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOControlEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlEvidence(ctx context.Context, sel ast.SelectionSet, v *model.ControlEvidence) graphql.Marshaler {
+func (ec *executionContext) marshalOControlEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlEvidence(ctx context.Context, sel ast.SelectionSet, v *model.ControlEvidence) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ControlEvidence(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOControlInfo2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlInfoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlInfo) graphql.Marshaler {
+func (ec *executionContext) marshalOControlInfo2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlInfoᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlInfo) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNControlInfo2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlInfo(ctx, sel, v[i])
+		return ec.marshalNControlInfo2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlInfo(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -2078,21 +2078,21 @@ func (ec *executionContext) marshalOControlInfo2ᚕᚖgithubᚗcomᚋtheopenlane
 	return ret
 }
 
-func (ec *executionContext) marshalOControlPolicies2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlPolicies(ctx context.Context, sel ast.SelectionSet, v *model.ControlPolicies) graphql.Marshaler {
+func (ec *executionContext) marshalOControlPolicies2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlPolicies(ctx context.Context, sel ast.SelectionSet, v *model.ControlPolicies) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ControlPolicies(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOControlReport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlReport) graphql.Marshaler {
+func (ec *executionContext) marshalOControlReport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlReport) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx, sel, v[i])
+		return ec.marshalNControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -2104,34 +2104,34 @@ func (ec *executionContext) marshalOControlReport2ᚕᚖgithubᚗcomᚋtheopenla
 	return ret
 }
 
-func (ec *executionContext) marshalOControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx context.Context, sel ast.SelectionSet, v *model.ControlReport) graphql.Marshaler {
+func (ec *executionContext) marshalOControlReport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReport(ctx context.Context, sel ast.SelectionSet, v *model.ControlReport) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ControlReport(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOControlReportEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ControlReportEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOControlReportEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ControlReportEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalOControlReportEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportEdge(ctx, sel, v[i])
+		return ec.marshalOControlReportEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportEdge(ctx, sel, v[i])
 	})
 
 	return ret
 }
 
-func (ec *executionContext) marshalOControlReportEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOControlReportEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ControlReportEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOControlReportOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportOrderᚄ(ctx context.Context, v any) ([]*model.ControlReportOrder, error) {
+func (ec *executionContext) unmarshalOControlReportOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportOrderᚄ(ctx context.Context, v any) ([]*model.ControlReportOrder, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -2140,7 +2140,7 @@ func (ec *executionContext) unmarshalOControlReportOrder2ᚕᚖgithubᚗcomᚋth
 	res := make([]*model.ControlReportOrder, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNControlReportOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlReportOrder(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNControlReportOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportOrder(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -2148,14 +2148,14 @@ func (ec *executionContext) unmarshalOControlReportOrder2ᚕᚖgithubᚗcomᚋth
 	return res, nil
 }
 
-func (ec *executionContext) marshalOEvidenceCountByStatus2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatusᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EvidenceCountByStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOEvidenceCountByStatus2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatusᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.EvidenceCountByStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatus(ctx, sel, v[i])
+		return ec.marshalNEvidenceCountByStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCountByStatus(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -2167,14 +2167,14 @@ func (ec *executionContext) marshalOEvidenceCountByStatus2ᚕᚖgithubᚗcomᚋt
 	return ret
 }
 
-func (ec *executionContext) marshalOPolicySummary2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPolicySummaryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PolicySummary) graphql.Marshaler {
+func (ec *executionContext) marshalOPolicySummary2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPolicySummaryᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PolicySummary) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNPolicySummary2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPolicySummary(ctx, sel, v[i])
+		return ec.marshalNPolicySummary2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐPolicySummary(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {

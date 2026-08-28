@@ -72,12 +72,12 @@ func (ec *executionContext) unmarshalInputFileMetadataInput(ctx context.Context,
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput(ctx context.Context, v any) (*model.FileMetadataInput, error) {
+func (ec *executionContext) unmarshalNFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput(ctx context.Context, v any) (*model.FileMetadataInput, error) {
 	res, err := ec.unmarshalInputFileMetadataInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ(ctx context.Context, v any) ([]*model.FileMetadataInput, error) {
+func (ec *executionContext) unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInputᚄ(ctx context.Context, v any) ([]*model.FileMetadataInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -86,7 +86,7 @@ func (ec *executionContext) unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋthe
 	res := make([]*model.FileMetadataInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -94,7 +94,7 @@ func (ec *executionContext) unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋthe
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput(ctx context.Context, v any) (*model.FileMetadataInput, error) {
+func (ec *executionContext) unmarshalOFileMetadataInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFileMetadataInput(ctx context.Context, v any) (*model.FileMetadataInput, error) {
 	if v == nil {
 		return nil, nil
 	}

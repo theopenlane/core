@@ -38,7 +38,7 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload_dnsVerifications(c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DNSVerification) graphql.Marshaler {
-			return ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx, selections, v)
+			return ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _DNSVerificationBulkUpdatePayload_dnsVerifications(c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.DNSVerification) graphql.Marshaler {
-			return ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx, selections, v)
+			return ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx co
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.DNSVerification) graphql.Marshaler {
-			return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, selections, v)
+			return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _DNSVerificationUpdatePayload_dnsVerification(ctx co
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.DNSVerification) graphql.Marshaler {
-			return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, selections, v)
+			return ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _DNSVerificationUpdatePayload(ctx context.Context, s
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
 	return ec._DNSVerificationBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithub�
 	return ec._DNSVerificationBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
 	return ec._DNSVerificationBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithub�
 	return ec._DNSVerificationBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
 	return ec._DNSVerificationBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNDNSVerificationBulkUpdatePayload2ᚖgithub�
 	return ec._DNSVerificationBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationCreatePayload) graphql.Marshaler {
 	return ec._DNSVerificationCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNDNSVerificationCreatePayload2ᚖgithubᚗcom
 	return ec._DNSVerificationCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationDeletePayload) graphql.Marshaler {
 	return ec._DNSVerificationDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNDNSVerificationDeletePayload2ᚖgithubᚗcom
 	return ec._DNSVerificationDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DNSVerificationUpdatePayload) graphql.Marshaler {
 	return ec._DNSVerificationUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDNSVerificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDNSVerificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

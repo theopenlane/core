@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	diskprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	diskprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
 )
 
 func TestNewDiskBuilder(t *testing.T) {

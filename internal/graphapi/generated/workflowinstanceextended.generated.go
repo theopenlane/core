@@ -338,7 +338,7 @@ func (ec *executionContext) _WorkflowProposalPreview_diffs(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.WorkflowFieldDiff) graphql.Marshaler {
-			return ec.marshalNWorkflowFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiffᚄ(ctx, selections, v)
+			return ec.marshalNWorkflowFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiffᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -509,11 +509,11 @@ func (ec *executionContext) _WorkflowProposalPreview(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNWorkflowFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiffᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.WorkflowFieldDiff) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiffᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.WorkflowFieldDiff) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNWorkflowFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiff(ctx, sel, v[i])
+		return ec.marshalNWorkflowFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiff(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -525,7 +525,7 @@ func (ec *executionContext) marshalNWorkflowFieldDiff2ᚕᚖgithubᚗcomᚋtheop
 	return ret
 }
 
-func (ec *executionContext) marshalNWorkflowFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiff(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowFieldDiff) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldDiff(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowFieldDiff) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -545,7 +545,7 @@ func (ec *executionContext) marshalNWorkflowProposalState2githubᚗcomᚋtheopen
 	return v
 }
 
-func (ec *executionContext) marshalOWorkflowProposalPreview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalPreview(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalPreview) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkflowProposalPreview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalPreview(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalPreview) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

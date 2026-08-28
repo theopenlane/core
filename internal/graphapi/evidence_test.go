@@ -408,7 +408,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		{
 			name: "attempt to link system owned procedure",
 			request: testclient.CreateEvidenceInput{
-				Name:              "System owned Evidence",
+				Name:         "System owned Evidence",
 				TaskIDs:      []string{taskViewOnly.ID},
 				ProcedureIDs: []string{systemOwnedProcedure.ID},
 			},
@@ -419,7 +419,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 		{
 			name: "attempt to link system owned control and org owned control",
 			request: testclient.CreateEvidenceInput{
-				Name:              "System owned Evidence",
+				Name:       "System owned Evidence",
 				TaskIDs:    []string{taskViewOnly.ID},
 				ControlIDs: []string{systemOwnedControl.ID, control1.ID},
 			},

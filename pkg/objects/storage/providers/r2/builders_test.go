@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
 )
 
 func TestNewR2Builder(t *testing.T) {

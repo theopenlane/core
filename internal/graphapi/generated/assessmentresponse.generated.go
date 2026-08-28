@@ -38,7 +38,7 @@ func (ec *executionContext) _AssessmentResponseCreatePayload_assessmentResponse(
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentResponse) graphql.Marshaler {
-			return ec.marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx, selections, v)
+			return ec.marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx, selections, v)
 		},
 		true,
 		true,
@@ -172,11 +172,11 @@ func (ec *executionContext) _AssessmentResponseDeletePayload(ctx context.Context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAssessmentResponseCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentResponseCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAssessmentResponseCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentResponseCreatePayload) graphql.Marshaler {
 	return ec._AssessmentResponseCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAssessmentResponseCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentResponseCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAssessmentResponseCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentResponseCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -186,11 +186,11 @@ func (ec *executionContext) marshalNAssessmentResponseCreatePayload2ᚖgithubᚗ
 	return ec._AssessmentResponseCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAssessmentResponseDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentResponseDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAssessmentResponseDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentResponseDeletePayload) graphql.Marshaler {
 	return ec._AssessmentResponseDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAssessmentResponseDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentResponseDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAssessmentResponseDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentResponseDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

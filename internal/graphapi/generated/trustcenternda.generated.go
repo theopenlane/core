@@ -37,7 +37,7 @@ func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload_documentData(ct
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.DocumentData) graphql.Marshaler {
-			return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, selections, v)
+			return ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx, selections, v)
 		},
 		true,
 		true,
@@ -69,7 +69,7 @@ func (ec *executionContext) _TrustCenterNDACreatePayload_template(ctx context.Co
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Template) graphql.Marshaler {
-			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
+			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
 		},
 		true,
 		true,
@@ -101,7 +101,7 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload_template(ctx context.Co
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Template) graphql.Marshaler {
-			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
+			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
 		},
 		true,
 		true,
@@ -317,21 +317,21 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNCreateTrustCenterNDAInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateTrustCenterNDAInput(ctx context.Context, v any) (model.CreateTrustCenterNDAInput, error) {
+func (ec *executionContext) unmarshalNCreateTrustCenterNDAInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCreateTrustCenterNDAInput(ctx context.Context, v any) (model.CreateTrustCenterNDAInput, error) {
 	res, err := ec.unmarshalInputCreateTrustCenterNDAInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNSubmitTrustCenterNDAResponseInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponseInput(ctx context.Context, v any) (model.SubmitTrustCenterNDAResponseInput, error) {
+func (ec *executionContext) unmarshalNSubmitTrustCenterNDAResponseInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponseInput(ctx context.Context, v any) (model.SubmitTrustCenterNDAResponseInput, error) {
 	res, err := ec.unmarshalInputSubmitTrustCenterNDAResponseInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
 	return ec._SubmitTrustCenterNDAResponsePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -341,11 +341,11 @@ func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithu
 	return ec._SubmitTrustCenterNDAResponsePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterNDACreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDACreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterNDACreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDACreatePayload) graphql.Marshaler {
 	return ec._TrustCenterNDACreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterNDACreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterNDACreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -355,11 +355,11 @@ func (ec *executionContext) marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcom�
 	return ec._TrustCenterNDACreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterNDAUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDAUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterNDAUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDAUpdatePayload) graphql.Marshaler {
 	return ec._TrustCenterNDAUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterNDAUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterNDAUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterNDAUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterNDAUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

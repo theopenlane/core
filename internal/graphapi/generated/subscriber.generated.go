@@ -38,7 +38,7 @@ func (ec *executionContext) _SubscriberBulkCreatePayload_subscribers(ctx context
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Subscriber) graphql.Marshaler {
-			return ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberᚄ(ctx, selections, v)
+			return ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _SubscriberCreatePayload_subscriber(ctx context.Cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Subscriber) graphql.Marshaler {
-			return ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx, selections, v)
+			return ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _SubscriberUpdatePayload_subscriber(ctx context.Cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Subscriber) graphql.Marshaler {
-			return ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx, selections, v)
+			return ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _SubscriberUpdatePayload(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNSubscriberBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubscriberBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberBulkCreatePayload) graphql.Marshaler {
 	return ec._SubscriberBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNSubscriberBulkCreatePayload2ᚖgithubᚗcom�
 	return ec._SubscriberBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSubscriberCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubscriberCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberCreatePayload) graphql.Marshaler {
 	return ec._SubscriberCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSubscriberCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubscriberCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNSubscriberCreatePayload2ᚖgithubᚗcomᚋth
 	return ec._SubscriberCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSubscriberDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubscriberDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberDeletePayload) graphql.Marshaler {
 	return ec._SubscriberDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSubscriberDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubscriberDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -354,11 +354,11 @@ func (ec *executionContext) marshalNSubscriberDeletePayload2ᚖgithubᚗcomᚋth
 	return ec._SubscriberDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSubscriberUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubscriberUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.SubscriberUpdatePayload) graphql.Marshaler {
 	return ec._SubscriberUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNSubscriberUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubscriberUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNSubscriberUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubscriberUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubscriberUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

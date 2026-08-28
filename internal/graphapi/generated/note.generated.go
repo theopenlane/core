@@ -78,7 +78,7 @@ func (ec *executionContext) unmarshalInputUpdateDiscussionsInput(ctx context.Con
 			it.ID = data
 		case "input":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-			data, err := ec.unmarshalNUpdateDiscussionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDiscussionInput(ctx, v)
+			data, err := ec.unmarshalNUpdateDiscussionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUpdateDiscussionInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -138,11 +138,11 @@ func (ec *executionContext) _NoteDeletePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNNoteDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.NoteDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNNoteDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.NoteDeletePayload) graphql.Marshaler {
 	return ec._NoteDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNNoteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NoteDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNNoteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NoteDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -152,7 +152,7 @@ func (ec *executionContext) marshalNNoteDeletePayload2ᚖgithubᚗcomᚋtheopenl
 	return ec._NoteDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOUpdateDiscussionsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUpdateDiscussionsInput(ctx context.Context, v any) (*model.UpdateDiscussionsInput, error) {
+func (ec *executionContext) unmarshalOUpdateDiscussionsInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUpdateDiscussionsInput(ctx context.Context, v any) (*model.UpdateDiscussionsInput, error) {
 	if v == nil {
 		return nil, nil
 	}

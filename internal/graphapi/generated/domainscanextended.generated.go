@@ -180,35 +180,35 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewInput(ctx contex
 			it.ScanIDs = data
 		case "platforms":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("platforms"))
-			data, err := ec.unmarshalOImportDomainScanReviewPlatformInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPlatformInputᚄ(ctx, v)
+			data, err := ec.unmarshalOImportDomainScanReviewPlatformInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPlatformInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Platforms = data
 		case "systems":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systems"))
-			data, err := ec.unmarshalOImportDomainScanReviewSystemInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewSystemInputᚄ(ctx, v)
+			data, err := ec.unmarshalOImportDomainScanReviewSystemInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewSystemInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Systems = data
 		case "vendors":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vendors"))
-			data, err := ec.unmarshalNImportDomainScanReviewVendorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInputᚄ(ctx, v)
+			data, err := ec.unmarshalNImportDomainScanReviewVendorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Vendors = data
 		case "assets":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assets"))
-			data, err := ec.unmarshalNImportDomainScanReviewAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInputᚄ(ctx, v)
+			data, err := ec.unmarshalNImportDomainScanReviewAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Assets = data
 		case "findings":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findings"))
-			data, err := ec.unmarshalOImportDomainScanReviewFindingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewFindingInputᚄ(ctx, v)
+			data, err := ec.unmarshalOImportDomainScanReviewFindingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewFindingInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -442,13 +442,13 @@ func (ec *executionContext) _ImportDomainScanReviewPayload(ctx context.Context, 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNImportDomainScanReviewAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewAssetInput, error) {
+func (ec *executionContext) unmarshalNImportDomainScanReviewAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewAssetInput, error) {
 	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ImportDomainScanReviewAssetInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNImportDomainScanReviewAssetInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNImportDomainScanReviewAssetInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -456,26 +456,26 @@ func (ec *executionContext) unmarshalNImportDomainScanReviewAssetInput2ᚕᚖgit
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNImportDomainScanReviewAssetInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInput(ctx context.Context, v any) (*model.ImportDomainScanReviewAssetInput, error) {
+func (ec *executionContext) unmarshalNImportDomainScanReviewAssetInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInput(ctx context.Context, v any) (*model.ImportDomainScanReviewAssetInput, error) {
 	res, err := ec.unmarshalInputImportDomainScanReviewAssetInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNImportDomainScanReviewFindingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewFindingInput(ctx context.Context, v any) (*model.ImportDomainScanReviewFindingInput, error) {
+func (ec *executionContext) unmarshalNImportDomainScanReviewFindingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewFindingInput(ctx context.Context, v any) (*model.ImportDomainScanReviewFindingInput, error) {
 	res, err := ec.unmarshalInputImportDomainScanReviewFindingInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNImportDomainScanReviewInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewInput(ctx context.Context, v any) (model.ImportDomainScanReviewInput, error) {
+func (ec *executionContext) unmarshalNImportDomainScanReviewInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewInput(ctx context.Context, v any) (model.ImportDomainScanReviewInput, error) {
 	res, err := ec.unmarshalInputImportDomainScanReviewInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNImportDomainScanReviewPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPayload(ctx context.Context, sel ast.SelectionSet, v model.ImportDomainScanReviewPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNImportDomainScanReviewPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPayload(ctx context.Context, sel ast.SelectionSet, v model.ImportDomainScanReviewPayload) graphql.Marshaler {
 	return ec._ImportDomainScanReviewPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNImportDomainScanReviewPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPayload(ctx context.Context, sel ast.SelectionSet, v *model.ImportDomainScanReviewPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNImportDomainScanReviewPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPayload(ctx context.Context, sel ast.SelectionSet, v *model.ImportDomainScanReviewPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -485,23 +485,23 @@ func (ec *executionContext) marshalNImportDomainScanReviewPayload2ᚖgithubᚗco
 	return ec._ImportDomainScanReviewPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNImportDomainScanReviewPlatformInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPlatformInput(ctx context.Context, v any) (*model.ImportDomainScanReviewPlatformInput, error) {
+func (ec *executionContext) unmarshalNImportDomainScanReviewPlatformInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPlatformInput(ctx context.Context, v any) (*model.ImportDomainScanReviewPlatformInput, error) {
 	res, err := ec.unmarshalInputImportDomainScanReviewPlatformInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNImportDomainScanReviewSystemInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewSystemInput(ctx context.Context, v any) (*model.ImportDomainScanReviewSystemInput, error) {
+func (ec *executionContext) unmarshalNImportDomainScanReviewSystemInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewSystemInput(ctx context.Context, v any) (*model.ImportDomainScanReviewSystemInput, error) {
 	res, err := ec.unmarshalInputImportDomainScanReviewSystemInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNImportDomainScanReviewVendorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewVendorInput, error) {
+func (ec *executionContext) unmarshalNImportDomainScanReviewVendorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewVendorInput, error) {
 	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ImportDomainScanReviewVendorInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNImportDomainScanReviewVendorInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNImportDomainScanReviewVendorInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -509,12 +509,12 @@ func (ec *executionContext) unmarshalNImportDomainScanReviewVendorInput2ᚕᚖgi
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalNImportDomainScanReviewVendorInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInput(ctx context.Context, v any) (*model.ImportDomainScanReviewVendorInput, error) {
+func (ec *executionContext) unmarshalNImportDomainScanReviewVendorInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInput(ctx context.Context, v any) (*model.ImportDomainScanReviewVendorInput, error) {
 	res, err := ec.unmarshalInputImportDomainScanReviewVendorInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOImportDomainScanReviewFindingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewFindingInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewFindingInput, error) {
+func (ec *executionContext) unmarshalOImportDomainScanReviewFindingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewFindingInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewFindingInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -523,7 +523,7 @@ func (ec *executionContext) unmarshalOImportDomainScanReviewFindingInput2ᚕᚖg
 	res := make([]*model.ImportDomainScanReviewFindingInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNImportDomainScanReviewFindingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewFindingInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNImportDomainScanReviewFindingInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewFindingInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -531,7 +531,7 @@ func (ec *executionContext) unmarshalOImportDomainScanReviewFindingInput2ᚕᚖg
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOImportDomainScanReviewPlatformInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPlatformInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewPlatformInput, error) {
+func (ec *executionContext) unmarshalOImportDomainScanReviewPlatformInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPlatformInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewPlatformInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -540,7 +540,7 @@ func (ec *executionContext) unmarshalOImportDomainScanReviewPlatformInput2ᚕᚖ
 	res := make([]*model.ImportDomainScanReviewPlatformInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNImportDomainScanReviewPlatformInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPlatformInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNImportDomainScanReviewPlatformInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPlatformInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -548,7 +548,7 @@ func (ec *executionContext) unmarshalOImportDomainScanReviewPlatformInput2ᚕᚖ
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOImportDomainScanReviewSystemInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewSystemInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewSystemInput, error) {
+func (ec *executionContext) unmarshalOImportDomainScanReviewSystemInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewSystemInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewSystemInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -557,7 +557,7 @@ func (ec *executionContext) unmarshalOImportDomainScanReviewSystemInput2ᚕᚖgi
 	res := make([]*model.ImportDomainScanReviewSystemInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNImportDomainScanReviewSystemInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewSystemInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNImportDomainScanReviewSystemInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewSystemInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}

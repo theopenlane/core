@@ -14550,7 +14550,7 @@ input NarrativeHistoryWhereInput {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/theopenlane/core/internal/ent/historygenerated.Noder") {
+interface Node @goModel(model: "github.com/theopenlane/core/v2/internal/ent/historygenerated.Noder") {
 	"""
 	The id of the object.
 	"""

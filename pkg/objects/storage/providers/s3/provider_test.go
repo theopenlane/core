@@ -22,9 +22,9 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 
 	"github.com/theopenlane/core/common/storagetypes"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
-	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/iam/tokens"
 )
 

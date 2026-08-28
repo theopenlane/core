@@ -38,7 +38,7 @@ func (ec *executionContext) _EmailTemplateBulkCreatePayload_emailTemplates(ctx c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.EmailTemplate) graphql.Marshaler {
-			return ec.marshalOEmailTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateᚄ(ctx, selections, v)
+			return ec.marshalOEmailTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _EmailTemplateBulkUpdatePayload_emailTemplates(ctx c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.EmailTemplate) graphql.Marshaler {
-			return ec.marshalOEmailTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateᚄ(ctx, selections, v)
+			return ec.marshalOEmailTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _EmailTemplateCreatePayload_emailTemplate(ctx contex
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailTemplate) graphql.Marshaler {
-			return ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx, selections, v)
+			return ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _EmailTemplateUpdatePayload_emailTemplate(ctx contex
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailTemplate) graphql.Marshaler {
-			return ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx, selections, v)
+			return ec.marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _EmailTemplateUpdatePayload(ctx context.Context, sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNEmailTemplateBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkCreatePayload) graphql.Marshaler {
 	return ec._EmailTemplateBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNEmailTemplateBulkCreatePayload2ᚖgithubᚗc
 	return ec._EmailTemplateBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkDeletePayload) graphql.Marshaler {
 	return ec._EmailTemplateBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNEmailTemplateBulkDeletePayload2ᚖgithubᚗc
 	return ec._EmailTemplateBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateBulkUpdatePayload) graphql.Marshaler {
 	return ec._EmailTemplateBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNEmailTemplateBulkUpdatePayload2ᚖgithubᚗc
 	return ec._EmailTemplateBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateCreatePayload) graphql.Marshaler {
 	return ec._EmailTemplateCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNEmailTemplateCreatePayload2ᚖgithubᚗcom�
 	return ec._EmailTemplateCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateDeletePayload) graphql.Marshaler {
 	return ec._EmailTemplateDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNEmailTemplateDeletePayload2ᚖgithubᚗcom�
 	return ec._EmailTemplateDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EmailTemplateUpdatePayload) graphql.Marshaler {
 	return ec._EmailTemplateUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEmailTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEmailTemplateUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEmailTemplateUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EmailTemplateUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

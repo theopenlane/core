@@ -38,7 +38,7 @@ func (ec *executionContext) _ScanBulkCreatePayload_scans(ctx context.Context, fi
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Scan) graphql.Marshaler {
-			return ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ(ctx, selections, v)
+			return ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _ScanBulkUpdatePayload_scans(ctx context.Context, fi
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Scan) graphql.Marshaler {
-			return ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ(ctx, selections, v)
+			return ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _ScanCreatePayload_scan(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Scan) graphql.Marshaler {
-			return ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan(ctx, selections, v)
+			return ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScan(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _ScanUpdatePayload_scan(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Scan) graphql.Marshaler {
-			return ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan(ctx, selections, v)
+			return ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScan(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _ScanUpdatePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNScanBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkCreatePayload) graphql.Marshaler {
 	return ec._ScanBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNScanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNScanBulkCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._ScanBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNScanBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkDeletePayload) graphql.Marshaler {
 	return ec._ScanBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNScanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNScanBulkDeletePayload2ᚖgithubᚗcomᚋtheo
 	return ec._ScanBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNScanBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkUpdatePayload) graphql.Marshaler {
 	return ec._ScanBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNScanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNScanBulkUpdatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._ScanBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNScanCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanCreatePayload) graphql.Marshaler {
 	return ec._ScanCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNScanCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNScanCreatePayload2ᚖgithubᚗcomᚋtheopenl
 	return ec._ScanCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNScanDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanDeletePayload) graphql.Marshaler {
 	return ec._ScanDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNScanDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNScanDeletePayload2ᚖgithubᚗcomᚋtheopenl
 	return ec._ScanDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNScanUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanUpdatePayload) graphql.Marshaler {
 	return ec._ScanUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNScanUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNScanUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

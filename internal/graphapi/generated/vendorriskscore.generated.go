@@ -38,7 +38,7 @@ func (ec *executionContext) _VendorRiskScoreBulkCreatePayload_vendorRiskScores(c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.VendorRiskScore) graphql.Marshaler {
-			return ec.marshalOVendorRiskScore2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreᚄ(ctx, selections, v)
+			return ec.marshalOVendorRiskScore2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _VendorRiskScoreBulkUpdatePayload_vendorRiskScores(c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.VendorRiskScore) graphql.Marshaler {
-			return ec.marshalOVendorRiskScore2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreᚄ(ctx, selections, v)
+			return ec.marshalOVendorRiskScore2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _VendorRiskScoreCreatePayload_vendorRiskScore(ctx co
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.VendorRiskScore) graphql.Marshaler {
-			return ec.marshalNVendorRiskScore2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorRiskScore(ctx, selections, v)
+			return ec.marshalNVendorRiskScore2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScore(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _VendorRiskScoreUpdatePayload_vendorRiskScore(ctx co
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.VendorRiskScore) graphql.Marshaler {
-			return ec.marshalNVendorRiskScore2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorRiskScore(ctx, selections, v)
+			return ec.marshalNVendorRiskScore2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScore(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _VendorRiskScoreUpdatePayload(ctx context.Context, s
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNVendorRiskScoreBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkCreatePayload) graphql.Marshaler {
 	return ec._VendorRiskScoreBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNVendorRiskScoreBulkCreatePayload2ᚖgithub�
 	return ec._VendorRiskScoreBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkDeletePayload) graphql.Marshaler {
 	return ec._VendorRiskScoreBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNVendorRiskScoreBulkDeletePayload2ᚖgithub�
 	return ec._VendorRiskScoreBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkUpdatePayload) graphql.Marshaler {
 	return ec._VendorRiskScoreBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNVendorRiskScoreBulkUpdatePayload2ᚖgithub�
 	return ec._VendorRiskScoreBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreCreatePayload) graphql.Marshaler {
 	return ec._VendorRiskScoreCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNVendorRiskScoreCreatePayload2ᚖgithubᚗcom
 	return ec._VendorRiskScoreCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreDeletePayload) graphql.Marshaler {
 	return ec._VendorRiskScoreDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNVendorRiskScoreDeletePayload2ᚖgithubᚗcom
 	return ec._VendorRiskScoreDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreUpdatePayload) graphql.Marshaler {
 	return ec._VendorRiskScoreUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNVendorRiskScoreUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

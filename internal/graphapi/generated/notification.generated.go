@@ -61,7 +61,7 @@ func (ec *executionContext) _NotificationCreatePayload_notification(ctx context.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Notification) graphql.Marshaler {
-			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
+			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
 		},
 		true,
 		true,
@@ -93,7 +93,7 @@ func (ec *executionContext) _NotificationUpdatePayload_notification(ctx context.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Notification) graphql.Marshaler {
-			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
+			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
 		},
 		true,
 		true,
@@ -242,11 +242,11 @@ func (ec *executionContext) _NotificationUpdatePayload(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNActionNotificationsReadPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, v model.ActionNotificationsReadPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNActionNotificationsReadPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, v model.ActionNotificationsReadPayload) graphql.Marshaler {
 	return ec._ActionNotificationsReadPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNActionNotificationsReadPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionNotificationsReadPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNActionNotificationsReadPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐActionNotificationsReadPayload(ctx context.Context, sel ast.SelectionSet, v *model.ActionNotificationsReadPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -256,11 +256,11 @@ func (ec *executionContext) marshalNActionNotificationsReadPayload2ᚖgithubᚗc
 	return ec._ActionNotificationsReadPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNotificationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNNotificationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationCreatePayload) graphql.Marshaler {
 	return ec._NotificationCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNNotificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNNotificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -270,11 +270,11 @@ func (ec *executionContext) marshalNNotificationCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._NotificationCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNotificationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNNotificationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationUpdatePayload) graphql.Marshaler {
 	return ec._NotificationUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNNotificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNotificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNNotificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

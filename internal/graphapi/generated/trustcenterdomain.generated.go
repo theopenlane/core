@@ -37,7 +37,7 @@ func (ec *executionContext) _TrustCenterDomainCreatePayload_customDomain(ctx con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomDomain) graphql.Marshaler {
-			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
+			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
 		},
 		true,
 		true,
@@ -154,16 +154,16 @@ func (ec *executionContext) _TrustCenterDomainCreatePayload(ctx context.Context,
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNCreateTrustCenterDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateTrustCenterDomainInput(ctx context.Context, v any) (model.CreateTrustCenterDomainInput, error) {
+func (ec *executionContext) unmarshalNCreateTrustCenterDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCreateTrustCenterDomainInput(ctx context.Context, v any) (model.CreateTrustCenterDomainInput, error) {
 	res, err := ec.unmarshalInputCreateTrustCenterDomainInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterDomainCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterDomainCreatePayload) graphql.Marshaler {
 	return ec._TrustCenterDomainCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDomainCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDomainCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

@@ -38,7 +38,7 @@ func (ec *executionContext) _TFASettingCreatePayload_tfaSetting(ctx context.Cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TFASetting) graphql.Marshaler {
-			return ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTFASetting(ctx, selections, v)
+			return ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASetting(ctx, selections, v)
 		},
 		true,
 		true,
@@ -116,7 +116,7 @@ func (ec *executionContext) _TFASettingUpdatePayload_tfaSetting(ctx context.Cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TFASetting) graphql.Marshaler {
-			return ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTFASetting(ctx, selections, v)
+			return ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASetting(ctx, selections, v)
 		},
 		true,
 		true,
@@ -321,11 +321,11 @@ func (ec *executionContext) _TFASettingUpdatePayload(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNTFASettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TFASettingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTFASettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTFASettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TFASettingCreatePayload) graphql.Marshaler {
 	return ec._TFASettingCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTFASettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTFASettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTFASettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -335,11 +335,11 @@ func (ec *executionContext) marshalNTFASettingCreatePayload2ᚖgithubᚗcomᚋth
 	return ec._TFASettingCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTFASettingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TFASettingUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTFASettingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTFASettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TFASettingUpdatePayload) graphql.Marshaler {
 	return ec._TFASettingUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTFASettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTFASettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTFASettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

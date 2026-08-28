@@ -15,8 +15,8 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/objects"
-	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
 )
 
 const (

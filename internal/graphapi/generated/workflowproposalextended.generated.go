@@ -37,7 +37,7 @@ func (ec *executionContext) _WorkflowProposalSubmitPayload_workflowProposal(ctx 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowProposal) graphql.Marshaler {
-			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
+			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
 		},
 		true,
 		true,
@@ -69,7 +69,7 @@ func (ec *executionContext) _WorkflowProposalUpdatePayload_workflowProposal(ctx 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowProposal) graphql.Marshaler {
-			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
+			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
 		},
 		true,
 		true,
@@ -101,7 +101,7 @@ func (ec *executionContext) _WorkflowProposalWithdrawPayload_workflowProposal(ct
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowProposal) graphql.Marshaler {
-			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
+			return ec.marshalNWorkflowProposal2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx, selections, v)
 		},
 		true,
 		true,
@@ -287,16 +287,16 @@ func (ec *executionContext) _WorkflowProposalWithdrawPayload(ctx context.Context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNUpdateWorkflowProposalChangesInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUpdateWorkflowProposalChangesInput(ctx context.Context, v any) (model.UpdateWorkflowProposalChangesInput, error) {
+func (ec *executionContext) unmarshalNUpdateWorkflowProposalChangesInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐUpdateWorkflowProposalChangesInput(ctx context.Context, v any) (model.UpdateWorkflowProposalChangesInput, error) {
 	res, err := ec.unmarshalInputUpdateWorkflowProposalChangesInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalSubmitPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalSubmitPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalSubmitPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalSubmitPayload) graphql.Marshaler {
 	return ec._WorkflowProposalSubmitPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalSubmitPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalSubmitPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalSubmitPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalSubmitPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -306,11 +306,11 @@ func (ec *executionContext) marshalNWorkflowProposalSubmitPayload2ᚖgithubᚗco
 	return ec._WorkflowProposalSubmitPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalUpdatePayload) graphql.Marshaler {
 	return ec._WorkflowProposalUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -320,11 +320,11 @@ func (ec *executionContext) marshalNWorkflowProposalUpdatePayload2ᚖgithubᚗco
 	return ec._WorkflowProposalUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowProposalWithdrawPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalWithdrawPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalWithdrawPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowProposalWithdrawPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalWithdrawPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowProposalWithdrawPayload) graphql.Marshaler {
 	return ec._WorkflowProposalWithdrawPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowProposalWithdrawPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalWithdrawPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalWithdrawPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowProposalWithdrawPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowProposalWithdrawPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowProposalWithdrawPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

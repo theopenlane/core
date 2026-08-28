@@ -154,7 +154,7 @@ func (ec *executionContext) _GroupPermissionConnection_edges(ctx context.Context
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.GroupPermissionEdge) graphql.Marshaler {
-			return ec.marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx, selections, v)
+			return ec.marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx, selections, v)
 		},
 		true,
 		false,
@@ -241,7 +241,7 @@ func (ec *executionContext) _GroupPermissionEdge_node(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.GroupPermission) graphql.Marshaler {
-			return ec.marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission(ctx, selections, v)
+			return ec.marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermission(ctx, selections, v)
 		},
 		true,
 		false,
@@ -355,7 +355,7 @@ func (ec *executionContext) unmarshalInputGroupPermissionOrder(ctx context.Conte
 			it.Direction = data
 		case "field":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			data, err := ec.unmarshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx, v)
+			data, err := ec.unmarshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -385,21 +385,21 @@ func (ec *executionContext) unmarshalInputGroupPermissionWhereInput(ctx context.
 		switch k {
 		case "not":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
-			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx, v)
+			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Not = data
 		case "and":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
-			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx, v)
+			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.And = data
 		case "or":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
-			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx, v)
+			data, err := ec.unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -871,16 +871,16 @@ func (ec *executionContext) _GroupPermissionEdge(ctx context.Context, sel ast.Se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNGroupMembersInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInput(ctx context.Context, v any) (*model.GroupMembersInput, error) {
+func (ec *executionContext) unmarshalNGroupMembersInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInput(ctx context.Context, v any) (*model.GroupMembersInput, error) {
 	res, err := ec.unmarshalInputGroupMembersInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNGroupPermissionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, v model.GroupPermissionConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupPermissionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, v model.GroupPermissionConnection) graphql.Marshaler {
 	return ec._GroupPermissionConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNGroupPermissionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermissionConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupPermissionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionConnection(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermissionConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -890,17 +890,17 @@ func (ec *executionContext) marshalNGroupPermissionConnection2ᚖgithubᚗcomᚋ
 	return ec._GroupPermissionConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx context.Context, v any) (model.GroupPermissionOrderField, error) {
+func (ec *executionContext) unmarshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx context.Context, v any) (model.GroupPermissionOrderField, error) {
 	var res model.GroupPermissionOrderField
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx context.Context, sel ast.SelectionSet, v model.GroupPermissionOrderField) graphql.Marshaler {
+func (ec *executionContext) marshalNGroupPermissionOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionOrderField(ctx context.Context, sel ast.SelectionSet, v model.GroupPermissionOrderField) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx context.Context, v any) (*model.GroupPermissionWhereInput, error) {
+func (ec *executionContext) unmarshalNGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx context.Context, v any) (*model.GroupPermissionWhereInput, error) {
 	res, err := ec.unmarshalInputGroupPermissionWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
@@ -915,7 +915,7 @@ func (ec *executionContext) marshalNPermission2githubᚗcomᚋtheopenlaneᚋcore
 	return v
 }
 
-func (ec *executionContext) unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInputᚄ(ctx context.Context, v any) ([]*model.GroupMembersInput, error) {
+func (ec *executionContext) unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInputᚄ(ctx context.Context, v any) ([]*model.GroupMembersInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -924,7 +924,7 @@ func (ec *executionContext) unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋthe
 	res := make([]*model.GroupMembersInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNGroupMembersInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNGroupMembersInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupMembersInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -932,34 +932,34 @@ func (ec *executionContext) unmarshalOGroupMembersInput2ᚕᚖgithubᚗcomᚋthe
 	return res, nil
 }
 
-func (ec *executionContext) marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermission(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermission) graphql.Marshaler {
+func (ec *executionContext) marshalOGroupPermission2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermission(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermission) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._GroupPermission(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx context.Context, sel ast.SelectionSet, v []*model.GroupPermissionEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOGroupPermissionEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx context.Context, sel ast.SelectionSet, v []*model.GroupPermissionEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalOGroupPermissionEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx, sel, v[i])
+		return ec.marshalOGroupPermissionEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx, sel, v[i])
 	})
 
 	return ret
 }
 
-func (ec *executionContext) marshalOGroupPermissionEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermissionEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOGroupPermissionEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionEdge(ctx context.Context, sel ast.SelectionSet, v *model.GroupPermissionEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._GroupPermissionEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx context.Context, v any) ([]*model.GroupPermissionWhereInput, error) {
+func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInputᚄ(ctx context.Context, v any) ([]*model.GroupPermissionWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -968,7 +968,7 @@ func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗc
 	res := make([]*model.GroupPermissionWhereInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -976,7 +976,7 @@ func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚕᚖgithubᚗc
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx context.Context, v any) (*model.GroupPermissionWhereInput, error) {
+func (ec *executionContext) unmarshalOGroupPermissionWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupPermissionWhereInput(ctx context.Context, v any) (*model.GroupPermissionWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}

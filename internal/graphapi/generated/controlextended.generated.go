@@ -85,7 +85,7 @@ func (ec *executionContext) _ControlCategoryConnection_edges(ctx context.Context
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlCategoryEdge) graphql.Marshaler {
-			return ec.marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, selections, v)
+			return ec.marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, selections, v)
 		},
 		true,
 		false,
@@ -172,7 +172,7 @@ func (ec *executionContext) _ControlCategoryEdge_node(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ControlCategory) graphql.Marshaler {
-			return ec.marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx, selections, v)
+			return ec.marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx, selections, v)
 		},
 		true,
 		true,
@@ -250,7 +250,7 @@ func (ec *executionContext) _ControlChange_diffs(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlFieldDiff) graphql.Marshaler {
-			return ec.marshalNControlFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiffᚄ(ctx, selections, v)
+			return ec.marshalNControlFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiffᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -351,7 +351,7 @@ func (ec *executionContext) _ControlDiffPayload_changes(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlChange) graphql.Marshaler {
-			return ec.marshalNControlChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlChangeᚄ(ctx, selections, v)
+			return ec.marshalNControlChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlChangeᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -498,7 +498,7 @@ func (ec *executionContext) _ControlGroup_controls(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlConnection) graphql.Marshaler {
-			return ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, selections, v)
+			return ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, selections, v)
 		},
 		true,
 		true,
@@ -530,7 +530,7 @@ func (ec *executionContext) _ControlGroupConnection_edges(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.ControlGroupEdge) graphql.Marshaler {
-			return ec.marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ(ctx, selections, v)
+			return ec.marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -594,7 +594,7 @@ func (ec *executionContext) _ControlGroupEdge_node(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *model.ControlGroup) graphql.Marshaler {
-			return ec.marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx, selections, v)
+			return ec.marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx, selections, v)
 		},
 		true,
 		true,
@@ -626,7 +626,7 @@ func (ec *executionContext) _RelatedControlConnection_edges(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.RelatedControlEdge) graphql.Marshaler {
-			return ec.marshalORelatedControlEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlEdge(ctx, selections, v)
+			return ec.marshalORelatedControlEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRelatedControlEdge(ctx, selections, v)
 		},
 		true,
 		false,
@@ -681,7 +681,7 @@ func (ec *executionContext) _RelatedControlEdge_node(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Control) graphql.Marshaler {
-			return ec.marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControl(ctx, selections, v)
+			return ec.marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControl(ctx, selections, v)
 		},
 		true,
 		true,
@@ -713,7 +713,7 @@ func (ec *executionContext) _RelatedSubcontrolConnection_edges(ctx context.Conte
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.RelatedSubcontrolEdge) graphql.Marshaler {
-			return ec.marshalORelatedSubcontrolEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolEdge(ctx, selections, v)
+			return ec.marshalORelatedSubcontrolEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolEdge(ctx, selections, v)
 		},
 		true,
 		false,
@@ -768,7 +768,7 @@ func (ec *executionContext) _RelatedSubcontrolEdge_node(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Subcontrol) graphql.Marshaler {
-			return ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol(ctx, selections, v)
+			return ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrol(ctx, selections, v)
 		},
 		true,
 		true,
@@ -967,7 +967,7 @@ func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Co
 			it.InternalPolicyID = data
 		case "controlInput":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlInput"))
-			data, err := ec.unmarshalOCreateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInput(ctx, v)
+			data, err := ec.unmarshalOCreateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCreateControlInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1008,7 +1008,7 @@ func (ec *executionContext) unmarshalInputControlCategoryOrder(ctx context.Conte
 			it.Direction = data
 		case "field":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			data, err := ec.unmarshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx, v)
+			data, err := ec.unmarshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -1643,7 +1643,7 @@ func (ec *executionContext) _RelatedSubcontrolEdge(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategory) graphql.Marshaler {
+func (ec *executionContext) marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategory) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1653,7 +1653,7 @@ func (ec *executionContext) marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlan
 	return ec._ControlCategory(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategoryEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategoryEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1663,26 +1663,26 @@ func (ec *executionContext) marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheope
 	return ec._ControlCategoryEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNControlCategoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrder(ctx context.Context, v any) (*model.ControlCategoryOrder, error) {
+func (ec *executionContext) unmarshalNControlCategoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrder(ctx context.Context, v any) (*model.ControlCategoryOrder, error) {
 	res, err := ec.unmarshalInputControlCategoryOrder(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx context.Context, v any) (model.ControlCategoryOrderField, error) {
+func (ec *executionContext) unmarshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx context.Context, v any) (model.ControlCategoryOrderField, error) {
 	var res model.ControlCategoryOrderField
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx context.Context, sel ast.SelectionSet, v model.ControlCategoryOrderField) graphql.Marshaler {
+func (ec *executionContext) marshalNControlCategoryOrderField2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderField(ctx context.Context, sel ast.SelectionSet, v model.ControlCategoryOrderField) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNControlChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlChangeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlChange) graphql.Marshaler {
+func (ec *executionContext) marshalNControlChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlChangeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlChange) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNControlChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlChange(ctx, sel, v[i])
+		return ec.marshalNControlChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlChange(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -1694,7 +1694,7 @@ func (ec *executionContext) marshalNControlChange2ᚕᚖgithubᚗcomᚋtheopenla
 	return ret
 }
 
-func (ec *executionContext) marshalNControlChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlChange(ctx context.Context, sel ast.SelectionSet, v *model.ControlChange) graphql.Marshaler {
+func (ec *executionContext) marshalNControlChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlChange(ctx context.Context, sel ast.SelectionSet, v *model.ControlChange) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1704,16 +1704,16 @@ func (ec *executionContext) marshalNControlChange2ᚖgithubᚗcomᚋtheopenlane�
 	return ec._ControlChange(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNControlDiffInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlDiffInput(ctx context.Context, v any) (model.ControlDiffInput, error) {
+func (ec *executionContext) unmarshalNControlDiffInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlDiffInput(ctx context.Context, v any) (model.ControlDiffInput, error) {
 	res, err := ec.unmarshalInputControlDiffInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNControlDiffPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlDiffPayload(ctx context.Context, sel ast.SelectionSet, v model.ControlDiffPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNControlDiffPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlDiffPayload(ctx context.Context, sel ast.SelectionSet, v model.ControlDiffPayload) graphql.Marshaler {
 	return ec._ControlDiffPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNControlDiffPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlDiffPayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlDiffPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNControlDiffPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlDiffPayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlDiffPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1723,11 +1723,11 @@ func (ec *executionContext) marshalNControlDiffPayload2ᚖgithubᚗcomᚋtheopen
 	return ec._ControlDiffPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiffᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlFieldDiff) graphql.Marshaler {
+func (ec *executionContext) marshalNControlFieldDiff2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiffᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlFieldDiff) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNControlFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiff(ctx, sel, v[i])
+		return ec.marshalNControlFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiff(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -1739,7 +1739,7 @@ func (ec *executionContext) marshalNControlFieldDiff2ᚕᚖgithubᚗcomᚋtheope
 	return ret
 }
 
-func (ec *executionContext) marshalNControlFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiff(ctx context.Context, sel ast.SelectionSet, v *model.ControlFieldDiff) graphql.Marshaler {
+func (ec *executionContext) marshalNControlFieldDiff2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlFieldDiff(ctx context.Context, sel ast.SelectionSet, v *model.ControlFieldDiff) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1749,7 +1749,7 @@ func (ec *executionContext) marshalNControlFieldDiff2ᚖgithubᚗcomᚋtheopenla
 	return ec._ControlFieldDiff(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroup) graphql.Marshaler {
+func (ec *executionContext) marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroup) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1759,11 +1759,11 @@ func (ec *executionContext) marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlane�
 	return ec._ControlGroup(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlGroupConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v model.ControlGroupConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNControlGroupConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v model.ControlGroupConnection) graphql.Marshaler {
 	return ec._ControlGroupConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNControlGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNControlGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1773,11 +1773,11 @@ func (ec *executionContext) marshalNControlGroupConnection2ᚖgithubᚗcomᚋthe
 	return ec._ControlGroupConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlGroupEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlGroupEdge) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdge(ctx, sel, v[i])
+		return ec.marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdge(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -1789,7 +1789,7 @@ func (ec *executionContext) marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheope
 	return ret
 }
 
-func (ec *executionContext) marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupEdge) graphql.Marshaler {
+func (ec *executionContext) marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -1799,7 +1799,7 @@ func (ec *executionContext) marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenla
 	return ec._ControlGroupEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCloneControlInput(ctx context.Context, v any) (*model.CloneControlInput, error) {
+func (ec *executionContext) unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCloneControlInput(ctx context.Context, v any) (*model.CloneControlInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -1807,27 +1807,27 @@ func (ec *executionContext) unmarshalOCloneControlInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ControlCategoryEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v []*model.ControlCategoryEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalOControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, sel, v[i])
+		return ec.marshalOControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, sel, v[i])
 	})
 
 	return ret
 }
 
-func (ec *executionContext) marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlCategoryEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ControlCategoryEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, sel, v[i])
+		return ec.marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -1839,14 +1839,14 @@ func (ec *executionContext) marshalOControlCategoryEdge2ᚕᚖgithubᚗcomᚋthe
 	return ret
 }
 
-func (ec *executionContext) marshalOControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategoryEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategoryEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ControlCategoryEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOControlCategoryOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderᚄ(ctx context.Context, v any) ([]*model.ControlCategoryOrder, error) {
+func (ec *executionContext) unmarshalOControlCategoryOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrderᚄ(ctx context.Context, v any) ([]*model.ControlCategoryOrder, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -1855,7 +1855,7 @@ func (ec *executionContext) unmarshalOControlCategoryOrder2ᚕᚖgithubᚗcomᚋ
 	res := make([]*model.ControlCategoryOrder, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNControlCategoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrder(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNControlCategoryOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlCategoryOrder(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -1863,40 +1863,40 @@ func (ec *executionContext) unmarshalOControlCategoryOrder2ᚕᚖgithubᚗcomᚋ
 	return res, nil
 }
 
-func (ec *executionContext) marshalORelatedControlEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlEdge(ctx context.Context, sel ast.SelectionSet, v []*model.RelatedControlEdge) graphql.Marshaler {
+func (ec *executionContext) marshalORelatedControlEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRelatedControlEdge(ctx context.Context, sel ast.SelectionSet, v []*model.RelatedControlEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalORelatedControlEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlEdge(ctx, sel, v[i])
+		return ec.marshalORelatedControlEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRelatedControlEdge(ctx, sel, v[i])
 	})
 
 	return ret
 }
 
-func (ec *executionContext) marshalORelatedControlEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedControlEdge(ctx context.Context, sel ast.SelectionSet, v *model.RelatedControlEdge) graphql.Marshaler {
+func (ec *executionContext) marshalORelatedControlEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRelatedControlEdge(ctx context.Context, sel ast.SelectionSet, v *model.RelatedControlEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._RelatedControlEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalORelatedSubcontrolEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolEdge(ctx context.Context, sel ast.SelectionSet, v []*model.RelatedSubcontrolEdge) graphql.Marshaler {
+func (ec *executionContext) marshalORelatedSubcontrolEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolEdge(ctx context.Context, sel ast.SelectionSet, v []*model.RelatedSubcontrolEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalORelatedSubcontrolEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolEdge(ctx, sel, v[i])
+		return ec.marshalORelatedSubcontrolEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolEdge(ctx, sel, v[i])
 	})
 
 	return ret
 }
 
-func (ec *executionContext) marshalORelatedSubcontrolEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolEdge(ctx context.Context, sel ast.SelectionSet, v *model.RelatedSubcontrolEdge) graphql.Marshaler {
+func (ec *executionContext) marshalORelatedSubcontrolEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRelatedSubcontrolEdge(ctx context.Context, sel ast.SelectionSet, v *model.RelatedSubcontrolEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

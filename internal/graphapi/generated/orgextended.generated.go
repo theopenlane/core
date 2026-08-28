@@ -38,7 +38,7 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload_organization(c
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
-			return ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganization(ctx, selections, v)
+			return ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx, selections, v)
 		},
 		true,
 		true,
@@ -176,16 +176,16 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload(ctx context.Co
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNOrgMembersInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInput(ctx context.Context, v any) (*model.OrgMembersInput, error) {
+func (ec *executionContext) unmarshalNOrgMembersInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInput(ctx context.Context, v any) (*model.OrgMembersInput, error) {
 	res, err := ec.unmarshalInputOrgMembersInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrganizationTransferOwnershipPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationTransferOwnershipPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationTransferOwnershipPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationTransferOwnershipPayload) graphql.Marshaler {
 	return ec._OrganizationTransferOwnershipPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNOrganizationTransferOwnershipPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationTransferOwnershipPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNOrganizationTransferOwnershipPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationTransferOwnershipPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -195,7 +195,7 @@ func (ec *executionContext) marshalNOrganizationTransferOwnershipPayload2ᚖgith
 	return ec._OrganizationTransferOwnershipPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInputᚄ(ctx context.Context, v any) ([]*model.OrgMembersInput, error) {
+func (ec *executionContext) unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInputᚄ(ctx context.Context, v any) ([]*model.OrgMembersInput, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -204,7 +204,7 @@ func (ec *executionContext) unmarshalOOrgMembersInput2ᚕᚖgithubᚗcomᚋtheop
 	res := make([]*model.OrgMembersInput, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNOrgMembersInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNOrgMembersInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrgMembersInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
