@@ -2,9 +2,6 @@ module github.com/theopenlane/core/common
 
 go 1.26.6
 
-// temp fix while core/v2 is released and can be picked up by external deps
-replace github.com/theopenlane/core/v2 => ..
-
 require (
 	entgo.io/ent v0.14.6
 	github.com/go-webauthn/webauthn v0.17.4
@@ -14,7 +11,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.12.1
-	github.com/theopenlane/core/v2 v2.2.3
+	github.com/theopenlane/core/v2 v2.3.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.33.0
 	github.com/theopenlane/utils v0.7.1
