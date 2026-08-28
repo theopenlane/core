@@ -2,6 +2,7 @@ package cloudflare
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	cf "github.com/cloudflare/cloudflare-go/v7"
@@ -15,6 +16,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
+
+// permissionGroupMetaLabelKey is the meta attribute holding a permission group's human readable label
+const permissionGroupMetaLabelKey = "label"
 
 // cloudflareMemberPayload is the normalized payload for a Cloudflare account member
 type cloudflareMemberPayload struct {
@@ -207,14 +211,20 @@ func listDirectoryUsers(ctx context.Context, client *CloudflareClient, accountID
 	return members, nil
 }
 
-// listDirectoryGroups pages through all Cloudflare roles and groups for the given account
+// listDirectoryGroups pages through all Cloudflare user groups and permission groups for the given account
 func listDirectoryGroups(ctx context.Context, client *CloudflareClient, accountID string) ([]cloudflareGroupPayload, error) {
 	iterUser := client.IAM.UserGroups.ListAutoPaging(ctx, iam.UserGroupListParams{
 		AccountID: cf.F(accountID),
 	})
 
 	groups, err := parseResponseData(ctx, iterUser, func(g iam.UserGroupListResponse) cloudflareGroupPayload {
-		return cloudflareGroupPayload{ID: g.ID, Name: g.Name, LastModifiedTime: g.ModifiedOn, CreatedTime: g.CreatedOn, Payload: g}
+		return cloudflareGroupPayload{
+			ID:               g.ID,
+			Name:             g.Name,
+			LastModifiedTime: g.ModifiedOn,
+			CreatedTime:      g.CreatedOn,
+			Payload:          rawPayload(g.JSON.RawJSON(), g),
+		}
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error pulling user groups")
@@ -226,28 +236,52 @@ func listDirectoryGroups(ctx context.Context, client *CloudflareClient, accountI
 	})
 
 	permissionGroups, err := parseResponseData(ctx, iterPerm, func(g iam.PermissionGroupListResponse) cloudflareGroupPayload {
-		return cloudflareGroupPayload{ID: g.ID, Name: g.Name, Payload: g}
+		return cloudflareGroupPayload{
+			ID:          g.ID,
+			Name:        g.Name,
+			Description: permissionGroupLabel(g),
+			Payload:     rawPayload(g.JSON.RawJSON(), g),
+		}
 	})
 	if err != nil {
-		return nil, err
+		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error pulling permission groups")
+		return nil, ErrGroupsFetchFailed
 	}
 
 	groups = append(groups, permissionGroups...)
 
-	iterRoles := client.Accounts.Roles.ListAutoPaging(ctx, accounts.RoleListParams{
-		AccountID: cf.F(accountID),
-	})
+	return groups, nil
+}
 
-	roles, err := parseResponseData(ctx, iterRoles, func(g shared.Role) cloudflareGroupPayload {
-		return cloudflareGroupPayload{ID: g.ID, Name: g.Name, Description: g.Description, Payload: g}
-	})
-	if err != nil {
-		return nil, err
+// permissionGroupLabel pulls the human readable label out of a permission group's meta attributes.
+// The typed SDK struct models meta as a single key/value pair, so the label is read from the raw
+// response when it comes back as the documented object of attributes instead
+func permissionGroupLabel(g iam.PermissionGroupListResponse) string {
+	if g.Meta.Key == permissionGroupMetaLabelKey {
+		return g.Meta.Value
 	}
 
-	groups = append(groups, roles...)
+	var raw struct {
+		Meta struct {
+			Label string `json:"label"`
+		} `json:"meta"`
+	}
 
-	return groups, nil
+	if err := json.Unmarshal([]byte(g.JSON.RawJSON()), &raw); err != nil {
+		return ""
+	}
+
+	return raw.Meta.Label
+}
+
+// rawPayload prefers the untouched API response so attributes the typed SDK struct does not model
+// (such as a permission group's meta label and scopes) survive into the stored payload
+func rawPayload(raw string, fallback any) any {
+	if raw == "" {
+		return fallback
+	}
+
+	return json.RawMessage(raw)
 }
 
 // parseResponseData is a generic helper for iterating through results

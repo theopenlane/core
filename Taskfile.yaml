@@ -314,7 +314,7 @@ tasks:
     silent: true
     desc: runs golangci-lint only on the graphapi package for CI, excluding generated code
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose $(go list ./... | grep internal/graphapi | grep -v generated | sed 's|github.com/theopenlane/core[^/]*/||' | sed 's|^|./|')
+      - golangci-lint run --config=.golangci.yaml --verbose $(go list ./... | grep internal/graphapi | grep -v generated | sed -E 's|^github.com/theopenlane/core(/v[0-9]+)?/||' | sed 's|^|./|')
 
   go:lint:ci:handlers:
     silent: true
@@ -332,8 +332,8 @@ tasks:
           | grep -v /internal/graphapi \
           | grep -v /internal/httpserve/handlers \
           | grep -v generated \
-          | grep -v '^github.com/theopenlane/core$' \
-          | sed 's|github.com/theopenlane/core[^/]*/||' \
+          | grep -vE '^github.com/theopenlane/core(/v[0-9]+)?$' \
+          | sed -E 's|^github.com/theopenlane/core(/v[0-9]+)?/||' \
           | sed 's|^|./|'
         )
 
