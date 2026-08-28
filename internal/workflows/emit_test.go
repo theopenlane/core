@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 func TestEmitWorkflowEventNoRuntime(t *testing.T) {

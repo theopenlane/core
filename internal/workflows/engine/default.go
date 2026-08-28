@@ -1,6 +1,6 @@
 package engine
 
-import "github.com/theopenlane/core/pkg/singleton"
+import "github.com/theopenlane/core/v2/pkg/singleton"
 
 // defaultEngine holds the process-wide workflow engine
 var defaultEngine singleton.Value[WorkflowEngine]

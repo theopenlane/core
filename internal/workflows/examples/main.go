@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	api "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows"
 	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 	"github.com/theopenlane/utils/ulids"

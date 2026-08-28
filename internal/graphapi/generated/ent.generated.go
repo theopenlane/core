@@ -17,8 +17,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/theopenlane/entx"
 	"github.com/vektah/gqlparser/v2/ast"
 )

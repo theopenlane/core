@@ -22,9 +22,9 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	r2provider "github.com/theopenlane/core/pkg/objects/storage/providers/r2"
-	"github.com/theopenlane/core/pkg/objects/storage/proxy"
+	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
+	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/iam/tokens"
 )
 

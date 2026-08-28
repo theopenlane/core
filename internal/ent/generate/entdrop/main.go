@@ -1365,7 +1365,7 @@ func entcClosure(root string) map[string]bool {
 		return out
 	}
 	pkgs := map[string]bool{}
-	const mod = "github.com/theopenlane/core/"
+	const mod = "github.com/theopenlane/core/v2/"
 	for _, target := range []string{"./internal/ent/schema", "./internal/ent/historyschema"} {
 		cmd := exec.Command("go", "list", "-deps", "-tags=codegen", target)
 		cmd.Dir = root

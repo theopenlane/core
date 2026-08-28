@@ -19,7 +19,7 @@ import (
 
 	corecmd "github.com/theopenlane/core/cli/cmd"
 	models "github.com/theopenlane/core/common/openapi"
-	sso "github.com/theopenlane/core/pkg/ssoutils"
+	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 	openlane "github.com/theopenlane/go-client"
 )
 

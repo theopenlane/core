@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/workflows/observability"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/workflows/observability"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 var (

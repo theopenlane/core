@@ -8,9 +8,9 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	coreconfig "github.com/theopenlane/core/config"
-	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
+	coreconfig "github.com/theopenlane/core/v2/config"
+	serverconfig "github.com/theopenlane/core/v2/internal/httpserve/config"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
 )
 
 func TestGraphRateLimitConfig(t *testing.T) {

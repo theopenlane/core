@@ -9,9 +9,9 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/graphapi"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/internal/graphapi"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 )
 
 type metadataProvider struct {

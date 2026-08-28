@@ -8,7 +8,7 @@ import (
 
 	"github.com/stripe/stripe-go/v86"
 
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (

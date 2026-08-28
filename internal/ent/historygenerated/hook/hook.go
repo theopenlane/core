@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 )
 
 // The ActionPlanHistoryFunc type is an adapter to allow the use of ordinary

@@ -9,7 +9,7 @@ import (
 
 	"github.com/invopop/jsonschema"
 
-	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/v2/pkg/catalog"
 )
 
 func main() {

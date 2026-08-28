@@ -1,9 +1,9 @@
 package zitadel
 
 import (
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for Zitadel user payloads mapped to DirectoryAccount

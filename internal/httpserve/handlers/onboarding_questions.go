@@ -5,8 +5,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/onboarding"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/onboarding"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 func (h *Handler) ListOnboardingQuestions(ctx echo.Context) error {

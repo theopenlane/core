@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 )
 
 // WaitForIdentityHolderLink polls until the directory account has an identity_holder_id set or times out

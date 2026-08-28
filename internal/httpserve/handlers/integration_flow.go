@@ -13,10 +13,10 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keymaker"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // StartIntegrationAuth initiates the auth flow for an integration definition

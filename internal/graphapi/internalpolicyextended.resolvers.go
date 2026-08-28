@@ -10,12 +10,12 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations/definitions/googledrive"
-	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // LiveExternalContents is the resolver for the liveExternalContents field

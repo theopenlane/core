@@ -10,16 +10,16 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	intobvs "github.com/theopenlane/core/internal/integrations/observability"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/mapx"
-	"github.com/theopenlane/core/pkg/metrics"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keymaker"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
 // BeginAuth starts one definition auth flow through the runtime-managed keymaker service

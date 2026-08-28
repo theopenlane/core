@@ -16,7 +16,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 	"github.com/theopenlane/entx/history"
 	"github.com/vektah/gqlparser/v2/ast"
 )

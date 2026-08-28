@@ -10,7 +10,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman/providers/mock"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // MockRuntimeConfig returns a RuntimeEmailConfig backed by the mock provider

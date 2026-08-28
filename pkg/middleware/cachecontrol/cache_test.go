@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
+	"github.com/theopenlane/core/v2/pkg/middleware/cachecontrol"
 )
 
 var epoch = time.Unix(0, 0).Format(time.RFC1123)

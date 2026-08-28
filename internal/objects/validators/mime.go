@@ -1,8 +1,8 @@
 package validators
 
 import (
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // importSchemaMimeTypes is a list of mime-types that are accepted for files uploaded as part of the import schema process (e.g. procedure, internal policy, action plan).

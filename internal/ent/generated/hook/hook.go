@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // The APITokenFunc type is an adapter to allow the use of ordinary

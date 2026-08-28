@@ -13,8 +13,8 @@ import (
 	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	sso "github.com/theopenlane/core/pkg/ssoutils"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
 // withOverrides injects a custom userMustSSOFunc for testing. userMustSSOFunc encapsulates the

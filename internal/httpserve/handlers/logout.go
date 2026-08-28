@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // LogoutHandler revokes the caller's access and refresh tokens and deletes their server-side

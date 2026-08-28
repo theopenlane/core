@@ -16,8 +16,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/httpsling"
 
-	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // maxPageBytes bounds how much of a landing page is read while scanning for icon links (2MB)

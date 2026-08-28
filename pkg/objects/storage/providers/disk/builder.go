@@ -5,7 +5,7 @@ import (
 
 	"github.com/samber/mo"
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // Builder creates disk providers for the client pool

@@ -7,7 +7,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
 	"golang.org/x/net/publicsuffix"
 
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // vendorGroup accumulates every signal (wappalyzer detections, third-party

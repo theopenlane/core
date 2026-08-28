@@ -7,12 +7,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 	// required by schema hooks.
-	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
+	_ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/theopenlane/core/internal/ent/historygenerated/migrate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/migrate"
 )
 
 type (

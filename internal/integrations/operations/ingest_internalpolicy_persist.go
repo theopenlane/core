@@ -4,8 +4,8 @@ import (
 	"context"
 	"slices"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // persistInternalPolicyInput upserts one InternalPolicy record through the catalog-driven entityops upsert

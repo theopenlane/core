@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
 func TestPopulateProviderHints(t *testing.T) {

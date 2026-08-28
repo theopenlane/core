@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
-	fgamodel "github.com/theopenlane/core/fga/model"
-	"github.com/theopenlane/core/pkg/logx"
+	fgamodel "github.com/theopenlane/core/v2/fga/model"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ScopesHandler lists available scopes that can be used for api tokens

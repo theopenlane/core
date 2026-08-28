@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // UserInfo returns the user information for the authenticated user

@@ -3,7 +3,7 @@ package types //nolint:revive
 import (
 	"encoding/json"
 
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // GetTagsForOperationContext safely translates an operation context to river-safe tags

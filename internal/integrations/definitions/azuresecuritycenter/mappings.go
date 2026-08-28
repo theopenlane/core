@@ -1,8 +1,8 @@
 package azuresecuritycenter
 
 import (
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
 // mapExprAssessment maps AssessmentPayload fields to the Vulnerability schema.

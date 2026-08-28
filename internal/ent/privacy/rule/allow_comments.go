@@ -7,9 +7,9 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/slateparser"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/pkg/slateparser"
 )
 
 // CheckIfCommentOnly is a rule that returns allow decision if the mutation is a comment-only operation

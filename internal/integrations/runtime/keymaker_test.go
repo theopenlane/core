@@ -5,8 +5,8 @@ import (
 	"errors"
 	"testing"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/keymaker"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/keymaker"
 )
 
 func TestResolveKeymakerInstallationRequiresInstallationID(t *testing.T) {

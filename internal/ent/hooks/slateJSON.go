@@ -6,9 +6,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/slateparser"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/pkg/slateparser"
 )
 
 // ErrTextContainsComments is returned when attempting to set a text field with a corresponding JSON field that contains comments, this will cause the comment links to be lost in conversion and is not allowed

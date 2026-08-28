@@ -6,7 +6,7 @@ import (
 
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // OperationContext is the durable entity-object metadata attached to event

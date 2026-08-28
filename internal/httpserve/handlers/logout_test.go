@@ -20,8 +20,8 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	coreutils "github.com/theopenlane/core/internal/testutils"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	coreutils "github.com/theopenlane/core/v2/internal/testutils"
 )
 
 // newSessionConfig builds a session config the way serveropts.WithSessionManager does for a

@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/pkg/logx/consolelog"
+	"github.com/theopenlane/core/v2/pkg/logx/consolelog"
 )
 
 // LoggerConfig controls how loggers produced by Configure behave.

@@ -3,8 +3,8 @@ package controls_test
 import (
 	"testing"
 
-	"github.com/theopenlane/core/internal/controls"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/controls"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )

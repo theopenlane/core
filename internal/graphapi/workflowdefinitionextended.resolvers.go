@@ -8,9 +8,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/resolvers"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/resolvers"
 )
 
 // WorkflowMetadata is a resolver for the UI to allow composition of CEL statements based on eligible fields and objects

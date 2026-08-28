@@ -3,7 +3,7 @@ package specs
 
 import (
 	pkg0 "github.com/theopenlane/core/common/openapi"
-	pkg1 "github.com/theopenlane/core/internal/httpserve/handlers"
+	pkg1 "github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 // SpecInstances maps qualified model type names to instances for schema reflection during spec generation
@@ -54,5 +54,5 @@ var SpecInstances = map[string]any{
 	"github.com/theopenlane/core/common/openapi.VerifyResponse":                            pkg0.VerifyResponse{},
 	"github.com/theopenlane/core/common/openapi.VerifySubscribeRequest":                    pkg0.VerifySubscribeRequest{},
 	"github.com/theopenlane/core/common/openapi.VerifySubscribeResponse":                   pkg0.VerifySubscribeResponse{},
-	"github.com/theopenlane/core/internal/httpserve/handlers.IntegrationProvidersResponse": pkg1.IntegrationProvidersResponse{},
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers.IntegrationProvidersResponse": pkg1.IntegrationProvidersResponse{},
 }

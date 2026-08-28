@@ -3,7 +3,7 @@ package scim
 import (
 	"encoding/json"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
 // healthCheckAckMessage is the static message returned when the SCIM health check is invoked

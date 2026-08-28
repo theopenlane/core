@@ -9,11 +9,11 @@ import (
 	"github.com/elimity-com/scim"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 const (

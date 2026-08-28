@@ -2,7 +2,7 @@ package workflows
 
 import (
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 )
 
 // TriggerChangeSet returns the trigger mutation change-set carried by workflow instance

@@ -15,10 +15,10 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
 
-	"github.com/theopenlane/core/config"
-	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
-	server "github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/httpserve/serveropts"
+	"github.com/theopenlane/core/v2/config"
+	serverconfig "github.com/theopenlane/core/v2/internal/httpserve/config"
+	server "github.com/theopenlane/core/v2/internal/httpserve/server"
+	"github.com/theopenlane/core/v2/internal/httpserve/serveropts"
 )
 
 // testHandler implements server.handler and exposes a simple POST endpoint

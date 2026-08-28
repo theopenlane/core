@@ -15,7 +15,7 @@ import (
 	"github.com/mcuadros/go-defaults"
 	"gopkg.in/yaml.v3"
 
-	"github.com/theopenlane/core/internal/integrations/cli/config"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/config"
 )
 
 // const values used for the schema generator
@@ -73,7 +73,7 @@ func generateSchema(c schemaConfig, structure any) error {
 
 	// add go comments to the schema
 	for _, pkg := range includedPackages {
-		if err := r.AddGoComments("github.com/theopenlane/core/internal/integrations/cli", pkg); err != nil {
+		if err := r.AddGoComments("github.com/theopenlane/core/v2/internal/integrations/cli", pkg); err != nil {
 			panic(err.Error())
 		}
 	}

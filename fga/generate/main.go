@@ -13,8 +13,8 @@ import (
 	"strings"
 
 	"github.com/stoewer/go-strcase"
-	"github.com/theopenlane/core/fga/generate/modelparse"
-	"github.com/theopenlane/core/fga/generate/schemaparse"
+	"github.com/theopenlane/core/v2/fga/generate/modelparse"
+	"github.com/theopenlane/core/v2/fga/generate/schemaparse"
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
 // AvatarMutation is an interface for setting the local file ID for an avatar

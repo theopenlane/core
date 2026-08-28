@@ -5,11 +5,11 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	runtime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/gala"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	runtime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/keystore"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // WithIntegrationsRuntime builds the integration runtime from server settings and wires it

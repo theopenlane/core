@@ -13,17 +13,17 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/graphapi"
-	cloudflaredef "github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
-	coreutils "github.com/theopenlane/core/internal/testutils"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi"
+	cloudflaredef "github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keystore"
+	coreutils "github.com/theopenlane/core/v2/internal/testutils"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 func TestDomainScanListeners(t *testing.T) {

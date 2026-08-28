@@ -6,10 +6,10 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/common/jobspec"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookTrustCenterWatermarkConfig process files for trust center watermark config

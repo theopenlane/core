@@ -7,7 +7,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 )
 
 // HookImpersonatorAttribution stamps the acting impersonator onto a record when the mutation is

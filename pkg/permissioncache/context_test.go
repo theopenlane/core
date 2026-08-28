@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/pkg/permissioncache"
+	"github.com/theopenlane/core/v2/pkg/permissioncache"
 )
 
 func TestContext(t *testing.T) {

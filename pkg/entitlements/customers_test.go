@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v86"
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 func TestMapStripeCustomer(t *testing.T) {

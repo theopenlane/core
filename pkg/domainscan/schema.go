@@ -1,7 +1,7 @@
 package domainscan
 
 import (
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Vendor is one detected vendor entry in a scan report

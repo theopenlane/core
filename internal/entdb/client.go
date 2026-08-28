@@ -19,12 +19,12 @@ import (
 
 	"github.com/theopenlane/utils/testutils"
 
-	migratedb "github.com/theopenlane/core/db"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	migratedb "github.com/theopenlane/core/v2/db"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 
 	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
 )

@@ -12,8 +12,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	diskprovider "github.com/theopenlane/core/pkg/objects/storage/providers/disk"
+	diskprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 func diskOptions(bucket string, localURL string) *storage.ProviderOptions {

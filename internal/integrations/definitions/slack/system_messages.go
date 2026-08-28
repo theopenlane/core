@@ -10,8 +10,8 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // joinStrings is a template helper that joins a string slice with the given separator

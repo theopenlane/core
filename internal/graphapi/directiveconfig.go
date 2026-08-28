@@ -1,8 +1,8 @@
 package graphapi
 
 import (
-	"github.com/theopenlane/core/internal/graphapi/directives"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/directives"
+	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
 )
 
 // ImplementAllDirectives adds all active directives to the gqlgen config in the resolver setup

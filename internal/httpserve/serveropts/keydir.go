@@ -18,7 +18,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 const (

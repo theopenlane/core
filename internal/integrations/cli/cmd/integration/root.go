@@ -5,7 +5,7 @@ package integration
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/internal/integrations/cli/cmd"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/cmd"
 )
 
 // command is the parent `integration` command; subcommands register in init().

@@ -7,8 +7,8 @@ import (
 
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/oidc"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/oidc"
 )
 
 // FederationSpec describes one identity federation exchange for an installation-scoped client

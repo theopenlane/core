@@ -5,7 +5,7 @@ import (
 
 	oktagosdk "github.com/okta/okta-sdk-golang/v6/okta"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 const (

@@ -19,8 +19,8 @@ import (
 // analyzedPackages are the packages parsed to resolve route handlers; handlers hold the Handler
 // methods, route holds the package-level handler funcs for static routes
 var analyzedPackages = []string{
-	"github.com/theopenlane/core/internal/httpserve/handlers",
-	"github.com/theopenlane/core/internal/httpserve/route",
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers",
+	"github.com/theopenlane/core/v2/internal/httpserve/route",
 }
 
 // ResponseShape describes one response a handler can produce, derived from its source

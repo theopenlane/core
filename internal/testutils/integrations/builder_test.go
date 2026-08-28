@@ -5,7 +5,7 @@ package integrations
 import (
 	"testing"
 
-	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
 )
 
 func TestBuilderRegistersAllSurfaces(t *testing.T) {

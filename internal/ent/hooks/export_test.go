@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"gotest.tools/v3/assert"
 )
 

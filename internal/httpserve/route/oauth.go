@@ -5,7 +5,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 // registerOAuthRegisterHandler registers the oauth register handler used by the UI to register

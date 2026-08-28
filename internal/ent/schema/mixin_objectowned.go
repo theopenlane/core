@@ -21,12 +21,12 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
-	access "github.com/theopenlane/core/internal/ent/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	access "github.com/theopenlane/core/v2/internal/ent/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 )
 
 // ObjectOwnedMixin is a mixin for object owned entities

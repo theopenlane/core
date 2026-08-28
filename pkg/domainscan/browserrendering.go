@@ -14,8 +14,8 @@ import (
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (

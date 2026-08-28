@@ -2,7 +2,7 @@ package graphapihistory
 
 import (
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 )
 
 func redactHushHistoryCredentialSet(value *historygenerated.HushHistory) {

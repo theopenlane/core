@@ -13,9 +13,9 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/mixin"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
 
 // Integration maps configured integrations (github, slack, etc.) to organizations

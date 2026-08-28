@@ -3,7 +3,7 @@ package slateparser_test
 import (
 	"testing"
 
-	"github.com/theopenlane/core/pkg/slateparser"
+	"github.com/theopenlane/core/v2/pkg/slateparser"
 	"gotest.tools/v3/assert"
 )
 

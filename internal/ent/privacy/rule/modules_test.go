@@ -11,15 +11,15 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/v2/internal/ent/entconfig"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/internal/testutils"
-	"github.com/theopenlane/core/pkg/permissioncache"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/internal/testutils"
+	"github.com/theopenlane/core/v2/pkg/permissioncache"
 )
 
 func createExportMutation(t *testing.T) ent.Mutation {

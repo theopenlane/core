@@ -7,7 +7,7 @@ import (
 	"entgo.io/ent"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
 )
 
 func Test_skipQueryModeCheck(t *testing.T) {

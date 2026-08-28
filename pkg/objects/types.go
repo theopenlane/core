@@ -1,7 +1,7 @@
 package objects
 
 import (
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // File aliases storage.File so callers can reference a single top-level type.

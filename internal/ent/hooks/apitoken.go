@@ -12,10 +12,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
-	fgamodel "github.com/theopenlane/core/fga/model"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/logx"
+	fgamodel "github.com/theopenlane/core/v2/fga/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 func validateTimeNotInPast[T time.Time | models.DateTime](t T, ok bool) error {

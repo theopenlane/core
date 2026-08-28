@@ -3,7 +3,7 @@ package route
 import (
 	"net/http"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 // register2faHandler registers the 2FA validation handler which is used to verify the TOTP code of a user

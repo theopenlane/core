@@ -10,8 +10,8 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // CSV reference sentinel errors for field access.

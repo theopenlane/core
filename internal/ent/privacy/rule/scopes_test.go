@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 func TestScopedRelation(t *testing.T) {

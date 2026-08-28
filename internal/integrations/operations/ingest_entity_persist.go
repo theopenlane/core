@@ -4,8 +4,8 @@ import (
 	"context"
 	"slices"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // persistEntityInput upserts one Entity record through the catalog-driven entityops upsert. The

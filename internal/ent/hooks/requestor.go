@@ -5,7 +5,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/iam/auth"
 )
 

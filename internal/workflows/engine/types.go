@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 )
 
 // TriggerInput captures the trigger metadata passed to workflow execution

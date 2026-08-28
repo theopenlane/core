@@ -15,18 +15,18 @@ import (
 
 	"github.com/theopenlane/utils/cache"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/internal/httpserve/config"
-	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/httpserve/serveropts"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/gala"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/entdb"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/httpserve/config"
+	"github.com/theopenlane/core/v2/internal/httpserve/server"
+	"github.com/theopenlane/core/v2/internal/httpserve/serveropts"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
 // galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.

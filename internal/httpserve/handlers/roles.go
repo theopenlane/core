@@ -9,10 +9,10 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/fga/generate/modelparse"
-	fgamodel "github.com/theopenlane/core/fga/model"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/fga/generate/modelparse"
+	fgamodel "github.com/theopenlane/core/v2/fga/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // RolesHandler lists available roles that can be assigned to users in addition to the base organization role

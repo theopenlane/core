@@ -14,7 +14,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v3"
 
-	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/v2/internal/httpserve/server"
 )
 
 const (

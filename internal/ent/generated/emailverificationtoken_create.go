@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailverificationtoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // EmailVerificationTokenCreate is the builder for creating a EmailVerificationToken entity.

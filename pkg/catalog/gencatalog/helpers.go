@@ -2,7 +2,7 @@ package gencatalog
 
 import (
 	models "github.com/theopenlane/core/common/models"
-	catalog "github.com/theopenlane/core/pkg/catalog"
+	catalog "github.com/theopenlane/core/v2/pkg/catalog"
 )
 
 // GetDefaultCatalog returns the default catalog; if useSandbox is true, it returns the sandbox catalog

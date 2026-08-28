@@ -10,12 +10,12 @@ import (
 	"github.com/theopenlane/eddy"
 
 	"github.com/theopenlane/core/common/helpers"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	enthush "github.com/theopenlane/core/internal/ent/generated/hush"
-	entintegration "github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	enthush "github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	entintegration "github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
 

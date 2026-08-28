@@ -5,8 +5,8 @@ import (
 
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // testMappings returns the ingest mappings from the built GitHub App definition

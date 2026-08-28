@@ -12,10 +12,10 @@ import (
 	openlaneclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/httpsling"
 
-	"github.com/theopenlane/core/internal/integrations/cli/config"
-	"github.com/theopenlane/core/internal/integrations/cli/openlane"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/config"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/openlane"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // healthCheckTimeout is the maximum time to wait for the server livez check

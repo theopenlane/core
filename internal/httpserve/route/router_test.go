@@ -7,7 +7,7 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
 )
 
 func newTestRouter() *Router {

@@ -3,7 +3,7 @@ package engine
 import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows"
 )
 
 const (

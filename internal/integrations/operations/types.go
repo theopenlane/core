@@ -3,9 +3,9 @@ package operations
 import (
 	"encoding/json"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/pkg/gala"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // IngestContext holds the stable per-integration dependencies shared across all ingest call paths

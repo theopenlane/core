@@ -5,9 +5,9 @@ import (
 	"sort"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 )
 
 func resolveTrustCenterForPreviewSetting(ctx context.Context, client *generated.Client, trustCenterID string) (*generated.TrustCenter, error) {

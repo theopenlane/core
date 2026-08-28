@@ -12,11 +12,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	intr "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	intr "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // newTestRuntime builds a lightweight runtime with the Slack mock registered,

@@ -2,7 +2,7 @@
 
 package entityops
 
-import "github.com/theopenlane/core/pkg/gala"
+import "github.com/theopenlane/core/v2/pkg/gala"
 
 // IngestTopics is the namespace for every generated asynchronous schema-ingest topic.
 var IngestTopics = gala.IntegrationIngest.At("entityops")

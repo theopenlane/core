@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/theopenlane/core/pkg/objects/examples/config"
+	"github.com/theopenlane/core/v2/pkg/objects/examples/config"
 )
 
 // SetupWorkflow performs the complete setup workflow and persists the configuration

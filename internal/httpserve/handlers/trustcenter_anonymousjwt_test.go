@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
 )
 

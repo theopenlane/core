@@ -8,8 +8,8 @@ import (
 	"slices"
 
 	"github.com/samber/do/v2"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/utils/contextx"
 )
 

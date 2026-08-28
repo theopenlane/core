@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	genprivacy "github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	genprivacy "github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 func TestCreateClaimsWithOrg(t *testing.T) {

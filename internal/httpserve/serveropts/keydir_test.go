@@ -17,8 +17,8 @@ import (
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/config"
-	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
+	"github.com/theopenlane/core/v2/config"
+	serverconfig "github.com/theopenlane/core/v2/internal/httpserve/config"
 	"github.com/theopenlane/iam/tokens"
 )
 

@@ -8,9 +8,9 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // UnsubscribeHandler unsubscribes a subscriber by their bearer token. The token is embedded in every

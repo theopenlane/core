@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	testint "github.com/theopenlane/core/internal/testutils/integrations"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
 // waitForInstallationErrored polls until the installation is marked unhealthy; the exhausting

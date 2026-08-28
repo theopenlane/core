@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // interpolatePayload executes Go template expressions in the raw JSON payload against a variable map

@@ -9,9 +9,9 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	gqlhistorygenerated "github.com/theopenlane/core/v2/internal/graphapi/historygenerated"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 

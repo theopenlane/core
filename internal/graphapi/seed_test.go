@@ -12,12 +12,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	fgamodel "github.com/theopenlane/core/fga/model"
-	"github.com/theopenlane/core/internal/ent/generated"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	coreutils "github.com/theopenlane/core/internal/testutils"
-	authmw "github.com/theopenlane/core/pkg/middleware/auth"
+	fgamodel "github.com/theopenlane/core/v2/fga/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	coreutils "github.com/theopenlane/core/v2/internal/testutils"
+	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
 )
 
 var (

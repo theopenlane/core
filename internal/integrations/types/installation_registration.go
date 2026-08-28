@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // InstallationRequest bundles the inputs used to resolve installation metadata

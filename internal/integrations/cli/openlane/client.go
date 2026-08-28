@@ -9,7 +9,7 @@ import (
 	openlaneclient "github.com/theopenlane/go-client"
 
 	api "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/integrations/cli/config"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/config"
 )
 
 // Auth modes supported by Connect

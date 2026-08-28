@@ -12,13 +12,13 @@ import (
 
 	echo_log "github.com/labstack/gommon/log"
 
-	"github.com/theopenlane/core/internal/httpserve/config"
-	"github.com/theopenlane/core/internal/httpserve/route"
-	"github.com/theopenlane/core/internal/httpserve/specs"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
-	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
+	"github.com/theopenlane/core/v2/internal/httpserve/config"
+	"github.com/theopenlane/core/v2/internal/httpserve/route"
+	"github.com/theopenlane/core/v2/internal/httpserve/specs"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/metrics"
+	echodebug "github.com/theopenlane/core/v2/pkg/middleware/debug"
 )
 
 // Server is a struct that holds the configuration for the server

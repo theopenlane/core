@@ -5,8 +5,8 @@ package graphapi
 import (
 	"context"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	intr "github.com/theopenlane/core/internal/integrations/runtime"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	intr "github.com/theopenlane/core/v2/internal/integrations/runtime"
 )
 
 // WorkflowMetadataExtensions exposes workflowMetadataExtensions for cross-package integration tests

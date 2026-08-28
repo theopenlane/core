@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/passwordresettoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // PasswordResetToken is the model entity for the PasswordResetToken schema.

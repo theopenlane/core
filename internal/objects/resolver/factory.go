@@ -1,13 +1,13 @@
 package resolver
 
 import (
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/internal/objects/validators"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	dbprovider "github.com/theopenlane/core/pkg/objects/storage/providers/database"
-	"github.com/theopenlane/core/pkg/objects/storage/providers/disk"
-	r2provider "github.com/theopenlane/core/pkg/objects/storage/providers/r2"
-	s3provider "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/internal/objects/validators"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	dbprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/database"
+	"github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
+	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
+	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/iam/tokens"
 )

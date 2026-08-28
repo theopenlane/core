@@ -4,7 +4,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // customerTemplateConfigFields is the allowlist of RuntimeEmailConfig keys (by JSON name)

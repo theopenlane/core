@@ -12,8 +12,8 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 func TestValidateConfiguredStorageProvidersDevModeDisk(t *testing.T) {

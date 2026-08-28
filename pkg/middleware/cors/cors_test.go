@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/middleware/cors"
+	"github.com/theopenlane/core/v2/pkg/middleware/cors"
 )
 
 const (

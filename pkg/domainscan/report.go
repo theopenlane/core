@@ -7,7 +7,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // Enrichment holds the best-effort pkg/domainscan results for a single

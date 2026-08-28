@@ -1,8 +1,8 @@
 package onedrive
 
 import (
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
 // mapExprInternalPolicy is the CEL mapping expression for OneDrive file payloads mapped to InternalPolicy

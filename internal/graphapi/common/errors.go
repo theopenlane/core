@@ -8,8 +8,8 @@ import (
 
 	"github.com/lib/pq"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 const (

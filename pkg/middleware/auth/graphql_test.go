@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 )
 
 func TestBlockNonTrustCenterAnonymous(t *testing.T) {

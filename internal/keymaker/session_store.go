@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // defaultSessionTTL is the duration that auth sessions remain valid when no explicit expiry is set

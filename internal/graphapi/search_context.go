@@ -14,8 +14,8 @@ import (
 	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 const (

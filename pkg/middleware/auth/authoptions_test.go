@@ -10,7 +10,7 @@ import (
 
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/pkg/middleware/auth"
+	"github.com/theopenlane/core/v2/pkg/middleware/auth"
 )
 
 func TestDefaultAuthOptions(t *testing.T) {

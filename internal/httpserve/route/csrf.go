@@ -6,7 +6,7 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 // registerCSRFHandler serves up the csrf token for the UI to use

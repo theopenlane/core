@@ -7,10 +7,10 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/graphsubscriptions"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookNotification runs on notification mutations to validate channels
