@@ -2,6 +2,9 @@ module github.com/theopenlane/core/cli
 
 go 1.26.6
 
+// temp fix while core/v2 is released and can be picked up by external deps
+replace github.com/theopenlane/core/v2 => ..
+
 require (
 	github.com/99designs/gqlgen v0.17.94
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
@@ -18,6 +21,7 @@ require (
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core/common v1.0.25
+	github.com/theopenlane/core/v2 v2.2.3
 	github.com/theopenlane/go-client v0.13.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.37.0
@@ -37,7 +41,10 @@ require (
 	github.com/envoyproxy/protoc-gen-validate v1.3.3 // indirect
 	github.com/fatih/color v1.19.0 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
+	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b // indirect
+	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.3 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.15 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-webauthn/webauthn v0.17.4 // indirect
@@ -81,8 +88,7 @@ require (
 	github.com/sosodev/duration v1.4.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/stoewer/go-strcase v1.3.1 // indirect
-	github.com/stretchr/testify v1.12.1 // indirect
-	github.com/theopenlane/core v1.32.0 // indirect
+	github.com/theopenlane/core v1.34.0 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
@@ -96,12 +102,12 @@ require (
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/otel v1.45.0 // indirect
 	go.opentelemetry.io/otel/metric v1.45.0 // indirect
-	go.opentelemetry.io/otel/sdk/metric v1.45.0 // indirect
 	go.opentelemetry.io/otel/trace v1.45.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/crypto v0.55.0 // indirect
 	golang.org/x/exp v0.0.0-20260820142414-ca536658362e // indirect
+	golang.org/x/image v0.45.0 // indirect
 	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
