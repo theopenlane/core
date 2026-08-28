@@ -1217,9 +1217,9 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 
 // TestTrustCenterCreateHookWithCustomDomain tests that CreatePirschDomain job is called when custom_domain_id is set during creation
 func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
-	users := suite.SeedFreshOrgUsers(t)
+	users := suite.UserBuilder(context.Background(), t)
 
-	customDomain := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(users.Owner.UserCtx, t)
+	customDomain := (&th.CustomDomainBuilder{Client: suite.Client}).MustNew(users.UserCtx, t)
 
 	testCases := []struct {
 		name                  string
@@ -1235,14 +1235,14 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 				CustomDomainID: &customDomain.ID,
 			},
 			client:                suite.Client.API,
-			ctx:                   users.Owner.UserCtx,
+			ctx:                   users.UserCtx,
 			expectCreatePirschJob: true,
 		},
 		{
 			name:                  "create trust center without custom domain - should NOT trigger CreatePirschDomain job",
 			request:               testclient.CreateTrustCenterInput{},
 			client:                suite.Client.API,
-			ctx:                   users.Owner.UserCtx,
+			ctx:                   users.UserCtx,
 			expectCreatePirschJob: false,
 		},
 	}
@@ -1284,7 +1284,7 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 	}
 
 	// Clean up custom domain
-	th.CleanupOrganizationDataWithContext(users.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(users.UserCtx, t)
 }
 
 // TestTrustCenterUpdateHookWithCustomDomain tests that CreatePirschDomain job is called when custom_domain_id changes from empty to non-empty

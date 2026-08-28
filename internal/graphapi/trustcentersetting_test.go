@@ -27,6 +27,8 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 	t.Parallel()
 	// Test 1: happy path - recreate a deleted live setting
 	t.Run("Create happy path - recreate deleted live setting", func(t *testing.T) {
+		t.Parallel()
+
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 		settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
@@ -56,6 +58,8 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 	// Test 2: happy path - recreate with all color fields
 	t.Run("Create happy path - recreate with all color fields", func(t *testing.T) {
+		t.Parallel()
+
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 		settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
@@ -86,6 +90,8 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 	// Test 3: happy path - recreate with theme mode
 	t.Run("Create happy path - recreate with theme mode", func(t *testing.T) {
+		t.Parallel()
+
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 		settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
@@ -111,6 +117,8 @@ func TestCreateTrustCenterSetting(t *testing.T) {
 
 	// Test 4: not authorized - view only user cannot create
 	t.Run("Create not authorized - view only user", func(t *testing.T) {
+		t.Parallel()
+
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 		settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
@@ -414,6 +422,8 @@ func TestDeleteTrustCenterSetting(t *testing.T) {
 	t.Parallel()
 	// Test 1: happy path - delete trust center setting
 	t.Run("Delete happy path - delete trust center setting", func(t *testing.T) {
+		t.Parallel()
+
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 		settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
@@ -432,6 +442,8 @@ func TestDeleteTrustCenterSetting(t *testing.T) {
 
 	// Test 2: not authorized - view only user
 	t.Run("Delete not authorized - view only user", func(t *testing.T) {
+		t.Parallel()
+
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 		settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
@@ -444,6 +456,8 @@ func TestDeleteTrustCenterSetting(t *testing.T) {
 
 	// Test 3: not authorized - different org user
 	t.Run("Delete not authorized - different org user", func(t *testing.T) {
+		t.Parallel()
+
 		tcOrg := th.CreateFreshOrgWithTrustCenter(t)
 		settingID := tcOrg.TrustCenter.Edges.Setting.ID
 
@@ -456,10 +470,12 @@ func TestDeleteTrustCenterSetting(t *testing.T) {
 
 	// Test 4: trust center setting not found
 	t.Run("Delete trust center setting not found", func(t *testing.T) {
-		localTestUser := suite.SeedFreshOrgUsers(t) // create new org with no trust center
-		_, err := suite.Client.API.DeleteTrustCenterSetting(localTestUser.Owner.UserCtx, "non-existent-id")
+		t.Parallel()
+
+		localTestUser := suite.UserBuilder(context.Background(), t) // create new org with no trust center
+		_, err := suite.Client.API.DeleteTrustCenterSetting(localTestUser.UserCtx, "non-existent-id")
 		assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
-		th.CleanupOrganizationDataWithContext(localTestUser.Owner.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(localTestUser.UserCtx, t)
 	})
 }

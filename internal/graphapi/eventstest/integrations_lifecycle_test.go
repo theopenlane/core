@@ -3,6 +3,7 @@
 package eventstest_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -18,13 +19,13 @@ import (
 
 // harnessReconcileOperation returns the reconcile operation name for one harness mode
 func TestIntegrationLifecycle(t *testing.T) {
-	org := suite.SeedFreshMinimalOrgUsers(t, false)
+	org := suite.UserBuilder(context.Background(), t)
 
-	allowCtx := privacy.DecisionContext(th.SetContext(org.Owner.UserCtx, suite.Client.DB), privacy.Allow)
-	ownerCtx := th.SetContext(org.Owner.UserCtx, suite.Client.DB)
+	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
 
 	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
-	require.Equal(t, org.Owner.OrganizationID, installation.OwnerID)
+	require.Equal(t, org.OrganizationID, installation.OwnerID)
 
 	opName := harnessReconcileOperation(t, testint.ModeRecurring)
 

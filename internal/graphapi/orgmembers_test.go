@@ -275,11 +275,11 @@ func TestQueryOrgMembersWithAdditionalRoles(t *testing.T) {
 func TestMutationCreateOrgMembers(t *testing.T) {
 	t.Parallel()
 
-	localTestOrg := suite.SeedFreshOrgUsers(t)
-	org1ID := localTestOrg.Owner.OrganizationID
+	localTestOrg := suite.UserBuilder(context.Background(), t)
+	org1ID := localTestOrg.OrganizationID
 
-	userCtx := localTestOrg.Owner.UserCtx
-	personalOrgCtx := auth.NewTestContextWithOrgID(localTestOrg.Owner.ID, localTestOrg.Owner.PersonalOrgID)
+	userCtx := localTestOrg.UserCtx
+	personalOrgCtx := auth.NewTestContextWithOrgID(localTestOrg.ID, localTestOrg.PersonalOrgID)
 
 	user1 := (&th.UserBuilder{Client: suite.Client}).MustNew(userCtx, t)
 	user2 := (&th.UserBuilder{Client: suite.Client}).MustNew(userCtx, t)
@@ -288,8 +288,8 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 	userWithValidDomain := (&th.UserBuilder{Client: suite.Client, Email: "matt@anderson.net"}).MustNew(userCtx, t)
 	userWithAnotherDomain := (&th.UserBuilder{Client: suite.Client, Email: "mitb@example.com"}).MustNew(userCtx, t)
 
-	orgWithRestrictions := (&th.OrganizationBuilder{Client: suite.Client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(localTestOrg.Owner.UserCtx, t)
-	otherOrgCtx := auth.NewTestContextWithOrgID(localTestOrg.Owner.ID, orgWithRestrictions.ID)
+	orgWithRestrictions := (&th.OrganizationBuilder{Client: suite.Client, AllowedDomains: []string{"anderson.io", "anderson.net"}}).MustNew(localTestOrg.UserCtx, t)
+	otherOrgCtx := auth.NewTestContextWithOrgID(localTestOrg.ID, orgWithRestrictions.ID)
 
 	testCases := []struct {
 		name   string
@@ -353,7 +353,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 		},
 		{
 			name:   "add user to personal org not allowed",
-			orgID:  localTestOrg.Owner.PersonalOrgID,
+			orgID:  localTestOrg.PersonalOrgID,
 			userID: user1.ID,
 			role:   enums.RoleMember,
 			ctx:    personalOrgCtx,
@@ -414,7 +414,7 @@ func TestMutationCreateOrgMembers(t *testing.T) {
 
 	// delete created org and users
 	th.CleanupOrganizationDataWithContext(otherOrgCtx, t)
-	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.UserCtx, t)
 }
 
 func TestMutationUpdateOrgMembers(t *testing.T) {

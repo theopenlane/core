@@ -3,6 +3,7 @@
 package eventstest_test
 
 import (
+	"context"
 	"testing"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -15,8 +16,8 @@ import (
 )
 
 func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
-	org := suite.SeedFreshMinimalOrgUsers(t, false)
-	allowCtx := privacy.DecisionContext(th.SetContext(org.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	org := suite.UserBuilder(context.Background(), t)
+	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
 
 	installation, fragment := seedHarnessLoop(t, allowCtx)
 
@@ -34,8 +35,8 @@ func TestIntegrationCleanupListenerHardDelete(t *testing.T) {
 }
 
 func TestIntegrationCleanupListenerNonStatusUpdateKeepsLoops(t *testing.T) {
-	org := suite.SeedFreshMinimalOrgUsers(t, false)
-	allowCtx := privacy.DecisionContext(th.SetContext(org.Owner.UserCtx, suite.Client.DB), privacy.Allow)
+	org := suite.UserBuilder(context.Background(), t)
+	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
 
 	installation, fragment := seedHarnessLoop(t, allowCtx)
 

@@ -177,11 +177,11 @@ func TestQueryGroupsByOwner(t *testing.T) {
 
 func TestQueryGroups(t *testing.T) {
 	users := suite.SeedFreshOrgUsers(t)
-	usersAnother := suite.SeedFreshOrgUsers(t)
+	usersAnother := suite.UserBuilder(context.Background(), t)
 
 	group1 := (&th.GroupBuilder{Client: suite.Client}).MustNew(users.Owner.UserCtx, t)
-	group2 := (&th.GroupBuilder{Client: suite.Client}).MustNew(usersAnother.Owner.UserCtx, t)
-	group3 := (&th.GroupBuilder{Client: suite.Client}).MustNew(usersAnother.Owner.UserCtx, t)
+	group2 := (&th.GroupBuilder{Client: suite.Client}).MustNew(usersAnother.UserCtx, t)
+	group3 := (&th.GroupBuilder{Client: suite.Client}).MustNew(usersAnother.UserCtx, t)
 
 	privateGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(users.Owner.UserCtx, t)
 
@@ -194,7 +194,7 @@ func TestQueryGroups(t *testing.T) {
 	assert.NilError(t, err)
 
 	t.Run("Get Groups", func(t *testing.T) {
-		resp, err := suite.Client.API.GetAllGroups(usersAnother.Owner.UserCtx)
+		resp, err := suite.Client.API.GetAllGroups(usersAnother.UserCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -255,7 +255,7 @@ func TestQueryGroups(t *testing.T) {
 
 	// delete created groups
 	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{group1.ID, privateGroup.ID}}).MustDelete(users.Owner.UserCtx, t)
-	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{group2.ID, group3.ID}}).MustDelete(usersAnother.Owner.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{group2.ID, group3.ID}}).MustDelete(usersAnother.UserCtx, t)
 }
 
 func TestMutationCreateGroup(t *testing.T) {

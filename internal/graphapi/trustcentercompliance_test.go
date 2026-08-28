@@ -199,14 +199,14 @@ func TestQueryTrustCenterCompliance(t *testing.T) {
 		Tags:          []string{"test", "query"},
 	}).MustNew(tcOrg.Owner.UserCtx, t)
 
-	users2 := suite.SeedFreshOrgUsers(t)
+	users2 := suite.UserBuilder(context.Background(), t)
 
 	// Create compliance for different org
-	standardOther := (&th.StandardBuilder{Client: suite.Client}).MustNew(users2.Owner.UserCtx, t)
+	standardOther := (&th.StandardBuilder{Client: suite.Client}).MustNew(users2.UserCtx, t)
 	complianceOther := (&th.TrustCenterComplianceBuilder{
 		Client:     suite.Client,
 		StandardID: standardOther.ID,
-	}).MustNew(users2.Owner.UserCtx, t)
+	}).MustNew(users2.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -256,7 +256,7 @@ func TestQueryTrustCenterCompliance(t *testing.T) {
 			name:     "trust center compliance not found, using not authorized user",
 			queryID:  compliance.ID,
 			client:   suite.Client.API,
-			ctx:      users2.Owner.UserCtx,
+			ctx:      users2.UserCtx,
 			errorMsg: th.NotFoundErrorMsg,
 		},
 		{

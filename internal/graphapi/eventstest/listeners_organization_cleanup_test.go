@@ -3,6 +3,7 @@
 package eventstest_test
 
 import (
+	"context"
 	"testing"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -20,9 +21,9 @@ import (
 )
 
 func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
-	org := suite.SeedFreshMinimalOrgUsers(t, false)
-	orgID := org.Owner.OrganizationID
-	ownerCtx := org.Owner.UserCtx
+	org := suite.UserBuilder(context.Background(), t)
+	orgID := org.OrganizationID
+	ownerCtx := org.UserCtx
 	allowCtx := privacy.DecisionContext(th.SetContext(ownerCtx, suite.Client.DB), privacy.Allow)
 
 	waitForEvents()
@@ -60,7 +61,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, !contactExists)
 
-	groupExists, err := suite.Client.DB.Group.Query().Where(group.ID(org.Owner.GroupID)).Exist(purgedCtx)
+	groupExists, err := suite.Client.DB.Group.Query().Where(group.ID(org.GroupID)).Exist(purgedCtx)
 	assert.NilError(t, err)
 	assert.Check(t, !groupExists)
 

@@ -1,6 +1,7 @@
 package graphapi_test
 
 import (
+	"context"
 	"testing"
 
 	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
@@ -408,14 +409,14 @@ func TestQueryUserSupportContext(t *testing.T) {
 
 func TestMutationDeleteUser_OrgOwnerCannotBeDeleted(t *testing.T) {
 	t.Parallel()
-	localTestOrg := suite.SeedFreshOrgUsers(t)
+	localTestOrg := suite.UserBuilder(context.Background(), t)
 
-	_, err := suite.Client.API.DeleteUser(localTestOrg.Owner.UserCtx, localTestOrg.Owner.ID)
+	_, err := suite.Client.API.DeleteUser(localTestOrg.UserCtx, localTestOrg.ID)
 
 	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
 
 	// cleanup
-	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.UserCtx, t)
 }
 
 func TestMutationDeleteUser_OrgOwnerCannotDeleteFromAnotherOrg(t *testing.T) {
@@ -426,16 +427,16 @@ func TestMutationDeleteUser_OrgOwnerCannotDeleteFromAnotherOrg(t *testing.T) {
 	// storing here to use in cleanup because addUserToOrganization updates the active org context of the user
 	ownerOrgCtx := newOrgAsOwner.Owner.UserCtx
 
-	newOrgAsMember := suite.SeedFreshMinimalOrgUsers(t, false)
+	newOrgAsMember := suite.UserBuilder(context.Background(), t)
 
-	suite.AddUserToOrganization(newOrgAsMember.Owner.UserCtx, t, newOrgAsOwner.Owner, enums.RoleMember, newOrgAsMember.Owner.OrganizationID)
+	suite.AddUserToOrganization(newOrgAsMember.UserCtx, t, newOrgAsOwner.Owner, enums.RoleMember, newOrgAsMember.OrganizationID)
 
 	_, err := suite.Client.API.DeleteUser(newOrgAsOwner.Owner.UserCtx, newOrgAsOwner.Owner.ID)
 
 	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
 
 	th.CleanupOrganizationDataWithContext(ownerOrgCtx, t)
-	th.CleanupOrganizationDataWithContext(newOrgAsMember.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(newOrgAsMember.UserCtx, t)
 }
 
 func TestMutationUserCascadeDelete(t *testing.T) {
