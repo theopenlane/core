@@ -14,7 +14,7 @@ import (
 // command represents the base trust center NDA command when called without any subcommands
 var command = &cobra.Command{
 	Use:   "trust-center-nda",
-	Short: "the subcommands for working with trust center ANDAs",
+	Short: "the subcommands for working with trust center NDAs",
 }
 
 func init() {

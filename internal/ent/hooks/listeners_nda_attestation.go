@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// NDAAttestationListeners attests signed trust center ANDAs after document data creation
+// NDAAttestationListeners attests signed trust center NDAs after document data creation
 func NDAAttestationListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
