@@ -104,7 +104,7 @@ require (
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.33.0
 	github.com/theopenlane/go-client v0.13.1
-	github.com/theopenlane/gqlgen-plugins v0.17.1
+	github.com/theopenlane/gqlgen-plugins v0.17.2-0.20260828161806-ecdb6d16466f
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.37.0
 	github.com/theopenlane/newman v0.4.3
