@@ -401,7 +401,7 @@ func layoutAttestationRows(fields []attestationField) ([]attestationRowLayout, f
 
 // buildAttestationText creates the header and per-row text elements for the attestation table
 func buildAttestationText(rows []attestationRowLayout) []attestationTextBox {
-	baselinePad := attestCellPadY + font.Ascent(attestFontRegular, attestFieldSize)
+	baselinePad := attestCellPadY + fontAscent(attestFontRegular, attestFieldSize)
 
 	textBoxes := []attestationTextBox{
 		{
@@ -521,11 +521,37 @@ func renderAttestationPage(textBoxes []attestationTextBox, boxes []attestationSi
 	return buf.Bytes(), nil
 }
 
+// fontAscent returns fontName's ascent at fontSize, falling back to zero when the font has no
+// known metrics, which only happens for a font pdfcpu doesn't know about
+func fontAscent(fontName string, fontSize int) float64 {
+	ascent, err := font.Ascent(fontName, fontSize)
+	if err != nil {
+		log.Error().Err(err).Str("font", fontName).Msg("failed to measure font ascent")
+
+		return 0
+	}
+
+	return ascent
+}
+
+// textWidth measures text in fontName at fontSize, falling back to zero when a character isn't
+// mappable in the font; an unmeasurable string is treated as fitting rather than failing the render
+func textWidth(text, fontName string, fontSize int) float64 {
+	w, err := font.TextWidth(text, fontName, fontSize)
+	if err != nil {
+		log.Error().Err(err).Str("font", fontName).Msg("failed to measure text width")
+
+		return 0
+	}
+
+	return w
+}
+
 // wrapText breaks s into lines that fit within maxWidth points for the given core font and size.
 // pdfcpu's WriteColumn scales fonts down instead of wrapping, so we pre-insert newlines.
 // Words that exceed maxWidth on their own (e.g. hex hashes) are broken at character boundaries
 func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
-	if font.TextWidth(s, fontName, fontSize) <= maxWidth {
+	if textWidth(s, fontName, fontSize) <= maxWidth {
 		return s
 	}
 
@@ -535,7 +561,7 @@ func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
 
 	for word := range strings.FieldsSeq(s) {
 		if line.Len() > 0 {
-			if font.TextWidth(line.String()+" "+word, fontName, fontSize) <= maxWidth {
+			if textWidth(line.String()+" "+word, fontName, fontSize) <= maxWidth {
 				line.WriteString(" ")
 				line.WriteString(word)
 
@@ -546,7 +572,7 @@ func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
 			line.Reset()
 		}
 
-		if font.TextWidth(word, fontName, fontSize) <= maxWidth {
+		if textWidth(word, fontName, fontSize) <= maxWidth {
 			line.WriteString(word)
 
 			continue
@@ -572,7 +598,7 @@ func breakWord(word, fontName string, fontSize int, maxWidth float64) []string {
 
 	for _, r := range word {
 		test := chunk.String() + string(r)
-		if font.TextWidth(test, fontName, fontSize) > maxWidth && chunk.Len() > 0 {
+		if textWidth(test, fontName, fontSize) > maxWidth && chunk.Len() > 0 {
 			lines = append(lines, chunk.String())
 			chunk.Reset()
 		}
