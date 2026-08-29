@@ -200,9 +200,9 @@ func TestQueryGroups(t *testing.T) {
 		assert.Assert(t, resp != nil)
 		assert.Assert(t, resp.Groups.Edges != nil)
 
-		// make sure two organizations are returned (group 2 and group 3), the seeded group, and the 6 managed groups
+		// make sure two organizations are returned (group 2 and group 3), the seeded group, and the 3 managed groups
 		// and the system managed group for the user
-		assert.Check(t, is.Equal(10, len(resp.Groups.Edges)))
+		assert.Check(t, is.Equal(7, len(resp.Groups.Edges)))
 
 		group1Found := false
 		group2Found := false
