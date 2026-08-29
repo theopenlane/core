@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
@@ -131,6 +133,8 @@ const (
 	TypeAssessment                 = "Assessment"
 	TypeAssessmentResponse         = "AssessmentResponse"
 	TypeAsset                      = "Asset"
+	TypeAudience                   = "Audience"
+	TypeAudienceMember             = "AudienceMember"
 	TypeCampaign                   = "Campaign"
 	TypeCampaignTarget             = "CampaignTarget"
 	TypeCheckResult                = "CheckResult"
@@ -18743,6 +18747,3771 @@ func (m *AssetMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Asset edge %s", name)
 }
 
+// AudienceMutation represents an operation that mutates the Audience nodes in the graph.
+type AudienceMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	deleted_at              *time.Time
+	deleted_by              *string
+	display_id              *string
+	tags                    *[]string
+	appendtags              []string
+	name                    *string
+	description             *string
+	audience_type           *enums.AudienceType
+	filters                 *map[string]interface{}
+	metadata                *map[string]interface{}
+	clearedFields           map[string]struct{}
+	owner                   *string
+	clearedowner            bool
+	blocked_groups          map[string]struct{}
+	removedblocked_groups   map[string]struct{}
+	clearedblocked_groups   bool
+	editors                 map[string]struct{}
+	removededitors          map[string]struct{}
+	clearededitors          bool
+	viewers                 map[string]struct{}
+	removedviewers          map[string]struct{}
+	clearedviewers          bool
+	audience_members        map[string]struct{}
+	removedaudience_members map[string]struct{}
+	clearedaudience_members bool
+	campaigns               map[string]struct{}
+	removedcampaigns        map[string]struct{}
+	clearedcampaigns        bool
+	done                    bool
+	oldValue                func(context.Context) (*Audience, error)
+	predicates              []predicate.Audience
+}
+
+var _ ent.Mutation = (*AudienceMutation)(nil)
+
+// audienceOption allows management of the mutation configuration using functional options.
+type audienceOption func(*AudienceMutation)
+
+// newAudienceMutation creates new mutation for the Audience entity.
+func newAudienceMutation(c config, op Op, opts ...audienceOption) *AudienceMutation {
+	m := &AudienceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAudience,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAudienceID sets the ID field of the mutation.
+func withAudienceID(id string) audienceOption {
+	return func(m *AudienceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Audience
+		)
+		m.oldValue = func(ctx context.Context) (*Audience, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Audience.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAudience sets the old Audience of the mutation.
+func withAudience(node *Audience) audienceOption {
+	return func(m *AudienceMutation) {
+		m.oldValue = func(context.Context) (*Audience, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AudienceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AudienceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Audience entities.
+func (m *AudienceMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AudienceMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AudienceMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Audience.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AudienceMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AudienceMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *AudienceMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[audience.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *AudienceMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[audience.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AudienceMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, audience.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AudienceMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AudienceMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *AudienceMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[audience.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *AudienceMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[audience.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AudienceMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, audience.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *AudienceMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *AudienceMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *AudienceMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[audience.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *AudienceMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[audience.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *AudienceMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, audience.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *AudienceMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *AudienceMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *AudienceMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[audience.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *AudienceMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[audience.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *AudienceMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, audience.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *AudienceMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *AudienceMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *AudienceMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[audience.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *AudienceMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[audience.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *AudienceMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, audience.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *AudienceMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *AudienceMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *AudienceMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[audience.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *AudienceMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[audience.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *AudienceMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, audience.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *AudienceMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *AudienceMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *AudienceMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[audience.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *AudienceMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[audience.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *AudienceMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, audience.FieldDeletedBy)
+}
+
+// SetDisplayID sets the "display_id" field.
+func (m *AudienceMutation) SetDisplayID(s string) {
+	m.display_id = &s
+}
+
+// DisplayID returns the value of the "display_id" field in the mutation.
+func (m *AudienceMutation) DisplayID() (r string, exists bool) {
+	v := m.display_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayID returns the old "display_id" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldDisplayID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayID: %w", err)
+	}
+	return oldValue.DisplayID, nil
+}
+
+// ResetDisplayID resets all changes to the "display_id" field.
+func (m *AudienceMutation) ResetDisplayID() {
+	m.display_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *AudienceMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *AudienceMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *AudienceMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *AudienceMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *AudienceMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[audience.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *AudienceMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[audience.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *AudienceMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, audience.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *AudienceMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *AudienceMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *AudienceMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[audience.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *AudienceMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[audience.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *AudienceMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, audience.FieldOwnerID)
+}
+
+// SetName sets the "name" field.
+func (m *AudienceMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *AudienceMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *AudienceMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *AudienceMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *AudienceMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *AudienceMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[audience.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *AudienceMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[audience.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *AudienceMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, audience.FieldDescription)
+}
+
+// SetAudienceType sets the "audience_type" field.
+func (m *AudienceMutation) SetAudienceType(et enums.AudienceType) {
+	m.audience_type = &et
+}
+
+// AudienceType returns the value of the "audience_type" field in the mutation.
+func (m *AudienceMutation) AudienceType() (r enums.AudienceType, exists bool) {
+	v := m.audience_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAudienceType returns the old "audience_type" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldAudienceType(ctx context.Context) (v enums.AudienceType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAudienceType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAudienceType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAudienceType: %w", err)
+	}
+	return oldValue.AudienceType, nil
+}
+
+// ResetAudienceType resets all changes to the "audience_type" field.
+func (m *AudienceMutation) ResetAudienceType() {
+	m.audience_type = nil
+}
+
+// SetFilters sets the "filters" field.
+func (m *AudienceMutation) SetFilters(value map[string]interface{}) {
+	m.filters = &value
+}
+
+// Filters returns the value of the "filters" field in the mutation.
+func (m *AudienceMutation) Filters() (r map[string]interface{}, exists bool) {
+	v := m.filters
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFilters returns the old "filters" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldFilters(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFilters is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFilters requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFilters: %w", err)
+	}
+	return oldValue.Filters, nil
+}
+
+// ClearFilters clears the value of the "filters" field.
+func (m *AudienceMutation) ClearFilters() {
+	m.filters = nil
+	m.clearedFields[audience.FieldFilters] = struct{}{}
+}
+
+// FiltersCleared returns if the "filters" field was cleared in this mutation.
+func (m *AudienceMutation) FiltersCleared() bool {
+	_, ok := m.clearedFields[audience.FieldFilters]
+	return ok
+}
+
+// ResetFilters resets all changes to the "filters" field.
+func (m *AudienceMutation) ResetFilters() {
+	m.filters = nil
+	delete(m.clearedFields, audience.FieldFilters)
+}
+
+// SetMetadata sets the "metadata" field.
+func (m *AudienceMutation) SetMetadata(value map[string]interface{}) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *AudienceMutation) Metadata() (r map[string]interface{}, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the Audience entity.
+// If the Audience object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMutation) OldMetadata(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *AudienceMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[audience.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *AudienceMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[audience.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *AudienceMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, audience.FieldMetadata)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *AudienceMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[audience.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *AudienceMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *AudienceMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *AudienceMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by ids.
+func (m *AudienceMutation) AddBlockedGroupIDs(ids ...string) {
+	if m.blocked_groups == nil {
+		m.blocked_groups = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.blocked_groups[ids[i]] = struct{}{}
+	}
+}
+
+// ClearBlockedGroups clears the "blocked_groups" edge to the Group entity.
+func (m *AudienceMutation) ClearBlockedGroups() {
+	m.clearedblocked_groups = true
+}
+
+// BlockedGroupsCleared reports if the "blocked_groups" edge to the Group entity was cleared.
+func (m *AudienceMutation) BlockedGroupsCleared() bool {
+	return m.clearedblocked_groups
+}
+
+// RemoveBlockedGroupIDs removes the "blocked_groups" edge to the Group entity by IDs.
+func (m *AudienceMutation) RemoveBlockedGroupIDs(ids ...string) {
+	if m.removedblocked_groups == nil {
+		m.removedblocked_groups = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.blocked_groups, ids[i])
+		m.removedblocked_groups[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedBlockedGroups returns the removed IDs of the "blocked_groups" edge to the Group entity.
+func (m *AudienceMutation) RemovedBlockedGroupsIDs() (ids []string) {
+	for id := range m.removedblocked_groups {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// BlockedGroupsIDs returns the "blocked_groups" edge IDs in the mutation.
+func (m *AudienceMutation) BlockedGroupsIDs() (ids []string) {
+	for id := range m.blocked_groups {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetBlockedGroups resets all changes to the "blocked_groups" edge.
+func (m *AudienceMutation) ResetBlockedGroups() {
+	m.blocked_groups = nil
+	m.clearedblocked_groups = false
+	m.removedblocked_groups = nil
+}
+
+// AddEditorIDs adds the "editors" edge to the Group entity by ids.
+func (m *AudienceMutation) AddEditorIDs(ids ...string) {
+	if m.editors == nil {
+		m.editors = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.editors[ids[i]] = struct{}{}
+	}
+}
+
+// ClearEditors clears the "editors" edge to the Group entity.
+func (m *AudienceMutation) ClearEditors() {
+	m.clearededitors = true
+}
+
+// EditorsCleared reports if the "editors" edge to the Group entity was cleared.
+func (m *AudienceMutation) EditorsCleared() bool {
+	return m.clearededitors
+}
+
+// RemoveEditorIDs removes the "editors" edge to the Group entity by IDs.
+func (m *AudienceMutation) RemoveEditorIDs(ids ...string) {
+	if m.removededitors == nil {
+		m.removededitors = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.editors, ids[i])
+		m.removededitors[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedEditors returns the removed IDs of the "editors" edge to the Group entity.
+func (m *AudienceMutation) RemovedEditorsIDs() (ids []string) {
+	for id := range m.removededitors {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// EditorsIDs returns the "editors" edge IDs in the mutation.
+func (m *AudienceMutation) EditorsIDs() (ids []string) {
+	for id := range m.editors {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetEditors resets all changes to the "editors" edge.
+func (m *AudienceMutation) ResetEditors() {
+	m.editors = nil
+	m.clearededitors = false
+	m.removededitors = nil
+}
+
+// AddViewerIDs adds the "viewers" edge to the Group entity by ids.
+func (m *AudienceMutation) AddViewerIDs(ids ...string) {
+	if m.viewers == nil {
+		m.viewers = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.viewers[ids[i]] = struct{}{}
+	}
+}
+
+// ClearViewers clears the "viewers" edge to the Group entity.
+func (m *AudienceMutation) ClearViewers() {
+	m.clearedviewers = true
+}
+
+// ViewersCleared reports if the "viewers" edge to the Group entity was cleared.
+func (m *AudienceMutation) ViewersCleared() bool {
+	return m.clearedviewers
+}
+
+// RemoveViewerIDs removes the "viewers" edge to the Group entity by IDs.
+func (m *AudienceMutation) RemoveViewerIDs(ids ...string) {
+	if m.removedviewers == nil {
+		m.removedviewers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.viewers, ids[i])
+		m.removedviewers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedViewers returns the removed IDs of the "viewers" edge to the Group entity.
+func (m *AudienceMutation) RemovedViewersIDs() (ids []string) {
+	for id := range m.removedviewers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ViewersIDs returns the "viewers" edge IDs in the mutation.
+func (m *AudienceMutation) ViewersIDs() (ids []string) {
+	for id := range m.viewers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetViewers resets all changes to the "viewers" edge.
+func (m *AudienceMutation) ResetViewers() {
+	m.viewers = nil
+	m.clearedviewers = false
+	m.removedviewers = nil
+}
+
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by ids.
+func (m *AudienceMutation) AddAudienceMemberIDs(ids ...string) {
+	if m.audience_members == nil {
+		m.audience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceMembers clears the "audience_members" edge to the AudienceMember entity.
+func (m *AudienceMutation) ClearAudienceMembers() {
+	m.clearedaudience_members = true
+}
+
+// AudienceMembersCleared reports if the "audience_members" edge to the AudienceMember entity was cleared.
+func (m *AudienceMutation) AudienceMembersCleared() bool {
+	return m.clearedaudience_members
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to the AudienceMember entity by IDs.
+func (m *AudienceMutation) RemoveAudienceMemberIDs(ids ...string) {
+	if m.removedaudience_members == nil {
+		m.removedaudience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_members, ids[i])
+		m.removedaudience_members[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceMembers returns the removed IDs of the "audience_members" edge to the AudienceMember entity.
+func (m *AudienceMutation) RemovedAudienceMembersIDs() (ids []string) {
+	for id := range m.removedaudience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceMembersIDs returns the "audience_members" edge IDs in the mutation.
+func (m *AudienceMutation) AudienceMembersIDs() (ids []string) {
+	for id := range m.audience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceMembers resets all changes to the "audience_members" edge.
+func (m *AudienceMutation) ResetAudienceMembers() {
+	m.audience_members = nil
+	m.clearedaudience_members = false
+	m.removedaudience_members = nil
+}
+
+// AddCampaignIDs adds the "campaigns" edge to the Campaign entity by ids.
+func (m *AudienceMutation) AddCampaignIDs(ids ...string) {
+	if m.campaigns == nil {
+		m.campaigns = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.campaigns[ids[i]] = struct{}{}
+	}
+}
+
+// ClearCampaigns clears the "campaigns" edge to the Campaign entity.
+func (m *AudienceMutation) ClearCampaigns() {
+	m.clearedcampaigns = true
+}
+
+// CampaignsCleared reports if the "campaigns" edge to the Campaign entity was cleared.
+func (m *AudienceMutation) CampaignsCleared() bool {
+	return m.clearedcampaigns
+}
+
+// RemoveCampaignIDs removes the "campaigns" edge to the Campaign entity by IDs.
+func (m *AudienceMutation) RemoveCampaignIDs(ids ...string) {
+	if m.removedcampaigns == nil {
+		m.removedcampaigns = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.campaigns, ids[i])
+		m.removedcampaigns[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedCampaigns returns the removed IDs of the "campaigns" edge to the Campaign entity.
+func (m *AudienceMutation) RemovedCampaignsIDs() (ids []string) {
+	for id := range m.removedcampaigns {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// CampaignsIDs returns the "campaigns" edge IDs in the mutation.
+func (m *AudienceMutation) CampaignsIDs() (ids []string) {
+	for id := range m.campaigns {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetCampaigns resets all changes to the "campaigns" edge.
+func (m *AudienceMutation) ResetCampaigns() {
+	m.campaigns = nil
+	m.clearedcampaigns = false
+	m.removedcampaigns = nil
+}
+
+// Where appends a list predicates to the AudienceMutation builder.
+func (m *AudienceMutation) Where(ps ...predicate.Audience) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the AudienceMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *AudienceMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Audience, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *AudienceMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *AudienceMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Audience).
+func (m *AudienceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AudienceMutation) Fields() []string {
+	fields := make([]string, 0, 15)
+	if m.created_at != nil {
+		fields = append(fields, audience.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, audience.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, audience.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, audience.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, audience.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, audience.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, audience.FieldDeletedBy)
+	}
+	if m.display_id != nil {
+		fields = append(fields, audience.FieldDisplayID)
+	}
+	if m.tags != nil {
+		fields = append(fields, audience.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, audience.FieldOwnerID)
+	}
+	if m.name != nil {
+		fields = append(fields, audience.FieldName)
+	}
+	if m.description != nil {
+		fields = append(fields, audience.FieldDescription)
+	}
+	if m.audience_type != nil {
+		fields = append(fields, audience.FieldAudienceType)
+	}
+	if m.filters != nil {
+		fields = append(fields, audience.FieldFilters)
+	}
+	if m.metadata != nil {
+		fields = append(fields, audience.FieldMetadata)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AudienceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case audience.FieldCreatedAt:
+		return m.CreatedAt()
+	case audience.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case audience.FieldCreatedBy:
+		return m.CreatedBy()
+	case audience.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case audience.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case audience.FieldDeletedAt:
+		return m.DeletedAt()
+	case audience.FieldDeletedBy:
+		return m.DeletedBy()
+	case audience.FieldDisplayID:
+		return m.DisplayID()
+	case audience.FieldTags:
+		return m.Tags()
+	case audience.FieldOwnerID:
+		return m.OwnerID()
+	case audience.FieldName:
+		return m.Name()
+	case audience.FieldDescription:
+		return m.Description()
+	case audience.FieldAudienceType:
+		return m.AudienceType()
+	case audience.FieldFilters:
+		return m.Filters()
+	case audience.FieldMetadata:
+		return m.Metadata()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AudienceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case audience.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case audience.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case audience.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case audience.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case audience.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case audience.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case audience.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case audience.FieldDisplayID:
+		return m.OldDisplayID(ctx)
+	case audience.FieldTags:
+		return m.OldTags(ctx)
+	case audience.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case audience.FieldName:
+		return m.OldName(ctx)
+	case audience.FieldDescription:
+		return m.OldDescription(ctx)
+	case audience.FieldAudienceType:
+		return m.OldAudienceType(ctx)
+	case audience.FieldFilters:
+		return m.OldFilters(ctx)
+	case audience.FieldMetadata:
+		return m.OldMetadata(ctx)
+	}
+	return nil, fmt.Errorf("unknown Audience field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AudienceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case audience.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case audience.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case audience.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case audience.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case audience.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case audience.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case audience.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case audience.FieldDisplayID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayID(v)
+		return nil
+	case audience.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case audience.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case audience.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case audience.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case audience.FieldAudienceType:
+		v, ok := value.(enums.AudienceType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAudienceType(v)
+		return nil
+	case audience.FieldFilters:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFilters(v)
+		return nil
+	case audience.FieldMetadata:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Audience field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AudienceMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AudienceMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AudienceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Audience numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AudienceMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(audience.FieldCreatedAt) {
+		fields = append(fields, audience.FieldCreatedAt)
+	}
+	if m.FieldCleared(audience.FieldUpdatedAt) {
+		fields = append(fields, audience.FieldUpdatedAt)
+	}
+	if m.FieldCleared(audience.FieldCreatedBy) {
+		fields = append(fields, audience.FieldCreatedBy)
+	}
+	if m.FieldCleared(audience.FieldUpdatedBy) {
+		fields = append(fields, audience.FieldUpdatedBy)
+	}
+	if m.FieldCleared(audience.FieldUpdatedByImpersonator) {
+		fields = append(fields, audience.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(audience.FieldDeletedAt) {
+		fields = append(fields, audience.FieldDeletedAt)
+	}
+	if m.FieldCleared(audience.FieldDeletedBy) {
+		fields = append(fields, audience.FieldDeletedBy)
+	}
+	if m.FieldCleared(audience.FieldTags) {
+		fields = append(fields, audience.FieldTags)
+	}
+	if m.FieldCleared(audience.FieldOwnerID) {
+		fields = append(fields, audience.FieldOwnerID)
+	}
+	if m.FieldCleared(audience.FieldDescription) {
+		fields = append(fields, audience.FieldDescription)
+	}
+	if m.FieldCleared(audience.FieldFilters) {
+		fields = append(fields, audience.FieldFilters)
+	}
+	if m.FieldCleared(audience.FieldMetadata) {
+		fields = append(fields, audience.FieldMetadata)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AudienceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AudienceMutation) ClearField(name string) error {
+	switch name {
+	case audience.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case audience.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case audience.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case audience.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case audience.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case audience.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case audience.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case audience.FieldTags:
+		m.ClearTags()
+		return nil
+	case audience.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case audience.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case audience.FieldFilters:
+		m.ClearFilters()
+		return nil
+	case audience.FieldMetadata:
+		m.ClearMetadata()
+		return nil
+	}
+	return fmt.Errorf("unknown Audience nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AudienceMutation) ResetField(name string) error {
+	switch name {
+	case audience.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case audience.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case audience.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case audience.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case audience.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case audience.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case audience.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case audience.FieldDisplayID:
+		m.ResetDisplayID()
+		return nil
+	case audience.FieldTags:
+		m.ResetTags()
+		return nil
+	case audience.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case audience.FieldName:
+		m.ResetName()
+		return nil
+	case audience.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case audience.FieldAudienceType:
+		m.ResetAudienceType()
+		return nil
+	case audience.FieldFilters:
+		m.ResetFilters()
+		return nil
+	case audience.FieldMetadata:
+		m.ResetMetadata()
+		return nil
+	}
+	return fmt.Errorf("unknown Audience field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AudienceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 6)
+	if m.owner != nil {
+		edges = append(edges, audience.EdgeOwner)
+	}
+	if m.blocked_groups != nil {
+		edges = append(edges, audience.EdgeBlockedGroups)
+	}
+	if m.editors != nil {
+		edges = append(edges, audience.EdgeEditors)
+	}
+	if m.viewers != nil {
+		edges = append(edges, audience.EdgeViewers)
+	}
+	if m.audience_members != nil {
+		edges = append(edges, audience.EdgeAudienceMembers)
+	}
+	if m.campaigns != nil {
+		edges = append(edges, audience.EdgeCampaigns)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AudienceMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case audience.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case audience.EdgeBlockedGroups:
+		ids := make([]ent.Value, 0, len(m.blocked_groups))
+		for id := range m.blocked_groups {
+			ids = append(ids, id)
+		}
+		return ids
+	case audience.EdgeEditors:
+		ids := make([]ent.Value, 0, len(m.editors))
+		for id := range m.editors {
+			ids = append(ids, id)
+		}
+		return ids
+	case audience.EdgeViewers:
+		ids := make([]ent.Value, 0, len(m.viewers))
+		for id := range m.viewers {
+			ids = append(ids, id)
+		}
+		return ids
+	case audience.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.audience_members))
+		for id := range m.audience_members {
+			ids = append(ids, id)
+		}
+		return ids
+	case audience.EdgeCampaigns:
+		ids := make([]ent.Value, 0, len(m.campaigns))
+		for id := range m.campaigns {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AudienceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 6)
+	if m.removedblocked_groups != nil {
+		edges = append(edges, audience.EdgeBlockedGroups)
+	}
+	if m.removededitors != nil {
+		edges = append(edges, audience.EdgeEditors)
+	}
+	if m.removedviewers != nil {
+		edges = append(edges, audience.EdgeViewers)
+	}
+	if m.removedaudience_members != nil {
+		edges = append(edges, audience.EdgeAudienceMembers)
+	}
+	if m.removedcampaigns != nil {
+		edges = append(edges, audience.EdgeCampaigns)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AudienceMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case audience.EdgeBlockedGroups:
+		ids := make([]ent.Value, 0, len(m.removedblocked_groups))
+		for id := range m.removedblocked_groups {
+			ids = append(ids, id)
+		}
+		return ids
+	case audience.EdgeEditors:
+		ids := make([]ent.Value, 0, len(m.removededitors))
+		for id := range m.removededitors {
+			ids = append(ids, id)
+		}
+		return ids
+	case audience.EdgeViewers:
+		ids := make([]ent.Value, 0, len(m.removedviewers))
+		for id := range m.removedviewers {
+			ids = append(ids, id)
+		}
+		return ids
+	case audience.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.removedaudience_members))
+		for id := range m.removedaudience_members {
+			ids = append(ids, id)
+		}
+		return ids
+	case audience.EdgeCampaigns:
+		ids := make([]ent.Value, 0, len(m.removedcampaigns))
+		for id := range m.removedcampaigns {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AudienceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 6)
+	if m.clearedowner {
+		edges = append(edges, audience.EdgeOwner)
+	}
+	if m.clearedblocked_groups {
+		edges = append(edges, audience.EdgeBlockedGroups)
+	}
+	if m.clearededitors {
+		edges = append(edges, audience.EdgeEditors)
+	}
+	if m.clearedviewers {
+		edges = append(edges, audience.EdgeViewers)
+	}
+	if m.clearedaudience_members {
+		edges = append(edges, audience.EdgeAudienceMembers)
+	}
+	if m.clearedcampaigns {
+		edges = append(edges, audience.EdgeCampaigns)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AudienceMutation) EdgeCleared(name string) bool {
+	switch name {
+	case audience.EdgeOwner:
+		return m.clearedowner
+	case audience.EdgeBlockedGroups:
+		return m.clearedblocked_groups
+	case audience.EdgeEditors:
+		return m.clearededitors
+	case audience.EdgeViewers:
+		return m.clearedviewers
+	case audience.EdgeAudienceMembers:
+		return m.clearedaudience_members
+	case audience.EdgeCampaigns:
+		return m.clearedcampaigns
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AudienceMutation) ClearEdge(name string) error {
+	switch name {
+	case audience.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown Audience unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AudienceMutation) ResetEdge(name string) error {
+	switch name {
+	case audience.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case audience.EdgeBlockedGroups:
+		m.ResetBlockedGroups()
+		return nil
+	case audience.EdgeEditors:
+		m.ResetEditors()
+		return nil
+	case audience.EdgeViewers:
+		m.ResetViewers()
+		return nil
+	case audience.EdgeAudienceMembers:
+		m.ResetAudienceMembers()
+		return nil
+	case audience.EdgeCampaigns:
+		m.ResetCampaigns()
+		return nil
+	}
+	return fmt.Errorf("unknown Audience edge %s", name)
+}
+
+// AudienceMemberMutation represents an operation that mutates the AudienceMember nodes in the graph.
+type AudienceMemberMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	deleted_at              *time.Time
+	deleted_by              *string
+	display_id              *string
+	tags                    *[]string
+	appendtags              []string
+	email                   *string
+	full_name               *string
+	metadata                *map[string]interface{}
+	clearedFields           map[string]struct{}
+	owner                   *string
+	clearedowner            bool
+	audience                *string
+	clearedaudience         bool
+	contact                 *string
+	clearedcontact          bool
+	user                    *string
+	cleareduser             bool
+	group                   *string
+	clearedgroup            bool
+	identity_holder         *string
+	clearedidentity_holder  bool
+	subscriber              *string
+	clearedsubscriber       bool
+	done                    bool
+	oldValue                func(context.Context) (*AudienceMember, error)
+	predicates              []predicate.AudienceMember
+}
+
+var _ ent.Mutation = (*AudienceMemberMutation)(nil)
+
+// audiencememberOption allows management of the mutation configuration using functional options.
+type audiencememberOption func(*AudienceMemberMutation)
+
+// newAudienceMemberMutation creates new mutation for the AudienceMember entity.
+func newAudienceMemberMutation(c config, op Op, opts ...audiencememberOption) *AudienceMemberMutation {
+	m := &AudienceMemberMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAudienceMember,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAudienceMemberID sets the ID field of the mutation.
+func withAudienceMemberID(id string) audiencememberOption {
+	return func(m *AudienceMemberMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AudienceMember
+		)
+		m.oldValue = func(ctx context.Context) (*AudienceMember, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AudienceMember.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAudienceMember sets the old AudienceMember of the mutation.
+func withAudienceMember(node *AudienceMember) audiencememberOption {
+	return func(m *AudienceMemberMutation) {
+		m.oldValue = func(context.Context) (*AudienceMember, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AudienceMemberMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AudienceMemberMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of AudienceMember entities.
+func (m *AudienceMemberMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AudienceMemberMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AudienceMemberMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AudienceMember.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AudienceMemberMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AudienceMemberMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *AudienceMemberMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[audiencemember.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *AudienceMemberMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AudienceMemberMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, audiencemember.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AudienceMemberMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AudienceMemberMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *AudienceMemberMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[audiencemember.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *AudienceMemberMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AudienceMemberMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, audiencemember.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *AudienceMemberMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *AudienceMemberMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *AudienceMemberMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[audiencemember.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *AudienceMemberMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *AudienceMemberMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, audiencemember.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *AudienceMemberMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *AudienceMemberMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *AudienceMemberMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[audiencemember.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *AudienceMemberMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *AudienceMemberMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, audiencemember.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *AudienceMemberMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *AudienceMemberMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *AudienceMemberMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[audiencemember.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *AudienceMemberMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *AudienceMemberMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, audiencemember.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *AudienceMemberMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *AudienceMemberMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *AudienceMemberMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[audiencemember.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *AudienceMemberMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *AudienceMemberMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, audiencemember.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *AudienceMemberMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *AudienceMemberMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *AudienceMemberMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[audiencemember.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *AudienceMemberMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *AudienceMemberMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, audiencemember.FieldDeletedBy)
+}
+
+// SetDisplayID sets the "display_id" field.
+func (m *AudienceMemberMutation) SetDisplayID(s string) {
+	m.display_id = &s
+}
+
+// DisplayID returns the value of the "display_id" field in the mutation.
+func (m *AudienceMemberMutation) DisplayID() (r string, exists bool) {
+	v := m.display_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayID returns the old "display_id" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldDisplayID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayID: %w", err)
+	}
+	return oldValue.DisplayID, nil
+}
+
+// ResetDisplayID resets all changes to the "display_id" field.
+func (m *AudienceMemberMutation) ResetDisplayID() {
+	m.display_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *AudienceMemberMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *AudienceMemberMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *AudienceMemberMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *AudienceMemberMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *AudienceMemberMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[audiencemember.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *AudienceMemberMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *AudienceMemberMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, audiencemember.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *AudienceMemberMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *AudienceMemberMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *AudienceMemberMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[audiencemember.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *AudienceMemberMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *AudienceMemberMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, audiencemember.FieldOwnerID)
+}
+
+// SetAudienceID sets the "audience_id" field.
+func (m *AudienceMemberMutation) SetAudienceID(s string) {
+	m.audience = &s
+}
+
+// AudienceID returns the value of the "audience_id" field in the mutation.
+func (m *AudienceMemberMutation) AudienceID() (r string, exists bool) {
+	v := m.audience
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAudienceID returns the old "audience_id" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldAudienceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAudienceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAudienceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAudienceID: %w", err)
+	}
+	return oldValue.AudienceID, nil
+}
+
+// ResetAudienceID resets all changes to the "audience_id" field.
+func (m *AudienceMemberMutation) ResetAudienceID() {
+	m.audience = nil
+}
+
+// SetContactID sets the "contact_id" field.
+func (m *AudienceMemberMutation) SetContactID(s string) {
+	m.contact = &s
+}
+
+// ContactID returns the value of the "contact_id" field in the mutation.
+func (m *AudienceMemberMutation) ContactID() (r string, exists bool) {
+	v := m.contact
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContactID returns the old "contact_id" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldContactID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContactID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContactID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContactID: %w", err)
+	}
+	return oldValue.ContactID, nil
+}
+
+// ClearContactID clears the value of the "contact_id" field.
+func (m *AudienceMemberMutation) ClearContactID() {
+	m.contact = nil
+	m.clearedFields[audiencemember.FieldContactID] = struct{}{}
+}
+
+// ContactIDCleared returns if the "contact_id" field was cleared in this mutation.
+func (m *AudienceMemberMutation) ContactIDCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldContactID]
+	return ok
+}
+
+// ResetContactID resets all changes to the "contact_id" field.
+func (m *AudienceMemberMutation) ResetContactID() {
+	m.contact = nil
+	delete(m.clearedFields, audiencemember.FieldContactID)
+}
+
+// SetUserID sets the "user_id" field.
+func (m *AudienceMemberMutation) SetUserID(s string) {
+	m.user = &s
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *AudienceMemberMutation) UserID() (r string, exists bool) {
+	v := m.user
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ClearUserID clears the value of the "user_id" field.
+func (m *AudienceMemberMutation) ClearUserID() {
+	m.user = nil
+	m.clearedFields[audiencemember.FieldUserID] = struct{}{}
+}
+
+// UserIDCleared returns if the "user_id" field was cleared in this mutation.
+func (m *AudienceMemberMutation) UserIDCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldUserID]
+	return ok
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *AudienceMemberMutation) ResetUserID() {
+	m.user = nil
+	delete(m.clearedFields, audiencemember.FieldUserID)
+}
+
+// SetGroupID sets the "group_id" field.
+func (m *AudienceMemberMutation) SetGroupID(s string) {
+	m.group = &s
+}
+
+// GroupID returns the value of the "group_id" field in the mutation.
+func (m *AudienceMemberMutation) GroupID() (r string, exists bool) {
+	v := m.group
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGroupID returns the old "group_id" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGroupID: %w", err)
+	}
+	return oldValue.GroupID, nil
+}
+
+// ClearGroupID clears the value of the "group_id" field.
+func (m *AudienceMemberMutation) ClearGroupID() {
+	m.group = nil
+	m.clearedFields[audiencemember.FieldGroupID] = struct{}{}
+}
+
+// GroupIDCleared returns if the "group_id" field was cleared in this mutation.
+func (m *AudienceMemberMutation) GroupIDCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldGroupID]
+	return ok
+}
+
+// ResetGroupID resets all changes to the "group_id" field.
+func (m *AudienceMemberMutation) ResetGroupID() {
+	m.group = nil
+	delete(m.clearedFields, audiencemember.FieldGroupID)
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (m *AudienceMemberMutation) SetIdentityHolderID(s string) {
+	m.identity_holder = &s
+}
+
+// IdentityHolderID returns the value of the "identity_holder_id" field in the mutation.
+func (m *AudienceMemberMutation) IdentityHolderID() (r string, exists bool) {
+	v := m.identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIdentityHolderID returns the old "identity_holder_id" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIdentityHolderID: %w", err)
+	}
+	return oldValue.IdentityHolderID, nil
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (m *AudienceMemberMutation) ClearIdentityHolderID() {
+	m.identity_holder = nil
+	m.clearedFields[audiencemember.FieldIdentityHolderID] = struct{}{}
+}
+
+// IdentityHolderIDCleared returns if the "identity_holder_id" field was cleared in this mutation.
+func (m *AudienceMemberMutation) IdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldIdentityHolderID]
+	return ok
+}
+
+// ResetIdentityHolderID resets all changes to the "identity_holder_id" field.
+func (m *AudienceMemberMutation) ResetIdentityHolderID() {
+	m.identity_holder = nil
+	delete(m.clearedFields, audiencemember.FieldIdentityHolderID)
+}
+
+// SetSubscriberID sets the "subscriber_id" field.
+func (m *AudienceMemberMutation) SetSubscriberID(s string) {
+	m.subscriber = &s
+}
+
+// SubscriberID returns the value of the "subscriber_id" field in the mutation.
+func (m *AudienceMemberMutation) SubscriberID() (r string, exists bool) {
+	v := m.subscriber
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubscriberID returns the old "subscriber_id" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldSubscriberID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubscriberID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubscriberID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubscriberID: %w", err)
+	}
+	return oldValue.SubscriberID, nil
+}
+
+// ClearSubscriberID clears the value of the "subscriber_id" field.
+func (m *AudienceMemberMutation) ClearSubscriberID() {
+	m.subscriber = nil
+	m.clearedFields[audiencemember.FieldSubscriberID] = struct{}{}
+}
+
+// SubscriberIDCleared returns if the "subscriber_id" field was cleared in this mutation.
+func (m *AudienceMemberMutation) SubscriberIDCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldSubscriberID]
+	return ok
+}
+
+// ResetSubscriberID resets all changes to the "subscriber_id" field.
+func (m *AudienceMemberMutation) ResetSubscriberID() {
+	m.subscriber = nil
+	delete(m.clearedFields, audiencemember.FieldSubscriberID)
+}
+
+// SetEmail sets the "email" field.
+func (m *AudienceMemberMutation) SetEmail(s string) {
+	m.email = &s
+}
+
+// Email returns the value of the "email" field in the mutation.
+func (m *AudienceMemberMutation) Email() (r string, exists bool) {
+	v := m.email
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmail returns the old "email" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldEmail(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmail requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
+	}
+	return oldValue.Email, nil
+}
+
+// ResetEmail resets all changes to the "email" field.
+func (m *AudienceMemberMutation) ResetEmail() {
+	m.email = nil
+}
+
+// SetFullName sets the "full_name" field.
+func (m *AudienceMemberMutation) SetFullName(s string) {
+	m.full_name = &s
+}
+
+// FullName returns the value of the "full_name" field in the mutation.
+func (m *AudienceMemberMutation) FullName() (r string, exists bool) {
+	v := m.full_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFullName returns the old "full_name" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldFullName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFullName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFullName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFullName: %w", err)
+	}
+	return oldValue.FullName, nil
+}
+
+// ClearFullName clears the value of the "full_name" field.
+func (m *AudienceMemberMutation) ClearFullName() {
+	m.full_name = nil
+	m.clearedFields[audiencemember.FieldFullName] = struct{}{}
+}
+
+// FullNameCleared returns if the "full_name" field was cleared in this mutation.
+func (m *AudienceMemberMutation) FullNameCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldFullName]
+	return ok
+}
+
+// ResetFullName resets all changes to the "full_name" field.
+func (m *AudienceMemberMutation) ResetFullName() {
+	m.full_name = nil
+	delete(m.clearedFields, audiencemember.FieldFullName)
+}
+
+// SetMetadata sets the "metadata" field.
+func (m *AudienceMemberMutation) SetMetadata(value map[string]interface{}) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *AudienceMemberMutation) Metadata() (r map[string]interface{}, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the AudienceMember entity.
+// If the AudienceMember object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberMutation) OldMetadata(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *AudienceMemberMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[audiencemember.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *AudienceMemberMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[audiencemember.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *AudienceMemberMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, audiencemember.FieldMetadata)
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *AudienceMemberMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[audiencemember.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *AudienceMemberMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *AudienceMemberMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *AudienceMemberMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// ClearAudience clears the "audience" edge to the Audience entity.
+func (m *AudienceMemberMutation) ClearAudience() {
+	m.clearedaudience = true
+	m.clearedFields[audiencemember.FieldAudienceID] = struct{}{}
+}
+
+// AudienceCleared reports if the "audience" edge to the Audience entity was cleared.
+func (m *AudienceMemberMutation) AudienceCleared() bool {
+	return m.clearedaudience
+}
+
+// AudienceIDs returns the "audience" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AudienceID instead. It exists only for internal usage by the builders.
+func (m *AudienceMemberMutation) AudienceIDs() (ids []string) {
+	if id := m.audience; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAudience resets all changes to the "audience" edge.
+func (m *AudienceMemberMutation) ResetAudience() {
+	m.audience = nil
+	m.clearedaudience = false
+}
+
+// ClearContact clears the "contact" edge to the Contact entity.
+func (m *AudienceMemberMutation) ClearContact() {
+	m.clearedcontact = true
+	m.clearedFields[audiencemember.FieldContactID] = struct{}{}
+}
+
+// ContactCleared reports if the "contact" edge to the Contact entity was cleared.
+func (m *AudienceMemberMutation) ContactCleared() bool {
+	return m.ContactIDCleared() || m.clearedcontact
+}
+
+// ContactIDs returns the "contact" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ContactID instead. It exists only for internal usage by the builders.
+func (m *AudienceMemberMutation) ContactIDs() (ids []string) {
+	if id := m.contact; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetContact resets all changes to the "contact" edge.
+func (m *AudienceMemberMutation) ResetContact() {
+	m.contact = nil
+	m.clearedcontact = false
+}
+
+// ClearUser clears the "user" edge to the User entity.
+func (m *AudienceMemberMutation) ClearUser() {
+	m.cleareduser = true
+	m.clearedFields[audiencemember.FieldUserID] = struct{}{}
+}
+
+// UserCleared reports if the "user" edge to the User entity was cleared.
+func (m *AudienceMemberMutation) UserCleared() bool {
+	return m.UserIDCleared() || m.cleareduser
+}
+
+// UserIDs returns the "user" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// UserID instead. It exists only for internal usage by the builders.
+func (m *AudienceMemberMutation) UserIDs() (ids []string) {
+	if id := m.user; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetUser resets all changes to the "user" edge.
+func (m *AudienceMemberMutation) ResetUser() {
+	m.user = nil
+	m.cleareduser = false
+}
+
+// ClearGroup clears the "group" edge to the Group entity.
+func (m *AudienceMemberMutation) ClearGroup() {
+	m.clearedgroup = true
+	m.clearedFields[audiencemember.FieldGroupID] = struct{}{}
+}
+
+// GroupCleared reports if the "group" edge to the Group entity was cleared.
+func (m *AudienceMemberMutation) GroupCleared() bool {
+	return m.GroupIDCleared() || m.clearedgroup
+}
+
+// GroupIDs returns the "group" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// GroupID instead. It exists only for internal usage by the builders.
+func (m *AudienceMemberMutation) GroupIDs() (ids []string) {
+	if id := m.group; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetGroup resets all changes to the "group" edge.
+func (m *AudienceMemberMutation) ResetGroup() {
+	m.group = nil
+	m.clearedgroup = false
+}
+
+// ClearIdentityHolder clears the "identity_holder" edge to the IdentityHolder entity.
+func (m *AudienceMemberMutation) ClearIdentityHolder() {
+	m.clearedidentity_holder = true
+	m.clearedFields[audiencemember.FieldIdentityHolderID] = struct{}{}
+}
+
+// IdentityHolderCleared reports if the "identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *AudienceMemberMutation) IdentityHolderCleared() bool {
+	return m.IdentityHolderIDCleared() || m.clearedidentity_holder
+}
+
+// IdentityHolderIDs returns the "identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// IdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *AudienceMemberMutation) IdentityHolderIDs() (ids []string) {
+	if id := m.identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetIdentityHolder resets all changes to the "identity_holder" edge.
+func (m *AudienceMemberMutation) ResetIdentityHolder() {
+	m.identity_holder = nil
+	m.clearedidentity_holder = false
+}
+
+// ClearSubscriber clears the "subscriber" edge to the Subscriber entity.
+func (m *AudienceMemberMutation) ClearSubscriber() {
+	m.clearedsubscriber = true
+	m.clearedFields[audiencemember.FieldSubscriberID] = struct{}{}
+}
+
+// SubscriberCleared reports if the "subscriber" edge to the Subscriber entity was cleared.
+func (m *AudienceMemberMutation) SubscriberCleared() bool {
+	return m.SubscriberIDCleared() || m.clearedsubscriber
+}
+
+// SubscriberIDs returns the "subscriber" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SubscriberID instead. It exists only for internal usage by the builders.
+func (m *AudienceMemberMutation) SubscriberIDs() (ids []string) {
+	if id := m.subscriber; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSubscriber resets all changes to the "subscriber" edge.
+func (m *AudienceMemberMutation) ResetSubscriber() {
+	m.subscriber = nil
+	m.clearedsubscriber = false
+}
+
+// Where appends a list predicates to the AudienceMemberMutation builder.
+func (m *AudienceMemberMutation) Where(ps ...predicate.AudienceMember) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the AudienceMemberMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *AudienceMemberMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.AudienceMember, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *AudienceMemberMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *AudienceMemberMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (AudienceMember).
+func (m *AudienceMemberMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AudienceMemberMutation) Fields() []string {
+	fields := make([]string, 0, 19)
+	if m.created_at != nil {
+		fields = append(fields, audiencemember.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, audiencemember.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, audiencemember.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, audiencemember.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, audiencemember.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, audiencemember.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, audiencemember.FieldDeletedBy)
+	}
+	if m.display_id != nil {
+		fields = append(fields, audiencemember.FieldDisplayID)
+	}
+	if m.tags != nil {
+		fields = append(fields, audiencemember.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, audiencemember.FieldOwnerID)
+	}
+	if m.audience != nil {
+		fields = append(fields, audiencemember.FieldAudienceID)
+	}
+	if m.contact != nil {
+		fields = append(fields, audiencemember.FieldContactID)
+	}
+	if m.user != nil {
+		fields = append(fields, audiencemember.FieldUserID)
+	}
+	if m.group != nil {
+		fields = append(fields, audiencemember.FieldGroupID)
+	}
+	if m.identity_holder != nil {
+		fields = append(fields, audiencemember.FieldIdentityHolderID)
+	}
+	if m.subscriber != nil {
+		fields = append(fields, audiencemember.FieldSubscriberID)
+	}
+	if m.email != nil {
+		fields = append(fields, audiencemember.FieldEmail)
+	}
+	if m.full_name != nil {
+		fields = append(fields, audiencemember.FieldFullName)
+	}
+	if m.metadata != nil {
+		fields = append(fields, audiencemember.FieldMetadata)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AudienceMemberMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case audiencemember.FieldCreatedAt:
+		return m.CreatedAt()
+	case audiencemember.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case audiencemember.FieldCreatedBy:
+		return m.CreatedBy()
+	case audiencemember.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case audiencemember.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case audiencemember.FieldDeletedAt:
+		return m.DeletedAt()
+	case audiencemember.FieldDeletedBy:
+		return m.DeletedBy()
+	case audiencemember.FieldDisplayID:
+		return m.DisplayID()
+	case audiencemember.FieldTags:
+		return m.Tags()
+	case audiencemember.FieldOwnerID:
+		return m.OwnerID()
+	case audiencemember.FieldAudienceID:
+		return m.AudienceID()
+	case audiencemember.FieldContactID:
+		return m.ContactID()
+	case audiencemember.FieldUserID:
+		return m.UserID()
+	case audiencemember.FieldGroupID:
+		return m.GroupID()
+	case audiencemember.FieldIdentityHolderID:
+		return m.IdentityHolderID()
+	case audiencemember.FieldSubscriberID:
+		return m.SubscriberID()
+	case audiencemember.FieldEmail:
+		return m.Email()
+	case audiencemember.FieldFullName:
+		return m.FullName()
+	case audiencemember.FieldMetadata:
+		return m.Metadata()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AudienceMemberMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case audiencemember.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case audiencemember.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case audiencemember.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case audiencemember.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case audiencemember.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case audiencemember.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case audiencemember.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case audiencemember.FieldDisplayID:
+		return m.OldDisplayID(ctx)
+	case audiencemember.FieldTags:
+		return m.OldTags(ctx)
+	case audiencemember.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case audiencemember.FieldAudienceID:
+		return m.OldAudienceID(ctx)
+	case audiencemember.FieldContactID:
+		return m.OldContactID(ctx)
+	case audiencemember.FieldUserID:
+		return m.OldUserID(ctx)
+	case audiencemember.FieldGroupID:
+		return m.OldGroupID(ctx)
+	case audiencemember.FieldIdentityHolderID:
+		return m.OldIdentityHolderID(ctx)
+	case audiencemember.FieldSubscriberID:
+		return m.OldSubscriberID(ctx)
+	case audiencemember.FieldEmail:
+		return m.OldEmail(ctx)
+	case audiencemember.FieldFullName:
+		return m.OldFullName(ctx)
+	case audiencemember.FieldMetadata:
+		return m.OldMetadata(ctx)
+	}
+	return nil, fmt.Errorf("unknown AudienceMember field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AudienceMemberMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case audiencemember.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case audiencemember.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case audiencemember.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case audiencemember.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case audiencemember.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case audiencemember.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case audiencemember.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case audiencemember.FieldDisplayID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayID(v)
+		return nil
+	case audiencemember.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case audiencemember.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case audiencemember.FieldAudienceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAudienceID(v)
+		return nil
+	case audiencemember.FieldContactID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContactID(v)
+		return nil
+	case audiencemember.FieldUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case audiencemember.FieldGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGroupID(v)
+		return nil
+	case audiencemember.FieldIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIdentityHolderID(v)
+		return nil
+	case audiencemember.FieldSubscriberID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubscriberID(v)
+		return nil
+	case audiencemember.FieldEmail:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmail(v)
+		return nil
+	case audiencemember.FieldFullName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFullName(v)
+		return nil
+	case audiencemember.FieldMetadata:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceMember field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AudienceMemberMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AudienceMemberMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AudienceMemberMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown AudienceMember numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AudienceMemberMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(audiencemember.FieldCreatedAt) {
+		fields = append(fields, audiencemember.FieldCreatedAt)
+	}
+	if m.FieldCleared(audiencemember.FieldUpdatedAt) {
+		fields = append(fields, audiencemember.FieldUpdatedAt)
+	}
+	if m.FieldCleared(audiencemember.FieldCreatedBy) {
+		fields = append(fields, audiencemember.FieldCreatedBy)
+	}
+	if m.FieldCleared(audiencemember.FieldUpdatedBy) {
+		fields = append(fields, audiencemember.FieldUpdatedBy)
+	}
+	if m.FieldCleared(audiencemember.FieldUpdatedByImpersonator) {
+		fields = append(fields, audiencemember.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(audiencemember.FieldDeletedAt) {
+		fields = append(fields, audiencemember.FieldDeletedAt)
+	}
+	if m.FieldCleared(audiencemember.FieldDeletedBy) {
+		fields = append(fields, audiencemember.FieldDeletedBy)
+	}
+	if m.FieldCleared(audiencemember.FieldTags) {
+		fields = append(fields, audiencemember.FieldTags)
+	}
+	if m.FieldCleared(audiencemember.FieldOwnerID) {
+		fields = append(fields, audiencemember.FieldOwnerID)
+	}
+	if m.FieldCleared(audiencemember.FieldContactID) {
+		fields = append(fields, audiencemember.FieldContactID)
+	}
+	if m.FieldCleared(audiencemember.FieldUserID) {
+		fields = append(fields, audiencemember.FieldUserID)
+	}
+	if m.FieldCleared(audiencemember.FieldGroupID) {
+		fields = append(fields, audiencemember.FieldGroupID)
+	}
+	if m.FieldCleared(audiencemember.FieldIdentityHolderID) {
+		fields = append(fields, audiencemember.FieldIdentityHolderID)
+	}
+	if m.FieldCleared(audiencemember.FieldSubscriberID) {
+		fields = append(fields, audiencemember.FieldSubscriberID)
+	}
+	if m.FieldCleared(audiencemember.FieldFullName) {
+		fields = append(fields, audiencemember.FieldFullName)
+	}
+	if m.FieldCleared(audiencemember.FieldMetadata) {
+		fields = append(fields, audiencemember.FieldMetadata)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AudienceMemberMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AudienceMemberMutation) ClearField(name string) error {
+	switch name {
+	case audiencemember.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case audiencemember.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case audiencemember.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case audiencemember.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case audiencemember.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case audiencemember.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case audiencemember.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case audiencemember.FieldTags:
+		m.ClearTags()
+		return nil
+	case audiencemember.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case audiencemember.FieldContactID:
+		m.ClearContactID()
+		return nil
+	case audiencemember.FieldUserID:
+		m.ClearUserID()
+		return nil
+	case audiencemember.FieldGroupID:
+		m.ClearGroupID()
+		return nil
+	case audiencemember.FieldIdentityHolderID:
+		m.ClearIdentityHolderID()
+		return nil
+	case audiencemember.FieldSubscriberID:
+		m.ClearSubscriberID()
+		return nil
+	case audiencemember.FieldFullName:
+		m.ClearFullName()
+		return nil
+	case audiencemember.FieldMetadata:
+		m.ClearMetadata()
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceMember nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AudienceMemberMutation) ResetField(name string) error {
+	switch name {
+	case audiencemember.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case audiencemember.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case audiencemember.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case audiencemember.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case audiencemember.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case audiencemember.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case audiencemember.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case audiencemember.FieldDisplayID:
+		m.ResetDisplayID()
+		return nil
+	case audiencemember.FieldTags:
+		m.ResetTags()
+		return nil
+	case audiencemember.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case audiencemember.FieldAudienceID:
+		m.ResetAudienceID()
+		return nil
+	case audiencemember.FieldContactID:
+		m.ResetContactID()
+		return nil
+	case audiencemember.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case audiencemember.FieldGroupID:
+		m.ResetGroupID()
+		return nil
+	case audiencemember.FieldIdentityHolderID:
+		m.ResetIdentityHolderID()
+		return nil
+	case audiencemember.FieldSubscriberID:
+		m.ResetSubscriberID()
+		return nil
+	case audiencemember.FieldEmail:
+		m.ResetEmail()
+		return nil
+	case audiencemember.FieldFullName:
+		m.ResetFullName()
+		return nil
+	case audiencemember.FieldMetadata:
+		m.ResetMetadata()
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceMember field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AudienceMemberMutation) AddedEdges() []string {
+	edges := make([]string, 0, 7)
+	if m.owner != nil {
+		edges = append(edges, audiencemember.EdgeOwner)
+	}
+	if m.audience != nil {
+		edges = append(edges, audiencemember.EdgeAudience)
+	}
+	if m.contact != nil {
+		edges = append(edges, audiencemember.EdgeContact)
+	}
+	if m.user != nil {
+		edges = append(edges, audiencemember.EdgeUser)
+	}
+	if m.group != nil {
+		edges = append(edges, audiencemember.EdgeGroup)
+	}
+	if m.identity_holder != nil {
+		edges = append(edges, audiencemember.EdgeIdentityHolder)
+	}
+	if m.subscriber != nil {
+		edges = append(edges, audiencemember.EdgeSubscriber)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AudienceMemberMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case audiencemember.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	case audiencemember.EdgeAudience:
+		if id := m.audience; id != nil {
+			return []ent.Value{*id}
+		}
+	case audiencemember.EdgeContact:
+		if id := m.contact; id != nil {
+			return []ent.Value{*id}
+		}
+	case audiencemember.EdgeUser:
+		if id := m.user; id != nil {
+			return []ent.Value{*id}
+		}
+	case audiencemember.EdgeGroup:
+		if id := m.group; id != nil {
+			return []ent.Value{*id}
+		}
+	case audiencemember.EdgeIdentityHolder:
+		if id := m.identity_holder; id != nil {
+			return []ent.Value{*id}
+		}
+	case audiencemember.EdgeSubscriber:
+		if id := m.subscriber; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AudienceMemberMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 7)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AudienceMemberMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AudienceMemberMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 7)
+	if m.clearedowner {
+		edges = append(edges, audiencemember.EdgeOwner)
+	}
+	if m.clearedaudience {
+		edges = append(edges, audiencemember.EdgeAudience)
+	}
+	if m.clearedcontact {
+		edges = append(edges, audiencemember.EdgeContact)
+	}
+	if m.cleareduser {
+		edges = append(edges, audiencemember.EdgeUser)
+	}
+	if m.clearedgroup {
+		edges = append(edges, audiencemember.EdgeGroup)
+	}
+	if m.clearedidentity_holder {
+		edges = append(edges, audiencemember.EdgeIdentityHolder)
+	}
+	if m.clearedsubscriber {
+		edges = append(edges, audiencemember.EdgeSubscriber)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AudienceMemberMutation) EdgeCleared(name string) bool {
+	switch name {
+	case audiencemember.EdgeOwner:
+		return m.clearedowner
+	case audiencemember.EdgeAudience:
+		return m.clearedaudience
+	case audiencemember.EdgeContact:
+		return m.clearedcontact
+	case audiencemember.EdgeUser:
+		return m.cleareduser
+	case audiencemember.EdgeGroup:
+		return m.clearedgroup
+	case audiencemember.EdgeIdentityHolder:
+		return m.clearedidentity_holder
+	case audiencemember.EdgeSubscriber:
+		return m.clearedsubscriber
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AudienceMemberMutation) ClearEdge(name string) error {
+	switch name {
+	case audiencemember.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	case audiencemember.EdgeAudience:
+		m.ClearAudience()
+		return nil
+	case audiencemember.EdgeContact:
+		m.ClearContact()
+		return nil
+	case audiencemember.EdgeUser:
+		m.ClearUser()
+		return nil
+	case audiencemember.EdgeGroup:
+		m.ClearGroup()
+		return nil
+	case audiencemember.EdgeIdentityHolder:
+		m.ClearIdentityHolder()
+		return nil
+	case audiencemember.EdgeSubscriber:
+		m.ClearSubscriber()
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceMember unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AudienceMemberMutation) ResetEdge(name string) error {
+	switch name {
+	case audiencemember.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	case audiencemember.EdgeAudience:
+		m.ResetAudience()
+		return nil
+	case audiencemember.EdgeContact:
+		m.ResetContact()
+		return nil
+	case audiencemember.EdgeUser:
+		m.ResetUser()
+		return nil
+	case audiencemember.EdgeGroup:
+		m.ResetGroup()
+		return nil
+	case audiencemember.EdgeIdentityHolder:
+		m.ResetIdentityHolder()
+		return nil
+	case audiencemember.EdgeSubscriber:
+		m.ResetSubscriber()
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceMember edge %s", name)
+}
+
 // CampaignMutation represents an operation that mutates the Campaign nodes in the graph.
 type CampaignMutation struct {
 	config
@@ -18832,6 +22601,9 @@ type CampaignMutation struct {
 	identity_holders            map[string]struct{}
 	removedidentity_holders     map[string]struct{}
 	clearedidentity_holders     bool
+	audiences                   map[string]struct{}
+	removedaudiences            map[string]struct{}
+	clearedaudiences            bool
 	controls                    map[string]struct{}
 	removedcontrols             map[string]struct{}
 	clearedcontrols             bool
@@ -21735,6 +25507,60 @@ func (m *CampaignMutation) ResetIdentityHolders() {
 	m.removedidentity_holders = nil
 }
 
+// AddAudienceIDs adds the "audiences" edge to the Audience entity by ids.
+func (m *CampaignMutation) AddAudienceIDs(ids ...string) {
+	if m.audiences == nil {
+		m.audiences = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audiences[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudiences clears the "audiences" edge to the Audience entity.
+func (m *CampaignMutation) ClearAudiences() {
+	m.clearedaudiences = true
+}
+
+// AudiencesCleared reports if the "audiences" edge to the Audience entity was cleared.
+func (m *CampaignMutation) AudiencesCleared() bool {
+	return m.clearedaudiences
+}
+
+// RemoveAudienceIDs removes the "audiences" edge to the Audience entity by IDs.
+func (m *CampaignMutation) RemoveAudienceIDs(ids ...string) {
+	if m.removedaudiences == nil {
+		m.removedaudiences = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audiences, ids[i])
+		m.removedaudiences[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudiences returns the removed IDs of the "audiences" edge to the Audience entity.
+func (m *CampaignMutation) RemovedAudiencesIDs() (ids []string) {
+	for id := range m.removedaudiences {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudiencesIDs returns the "audiences" edge IDs in the mutation.
+func (m *CampaignMutation) AudiencesIDs() (ids []string) {
+	for id := range m.audiences {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudiences resets all changes to the "audiences" edge.
+func (m *CampaignMutation) ResetAudiences() {
+	m.audiences = nil
+	m.clearedaudiences = false
+	m.removedaudiences = nil
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by ids.
 func (m *CampaignMutation) AddControlIDs(ids ...string) {
 	if m.controls == nil {
@@ -22931,7 +26757,7 @@ func (m *CampaignMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CampaignMutation) AddedEdges() []string {
-	edges := make([]string, 0, 20)
+	edges := make([]string, 0, 21)
 	if m.owner != nil {
 		edges = append(edges, campaign.EdgeOwner)
 	}
@@ -22985,6 +26811,9 @@ func (m *CampaignMutation) AddedEdges() []string {
 	}
 	if m.identity_holders != nil {
 		edges = append(edges, campaign.EdgeIdentityHolders)
+	}
+	if m.audiences != nil {
+		edges = append(edges, campaign.EdgeAudiences)
 	}
 	if m.controls != nil {
 		edges = append(edges, campaign.EdgeControls)
@@ -23089,6 +26918,12 @@ func (m *CampaignMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case campaign.EdgeAudiences:
+		ids := make([]ent.Value, 0, len(m.audiences))
+		for id := range m.audiences {
+			ids = append(ids, id)
+		}
+		return ids
 	case campaign.EdgeControls:
 		ids := make([]ent.Value, 0, len(m.controls))
 		for id := range m.controls {
@@ -23107,7 +26942,7 @@ func (m *CampaignMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CampaignMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 20)
+	edges := make([]string, 0, 21)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, campaign.EdgeBlockedGroups)
 	}
@@ -23134,6 +26969,9 @@ func (m *CampaignMutation) RemovedEdges() []string {
 	}
 	if m.removedidentity_holders != nil {
 		edges = append(edges, campaign.EdgeIdentityHolders)
+	}
+	if m.removedaudiences != nil {
+		edges = append(edges, campaign.EdgeAudiences)
 	}
 	if m.removedcontrols != nil {
 		edges = append(edges, campaign.EdgeControls)
@@ -23202,6 +27040,12 @@ func (m *CampaignMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case campaign.EdgeAudiences:
+		ids := make([]ent.Value, 0, len(m.removedaudiences))
+		for id := range m.removedaudiences {
+			ids = append(ids, id)
+		}
+		return ids
 	case campaign.EdgeControls:
 		ids := make([]ent.Value, 0, len(m.removedcontrols))
 		for id := range m.removedcontrols {
@@ -23220,7 +27064,7 @@ func (m *CampaignMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CampaignMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 20)
+	edges := make([]string, 0, 21)
 	if m.clearedowner {
 		edges = append(edges, campaign.EdgeOwner)
 	}
@@ -23275,6 +27119,9 @@ func (m *CampaignMutation) ClearedEdges() []string {
 	if m.clearedidentity_holders {
 		edges = append(edges, campaign.EdgeIdentityHolders)
 	}
+	if m.clearedaudiences {
+		edges = append(edges, campaign.EdgeAudiences)
+	}
 	if m.clearedcontrols {
 		edges = append(edges, campaign.EdgeControls)
 	}
@@ -23324,6 +27171,8 @@ func (m *CampaignMutation) EdgeCleared(name string) bool {
 		return m.clearedgroups
 	case campaign.EdgeIdentityHolders:
 		return m.clearedidentity_holders
+	case campaign.EdgeAudiences:
+		return m.clearedaudiences
 	case campaign.EdgeControls:
 		return m.clearedcontrols
 	case campaign.EdgeWorkflowObjectRefs:
@@ -23424,6 +27273,9 @@ func (m *CampaignMutation) ResetEdge(name string) error {
 		return nil
 	case campaign.EdgeIdentityHolders:
 		m.ResetIdentityHolders()
+		return nil
+	case campaign.EdgeAudiences:
+		m.ResetAudiences()
 		return nil
 	case campaign.EdgeControls:
 		m.ResetControls()
@@ -27370,6 +31222,9 @@ type ContactMutation struct {
 	campaign_targets        map[string]struct{}
 	removedcampaign_targets map[string]struct{}
 	clearedcampaign_targets bool
+	audience_members        map[string]struct{}
+	removedaudience_members map[string]struct{}
+	clearedaudience_members bool
 	files                   map[string]struct{}
 	removedfiles            map[string]struct{}
 	clearedfiles            bool
@@ -28608,6 +32463,60 @@ func (m *ContactMutation) ResetCampaignTargets() {
 	m.removedcampaign_targets = nil
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by ids.
+func (m *ContactMutation) AddAudienceMemberIDs(ids ...string) {
+	if m.audience_members == nil {
+		m.audience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceMembers clears the "audience_members" edge to the AudienceMember entity.
+func (m *ContactMutation) ClearAudienceMembers() {
+	m.clearedaudience_members = true
+}
+
+// AudienceMembersCleared reports if the "audience_members" edge to the AudienceMember entity was cleared.
+func (m *ContactMutation) AudienceMembersCleared() bool {
+	return m.clearedaudience_members
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to the AudienceMember entity by IDs.
+func (m *ContactMutation) RemoveAudienceMemberIDs(ids ...string) {
+	if m.removedaudience_members == nil {
+		m.removedaudience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_members, ids[i])
+		m.removedaudience_members[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceMembers returns the removed IDs of the "audience_members" edge to the AudienceMember entity.
+func (m *ContactMutation) RemovedAudienceMembersIDs() (ids []string) {
+	for id := range m.removedaudience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceMembersIDs returns the "audience_members" edge IDs in the mutation.
+func (m *ContactMutation) AudienceMembersIDs() (ids []string) {
+	for id := range m.audience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceMembers resets all changes to the "audience_members" edge.
+func (m *ContactMutation) ResetAudienceMembers() {
+	m.audience_members = nil
+	m.clearedaudience_members = false
+	m.removedaudience_members = nil
+}
+
 // AddFileIDs adds the "files" edge to the File entity by ids.
 func (m *ContactMutation) AddFileIDs(ids ...string) {
 	if m.files == nil {
@@ -29266,7 +33175,7 @@ func (m *ContactMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ContactMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.owner != nil {
 		edges = append(edges, contact.EdgeOwner)
 	}
@@ -29278,6 +33187,9 @@ func (m *ContactMutation) AddedEdges() []string {
 	}
 	if m.campaign_targets != nil {
 		edges = append(edges, contact.EdgeCampaignTargets)
+	}
+	if m.audience_members != nil {
+		edges = append(edges, contact.EdgeAudienceMembers)
 	}
 	if m.files != nil {
 		edges = append(edges, contact.EdgeFiles)
@@ -29314,6 +33226,12 @@ func (m *ContactMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case contact.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.audience_members))
+		for id := range m.audience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case contact.EdgeFiles:
 		ids := make([]ent.Value, 0, len(m.files))
 		for id := range m.files {
@@ -29332,7 +33250,7 @@ func (m *ContactMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ContactMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedentities != nil {
 		edges = append(edges, contact.EdgeEntities)
 	}
@@ -29341,6 +33259,9 @@ func (m *ContactMutation) RemovedEdges() []string {
 	}
 	if m.removedcampaign_targets != nil {
 		edges = append(edges, contact.EdgeCampaignTargets)
+	}
+	if m.removedaudience_members != nil {
+		edges = append(edges, contact.EdgeAudienceMembers)
 	}
 	if m.removedfiles != nil {
 		edges = append(edges, contact.EdgeFiles)
@@ -29373,6 +33294,12 @@ func (m *ContactMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case contact.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.removedaudience_members))
+		for id := range m.removedaudience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case contact.EdgeFiles:
 		ids := make([]ent.Value, 0, len(m.removedfiles))
 		for id := range m.removedfiles {
@@ -29391,7 +33318,7 @@ func (m *ContactMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ContactMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedowner {
 		edges = append(edges, contact.EdgeOwner)
 	}
@@ -29403,6 +33330,9 @@ func (m *ContactMutation) ClearedEdges() []string {
 	}
 	if m.clearedcampaign_targets {
 		edges = append(edges, contact.EdgeCampaignTargets)
+	}
+	if m.clearedaudience_members {
+		edges = append(edges, contact.EdgeAudienceMembers)
 	}
 	if m.clearedfiles {
 		edges = append(edges, contact.EdgeFiles)
@@ -29425,6 +33355,8 @@ func (m *ContactMutation) EdgeCleared(name string) bool {
 		return m.clearedcampaigns
 	case contact.EdgeCampaignTargets:
 		return m.clearedcampaign_targets
+	case contact.EdgeAudienceMembers:
+		return m.clearedaudience_members
 	case contact.EdgeFiles:
 		return m.clearedfiles
 	case contact.EdgeSubscribers:
@@ -29459,6 +33391,9 @@ func (m *ContactMutation) ResetEdge(name string) error {
 		return nil
 	case contact.EdgeCampaignTargets:
 		m.ResetCampaignTargets()
+		return nil
+	case contact.EdgeAudienceMembers:
+		m.ResetAudienceMembers()
 		return nil
 	case contact.EdgeFiles:
 		m.ResetFiles()
@@ -99128,6 +103063,15 @@ type GroupMutation struct {
 	campaign_viewers                             map[string]struct{}
 	removedcampaign_viewers                      map[string]struct{}
 	clearedcampaign_viewers                      bool
+	audience_editors                             map[string]struct{}
+	removedaudience_editors                      map[string]struct{}
+	clearedaudience_editors                      bool
+	audience_blocked_groups                      map[string]struct{}
+	removedaudience_blocked_groups               map[string]struct{}
+	clearedaudience_blocked_groups               bool
+	audience_viewers                             map[string]struct{}
+	removedaudience_viewers                      map[string]struct{}
+	clearedaudience_viewers                      bool
 	procedure_editors                            map[string]struct{}
 	removedprocedure_editors                     map[string]struct{}
 	clearedprocedure_editors                     bool
@@ -99207,6 +103151,9 @@ type GroupMutation struct {
 	campaign_targets                             map[string]struct{}
 	removedcampaign_targets                      map[string]struct{}
 	clearedcampaign_targets                      bool
+	audience_members                             map[string]struct{}
+	removedaudience_members                      map[string]struct{}
+	clearedaudience_members                      bool
 	invites                                      map[string]struct{}
 	removedinvites                               map[string]struct{}
 	clearedinvites                               bool
@@ -101814,6 +105761,168 @@ func (m *GroupMutation) ResetCampaignViewers() {
 	m.removedcampaign_viewers = nil
 }
 
+// AddAudienceEditorIDs adds the "audience_editors" edge to the Audience entity by ids.
+func (m *GroupMutation) AddAudienceEditorIDs(ids ...string) {
+	if m.audience_editors == nil {
+		m.audience_editors = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_editors[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceEditors clears the "audience_editors" edge to the Audience entity.
+func (m *GroupMutation) ClearAudienceEditors() {
+	m.clearedaudience_editors = true
+}
+
+// AudienceEditorsCleared reports if the "audience_editors" edge to the Audience entity was cleared.
+func (m *GroupMutation) AudienceEditorsCleared() bool {
+	return m.clearedaudience_editors
+}
+
+// RemoveAudienceEditorIDs removes the "audience_editors" edge to the Audience entity by IDs.
+func (m *GroupMutation) RemoveAudienceEditorIDs(ids ...string) {
+	if m.removedaudience_editors == nil {
+		m.removedaudience_editors = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_editors, ids[i])
+		m.removedaudience_editors[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceEditors returns the removed IDs of the "audience_editors" edge to the Audience entity.
+func (m *GroupMutation) RemovedAudienceEditorsIDs() (ids []string) {
+	for id := range m.removedaudience_editors {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceEditorsIDs returns the "audience_editors" edge IDs in the mutation.
+func (m *GroupMutation) AudienceEditorsIDs() (ids []string) {
+	for id := range m.audience_editors {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceEditors resets all changes to the "audience_editors" edge.
+func (m *GroupMutation) ResetAudienceEditors() {
+	m.audience_editors = nil
+	m.clearedaudience_editors = false
+	m.removedaudience_editors = nil
+}
+
+// AddAudienceBlockedGroupIDs adds the "audience_blocked_groups" edge to the Audience entity by ids.
+func (m *GroupMutation) AddAudienceBlockedGroupIDs(ids ...string) {
+	if m.audience_blocked_groups == nil {
+		m.audience_blocked_groups = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_blocked_groups[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceBlockedGroups clears the "audience_blocked_groups" edge to the Audience entity.
+func (m *GroupMutation) ClearAudienceBlockedGroups() {
+	m.clearedaudience_blocked_groups = true
+}
+
+// AudienceBlockedGroupsCleared reports if the "audience_blocked_groups" edge to the Audience entity was cleared.
+func (m *GroupMutation) AudienceBlockedGroupsCleared() bool {
+	return m.clearedaudience_blocked_groups
+}
+
+// RemoveAudienceBlockedGroupIDs removes the "audience_blocked_groups" edge to the Audience entity by IDs.
+func (m *GroupMutation) RemoveAudienceBlockedGroupIDs(ids ...string) {
+	if m.removedaudience_blocked_groups == nil {
+		m.removedaudience_blocked_groups = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_blocked_groups, ids[i])
+		m.removedaudience_blocked_groups[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceBlockedGroups returns the removed IDs of the "audience_blocked_groups" edge to the Audience entity.
+func (m *GroupMutation) RemovedAudienceBlockedGroupsIDs() (ids []string) {
+	for id := range m.removedaudience_blocked_groups {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceBlockedGroupsIDs returns the "audience_blocked_groups" edge IDs in the mutation.
+func (m *GroupMutation) AudienceBlockedGroupsIDs() (ids []string) {
+	for id := range m.audience_blocked_groups {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceBlockedGroups resets all changes to the "audience_blocked_groups" edge.
+func (m *GroupMutation) ResetAudienceBlockedGroups() {
+	m.audience_blocked_groups = nil
+	m.clearedaudience_blocked_groups = false
+	m.removedaudience_blocked_groups = nil
+}
+
+// AddAudienceViewerIDs adds the "audience_viewers" edge to the Audience entity by ids.
+func (m *GroupMutation) AddAudienceViewerIDs(ids ...string) {
+	if m.audience_viewers == nil {
+		m.audience_viewers = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_viewers[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceViewers clears the "audience_viewers" edge to the Audience entity.
+func (m *GroupMutation) ClearAudienceViewers() {
+	m.clearedaudience_viewers = true
+}
+
+// AudienceViewersCleared reports if the "audience_viewers" edge to the Audience entity was cleared.
+func (m *GroupMutation) AudienceViewersCleared() bool {
+	return m.clearedaudience_viewers
+}
+
+// RemoveAudienceViewerIDs removes the "audience_viewers" edge to the Audience entity by IDs.
+func (m *GroupMutation) RemoveAudienceViewerIDs(ids ...string) {
+	if m.removedaudience_viewers == nil {
+		m.removedaudience_viewers = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_viewers, ids[i])
+		m.removedaudience_viewers[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceViewers returns the removed IDs of the "audience_viewers" edge to the Audience entity.
+func (m *GroupMutation) RemovedAudienceViewersIDs() (ids []string) {
+	for id := range m.removedaudience_viewers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceViewersIDs returns the "audience_viewers" edge IDs in the mutation.
+func (m *GroupMutation) AudienceViewersIDs() (ids []string) {
+	for id := range m.audience_viewers {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceViewers resets all changes to the "audience_viewers" edge.
+func (m *GroupMutation) ResetAudienceViewers() {
+	m.audience_viewers = nil
+	m.clearedaudience_viewers = false
+	m.removedaudience_viewers = nil
+}
+
 // AddProcedureEditorIDs adds the "procedure_editors" edge to the Procedure entity by ids.
 func (m *GroupMutation) AddProcedureEditorIDs(ids ...string) {
 	if m.procedure_editors == nil {
@@ -103243,6 +107352,60 @@ func (m *GroupMutation) ResetCampaignTargets() {
 	m.removedcampaign_targets = nil
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by ids.
+func (m *GroupMutation) AddAudienceMemberIDs(ids ...string) {
+	if m.audience_members == nil {
+		m.audience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceMembers clears the "audience_members" edge to the AudienceMember entity.
+func (m *GroupMutation) ClearAudienceMembers() {
+	m.clearedaudience_members = true
+}
+
+// AudienceMembersCleared reports if the "audience_members" edge to the AudienceMember entity was cleared.
+func (m *GroupMutation) AudienceMembersCleared() bool {
+	return m.clearedaudience_members
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to the AudienceMember entity by IDs.
+func (m *GroupMutation) RemoveAudienceMemberIDs(ids ...string) {
+	if m.removedaudience_members == nil {
+		m.removedaudience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_members, ids[i])
+		m.removedaudience_members[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceMembers returns the removed IDs of the "audience_members" edge to the AudienceMember entity.
+func (m *GroupMutation) RemovedAudienceMembersIDs() (ids []string) {
+	for id := range m.removedaudience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceMembersIDs returns the "audience_members" edge IDs in the mutation.
+func (m *GroupMutation) AudienceMembersIDs() (ids []string) {
+	for id := range m.audience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceMembers resets all changes to the "audience_members" edge.
+func (m *GroupMutation) ResetAudienceMembers() {
+	m.audience_members = nil
+	m.clearedaudience_members = false
+	m.removedaudience_members = nil
+}
+
 // AddInviteIDs adds the "invites" edge to the Invite entity by ids.
 func (m *GroupMutation) AddInviteIDs(ids ...string) {
 	if m.invites == nil {
@@ -104004,7 +108167,7 @@ func (m *GroupMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *GroupMutation) AddedEdges() []string {
-	edges := make([]string, 0, 54)
+	edges := make([]string, 0, 58)
 	if m.owner != nil {
 		edges = append(edges, group.EdgeOwner)
 	}
@@ -104079,6 +108242,15 @@ func (m *GroupMutation) AddedEdges() []string {
 	}
 	if m.campaign_viewers != nil {
 		edges = append(edges, group.EdgeCampaignViewers)
+	}
+	if m.audience_editors != nil {
+		edges = append(edges, group.EdgeAudienceEditors)
+	}
+	if m.audience_blocked_groups != nil {
+		edges = append(edges, group.EdgeAudienceBlockedGroups)
+	}
+	if m.audience_viewers != nil {
+		edges = append(edges, group.EdgeAudienceViewers)
 	}
 	if m.procedure_editors != nil {
 		edges = append(edges, group.EdgeProcedureEditors)
@@ -104160,6 +108332,9 @@ func (m *GroupMutation) AddedEdges() []string {
 	}
 	if m.campaign_targets != nil {
 		edges = append(edges, group.EdgeCampaignTargets)
+	}
+	if m.audience_members != nil {
+		edges = append(edges, group.EdgeAudienceMembers)
 	}
 	if m.invites != nil {
 		edges = append(edges, group.EdgeInvites)
@@ -104322,6 +108497,24 @@ func (m *GroupMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case group.EdgeAudienceEditors:
+		ids := make([]ent.Value, 0, len(m.audience_editors))
+		for id := range m.audience_editors {
+			ids = append(ids, id)
+		}
+		return ids
+	case group.EdgeAudienceBlockedGroups:
+		ids := make([]ent.Value, 0, len(m.audience_blocked_groups))
+		for id := range m.audience_blocked_groups {
+			ids = append(ids, id)
+		}
+		return ids
+	case group.EdgeAudienceViewers:
+		ids := make([]ent.Value, 0, len(m.audience_viewers))
+		for id := range m.audience_viewers {
+			ids = append(ids, id)
+		}
+		return ids
 	case group.EdgeProcedureEditors:
 		ids := make([]ent.Value, 0, len(m.procedure_editors))
 		for id := range m.procedure_editors {
@@ -104480,6 +108673,12 @@ func (m *GroupMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case group.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.audience_members))
+		for id := range m.audience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case group.EdgeInvites:
 		ids := make([]ent.Value, 0, len(m.invites))
 		for id := range m.invites {
@@ -104498,7 +108697,7 @@ func (m *GroupMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *GroupMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 54)
+	edges := make([]string, 0, 58)
 	if m.removedprogram_editors != nil {
 		edges = append(edges, group.EdgeProgramEditors)
 	}
@@ -104570,6 +108769,15 @@ func (m *GroupMutation) RemovedEdges() []string {
 	}
 	if m.removedcampaign_viewers != nil {
 		edges = append(edges, group.EdgeCampaignViewers)
+	}
+	if m.removedaudience_editors != nil {
+		edges = append(edges, group.EdgeAudienceEditors)
+	}
+	if m.removedaudience_blocked_groups != nil {
+		edges = append(edges, group.EdgeAudienceBlockedGroups)
+	}
+	if m.removedaudience_viewers != nil {
+		edges = append(edges, group.EdgeAudienceViewers)
 	}
 	if m.removedprocedure_editors != nil {
 		edges = append(edges, group.EdgeProcedureEditors)
@@ -104645,6 +108853,9 @@ func (m *GroupMutation) RemovedEdges() []string {
 	}
 	if m.removedcampaign_targets != nil {
 		edges = append(edges, group.EdgeCampaignTargets)
+	}
+	if m.removedaudience_members != nil {
+		edges = append(edges, group.EdgeAudienceMembers)
 	}
 	if m.removedinvites != nil {
 		edges = append(edges, group.EdgeInvites)
@@ -104803,6 +109014,24 @@ func (m *GroupMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case group.EdgeAudienceEditors:
+		ids := make([]ent.Value, 0, len(m.removedaudience_editors))
+		for id := range m.removedaudience_editors {
+			ids = append(ids, id)
+		}
+		return ids
+	case group.EdgeAudienceBlockedGroups:
+		ids := make([]ent.Value, 0, len(m.removedaudience_blocked_groups))
+		for id := range m.removedaudience_blocked_groups {
+			ids = append(ids, id)
+		}
+		return ids
+	case group.EdgeAudienceViewers:
+		ids := make([]ent.Value, 0, len(m.removedaudience_viewers))
+		for id := range m.removedaudience_viewers {
+			ids = append(ids, id)
+		}
+		return ids
 	case group.EdgeProcedureEditors:
 		ids := make([]ent.Value, 0, len(m.removedprocedure_editors))
 		for id := range m.removedprocedure_editors {
@@ -104953,6 +109182,12 @@ func (m *GroupMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case group.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.removedaudience_members))
+		for id := range m.removedaudience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case group.EdgeInvites:
 		ids := make([]ent.Value, 0, len(m.removedinvites))
 		for id := range m.removedinvites {
@@ -104971,7 +109206,7 @@ func (m *GroupMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *GroupMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 54)
+	edges := make([]string, 0, 58)
 	if m.clearedowner {
 		edges = append(edges, group.EdgeOwner)
 	}
@@ -105046,6 +109281,15 @@ func (m *GroupMutation) ClearedEdges() []string {
 	}
 	if m.clearedcampaign_viewers {
 		edges = append(edges, group.EdgeCampaignViewers)
+	}
+	if m.clearedaudience_editors {
+		edges = append(edges, group.EdgeAudienceEditors)
+	}
+	if m.clearedaudience_blocked_groups {
+		edges = append(edges, group.EdgeAudienceBlockedGroups)
+	}
+	if m.clearedaudience_viewers {
+		edges = append(edges, group.EdgeAudienceViewers)
 	}
 	if m.clearedprocedure_editors {
 		edges = append(edges, group.EdgeProcedureEditors)
@@ -105128,6 +109372,9 @@ func (m *GroupMutation) ClearedEdges() []string {
 	if m.clearedcampaign_targets {
 		edges = append(edges, group.EdgeCampaignTargets)
 	}
+	if m.clearedaudience_members {
+		edges = append(edges, group.EdgeAudienceMembers)
+	}
 	if m.clearedinvites {
 		edges = append(edges, group.EdgeInvites)
 	}
@@ -105191,6 +109438,12 @@ func (m *GroupMutation) EdgeCleared(name string) bool {
 		return m.clearedcampaign_blocked_groups
 	case group.EdgeCampaignViewers:
 		return m.clearedcampaign_viewers
+	case group.EdgeAudienceEditors:
+		return m.clearedaudience_editors
+	case group.EdgeAudienceBlockedGroups:
+		return m.clearedaudience_blocked_groups
+	case group.EdgeAudienceViewers:
+		return m.clearedaudience_viewers
 	case group.EdgeProcedureEditors:
 		return m.clearedprocedure_editors
 	case group.EdgeProcedureBlockedGroups:
@@ -105245,6 +109498,8 @@ func (m *GroupMutation) EdgeCleared(name string) bool {
 		return m.clearedcampaigns
 	case group.EdgeCampaignTargets:
 		return m.clearedcampaign_targets
+	case group.EdgeAudienceMembers:
+		return m.clearedaudience_members
 	case group.EdgeInvites:
 		return m.clearedinvites
 	case group.EdgeMembers:
@@ -105349,6 +109604,15 @@ func (m *GroupMutation) ResetEdge(name string) error {
 	case group.EdgeCampaignViewers:
 		m.ResetCampaignViewers()
 		return nil
+	case group.EdgeAudienceEditors:
+		m.ResetAudienceEditors()
+		return nil
+	case group.EdgeAudienceBlockedGroups:
+		m.ResetAudienceBlockedGroups()
+		return nil
+	case group.EdgeAudienceViewers:
+		m.ResetAudienceViewers()
+		return nil
 	case group.EdgeProcedureEditors:
 		m.ResetProcedureEditors()
 		return nil
@@ -105429,6 +109693,9 @@ func (m *GroupMutation) ResetEdge(name string) error {
 		return nil
 	case group.EdgeCampaignTargets:
 		m.ResetCampaignTargets()
+		return nil
+	case group.EdgeAudienceMembers:
+		m.ResetAudienceMembers()
 		return nil
 	case group.EdgeInvites:
 		m.ResetInvites()
@@ -109784,6 +114051,9 @@ type IdentityHolderMutation struct {
 	campaigns                   map[string]struct{}
 	removedcampaigns            map[string]struct{}
 	clearedcampaigns            bool
+	audience_members            map[string]struct{}
+	removedaudience_members     map[string]struct{}
+	clearedaudience_members     bool
 	tasks                       map[string]struct{}
 	removedtasks                map[string]struct{}
 	clearedtasks                bool
@@ -112655,6 +116925,60 @@ func (m *IdentityHolderMutation) ResetCampaigns() {
 	m.removedcampaigns = nil
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by ids.
+func (m *IdentityHolderMutation) AddAudienceMemberIDs(ids ...string) {
+	if m.audience_members == nil {
+		m.audience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceMembers clears the "audience_members" edge to the AudienceMember entity.
+func (m *IdentityHolderMutation) ClearAudienceMembers() {
+	m.clearedaudience_members = true
+}
+
+// AudienceMembersCleared reports if the "audience_members" edge to the AudienceMember entity was cleared.
+func (m *IdentityHolderMutation) AudienceMembersCleared() bool {
+	return m.clearedaudience_members
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to the AudienceMember entity by IDs.
+func (m *IdentityHolderMutation) RemoveAudienceMemberIDs(ids ...string) {
+	if m.removedaudience_members == nil {
+		m.removedaudience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_members, ids[i])
+		m.removedaudience_members[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceMembers returns the removed IDs of the "audience_members" edge to the AudienceMember entity.
+func (m *IdentityHolderMutation) RemovedAudienceMembersIDs() (ids []string) {
+	for id := range m.removedaudience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceMembersIDs returns the "audience_members" edge IDs in the mutation.
+func (m *IdentityHolderMutation) AudienceMembersIDs() (ids []string) {
+	for id := range m.audience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceMembers resets all changes to the "audience_members" edge.
+func (m *IdentityHolderMutation) ResetAudienceMembers() {
+	m.audience_members = nil
+	m.clearedaudience_members = false
+	m.removedaudience_members = nil
+}
+
 // AddTaskIDs adds the "tasks" edge to the Task entity by ids.
 func (m *IdentityHolderMutation) AddTaskIDs(ids ...string) {
 	if m.tasks == nil {
@@ -113986,7 +118310,7 @@ func (m *IdentityHolderMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *IdentityHolderMutation) AddedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.owner != nil {
 		edges = append(edges, identityholder.EdgeOwner)
 	}
@@ -114043,6 +118367,9 @@ func (m *IdentityHolderMutation) AddedEdges() []string {
 	}
 	if m.campaigns != nil {
 		edges = append(edges, identityholder.EdgeCampaigns)
+	}
+	if m.audience_members != nil {
+		edges = append(edges, identityholder.EdgeAudienceMembers)
 	}
 	if m.tasks != nil {
 		edges = append(edges, identityholder.EdgeTasks)
@@ -114174,6 +118501,12 @@ func (m *IdentityHolderMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case identityholder.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.audience_members))
+		for id := range m.audience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case identityholder.EdgeTasks:
 		ids := make([]ent.Value, 0, len(m.tasks))
 		for id := range m.tasks {
@@ -114220,7 +118553,7 @@ func (m *IdentityHolderMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *IdentityHolderMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, identityholder.EdgeBlockedGroups)
 	}
@@ -114259,6 +118592,9 @@ func (m *IdentityHolderMutation) RemovedEdges() []string {
 	}
 	if m.removedcampaigns != nil {
 		edges = append(edges, identityholder.EdgeCampaigns)
+	}
+	if m.removedaudience_members != nil {
+		edges = append(edges, identityholder.EdgeAudienceMembers)
 	}
 	if m.removedtasks != nil {
 		edges = append(edges, identityholder.EdgeTasks)
@@ -114363,6 +118699,12 @@ func (m *IdentityHolderMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case identityholder.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.removedaudience_members))
+		for id := range m.removedaudience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case identityholder.EdgeTasks:
 		ids := make([]ent.Value, 0, len(m.removedtasks))
 		for id := range m.removedtasks {
@@ -114405,7 +118747,7 @@ func (m *IdentityHolderMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *IdentityHolderMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 27)
 	if m.clearedowner {
 		edges = append(edges, identityholder.EdgeOwner)
 	}
@@ -114462,6 +118804,9 @@ func (m *IdentityHolderMutation) ClearedEdges() []string {
 	}
 	if m.clearedcampaigns {
 		edges = append(edges, identityholder.EdgeCampaigns)
+	}
+	if m.clearedaudience_members {
+		edges = append(edges, identityholder.EdgeAudienceMembers)
 	}
 	if m.clearedtasks {
 		edges = append(edges, identityholder.EdgeTasks)
@@ -114529,6 +118874,8 @@ func (m *IdentityHolderMutation) EdgeCleared(name string) bool {
 		return m.clearedplatforms
 	case identityholder.EdgeCampaigns:
 		return m.clearedcampaigns
+	case identityholder.EdgeAudienceMembers:
+		return m.clearedaudience_members
 	case identityholder.EdgeTasks:
 		return m.clearedtasks
 	case identityholder.EdgeFiles:
@@ -114636,6 +118983,9 @@ func (m *IdentityHolderMutation) ResetEdge(name string) error {
 		return nil
 	case identityholder.EdgeCampaigns:
 		m.ResetCampaigns()
+		return nil
+	case identityholder.EdgeAudienceMembers:
+		m.ResetAudienceMembers()
 		return nil
 	case identityholder.EdgeTasks:
 		m.ResetTasks()
@@ -156584,6 +160934,12 @@ type OrganizationMutation struct {
 	asset_creators                                map[string]struct{}
 	removedasset_creators                         map[string]struct{}
 	clearedasset_creators                         bool
+	audience_creators                             map[string]struct{}
+	removedaudience_creators                      map[string]struct{}
+	clearedaudience_creators                      bool
+	audience_member_creators                      map[string]struct{}
+	removedaudience_member_creators               map[string]struct{}
+	clearedaudience_member_creators               bool
 	campaign_creators                             map[string]struct{}
 	removedcampaign_creators                      map[string]struct{}
 	clearedcampaign_creators                      bool
@@ -156962,6 +161318,12 @@ type OrganizationMutation struct {
 	exports                                       map[string]struct{}
 	removedexports                                map[string]struct{}
 	clearedexports                                bool
+	audiences                                     map[string]struct{}
+	removedaudiences                              map[string]struct{}
+	clearedaudiences                              bool
+	audience_members                              map[string]struct{}
+	removedaudience_members                       map[string]struct{}
+	clearedaudience_members                       bool
 	trust_center_watermark_configs                map[string]struct{}
 	removedtrust_center_watermark_configs         map[string]struct{}
 	clearedtrust_center_watermark_configs         bool
@@ -158238,6 +162600,114 @@ func (m *OrganizationMutation) ResetAssetCreators() {
 	m.asset_creators = nil
 	m.clearedasset_creators = false
 	m.removedasset_creators = nil
+}
+
+// AddAudienceCreatorIDs adds the "audience_creators" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddAudienceCreatorIDs(ids ...string) {
+	if m.audience_creators == nil {
+		m.audience_creators = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_creators[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceCreators clears the "audience_creators" edge to the Group entity.
+func (m *OrganizationMutation) ClearAudienceCreators() {
+	m.clearedaudience_creators = true
+}
+
+// AudienceCreatorsCleared reports if the "audience_creators" edge to the Group entity was cleared.
+func (m *OrganizationMutation) AudienceCreatorsCleared() bool {
+	return m.clearedaudience_creators
+}
+
+// RemoveAudienceCreatorIDs removes the "audience_creators" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveAudienceCreatorIDs(ids ...string) {
+	if m.removedaudience_creators == nil {
+		m.removedaudience_creators = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_creators, ids[i])
+		m.removedaudience_creators[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceCreators returns the removed IDs of the "audience_creators" edge to the Group entity.
+func (m *OrganizationMutation) RemovedAudienceCreatorsIDs() (ids []string) {
+	for id := range m.removedaudience_creators {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceCreatorsIDs returns the "audience_creators" edge IDs in the mutation.
+func (m *OrganizationMutation) AudienceCreatorsIDs() (ids []string) {
+	for id := range m.audience_creators {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceCreators resets all changes to the "audience_creators" edge.
+func (m *OrganizationMutation) ResetAudienceCreators() {
+	m.audience_creators = nil
+	m.clearedaudience_creators = false
+	m.removedaudience_creators = nil
+}
+
+// AddAudienceMemberCreatorIDs adds the "audience_member_creators" edge to the Group entity by ids.
+func (m *OrganizationMutation) AddAudienceMemberCreatorIDs(ids ...string) {
+	if m.audience_member_creators == nil {
+		m.audience_member_creators = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_member_creators[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceMemberCreators clears the "audience_member_creators" edge to the Group entity.
+func (m *OrganizationMutation) ClearAudienceMemberCreators() {
+	m.clearedaudience_member_creators = true
+}
+
+// AudienceMemberCreatorsCleared reports if the "audience_member_creators" edge to the Group entity was cleared.
+func (m *OrganizationMutation) AudienceMemberCreatorsCleared() bool {
+	return m.clearedaudience_member_creators
+}
+
+// RemoveAudienceMemberCreatorIDs removes the "audience_member_creators" edge to the Group entity by IDs.
+func (m *OrganizationMutation) RemoveAudienceMemberCreatorIDs(ids ...string) {
+	if m.removedaudience_member_creators == nil {
+		m.removedaudience_member_creators = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_member_creators, ids[i])
+		m.removedaudience_member_creators[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceMemberCreators returns the removed IDs of the "audience_member_creators" edge to the Group entity.
+func (m *OrganizationMutation) RemovedAudienceMemberCreatorsIDs() (ids []string) {
+	for id := range m.removedaudience_member_creators {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceMemberCreatorsIDs returns the "audience_member_creators" edge IDs in the mutation.
+func (m *OrganizationMutation) AudienceMemberCreatorsIDs() (ids []string) {
+	for id := range m.audience_member_creators {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceMemberCreators resets all changes to the "audience_member_creators" edge.
+func (m *OrganizationMutation) ResetAudienceMemberCreators() {
+	m.audience_member_creators = nil
+	m.clearedaudience_member_creators = false
+	m.removedaudience_member_creators = nil
 }
 
 // AddCampaignCreatorIDs adds the "campaign_creators" edge to the Group entity by ids.
@@ -165055,6 +169525,114 @@ func (m *OrganizationMutation) ResetExports() {
 	m.removedexports = nil
 }
 
+// AddAudienceIDs adds the "audiences" edge to the Audience entity by ids.
+func (m *OrganizationMutation) AddAudienceIDs(ids ...string) {
+	if m.audiences == nil {
+		m.audiences = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audiences[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudiences clears the "audiences" edge to the Audience entity.
+func (m *OrganizationMutation) ClearAudiences() {
+	m.clearedaudiences = true
+}
+
+// AudiencesCleared reports if the "audiences" edge to the Audience entity was cleared.
+func (m *OrganizationMutation) AudiencesCleared() bool {
+	return m.clearedaudiences
+}
+
+// RemoveAudienceIDs removes the "audiences" edge to the Audience entity by IDs.
+func (m *OrganizationMutation) RemoveAudienceIDs(ids ...string) {
+	if m.removedaudiences == nil {
+		m.removedaudiences = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audiences, ids[i])
+		m.removedaudiences[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudiences returns the removed IDs of the "audiences" edge to the Audience entity.
+func (m *OrganizationMutation) RemovedAudiencesIDs() (ids []string) {
+	for id := range m.removedaudiences {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudiencesIDs returns the "audiences" edge IDs in the mutation.
+func (m *OrganizationMutation) AudiencesIDs() (ids []string) {
+	for id := range m.audiences {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudiences resets all changes to the "audiences" edge.
+func (m *OrganizationMutation) ResetAudiences() {
+	m.audiences = nil
+	m.clearedaudiences = false
+	m.removedaudiences = nil
+}
+
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by ids.
+func (m *OrganizationMutation) AddAudienceMemberIDs(ids ...string) {
+	if m.audience_members == nil {
+		m.audience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceMembers clears the "audience_members" edge to the AudienceMember entity.
+func (m *OrganizationMutation) ClearAudienceMembers() {
+	m.clearedaudience_members = true
+}
+
+// AudienceMembersCleared reports if the "audience_members" edge to the AudienceMember entity was cleared.
+func (m *OrganizationMutation) AudienceMembersCleared() bool {
+	return m.clearedaudience_members
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to the AudienceMember entity by IDs.
+func (m *OrganizationMutation) RemoveAudienceMemberIDs(ids ...string) {
+	if m.removedaudience_members == nil {
+		m.removedaudience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_members, ids[i])
+		m.removedaudience_members[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceMembers returns the removed IDs of the "audience_members" edge to the AudienceMember entity.
+func (m *OrganizationMutation) RemovedAudienceMembersIDs() (ids []string) {
+	for id := range m.removedaudience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceMembersIDs returns the "audience_members" edge IDs in the mutation.
+func (m *OrganizationMutation) AudienceMembersIDs() (ids []string) {
+	for id := range m.audience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceMembers resets all changes to the "audience_members" edge.
+func (m *OrganizationMutation) ResetAudienceMembers() {
+	m.audience_members = nil
+	m.clearedaudience_members = false
+	m.removedaudience_members = nil
+}
+
 // AddTrustCenterWatermarkConfigIDs adds the "trust_center_watermark_configs" edge to the TrustCenterWatermarkConfig entity by ids.
 func (m *OrganizationMutation) AddTrustCenterWatermarkConfigIDs(ids ...string) {
 	if m.trust_center_watermark_configs == nil {
@@ -167034,7 +171612,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 158)
+	edges := make([]string, 0, 162)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -167046,6 +171624,12 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.asset_creators != nil {
 		edges = append(edges, organization.EdgeAssetCreators)
+	}
+	if m.audience_creators != nil {
+		edges = append(edges, organization.EdgeAudienceCreators)
+	}
+	if m.audience_member_creators != nil {
+		edges = append(edges, organization.EdgeAudienceMemberCreators)
 	}
 	if m.campaign_creators != nil {
 		edges = append(edges, organization.EdgeCampaignCreators)
@@ -167428,6 +172012,12 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	if m.exports != nil {
 		edges = append(edges, organization.EdgeExports)
 	}
+	if m.audiences != nil {
+		edges = append(edges, organization.EdgeAudiences)
+	}
+	if m.audience_members != nil {
+		edges = append(edges, organization.EdgeAudienceMembers)
+	}
 	if m.trust_center_watermark_configs != nil {
 		edges = append(edges, organization.EdgeTrustCenterWatermarkConfigs)
 	}
@@ -167537,6 +172127,18 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 	case organization.EdgeAssetCreators:
 		ids := make([]ent.Value, 0, len(m.asset_creators))
 		for id := range m.asset_creators {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeAudienceCreators:
+		ids := make([]ent.Value, 0, len(m.audience_creators))
+		for id := range m.audience_creators {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeAudienceMemberCreators:
+		ids := make([]ent.Value, 0, len(m.audience_member_creators))
+		for id := range m.audience_member_creators {
 			ids = append(ids, id)
 		}
 		return ids
@@ -168296,6 +172898,18 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeAudiences:
+		ids := make([]ent.Value, 0, len(m.audiences))
+		for id := range m.audiences {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.audience_members))
+		for id := range m.audience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeTrustCenterWatermarkConfigs:
 		ids := make([]ent.Value, 0, len(m.trust_center_watermark_configs))
 		for id := range m.trust_center_watermark_configs {
@@ -168464,7 +173078,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 158)
+	edges := make([]string, 0, 162)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -168476,6 +173090,12 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedasset_creators != nil {
 		edges = append(edges, organization.EdgeAssetCreators)
+	}
+	if m.removedaudience_creators != nil {
+		edges = append(edges, organization.EdgeAudienceCreators)
+	}
+	if m.removedaudience_member_creators != nil {
+		edges = append(edges, organization.EdgeAudienceMemberCreators)
 	}
 	if m.removedcampaign_creators != nil {
 		edges = append(edges, organization.EdgeCampaignCreators)
@@ -168849,6 +173469,12 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	if m.removedexports != nil {
 		edges = append(edges, organization.EdgeExports)
 	}
+	if m.removedaudiences != nil {
+		edges = append(edges, organization.EdgeAudiences)
+	}
+	if m.removedaudience_members != nil {
+		edges = append(edges, organization.EdgeAudienceMembers)
+	}
 	if m.removedtrust_center_watermark_configs != nil {
 		edges = append(edges, organization.EdgeTrustCenterWatermarkConfigs)
 	}
@@ -168958,6 +173584,18 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 	case organization.EdgeAssetCreators:
 		ids := make([]ent.Value, 0, len(m.removedasset_creators))
 		for id := range m.removedasset_creators {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeAudienceCreators:
+		ids := make([]ent.Value, 0, len(m.removedaudience_creators))
+		for id := range m.removedaudience_creators {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeAudienceMemberCreators:
+		ids := make([]ent.Value, 0, len(m.removedaudience_member_creators))
+		for id := range m.removedaudience_member_creators {
 			ids = append(ids, id)
 		}
 		return ids
@@ -169705,6 +174343,18 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeAudiences:
+		ids := make([]ent.Value, 0, len(m.removedaudiences))
+		for id := range m.removedaudiences {
+			ids = append(ids, id)
+		}
+		return ids
+	case organization.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.removedaudience_members))
+		for id := range m.removedaudience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeTrustCenterWatermarkConfigs:
 		ids := make([]ent.Value, 0, len(m.removedtrust_center_watermark_configs))
 		for id := range m.removedtrust_center_watermark_configs {
@@ -169873,7 +174523,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 158)
+	edges := make([]string, 0, 162)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -169885,6 +174535,12 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	}
 	if m.clearedasset_creators {
 		edges = append(edges, organization.EdgeAssetCreators)
+	}
+	if m.clearedaudience_creators {
+		edges = append(edges, organization.EdgeAudienceCreators)
+	}
+	if m.clearedaudience_member_creators {
+		edges = append(edges, organization.EdgeAudienceMemberCreators)
 	}
 	if m.clearedcampaign_creators {
 		edges = append(edges, organization.EdgeCampaignCreators)
@@ -170267,6 +174923,12 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedexports {
 		edges = append(edges, organization.EdgeExports)
 	}
+	if m.clearedaudiences {
+		edges = append(edges, organization.EdgeAudiences)
+	}
+	if m.clearedaudience_members {
+		edges = append(edges, organization.EdgeAudienceMembers)
+	}
 	if m.clearedtrust_center_watermark_configs {
 		edges = append(edges, organization.EdgeTrustCenterWatermarkConfigs)
 	}
@@ -170363,6 +175025,10 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedassessment_creators
 	case organization.EdgeAssetCreators:
 		return m.clearedasset_creators
+	case organization.EdgeAudienceCreators:
+		return m.clearedaudience_creators
+	case organization.EdgeAudienceMemberCreators:
+		return m.clearedaudience_member_creators
 	case organization.EdgeCampaignCreators:
 		return m.clearedcampaign_creators
 	case organization.EdgeCampaignTargetCreators:
@@ -170617,6 +175283,10 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedsubprocessors
 	case organization.EdgeExports:
 		return m.clearedexports
+	case organization.EdgeAudiences:
+		return m.clearedaudiences
+	case organization.EdgeAudienceMembers:
+		return m.clearedaudience_members
 	case organization.EdgeTrustCenterWatermarkConfigs:
 		return m.clearedtrust_center_watermark_configs
 	case organization.EdgeImpersonationEvents:
@@ -170707,6 +175377,12 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeAssetCreators:
 		m.ResetAssetCreators()
+		return nil
+	case organization.EdgeAudienceCreators:
+		m.ResetAudienceCreators()
+		return nil
+	case organization.EdgeAudienceMemberCreators:
+		m.ResetAudienceMemberCreators()
 		return nil
 	case organization.EdgeCampaignCreators:
 		m.ResetCampaignCreators()
@@ -171088,6 +175764,12 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeExports:
 		m.ResetExports()
+		return nil
+	case organization.EdgeAudiences:
+		m.ResetAudiences()
+		return nil
+	case organization.EdgeAudienceMembers:
+		m.ResetAudienceMembers()
 		return nil
 	case organization.EdgeTrustCenterWatermarkConfigs:
 		m.ResetTrustCenterWatermarkConfigs()
@@ -226218,6 +230900,9 @@ type SubscriberMutation struct {
 	clearedcontact          bool
 	user                    *string
 	cleareduser             bool
+	audience_members        map[string]struct{}
+	removedaudience_members map[string]struct{}
+	clearedaudience_members bool
 	done                    bool
 	oldValue                func(context.Context) (*Subscriber, error)
 	predicates              []predicate.Subscriber
@@ -227540,6 +232225,60 @@ func (m *SubscriberMutation) ResetUser() {
 	m.cleareduser = false
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by ids.
+func (m *SubscriberMutation) AddAudienceMemberIDs(ids ...string) {
+	if m.audience_members == nil {
+		m.audience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceMembers clears the "audience_members" edge to the AudienceMember entity.
+func (m *SubscriberMutation) ClearAudienceMembers() {
+	m.clearedaudience_members = true
+}
+
+// AudienceMembersCleared reports if the "audience_members" edge to the AudienceMember entity was cleared.
+func (m *SubscriberMutation) AudienceMembersCleared() bool {
+	return m.clearedaudience_members
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to the AudienceMember entity by IDs.
+func (m *SubscriberMutation) RemoveAudienceMemberIDs(ids ...string) {
+	if m.removedaudience_members == nil {
+		m.removedaudience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_members, ids[i])
+		m.removedaudience_members[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceMembers returns the removed IDs of the "audience_members" edge to the AudienceMember entity.
+func (m *SubscriberMutation) RemovedAudienceMembersIDs() (ids []string) {
+	for id := range m.removedaudience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceMembersIDs returns the "audience_members" edge IDs in the mutation.
+func (m *SubscriberMutation) AudienceMembersIDs() (ids []string) {
+	for id := range m.audience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceMembers resets all changes to the "audience_members" edge.
+func (m *SubscriberMutation) ResetAudienceMembers() {
+	m.audience_members = nil
+	m.clearedaudience_members = false
+	m.removedaudience_members = nil
+}
+
 // Where appends a list predicates to the SubscriberMutation builder.
 func (m *SubscriberMutation) Where(ps ...predicate.Subscriber) {
 	m.predicates = append(m.predicates, ps...)
@@ -228126,7 +232865,7 @@ func (m *SubscriberMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SubscriberMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.owner != nil {
 		edges = append(edges, subscriber.EdgeOwner)
 	}
@@ -228144,6 +232883,9 @@ func (m *SubscriberMutation) AddedEdges() []string {
 	}
 	if m.user != nil {
 		edges = append(edges, subscriber.EdgeUser)
+	}
+	if m.audience_members != nil {
+		edges = append(edges, subscriber.EdgeAudienceMembers)
 	}
 	return edges
 }
@@ -228180,18 +232922,27 @@ func (m *SubscriberMutation) AddedIDs(name string) []ent.Value {
 		if id := m.user; id != nil {
 			return []ent.Value{*id}
 		}
+	case subscriber.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.audience_members))
+		for id := range m.audience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SubscriberMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedevents != nil {
 		edges = append(edges, subscriber.EdgeEvents)
 	}
 	if m.removedcampaign_targets != nil {
 		edges = append(edges, subscriber.EdgeCampaignTargets)
+	}
+	if m.removedaudience_members != nil {
+		edges = append(edges, subscriber.EdgeAudienceMembers)
 	}
 	return edges
 }
@@ -228212,13 +232963,19 @@ func (m *SubscriberMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subscriber.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.removedaudience_members))
+		for id := range m.removedaudience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SubscriberMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedowner {
 		edges = append(edges, subscriber.EdgeOwner)
 	}
@@ -228236,6 +232993,9 @@ func (m *SubscriberMutation) ClearedEdges() []string {
 	}
 	if m.cleareduser {
 		edges = append(edges, subscriber.EdgeUser)
+	}
+	if m.clearedaudience_members {
+		edges = append(edges, subscriber.EdgeAudienceMembers)
 	}
 	return edges
 }
@@ -228256,6 +233016,8 @@ func (m *SubscriberMutation) EdgeCleared(name string) bool {
 		return m.clearedcontact
 	case subscriber.EdgeUser:
 		return m.cleareduser
+	case subscriber.EdgeAudienceMembers:
+		return m.clearedaudience_members
 	}
 	return false
 }
@@ -228301,6 +233063,9 @@ func (m *SubscriberMutation) ResetEdge(name string) error {
 		return nil
 	case subscriber.EdgeUser:
 		m.ResetUser()
+		return nil
+	case subscriber.EdgeAudienceMembers:
+		m.ResetAudienceMembers()
 		return nil
 	}
 	return fmt.Errorf("unknown Subscriber edge %s", name)
@@ -258762,6 +263527,9 @@ type UserMutation struct {
 	campaign_targets                 map[string]struct{}
 	removedcampaign_targets          map[string]struct{}
 	clearedcampaign_targets          bool
+	audience_members                 map[string]struct{}
+	removedaudience_members          map[string]struct{}
+	clearedaudience_members          bool
 	subcontrols                      map[string]struct{}
 	removedsubcontrols               map[string]struct{}
 	clearedsubcontrols               bool
@@ -260926,6 +265694,60 @@ func (m *UserMutation) ResetCampaignTargets() {
 	m.removedcampaign_targets = nil
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by ids.
+func (m *UserMutation) AddAudienceMemberIDs(ids ...string) {
+	if m.audience_members == nil {
+		m.audience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.audience_members[ids[i]] = struct{}{}
+	}
+}
+
+// ClearAudienceMembers clears the "audience_members" edge to the AudienceMember entity.
+func (m *UserMutation) ClearAudienceMembers() {
+	m.clearedaudience_members = true
+}
+
+// AudienceMembersCleared reports if the "audience_members" edge to the AudienceMember entity was cleared.
+func (m *UserMutation) AudienceMembersCleared() bool {
+	return m.clearedaudience_members
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to the AudienceMember entity by IDs.
+func (m *UserMutation) RemoveAudienceMemberIDs(ids ...string) {
+	if m.removedaudience_members == nil {
+		m.removedaudience_members = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.audience_members, ids[i])
+		m.removedaudience_members[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedAudienceMembers returns the removed IDs of the "audience_members" edge to the AudienceMember entity.
+func (m *UserMutation) RemovedAudienceMembersIDs() (ids []string) {
+	for id := range m.removedaudience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// AudienceMembersIDs returns the "audience_members" edge IDs in the mutation.
+func (m *UserMutation) AudienceMembersIDs() (ids []string) {
+	for id := range m.audience_members {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetAudienceMembers resets all changes to the "audience_members" edge.
+func (m *UserMutation) ResetAudienceMembers() {
+	m.audience_members = nil
+	m.clearedaudience_members = false
+	m.removedaudience_members = nil
+}
+
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by ids.
 func (m *UserMutation) AddSubcontrolIDs(ids ...string) {
 	if m.subcontrols == nil {
@@ -262267,7 +267089,7 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.personal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -262312,6 +267134,9 @@ func (m *UserMutation) AddedEdges() []string {
 	}
 	if m.campaign_targets != nil {
 		edges = append(edges, user.EdgeCampaignTargets)
+	}
+	if m.audience_members != nil {
+		edges = append(edges, user.EdgeAudienceMembers)
 	}
 	if m.subcontrols != nil {
 		edges = append(edges, user.EdgeSubcontrols)
@@ -262442,6 +267267,12 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.audience_members))
+		for id := range m.audience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case user.EdgeSubcontrols:
 		ids := make([]ent.Value, 0, len(m.subcontrols))
 		for id := range m.subcontrols {
@@ -262520,7 +267351,7 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.removedpersonal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -262559,6 +267390,9 @@ func (m *UserMutation) RemovedEdges() []string {
 	}
 	if m.removedcampaign_targets != nil {
 		edges = append(edges, user.EdgeCampaignTargets)
+	}
+	if m.removedaudience_members != nil {
+		edges = append(edges, user.EdgeAudienceMembers)
 	}
 	if m.removedsubcontrols != nil {
 		edges = append(edges, user.EdgeSubcontrols)
@@ -262681,6 +267515,12 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case user.EdgeAudienceMembers:
+		ids := make([]ent.Value, 0, len(m.removedaudience_members))
+		for id := range m.removedaudience_members {
+			ids = append(ids, id)
+		}
+		return ids
 	case user.EdgeSubcontrols:
 		ids := make([]ent.Value, 0, len(m.removedsubcontrols))
 		for id := range m.removedsubcontrols {
@@ -262759,7 +267599,7 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.clearedpersonal_access_tokens {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -262804,6 +267644,9 @@ func (m *UserMutation) ClearedEdges() []string {
 	}
 	if m.clearedcampaign_targets {
 		edges = append(edges, user.EdgeCampaignTargets)
+	}
+	if m.clearedaudience_members {
+		edges = append(edges, user.EdgeAudienceMembers)
 	}
 	if m.clearedsubcontrols {
 		edges = append(edges, user.EdgeSubcontrols)
@@ -262878,6 +267721,8 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 		return m.clearedcampaigns
 	case user.EdgeCampaignTargets:
 		return m.clearedcampaign_targets
+	case user.EdgeAudienceMembers:
+		return m.clearedaudience_members
 	case user.EdgeSubcontrols:
 		return m.clearedsubcontrols
 	case user.EdgeAssignerTasks:
@@ -262968,6 +267813,9 @@ func (m *UserMutation) ResetEdge(name string) error {
 		return nil
 	case user.EdgeCampaignTargets:
 		m.ResetCampaignTargets()
+		return nil
+	case user.EdgeAudienceMembers:
+		m.ResetAudienceMembers()
 		return nil
 	case user.EdgeSubcontrols:
 		m.ResetSubcontrols()

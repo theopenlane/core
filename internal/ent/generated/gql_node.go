@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
@@ -131,6 +133,16 @@ var assetImplementors = []string{"Asset", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*Asset) IsNode() {}
+
+var audienceImplementors = []string{"Audience", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Audience) IsNode() {}
+
+var audiencememberImplementors = []string{"AudienceMember", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AudienceMember) IsNode() {}
 
 var campaignImplementors = []string{"Campaign", "Node"}
 
@@ -661,6 +673,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(asset.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assetImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case audience.Table:
+		query := c.Audience.Query().
+			Where(audience.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, audienceImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case audiencemember.Table:
+		query := c.AudienceMember.Query().
+			Where(audiencemember.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, audiencememberImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1580,6 +1610,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Asset.Query().
 			Where(asset.IDIn(ids...))
 		query, err := query.CollectFields(ctx, assetImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case audience.Table:
+		query := c.Audience.Query().
+			Where(audience.IDIn(ids...))
+		query, err := query.CollectFields(ctx, audienceImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case audiencemember.Table:
+		query := c.AudienceMember.Query().
+			Where(audiencemember.IDIn(ids...))
+		query, err := query.CollectFields(ctx, audiencememberImplementors...)
 		if err != nil {
 			return nil, err
 		}

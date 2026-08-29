@@ -138,6 +138,8 @@ const (
 	EdgeGroups = "groups"
 	// EdgeIdentityHolders holds the string denoting the identity_holders edge name in mutations.
 	EdgeIdentityHolders = "identity_holders"
+	// EdgeAudiences holds the string denoting the audiences edge name in mutations.
+	EdgeAudiences = "audiences"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
 	EdgeControls = "controls"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
@@ -256,6 +258,11 @@ const (
 	// IdentityHoldersInverseTable is the table name for the IdentityHolder entity.
 	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
 	IdentityHoldersInverseTable = "identity_holders"
+	// AudiencesTable is the table that holds the audiences relation/edge. The primary key declared below.
+	AudiencesTable = "campaign_audiences"
+	// AudiencesInverseTable is the table name for the Audience entity.
+	// It exists in this package in order to avoid circular dependency with the "audience" package.
+	AudiencesInverseTable = "audiences"
 	// ControlsTable is the table that holds the controls relation/edge. The primary key declared below.
 	ControlsTable = "control_campaigns"
 	// ControlsInverseTable is the table name for the Control entity.
@@ -339,6 +346,9 @@ var (
 	// IdentityHoldersPrimaryKey and IdentityHoldersColumn2 are the table columns denoting the
 	// primary key for the identity_holders relation (M2M).
 	IdentityHoldersPrimaryKey = []string{"campaign_id", "identity_holder_id"}
+	// AudiencesPrimaryKey and AudiencesColumn2 are the table columns denoting the
+	// primary key for the audiences relation (M2M).
+	AudiencesPrimaryKey = []string{"campaign_id", "audience_id"}
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"control_id", "campaign_id"}
@@ -830,6 +840,20 @@ func ByIdentityHolders(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAudiencesCount orders the results by audiences count.
+func ByAudiencesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudiencesStep(), opts...)
+	}
+}
+
+// ByAudiences orders the results by audiences terms.
+func ByAudiences(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudiencesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlsCount orders the results by controls count.
 func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -981,6 +1005,13 @@ func newIdentityHoldersStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IdentityHoldersInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
+	)
+}
+func newAudiencesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudiencesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, AudiencesTable, AudiencesPrimaryKey...),
 	)
 }
 func newControlsStep() *sqlgraph.Step {

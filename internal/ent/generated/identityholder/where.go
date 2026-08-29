@@ -2984,6 +2984,29 @@ func HasCampaignsWith(preds ...predicate.Campaign) predicate.IdentityHolder {
 	})
 }
 
+// HasAudienceMembers applies the HasEdge predicate on the "audience_members" edge.
+func HasAudienceMembers() predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceMembersWith applies the HasEdge predicate on the "audience_members" edge with a given conditions (other predicates).
+func HasAudienceMembersWith(preds ...predicate.AudienceMember) predicate.IdentityHolder {
+	return predicate.IdentityHolder(func(s *sql.Selector) {
+		step := newAudienceMembersStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasTasks applies the HasEdge predicate on the "tasks" edge.
 func HasTasks() predicate.IdentityHolder {
 	return predicate.IdentityHolder(func(s *sql.Selector) {

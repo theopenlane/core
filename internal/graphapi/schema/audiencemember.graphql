@@ -1,0 +1,166 @@
+extend type Query {
+    """
+    Look up audienceMember by ID
+    """
+     audienceMember(
+        """
+        ID of the audienceMember
+        """
+        id: ID!
+    ):  AudienceMember!
+}
+
+extend type Mutation{
+    """
+    Create a new audienceMember
+    """
+    createAudienceMember(
+        """
+        values of the audienceMember
+        """
+        input: CreateAudienceMemberInput!
+    ): AudienceMemberCreatePayload!
+    """
+    Create multiple new audienceMembers
+    """
+    createBulkAudienceMember(
+        """
+        values of the audienceMember
+        """
+        input: [CreateAudienceMemberInput!]
+    ): AudienceMemberBulkCreatePayload!
+    """
+    Create multiple new audienceMembers via file upload
+    """
+    createBulkCSVAudienceMember(
+        """
+        csv file containing values of the audienceMember
+        """
+        input: Upload!
+    ): AudienceMemberBulkCreatePayload!
+    """
+    Update multiple existing audienceMembers
+    """
+    updateBulkAudienceMember(
+        """
+        IDs of the audienceMembers to update
+        """
+        ids: [ID!]!
+        """
+        values to update the audienceMembers with
+        """
+        input: UpdateAudienceMemberInput!
+    ): AudienceMemberBulkUpdatePayload!
+    """
+    Update multiple existing audienceMembers via file upload
+    """
+    updateBulkCSVAudienceMember(
+        """
+        csv file containing values of the audienceMember, must include ID column
+        """
+        input: Upload!
+    ): AudienceMemberBulkUpdatePayload!
+    """
+    Update an existing audienceMember
+    """
+    updateAudienceMember(
+        """
+        ID of the audienceMember
+        """
+        id: ID!
+        """
+        New values for the audienceMember
+        """
+        input: UpdateAudienceMemberInput!
+    ): AudienceMemberUpdatePayload!
+    """
+    Delete an existing audienceMember
+    """
+    deleteAudienceMember(
+        """
+        ID of the audienceMember
+        """
+        id: ID!
+    ): AudienceMemberDeletePayload!
+    """
+    Delete multiple audienceMembers
+    """
+    deleteBulkAudienceMember(
+        """
+        IDs of the audienceMembers to delete
+        """
+        ids: [ID!]!
+    ): AudienceMemberBulkDeletePayload!
+}
+
+"""
+Return response for createAudienceMember mutation
+"""
+type AudienceMemberCreatePayload {
+    """
+    Created audienceMember
+    """
+    audienceMember: AudienceMember!
+}
+
+"""
+Return response for updateAudienceMember mutation
+"""
+type AudienceMemberUpdatePayload {
+    """
+    Updated audienceMember
+    """
+    audienceMember: AudienceMember!
+}
+
+"""
+Return response for deleteAudienceMember mutation
+"""
+type AudienceMemberDeletePayload {
+    """
+    Deleted audienceMember ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAudienceMember mutation
+"""
+type AudienceMemberBulkCreatePayload {
+    """
+    Created audienceMembers
+    """
+    audienceMembers: [AudienceMember!]
+}
+
+"""
+Return response for updateBulkAudienceMember mutation
+"""
+type AudienceMemberBulkUpdatePayload {
+    """
+    Updated audienceMembers
+    """
+    audienceMembers: [AudienceMember!]
+    """
+    IDs of the updated audienceMembers
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkAudienceMember mutation
+"""
+type AudienceMemberBulkDeletePayload {
+    """
+    Deleted audienceMember IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of audienceMembers that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}

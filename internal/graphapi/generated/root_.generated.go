@@ -524,6 +524,133 @@ type ComplexityRoot struct {
 		Asset func(childComplexity int) int
 	}
 
+	Audience struct {
+		AudienceMembers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) int
+		AudienceType          func(childComplexity int) int
+		BlockedGroups         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Campaigns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Editors               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Filters               func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Viewers               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+	}
+
+	AudienceBulkCreatePayload struct {
+		Audiences func(childComplexity int) int
+	}
+
+	AudienceBulkDeletePayload struct {
+		DeletedIDs    func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotDeletedIDs func(childComplexity int) int
+	}
+
+	AudienceBulkUpdatePayload struct {
+		Audiences  func(childComplexity int) int
+		UpdatedIDs func(childComplexity int) int
+	}
+
+	AudienceConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AudienceCreatePayload struct {
+		Audience func(childComplexity int) int
+	}
+
+	AudienceDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	AudienceEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	AudienceMember struct {
+		Audience              func(childComplexity int) int
+		AudienceID            func(childComplexity int) int
+		Contact               func(childComplexity int) int
+		ContactID             func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Email                 func(childComplexity int) int
+		FullName              func(childComplexity int) int
+		Group                 func(childComplexity int) int
+		GroupID               func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IdentityHolder        func(childComplexity int) int
+		IdentityHolderID      func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Subscriber            func(childComplexity int) int
+		SubscriberID          func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		User                  func(childComplexity int) int
+		UserID                func(childComplexity int) int
+	}
+
+	AudienceMemberBulkCreatePayload struct {
+		AudienceMembers func(childComplexity int) int
+	}
+
+	AudienceMemberBulkDeletePayload struct {
+		DeletedIDs    func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotDeletedIDs func(childComplexity int) int
+	}
+
+	AudienceMemberBulkUpdatePayload struct {
+		AudienceMembers func(childComplexity int) int
+		UpdatedIDs      func(childComplexity int) int
+	}
+
+	AudienceMemberConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AudienceMemberCreatePayload struct {
+		AudienceMember func(childComplexity int) int
+	}
+
+	AudienceMemberDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	AudienceMemberEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	AudienceMemberUpdatePayload struct {
+		AudienceMember func(childComplexity int) int
+	}
+
+	AudienceUpdatePayload struct {
+		Audience func(childComplexity int) int
+	}
+
 	BulkUpdateStatusPayload struct {
 		TotalUpdated func(childComplexity int) int
 	}
@@ -533,6 +660,7 @@ type ComplexityRoot struct {
 		Assessment              func(childComplexity int) int
 		AssessmentID            func(childComplexity int) int
 		AssessmentResponses     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
+		Audiences               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceOrder, where *generated.AudienceWhereInput) int
 		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CampaignTargets         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
 		CampaignType            func(childComplexity int) int
@@ -765,6 +893,7 @@ type ComplexityRoot struct {
 
 	Contact struct {
 		Address               func(childComplexity int) int
+		AudienceMembers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) int
 		CampaignTargets       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
 		Campaigns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
 		Company               func(childComplexity int) int
@@ -2599,6 +2728,10 @@ type ComplexityRoot struct {
 		ActionPlanEditors                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		ActionPlanViewers                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AdditionalRoles                    func(childComplexity int) int
+		AudienceBlockedGroups              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceOrder, where *generated.AudienceWhereInput) int
+		AudienceEditors                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceOrder, where *generated.AudienceWhereInput) int
+		AudienceMembers                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) int
+		AudienceViewers                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceOrder, where *generated.AudienceWhereInput) int
 		AvatarFile                         func(childComplexity int) int
 		AvatarLocalFileID                  func(childComplexity int) int
 		CampaignBlockedGroups              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
@@ -2916,6 +3049,7 @@ type ComplexityRoot struct {
 		AssessmentResponses     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		Assessments             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		Assets                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AudienceMembers         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) int
 		AvatarRemoteURL         func(childComplexity int) int
 		BlockedGroups           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Campaigns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) int
@@ -3407,12 +3541,18 @@ type ComplexityRoot struct {
 		CreateAssessmentResponse             func(childComplexity int, input generated.CreateAssessmentResponseInput) int
 		CreateAssessmentTemplate             func(childComplexity int, input model.CreateAssessmentTemplateInput) int
 		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
+		CreateAudience                       func(childComplexity int, input generated.CreateAudienceInput) int
+		CreateAudienceMember                 func(childComplexity int, input generated.CreateAudienceMemberInput) int
 		CreateBulkAPIToken                   func(childComplexity int, input []*generated.CreateAPITokenInput) int
 		CreateBulkActionPlan                 func(childComplexity int, input []*generated.CreateActionPlanInput) int
 		CreateBulkAsset                      func(childComplexity int, input []*generated.CreateAssetInput) int
+		CreateBulkAudience                   func(childComplexity int, input []*generated.CreateAudienceInput) int
+		CreateBulkAudienceMember             func(childComplexity int, input []*generated.CreateAudienceMemberInput) int
 		CreateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVAudience                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVAudienceMember          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCampaign                func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCampaignTarget          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVCheckResult             func(childComplexity int, input graphql.Upload) int
@@ -3635,10 +3775,14 @@ type ComplexityRoot struct {
 		DeleteAssessment                     func(childComplexity int, id string) int
 		DeleteAssessmentResponse             func(childComplexity int, id string) int
 		DeleteAsset                          func(childComplexity int, id string) int
+		DeleteAudience                       func(childComplexity int, id string) int
+		DeleteAudienceMember                 func(childComplexity int, id string) int
 		DeleteBulkAPIToken                   func(childComplexity int, ids []string) int
 		DeleteBulkActionPlan                 func(childComplexity int, ids []string) int
 		DeleteBulkAssessment                 func(childComplexity int, ids []string) int
 		DeleteBulkAsset                      func(childComplexity int, ids []string) int
+		DeleteBulkAudience                   func(childComplexity int, ids []string) int
+		DeleteBulkAudienceMember             func(childComplexity int, ids []string) int
 		DeleteBulkCheckResult                func(childComplexity int, ids []string) int
 		DeleteBulkContact                    func(childComplexity int, ids []string) int
 		DeleteBulkControl                    func(childComplexity int, ids []string) int
@@ -3787,12 +3931,18 @@ type ComplexityRoot struct {
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAssessment                     func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
+		UpdateAudience                       func(childComplexity int, id string, input generated.UpdateAudienceInput) int
+		UpdateAudienceMember                 func(childComplexity int, id string, input generated.UpdateAudienceMemberInput) int
 		UpdateBulkAPIToken                   func(childComplexity int, ids []string, input generated.UpdateAPITokenInput) int
 		UpdateBulkActionPlan                 func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
 		UpdateBulkAsset                      func(childComplexity int, ids []string, input generated.UpdateAssetInput) int
+		UpdateBulkAudience                   func(childComplexity int, ids []string, input generated.UpdateAudienceInput) int
+		UpdateBulkAudienceMember             func(childComplexity int, ids []string, input generated.UpdateAudienceMemberInput) int
 		UpdateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVAudience                func(childComplexity int, input graphql.Upload) int
+		UpdateBulkCSVAudienceMember          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVCheckResult             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
@@ -4414,6 +4564,10 @@ type ComplexityRoot struct {
 		Assessments                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		AssetCreators                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Assets                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AudienceCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		AudienceMemberCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		AudienceMembers                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) int
+		Audiences                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceOrder, where *generated.AudienceWhereInput) int
 		AvatarFile                         func(childComplexity int) int
 		AvatarLocalFileID                  func(childComplexity int) int
 		AvatarRemoteURL                    func(childComplexity int) int
@@ -5163,6 +5317,12 @@ type ComplexityRoot struct {
 		Asset                           func(childComplexity int, id string) int
 		AssetSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Assets                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		Audience                        func(childComplexity int, id string) int
+		AudienceMember                  func(childComplexity int, id string) int
+		AudienceMemberSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AudienceMembers                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) int
+		AudienceSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Audiences                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceOrder, where *generated.AudienceWhereInput) int
 		Campaign                        func(childComplexity int, id string) int
 		CampaignSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		CampaignTarget                  func(childComplexity int, id string) int
@@ -5894,6 +6054,8 @@ type ComplexityRoot struct {
 		AssessmentResponses   func(childComplexity int) int
 		Assessments           func(childComplexity int) int
 		Assets                func(childComplexity int) int
+		AudienceMembers       func(childComplexity int) int
+		Audiences             func(childComplexity int) int
 		CampaignTargets       func(childComplexity int) int
 		Campaigns             func(childComplexity int) int
 		Contacts              func(childComplexity int) int
@@ -6190,6 +6352,7 @@ type ComplexityRoot struct {
 
 	Subscriber struct {
 		Active                func(childComplexity int) int
+		AudienceMembers       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) int
 		CampaignTargets       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignTargetOrder, where *generated.CampaignTargetWhereInput) int
 		Contact               func(childComplexity int) int
 		ContactID             func(childComplexity int) int
@@ -7147,6 +7310,7 @@ type ComplexityRoot struct {
 		ActionPlans            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
 		AssigneeTasks          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		AssignerTasks          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		AudienceMembers        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) int
 		AuthProvider           func(childComplexity int) int
 		AvatarFile             func(childComplexity int) int
 		AvatarLocalFileID      func(childComplexity int) int
@@ -10146,6 +10310,487 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.AssetUpdatePayload.Asset(childComplexity), true
 
+	case "Audience.audienceMembers":
+		if e.ComplexityRoot.Audience.AudienceMembers == nil {
+			break
+		}
+
+		args, err := ec.field_Audience_audienceMembers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Audience.AudienceMembers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceMemberOrder), args["where"].(*generated.AudienceMemberWhereInput)), true
+	case "Audience.audienceType":
+		if e.ComplexityRoot.Audience.AudienceType == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.AudienceType(childComplexity), true
+	case "Audience.blockedGroups":
+		if e.ComplexityRoot.Audience.BlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Audience_blockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Audience.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Audience.campaigns":
+		if e.ComplexityRoot.Audience.Campaigns == nil {
+			break
+		}
+
+		args, err := ec.field_Audience_campaigns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Audience.Campaigns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.CampaignOrder), args["where"].(*generated.CampaignWhereInput)), true
+	case "Audience.createdAt":
+		if e.ComplexityRoot.Audience.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.CreatedAt(childComplexity), true
+	case "Audience.createdBy":
+		if e.ComplexityRoot.Audience.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.CreatedBy(childComplexity), true
+	case "Audience.description":
+		if e.ComplexityRoot.Audience.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.Description(childComplexity), true
+	case "Audience.displayID":
+		if e.ComplexityRoot.Audience.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.DisplayID(childComplexity), true
+	case "Audience.editors":
+		if e.ComplexityRoot.Audience.Editors == nil {
+			break
+		}
+
+		args, err := ec.field_Audience_editors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Audience.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Audience.filters":
+		if e.ComplexityRoot.Audience.Filters == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.Filters(childComplexity), true
+	case "Audience.id":
+		if e.ComplexityRoot.Audience.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.ID(childComplexity), true
+	case "Audience.metadata":
+		if e.ComplexityRoot.Audience.Metadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.Metadata(childComplexity), true
+	case "Audience.name":
+		if e.ComplexityRoot.Audience.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.Name(childComplexity), true
+	case "Audience.owner":
+		if e.ComplexityRoot.Audience.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.Owner(childComplexity), true
+	case "Audience.ownerID":
+		if e.ComplexityRoot.Audience.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.OwnerID(childComplexity), true
+	case "Audience.tags":
+		if e.ComplexityRoot.Audience.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.Tags(childComplexity), true
+	case "Audience.updatedAt":
+		if e.ComplexityRoot.Audience.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.UpdatedAt(childComplexity), true
+	case "Audience.updatedBy":
+		if e.ComplexityRoot.Audience.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.UpdatedBy(childComplexity), true
+	case "Audience.updatedByImpersonator":
+		if e.ComplexityRoot.Audience.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Audience.UpdatedByImpersonator(childComplexity), true
+	case "Audience.viewers":
+		if e.ComplexityRoot.Audience.Viewers == nil {
+			break
+		}
+
+		args, err := ec.field_Audience_viewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Audience.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "AudienceBulkCreatePayload.audiences":
+		if e.ComplexityRoot.AudienceBulkCreatePayload.Audiences == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceBulkCreatePayload.Audiences(childComplexity), true
+
+	case "AudienceBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.AudienceBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceBulkDeletePayload.DeletedIDs(childComplexity), true
+	case "AudienceBulkDeletePayload.error":
+		if e.ComplexityRoot.AudienceBulkDeletePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceBulkDeletePayload.Error(childComplexity), true
+	case "AudienceBulkDeletePayload.notDeletedIDs":
+		if e.ComplexityRoot.AudienceBulkDeletePayload.NotDeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceBulkDeletePayload.NotDeletedIDs(childComplexity), true
+
+	case "AudienceBulkUpdatePayload.audiences":
+		if e.ComplexityRoot.AudienceBulkUpdatePayload.Audiences == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceBulkUpdatePayload.Audiences(childComplexity), true
+	case "AudienceBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.AudienceBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "AudienceConnection.edges":
+		if e.ComplexityRoot.AudienceConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceConnection.Edges(childComplexity), true
+	case "AudienceConnection.pageInfo":
+		if e.ComplexityRoot.AudienceConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceConnection.PageInfo(childComplexity), true
+	case "AudienceConnection.totalCount":
+		if e.ComplexityRoot.AudienceConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceConnection.TotalCount(childComplexity), true
+
+	case "AudienceCreatePayload.audience":
+		if e.ComplexityRoot.AudienceCreatePayload.Audience == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceCreatePayload.Audience(childComplexity), true
+
+	case "AudienceDeletePayload.deletedID":
+		if e.ComplexityRoot.AudienceDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceDeletePayload.DeletedID(childComplexity), true
+
+	case "AudienceEdge.cursor":
+		if e.ComplexityRoot.AudienceEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceEdge.Cursor(childComplexity), true
+	case "AudienceEdge.node":
+		if e.ComplexityRoot.AudienceEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceEdge.Node(childComplexity), true
+
+	case "AudienceMember.audience":
+		if e.ComplexityRoot.AudienceMember.Audience == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.Audience(childComplexity), true
+	case "AudienceMember.audienceID":
+		if e.ComplexityRoot.AudienceMember.AudienceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.AudienceID(childComplexity), true
+	case "AudienceMember.contact":
+		if e.ComplexityRoot.AudienceMember.Contact == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.Contact(childComplexity), true
+	case "AudienceMember.contactID":
+		if e.ComplexityRoot.AudienceMember.ContactID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.ContactID(childComplexity), true
+	case "AudienceMember.createdAt":
+		if e.ComplexityRoot.AudienceMember.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.CreatedAt(childComplexity), true
+	case "AudienceMember.createdBy":
+		if e.ComplexityRoot.AudienceMember.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.CreatedBy(childComplexity), true
+	case "AudienceMember.displayID":
+		if e.ComplexityRoot.AudienceMember.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.DisplayID(childComplexity), true
+	case "AudienceMember.email":
+		if e.ComplexityRoot.AudienceMember.Email == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.Email(childComplexity), true
+	case "AudienceMember.fullName":
+		if e.ComplexityRoot.AudienceMember.FullName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.FullName(childComplexity), true
+	case "AudienceMember.group":
+		if e.ComplexityRoot.AudienceMember.Group == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.Group(childComplexity), true
+	case "AudienceMember.groupID":
+		if e.ComplexityRoot.AudienceMember.GroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.GroupID(childComplexity), true
+	case "AudienceMember.id":
+		if e.ComplexityRoot.AudienceMember.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.ID(childComplexity), true
+	case "AudienceMember.identityHolder":
+		if e.ComplexityRoot.AudienceMember.IdentityHolder == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.IdentityHolder(childComplexity), true
+	case "AudienceMember.identityHolderID":
+		if e.ComplexityRoot.AudienceMember.IdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.IdentityHolderID(childComplexity), true
+	case "AudienceMember.metadata":
+		if e.ComplexityRoot.AudienceMember.Metadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.Metadata(childComplexity), true
+	case "AudienceMember.owner":
+		if e.ComplexityRoot.AudienceMember.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.Owner(childComplexity), true
+	case "AudienceMember.ownerID":
+		if e.ComplexityRoot.AudienceMember.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.OwnerID(childComplexity), true
+	case "AudienceMember.subscriber":
+		if e.ComplexityRoot.AudienceMember.Subscriber == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.Subscriber(childComplexity), true
+	case "AudienceMember.subscriberID":
+		if e.ComplexityRoot.AudienceMember.SubscriberID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.SubscriberID(childComplexity), true
+	case "AudienceMember.tags":
+		if e.ComplexityRoot.AudienceMember.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.Tags(childComplexity), true
+	case "AudienceMember.updatedAt":
+		if e.ComplexityRoot.AudienceMember.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.UpdatedAt(childComplexity), true
+	case "AudienceMember.updatedBy":
+		if e.ComplexityRoot.AudienceMember.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.UpdatedBy(childComplexity), true
+	case "AudienceMember.updatedByImpersonator":
+		if e.ComplexityRoot.AudienceMember.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.UpdatedByImpersonator(childComplexity), true
+	case "AudienceMember.user":
+		if e.ComplexityRoot.AudienceMember.User == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.User(childComplexity), true
+	case "AudienceMember.userID":
+		if e.ComplexityRoot.AudienceMember.UserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMember.UserID(childComplexity), true
+
+	case "AudienceMemberBulkCreatePayload.audienceMembers":
+		if e.ComplexityRoot.AudienceMemberBulkCreatePayload.AudienceMembers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberBulkCreatePayload.AudienceMembers(childComplexity), true
+
+	case "AudienceMemberBulkDeletePayload.deletedIDs":
+		if e.ComplexityRoot.AudienceMemberBulkDeletePayload.DeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberBulkDeletePayload.DeletedIDs(childComplexity), true
+	case "AudienceMemberBulkDeletePayload.error":
+		if e.ComplexityRoot.AudienceMemberBulkDeletePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberBulkDeletePayload.Error(childComplexity), true
+	case "AudienceMemberBulkDeletePayload.notDeletedIDs":
+		if e.ComplexityRoot.AudienceMemberBulkDeletePayload.NotDeletedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberBulkDeletePayload.NotDeletedIDs(childComplexity), true
+
+	case "AudienceMemberBulkUpdatePayload.audienceMembers":
+		if e.ComplexityRoot.AudienceMemberBulkUpdatePayload.AudienceMembers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberBulkUpdatePayload.AudienceMembers(childComplexity), true
+	case "AudienceMemberBulkUpdatePayload.updatedIDs":
+		if e.ComplexityRoot.AudienceMemberBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
+	case "AudienceMemberConnection.edges":
+		if e.ComplexityRoot.AudienceMemberConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberConnection.Edges(childComplexity), true
+	case "AudienceMemberConnection.pageInfo":
+		if e.ComplexityRoot.AudienceMemberConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberConnection.PageInfo(childComplexity), true
+	case "AudienceMemberConnection.totalCount":
+		if e.ComplexityRoot.AudienceMemberConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberConnection.TotalCount(childComplexity), true
+
+	case "AudienceMemberCreatePayload.audienceMember":
+		if e.ComplexityRoot.AudienceMemberCreatePayload.AudienceMember == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberCreatePayload.AudienceMember(childComplexity), true
+
+	case "AudienceMemberDeletePayload.deletedID":
+		if e.ComplexityRoot.AudienceMemberDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberDeletePayload.DeletedID(childComplexity), true
+
+	case "AudienceMemberEdge.cursor":
+		if e.ComplexityRoot.AudienceMemberEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberEdge.Cursor(childComplexity), true
+	case "AudienceMemberEdge.node":
+		if e.ComplexityRoot.AudienceMemberEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberEdge.Node(childComplexity), true
+
+	case "AudienceMemberUpdatePayload.audienceMember":
+		if e.ComplexityRoot.AudienceMemberUpdatePayload.AudienceMember == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberUpdatePayload.AudienceMember(childComplexity), true
+
+	case "AudienceUpdatePayload.audience":
+		if e.ComplexityRoot.AudienceUpdatePayload.Audience == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceUpdatePayload.Audience(childComplexity), true
+
 	case "BulkUpdateStatusPayload.totalUpdated":
 		if e.ComplexityRoot.BulkUpdateStatusPayload.TotalUpdated == nil {
 			break
@@ -10182,6 +10827,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Campaign.AssessmentResponses(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentResponseOrder), args["where"].(*generated.AssessmentResponseWhereInput)), true
+	case "Campaign.audiences":
+		if e.ComplexityRoot.Campaign.Audiences == nil {
+			break
+		}
+
+		args, err := ec.field_Campaign_audiences_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Campaign.Audiences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceOrder), args["where"].(*generated.AudienceWhereInput)), true
 	case "Campaign.blockedGroups":
 		if e.ComplexityRoot.Campaign.BlockedGroups == nil {
 			break
@@ -11222,6 +11878,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Contact.Address(childComplexity), true
+	case "Contact.audienceMembers":
+		if e.ComplexityRoot.Contact.AudienceMembers == nil {
+			break
+		}
+
+		args, err := ec.field_Contact_audienceMembers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Contact.AudienceMembers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceMemberOrder), args["where"].(*generated.AudienceMemberWhereInput)), true
 	case "Contact.campaignTargets":
 		if e.ComplexityRoot.Contact.CampaignTargets == nil {
 			break
@@ -19698,6 +20365,50 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Group.AdditionalRoles(childComplexity), true
+	case "Group.audienceBlockedGroups":
+		if e.ComplexityRoot.Group.AudienceBlockedGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Group_audienceBlockedGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Group.AudienceBlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceOrder), args["where"].(*generated.AudienceWhereInput)), true
+	case "Group.audienceEditors":
+		if e.ComplexityRoot.Group.AudienceEditors == nil {
+			break
+		}
+
+		args, err := ec.field_Group_audienceEditors_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Group.AudienceEditors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceOrder), args["where"].(*generated.AudienceWhereInput)), true
+	case "Group.audienceMembers":
+		if e.ComplexityRoot.Group.AudienceMembers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_audienceMembers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Group.AudienceMembers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceMemberOrder), args["where"].(*generated.AudienceMemberWhereInput)), true
+	case "Group.audienceViewers":
+		if e.ComplexityRoot.Group.AudienceViewers == nil {
+			break
+		}
+
+		args, err := ec.field_Group_audienceViewers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Group.AudienceViewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceOrder), args["where"].(*generated.AudienceWhereInput)), true
 	case "Group.avatarFile":
 		if e.ComplexityRoot.Group.AvatarFile == nil {
 			break
@@ -21217,6 +21928,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IdentityHolder.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+	case "IdentityHolder.audienceMembers":
+		if e.ComplexityRoot.IdentityHolder.AudienceMembers == nil {
+			break
+		}
+
+		args, err := ec.field_IdentityHolder_audienceMembers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.IdentityHolder.AudienceMembers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceMemberOrder), args["where"].(*generated.AudienceMemberWhereInput)), true
 	case "IdentityHolder.avatarRemoteURL":
 		if e.ComplexityRoot.IdentityHolder.AvatarRemoteURL == nil {
 			break
@@ -23703,6 +24425,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateAsset(childComplexity, args["input"].(generated.CreateAssetInput)), true
+	case "Mutation.createAudience":
+		if e.ComplexityRoot.Mutation.CreateAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateAudience(childComplexity, args["input"].(generated.CreateAudienceInput)), true
+	case "Mutation.createAudienceMember":
+		if e.ComplexityRoot.Mutation.CreateAudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAudienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateAudienceMember(childComplexity, args["input"].(generated.CreateAudienceMemberInput)), true
 	case "Mutation.createBulkAPIToken":
 		if e.ComplexityRoot.Mutation.CreateBulkAPIToken == nil {
 			break
@@ -23736,6 +24480,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkAsset(childComplexity, args["input"].([]*generated.CreateAssetInput)), true
+	case "Mutation.createBulkAudience":
+		if e.ComplexityRoot.Mutation.CreateBulkAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkAudience(childComplexity, args["input"].([]*generated.CreateAudienceInput)), true
+	case "Mutation.createBulkAudienceMember":
+		if e.ComplexityRoot.Mutation.CreateBulkAudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkAudienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkAudienceMember(childComplexity, args["input"].([]*generated.CreateAudienceMemberInput)), true
 	case "Mutation.createBulkCSVAPIToken":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVAPIToken == nil {
 			break
@@ -23769,6 +24535,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVAsset(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.createBulkCSVAudience":
+		if e.ComplexityRoot.Mutation.CreateBulkCSVAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkCSVAudience(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.createBulkCSVAudienceMember":
+		if e.ComplexityRoot.Mutation.CreateBulkCSVAudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVAudienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateBulkCSVAudienceMember(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVCampaign":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVCampaign == nil {
 			break
@@ -26211,6 +26999,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteAsset(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteAudience":
+		if e.ComplexityRoot.Mutation.DeleteAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteAudience(childComplexity, args["id"].(string)), true
+	case "Mutation.deleteAudienceMember":
+		if e.ComplexityRoot.Mutation.DeleteAudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteAudienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteAudienceMember(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteBulkAPIToken":
 		if e.ComplexityRoot.Mutation.DeleteBulkAPIToken == nil {
 			break
@@ -26255,6 +27065,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkAsset(childComplexity, args["ids"].([]string)), true
+	case "Mutation.deleteBulkAudience":
+		if e.ComplexityRoot.Mutation.DeleteBulkAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkAudience(childComplexity, args["ids"].([]string)), true
+	case "Mutation.deleteBulkAudienceMember":
+		if e.ComplexityRoot.Mutation.DeleteBulkAudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteBulkAudienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteBulkAudienceMember(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkCheckResult":
 		if e.ComplexityRoot.Mutation.DeleteBulkCheckResult == nil {
 			break
@@ -27878,6 +28710,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateAsset(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssetInput)), true
+	case "Mutation.updateAudience":
+		if e.ComplexityRoot.Mutation.UpdateAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateAudience(childComplexity, args["id"].(string), args["input"].(generated.UpdateAudienceInput)), true
+	case "Mutation.updateAudienceMember":
+		if e.ComplexityRoot.Mutation.UpdateAudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateAudienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateAudienceMember(childComplexity, args["id"].(string), args["input"].(generated.UpdateAudienceMemberInput)), true
 	case "Mutation.updateBulkAPIToken":
 		if e.ComplexityRoot.Mutation.UpdateBulkAPIToken == nil {
 			break
@@ -27911,6 +28765,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkAsset(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateAssetInput)), true
+	case "Mutation.updateBulkAudience":
+		if e.ComplexityRoot.Mutation.UpdateBulkAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkAudience(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateAudienceInput)), true
+	case "Mutation.updateBulkAudienceMember":
+		if e.ComplexityRoot.Mutation.UpdateBulkAudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkAudienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkAudienceMember(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateAudienceMemberInput)), true
 	case "Mutation.updateBulkCSVAPIToken":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVAPIToken == nil {
 			break
@@ -27944,6 +28820,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVAsset(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.updateBulkCSVAudience":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVAudience == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVAudience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVAudience(childComplexity, args["input"].(graphql.Upload)), true
+	case "Mutation.updateBulkCSVAudienceMember":
+		if e.ComplexityRoot.Mutation.UpdateBulkCSVAudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkCSVAudienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateBulkCSVAudienceMember(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVCheckResult":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVCheckResult == nil {
 			break
@@ -31843,6 +32741,50 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+	case "Organization.audienceCreators":
+		if e.ComplexityRoot.Organization.AudienceCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_audienceCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.AudienceCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.audienceMemberCreators":
+		if e.ComplexityRoot.Organization.AudienceMemberCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_audienceMemberCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.AudienceMemberCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+	case "Organization.audienceMembers":
+		if e.ComplexityRoot.Organization.AudienceMembers == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_audienceMembers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.AudienceMembers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceMemberOrder), args["where"].(*generated.AudienceMemberWhereInput)), true
+	case "Organization.audiences":
+		if e.ComplexityRoot.Organization.Audiences == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_audiences_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.Audiences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceOrder), args["where"].(*generated.AudienceWhereInput)), true
 	case "Organization.avatarFile":
 		if e.ComplexityRoot.Organization.AvatarFile == nil {
 			break
@@ -36412,6 +37354,72 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+	case "Query.audience":
+		if e.ComplexityRoot.Query.Audience == nil {
+			break
+		}
+
+		args, err := ec.field_Query_audience_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Audience(childComplexity, args["id"].(string)), true
+	case "Query.audienceMember":
+		if e.ComplexityRoot.Query.AudienceMember == nil {
+			break
+		}
+
+		args, err := ec.field_Query_audienceMember_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AudienceMember(childComplexity, args["id"].(string)), true
+	case "Query.audienceMemberSearch":
+		if e.ComplexityRoot.Query.AudienceMemberSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_audienceMemberSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AudienceMemberSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+	case "Query.audienceMembers":
+		if e.ComplexityRoot.Query.AudienceMembers == nil {
+			break
+		}
+
+		args, err := ec.field_Query_audienceMembers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AudienceMembers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceMemberOrder), args["where"].(*generated.AudienceMemberWhereInput)), true
+	case "Query.audienceSearch":
+		if e.ComplexityRoot.Query.AudienceSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_audienceSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AudienceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+	case "Query.audiences":
+		if e.ComplexityRoot.Query.Audiences == nil {
+			break
+		}
+
+		args, err := ec.field_Query_audiences_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Audiences(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceOrder), args["where"].(*generated.AudienceWhereInput)), true
 	case "Query.campaign":
 		if e.ComplexityRoot.Query.Campaign == nil {
 			break
@@ -41377,6 +42385,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SearchResults.Assets(childComplexity), true
+	case "SearchResults.audienceMembers":
+		if e.ComplexityRoot.SearchResults.AudienceMembers == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResults.AudienceMembers(childComplexity), true
+	case "SearchResults.audiences":
+		if e.ComplexityRoot.SearchResults.Audiences == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResults.Audiences(childComplexity), true
 	case "SearchResults.campaignTargets":
 		if e.ComplexityRoot.SearchResults.CampaignTargets == nil {
 			break
@@ -42812,6 +43832,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subscriber.Active(childComplexity), true
+	case "Subscriber.audienceMembers":
+		if e.ComplexityRoot.Subscriber.AudienceMembers == nil {
+			break
+		}
+
+		args, err := ec.field_Subscriber_audienceMembers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Subscriber.AudienceMembers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceMemberOrder), args["where"].(*generated.AudienceMemberWhereInput)), true
 	case "Subscriber.campaignTargets":
 		if e.ComplexityRoot.Subscriber.CampaignTargets == nil {
 			break
@@ -46744,6 +47775,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.User.AssignerTasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+	case "User.audienceMembers":
+		if e.ComplexityRoot.User.AudienceMembers == nil {
+			break
+		}
+
+		args, err := ec.field_User_audienceMembers_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.User.AudienceMembers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AudienceMemberOrder), args["where"].(*generated.AudienceMemberWhereInput)), true
 	case "User.authProvider":
 		if e.ComplexityRoot.User.AuthProvider == nil {
 			break
@@ -50614,6 +51656,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAssessmentWhereInput,
 		ec.unmarshalInputAssetOrder,
 		ec.unmarshalInputAssetWhereInput,
+		ec.unmarshalInputAudienceMemberOrder,
+		ec.unmarshalInputAudienceMemberWhereInput,
+		ec.unmarshalInputAudienceOrder,
+		ec.unmarshalInputAudienceWhereInput,
 		ec.unmarshalInputCampaignOrder,
 		ec.unmarshalInputCampaignTargetOrder,
 		ec.unmarshalInputCampaignTargetWhereInput,
@@ -50639,6 +51685,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateAssessmentResponseInput,
 		ec.unmarshalInputCreateAssessmentTemplateInput,
 		ec.unmarshalInputCreateAssetInput,
+		ec.unmarshalInputCreateAudienceInput,
+		ec.unmarshalInputCreateAudienceMemberInput,
 		ec.unmarshalInputCreateCampaignInput,
 		ec.unmarshalInputCreateCampaignTargetInput,
 		ec.unmarshalInputCreateCampaignWithTargetsInput,
@@ -50875,6 +51923,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateActionPlanInput,
 		ec.unmarshalInputUpdateAssessmentInput,
 		ec.unmarshalInputUpdateAssetInput,
+		ec.unmarshalInputUpdateAudienceInput,
+		ec.unmarshalInputUpdateAudienceMemberInput,
 		ec.unmarshalInputUpdateCampaignInput,
 		ec.unmarshalInputUpdateCampaignTargetInput,
 		ec.unmarshalInputUpdateCheckResultInput,
@@ -52046,6 +53096,340 @@ type AssetBulkUpdatePayload {
     Error message when the bulk update did not apply to every requested ID
     """
     error: String
+}
+`, BuiltIn: false},
+	{Name: "../schema/audience.graphql", Input: `extend type Query {
+    """
+    Look up audience by ID
+    """
+     audience(
+        """
+        ID of the audience
+        """
+        id: ID!
+    ):  Audience!
+}
+
+extend type Mutation{
+    """
+    Create a new audience
+    """
+    createAudience(
+        """
+        values of the audience
+        """
+        input: CreateAudienceInput!
+    ): AudienceCreatePayload!
+    """
+    Create multiple new audiences
+    """
+    createBulkAudience(
+        """
+        values of the audience
+        """
+        input: [CreateAudienceInput!]
+    ): AudienceBulkCreatePayload!
+    """
+    Create multiple new audiences via file upload
+    """
+    createBulkCSVAudience(
+        """
+        csv file containing values of the audience
+        """
+        input: Upload!
+    ): AudienceBulkCreatePayload!
+    """
+    Update multiple existing audiences
+    """
+    updateBulkAudience(
+        """
+        IDs of the audiences to update
+        """
+        ids: [ID!]!
+        """
+        values to update the audiences with
+        """
+        input: UpdateAudienceInput!
+    ): AudienceBulkUpdatePayload!
+    """
+    Update multiple existing audiences via file upload
+    """
+    updateBulkCSVAudience(
+        """
+        csv file containing values of the audience, must include ID column
+        """
+        input: Upload!
+    ): AudienceBulkUpdatePayload!
+    """
+    Update an existing audience
+    """
+    updateAudience(
+        """
+        ID of the audience
+        """
+        id: ID!
+        """
+        New values for the audience
+        """
+        input: UpdateAudienceInput!
+    ): AudienceUpdatePayload!
+    """
+    Delete an existing audience
+    """
+    deleteAudience(
+        """
+        ID of the audience
+        """
+        id: ID!
+    ): AudienceDeletePayload!
+    """
+    Delete multiple audiences
+    """
+    deleteBulkAudience(
+        """
+        IDs of the audiences to delete
+        """
+        ids: [ID!]!
+    ): AudienceBulkDeletePayload!
+}
+
+"""
+Return response for createAudience mutation
+"""
+type AudienceCreatePayload {
+    """
+    Created audience
+    """
+    audience: Audience!
+}
+
+"""
+Return response for updateAudience mutation
+"""
+type AudienceUpdatePayload {
+    """
+    Updated audience
+    """
+    audience: Audience!
+}
+
+"""
+Return response for deleteAudience mutation
+"""
+type AudienceDeletePayload {
+    """
+    Deleted audience ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAudience mutation
+"""
+type AudienceBulkCreatePayload {
+    """
+    Created audiences
+    """
+    audiences: [Audience!]
+}
+
+"""
+Return response for updateBulkAudience mutation
+"""
+type AudienceBulkUpdatePayload {
+    """
+    Updated audiences
+    """
+    audiences: [Audience!]
+    """
+    IDs of the updated audiences
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkAudience mutation
+"""
+type AudienceBulkDeletePayload {
+    """
+    Deleted audience IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of audiences that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}
+`, BuiltIn: false},
+	{Name: "../schema/audiencemember.graphql", Input: `extend type Query {
+    """
+    Look up audienceMember by ID
+    """
+     audienceMember(
+        """
+        ID of the audienceMember
+        """
+        id: ID!
+    ):  AudienceMember!
+}
+
+extend type Mutation{
+    """
+    Create a new audienceMember
+    """
+    createAudienceMember(
+        """
+        values of the audienceMember
+        """
+        input: CreateAudienceMemberInput!
+    ): AudienceMemberCreatePayload!
+    """
+    Create multiple new audienceMembers
+    """
+    createBulkAudienceMember(
+        """
+        values of the audienceMember
+        """
+        input: [CreateAudienceMemberInput!]
+    ): AudienceMemberBulkCreatePayload!
+    """
+    Create multiple new audienceMembers via file upload
+    """
+    createBulkCSVAudienceMember(
+        """
+        csv file containing values of the audienceMember
+        """
+        input: Upload!
+    ): AudienceMemberBulkCreatePayload!
+    """
+    Update multiple existing audienceMembers
+    """
+    updateBulkAudienceMember(
+        """
+        IDs of the audienceMembers to update
+        """
+        ids: [ID!]!
+        """
+        values to update the audienceMembers with
+        """
+        input: UpdateAudienceMemberInput!
+    ): AudienceMemberBulkUpdatePayload!
+    """
+    Update multiple existing audienceMembers via file upload
+    """
+    updateBulkCSVAudienceMember(
+        """
+        csv file containing values of the audienceMember, must include ID column
+        """
+        input: Upload!
+    ): AudienceMemberBulkUpdatePayload!
+    """
+    Update an existing audienceMember
+    """
+    updateAudienceMember(
+        """
+        ID of the audienceMember
+        """
+        id: ID!
+        """
+        New values for the audienceMember
+        """
+        input: UpdateAudienceMemberInput!
+    ): AudienceMemberUpdatePayload!
+    """
+    Delete an existing audienceMember
+    """
+    deleteAudienceMember(
+        """
+        ID of the audienceMember
+        """
+        id: ID!
+    ): AudienceMemberDeletePayload!
+    """
+    Delete multiple audienceMembers
+    """
+    deleteBulkAudienceMember(
+        """
+        IDs of the audienceMembers to delete
+        """
+        ids: [ID!]!
+    ): AudienceMemberBulkDeletePayload!
+}
+
+"""
+Return response for createAudienceMember mutation
+"""
+type AudienceMemberCreatePayload {
+    """
+    Created audienceMember
+    """
+    audienceMember: AudienceMember!
+}
+
+"""
+Return response for updateAudienceMember mutation
+"""
+type AudienceMemberUpdatePayload {
+    """
+    Updated audienceMember
+    """
+    audienceMember: AudienceMember!
+}
+
+"""
+Return response for deleteAudienceMember mutation
+"""
+type AudienceMemberDeletePayload {
+    """
+    Deleted audienceMember ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAudienceMember mutation
+"""
+type AudienceMemberBulkCreatePayload {
+    """
+    Created audienceMembers
+    """
+    audienceMembers: [AudienceMember!]
+}
+
+"""
+Return response for updateBulkAudienceMember mutation
+"""
+type AudienceMemberBulkUpdatePayload {
+    """
+    Updated audienceMembers
+    """
+    audienceMembers: [AudienceMember!]
+    """
+    IDs of the updated audienceMembers
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkAudienceMember mutation
+"""
+type AudienceMemberBulkDeletePayload {
+    """
+    Deleted audienceMember IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of audienceMembers that were not deleted
+    """
+    notDeletedIDs: [ID!]
 }
 `, BuiltIn: false},
 	{Name: "../schema/campaign.graphql", Input: `extend type Campaign {
@@ -60078,6 +61462,808 @@ input AssetWhereInput {
   """
   categoriesHas: String
 }
+type Audience implements Node @modules(names: ["compliance_module","trust_center_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the name of the audience
+  """
+  name: String!
+  """
+  the description of the audience
+  """
+  description: String
+  """
+  the audience resolution type
+  """
+  audienceType: AudienceAudienceType!
+  """
+  selector filters for dynamic audiences
+  """
+  filters: Map
+  """
+  additional metadata about the audience
+  """
+  metadata: Map
+  owner: Organization
+  blockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  editors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  viewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+}
+"""
+AudienceAudienceType is enum for the field audience_type
+"""
+enum AudienceAudienceType @goModel(model: "github.com/theopenlane/core/common/enums.AudienceType") {
+  MANUAL
+  DYNAMIC
+}
+"""
+A connection to a list of items.
+"""
+type AudienceConnection {
+  """
+  A list of edges.
+  """
+  edges: [AudienceEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AudienceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Audience
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type AudienceMember implements Node @modules(names: ["compliance_module","trust_center_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the audience this member belongs to
+  """
+  audienceID: ID!
+  """
+  the contact associated with this audience member
+  """
+  contactID: ID
+  """
+  the user associated with this audience member
+  """
+  userID: ID
+  """
+  the group associated with this audience member
+  """
+  groupID: ID
+  """
+  the identity holder associated with this audience member
+  """
+  identityHolderID: ID
+  """
+  the subscriber associated with this audience member
+  """
+  subscriberID: ID
+  """
+  the email address for this audience member
+  """
+  email: String!
+  """
+  the name of this audience member, if known
+  """
+  fullName: String
+  """
+  additional metadata about the audience member
+  """
+  metadata: Map
+  owner: Organization
+  audience: Audience!
+  contact: Contact
+  user: User
+  group: Group
+  identityHolder: IdentityHolder
+  subscriber: Subscriber
+}
+"""
+A connection to a list of items.
+"""
+type AudienceMemberConnection {
+  """
+  A list of edges.
+  """
+  edges: [AudienceMemberEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AudienceMemberEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AudienceMember
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for AudienceMember connections
+"""
+input AudienceMemberOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AudienceMembers.
+  """
+  field: AudienceMemberOrderField!
+}
+"""
+Properties by which AudienceMember connections can be ordered.
+"""
+enum AudienceMemberOrderField {
+  created_at
+  updated_at
+  email
+  full_name
+}
+"""
+AudienceMemberWhereInput is used for filtering AudienceMember objects.
+Input was generated by ent.
+"""
+input AudienceMemberWhereInput {
+  not: AudienceMemberWhereInput
+  and: [AudienceMemberWhereInput!]
+  or: [AudienceMemberWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  audience_id field predicates
+  """
+  audienceID: ID
+  audienceIDNEQ: ID
+  audienceIDIn: [ID!]
+  audienceIDNotIn: [ID!]
+  audienceIDContains: ID
+  audienceIDHasPrefix: ID
+  audienceIDHasSuffix: ID
+  audienceIDEqualFold: ID
+  audienceIDContainsFold: ID
+  """
+  contact_id field predicates
+  """
+  contactID: ID
+  contactIDNEQ: ID
+  contactIDIn: [ID!]
+  contactIDNotIn: [ID!]
+  contactIDContains: ID
+  contactIDHasPrefix: ID
+  contactIDHasSuffix: ID
+  contactIDIsNil: Boolean
+  contactIDNotNil: Boolean
+  contactIDEqualFold: ID
+  contactIDContainsFold: ID
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
+  group_id field predicates
+  """
+  groupID: ID
+  groupIDNEQ: ID
+  groupIDIn: [ID!]
+  groupIDNotIn: [ID!]
+  groupIDContains: ID
+  groupIDHasPrefix: ID
+  groupIDHasSuffix: ID
+  groupIDIsNil: Boolean
+  groupIDNotNil: Boolean
+  groupIDEqualFold: ID
+  groupIDContainsFold: ID
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: ID
+  identityHolderIDNEQ: ID
+  identityHolderIDIn: [ID!]
+  identityHolderIDNotIn: [ID!]
+  identityHolderIDContains: ID
+  identityHolderIDHasPrefix: ID
+  identityHolderIDHasSuffix: ID
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: ID
+  identityHolderIDContainsFold: ID
+  """
+  subscriber_id field predicates
+  """
+  subscriberID: ID
+  subscriberIDNEQ: ID
+  subscriberIDIn: [ID!]
+  subscriberIDNotIn: [ID!]
+  subscriberIDContains: ID
+  subscriberIDHasPrefix: ID
+  subscriberIDHasSuffix: ID
+  subscriberIDIsNil: Boolean
+  subscriberIDNotNil: Boolean
+  subscriberIDEqualFold: ID
+  subscriberIDContainsFold: ID
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  full_name field predicates
+  """
+  fullName: String
+  fullNameNEQ: String
+  fullNameIn: [String!]
+  fullNameNotIn: [String!]
+  fullNameContains: String
+  fullNameHasPrefix: String
+  fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
+  fullNameEqualFold: String
+  fullNameContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  audience edge predicates
+  """
+  hasAudience: Boolean
+  hasAudienceWith: [AudienceWhereInput!]
+  """
+  contact edge predicates
+  """
+  hasContact: Boolean
+  hasContactWith: [ContactWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+  """
+  group edge predicates
+  """
+  hasGroup: Boolean
+  hasGroupWith: [GroupWhereInput!]
+  """
+  identity_holder edge predicates
+  """
+  hasIdentityHolder: Boolean
+  hasIdentityHolderWith: [IdentityHolderWhereInput!]
+  """
+  subscriber edge predicates
+  """
+  hasSubscriber: Boolean
+  hasSubscriberWith: [SubscriberWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
+"""
+Ordering options for Audience connections
+"""
+input AudienceOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Audiences.
+  """
+  field: AudienceOrderField!
+}
+"""
+Properties by which Audience connections can be ordered.
+"""
+enum AudienceOrderField {
+  created_at
+  updated_at
+  name
+  AUDIENCE_TYPE
+}
+"""
+AudienceWhereInput is used for filtering Audience objects.
+Input was generated by ent.
+"""
+input AudienceWhereInput {
+  not: AudienceWhereInput
+  and: [AudienceWhereInput!]
+  or: [AudienceWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  audience_type field predicates
+  """
+  audienceType: AudienceAudienceType
+  audienceTypeNEQ: AudienceAudienceType
+  audienceTypeIn: [AudienceAudienceType!]
+  audienceTypeNotIn: [AudienceAudienceType!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  blocked_groups edge predicates
+  """
+  hasBlockedGroups: Boolean
+  hasBlockedGroupsWith: [GroupWhereInput!]
+  """
+  editors edge predicates
+  """
+  hasEditors: Boolean
+  hasEditorsWith: [GroupWhereInput!]
+  """
+  viewers edge predicates
+  """
+  hasViewers: Boolean
+  hasViewersWith: [GroupWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
 type Campaign implements Node @modules(names: ["compliance_module","trust_center_module"]) {
   id: ID!
   createdAt: Time
@@ -60516,6 +62702,37 @@ type Campaign implements Node @modules(names: ["compliance_module","trust_center
     """
     where: IdentityHolderWhereInput
   ): IdentityHolderConnection!
+  audiences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -61634,6 +63851,11 @@ input CampaignWhereInput {
   hasIdentityHolders: Boolean
   hasIdentityHoldersWith: [IdentityHolderWhereInput!]
   """
+  audiences edge predicates
+  """
+  hasAudiences: Boolean
+  hasAudiencesWith: [AudienceWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -62262,6 +64484,37 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
     """
     where: CampaignTargetWhereInput
   ): CampaignTargetConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -62635,6 +64888,11 @@ input ContactWhereInput {
   """
   hasCampaignTargets: Boolean
   hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   files edge predicates
   """
@@ -66367,6 +68625,71 @@ input CreateAssetInput {
   connectedFromIDs: [ID!]
 }
 """
+CreateAudienceInput is used for create Audience object.
+Input was generated by ent.
+"""
+input CreateAudienceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the name of the audience
+  """
+  name: String!
+  """
+  the description of the audience
+  """
+  description: String
+  """
+  the audience resolution type
+  """
+  audienceType: AudienceAudienceType
+  """
+  selector filters for dynamic audiences
+  """
+  filters: Map
+  """
+  additional metadata about the audience
+  """
+  metadata: Map
+  ownerID: ID
+  blockedGroupIDs: [ID!]
+  editorIDs: [ID!]
+  viewerIDs: [ID!]
+  audienceMemberIDs: [ID!]
+  campaignIDs: [ID!]
+}
+"""
+CreateAudienceMemberInput is used for create AudienceMember object.
+Input was generated by ent.
+"""
+input CreateAudienceMemberInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the email address for this audience member
+  """
+  email: String!
+  """
+  the name of this audience member, if known
+  """
+  fullName: String
+  """
+  additional metadata about the audience member
+  """
+  metadata: Map
+  ownerID: ID
+  audienceID: ID!
+  contactID: ID
+  userID: ID
+  groupID: ID
+  identityHolderID: ID
+  subscriberID: ID
+}
+"""
 CreateCampaignInput is used for create Campaign object.
 Input was generated by ent.
 """
@@ -66489,6 +68812,7 @@ input CreateCampaignInput {
   userIDs: [ID!]
   groupIDs: [ID!]
   identityHolderIDs: [ID!]
+  audienceIDs: [ID!]
   controlIDs: [ID!]
   workflowObjectRefIDs: [ID!]
 }
@@ -66626,6 +68950,7 @@ input CreateContactInput {
   entityIDs: [ID!]
   campaignIDs: [ID!]
   campaignTargetIDs: [ID!]
+  audienceMemberIDs: [ID!]
   fileIDs: [ID!]
   subscriberIDs: [ID!]
 }
@@ -68410,6 +70735,9 @@ input CreateGroupInput {
   campaignEditorIDs: [ID!]
   campaignBlockedGroupIDs: [ID!]
   campaignViewerIDs: [ID!]
+  audienceEditorIDs: [ID!]
+  audienceBlockedGroupIDs: [ID!]
+  audienceViewerIDs: [ID!]
   procedureEditorIDs: [ID!]
   procedureBlockedGroupIDs: [ID!]
   internalPolicyEditorIDs: [ID!]
@@ -68436,6 +70764,7 @@ input CreateGroupInput {
   taskIDs: [ID!]
   campaignIDs: [ID!]
   campaignTargetIDs: [ID!]
+  audienceMemberIDs: [ID!]
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -68641,6 +70970,7 @@ input CreateIdentityHolderInput {
   subcontrolIDs: [ID!]
   platformIDs: [ID!]
   campaignIDs: [ID!]
+  audienceMemberIDs: [ID!]
   taskIDs: [ID!]
   fileIDs: [ID!]
   findingIDs: [ID!]
@@ -69275,6 +71605,8 @@ input CreateOrganizationInput {
   apiTokenCreatorIDs: [ID!]
   assessmentCreatorIDs: [ID!]
   assetCreatorIDs: [ID!]
+  audienceCreatorIDs: [ID!]
+  audienceMemberCreatorIDs: [ID!]
   campaignCreatorIDs: [ID!]
   campaignTargetCreatorIDs: [ID!]
   checkResultCreatorIDs: [ID!]
@@ -69395,6 +71727,8 @@ input CreateOrganizationInput {
   slaDefinitionIDs: [ID!]
   subprocessorIDs: [ID!]
   exportIDs: [ID!]
+  audienceIDs: [ID!]
+  audienceMemberIDs: [ID!]
   trustCenterWatermarkConfigIDs: [ID!]
   impersonationEventIDs: [ID!]
   assessmentIDs: [ID!]
@@ -70792,6 +73126,7 @@ input CreateSubscriberInput {
   campaignTargetIDs: [ID!]
   contactID: ID
   userID: ID
+  audienceMemberIDs: [ID!]
 }
 """
 CreateSystemDetailInput is used for create SystemDetail object.
@@ -71489,6 +73824,7 @@ input CreateUserInput {
   actionPlanIDs: [ID!]
   campaignIDs: [ID!]
   campaignTargetIDs: [ID!]
+  audienceMemberIDs: [ID!]
   subcontrolIDs: [ID!]
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
@@ -81652,6 +83988,8 @@ ExportExportType is enum for the field export_type
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
   ASSESSMENT
   ASSET
+  AUDIENCE
+  AUDIENCE_MEMBER
   CAMPAIGN
   CHECK_RESULT
   CONTACT
@@ -85665,6 +88003,99 @@ type Group implements Node {
     """
     where: CampaignWhereInput
   ): CampaignConnection!
+  audienceEditors(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
+  audienceBlockedGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
+  audienceViewers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
   procedureEditors(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -86442,6 +88873,37 @@ type Group implements Node {
     """
     where: CampaignTargetWhereInput
   ): CampaignTargetConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -87296,6 +89758,21 @@ input GroupWhereInput {
   hasCampaignViewers: Boolean
   hasCampaignViewersWith: [CampaignWhereInput!]
   """
+  audience_editors edge predicates
+  """
+  hasAudienceEditors: Boolean
+  hasAudienceEditorsWith: [AudienceWhereInput!]
+  """
+  audience_blocked_groups edge predicates
+  """
+  hasAudienceBlockedGroups: Boolean
+  hasAudienceBlockedGroupsWith: [AudienceWhereInput!]
+  """
+  audience_viewers edge predicates
+  """
+  hasAudienceViewers: Boolean
+  hasAudienceViewersWith: [AudienceWhereInput!]
+  """
   procedure_editors edge predicates
   """
   hasProcedureEditors: Boolean
@@ -87430,6 +89907,11 @@ input GroupWhereInput {
   """
   hasCampaignTargets: Boolean
   hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   members edge predicates
   """
@@ -88404,6 +90886,37 @@ type IdentityHolder implements Node @modules(names: ["compliance_module","regist
     """
     where: CampaignWhereInput
   ): CampaignConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   tasks(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -89209,6 +91722,11 @@ input IdentityHolderWhereInput {
   """
   hasCampaigns: Boolean
   hasCampaignsWith: [CampaignWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   tasks edge predicates
   """
@@ -96086,6 +98604,68 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  audienceCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  audienceMemberCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   campaignCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -99748,6 +102328,68 @@ type Organization implements Node {
     """
     where: ExportWhereInput
   ): ExportConnection!
+  audiences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   trustCenterWatermarkConfigs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -101348,6 +103990,16 @@ input OrganizationWhereInput {
   hasAssetCreators: Boolean
   hasAssetCreatorsWith: [GroupWhereInput!]
   """
+  audience_creators edge predicates
+  """
+  hasAudienceCreators: Boolean
+  hasAudienceCreatorsWith: [GroupWhereInput!]
+  """
+  audience_member_creators edge predicates
+  """
+  hasAudienceMemberCreators: Boolean
+  hasAudienceMemberCreatorsWith: [GroupWhereInput!]
+  """
   campaign_creators edge predicates
   """
   hasCampaignCreators: Boolean
@@ -101957,6 +104609,16 @@ input OrganizationWhereInput {
   """
   hasExports: Boolean
   hasExportsWith: [ExportWhereInput!]
+  """
+  audiences edge predicates
+  """
+  hasAudiences: Boolean
+  hasAudiencesWith: [AudienceWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   trust_center_watermark_configs edge predicates
   """
@@ -107384,6 +110046,68 @@ type Query {
     """
     where: AssetWhereInput
   ): AssetConnection!
+  audiences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   campaigns(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -118111,6 +120835,37 @@ type Subscriber implements Node {
   ): CampaignTargetConnection!
   contact: Contact
   user: User
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
 }
 """
 A connection to a list of items.
@@ -118386,6 +121141,11 @@ input SubscriberWhereInput {
   """
   hasUser: Boolean
   hasUserWith: [UserWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -125865,6 +128625,96 @@ input UpdateAssetInput {
   clearConnectedFrom: Boolean
 }
 """
+UpdateAudienceInput is used for update Audience object.
+Input was generated by ent.
+"""
+input UpdateAudienceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the name of the audience
+  """
+  name: String
+  """
+  the description of the audience
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  the audience resolution type
+  """
+  audienceType: AudienceAudienceType
+  """
+  selector filters for dynamic audiences
+  """
+  filters: Map
+  clearFilters: Boolean
+  """
+  additional metadata about the audience
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addBlockedGroupIDs: [ID!]
+  removeBlockedGroupIDs: [ID!]
+  clearBlockedGroups: Boolean
+  addEditorIDs: [ID!]
+  removeEditorIDs: [ID!]
+  clearEditors: Boolean
+  addViewerIDs: [ID!]
+  removeViewerIDs: [ID!]
+  clearViewers: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+}
+"""
+UpdateAudienceMemberInput is used for update AudienceMember object.
+Input was generated by ent.
+"""
+input UpdateAudienceMemberInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the email address for this audience member
+  """
+  email: String
+  """
+  the name of this audience member, if known
+  """
+  fullName: String
+  clearFullName: Boolean
+  """
+  additional metadata about the audience member
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  contactID: ID
+  clearContact: Boolean
+  userID: ID
+  clearUser: Boolean
+  groupID: ID
+  clearGroup: Boolean
+  identityHolderID: ID
+  clearIdentityHolder: Boolean
+  subscriberID: ID
+  clearSubscriber: Boolean
+}
+"""
 UpdateCampaignInput is used for update Campaign object.
 Input was generated by ent.
 """
@@ -126033,6 +128883,9 @@ input UpdateCampaignInput {
   addIdentityHolderIDs: [ID!]
   removeIdentityHolderIDs: [ID!]
   clearIdentityHolders: Boolean
+  addAudienceIDs: [ID!]
+  removeAudienceIDs: [ID!]
+  clearAudiences: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -126216,6 +129069,9 @@ input UpdateContactInput {
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -128695,6 +131551,15 @@ input UpdateGroupInput {
   addCampaignViewerIDs: [ID!]
   removeCampaignViewerIDs: [ID!]
   clearCampaignViewers: Boolean
+  addAudienceEditorIDs: [ID!]
+  removeAudienceEditorIDs: [ID!]
+  clearAudienceEditors: Boolean
+  addAudienceBlockedGroupIDs: [ID!]
+  removeAudienceBlockedGroupIDs: [ID!]
+  clearAudienceBlockedGroups: Boolean
+  addAudienceViewerIDs: [ID!]
+  removeAudienceViewerIDs: [ID!]
+  clearAudienceViewers: Boolean
   addProcedureEditorIDs: [ID!]
   removeProcedureEditorIDs: [ID!]
   clearProcedureEditors: Boolean
@@ -128771,6 +131636,9 @@ input UpdateGroupInput {
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -129037,6 +131905,9 @@ input UpdateIdentityHolderInput {
   addCampaignIDs: [ID!]
   removeCampaignIDs: [ID!]
   clearCampaigns: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
@@ -129810,6 +132681,12 @@ input UpdateOrganizationInput {
   addAssetCreatorIDs: [ID!]
   removeAssetCreatorIDs: [ID!]
   clearAssetCreators: Boolean
+  addAudienceCreatorIDs: [ID!]
+  removeAudienceCreatorIDs: [ID!]
+  clearAudienceCreators: Boolean
+  addAudienceMemberCreatorIDs: [ID!]
+  removeAudienceMemberCreatorIDs: [ID!]
+  clearAudienceMemberCreators: Boolean
   addCampaignCreatorIDs: [ID!]
   removeCampaignCreatorIDs: [ID!]
   clearCampaignCreators: Boolean
@@ -130165,6 +133042,12 @@ input UpdateOrganizationInput {
   addExportIDs: [ID!]
   removeExportIDs: [ID!]
   clearExports: Boolean
+  addAudienceIDs: [ID!]
+  removeAudienceIDs: [ID!]
+  clearAudiences: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   addTrustCenterWatermarkConfigIDs: [ID!]
   removeTrustCenterWatermarkConfigIDs: [ID!]
   clearTrustCenterWatermarkConfigs: Boolean
@@ -132269,6 +135152,9 @@ input UpdateSubscriberInput {
   clearContact: Boolean
   userID: ID
   clearUser: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
 }
 """
 UpdateSystemDetailInput is used for update SystemDetail object.
@@ -133233,6 +136119,9 @@ input UpdateUserInput {
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
@@ -134211,6 +137100,37 @@ type User implements Node {
     """
     where: CampaignTargetWhereInput
   ): CampaignTargetConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   subcontrols(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -135240,6 +138160,11 @@ input UserWhereInput {
   """
   hasCampaignTargets: Boolean
   hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   subcontrols edge predicates
   """
@@ -147810,6 +150735,56 @@ type ScanBulkDeletePayload {
         last: Int
     ): AssetConnection
     """
+    Search across Audience objects
+    """
+    audienceSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AudienceConnection
+    """
+    Search across AudienceMember objects
+    """
+    audienceMemberSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AudienceMemberConnection
+    """
     Search across Campaign objects
     """
     campaignSearch(
@@ -148698,6 +151673,8 @@ type SearchResults{
   assessments: AssessmentConnection
   assessmentResponses: AssessmentResponseConnection
   assets: AssetConnection
+  audiences: AudienceConnection
+  audienceMembers: AudienceMemberConnection
   campaigns: CampaignConnection
   campaignTargets: CampaignTargetConnection
   contacts: ContactConnection
@@ -154362,6 +157339,260 @@ func (ec *executionContext) childFields_AssetUpdatePayload(ctx context.Context, 
 	return nil, fmt.Errorf("no field named %q was found under type AssetUpdatePayload", field.Name)
 }
 
+func (ec *executionContext) childFields_Audience(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_Audience_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_Audience_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_Audience_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_Audience_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_Audience_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_Audience_updatedByImpersonator(ctx, field)
+	case "displayID":
+		return ec.fieldContext_Audience_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_Audience_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_Audience_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_Audience_name(ctx, field)
+	case "description":
+		return ec.fieldContext_Audience_description(ctx, field)
+	case "audienceType":
+		return ec.fieldContext_Audience_audienceType(ctx, field)
+	case "filters":
+		return ec.fieldContext_Audience_filters(ctx, field)
+	case "metadata":
+		return ec.fieldContext_Audience_metadata(ctx, field)
+	case "owner":
+		return ec.fieldContext_Audience_owner(ctx, field)
+	case "blockedGroups":
+		return ec.fieldContext_Audience_blockedGroups(ctx, field)
+	case "editors":
+		return ec.fieldContext_Audience_editors(ctx, field)
+	case "viewers":
+		return ec.fieldContext_Audience_viewers(ctx, field)
+	case "audienceMembers":
+		return ec.fieldContext_Audience_audienceMembers(ctx, field)
+	case "campaigns":
+		return ec.fieldContext_Audience_campaigns(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type Audience", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "audiences":
+		return ec.fieldContext_AudienceBulkCreatePayload_audiences(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceBulkCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedIDs":
+		return ec.fieldContext_AudienceBulkDeletePayload_deletedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_AudienceBulkDeletePayload_error(ctx, field)
+	case "notDeletedIDs":
+		return ec.fieldContext_AudienceBulkDeletePayload_notDeletedIDs(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceBulkDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "audiences":
+		return ec.fieldContext_AudienceBulkUpdatePayload_audiences(ctx, field)
+	case "updatedIDs":
+		return ec.fieldContext_AudienceBulkUpdatePayload_updatedIDs(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceBulkUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AudienceConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AudienceConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AudienceConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "audience":
+		return ec.fieldContext_AudienceCreatePayload_audience(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_AudienceDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AudienceEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AudienceEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMember(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AudienceMember_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AudienceMember_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AudienceMember_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AudienceMember_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AudienceMember_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AudienceMember_updatedByImpersonator(ctx, field)
+	case "displayID":
+		return ec.fieldContext_AudienceMember_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_AudienceMember_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AudienceMember_ownerID(ctx, field)
+	case "audienceID":
+		return ec.fieldContext_AudienceMember_audienceID(ctx, field)
+	case "contactID":
+		return ec.fieldContext_AudienceMember_contactID(ctx, field)
+	case "userID":
+		return ec.fieldContext_AudienceMember_userID(ctx, field)
+	case "groupID":
+		return ec.fieldContext_AudienceMember_groupID(ctx, field)
+	case "identityHolderID":
+		return ec.fieldContext_AudienceMember_identityHolderID(ctx, field)
+	case "subscriberID":
+		return ec.fieldContext_AudienceMember_subscriberID(ctx, field)
+	case "email":
+		return ec.fieldContext_AudienceMember_email(ctx, field)
+	case "fullName":
+		return ec.fieldContext_AudienceMember_fullName(ctx, field)
+	case "metadata":
+		return ec.fieldContext_AudienceMember_metadata(ctx, field)
+	case "owner":
+		return ec.fieldContext_AudienceMember_owner(ctx, field)
+	case "audience":
+		return ec.fieldContext_AudienceMember_audience(ctx, field)
+	case "contact":
+		return ec.fieldContext_AudienceMember_contact(ctx, field)
+	case "user":
+		return ec.fieldContext_AudienceMember_user(ctx, field)
+	case "group":
+		return ec.fieldContext_AudienceMember_group(ctx, field)
+	case "identityHolder":
+		return ec.fieldContext_AudienceMember_identityHolder(ctx, field)
+	case "subscriber":
+		return ec.fieldContext_AudienceMember_subscriber(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMember", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "audienceMembers":
+		return ec.fieldContext_AudienceMemberBulkCreatePayload_audienceMembers(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberBulkCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedIDs":
+		return ec.fieldContext_AudienceMemberBulkDeletePayload_deletedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_AudienceMemberBulkDeletePayload_error(ctx, field)
+	case "notDeletedIDs":
+		return ec.fieldContext_AudienceMemberBulkDeletePayload_notDeletedIDs(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberBulkDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "audienceMembers":
+		return ec.fieldContext_AudienceMemberBulkUpdatePayload_audienceMembers(ctx, field)
+	case "updatedIDs":
+		return ec.fieldContext_AudienceMemberBulkUpdatePayload_updatedIDs(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberBulkUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AudienceMemberConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AudienceMemberConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AudienceMemberConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "audienceMember":
+		return ec.fieldContext_AudienceMemberCreatePayload_audienceMember(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberCreatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "deletedID":
+		return ec.fieldContext_AudienceMemberDeletePayload_deletedID(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberDeletePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AudienceMemberEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AudienceMemberEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "audienceMember":
+		return ec.fieldContext_AudienceMemberUpdatePayload_audienceMember(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberUpdatePayload", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "audience":
+		return ec.fieldContext_AudienceUpdatePayload_audience(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceUpdatePayload", field.Name)
+}
+
 func (ec *executionContext) childFields_BulkUpdateStatusPayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "totalUpdated":
@@ -154490,6 +157721,8 @@ func (ec *executionContext) childFields_Campaign(ctx context.Context, field grap
 		return ec.fieldContext_Campaign_groups(ctx, field)
 	case "identityHolders":
 		return ec.fieldContext_Campaign_identityHolders(ctx, field)
+	case "audiences":
+		return ec.fieldContext_Campaign_audiences(ctx, field)
 	case "controls":
 		return ec.fieldContext_Campaign_controls(ctx, field)
 	case "workflowObjectRefs":
@@ -154886,6 +158119,8 @@ func (ec *executionContext) childFields_Contact(ctx context.Context, field graph
 		return ec.fieldContext_Contact_campaigns(ctx, field)
 	case "campaignTargets":
 		return ec.fieldContext_Contact_campaignTargets(ctx, field)
+	case "audienceMembers":
+		return ec.fieldContext_Contact_audienceMembers(ctx, field)
 	case "files":
 		return ec.fieldContext_Contact_files(ctx, field)
 	case "subscribers":
@@ -158580,6 +161815,12 @@ func (ec *executionContext) childFields_Group(ctx context.Context, field graphql
 		return ec.fieldContext_Group_campaignBlockedGroups(ctx, field)
 	case "campaignViewers":
 		return ec.fieldContext_Group_campaignViewers(ctx, field)
+	case "audienceEditors":
+		return ec.fieldContext_Group_audienceEditors(ctx, field)
+	case "audienceBlockedGroups":
+		return ec.fieldContext_Group_audienceBlockedGroups(ctx, field)
+	case "audienceViewers":
+		return ec.fieldContext_Group_audienceViewers(ctx, field)
 	case "procedureEditors":
 		return ec.fieldContext_Group_procedureEditors(ctx, field)
 	case "procedureBlockedGroups":
@@ -158634,6 +161875,8 @@ func (ec *executionContext) childFields_Group(ctx context.Context, field graphql
 		return ec.fieldContext_Group_campaigns(ctx, field)
 	case "campaignTargets":
 		return ec.fieldContext_Group_campaignTargets(ctx, field)
+	case "audienceMembers":
+		return ec.fieldContext_Group_audienceMembers(ctx, field)
 	case "members":
 		return ec.fieldContext_Group_members(ctx, field)
 	case "permissions":
@@ -159228,6 +162471,8 @@ func (ec *executionContext) childFields_IdentityHolder(ctx context.Context, fiel
 		return ec.fieldContext_IdentityHolder_platforms(ctx, field)
 	case "campaigns":
 		return ec.fieldContext_IdentityHolder_campaigns(ctx, field)
+	case "audienceMembers":
+		return ec.fieldContext_IdentityHolder_audienceMembers(ctx, field)
 	case "tasks":
 		return ec.fieldContext_IdentityHolder_tasks(ctx, field)
 	case "files":
@@ -160966,6 +164211,10 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_assessmentCreators(ctx, field)
 	case "assetCreators":
 		return ec.fieldContext_Organization_assetCreators(ctx, field)
+	case "audienceCreators":
+		return ec.fieldContext_Organization_audienceCreators(ctx, field)
+	case "audienceMemberCreators":
+		return ec.fieldContext_Organization_audienceMemberCreators(ctx, field)
 	case "campaignCreators":
 		return ec.fieldContext_Organization_campaignCreators(ctx, field)
 	case "campaignTargetCreators":
@@ -161210,6 +164459,10 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_subprocessors(ctx, field)
 	case "exports":
 		return ec.fieldContext_Organization_exports(ctx, field)
+	case "audiences":
+		return ec.fieldContext_Organization_audiences(ctx, field)
+	case "audienceMembers":
+		return ec.fieldContext_Organization_audienceMembers(ctx, field)
 	case "trustCenterWatermarkConfigs":
 		return ec.fieldContext_Organization_trustCenterWatermarkConfigs(ctx, field)
 	case "assessments":
@@ -163396,6 +166649,10 @@ func (ec *executionContext) childFields_SearchResults(ctx context.Context, field
 		return ec.fieldContext_SearchResults_assessmentResponses(ctx, field)
 	case "assets":
 		return ec.fieldContext_SearchResults_assets(ctx, field)
+	case "audiences":
+		return ec.fieldContext_SearchResults_audiences(ctx, field)
+	case "audienceMembers":
+		return ec.fieldContext_SearchResults_audienceMembers(ctx, field)
 	case "campaigns":
 		return ec.fieldContext_SearchResults_campaigns(ctx, field)
 	case "campaignTargets":
@@ -164022,6 +167279,8 @@ func (ec *executionContext) childFields_Subscriber(ctx context.Context, field gr
 		return ec.fieldContext_Subscriber_contact(ctx, field)
 	case "user":
 		return ec.fieldContext_Subscriber_user(ctx, field)
+	case "audienceMembers":
+		return ec.fieldContext_Subscriber_audienceMembers(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type Subscriber", field.Name)
 }
@@ -165932,6 +169191,8 @@ func (ec *executionContext) childFields_User(ctx context.Context, field graphql.
 		return ec.fieldContext_User_campaigns(ctx, field)
 	case "campaignTargets":
 		return ec.fieldContext_User_campaignTargets(ctx, field)
+	case "audienceMembers":
+		return ec.fieldContext_User_audienceMembers(ctx, field)
 	case "subcontrols":
 		return ec.fieldContext_User_subcontrols(ctx, field)
 	case "assignerTasks":

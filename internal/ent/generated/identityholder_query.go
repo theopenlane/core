@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
@@ -64,6 +65,7 @@ type IdentityHolderQuery struct {
 	withSubcontrols              *SubcontrolQuery
 	withPlatforms                *PlatformQuery
 	withCampaigns                *CampaignQuery
+	withAudienceMembers          *AudienceMemberQuery
 	withTasks                    *TaskQuery
 	withFiles                    *FileQuery
 	withFindings                 *FindingQuery
@@ -86,6 +88,7 @@ type IdentityHolderQuery struct {
 	withNamedSubcontrols         map[string]*SubcontrolQuery
 	withNamedPlatforms           map[string]*PlatformQuery
 	withNamedCampaigns           map[string]*CampaignQuery
+	withNamedAudienceMembers     map[string]*AudienceMemberQuery
 	withNamedTasks               map[string]*TaskQuery
 	withNamedFiles               map[string]*FileQuery
 	withNamedFindings            map[string]*FindingQuery
@@ -546,6 +549,28 @@ func (_q *IdentityHolderQuery) QueryCampaigns() *CampaignQuery {
 	return query
 }
 
+// QueryAudienceMembers chains the current query on the "audience_members" edge.
+func (_q *IdentityHolderQuery) QueryAudienceMembers() *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.AudienceMembersTable, identityholder.AudienceMembersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryTasks chains the current query on the "tasks" edge.
 func (_q *IdentityHolderQuery) QueryTasks() *TaskQuery {
 	query := (&TaskClient{config: _q.config}).Query()
@@ -911,6 +936,7 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		withSubcontrols:         _q.withSubcontrols.Clone(),
 		withPlatforms:           _q.withPlatforms.Clone(),
 		withCampaigns:           _q.withCampaigns.Clone(),
+		withAudienceMembers:     _q.withAudienceMembers.Clone(),
 		withTasks:               _q.withTasks.Clone(),
 		withFiles:               _q.withFiles.Clone(),
 		withFindings:            _q.withFindings.Clone(),
@@ -1134,6 +1160,17 @@ func (_q *IdentityHolderQuery) WithCampaigns(opts ...func(*CampaignQuery)) *Iden
 	return _q
 }
 
+// WithAudienceMembers tells the query-builder to eager-load the nodes that are connected to
+// the "audience_members" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithAudienceMembers(opts ...func(*AudienceMemberQuery)) *IdentityHolderQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceMembers = query
+	return _q
+}
+
 // WithTasks tells the query-builder to eager-load the nodes that are connected to
 // the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IdentityHolderQuery) WithTasks(opts ...func(*TaskQuery)) *IdentityHolderQuery {
@@ -1295,7 +1332,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IdentityHolder{}
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [27]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1315,6 +1352,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withSubcontrols != nil,
 			_q.withPlatforms != nil,
 			_q.withCampaigns != nil,
+			_q.withAudienceMembers != nil,
 			_q.withTasks != nil,
 			_q.withFiles != nil,
 			_q.withFindings != nil,
@@ -1476,6 +1514,15 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withAudienceMembers; query != nil {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.AudienceMembers = []*AudienceMember{} },
+			func(n *IdentityHolder, e *AudienceMember) {
+				n.Edges.AudienceMembers = append(n.Edges.AudienceMembers, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withTasks; query != nil {
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *IdentityHolder) { n.Edges.Tasks = []*Task{} },
@@ -1616,6 +1663,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadCampaigns(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedCampaigns(name) },
 			func(n *IdentityHolder, e *Campaign) { n.appendNamedCampaigns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceMembers {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedAudienceMembers(name) },
+			func(n *IdentityHolder, e *AudienceMember) { n.appendNamedAudienceMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2487,6 +2541,36 @@ func (_q *IdentityHolderQuery) loadCampaigns(ctx context.Context, query *Campaig
 	}
 	return nil
 }
+func (_q *IdentityHolderQuery) loadAudienceMembers(ctx context.Context, query *AudienceMemberQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *AudienceMember)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*IdentityHolder)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(audiencemember.FieldIdentityHolderID)
+	}
+	query.Where(predicate.AudienceMember(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(identityholder.AudienceMembersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IdentityHolderID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *IdentityHolderQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *Task)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*IdentityHolder)
@@ -3116,6 +3200,20 @@ func (_q *IdentityHolderQuery) WithNamedCampaigns(name string, opts ...func(*Cam
 		_q.withNamedCampaigns = make(map[string]*CampaignQuery)
 	}
 	_q.withNamedCampaigns[name] = query
+	return _q
+}
+
+// WithNamedAudienceMembers tells the query-builder to eager-load the nodes that are connected to the "audience_members"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedAudienceMembers(name string, opts ...func(*AudienceMemberQuery)) *IdentityHolderQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceMembers == nil {
+		_q.withNamedAudienceMembers = make(map[string]*AudienceMemberQuery)
+	}
+	_q.withNamedAudienceMembers[name] = query
 	return _q
 }
 

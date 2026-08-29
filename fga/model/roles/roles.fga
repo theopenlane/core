@@ -54,7 +54,7 @@ extend type organization
     # @role: Workflow Manager | Manage workflows, jobs, integrations, and webhook configuration
     define workflow_manager: [service, user, group#member]
 
-    # @crud: campaign, assessment, template, email_template, email_branding, notification_template
+    # @crud: campaign, assessment, template, email_template, email_branding, notification_template, audience
     # @view: document_data, assessment_response
     define can_manage_campaigns: campaign_manager or admin
     # @role: Campaign Manager | Manage campaigns, assessments, templates, and email configuration

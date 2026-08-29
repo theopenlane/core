@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
@@ -787,6 +788,21 @@ func (_c *CampaignCreate) AddIdentityHolders(v ...*IdentityHolder) *CampaignCrea
 	return _c.AddIdentityHolderIDs(ids...)
 }
 
+// AddAudienceIDs adds the "audiences" edge to the Audience entity by IDs.
+func (_c *CampaignCreate) AddAudienceIDs(ids ...string) *CampaignCreate {
+	_c.mutation.AddAudienceIDs(ids...)
+	return _c
+}
+
+// AddAudiences adds the "audiences" edges to the Audience entity.
+func (_c *CampaignCreate) AddAudiences(v ...*Audience) *CampaignCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceIDs(ids...)
+}
+
 // AddControlIDs adds the "controls" edge to the Control entity by IDs.
 func (_c *CampaignCreate) AddControlIDs(ids ...string) *CampaignCreate {
 	_c.mutation.AddControlIDs(ids...)
@@ -1435,6 +1451,22 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudiencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   campaign.AudiencesTable,
+			Columns: campaign.AudiencesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
