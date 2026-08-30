@@ -232,6 +232,10 @@ type AudienceBulkUpdatePayload struct {
 	Audiences []*generated.Audience `json:"audiences,omitempty"`
 	// IDs of the updated audiences
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createAudience mutation
@@ -268,6 +272,10 @@ type AudienceMemberBulkUpdatePayload struct {
 	AudienceMembers []*generated.AudienceMember `json:"audienceMembers,omitempty"`
 	// IDs of the updated audienceMembers
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createAudienceMember mutation

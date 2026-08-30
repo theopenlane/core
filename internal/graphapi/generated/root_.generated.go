@@ -558,8 +558,10 @@ type ComplexityRoot struct {
 	}
 
 	AudienceBulkUpdatePayload struct {
-		Audiences  func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Audiences     func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	AudienceConnection struct {
@@ -621,6 +623,8 @@ type ComplexityRoot struct {
 
 	AudienceMemberBulkUpdatePayload struct {
 		AudienceMembers func(childComplexity int) int
+		Error           func(childComplexity int) int
+		NotUpdatedIDs   func(childComplexity int) int
 		UpdatedIDs      func(childComplexity int) int
 	}
 
@@ -10488,6 +10492,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AudienceBulkUpdatePayload.Audiences(childComplexity), true
+	case "AudienceBulkUpdatePayload.error":
+		if e.ComplexityRoot.AudienceBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceBulkUpdatePayload.Error(childComplexity), true
+	case "AudienceBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.AudienceBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "AudienceBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.AudienceBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -10724,6 +10740,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AudienceMemberBulkUpdatePayload.AudienceMembers(childComplexity), true
+	case "AudienceMemberBulkUpdatePayload.error":
+		if e.ComplexityRoot.AudienceMemberBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberBulkUpdatePayload.Error(childComplexity), true
+	case "AudienceMemberBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.AudienceMemberBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "AudienceMemberBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.AudienceMemberBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -53245,6 +53273,14 @@ type AudienceBulkUpdatePayload {
     IDs of the updated audiences
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -53412,6 +53448,14 @@ type AudienceMemberBulkUpdatePayload {
     IDs of the updated audienceMembers
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -157411,6 +157455,10 @@ func (ec *executionContext) childFields_AudienceBulkUpdatePayload(ctx context.Co
 		return ec.fieldContext_AudienceBulkUpdatePayload_audiences(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_AudienceBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_AudienceBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_AudienceBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AudienceBulkUpdatePayload", field.Name)
 }
@@ -157535,6 +157583,10 @@ func (ec *executionContext) childFields_AudienceMemberBulkUpdatePayload(ctx cont
 		return ec.fieldContext_AudienceMemberBulkUpdatePayload_audienceMembers(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_AudienceMemberBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_AudienceMemberBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_AudienceMemberBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberBulkUpdatePayload", field.Name)
 }

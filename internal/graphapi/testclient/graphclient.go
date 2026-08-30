@@ -10140,8 +10140,10 @@ func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetUpdatedByImpersonat
 }
 
 type UpdateBulkAudience_UpdateBulkAudience struct {
-	Audiences  []*UpdateBulkAudience_UpdateBulkAudience_Audiences "json:\"audiences,omitempty\" graphql:\"audiences\""
-	UpdatedIDs []string                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Audiences     []*UpdateBulkAudience_UpdateBulkAudience_Audiences "json:\"audiences,omitempty\" graphql:\"audiences\""
+	Error         *string                                            "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                           "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkAudience_UpdateBulkAudience) GetAudiences() []*UpdateBulkAudience_UpdateBulkAudience_Audiences {
@@ -10149,6 +10151,18 @@ func (t *UpdateBulkAudience_UpdateBulkAudience) GetAudiences() []*UpdateBulkAudi
 		t = &UpdateBulkAudience_UpdateBulkAudience{}
 	}
 	return t.Audiences
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkAudience_UpdateBulkAudience) GetUpdatedIDs() []string {
 	if t == nil {
@@ -10260,8 +10274,10 @@ func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetUpdatedByImpe
 }
 
 type UpdateBulkCSVAudience_UpdateBulkCSVAudience struct {
-	Audiences  []*UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences "json:\"audiences,omitempty\" graphql:\"audiences\""
-	UpdatedIDs []string                                                 "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Audiences     []*UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences "json:\"audiences,omitempty\" graphql:\"audiences\""
+	Error         *string                                                  "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                 "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                                 "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetAudiences() []*UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences {
@@ -10269,6 +10285,18 @@ func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetAudiences() []*UpdateBu
 		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience{}
 	}
 	return t.Audiences
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetUpdatedIDs() []string {
 	if t == nil {
@@ -11521,6 +11549,8 @@ func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetU
 
 type UpdateBulkAudienceMember_UpdateBulkAudienceMember struct {
 	AudienceMembers []*UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers "json:\"audienceMembers,omitempty\" graphql:\"audienceMembers\""
+	Error           *string                                                              "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs   []string                                                             "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs      []string                                                             "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
@@ -11529,6 +11559,18 @@ func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember) GetAudienceMembers()
 		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember{}
 	}
 	return t.AudienceMembers
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember) GetUpdatedIDs() []string {
 	if t == nil {
@@ -11669,6 +11711,8 @@ func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers
 
 type UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember struct {
 	AudienceMembers []*UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers "json:\"audienceMembers,omitempty\" graphql:\"audienceMembers\""
+	Error           *string                                                                    "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs   []string                                                                   "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs      []string                                                                   "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
@@ -11677,6 +11721,18 @@ func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember) GetAudienceMem
 		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember{}
 	}
 	return t.AudienceMembers
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember) GetUpdatedIDs() []string {
 	if t == nil {
@@ -176301,6 +176357,8 @@ const UpdateBulkAudienceDocument = `mutation UpdateBulkAudience ($ids: [ID!]!, $
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -176342,6 +176400,8 @@ const UpdateBulkCSVAudienceDocument = `mutation UpdateBulkCSVAudience ($input: U
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -176761,6 +176821,8 @@ const UpdateBulkAudienceMemberDocument = `mutation UpdateBulkAudienceMember ($id
 			userID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -176806,6 +176868,8 @@ const UpdateBulkCSVAudienceMemberDocument = `mutation UpdateBulkCSVAudienceMembe
 			userID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `

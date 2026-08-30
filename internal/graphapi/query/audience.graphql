@@ -183,6 +183,8 @@ mutation UpdateBulkAudience ($ids: [ID!]!, $input: UpdateAudienceInput!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkCSVAudience ($input: Upload!) {
@@ -204,5 +206,7 @@ mutation UpdateBulkCSVAudience ($input: Upload!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }

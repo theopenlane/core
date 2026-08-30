@@ -145,6 +145,14 @@ type AudienceMemberBulkUpdatePayload {
     IDs of the updated audienceMembers
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """

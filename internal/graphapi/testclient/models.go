@@ -2445,6 +2445,10 @@ type AudienceBulkUpdatePayload struct {
 	Audiences []*Audience `json:"audiences,omitempty"`
 	// IDs of the updated audiences
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // A connection to a list of items.
@@ -2542,6 +2546,10 @@ type AudienceMemberBulkUpdatePayload struct {
 	AudienceMembers []*AudienceMember `json:"audienceMembers,omitempty"`
 	// IDs of the updated audienceMembers
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // A connection to a list of items.
