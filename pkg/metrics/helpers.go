@@ -256,6 +256,48 @@ func RecordStorageDelete(provider string) {
 	StorageProviderDeletes.WithLabelValues(provider).Inc()
 }
 
+// RecordStorageBackup records the outcome of a file backup replication from source to destination.
+// On success it also records the number of bytes replicated
+func RecordStorageBackup(source, destination string, bytes int64, duration float64, err error) {
+	status := "success"
+	if err != nil {
+		status = "failed"
+	}
+
+	StorageBackupAttempts.WithLabelValues(source, destination, status).Inc()
+	StorageBackupDuration.WithLabelValues(source, destination, status).Observe(duration)
+
+	if err == nil {
+		StorageBackupBytesReplicated.WithLabelValues(source, destination).Add(float64(bytes))
+	}
+}
+
+// RecordStorageBackupState records a file backup state transition
+func RecordStorageBackupState(source, destination, status string) {
+	StorageBackupState.WithLabelValues(source, destination, status).Inc()
+}
+
+// RecordStorageBackupRead records a read served from a backup replica instead of the source provider
+func RecordStorageBackupRead(source, destination, operation string) {
+	StorageBackupReads.WithLabelValues(source, destination, operation).Inc()
+}
+
+// RecordStorageBackupReadMissingReplica records a read that fell through to the source provider
+// because the file has no backup replica, despite the source being configured to read from backup
+func RecordStorageBackupReadMissingReplica(source, operation string) {
+	StorageBackupReadsMissingReplica.WithLabelValues(source, operation).Inc()
+}
+
+// RecordStorageBackupDelete records the outcome of deleting a backup replica
+func RecordStorageBackupDelete(source, destination string, err error) {
+	status := "success"
+	if err != nil {
+		status = "failed"
+	}
+
+	StorageBackupDeletes.WithLabelValues(source, destination, status).Inc()
+}
+
 // RecordAuthentication records an authentication attempt by type
 func RecordAuthentication(authType string) {
 	AuthenticationAttempts.WithLabelValues(authType).Inc()

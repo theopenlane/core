@@ -155,6 +155,7 @@ func StorageFileFromEnt(file *generated.File) *storagetypes.File {
 	storageFile := &storagetypes.File{
 		ID:           file.ID,
 		OriginalName: file.ProvidedFileName,
+		ProviderType: storagetypes.ProviderType(file.StorageProvider),
 		FileMetadata: storagetypes.FileMetadata{
 			Key:          file.StoragePath,
 			Bucket:       file.StorageVolume,
@@ -177,6 +178,8 @@ func StorageFileFromEnt(file *generated.File) *storagetypes.File {
 
 		storageFile.Metadata = metadata
 	}
+
+	storageFile.BackupLocation = file.BackupState.Location()
 
 	return storageFile
 }

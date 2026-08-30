@@ -13,6 +13,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the organization cleanup listeners so gala setup picks them up automatically
+func init() { registerListeners(OrganizationCleanupListeners) }
+
 // OrganizationCleanupListeners cascades an organization soft delete by hard-deleting everything it owns
 func OrganizationCleanupListeners() []gala.Registration {
 	return []gala.Registration{

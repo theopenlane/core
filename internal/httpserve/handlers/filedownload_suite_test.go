@@ -274,10 +274,13 @@ func (suite *HandlerTestSuite) swapObjectStoreToDatabase() func() {
 }
 
 func (suite *HandlerTestSuite) createDatabaseStoreWithPresignConfig(cfg storage.ProviderConfig, baseURL string) *objects.Service {
-	return resolver.NewServiceFromConfig(cfg,
+	service, err := resolver.NewServiceFromConfig(cfg,
 		resolver.WithPresignConfig(func() *tokens.TokenManager {
 			return suite.sharedTokenManager
 		}, testTokenIssuer, testTokenIssuer),
 		resolver.WithPresignBaseURL(baseURL),
 	)
+	require.NoError(suite.T(), err)
+
+	return service
 }

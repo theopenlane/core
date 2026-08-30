@@ -248,7 +248,7 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "description": "Enabled runs the backfill routines on server startup"
+          "description": "Enabled runs the backfill routines on server startup, this only setups up the main job, all configured backfills will run based on their settings"
         }
       },
       "additionalProperties": false,
@@ -1616,6 +1616,29 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "storage.BackupConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if this backup target is enabled"
+        },
+        "provider": {
+          "type": "string",
+          "description": "Provider names the destination backend type, e.g. s3; empty replicates to the source\nprovider itself, which writes the backup to the suffixed bucket alongside the live one"
+        },
+        "readfrombackup": {
+          "type": "boolean",
+          "description": "ReadFromBackup serves reads from this backup target instead of the source provider, intended\nto be enabled during a disaster recovery event when the source provider storage is lost"
+        },
+        "region": {
+          "type": "string",
+          "description": "Region optionally overrides the destination provider's region, so a backup can replicate\ninto a region other than the one holding the live objects"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "BackupConfig defines an asynchronous replication target for a provider's objects. It only\nnames whether backups run and where they go; the destination provider's own configuration\nsupplies the region, endpoint, and credentials"
+    },
     "storage.ProviderConfig": {
       "properties": {
         "enabled": {
@@ -1680,6 +1703,10 @@
         "credentials": {
           "$ref": "#/$defs/storage.ProviderCredentials",
           "description": "Credentials contains the credentials for accessing the provider"
+        },
+        "backup": {
+          "$ref": "#/$defs/storage.BackupConfig",
+          "description": "Backup optionally replicates this provider's objects to another provider asynchronously"
         }
       },
       "additionalProperties": false,

@@ -12,6 +12,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
+// init registers the document association listeners so gala setup picks them up automatically
+func init() { registerListeners(DocumentAssociationListeners) }
+
 // DocumentAssociationListeners links controls referenced in a new document's details
 func DocumentAssociationListeners() []gala.Registration {
 	return entityops.ForSchemas([]*entityops.Schema{entityops.SchemaActionPlan, entityops.SchemaInternalPolicy, entityops.SchemaProcedure}, entityops.MutationListener{

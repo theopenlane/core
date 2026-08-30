@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	echodebug "github.com/theopenlane/core/v2/pkg/middleware/debug"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // Server is a struct that holds the configuration for the server
@@ -136,6 +137,28 @@ func NewServer(c config.Config) (*Server, error) {
 	}, nil
 }
 
+// localFileRoot returns the filesystem root the local uploads handler serves for the disk provider,
+// preferring the replica bucket when reads come from a backup that lands on disk
+func localFileRoot(config storage.ProviderConfig) string {
+	disk := config.Providers.Disk
+	if !disk.Enabled {
+		return ""
+	}
+
+	// any provider reading from a backup that lands on disk, including disk backing up to itself,
+	// is served out of the suffixed sibling of the disk provider's own bucket
+	for source, providerCfg := range config.Providers.ByType() {
+		destination, ok := providerCfg.BackupDestination(source)
+		if !ok || !providerCfg.Backup.ReadFromBackup || destination != storage.DiskProvider {
+			continue
+		}
+
+		return storage.BackupBucket(disk.Bucket)
+	}
+
+	return disk.Bucket
+}
+
 // StartEchoServer creates and starts the echo server with configured middleware and handlers
 func (s *Server) StartEchoServer(ctx context.Context) error {
 	sc := echo.StartConfig{
@@ -157,6 +180,8 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	// set local file path for uploads if in dev mode
 	if s.config.Settings.ObjectStorage.DevMode {
 		s.Router.LocalFilePath = objects.DefaultDevStorageBucket
+	} else {
+		s.Router.LocalFilePath = localFileRoot(s.config.Settings.ObjectStorage)
 	}
 
 	s.Router.Handler = &s.config.Handler

@@ -17,6 +17,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the campaign recurring listeners so gala setup picks them up automatically
+func init() { registerListeners(CampaignRecurringListeners) }
+
 // CampaignRecurringListeners keeps recurring campaign scheduling in sync when activation or recurrence fields change
 func CampaignRecurringListeners() []gala.Registration {
 	return []gala.Registration{

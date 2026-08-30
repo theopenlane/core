@@ -19,6 +19,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the entitlement listeners so gala setup picks them up automatically
+func init() { registerListeners(EntitlementListeners) }
+
 // EntitlementListeners keeps Stripe customers and subscriptions in sync with organization
 // lifecycle and billing changes
 func EntitlementListeners() []gala.Registration {

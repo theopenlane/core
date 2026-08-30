@@ -5769,6 +5769,7 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaFile.Fields = []FieldDescriptor{
+		{Name: "backup_state", Label: "BackupState", Type: "models.FileBackupState", Clearable: true},
 		{Name: "category_id", Label: "CategoryID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "category_name", Label: "CategoryName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "category_type", Label: "CategoryType", Type: "string", MatchKey: true, Clearable: true},
