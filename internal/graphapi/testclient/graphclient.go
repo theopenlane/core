@@ -67523,11 +67523,244 @@ func (t *GetInternalPolicyByID_InternalPolicy_Delegate) GetName() string {
 	return t.Name
 }
 
+type GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node struct {
+	CreatedAt    *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy    *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DiscussionID *string    "json:\"discussionID,omitempty\" graphql:\"discussionID\""
+	DisplayID    string     "json:\"displayID\" graphql:\"displayID\""
+	ID           string     "json:\"id\" graphql:\"id\""
+	IsEdited     bool       "json:\"isEdited\" graphql:\"isEdited\""
+	NoteRef      *string    "json:\"noteRef,omitempty\" graphql:\"noteRef\""
+	Text         string     "json:\"text\" graphql:\"text\""
+	UpdatedAt    *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy    *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetDiscussionID() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.DiscussionID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetIsEdited() bool {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.IsEdited
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetNoteRef() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.NoteRef
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetText() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.Text
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges struct {
+	Node *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges) GetNode() *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges_Node {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges{}
+	}
+	return t.Node
+}
+
+type GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments struct {
+	Edges []*GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments) GetEdges() []*GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments_Edges {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments{}
+	}
+	return t.Edges
+}
+
+type GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node struct {
+	Comments   GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments "json:\"comments\" graphql:\"comments\""
+	CreatedAt  *time.Time                                                           "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	ExternalID *string                                                              "json:\"externalID,omitempty\" graphql:\"externalID\""
+	ID         string                                                               "json:\"id\" graphql:\"id\""
+	IsResolved bool                                                                 "json:\"isResolved\" graphql:\"isResolved\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node) GetComments() *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node_Comments {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node{}
+	}
+	return &t.Comments
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node) GetExternalID() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node{}
+	}
+	return t.ExternalID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node) GetIsResolved() bool {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node{}
+	}
+	return t.IsResolved
+}
+
+type GetInternalPolicyByID_InternalPolicy_Discussions_Edges struct {
+	Node *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions_Edges) GetNode() *GetInternalPolicyByID_InternalPolicy_Discussions_Edges_Node {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions_Edges{}
+	}
+	return t.Node
+}
+
+type GetInternalPolicyByID_InternalPolicy_Discussions struct {
+	Edges []*GetInternalPolicyByID_InternalPolicy_Discussions_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Discussions) GetEdges() []*GetInternalPolicyByID_InternalPolicy_Discussions_Edges {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Discussions{}
+	}
+	return t.Edges
+}
+
+type GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node struct {
+	CreatedAt *time.Time "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy *string    "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID string     "json:\"displayID\" graphql:\"displayID\""
+	ID        string     "json:\"id\" graphql:\"id\""
+	Text      string     "json:\"text\" graphql:\"text\""
+	UpdatedAt *time.Time "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy *string    "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node) GetText() string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node{}
+	}
+	return t.Text
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+
+type GetInternalPolicyByID_InternalPolicy_Comments_Edges struct {
+	Node *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Comments_Edges) GetNode() *GetInternalPolicyByID_InternalPolicy_Comments_Edges_Node {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments_Edges{}
+	}
+	return t.Node
+}
+
+type GetInternalPolicyByID_InternalPolicy_Comments struct {
+	Edges []*GetInternalPolicyByID_InternalPolicy_Comments_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetInternalPolicyByID_InternalPolicy_Comments) GetEdges() []*GetInternalPolicyByID_InternalPolicy_Comments_Edges {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy_Comments{}
+	}
+	return t.Edges
+}
+
 type GetInternalPolicyByID_InternalPolicy struct {
 	ApprovalRequired                *bool                                              "json:\"approvalRequired,omitempty\" graphql:\"approvalRequired\""
 	Approver                        *GetInternalPolicyByID_InternalPolicy_Approver     "json:\"approver,omitempty\" graphql:\"approver\""
 	ApproverID                      *string                                            "json:\"approverID,omitempty\" graphql:\"approverID\""
 	BlockedGroups                   GetInternalPolicyByID_InternalPolicy_BlockedGroups "json:\"blockedGroups\" graphql:\"blockedGroups\""
+	Comments                        GetInternalPolicyByID_InternalPolicy_Comments      "json:\"comments\" graphql:\"comments\""
 	ControlSuggestions              []string                                           "json:\"controlSuggestions,omitempty\" graphql:\"controlSuggestions\""
 	CreatedAt                       *time.Time                                         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy                       *string                                            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -67535,6 +67768,7 @@ type GetInternalPolicyByID_InternalPolicy struct {
 	DelegateID                      *string                                            "json:\"delegateID,omitempty\" graphql:\"delegateID\""
 	Details                         *string                                            "json:\"details,omitempty\" graphql:\"details\""
 	DetailsJSON                     []any                                              "json:\"detailsJSON,omitempty\" graphql:\"detailsJSON\""
+	Discussions                     GetInternalPolicyByID_InternalPolicy_Discussions   "json:\"discussions\" graphql:\"discussions\""
 	DismissedControlSuggestions     []string                                           "json:\"dismissedControlSuggestions,omitempty\" graphql:\"dismissedControlSuggestions\""
 	DismissedImprovementSuggestions []string                                           "json:\"dismissedImprovementSuggestions,omitempty\" graphql:\"dismissedImprovementSuggestions\""
 	DismissedTagSuggestions         []string                                           "json:\"dismissedTagSuggestions,omitempty\" graphql:\"dismissedTagSuggestions\""
@@ -67596,6 +67830,12 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetBlockedGroups() *GetInternalPo
 	}
 	return &t.BlockedGroups
 }
+func (t *GetInternalPolicyByID_InternalPolicy) GetComments() *GetInternalPolicyByID_InternalPolicy_Comments {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return &t.Comments
+}
 func (t *GetInternalPolicyByID_InternalPolicy) GetControlSuggestions() []string {
 	if t == nil {
 		t = &GetInternalPolicyByID_InternalPolicy{}
@@ -67637,6 +67877,12 @@ func (t *GetInternalPolicyByID_InternalPolicy) GetDetailsJSON() []any {
 		t = &GetInternalPolicyByID_InternalPolicy{}
 	}
 	return t.DetailsJSON
+}
+func (t *GetInternalPolicyByID_InternalPolicy) GetDiscussions() *GetInternalPolicyByID_InternalPolicy_Discussions {
+	if t == nil {
+		t = &GetInternalPolicyByID_InternalPolicy{}
+	}
+	return &t.Discussions
 }
 func (t *GetInternalPolicyByID_InternalPolicy) GetDismissedControlSuggestions() []string {
 	if t == nil {
@@ -188007,6 +188253,45 @@ const GetInternalPolicyByIDDocument = `query GetInternalPolicyByID ($internalPol
 		delegate {
 			id
 			name
+		}
+		discussions {
+			edges {
+				node {
+					id
+					externalID
+					createdAt
+					isResolved
+					comments {
+						edges {
+							node {
+								id
+								displayID
+								text
+								noteRef
+								isEdited
+								discussionID
+								createdAt
+								createdBy
+								updatedAt
+								updatedBy
+							}
+						}
+					}
+				}
+			}
+		}
+		comments {
+			edges {
+				node {
+					id
+					displayID
+					text
+					createdAt
+					createdBy
+					updatedAt
+					updatedBy
+				}
+			}
 		}
 	}
 }
