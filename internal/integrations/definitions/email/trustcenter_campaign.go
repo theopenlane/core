@@ -8,9 +8,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
@@ -26,55 +24,9 @@ func snapshotTrustCenterSubscribers(ctx context.Context, db *generated.Client, c
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	subscribers, err := db.Subscriber.Query().
-		Where(
-			subscriber.TrustCenterID(camp.TrustCenterID),
-			subscriber.Active(true),
-			subscriber.VerifiedEmail(true),
-			subscriber.Unsubscribed(false),
-		).
-		All(allowCtx)
-	if err != nil {
-		return err
-	}
-
-	if len(subscribers) == 0 {
-		return nil
-	}
-
-	existing, err := db.CampaignTarget.Query().
-		Where(campaigntarget.CampaignIDEQ(camp.ID)).
-		All(allowCtx)
-	if err != nil {
-		return err
-	}
-
-	seen := make(map[string]struct{}, len(existing))
-	for _, target := range existing {
-		if target.SubscriberID != "" {
-			seen[target.SubscriberID] = struct{}{}
-		}
-	}
-
-	builders := make([]*generated.CampaignTargetCreate, 0, len(subscribers))
-	for _, sub := range subscribers {
-		if _, ok := seen[sub.ID]; ok {
-			continue
-		}
-
-		builders = append(builders, db.CampaignTarget.Create().
-			SetCampaignID(camp.ID).
-			SetOwnerID(camp.OwnerID).
-			SetEmail(sub.Email).
-			SetSubscriberID(sub.ID).
-			SetMetadata(map[string]any{MetadataUnsubscribeTokenKey: sub.Token}))
-	}
-
-	if len(builders) == 0 {
-		return nil
-	}
-
-	return db.CampaignTarget.CreateBulk(builders...).Exec(allowCtx)
+	return snapshotCampaignRecipients(allowCtx, db, camp, func(handle campaignRecipientHandlerFunc) error {
+		return resolveTrustCenterSubscriberRecipients(allowCtx, db, camp, handle)
+	})
 }
 
 // renderMessagesForCampaign routes campaign rendering: trust center update campaigns render the

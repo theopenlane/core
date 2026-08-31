@@ -163,6 +163,70 @@ func (r *queryResolver) AssetHistories(ctx context.Context, after *entgql.Cursor
 	return res, err
 }
 
+// AudienceHistories is the resolver for the audienceHistories field.
+func (r *queryResolver) AudienceHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AudienceHistoryOrder, where *historygenerated.AudienceHistoryWhereInput) (*historygenerated.AudienceHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.AudienceHistoryOrder{
+			Field:     historygenerated.AudienceHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AudienceHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audiencehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithAudienceHistoryOrder(orderBy),
+		historygenerated.WithAudienceHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audiencehistory"})
+	}
+
+	return res, err
+}
+
+// AudienceMemberHistories is the resolver for the audienceMemberHistories field.
+func (r *queryResolver) AudienceMemberHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AudienceMemberHistoryOrder, where *historygenerated.AudienceMemberHistoryWhereInput) (*historygenerated.AudienceMemberHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &historygenerated.AudienceMemberHistoryOrder{
+			Field:     historygenerated.AudienceMemberHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AudienceMemberHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audiencememberhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		historygenerated.WithAudienceMemberHistoryOrder(orderBy),
+		historygenerated.WithAudienceMemberHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audiencememberhistory"})
+	}
+
+	return res, err
+}
+
 // CampaignHistories is the resolver for the campaignHistories field.
 func (r *queryResolver) CampaignHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignHistoryOrder, where *historygenerated.CampaignHistoryWhereInput) (*historygenerated.CampaignHistoryConnection, error) {
 	// set page limit if nothing was set

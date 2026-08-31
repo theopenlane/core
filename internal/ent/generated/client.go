@@ -24,6 +24,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
@@ -152,6 +154,10 @@ type Client struct {
 	AssessmentResponse *AssessmentResponseClient
 	// Asset is the client for interacting with the Asset builders.
 	Asset *AssetClient
+	// Audience is the client for interacting with the Audience builders.
+	Audience *AudienceClient
+	// AudienceMember is the client for interacting with the AudienceMember builders.
+	AudienceMember *AudienceMemberClient
 	// Campaign is the client for interacting with the Campaign builders.
 	Campaign *CampaignClient
 	// CampaignTarget is the client for interacting with the CampaignTarget builders.
@@ -367,6 +373,8 @@ func (c *Client) init() {
 	c.Assessment = NewAssessmentClient(c.config)
 	c.AssessmentResponse = NewAssessmentResponseClient(c.config)
 	c.Asset = NewAssetClient(c.config)
+	c.Audience = NewAudienceClient(c.config)
+	c.AudienceMember = NewAudienceMemberClient(c.config)
 	c.Campaign = NewCampaignClient(c.config)
 	c.CampaignTarget = NewCampaignTargetClient(c.config)
 	c.CheckResult = NewCheckResultClient(c.config)
@@ -665,6 +673,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Assessment:                 NewAssessmentClient(cfg),
 		AssessmentResponse:         NewAssessmentResponseClient(cfg),
 		Asset:                      NewAssetClient(cfg),
+		Audience:                   NewAudienceClient(cfg),
+		AudienceMember:             NewAudienceMemberClient(cfg),
 		Campaign:                   NewCampaignClient(cfg),
 		CampaignTarget:             NewCampaignTargetClient(cfg),
 		CheckResult:                NewCheckResultClient(cfg),
@@ -784,6 +794,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Assessment:                 NewAssessmentClient(cfg),
 		AssessmentResponse:         NewAssessmentResponseClient(cfg),
 		Asset:                      NewAssetClient(cfg),
+		Audience:                   NewAudienceClient(cfg),
+		AudienceMember:             NewAudienceMemberClient(cfg),
 		Campaign:                   NewCampaignClient(cfg),
 		CampaignTarget:             NewCampaignTargetClient(cfg),
 		CheckResult:                NewCheckResultClient(cfg),
@@ -909,18 +921,19 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentResponse, c.Asset,
-		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
-		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
-		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailTemplate,
-		c.EmailVerificationToken, c.Entity, c.EntityType, c.Event, c.Evidence,
-		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
-		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
-		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
-		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
-		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
-		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.Audience, c.AudienceMember, c.Campaign, c.CampaignTarget, c.CheckResult,
+		c.Contact, c.Control, c.ControlImplementation, c.ControlObjective,
+		c.CustomDomain, c.CustomTypeEnum, c.DNSVerification, c.DirectoryAccount,
+		c.DirectoryGroup, c.DirectoryMembership, c.DirectorySyncRun, c.Discussion,
+		c.DocumentData, c.EmailTemplate, c.EmailVerificationToken, c.Entity,
+		c.EntityType, c.Event, c.Evidence, c.Export, c.File, c.FileDownloadToken,
+		c.Finding, c.FindingControl, c.Group, c.GroupMembership, c.GroupSetting,
+		c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
+		c.IntegrationRun, c.IntegrationWebhook, c.InternalPolicy, c.Invite,
+		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
+		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
+		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
+		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
@@ -941,18 +954,19 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.APIToken, c.ActionPlan, c.Assessment, c.AssessmentResponse, c.Asset,
-		c.Campaign, c.CampaignTarget, c.CheckResult, c.Contact, c.Control,
-		c.ControlImplementation, c.ControlObjective, c.CustomDomain, c.CustomTypeEnum,
-		c.DNSVerification, c.DirectoryAccount, c.DirectoryGroup, c.DirectoryMembership,
-		c.DirectorySyncRun, c.Discussion, c.DocumentData, c.EmailTemplate,
-		c.EmailVerificationToken, c.Entity, c.EntityType, c.Event, c.Evidence,
-		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
-		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
-		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
-		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
-		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
-		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
-		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.Audience, c.AudienceMember, c.Campaign, c.CampaignTarget, c.CheckResult,
+		c.Contact, c.Control, c.ControlImplementation, c.ControlObjective,
+		c.CustomDomain, c.CustomTypeEnum, c.DNSVerification, c.DirectoryAccount,
+		c.DirectoryGroup, c.DirectoryMembership, c.DirectorySyncRun, c.Discussion,
+		c.DocumentData, c.EmailTemplate, c.EmailVerificationToken, c.Entity,
+		c.EntityType, c.Event, c.Evidence, c.Export, c.File, c.FileDownloadToken,
+		c.Finding, c.FindingControl, c.Group, c.GroupMembership, c.GroupSetting,
+		c.Hush, c.IdentityHolder, c.ImpersonationEvent, c.Integration,
+		c.IntegrationRun, c.IntegrationWebhook, c.InternalPolicy, c.Invite,
+		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
+		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
+		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
+		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
 		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
 		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
@@ -1053,6 +1067,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.AssessmentResponse.mutate(ctx, m)
 	case *AssetMutation:
 		return c.Asset.mutate(ctx, m)
+	case *AudienceMutation:
+		return c.Audience.mutate(ctx, m)
+	case *AudienceMemberMutation:
+		return c.AudienceMember.mutate(ctx, m)
 	case *CampaignMutation:
 		return c.Campaign.mutate(ctx, m)
 	case *CampaignTargetMutation:
@@ -3027,6 +3045,484 @@ func (c *AssetClient) mutate(ctx context.Context, m *AssetMutation) (Value, erro
 	}
 }
 
+// AudienceClient is a client for the Audience schema.
+type AudienceClient struct {
+	config
+}
+
+// NewAudienceClient returns a client for the Audience from the given config.
+func NewAudienceClient(c config) *AudienceClient {
+	return &AudienceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `audience.Hooks(f(g(h())))`.
+func (c *AudienceClient) Use(hooks ...Hook) {
+	c.hooks.Audience = append(c.hooks.Audience, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `audience.Intercept(f(g(h())))`.
+func (c *AudienceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Audience = append(c.inters.Audience, interceptors...)
+}
+
+// Create returns a builder for creating a Audience entity.
+func (c *AudienceClient) Create() *AudienceCreate {
+	mutation := newAudienceMutation(c.config, OpCreate)
+	return &AudienceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Audience entities.
+func (c *AudienceClient) CreateBulk(builders ...*AudienceCreate) *AudienceCreateBulk {
+	return &AudienceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AudienceClient) MapCreateBulk(slice any, setFunc func(*AudienceCreate, int)) *AudienceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AudienceCreateBulk{err: fmt.Errorf("calling to AudienceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AudienceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AudienceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Audience.
+func (c *AudienceClient) Update() *AudienceUpdate {
+	mutation := newAudienceMutation(c.config, OpUpdate)
+	return &AudienceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AudienceClient) UpdateOne(_m *Audience) *AudienceUpdateOne {
+	mutation := newAudienceMutation(c.config, OpUpdateOne, withAudience(_m))
+	return &AudienceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AudienceClient) UpdateOneID(id string) *AudienceUpdateOne {
+	mutation := newAudienceMutation(c.config, OpUpdateOne, withAudienceID(id))
+	return &AudienceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Audience.
+func (c *AudienceClient) Delete() *AudienceDelete {
+	mutation := newAudienceMutation(c.config, OpDelete)
+	return &AudienceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AudienceClient) DeleteOne(_m *Audience) *AudienceDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AudienceClient) DeleteOneID(id string) *AudienceDeleteOne {
+	builder := c.Delete().Where(audience.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AudienceDeleteOne{builder}
+}
+
+// Query returns a query builder for Audience.
+func (c *AudienceClient) Query() *AudienceQuery {
+	return &AudienceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAudience},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Audience entity by its id.
+func (c *AudienceClient) Get(ctx context.Context, id string) (*Audience, error) {
+	return c.Query().Where(audience.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AudienceClient) GetX(ctx context.Context, id string) *Audience {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Audience.
+func (c *AudienceClient) QueryOwner(_m *Audience) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audience.Table, audience.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, audience.OwnerTable, audience.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryBlockedGroups queries the blocked_groups edge of a Audience.
+func (c *AudienceClient) QueryBlockedGroups(_m *Audience) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audience.Table, audience.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, audience.BlockedGroupsTable, audience.BlockedGroupsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEditors queries the editors edge of a Audience.
+func (c *AudienceClient) QueryEditors(_m *Audience) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audience.Table, audience.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, audience.EditorsTable, audience.EditorsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryViewers queries the viewers edge of a Audience.
+func (c *AudienceClient) QueryViewers(_m *Audience) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audience.Table, audience.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, audience.ViewersTable, audience.ViewersPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudienceMembers queries the audience_members edge of a Audience.
+func (c *AudienceClient) QueryAudienceMembers(_m *Audience) *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audience.Table, audience.FieldID, id),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, audience.AudienceMembersTable, audience.AudienceMembersColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryCampaigns queries the campaigns edge of a Audience.
+func (c *AudienceClient) QueryCampaigns(_m *Audience) *CampaignQuery {
+	query := (&CampaignClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audience.Table, audience.FieldID, id),
+			sqlgraph.To(campaign.Table, campaign.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, audience.CampaignsTable, audience.CampaignsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AudienceClient) Hooks() []Hook {
+	hooks := c.hooks.Audience
+	return append(hooks[:len(hooks):len(hooks)], audience.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AudienceClient) Interceptors() []Interceptor {
+	inters := c.inters.Audience
+	return append(inters[:len(inters):len(inters)], audience.Interceptors[:]...)
+}
+
+func (c *AudienceClient) mutate(ctx context.Context, m *AudienceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AudienceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AudienceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AudienceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AudienceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Audience mutation op: %q", m.Op())
+	}
+}
+
+// AudienceMemberClient is a client for the AudienceMember schema.
+type AudienceMemberClient struct {
+	config
+}
+
+// NewAudienceMemberClient returns a client for the AudienceMember from the given config.
+func NewAudienceMemberClient(c config) *AudienceMemberClient {
+	return &AudienceMemberClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `audiencemember.Hooks(f(g(h())))`.
+func (c *AudienceMemberClient) Use(hooks ...Hook) {
+	c.hooks.AudienceMember = append(c.hooks.AudienceMember, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `audiencemember.Intercept(f(g(h())))`.
+func (c *AudienceMemberClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AudienceMember = append(c.inters.AudienceMember, interceptors...)
+}
+
+// Create returns a builder for creating a AudienceMember entity.
+func (c *AudienceMemberClient) Create() *AudienceMemberCreate {
+	mutation := newAudienceMemberMutation(c.config, OpCreate)
+	return &AudienceMemberCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AudienceMember entities.
+func (c *AudienceMemberClient) CreateBulk(builders ...*AudienceMemberCreate) *AudienceMemberCreateBulk {
+	return &AudienceMemberCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AudienceMemberClient) MapCreateBulk(slice any, setFunc func(*AudienceMemberCreate, int)) *AudienceMemberCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AudienceMemberCreateBulk{err: fmt.Errorf("calling to AudienceMemberClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AudienceMemberCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AudienceMemberCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AudienceMember.
+func (c *AudienceMemberClient) Update() *AudienceMemberUpdate {
+	mutation := newAudienceMemberMutation(c.config, OpUpdate)
+	return &AudienceMemberUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AudienceMemberClient) UpdateOne(_m *AudienceMember) *AudienceMemberUpdateOne {
+	mutation := newAudienceMemberMutation(c.config, OpUpdateOne, withAudienceMember(_m))
+	return &AudienceMemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AudienceMemberClient) UpdateOneID(id string) *AudienceMemberUpdateOne {
+	mutation := newAudienceMemberMutation(c.config, OpUpdateOne, withAudienceMemberID(id))
+	return &AudienceMemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AudienceMember.
+func (c *AudienceMemberClient) Delete() *AudienceMemberDelete {
+	mutation := newAudienceMemberMutation(c.config, OpDelete)
+	return &AudienceMemberDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AudienceMemberClient) DeleteOne(_m *AudienceMember) *AudienceMemberDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AudienceMemberClient) DeleteOneID(id string) *AudienceMemberDeleteOne {
+	builder := c.Delete().Where(audiencemember.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AudienceMemberDeleteOne{builder}
+}
+
+// Query returns a query builder for AudienceMember.
+func (c *AudienceMemberClient) Query() *AudienceMemberQuery {
+	return &AudienceMemberQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAudienceMember},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AudienceMember entity by its id.
+func (c *AudienceMemberClient) Get(ctx context.Context, id string) (*AudienceMember, error) {
+	return c.Query().Where(audiencemember.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AudienceMemberClient) GetX(ctx context.Context, id string) *AudienceMember {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a AudienceMember.
+func (c *AudienceMemberClient) QueryOwner(_m *AudienceMember) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audiencemember.Table, audiencemember.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, audiencemember.OwnerTable, audiencemember.OwnerColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudience queries the audience edge of a AudienceMember.
+func (c *AudienceMemberClient) QueryAudience(_m *AudienceMember) *AudienceQuery {
+	query := (&AudienceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audiencemember.Table, audiencemember.FieldID, id),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, audiencemember.AudienceTable, audiencemember.AudienceColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryContact queries the contact edge of a AudienceMember.
+func (c *AudienceMemberClient) QueryContact(_m *AudienceMember) *ContactQuery {
+	query := (&ContactClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audiencemember.Table, audiencemember.FieldID, id),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, audiencemember.ContactTable, audiencemember.ContactColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a AudienceMember.
+func (c *AudienceMemberClient) QueryUser(_m *AudienceMember) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audiencemember.Table, audiencemember.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, audiencemember.UserTable, audiencemember.UserColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroup queries the group edge of a AudienceMember.
+func (c *AudienceMemberClient) QueryGroup(_m *AudienceMember) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audiencemember.Table, audiencemember.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, audiencemember.GroupTable, audiencemember.GroupColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIdentityHolder queries the identity_holder edge of a AudienceMember.
+func (c *AudienceMemberClient) QueryIdentityHolder(_m *AudienceMember) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audiencemember.Table, audiencemember.FieldID, id),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, audiencemember.IdentityHolderTable, audiencemember.IdentityHolderColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubscriber queries the subscriber edge of a AudienceMember.
+func (c *AudienceMemberClient) QuerySubscriber(_m *AudienceMember) *SubscriberQuery {
+	query := (&SubscriberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(audiencemember.Table, audiencemember.FieldID, id),
+			sqlgraph.To(subscriber.Table, subscriber.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, audiencemember.SubscriberTable, audiencemember.SubscriberColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *AudienceMemberClient) Hooks() []Hook {
+	hooks := c.hooks.AudienceMember
+	return append(hooks[:len(hooks):len(hooks)], audiencemember.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AudienceMemberClient) Interceptors() []Interceptor {
+	inters := c.inters.AudienceMember
+	return append(inters[:len(inters):len(inters)], audiencemember.Interceptors[:]...)
+}
+
+func (c *AudienceMemberClient) mutate(ctx context.Context, m *AudienceMemberMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AudienceMemberCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AudienceMemberUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AudienceMemberUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AudienceMemberDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown AudienceMember mutation op: %q", m.Op())
+	}
+}
+
 // CampaignClient is a client for the Campaign schema.
 type CampaignClient struct {
 	config
@@ -3416,6 +3912,22 @@ func (c *CampaignClient) QueryIdentityHolders(_m *Campaign) *IdentityHolderQuery
 			sqlgraph.From(campaign.Table, campaign.FieldID, id),
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, campaign.IdentityHoldersTable, campaign.IdentityHoldersPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudiences queries the audiences edge of a Campaign.
+func (c *CampaignClient) QueryAudiences(_m *Campaign) *AudienceQuery {
+	query := (&AudienceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, id),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.AudiencesTable, campaign.AudiencesPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -4125,6 +4637,22 @@ func (c *ContactClient) QueryCampaignTargets(_m *Contact) *CampaignTargetQuery {
 			sqlgraph.From(contact.Table, contact.FieldID, id),
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, contact.CampaignTargetsTable, contact.CampaignTargetsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudienceMembers queries the audience_members edge of a Contact.
+func (c *ContactClient) QueryAudienceMembers(_m *Contact) *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(contact.Table, contact.FieldID, id),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, contact.AudienceMembersTable, contact.AudienceMembersColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -12059,6 +12587,54 @@ func (c *GroupClient) QueryCampaignViewers(_m *Group) *CampaignQuery {
 	return query
 }
 
+// QueryAudienceEditors queries the audience_editors edge of a Group.
+func (c *GroupClient) QueryAudienceEditors(_m *Group) *AudienceQuery {
+	query := (&AudienceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AudienceEditorsTable, group.AudienceEditorsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudienceBlockedGroups queries the audience_blocked_groups edge of a Group.
+func (c *GroupClient) QueryAudienceBlockedGroups(_m *Group) *AudienceQuery {
+	query := (&AudienceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AudienceBlockedGroupsTable, group.AudienceBlockedGroupsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudienceViewers queries the audience_viewers edge of a Group.
+func (c *GroupClient) QueryAudienceViewers(_m *Group) *AudienceQuery {
+	query := (&AudienceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AudienceViewersTable, group.AudienceViewersPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryProcedureEditors queries the procedure_editors edge of a Group.
 func (c *GroupClient) QueryProcedureEditors(_m *Group) *ProcedureQuery {
 	query := (&ProcedureClient{config: c.config}).Query()
@@ -12484,6 +13060,22 @@ func (c *GroupClient) QueryCampaignTargets(_m *Group) *CampaignTargetQuery {
 			sqlgraph.From(group.Table, group.FieldID, id),
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, group.CampaignTargetsTable, group.CampaignTargetsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudienceMembers queries the audience_members edge of a Group.
+func (c *GroupClient) QueryAudienceMembers(_m *Group) *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, id),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, group.AudienceMembersTable, group.AudienceMembersColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -13504,6 +14096,22 @@ func (c *IdentityHolderClient) QueryCampaigns(_m *IdentityHolder) *CampaignQuery
 			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.CampaignsTable, identityholder.CampaignsPrimaryKey...),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudienceMembers queries the audience_members edge of a IdentityHolder.
+func (c *IdentityHolderClient) QueryAudienceMembers(_m *IdentityHolder) *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, id),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.AudienceMembersTable, identityholder.AudienceMembersColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -18403,6 +19011,38 @@ func (c *OrganizationClient) QueryAssetCreators(_m *Organization) *GroupQuery {
 	return query
 }
 
+// QueryAudienceCreators queries the audience_creators edge of a Organization.
+func (c *OrganizationClient) QueryAudienceCreators(_m *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AudienceCreatorsTable, organization.AudienceCreatorsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudienceMemberCreators queries the audience_member_creators edge of a Organization.
+func (c *OrganizationClient) QueryAudienceMemberCreators(_m *Organization) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AudienceMemberCreatorsTable, organization.AudienceMemberCreatorsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryCampaignCreators queries the campaign_creators edge of a Organization.
 func (c *OrganizationClient) QueryCampaignCreators(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -20428,6 +21068,38 @@ func (c *OrganizationClient) QueryExports(_m *Organization) *ExportQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(export.Table, export.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ExportsTable, organization.ExportsColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudiences queries the audiences edge of a Organization.
+func (c *OrganizationClient) QueryAudiences(_m *Organization) *AudienceQuery {
+	query := (&AudienceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AudiencesTable, organization.AudiencesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAudienceMembers queries the audience_members edge of a Organization.
+func (c *OrganizationClient) QueryAudienceMembers(_m *Organization) *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AudienceMembersTable, organization.AudienceMembersColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -26883,6 +27555,22 @@ func (c *SubscriberClient) QueryUser(_m *Subscriber) *UserQuery {
 	return query
 }
 
+// QueryAudienceMembers queries the audience_members edge of a Subscriber.
+func (c *SubscriberClient) QueryAudienceMembers(_m *Subscriber) *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, id),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subscriber.AudienceMembersTable, subscriber.AudienceMembersColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *SubscriberClient) Hooks() []Hook {
 	hooks := c.hooks.Subscriber
@@ -30828,6 +31516,22 @@ func (c *UserClient) QueryCampaignTargets(_m *User) *CampaignTargetQuery {
 	return query
 }
 
+// QueryAudienceMembers queries the audience_members edge of a User.
+func (c *UserClient) QueryAudienceMembers(_m *User) *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.AudienceMembersTable, user.AudienceMembersColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySubcontrols queries the subcontrols edge of a User.
 func (c *UserClient) QuerySubcontrols(_m *User) *SubcontrolQuery {
 	query := (&SubcontrolClient{config: c.config}).Query()
@@ -34398,50 +35102,51 @@ func (c *WorkflowProposalClient) mutate(ctx context.Context, m *WorkflowProposal
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
-		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
-		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
-		DirectoryAccount, DirectoryGroup, DirectoryMembership, DirectorySyncRun,
-		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
-		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
-		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
-		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
-		InternalPolicy, Invite, MappableDomain, MappedControl, Narrative, Note,
-		Notification, NotificationPreference, NotificationTemplate, Onboarding,
-		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
-		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
-		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
-		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
-		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
-		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
-		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
-		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef, WorkflowProposal []ent.Hook
+		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Audience,
+		AudienceMember, Campaign, CampaignTarget, CheckResult, Contact, Control,
+		ControlImplementation, ControlObjective, CustomDomain, CustomTypeEnum,
+		DNSVerification, DirectoryAccount, DirectoryGroup, DirectoryMembership,
+		DirectorySyncRun, Discussion, DocumentData, EmailTemplate,
+		EmailVerificationToken, Entity, EntityType, Event, Evidence, Export, File,
+		FileDownloadToken, Finding, FindingControl, Group, GroupMembership,
+		GroupSetting, Hush, IdentityHolder, ImpersonationEvent, Integration,
+		IntegrationRun, IntegrationWebhook, InternalPolicy, Invite, MappableDomain,
+		MappedControl, Narrative, Note, Notification, NotificationPreference,
+		NotificationTemplate, Onboarding, OrgMembership, OrgModule, OrgPrice,
+		OrgProduct, OrgSubscription, Organization, OrganizationSetting,
+		PasswordResetToken, PersonalAccessToken, Platform, Procedure, Program,
+		ProgramMembership, Remediation, Review, Risk, SLADefinition, Scan, Standard,
+		Subcontrol, Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition,
+		Task, Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
+		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
-		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
-		CampaignTarget, CheckResult, Contact, Control, ControlImplementation,
-		ControlObjective, CustomDomain, CustomTypeEnum, DNSVerification,
-		DirectoryAccount, DirectoryGroup, DirectoryMembership, DirectorySyncRun,
-		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
-		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
-		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
-		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
-		InternalPolicy, Invite, MappableDomain, MappedControl, Narrative, Note,
-		Notification, NotificationPreference, NotificationTemplate, Onboarding,
-		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
-		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
-		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
-		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
-		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
-		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
-		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
-		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
-		WorkflowObjectRef, WorkflowProposal []ent.Interceptor
+		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Audience,
+		AudienceMember, Campaign, CampaignTarget, CheckResult, Contact, Control,
+		ControlImplementation, ControlObjective, CustomDomain, CustomTypeEnum,
+		DNSVerification, DirectoryAccount, DirectoryGroup, DirectoryMembership,
+		DirectorySyncRun, Discussion, DocumentData, EmailTemplate,
+		EmailVerificationToken, Entity, EntityType, Event, Evidence, Export, File,
+		FileDownloadToken, Finding, FindingControl, Group, GroupMembership,
+		GroupSetting, Hush, IdentityHolder, ImpersonationEvent, Integration,
+		IntegrationRun, IntegrationWebhook, InternalPolicy, Invite, MappableDomain,
+		MappedControl, Narrative, Note, Notification, NotificationPreference,
+		NotificationTemplate, Onboarding, OrgMembership, OrgModule, OrgPrice,
+		OrgProduct, OrgSubscription, Organization, OrganizationSetting,
+		PasswordResetToken, PersonalAccessToken, Platform, Procedure, Program,
+		ProgramMembership, Remediation, Review, Risk, SLADefinition, Scan, Standard,
+		Subcontrol, Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition,
+		Task, Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
+		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
+		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
+		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
+		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
+		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
+		WorkflowProposal []ent.Interceptor
 	}
 )
 

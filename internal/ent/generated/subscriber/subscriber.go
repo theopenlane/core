@@ -71,6 +71,8 @@ const (
 	EdgeContact = "contact"
 	// EdgeUser holds the string denoting the user edge name in mutations.
 	EdgeUser = "user"
+	// EdgeAudienceMembers holds the string denoting the audience_members edge name in mutations.
+	EdgeAudienceMembers = "audience_members"
 	// Table holds the table name of the subscriber in the database.
 	Table = "subscribers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -113,6 +115,13 @@ const (
 	UserInverseTable = "users"
 	// UserColumn is the table column denoting the user relation/edge.
 	UserColumn = "user_id"
+	// AudienceMembersTable is the table that holds the audience_members relation/edge.
+	AudienceMembersTable = "audience_members"
+	// AudienceMembersInverseTable is the table name for the AudienceMember entity.
+	// It exists in this package in order to avoid circular dependency with the "audiencemember" package.
+	AudienceMembersInverseTable = "audience_members"
+	// AudienceMembersColumn is the table column denoting the audience_members relation/edge.
+	AudienceMembersColumn = "subscriber_id"
 )
 
 // Columns holds all SQL columns for subscriber fields.
@@ -360,6 +369,20 @@ func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByAudienceMembersCount orders the results by audience_members count.
+func ByAudienceMembersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceMembersStep(), opts...)
+	}
+}
+
+// ByAudienceMembers orders the results by audience_members terms.
+func ByAudienceMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -400,5 +423,12 @@ func newUserStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(UserInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
+	)
+}
+func newAudienceMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceMembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
 	)
 }

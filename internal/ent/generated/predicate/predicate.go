@@ -21,6 +21,12 @@ type AssessmentResponse func(*sql.Selector)
 // Asset is the predicate function for asset builders.
 type Asset func(*sql.Selector)
 
+// Audience is the predicate function for audience builders.
+type Audience func(*sql.Selector)
+
+// AudienceMember is the predicate function for audiencemember builders.
+type AudienceMember func(*sql.Selector)
+
 // Campaign is the predicate function for campaign builders.
 type Campaign func(*sql.Selector)
 

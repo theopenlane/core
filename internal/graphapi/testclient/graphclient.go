@@ -52,6 +52,28 @@ type TestGraphClient interface {
 	UpdateAsset(ctx context.Context, updateAssetID string, input UpdateAssetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAsset, error)
 	UpdateBulkAsset(ctx context.Context, ids []string, input UpdateAssetInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAsset, error)
 	UpdateBulkCSVAsset(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAsset, error)
+	CreateAudience(ctx context.Context, input CreateAudienceInput, interceptors ...clientv2.RequestInterceptor) (*CreateAudience, error)
+	CreateBulkAudience(ctx context.Context, input []*CreateAudienceInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAudience, error)
+	CreateBulkCSVAudience(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAudience, error)
+	DeleteAudience(ctx context.Context, deleteAudienceID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAudience, error)
+	DeleteBulkAudience(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkAudience, error)
+	GetAllAudiences(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AudienceOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllAudiences, error)
+	GetAudienceByID(ctx context.Context, audienceID string, interceptors ...clientv2.RequestInterceptor) (*GetAudienceByID, error)
+	GetAudiences(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AudienceOrder, where *AudienceWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAudiences, error)
+	UpdateAudience(ctx context.Context, updateAudienceID string, input UpdateAudienceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAudience, error)
+	UpdateBulkAudience(ctx context.Context, ids []string, input UpdateAudienceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAudience, error)
+	UpdateBulkCSVAudience(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAudience, error)
+	CreateAudienceMember(ctx context.Context, input CreateAudienceMemberInput, interceptors ...clientv2.RequestInterceptor) (*CreateAudienceMember, error)
+	CreateBulkAudienceMember(ctx context.Context, input []*CreateAudienceMemberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAudienceMember, error)
+	CreateBulkCSVAudienceMember(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAudienceMember, error)
+	DeleteAudienceMember(ctx context.Context, deleteAudienceMemberID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAudienceMember, error)
+	DeleteBulkAudienceMember(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkAudienceMember, error)
+	GetAllAudienceMembers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AudienceMemberOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllAudienceMembers, error)
+	GetAudienceMemberByID(ctx context.Context, audienceMemberID string, interceptors ...clientv2.RequestInterceptor) (*GetAudienceMemberByID, error)
+	GetAudienceMembers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AudienceMemberOrder, where *AudienceMemberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAudienceMembers, error)
+	UpdateAudienceMember(ctx context.Context, updateAudienceMemberID string, input UpdateAudienceMemberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAudienceMember, error)
+	UpdateBulkAudienceMember(ctx context.Context, ids []string, input UpdateAudienceMemberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAudienceMember, error)
+	UpdateBulkCSVAudienceMember(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAudienceMember, error)
 	CreateBulkCSVCampaign(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVCampaign, error)
 	CreateBulkCampaign(ctx context.Context, input []*CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCampaign, error)
 	CreateCampaign(ctx context.Context, input CreateCampaignInput, interceptors ...clientv2.RequestInterceptor) (*CreateCampaign, error)
@@ -9095,6 +9117,2626 @@ func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetNotUpdatedIDs() []string {
 func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkCSVAsset_UpdateBulkCSVAsset{}
+	}
+	return t.UpdatedIDs
+}
+
+type CreateAudience_CreateAudience_Audience struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *CreateAudience_CreateAudience_Audience) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return &t.AudienceType
+}
+func (t *CreateAudience_CreateAudience_Audience) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateAudience_CreateAudience_Audience) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateAudience_CreateAudience_Audience) GetDescription() *string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.Description
+}
+func (t *CreateAudience_CreateAudience_Audience) GetDisplayID() string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.DisplayID
+}
+func (t *CreateAudience_CreateAudience_Audience) GetFilters() map[string]any {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.Filters
+}
+func (t *CreateAudience_CreateAudience_Audience) GetID() string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.ID
+}
+func (t *CreateAudience_CreateAudience_Audience) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.Metadata
+}
+func (t *CreateAudience_CreateAudience_Audience) GetName() string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.Name
+}
+func (t *CreateAudience_CreateAudience_Audience) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAudience_CreateAudience_Audience) GetTags() []string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.Tags
+}
+func (t *CreateAudience_CreateAudience_Audience) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateAudience_CreateAudience_Audience) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateAudience_CreateAudience_Audience) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateAudience_CreateAudience_Audience{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type CreateAudience_CreateAudience struct {
+	Audience CreateAudience_CreateAudience_Audience "json:\"audience\" graphql:\"audience\""
+}
+
+func (t *CreateAudience_CreateAudience) GetAudience() *CreateAudience_CreateAudience_Audience {
+	if t == nil {
+		t = &CreateAudience_CreateAudience{}
+	}
+	return &t.Audience
+}
+
+type CreateBulkAudience_CreateBulkAudience_Audiences struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return &t.AudienceType
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.Description
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetFilters() map[string]any {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.Filters
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetID() string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.ID
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetName() string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.Name
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkAudience_CreateBulkAudience_Audiences) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience_Audiences{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type CreateBulkAudience_CreateBulkAudience struct {
+	Audiences []*CreateBulkAudience_CreateBulkAudience_Audiences "json:\"audiences,omitempty\" graphql:\"audiences\""
+}
+
+func (t *CreateBulkAudience_CreateBulkAudience) GetAudiences() []*CreateBulkAudience_CreateBulkAudience_Audiences {
+	if t == nil {
+		t = &CreateBulkAudience_CreateBulkAudience{}
+	}
+	return t.Audiences
+}
+
+type CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return &t.AudienceType
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetDescription() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.Description
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetFilters() map[string]any {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.Filters
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetName() string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.Name
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type CreateBulkCSVAudience_CreateBulkCSVAudience struct {
+	Audiences []*CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences "json:\"audiences,omitempty\" graphql:\"audiences\""
+}
+
+func (t *CreateBulkCSVAudience_CreateBulkCSVAudience) GetAudiences() []*CreateBulkCSVAudience_CreateBulkCSVAudience_Audiences {
+	if t == nil {
+		t = &CreateBulkCSVAudience_CreateBulkCSVAudience{}
+	}
+	return t.Audiences
+}
+
+type DeleteAudience_DeleteAudience struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteAudience_DeleteAudience) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteAudience_DeleteAudience{}
+	}
+	return t.DeletedID
+}
+
+type DeleteBulkAudience_DeleteBulkAudience struct {
+	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+}
+
+func (t *DeleteBulkAudience_DeleteBulkAudience) GetDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkAudience_DeleteBulkAudience{}
+	}
+	return t.DeletedIDs
+}
+
+type GetAllAudiences_Audiences_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAudiences_Audiences_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAudiences_Audiences_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAudiences_Audiences_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAudiences_Audiences_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAudiences_Audiences_Edges_Node struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetAllAudiences_Audiences_Edges_Node) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return &t.AudienceType
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetFilters() map[string]any {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.Filters
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllAudiences_Audiences_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type GetAllAudiences_Audiences_Edges struct {
+	Node *GetAllAudiences_Audiences_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAudiences_Audiences_Edges) GetNode() *GetAllAudiences_Audiences_Edges_Node {
+	if t == nil {
+		t = &GetAllAudiences_Audiences_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAudiences_Audiences struct {
+	Edges      []*GetAllAudiences_Audiences_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAudiences_Audiences_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                              "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAudiences_Audiences) GetEdges() []*GetAllAudiences_Audiences_Edges {
+	if t == nil {
+		t = &GetAllAudiences_Audiences{}
+	}
+	return t.Edges
+}
+func (t *GetAllAudiences_Audiences) GetPageInfo() *GetAllAudiences_Audiences_PageInfo {
+	if t == nil {
+		t = &GetAllAudiences_Audiences{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAudiences_Audiences) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAudiences_Audiences{}
+	}
+	return t.TotalCount
+}
+
+type GetAudienceByID_Audience struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetAudienceByID_Audience) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return &t.AudienceType
+}
+func (t *GetAudienceByID_Audience) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAudienceByID_Audience) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAudienceByID_Audience) GetDescription() *string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.Description
+}
+func (t *GetAudienceByID_Audience) GetDisplayID() string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.DisplayID
+}
+func (t *GetAudienceByID_Audience) GetFilters() map[string]any {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.Filters
+}
+func (t *GetAudienceByID_Audience) GetID() string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.ID
+}
+func (t *GetAudienceByID_Audience) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.Metadata
+}
+func (t *GetAudienceByID_Audience) GetName() string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.Name
+}
+func (t *GetAudienceByID_Audience) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.OwnerID
+}
+func (t *GetAudienceByID_Audience) GetTags() []string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.Tags
+}
+func (t *GetAudienceByID_Audience) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAudienceByID_Audience) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAudienceByID_Audience) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAudienceByID_Audience{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type GetAudiences_Audiences_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAudiences_Audiences_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAudiences_Audiences_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAudiences_Audiences_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAudiences_Audiences_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAudiences_Audiences_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAudiences_Audiences_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAudiences_Audiences_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAudiences_Audiences_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAudiences_Audiences_Edges_Node struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *GetAudiences_Audiences_Edges_Node) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return &t.AudienceType
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetDescription() *string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.Description
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetFilters() map[string]any {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.Filters
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAudiences_Audiences_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type GetAudiences_Audiences_Edges struct {
+	Node *GetAudiences_Audiences_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAudiences_Audiences_Edges) GetNode() *GetAudiences_Audiences_Edges_Node {
+	if t == nil {
+		t = &GetAudiences_Audiences_Edges{}
+	}
+	return t.Node
+}
+
+type GetAudiences_Audiences struct {
+	Edges      []*GetAudiences_Audiences_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAudiences_Audiences_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                           "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAudiences_Audiences) GetEdges() []*GetAudiences_Audiences_Edges {
+	if t == nil {
+		t = &GetAudiences_Audiences{}
+	}
+	return t.Edges
+}
+func (t *GetAudiences_Audiences) GetPageInfo() *GetAudiences_Audiences_PageInfo {
+	if t == nil {
+		t = &GetAudiences_Audiences{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAudiences_Audiences) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAudiences_Audiences{}
+	}
+	return t.TotalCount
+}
+
+type UpdateAudience_UpdateAudience_Audience struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateAudience_UpdateAudience_Audience) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return &t.AudienceType
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetDescription() *string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.Description
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetFilters() map[string]any {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.Filters
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetID() string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.ID
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetMetadata() map[string]any {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.Metadata
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetName() string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.Name
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetTags() []string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.Tags
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateAudience_UpdateAudience_Audience) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience_Audience{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateAudience_UpdateAudience struct {
+	Audience UpdateAudience_UpdateAudience_Audience "json:\"audience\" graphql:\"audience\""
+}
+
+func (t *UpdateAudience_UpdateAudience) GetAudience() *UpdateAudience_UpdateAudience_Audience {
+	if t == nil {
+		t = &UpdateAudience_UpdateAudience{}
+	}
+	return &t.Audience
+}
+
+type UpdateBulkAudience_UpdateBulkAudience_Audiences struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return &t.AudienceType
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetDescription() *string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.Description
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetFilters() map[string]any {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.Filters
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetID() string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetMetadata() map[string]any {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.Metadata
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetName() string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience_Audiences) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience_Audiences{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateBulkAudience_UpdateBulkAudience struct {
+	Audiences     []*UpdateBulkAudience_UpdateBulkAudience_Audiences "json:\"audiences,omitempty\" graphql:\"audiences\""
+	Error         *string                                            "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                           "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkAudience_UpdateBulkAudience) GetAudiences() []*UpdateBulkAudience_UpdateBulkAudience_Audiences {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience{}
+	}
+	return t.Audiences
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience{}
+	}
+	return t.NotUpdatedIDs
+}
+func (t *UpdateBulkAudience_UpdateBulkAudience) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkAudience_UpdateBulkAudience{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences struct {
+	AudienceType          enums.AudienceType "json:\"audienceType\" graphql:\"audienceType\""
+	CreatedAt             *time.Time         "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string            "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	Description           *string            "json:\"description,omitempty\" graphql:\"description\""
+	DisplayID             string             "json:\"displayID\" graphql:\"displayID\""
+	Filters               map[string]any     "json:\"filters,omitempty\" graphql:\"filters\""
+	ID                    string             "json:\"id\" graphql:\"id\""
+	Metadata              map[string]any     "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                  string             "json:\"name\" graphql:\"name\""
+	OwnerID               *string            "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags                  []string           "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time         "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string            "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string            "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+}
+
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetAudienceType() *enums.AudienceType {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return &t.AudienceType
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetDescription() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.Description
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetFilters() map[string]any {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.Filters
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetID() string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetMetadata() map[string]any {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.Metadata
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetName() string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.Name
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences{}
+	}
+	return t.UpdatedByImpersonator
+}
+
+type UpdateBulkCSVAudience_UpdateBulkCSVAudience struct {
+	Audiences     []*UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences "json:\"audiences,omitempty\" graphql:\"audiences\""
+	Error         *string                                                  "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                 "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                                 "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetAudiences() []*UpdateBulkCSVAudience_UpdateBulkCSVAudience_Audiences {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience{}
+	}
+	return t.Audiences
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience{}
+	}
+	return t.NotUpdatedIDs
+}
+func (t *UpdateBulkCSVAudience_UpdateBulkCSVAudience) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAudience_UpdateBulkCSVAudience{}
+	}
+	return t.UpdatedIDs
+}
+
+type CreateAudienceMember_CreateAudienceMember_AudienceMember struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetAudienceID() string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.AudienceID
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetContactID() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.ContactID
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetDisplayID() string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.DisplayID
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetEmail() string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.Email
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetFullName() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.FullName
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetGroupID() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.GroupID
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetID() string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.ID
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.IdentityHolderID
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.Metadata
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetSubscriberID() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.SubscriberID
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetTags() []string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.Tags
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateAudienceMember_CreateAudienceMember_AudienceMember) GetUserID() *string {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember_AudienceMember{}
+	}
+	return t.UserID
+}
+
+type CreateAudienceMember_CreateAudienceMember struct {
+	AudienceMember CreateAudienceMember_CreateAudienceMember_AudienceMember "json:\"audienceMember\" graphql:\"audienceMember\""
+}
+
+func (t *CreateAudienceMember_CreateAudienceMember) GetAudienceMember() *CreateAudienceMember_CreateAudienceMember_AudienceMember {
+	if t == nil {
+		t = &CreateAudienceMember_CreateAudienceMember{}
+	}
+	return &t.AudienceMember
+}
+
+type CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetAudienceID() string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.AudienceID
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetContactID() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.ContactID
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetEmail() string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.Email
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetFullName() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.FullName
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetGroupID() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.GroupID
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetID() string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.ID
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.IdentityHolderID
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetSubscriberID() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.SubscriberID
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers) GetUserID() *string {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.UserID
+}
+
+type CreateBulkAudienceMember_CreateBulkAudienceMember struct {
+	AudienceMembers []*CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers "json:\"audienceMembers,omitempty\" graphql:\"audienceMembers\""
+}
+
+func (t *CreateBulkAudienceMember_CreateBulkAudienceMember) GetAudienceMembers() []*CreateBulkAudienceMember_CreateBulkAudienceMember_AudienceMembers {
+	if t == nil {
+		t = &CreateBulkAudienceMember_CreateBulkAudienceMember{}
+	}
+	return t.AudienceMembers
+}
+
+type CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetAudienceID() string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.AudienceID
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetContactID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.ContactID
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.CreatedAt
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetCreatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.CreatedBy
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetDisplayID() string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.DisplayID
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetEmail() string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.Email
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetFullName() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.FullName
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetGroupID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.GroupID
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetID() string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.ID
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.IdentityHolderID
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetMetadata() map[string]any {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.Metadata
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.OwnerID
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetSubscriberID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.SubscriberID
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetTags() []string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.Tags
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedAt
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetUpdatedBy() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedBy
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers) GetUserID() *string {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.UserID
+}
+
+type CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember struct {
+	AudienceMembers []*CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers "json:\"audienceMembers,omitempty\" graphql:\"audienceMembers\""
+}
+
+func (t *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember) GetAudienceMembers() []*CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember_AudienceMembers {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember{}
+	}
+	return t.AudienceMembers
+}
+
+type DeleteAudienceMember_DeleteAudienceMember struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *DeleteAudienceMember_DeleteAudienceMember) GetDeletedID() string {
+	if t == nil {
+		t = &DeleteAudienceMember_DeleteAudienceMember{}
+	}
+	return t.DeletedID
+}
+
+type DeleteBulkAudienceMember_DeleteBulkAudienceMember struct {
+	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+}
+
+func (t *DeleteBulkAudienceMember_DeleteBulkAudienceMember) GetDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkAudienceMember_DeleteBulkAudienceMember{}
+	}
+	return t.DeletedIDs
+}
+
+type GetAllAudienceMembers_AudienceMembers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAllAudienceMembers_AudienceMembers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAllAudienceMembers_AudienceMembers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAllAudienceMembers_AudienceMembers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAllAudienceMembers_AudienceMembers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAllAudienceMembers_AudienceMembers_Edges_Node struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetAudienceID() string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.AudienceID
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetContactID() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.ContactID
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetFullName() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.FullName
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetGroupID() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.GroupID
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.IdentityHolderID
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetSubscriberID() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.SubscriberID
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetAllAudienceMembers_AudienceMembers_Edges_Node) GetUserID() *string {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetAllAudienceMembers_AudienceMembers_Edges struct {
+	Node *GetAllAudienceMembers_AudienceMembers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAllAudienceMembers_AudienceMembers_Edges) GetNode() *GetAllAudienceMembers_AudienceMembers_Edges_Node {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers_Edges{}
+	}
+	return t.Node
+}
+
+type GetAllAudienceMembers_AudienceMembers struct {
+	Edges      []*GetAllAudienceMembers_AudienceMembers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAllAudienceMembers_AudienceMembers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                          "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAllAudienceMembers_AudienceMembers) GetEdges() []*GetAllAudienceMembers_AudienceMembers_Edges {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers{}
+	}
+	return t.Edges
+}
+func (t *GetAllAudienceMembers_AudienceMembers) GetPageInfo() *GetAllAudienceMembers_AudienceMembers_PageInfo {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAllAudienceMembers_AudienceMembers) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAllAudienceMembers_AudienceMembers{}
+	}
+	return t.TotalCount
+}
+
+type GetAudienceMemberByID_AudienceMember struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *GetAudienceMemberByID_AudienceMember) GetAudienceID() string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.AudienceID
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetContactID() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.ContactID
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetDisplayID() string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.DisplayID
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetEmail() string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.Email
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetFullName() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.FullName
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetGroupID() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.GroupID
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetID() string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.ID
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.IdentityHolderID
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.Metadata
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.OwnerID
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetSubscriberID() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.SubscriberID
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetTags() []string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.Tags
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetAudienceMemberByID_AudienceMember) GetUserID() *string {
+	if t == nil {
+		t = &GetAudienceMemberByID_AudienceMember{}
+	}
+	return t.UserID
+}
+
+type GetAudienceMembers_AudienceMembers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GetAudienceMembers_AudienceMembers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GetAudienceMembers_AudienceMembers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GetAudienceMembers_AudienceMembers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GetAudienceMembers_AudienceMembers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GetAudienceMembers_AudienceMembers_Edges_Node struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetAudienceID() string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.AudienceID
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetContactID() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.ContactID
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.CreatedAt
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetCreatedBy() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.CreatedBy
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetFullName() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.FullName
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetGroupID() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.GroupID
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.IdentityHolderID
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetMetadata() map[string]any {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.Metadata
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetOwnerID() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.OwnerID
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetSubscriberID() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.SubscriberID
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.Tags
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.UpdatedAt
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetUpdatedBy() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.UpdatedBy
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *GetAudienceMembers_AudienceMembers_Edges_Node) GetUserID() *string {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges_Node{}
+	}
+	return t.UserID
+}
+
+type GetAudienceMembers_AudienceMembers_Edges struct {
+	Node *GetAudienceMembers_AudienceMembers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetAudienceMembers_AudienceMembers_Edges) GetNode() *GetAudienceMembers_AudienceMembers_Edges_Node {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers_Edges{}
+	}
+	return t.Node
+}
+
+type GetAudienceMembers_AudienceMembers struct {
+	Edges      []*GetAudienceMembers_AudienceMembers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GetAudienceMembers_AudienceMembers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                       "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GetAudienceMembers_AudienceMembers) GetEdges() []*GetAudienceMembers_AudienceMembers_Edges {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers{}
+	}
+	return t.Edges
+}
+func (t *GetAudienceMembers_AudienceMembers) GetPageInfo() *GetAudienceMembers_AudienceMembers_PageInfo {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers{}
+	}
+	return &t.PageInfo
+}
+func (t *GetAudienceMembers_AudienceMembers) GetTotalCount() int64 {
+	if t == nil {
+		t = &GetAudienceMembers_AudienceMembers{}
+	}
+	return t.TotalCount
+}
+
+type UpdateAudienceMember_UpdateAudienceMember_AudienceMember struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetAudienceID() string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.AudienceID
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetContactID() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.ContactID
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetEmail() string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.Email
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetFullName() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.FullName
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetGroupID() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.GroupID
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetID() string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.ID
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.IdentityHolderID
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetMetadata() map[string]any {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.Metadata
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetSubscriberID() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.SubscriberID
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetTags() []string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.Tags
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateAudienceMember_UpdateAudienceMember_AudienceMember) GetUserID() *string {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember_AudienceMember{}
+	}
+	return t.UserID
+}
+
+type UpdateAudienceMember_UpdateAudienceMember struct {
+	AudienceMember UpdateAudienceMember_UpdateAudienceMember_AudienceMember "json:\"audienceMember\" graphql:\"audienceMember\""
+}
+
+func (t *UpdateAudienceMember_UpdateAudienceMember) GetAudienceMember() *UpdateAudienceMember_UpdateAudienceMember_AudienceMember {
+	if t == nil {
+		t = &UpdateAudienceMember_UpdateAudienceMember{}
+	}
+	return &t.AudienceMember
+}
+
+type UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetAudienceID() string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.AudienceID
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetContactID() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.ContactID
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetEmail() string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.Email
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetFullName() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.FullName
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetGroupID() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.GroupID
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetID() string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.IdentityHolderID
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetMetadata() map[string]any {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.Metadata
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetSubscriberID() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.SubscriberID
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers) GetUserID() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers{}
+	}
+	return t.UserID
+}
+
+type UpdateBulkAudienceMember_UpdateBulkAudienceMember struct {
+	AudienceMembers []*UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers "json:\"audienceMembers,omitempty\" graphql:\"audienceMembers\""
+	Error           *string                                                              "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs   []string                                                             "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs      []string                                                             "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember) GetAudienceMembers() []*UpdateBulkAudienceMember_UpdateBulkAudienceMember_AudienceMembers {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember{}
+	}
+	return t.AudienceMembers
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember{}
+	}
+	return t.NotUpdatedIDs
+}
+func (t *UpdateBulkAudienceMember_UpdateBulkAudienceMember) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkAudienceMember_UpdateBulkAudienceMember{}
+	}
+	return t.UpdatedIDs
+}
+
+type UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers struct {
+	AudienceID            string         "json:\"audienceID\" graphql:\"audienceID\""
+	ContactID             *string        "json:\"contactID,omitempty\" graphql:\"contactID\""
+	CreatedAt             *time.Time     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy             *string        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DisplayID             string         "json:\"displayID\" graphql:\"displayID\""
+	Email                 string         "json:\"email\" graphql:\"email\""
+	FullName              *string        "json:\"fullName,omitempty\" graphql:\"fullName\""
+	GroupID               *string        "json:\"groupID,omitempty\" graphql:\"groupID\""
+	ID                    string         "json:\"id\" graphql:\"id\""
+	IdentityHolderID      *string        "json:\"identityHolderID,omitempty\" graphql:\"identityHolderID\""
+	Metadata              map[string]any "json:\"metadata,omitempty\" graphql:\"metadata\""
+	OwnerID               *string        "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	SubscriberID          *string        "json:\"subscriberID,omitempty\" graphql:\"subscriberID\""
+	Tags                  []string       "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt             *time.Time     "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy             *string        "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator *string        "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	UserID                *string        "json:\"userID,omitempty\" graphql:\"userID\""
+}
+
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetAudienceID() string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.AudienceID
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetContactID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.ContactID
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetCreatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.CreatedAt
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetCreatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.CreatedBy
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetEmail() string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.Email
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetFullName() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.FullName
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetGroupID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.GroupID
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetID() string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.ID
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetIdentityHolderID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.IdentityHolderID
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetMetadata() map[string]any {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.Metadata
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetOwnerID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.OwnerID
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetSubscriberID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.SubscriberID
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetTags() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.Tags
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetUpdatedAt() *time.Time {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedAt
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetUpdatedBy() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedBy
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetUpdatedByImpersonator() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.UpdatedByImpersonator
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers) GetUserID() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers{}
+	}
+	return t.UserID
+}
+
+type UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember struct {
+	AudienceMembers []*UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers "json:\"audienceMembers,omitempty\" graphql:\"audienceMembers\""
+	Error           *string                                                                    "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs   []string                                                                   "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs      []string                                                                   "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+}
+
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember) GetAudienceMembers() []*UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember_AudienceMembers {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember{}
+	}
+	return t.AudienceMembers
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember{}
+	}
+	return t.NotUpdatedIDs
+}
+func (t *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember) GetUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember{}
 	}
 	return t.UpdatedIDs
 }
@@ -108749,6 +111391,206 @@ func (t *GlobalSearch_Search_Assets) GetTotalCount() int64 {
 	return t.TotalCount
 }
 
+type GlobalSearch_Search_Audiences_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_Audiences_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_Audiences_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_Audiences_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_Audiences_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_Audiences_Edges_Node struct {
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Name      string   "json:\"name\" graphql:\"name\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_Audiences_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GlobalSearch_Search_Audiences_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_Audiences_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_Edges_Node{}
+	}
+	return t.Name
+}
+func (t *GlobalSearch_Search_Audiences_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_Audiences_Edges struct {
+	Node *GlobalSearch_Search_Audiences_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_Audiences_Edges) GetNode() *GlobalSearch_Search_Audiences_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_Audiences struct {
+	Edges      []*GlobalSearch_Search_Audiences_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_Audiences_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                  "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_Audiences) GetEdges() []*GlobalSearch_Search_Audiences_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_Audiences) GetPageInfo() *GlobalSearch_Search_Audiences_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_Audiences) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_Audiences{}
+	}
+	return t.TotalCount
+}
+
+type GlobalSearch_Search_AudienceMembers_PageInfo struct {
+	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
+	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
+	HasPreviousPage bool    "json:\"hasPreviousPage\" graphql:\"hasPreviousPage\""
+	StartCursor     *string "json:\"startCursor,omitempty\" graphql:\"startCursor\""
+}
+
+func (t *GlobalSearch_Search_AudienceMembers_PageInfo) GetEndCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_PageInfo{}
+	}
+	return t.EndCursor
+}
+func (t *GlobalSearch_Search_AudienceMembers_PageInfo) GetHasNextPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_PageInfo{}
+	}
+	return t.HasNextPage
+}
+func (t *GlobalSearch_Search_AudienceMembers_PageInfo) GetHasPreviousPage() bool {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_PageInfo{}
+	}
+	return t.HasPreviousPage
+}
+func (t *GlobalSearch_Search_AudienceMembers_PageInfo) GetStartCursor() *string {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_PageInfo{}
+	}
+	return t.StartCursor
+}
+
+type GlobalSearch_Search_AudienceMembers_Edges_Node struct {
+	DisplayID string   "json:\"displayID\" graphql:\"displayID\""
+	Email     string   "json:\"email\" graphql:\"email\""
+	ID        string   "json:\"id\" graphql:\"id\""
+	Tags      []string "json:\"tags,omitempty\" graphql:\"tags\""
+}
+
+func (t *GlobalSearch_Search_AudienceMembers_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GlobalSearch_Search_AudienceMembers_Edges_Node) GetEmail() string {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_Edges_Node{}
+	}
+	return t.Email
+}
+func (t *GlobalSearch_Search_AudienceMembers_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GlobalSearch_Search_AudienceMembers_Edges_Node) GetTags() []string {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_Edges_Node{}
+	}
+	return t.Tags
+}
+
+type GlobalSearch_Search_AudienceMembers_Edges struct {
+	Node *GlobalSearch_Search_AudienceMembers_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GlobalSearch_Search_AudienceMembers_Edges) GetNode() *GlobalSearch_Search_AudienceMembers_Edges_Node {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers_Edges{}
+	}
+	return t.Node
+}
+
+type GlobalSearch_Search_AudienceMembers struct {
+	Edges      []*GlobalSearch_Search_AudienceMembers_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+	PageInfo   GlobalSearch_Search_AudienceMembers_PageInfo "json:\"pageInfo\" graphql:\"pageInfo\""
+	TotalCount int64                                        "json:\"totalCount\" graphql:\"totalCount\""
+}
+
+func (t *GlobalSearch_Search_AudienceMembers) GetEdges() []*GlobalSearch_Search_AudienceMembers_Edges {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers{}
+	}
+	return t.Edges
+}
+func (t *GlobalSearch_Search_AudienceMembers) GetPageInfo() *GlobalSearch_Search_AudienceMembers_PageInfo {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers{}
+	}
+	return &t.PageInfo
+}
+func (t *GlobalSearch_Search_AudienceMembers) GetTotalCount() int64 {
+	if t == nil {
+		t = &GlobalSearch_Search_AudienceMembers{}
+	}
+	return t.TotalCount
+}
+
 type GlobalSearch_Search_Campaigns_PageInfo struct {
 	EndCursor       *string "json:\"endCursor,omitempty\" graphql:\"endCursor\""
 	HasNextPage     bool    "json:\"hasNextPage\" graphql:\"hasNextPage\""
@@ -112478,6 +115320,8 @@ type GlobalSearch_Search struct {
 	AssessmentResponses   *GlobalSearch_Search_AssessmentResponses   "json:\"assessmentResponses,omitempty\" graphql:\"assessmentResponses\""
 	Assessments           *GlobalSearch_Search_Assessments           "json:\"assessments,omitempty\" graphql:\"assessments\""
 	Assets                *GlobalSearch_Search_Assets                "json:\"assets,omitempty\" graphql:\"assets\""
+	AudienceMembers       *GlobalSearch_Search_AudienceMembers       "json:\"audienceMembers,omitempty\" graphql:\"audienceMembers\""
+	Audiences             *GlobalSearch_Search_Audiences             "json:\"audiences,omitempty\" graphql:\"audiences\""
 	CampaignTargets       *GlobalSearch_Search_CampaignTargets       "json:\"campaignTargets,omitempty\" graphql:\"campaignTargets\""
 	Campaigns             *GlobalSearch_Search_Campaigns             "json:\"campaigns,omitempty\" graphql:\"campaigns\""
 	Contacts              *GlobalSearch_Search_Contacts              "json:\"contacts,omitempty\" graphql:\"contacts\""
@@ -112539,6 +115383,18 @@ func (t *GlobalSearch_Search) GetAssets() *GlobalSearch_Search_Assets {
 		t = &GlobalSearch_Search{}
 	}
 	return t.Assets
+}
+func (t *GlobalSearch_Search) GetAudienceMembers() *GlobalSearch_Search_AudienceMembers {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.AudienceMembers
+}
+func (t *GlobalSearch_Search) GetAudiences() *GlobalSearch_Search_Audiences {
+	if t == nil {
+		t = &GlobalSearch_Search{}
+	}
+	return t.Audiences
 }
 func (t *GlobalSearch_Search) GetCampaignTargets() *GlobalSearch_Search_CampaignTargets {
 	if t == nil {
@@ -162902,6 +165758,248 @@ func (t *UpdateBulkCSVAsset) GetUpdateBulkCSVAsset() *UpdateBulkCSVAsset_UpdateB
 	return &t.UpdateBulkCSVAsset
 }
 
+type CreateAudience struct {
+	CreateAudience CreateAudience_CreateAudience "json:\"createAudience\" graphql:\"createAudience\""
+}
+
+func (t *CreateAudience) GetCreateAudience() *CreateAudience_CreateAudience {
+	if t == nil {
+		t = &CreateAudience{}
+	}
+	return &t.CreateAudience
+}
+
+type CreateBulkAudience struct {
+	CreateBulkAudience CreateBulkAudience_CreateBulkAudience "json:\"createBulkAudience\" graphql:\"createBulkAudience\""
+}
+
+func (t *CreateBulkAudience) GetCreateBulkAudience() *CreateBulkAudience_CreateBulkAudience {
+	if t == nil {
+		t = &CreateBulkAudience{}
+	}
+	return &t.CreateBulkAudience
+}
+
+type CreateBulkCSVAudience struct {
+	CreateBulkCSVAudience CreateBulkCSVAudience_CreateBulkCSVAudience "json:\"createBulkCSVAudience\" graphql:\"createBulkCSVAudience\""
+}
+
+func (t *CreateBulkCSVAudience) GetCreateBulkCSVAudience() *CreateBulkCSVAudience_CreateBulkCSVAudience {
+	if t == nil {
+		t = &CreateBulkCSVAudience{}
+	}
+	return &t.CreateBulkCSVAudience
+}
+
+type DeleteAudience struct {
+	DeleteAudience DeleteAudience_DeleteAudience "json:\"deleteAudience\" graphql:\"deleteAudience\""
+}
+
+func (t *DeleteAudience) GetDeleteAudience() *DeleteAudience_DeleteAudience {
+	if t == nil {
+		t = &DeleteAudience{}
+	}
+	return &t.DeleteAudience
+}
+
+type DeleteBulkAudience struct {
+	DeleteBulkAudience DeleteBulkAudience_DeleteBulkAudience "json:\"deleteBulkAudience\" graphql:\"deleteBulkAudience\""
+}
+
+func (t *DeleteBulkAudience) GetDeleteBulkAudience() *DeleteBulkAudience_DeleteBulkAudience {
+	if t == nil {
+		t = &DeleteBulkAudience{}
+	}
+	return &t.DeleteBulkAudience
+}
+
+type GetAllAudiences struct {
+	Audiences GetAllAudiences_Audiences "json:\"audiences\" graphql:\"audiences\""
+}
+
+func (t *GetAllAudiences) GetAudiences() *GetAllAudiences_Audiences {
+	if t == nil {
+		t = &GetAllAudiences{}
+	}
+	return &t.Audiences
+}
+
+type GetAudienceByID struct {
+	Audience GetAudienceByID_Audience "json:\"audience\" graphql:\"audience\""
+}
+
+func (t *GetAudienceByID) GetAudience() *GetAudienceByID_Audience {
+	if t == nil {
+		t = &GetAudienceByID{}
+	}
+	return &t.Audience
+}
+
+type GetAudiences struct {
+	Audiences GetAudiences_Audiences "json:\"audiences\" graphql:\"audiences\""
+}
+
+func (t *GetAudiences) GetAudiences() *GetAudiences_Audiences {
+	if t == nil {
+		t = &GetAudiences{}
+	}
+	return &t.Audiences
+}
+
+type UpdateAudience struct {
+	UpdateAudience UpdateAudience_UpdateAudience "json:\"updateAudience\" graphql:\"updateAudience\""
+}
+
+func (t *UpdateAudience) GetUpdateAudience() *UpdateAudience_UpdateAudience {
+	if t == nil {
+		t = &UpdateAudience{}
+	}
+	return &t.UpdateAudience
+}
+
+type UpdateBulkAudience struct {
+	UpdateBulkAudience UpdateBulkAudience_UpdateBulkAudience "json:\"updateBulkAudience\" graphql:\"updateBulkAudience\""
+}
+
+func (t *UpdateBulkAudience) GetUpdateBulkAudience() *UpdateBulkAudience_UpdateBulkAudience {
+	if t == nil {
+		t = &UpdateBulkAudience{}
+	}
+	return &t.UpdateBulkAudience
+}
+
+type UpdateBulkCSVAudience struct {
+	UpdateBulkCSVAudience UpdateBulkCSVAudience_UpdateBulkCSVAudience "json:\"updateBulkCSVAudience\" graphql:\"updateBulkCSVAudience\""
+}
+
+func (t *UpdateBulkCSVAudience) GetUpdateBulkCSVAudience() *UpdateBulkCSVAudience_UpdateBulkCSVAudience {
+	if t == nil {
+		t = &UpdateBulkCSVAudience{}
+	}
+	return &t.UpdateBulkCSVAudience
+}
+
+type CreateAudienceMember struct {
+	CreateAudienceMember CreateAudienceMember_CreateAudienceMember "json:\"createAudienceMember\" graphql:\"createAudienceMember\""
+}
+
+func (t *CreateAudienceMember) GetCreateAudienceMember() *CreateAudienceMember_CreateAudienceMember {
+	if t == nil {
+		t = &CreateAudienceMember{}
+	}
+	return &t.CreateAudienceMember
+}
+
+type CreateBulkAudienceMember struct {
+	CreateBulkAudienceMember CreateBulkAudienceMember_CreateBulkAudienceMember "json:\"createBulkAudienceMember\" graphql:\"createBulkAudienceMember\""
+}
+
+func (t *CreateBulkAudienceMember) GetCreateBulkAudienceMember() *CreateBulkAudienceMember_CreateBulkAudienceMember {
+	if t == nil {
+		t = &CreateBulkAudienceMember{}
+	}
+	return &t.CreateBulkAudienceMember
+}
+
+type CreateBulkCSVAudienceMember struct {
+	CreateBulkCSVAudienceMember CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember "json:\"createBulkCSVAudienceMember\" graphql:\"createBulkCSVAudienceMember\""
+}
+
+func (t *CreateBulkCSVAudienceMember) GetCreateBulkCSVAudienceMember() *CreateBulkCSVAudienceMember_CreateBulkCSVAudienceMember {
+	if t == nil {
+		t = &CreateBulkCSVAudienceMember{}
+	}
+	return &t.CreateBulkCSVAudienceMember
+}
+
+type DeleteAudienceMember struct {
+	DeleteAudienceMember DeleteAudienceMember_DeleteAudienceMember "json:\"deleteAudienceMember\" graphql:\"deleteAudienceMember\""
+}
+
+func (t *DeleteAudienceMember) GetDeleteAudienceMember() *DeleteAudienceMember_DeleteAudienceMember {
+	if t == nil {
+		t = &DeleteAudienceMember{}
+	}
+	return &t.DeleteAudienceMember
+}
+
+type DeleteBulkAudienceMember struct {
+	DeleteBulkAudienceMember DeleteBulkAudienceMember_DeleteBulkAudienceMember "json:\"deleteBulkAudienceMember\" graphql:\"deleteBulkAudienceMember\""
+}
+
+func (t *DeleteBulkAudienceMember) GetDeleteBulkAudienceMember() *DeleteBulkAudienceMember_DeleteBulkAudienceMember {
+	if t == nil {
+		t = &DeleteBulkAudienceMember{}
+	}
+	return &t.DeleteBulkAudienceMember
+}
+
+type GetAllAudienceMembers struct {
+	AudienceMembers GetAllAudienceMembers_AudienceMembers "json:\"audienceMembers\" graphql:\"audienceMembers\""
+}
+
+func (t *GetAllAudienceMembers) GetAudienceMembers() *GetAllAudienceMembers_AudienceMembers {
+	if t == nil {
+		t = &GetAllAudienceMembers{}
+	}
+	return &t.AudienceMembers
+}
+
+type GetAudienceMemberByID struct {
+	AudienceMember GetAudienceMemberByID_AudienceMember "json:\"audienceMember\" graphql:\"audienceMember\""
+}
+
+func (t *GetAudienceMemberByID) GetAudienceMember() *GetAudienceMemberByID_AudienceMember {
+	if t == nil {
+		t = &GetAudienceMemberByID{}
+	}
+	return &t.AudienceMember
+}
+
+type GetAudienceMembers struct {
+	AudienceMembers GetAudienceMembers_AudienceMembers "json:\"audienceMembers\" graphql:\"audienceMembers\""
+}
+
+func (t *GetAudienceMembers) GetAudienceMembers() *GetAudienceMembers_AudienceMembers {
+	if t == nil {
+		t = &GetAudienceMembers{}
+	}
+	return &t.AudienceMembers
+}
+
+type UpdateAudienceMember struct {
+	UpdateAudienceMember UpdateAudienceMember_UpdateAudienceMember "json:\"updateAudienceMember\" graphql:\"updateAudienceMember\""
+}
+
+func (t *UpdateAudienceMember) GetUpdateAudienceMember() *UpdateAudienceMember_UpdateAudienceMember {
+	if t == nil {
+		t = &UpdateAudienceMember{}
+	}
+	return &t.UpdateAudienceMember
+}
+
+type UpdateBulkAudienceMember struct {
+	UpdateBulkAudienceMember UpdateBulkAudienceMember_UpdateBulkAudienceMember "json:\"updateBulkAudienceMember\" graphql:\"updateBulkAudienceMember\""
+}
+
+func (t *UpdateBulkAudienceMember) GetUpdateBulkAudienceMember() *UpdateBulkAudienceMember_UpdateBulkAudienceMember {
+	if t == nil {
+		t = &UpdateBulkAudienceMember{}
+	}
+	return &t.UpdateBulkAudienceMember
+}
+
+type UpdateBulkCSVAudienceMember struct {
+	UpdateBulkCSVAudienceMember UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember "json:\"updateBulkCSVAudienceMember\" graphql:\"updateBulkCSVAudienceMember\""
+}
+
+func (t *UpdateBulkCSVAudienceMember) GetUpdateBulkCSVAudienceMember() *UpdateBulkCSVAudienceMember_UpdateBulkCSVAudienceMember {
+	if t == nil {
+		t = &UpdateBulkCSVAudienceMember{}
+	}
+	return &t.UpdateBulkCSVAudienceMember
+}
+
 type CreateBulkCSVCampaign struct {
 	CreateBulkCSVCampaign CreateBulkCSVCampaign_CreateBulkCSVCampaign "json:\"createBulkCSVCampaign\" graphql:\"createBulkCSVCampaign\""
 }
@@ -172883,6 +175981,906 @@ func (c *Client) UpdateBulkCSVAsset(ctx context.Context, input graphql.Upload, i
 
 	var res UpdateBulkCSVAsset
 	if err := c.Client.Post(ctx, "UpdateBulkCSVAsset", UpdateBulkCSVAssetDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAudienceDocument = `mutation CreateAudience ($input: CreateAudienceInput!) {
+	createAudience(input: $input) {
+		audience {
+			audienceType
+			createdAt
+			createdBy
+			description
+			displayID
+			filters
+			id
+			metadata
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) CreateAudience(ctx context.Context, input CreateAudienceInput, interceptors ...clientv2.RequestInterceptor) (*CreateAudience, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAudience
+	if err := c.Client.Post(ctx, "CreateAudience", CreateAudienceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkAudienceDocument = `mutation CreateBulkAudience ($input: [CreateAudienceInput!]) {
+	createBulkAudience(input: $input) {
+		audiences {
+			audienceType
+			createdAt
+			createdBy
+			description
+			displayID
+			filters
+			id
+			metadata
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkAudience(ctx context.Context, input []*CreateAudienceInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAudience, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkAudience
+	if err := c.Client.Post(ctx, "CreateBulkAudience", CreateBulkAudienceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVAudienceDocument = `mutation CreateBulkCSVAudience ($input: Upload!) {
+	createBulkCSVAudience(input: $input) {
+		audiences {
+			audienceType
+			createdAt
+			createdBy
+			description
+			displayID
+			filters
+			id
+			metadata
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVAudience(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAudience, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVAudience
+	if err := c.Client.Post(ctx, "CreateBulkCSVAudience", CreateBulkCSVAudienceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteAudienceDocument = `mutation DeleteAudience ($deleteAudienceId: ID!) {
+	deleteAudience(id: $deleteAudienceId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteAudience(ctx context.Context, deleteAudienceID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAudience, error) {
+	vars := map[string]any{
+		"deleteAudienceId": deleteAudienceID,
+	}
+
+	var res DeleteAudience
+	if err := c.Client.Post(ctx, "DeleteAudience", DeleteAudienceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteBulkAudienceDocument = `mutation DeleteBulkAudience ($ids: [ID!]!) {
+	deleteBulkAudience(ids: $ids) {
+		deletedIDs
+	}
+}
+`
+
+func (c *Client) DeleteBulkAudience(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkAudience, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res DeleteBulkAudience
+	if err := c.Client.Post(ctx, "DeleteBulkAudience", DeleteBulkAudienceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAudiencesDocument = `query GetAllAudiences ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AudienceOrder!]) {
+	audiences(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				audienceType
+				createdAt
+				createdBy
+				description
+				displayID
+				filters
+				id
+				metadata
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAudiences(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AudienceOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllAudiences, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
+
+	var res GetAllAudiences
+	if err := c.Client.Post(ctx, "GetAllAudiences", GetAllAudiencesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAudienceByIDDocument = `query GetAudienceByID ($audienceId: ID!) {
+	audience(id: $audienceId) {
+		audienceType
+		createdAt
+		createdBy
+		description
+		displayID
+		filters
+		id
+		metadata
+		name
+		ownerID
+		tags
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+	}
+}
+`
+
+func (c *Client) GetAudienceByID(ctx context.Context, audienceID string, interceptors ...clientv2.RequestInterceptor) (*GetAudienceByID, error) {
+	vars := map[string]any{
+		"audienceId": audienceID,
+	}
+
+	var res GetAudienceByID
+	if err := c.Client.Post(ctx, "GetAudienceByID", GetAudienceByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAudiencesDocument = `query GetAudiences ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AudienceOrder!], $where: AudienceWhereInput) {
+	audiences(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				audienceType
+				createdAt
+				createdBy
+				description
+				displayID
+				filters
+				id
+				metadata
+				name
+				ownerID
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAudiences(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AudienceOrder, where *AudienceWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAudiences, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetAudiences
+	if err := c.Client.Post(ctx, "GetAudiences", GetAudiencesDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAudienceDocument = `mutation UpdateAudience ($updateAudienceId: ID!, $input: UpdateAudienceInput!) {
+	updateAudience(id: $updateAudienceId, input: $input) {
+		audience {
+			audienceType
+			createdAt
+			createdBy
+			description
+			displayID
+			filters
+			id
+			metadata
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAudience(ctx context.Context, updateAudienceID string, input UpdateAudienceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAudience, error) {
+	vars := map[string]any{
+		"updateAudienceId": updateAudienceID,
+		"input":            input,
+	}
+
+	var res UpdateAudience
+	if err := c.Client.Post(ctx, "UpdateAudience", UpdateAudienceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkAudienceDocument = `mutation UpdateBulkAudience ($ids: [ID!]!, $input: UpdateAudienceInput!) {
+	updateBulkAudience(ids: $ids, input: $input) {
+		audiences {
+			audienceType
+			createdAt
+			createdBy
+			description
+			displayID
+			filters
+			id
+			metadata
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+		updatedIDs
+		notUpdatedIDs
+		error
+	}
+}
+`
+
+func (c *Client) UpdateBulkAudience(ctx context.Context, ids []string, input UpdateAudienceInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAudience, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkAudience
+	if err := c.Client.Post(ctx, "UpdateBulkAudience", UpdateBulkAudienceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkCSVAudienceDocument = `mutation UpdateBulkCSVAudience ($input: Upload!) {
+	updateBulkCSVAudience(input: $input) {
+		audiences {
+			audienceType
+			createdAt
+			createdBy
+			description
+			displayID
+			filters
+			id
+			metadata
+			name
+			ownerID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+		}
+		updatedIDs
+		notUpdatedIDs
+		error
+	}
+}
+`
+
+func (c *Client) UpdateBulkCSVAudience(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAudience, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkCSVAudience
+	if err := c.Client.Post(ctx, "UpdateBulkCSVAudience", UpdateBulkCSVAudienceDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAudienceMemberDocument = `mutation CreateAudienceMember ($input: CreateAudienceMemberInput!) {
+	createAudienceMember(input: $input) {
+		audienceMember {
+			audienceID
+			contactID
+			createdAt
+			createdBy
+			displayID
+			email
+			fullName
+			groupID
+			id
+			identityHolderID
+			metadata
+			ownerID
+			subscriberID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateAudienceMember(ctx context.Context, input CreateAudienceMemberInput, interceptors ...clientv2.RequestInterceptor) (*CreateAudienceMember, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAudienceMember
+	if err := c.Client.Post(ctx, "CreateAudienceMember", CreateAudienceMemberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkAudienceMemberDocument = `mutation CreateBulkAudienceMember ($input: [CreateAudienceMemberInput!]) {
+	createBulkAudienceMember(input: $input) {
+		audienceMembers {
+			audienceID
+			contactID
+			createdAt
+			createdBy
+			displayID
+			email
+			fullName
+			groupID
+			id
+			identityHolderID
+			metadata
+			ownerID
+			subscriberID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkAudienceMember(ctx context.Context, input []*CreateAudienceMemberInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkAudienceMember, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkAudienceMember
+	if err := c.Client.Post(ctx, "CreateBulkAudienceMember", CreateBulkAudienceMemberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateBulkCSVAudienceMemberDocument = `mutation CreateBulkCSVAudienceMember ($input: Upload!) {
+	createBulkCSVAudienceMember(input: $input) {
+		audienceMembers {
+			audienceID
+			contactID
+			createdAt
+			createdBy
+			displayID
+			email
+			fullName
+			groupID
+			id
+			identityHolderID
+			metadata
+			ownerID
+			subscriberID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) CreateBulkCSVAudienceMember(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVAudienceMember, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateBulkCSVAudienceMember
+	if err := c.Client.Post(ctx, "CreateBulkCSVAudienceMember", CreateBulkCSVAudienceMemberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteAudienceMemberDocument = `mutation DeleteAudienceMember ($deleteAudienceMemberId: ID!) {
+	deleteAudienceMember(id: $deleteAudienceMemberId) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) DeleteAudienceMember(ctx context.Context, deleteAudienceMemberID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAudienceMember, error) {
+	vars := map[string]any{
+		"deleteAudienceMemberId": deleteAudienceMemberID,
+	}
+
+	var res DeleteAudienceMember
+	if err := c.Client.Post(ctx, "DeleteAudienceMember", DeleteAudienceMemberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const DeleteBulkAudienceMemberDocument = `mutation DeleteBulkAudienceMember ($ids: [ID!]!) {
+	deleteBulkAudienceMember(ids: $ids) {
+		deletedIDs
+	}
+}
+`
+
+func (c *Client) DeleteBulkAudienceMember(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkAudienceMember, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res DeleteBulkAudienceMember
+	if err := c.Client.Post(ctx, "DeleteBulkAudienceMember", DeleteBulkAudienceMemberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAllAudienceMembersDocument = `query GetAllAudienceMembers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AudienceMemberOrder!]) {
+	audienceMembers(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				audienceID
+				contactID
+				createdAt
+				createdBy
+				displayID
+				email
+				fullName
+				groupID
+				id
+				identityHolderID
+				metadata
+				ownerID
+				subscriberID
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAllAudienceMembers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AudienceMemberOrder, interceptors ...clientv2.RequestInterceptor) (*GetAllAudienceMembers, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+	}
+
+	var res GetAllAudienceMembers
+	if err := c.Client.Post(ctx, "GetAllAudienceMembers", GetAllAudienceMembersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAudienceMemberByIDDocument = `query GetAudienceMemberByID ($audienceMemberId: ID!) {
+	audienceMember(id: $audienceMemberId) {
+		audienceID
+		contactID
+		createdAt
+		createdBy
+		displayID
+		email
+		fullName
+		groupID
+		id
+		identityHolderID
+		metadata
+		ownerID
+		subscriberID
+		tags
+		updatedAt
+		updatedBy
+		updatedByImpersonator
+		userID
+	}
+}
+`
+
+func (c *Client) GetAudienceMemberByID(ctx context.Context, audienceMemberID string, interceptors ...clientv2.RequestInterceptor) (*GetAudienceMemberByID, error) {
+	vars := map[string]any{
+		"audienceMemberId": audienceMemberID,
+	}
+
+	var res GetAudienceMemberByID
+	if err := c.Client.Post(ctx, "GetAudienceMemberByID", GetAudienceMemberByIDDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const GetAudienceMembersDocument = `query GetAudienceMembers ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AudienceMemberOrder!], $where: AudienceMemberWhereInput) {
+	audienceMembers(first: $first, last: $last, after: $after, before: $before, orderBy: $orderBy, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				audienceID
+				contactID
+				createdAt
+				createdBy
+				displayID
+				email
+				fullName
+				groupID
+				id
+				identityHolderID
+				metadata
+				ownerID
+				subscriberID
+				tags
+				updatedAt
+				updatedBy
+				updatedByImpersonator
+				userID
+			}
+		}
+	}
+}
+`
+
+func (c *Client) GetAudienceMembers(ctx context.Context, first *int64, last *int64, after *string, before *string, orderBy []*AudienceMemberOrder, where *AudienceMemberWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetAudienceMembers, error) {
+	vars := map[string]any{
+		"first":   first,
+		"last":    last,
+		"after":   after,
+		"before":  before,
+		"orderBy": orderBy,
+		"where":   where,
+	}
+
+	var res GetAudienceMembers
+	if err := c.Client.Post(ctx, "GetAudienceMembers", GetAudienceMembersDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateAudienceMemberDocument = `mutation UpdateAudienceMember ($updateAudienceMemberId: ID!, $input: UpdateAudienceMemberInput!) {
+	updateAudienceMember(id: $updateAudienceMemberId, input: $input) {
+		audienceMember {
+			audienceID
+			contactID
+			createdAt
+			createdBy
+			displayID
+			email
+			fullName
+			groupID
+			id
+			identityHolderID
+			metadata
+			ownerID
+			subscriberID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+	}
+}
+`
+
+func (c *Client) UpdateAudienceMember(ctx context.Context, updateAudienceMemberID string, input UpdateAudienceMemberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAudienceMember, error) {
+	vars := map[string]any{
+		"updateAudienceMemberId": updateAudienceMemberID,
+		"input":                  input,
+	}
+
+	var res UpdateAudienceMember
+	if err := c.Client.Post(ctx, "UpdateAudienceMember", UpdateAudienceMemberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkAudienceMemberDocument = `mutation UpdateBulkAudienceMember ($ids: [ID!]!, $input: UpdateAudienceMemberInput!) {
+	updateBulkAudienceMember(ids: $ids, input: $input) {
+		audienceMembers {
+			audienceID
+			contactID
+			createdAt
+			createdBy
+			displayID
+			email
+			fullName
+			groupID
+			id
+			identityHolderID
+			metadata
+			ownerID
+			subscriberID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+		notUpdatedIDs
+		error
+	}
+}
+`
+
+func (c *Client) UpdateBulkAudienceMember(ctx context.Context, ids []string, input UpdateAudienceMemberInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkAudienceMember, error) {
+	vars := map[string]any{
+		"ids":   ids,
+		"input": input,
+	}
+
+	var res UpdateBulkAudienceMember
+	if err := c.Client.Post(ctx, "UpdateBulkAudienceMember", UpdateBulkAudienceMemberDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const UpdateBulkCSVAudienceMemberDocument = `mutation UpdateBulkCSVAudienceMember ($input: Upload!) {
+	updateBulkCSVAudienceMember(input: $input) {
+		audienceMembers {
+			audienceID
+			contactID
+			createdAt
+			createdBy
+			displayID
+			email
+			fullName
+			groupID
+			id
+			identityHolderID
+			metadata
+			ownerID
+			subscriberID
+			tags
+			updatedAt
+			updatedBy
+			updatedByImpersonator
+			userID
+		}
+		updatedIDs
+		notUpdatedIDs
+		error
+	}
+}
+`
+
+func (c *Client) UpdateBulkCSVAudienceMember(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkCSVAudienceMember, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res UpdateBulkCSVAudienceMember
+	if err := c.Client.Post(ctx, "UpdateBulkCSVAudienceMember", UpdateBulkCSVAudienceMemberDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -198242,6 +202240,40 @@ const GlobalSearchDocument = `query GlobalSearch ($query: String!) {
 				}
 			}
 		}
+		audiences {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					displayID
+					id
+					name
+					tags
+				}
+			}
+		}
+		audienceMembers {
+			totalCount
+			pageInfo {
+				hasNextPage
+				hasPreviousPage
+				startCursor
+				endCursor
+			}
+			edges {
+				node {
+					displayID
+					email
+					id
+					tags
+				}
+			}
+		}
 		campaigns {
 			totalCount
 			pageInfo {
@@ -212495,6 +216527,28 @@ var DocumentOperationNames = map[string]string{
 	UpdateAssetDocument:                           "UpdateAsset",
 	UpdateBulkAssetDocument:                       "UpdateBulkAsset",
 	UpdateBulkCSVAssetDocument:                    "UpdateBulkCSVAsset",
+	CreateAudienceDocument:                        "CreateAudience",
+	CreateBulkAudienceDocument:                    "CreateBulkAudience",
+	CreateBulkCSVAudienceDocument:                 "CreateBulkCSVAudience",
+	DeleteAudienceDocument:                        "DeleteAudience",
+	DeleteBulkAudienceDocument:                    "DeleteBulkAudience",
+	GetAllAudiencesDocument:                       "GetAllAudiences",
+	GetAudienceByIDDocument:                       "GetAudienceByID",
+	GetAudiencesDocument:                          "GetAudiences",
+	UpdateAudienceDocument:                        "UpdateAudience",
+	UpdateBulkAudienceDocument:                    "UpdateBulkAudience",
+	UpdateBulkCSVAudienceDocument:                 "UpdateBulkCSVAudience",
+	CreateAudienceMemberDocument:                  "CreateAudienceMember",
+	CreateBulkAudienceMemberDocument:              "CreateBulkAudienceMember",
+	CreateBulkCSVAudienceMemberDocument:           "CreateBulkCSVAudienceMember",
+	DeleteAudienceMemberDocument:                  "DeleteAudienceMember",
+	DeleteBulkAudienceMemberDocument:              "DeleteBulkAudienceMember",
+	GetAllAudienceMembersDocument:                 "GetAllAudienceMembers",
+	GetAudienceMemberByIDDocument:                 "GetAudienceMemberByID",
+	GetAudienceMembersDocument:                    "GetAudienceMembers",
+	UpdateAudienceMemberDocument:                  "UpdateAudienceMember",
+	UpdateBulkAudienceMemberDocument:              "UpdateBulkAudienceMember",
+	UpdateBulkCSVAudienceMemberDocument:           "UpdateBulkCSVAudienceMember",
 	CreateBulkCSVCampaignDocument:                 "CreateBulkCSVCampaign",
 	CreateBulkCampaignDocument:                    "CreateBulkCampaign",
 	CreateCampaignDocument:                        "CreateCampaign",

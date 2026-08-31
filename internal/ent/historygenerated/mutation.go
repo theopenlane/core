@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/audiencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/audiencememberhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
@@ -98,6 +100,8 @@ const (
 	TypeAssessmentHistory                 = "AssessmentHistory"
 	TypeAssessmentResponseHistory         = "AssessmentResponseHistory"
 	TypeAssetHistory                      = "AssetHistory"
+	TypeAudienceHistory                   = "AudienceHistory"
+	TypeAudienceMemberHistory             = "AudienceMemberHistory"
 	TypeCampaignHistory                   = "CampaignHistory"
 	TypeCampaignTargetHistory             = "CampaignTargetHistory"
 	TypeContactHistory                    = "ContactHistory"
@@ -12873,6 +12877,3332 @@ func (m *AssetHistoryMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *AssetHistoryMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown AssetHistory edge %s", name)
+}
+
+// AudienceHistoryMutation represents an operation that mutates the AudienceHistory nodes in the graph.
+type AudienceHistoryMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	history_time            *time.Time
+	ref                     *string
+	operation               *history.OpType
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	deleted_at              *time.Time
+	deleted_by              *string
+	display_id              *string
+	tags                    *[]string
+	appendtags              []string
+	owner_id                *string
+	name                    *string
+	description             *string
+	audience_type           *enums.AudienceType
+	filters                 *map[string]interface{}
+	metadata                *map[string]interface{}
+	clearedFields           map[string]struct{}
+	done                    bool
+	oldValue                func(context.Context) (*AudienceHistory, error)
+	predicates              []predicate.AudienceHistory
+}
+
+var _ ent.Mutation = (*AudienceHistoryMutation)(nil)
+
+// audiencehistoryOption allows management of the mutation configuration using functional options.
+type audiencehistoryOption func(*AudienceHistoryMutation)
+
+// newAudienceHistoryMutation creates new mutation for the AudienceHistory entity.
+func newAudienceHistoryMutation(c config, op Op, opts ...audiencehistoryOption) *AudienceHistoryMutation {
+	m := &AudienceHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAudienceHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAudienceHistoryID sets the ID field of the mutation.
+func withAudienceHistoryID(id string) audiencehistoryOption {
+	return func(m *AudienceHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AudienceHistory
+		)
+		m.oldValue = func(ctx context.Context) (*AudienceHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AudienceHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAudienceHistory sets the old AudienceHistory of the mutation.
+func withAudienceHistory(node *AudienceHistory) audiencehistoryOption {
+	return func(m *AudienceHistoryMutation) {
+		m.oldValue = func(context.Context) (*AudienceHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AudienceHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AudienceHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("historygenerated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of AudienceHistory entities.
+func (m *AudienceHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AudienceHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AudienceHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AudienceHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *AudienceHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *AudienceHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *AudienceHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *AudienceHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *AudienceHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *AudienceHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[audiencehistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *AudienceHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, audiencehistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *AudienceHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *AudienceHistoryMutation) Operation() (r history.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *AudienceHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AudienceHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AudienceHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *AudienceHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[audiencehistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AudienceHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, audiencehistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AudienceHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AudienceHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *AudienceHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[audiencehistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AudienceHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, audiencehistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *AudienceHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *AudienceHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *AudienceHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[audiencehistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *AudienceHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, audiencehistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *AudienceHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *AudienceHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *AudienceHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[audiencehistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *AudienceHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, audiencehistory.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *AudienceHistoryMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *AudienceHistoryMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *AudienceHistoryMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[audiencehistory.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *AudienceHistoryMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, audiencehistory.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *AudienceHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *AudienceHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *AudienceHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[audiencehistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *AudienceHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, audiencehistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *AudienceHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *AudienceHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *AudienceHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[audiencehistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *AudienceHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, audiencehistory.FieldDeletedBy)
+}
+
+// SetDisplayID sets the "display_id" field.
+func (m *AudienceHistoryMutation) SetDisplayID(s string) {
+	m.display_id = &s
+}
+
+// DisplayID returns the value of the "display_id" field in the mutation.
+func (m *AudienceHistoryMutation) DisplayID() (r string, exists bool) {
+	v := m.display_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayID returns the old "display_id" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldDisplayID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayID: %w", err)
+	}
+	return oldValue.DisplayID, nil
+}
+
+// ResetDisplayID resets all changes to the "display_id" field.
+func (m *AudienceHistoryMutation) ResetDisplayID() {
+	m.display_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *AudienceHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *AudienceHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *AudienceHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *AudienceHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *AudienceHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[audiencehistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *AudienceHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, audiencehistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *AudienceHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *AudienceHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *AudienceHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[audiencehistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *AudienceHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, audiencehistory.FieldOwnerID)
+}
+
+// SetName sets the "name" field.
+func (m *AudienceHistoryMutation) SetName(s string) {
+	m.name = &s
+}
+
+// Name returns the value of the "name" field in the mutation.
+func (m *AudienceHistoryMutation) Name() (r string, exists bool) {
+	v := m.name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldName returns the old "name" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldName: %w", err)
+	}
+	return oldValue.Name, nil
+}
+
+// ResetName resets all changes to the "name" field.
+func (m *AudienceHistoryMutation) ResetName() {
+	m.name = nil
+}
+
+// SetDescription sets the "description" field.
+func (m *AudienceHistoryMutation) SetDescription(s string) {
+	m.description = &s
+}
+
+// Description returns the value of the "description" field in the mutation.
+func (m *AudienceHistoryMutation) Description() (r string, exists bool) {
+	v := m.description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDescription returns the old "description" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDescription: %w", err)
+	}
+	return oldValue.Description, nil
+}
+
+// ClearDescription clears the value of the "description" field.
+func (m *AudienceHistoryMutation) ClearDescription() {
+	m.description = nil
+	m.clearedFields[audiencehistory.FieldDescription] = struct{}{}
+}
+
+// DescriptionCleared returns if the "description" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) DescriptionCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldDescription]
+	return ok
+}
+
+// ResetDescription resets all changes to the "description" field.
+func (m *AudienceHistoryMutation) ResetDescription() {
+	m.description = nil
+	delete(m.clearedFields, audiencehistory.FieldDescription)
+}
+
+// SetAudienceType sets the "audience_type" field.
+func (m *AudienceHistoryMutation) SetAudienceType(et enums.AudienceType) {
+	m.audience_type = &et
+}
+
+// AudienceType returns the value of the "audience_type" field in the mutation.
+func (m *AudienceHistoryMutation) AudienceType() (r enums.AudienceType, exists bool) {
+	v := m.audience_type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAudienceType returns the old "audience_type" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldAudienceType(ctx context.Context) (v enums.AudienceType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAudienceType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAudienceType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAudienceType: %w", err)
+	}
+	return oldValue.AudienceType, nil
+}
+
+// ResetAudienceType resets all changes to the "audience_type" field.
+func (m *AudienceHistoryMutation) ResetAudienceType() {
+	m.audience_type = nil
+}
+
+// SetFilters sets the "filters" field.
+func (m *AudienceHistoryMutation) SetFilters(value map[string]interface{}) {
+	m.filters = &value
+}
+
+// Filters returns the value of the "filters" field in the mutation.
+func (m *AudienceHistoryMutation) Filters() (r map[string]interface{}, exists bool) {
+	v := m.filters
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFilters returns the old "filters" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldFilters(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFilters is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFilters requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFilters: %w", err)
+	}
+	return oldValue.Filters, nil
+}
+
+// ClearFilters clears the value of the "filters" field.
+func (m *AudienceHistoryMutation) ClearFilters() {
+	m.filters = nil
+	m.clearedFields[audiencehistory.FieldFilters] = struct{}{}
+}
+
+// FiltersCleared returns if the "filters" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) FiltersCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldFilters]
+	return ok
+}
+
+// ResetFilters resets all changes to the "filters" field.
+func (m *AudienceHistoryMutation) ResetFilters() {
+	m.filters = nil
+	delete(m.clearedFields, audiencehistory.FieldFilters)
+}
+
+// SetMetadata sets the "metadata" field.
+func (m *AudienceHistoryMutation) SetMetadata(value map[string]interface{}) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *AudienceHistoryMutation) Metadata() (r map[string]interface{}, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the AudienceHistory entity.
+// If the AudienceHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceHistoryMutation) OldMetadata(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *AudienceHistoryMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[audiencehistory.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *AudienceHistoryMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[audiencehistory.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *AudienceHistoryMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, audiencehistory.FieldMetadata)
+}
+
+// Where appends a list predicates to the AudienceHistoryMutation builder.
+func (m *AudienceHistoryMutation) Where(ps ...predicate.AudienceHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the AudienceHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *AudienceHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.AudienceHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *AudienceHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *AudienceHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (AudienceHistory).
+func (m *AudienceHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AudienceHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 18)
+	if m.history_time != nil {
+		fields = append(fields, audiencehistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, audiencehistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, audiencehistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, audiencehistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, audiencehistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, audiencehistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, audiencehistory.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, audiencehistory.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, audiencehistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, audiencehistory.FieldDeletedBy)
+	}
+	if m.display_id != nil {
+		fields = append(fields, audiencehistory.FieldDisplayID)
+	}
+	if m.tags != nil {
+		fields = append(fields, audiencehistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, audiencehistory.FieldOwnerID)
+	}
+	if m.name != nil {
+		fields = append(fields, audiencehistory.FieldName)
+	}
+	if m.description != nil {
+		fields = append(fields, audiencehistory.FieldDescription)
+	}
+	if m.audience_type != nil {
+		fields = append(fields, audiencehistory.FieldAudienceType)
+	}
+	if m.filters != nil {
+		fields = append(fields, audiencehistory.FieldFilters)
+	}
+	if m.metadata != nil {
+		fields = append(fields, audiencehistory.FieldMetadata)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AudienceHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case audiencehistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case audiencehistory.FieldRef:
+		return m.Ref()
+	case audiencehistory.FieldOperation:
+		return m.Operation()
+	case audiencehistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case audiencehistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case audiencehistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case audiencehistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case audiencehistory.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case audiencehistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case audiencehistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case audiencehistory.FieldDisplayID:
+		return m.DisplayID()
+	case audiencehistory.FieldTags:
+		return m.Tags()
+	case audiencehistory.FieldOwnerID:
+		return m.OwnerID()
+	case audiencehistory.FieldName:
+		return m.Name()
+	case audiencehistory.FieldDescription:
+		return m.Description()
+	case audiencehistory.FieldAudienceType:
+		return m.AudienceType()
+	case audiencehistory.FieldFilters:
+		return m.Filters()
+	case audiencehistory.FieldMetadata:
+		return m.Metadata()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AudienceHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case audiencehistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case audiencehistory.FieldRef:
+		return m.OldRef(ctx)
+	case audiencehistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case audiencehistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case audiencehistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case audiencehistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case audiencehistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case audiencehistory.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case audiencehistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case audiencehistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case audiencehistory.FieldDisplayID:
+		return m.OldDisplayID(ctx)
+	case audiencehistory.FieldTags:
+		return m.OldTags(ctx)
+	case audiencehistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case audiencehistory.FieldName:
+		return m.OldName(ctx)
+	case audiencehistory.FieldDescription:
+		return m.OldDescription(ctx)
+	case audiencehistory.FieldAudienceType:
+		return m.OldAudienceType(ctx)
+	case audiencehistory.FieldFilters:
+		return m.OldFilters(ctx)
+	case audiencehistory.FieldMetadata:
+		return m.OldMetadata(ctx)
+	}
+	return nil, fmt.Errorf("unknown AudienceHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AudienceHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case audiencehistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case audiencehistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case audiencehistory.FieldOperation:
+		v, ok := value.(history.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case audiencehistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case audiencehistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case audiencehistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case audiencehistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case audiencehistory.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case audiencehistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case audiencehistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case audiencehistory.FieldDisplayID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayID(v)
+		return nil
+	case audiencehistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case audiencehistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case audiencehistory.FieldName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetName(v)
+		return nil
+	case audiencehistory.FieldDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDescription(v)
+		return nil
+	case audiencehistory.FieldAudienceType:
+		v, ok := value.(enums.AudienceType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAudienceType(v)
+		return nil
+	case audiencehistory.FieldFilters:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFilters(v)
+		return nil
+	case audiencehistory.FieldMetadata:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AudienceHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AudienceHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AudienceHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown AudienceHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AudienceHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(audiencehistory.FieldRef) {
+		fields = append(fields, audiencehistory.FieldRef)
+	}
+	if m.FieldCleared(audiencehistory.FieldCreatedAt) {
+		fields = append(fields, audiencehistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(audiencehistory.FieldUpdatedAt) {
+		fields = append(fields, audiencehistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(audiencehistory.FieldCreatedBy) {
+		fields = append(fields, audiencehistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(audiencehistory.FieldUpdatedBy) {
+		fields = append(fields, audiencehistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(audiencehistory.FieldUpdatedByImpersonator) {
+		fields = append(fields, audiencehistory.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(audiencehistory.FieldDeletedAt) {
+		fields = append(fields, audiencehistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(audiencehistory.FieldDeletedBy) {
+		fields = append(fields, audiencehistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(audiencehistory.FieldTags) {
+		fields = append(fields, audiencehistory.FieldTags)
+	}
+	if m.FieldCleared(audiencehistory.FieldOwnerID) {
+		fields = append(fields, audiencehistory.FieldOwnerID)
+	}
+	if m.FieldCleared(audiencehistory.FieldDescription) {
+		fields = append(fields, audiencehistory.FieldDescription)
+	}
+	if m.FieldCleared(audiencehistory.FieldFilters) {
+		fields = append(fields, audiencehistory.FieldFilters)
+	}
+	if m.FieldCleared(audiencehistory.FieldMetadata) {
+		fields = append(fields, audiencehistory.FieldMetadata)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AudienceHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AudienceHistoryMutation) ClearField(name string) error {
+	switch name {
+	case audiencehistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case audiencehistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case audiencehistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case audiencehistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case audiencehistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case audiencehistory.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case audiencehistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case audiencehistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case audiencehistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case audiencehistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case audiencehistory.FieldDescription:
+		m.ClearDescription()
+		return nil
+	case audiencehistory.FieldFilters:
+		m.ClearFilters()
+		return nil
+	case audiencehistory.FieldMetadata:
+		m.ClearMetadata()
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AudienceHistoryMutation) ResetField(name string) error {
+	switch name {
+	case audiencehistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case audiencehistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case audiencehistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case audiencehistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case audiencehistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case audiencehistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case audiencehistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case audiencehistory.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case audiencehistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case audiencehistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case audiencehistory.FieldDisplayID:
+		m.ResetDisplayID()
+		return nil
+	case audiencehistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case audiencehistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case audiencehistory.FieldName:
+		m.ResetName()
+		return nil
+	case audiencehistory.FieldDescription:
+		m.ResetDescription()
+		return nil
+	case audiencehistory.FieldAudienceType:
+		m.ResetAudienceType()
+		return nil
+	case audiencehistory.FieldFilters:
+		m.ResetFilters()
+		return nil
+	case audiencehistory.FieldMetadata:
+		m.ResetMetadata()
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AudienceHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AudienceHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AudienceHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AudienceHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AudienceHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AudienceHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AudienceHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown AudienceHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AudienceHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown AudienceHistory edge %s", name)
+}
+
+// AudienceMemberHistoryMutation represents an operation that mutates the AudienceMemberHistory nodes in the graph.
+type AudienceMemberHistoryMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	history_time            *time.Time
+	ref                     *string
+	operation               *history.OpType
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	deleted_at              *time.Time
+	deleted_by              *string
+	display_id              *string
+	tags                    *[]string
+	appendtags              []string
+	owner_id                *string
+	audience_id             *string
+	contact_id              *string
+	user_id                 *string
+	group_id                *string
+	identity_holder_id      *string
+	subscriber_id           *string
+	email                   *string
+	full_name               *string
+	metadata                *map[string]interface{}
+	clearedFields           map[string]struct{}
+	done                    bool
+	oldValue                func(context.Context) (*AudienceMemberHistory, error)
+	predicates              []predicate.AudienceMemberHistory
+}
+
+var _ ent.Mutation = (*AudienceMemberHistoryMutation)(nil)
+
+// audiencememberhistoryOption allows management of the mutation configuration using functional options.
+type audiencememberhistoryOption func(*AudienceMemberHistoryMutation)
+
+// newAudienceMemberHistoryMutation creates new mutation for the AudienceMemberHistory entity.
+func newAudienceMemberHistoryMutation(c config, op Op, opts ...audiencememberhistoryOption) *AudienceMemberHistoryMutation {
+	m := &AudienceMemberHistoryMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeAudienceMemberHistory,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withAudienceMemberHistoryID sets the ID field of the mutation.
+func withAudienceMemberHistoryID(id string) audiencememberhistoryOption {
+	return func(m *AudienceMemberHistoryMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *AudienceMemberHistory
+		)
+		m.oldValue = func(ctx context.Context) (*AudienceMemberHistory, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().AudienceMemberHistory.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withAudienceMemberHistory sets the old AudienceMemberHistory of the mutation.
+func withAudienceMemberHistory(node *AudienceMemberHistory) audiencememberhistoryOption {
+	return func(m *AudienceMemberHistoryMutation) {
+		m.oldValue = func(context.Context) (*AudienceMemberHistory, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m AudienceMemberHistoryMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m AudienceMemberHistoryMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("historygenerated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of AudienceMemberHistory entities.
+func (m *AudienceMemberHistoryMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *AudienceMemberHistoryMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *AudienceMemberHistoryMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().AudienceMemberHistory.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetHistoryTime sets the "history_time" field.
+func (m *AudienceMemberHistoryMutation) SetHistoryTime(t time.Time) {
+	m.history_time = &t
+}
+
+// HistoryTime returns the value of the "history_time" field in the mutation.
+func (m *AudienceMemberHistoryMutation) HistoryTime() (r time.Time, exists bool) {
+	v := m.history_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHistoryTime returns the old "history_time" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldHistoryTime(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHistoryTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHistoryTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHistoryTime: %w", err)
+	}
+	return oldValue.HistoryTime, nil
+}
+
+// ResetHistoryTime resets all changes to the "history_time" field.
+func (m *AudienceMemberHistoryMutation) ResetHistoryTime() {
+	m.history_time = nil
+}
+
+// SetRef sets the "ref" field.
+func (m *AudienceMemberHistoryMutation) SetRef(s string) {
+	m.ref = &s
+}
+
+// Ref returns the value of the "ref" field in the mutation.
+func (m *AudienceMemberHistoryMutation) Ref() (r string, exists bool) {
+	v := m.ref
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRef returns the old "ref" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldRef(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldRef is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldRef requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRef: %w", err)
+	}
+	return oldValue.Ref, nil
+}
+
+// ClearRef clears the value of the "ref" field.
+func (m *AudienceMemberHistoryMutation) ClearRef() {
+	m.ref = nil
+	m.clearedFields[audiencememberhistory.FieldRef] = struct{}{}
+}
+
+// RefCleared returns if the "ref" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) RefCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldRef]
+	return ok
+}
+
+// ResetRef resets all changes to the "ref" field.
+func (m *AudienceMemberHistoryMutation) ResetRef() {
+	m.ref = nil
+	delete(m.clearedFields, audiencememberhistory.FieldRef)
+}
+
+// SetOperation sets the "operation" field.
+func (m *AudienceMemberHistoryMutation) SetOperation(ht history.OpType) {
+	m.operation = &ht
+}
+
+// Operation returns the value of the "operation" field in the mutation.
+func (m *AudienceMemberHistoryMutation) Operation() (r history.OpType, exists bool) {
+	v := m.operation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOperation returns the old "operation" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldOperation(ctx context.Context) (v history.OpType, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOperation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOperation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOperation: %w", err)
+	}
+	return oldValue.Operation, nil
+}
+
+// ResetOperation resets all changes to the "operation" field.
+func (m *AudienceMemberHistoryMutation) ResetOperation() {
+	m.operation = nil
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *AudienceMemberHistoryMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *AudienceMemberHistoryMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *AudienceMemberHistoryMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[audiencememberhistory.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *AudienceMemberHistoryMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, audiencememberhistory.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *AudienceMemberHistoryMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *AudienceMemberHistoryMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *AudienceMemberHistoryMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[audiencememberhistory.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *AudienceMemberHistoryMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, audiencememberhistory.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *AudienceMemberHistoryMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *AudienceMemberHistoryMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *AudienceMemberHistoryMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[audiencememberhistory.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *AudienceMemberHistoryMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, audiencememberhistory.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *AudienceMemberHistoryMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *AudienceMemberHistoryMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *AudienceMemberHistoryMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[audiencememberhistory.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *AudienceMemberHistoryMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, audiencememberhistory.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *AudienceMemberHistoryMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *AudienceMemberHistoryMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *AudienceMemberHistoryMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[audiencememberhistory.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *AudienceMemberHistoryMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, audiencememberhistory.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *AudienceMemberHistoryMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *AudienceMemberHistoryMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *AudienceMemberHistoryMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[audiencememberhistory.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *AudienceMemberHistoryMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, audiencememberhistory.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *AudienceMemberHistoryMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *AudienceMemberHistoryMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *AudienceMemberHistoryMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[audiencememberhistory.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *AudienceMemberHistoryMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, audiencememberhistory.FieldDeletedBy)
+}
+
+// SetDisplayID sets the "display_id" field.
+func (m *AudienceMemberHistoryMutation) SetDisplayID(s string) {
+	m.display_id = &s
+}
+
+// DisplayID returns the value of the "display_id" field in the mutation.
+func (m *AudienceMemberHistoryMutation) DisplayID() (r string, exists bool) {
+	v := m.display_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDisplayID returns the old "display_id" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldDisplayID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDisplayID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDisplayID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDisplayID: %w", err)
+	}
+	return oldValue.DisplayID, nil
+}
+
+// ResetDisplayID resets all changes to the "display_id" field.
+func (m *AudienceMemberHistoryMutation) ResetDisplayID() {
+	m.display_id = nil
+}
+
+// SetTags sets the "tags" field.
+func (m *AudienceMemberHistoryMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *AudienceMemberHistoryMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *AudienceMemberHistoryMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *AudienceMemberHistoryMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *AudienceMemberHistoryMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[audiencememberhistory.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *AudienceMemberHistoryMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, audiencememberhistory.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *AudienceMemberHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *AudienceMemberHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *AudienceMemberHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[audiencememberhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *AudienceMemberHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, audiencememberhistory.FieldOwnerID)
+}
+
+// SetAudienceID sets the "audience_id" field.
+func (m *AudienceMemberHistoryMutation) SetAudienceID(s string) {
+	m.audience_id = &s
+}
+
+// AudienceID returns the value of the "audience_id" field in the mutation.
+func (m *AudienceMemberHistoryMutation) AudienceID() (r string, exists bool) {
+	v := m.audience_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAudienceID returns the old "audience_id" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldAudienceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAudienceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAudienceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAudienceID: %w", err)
+	}
+	return oldValue.AudienceID, nil
+}
+
+// ResetAudienceID resets all changes to the "audience_id" field.
+func (m *AudienceMemberHistoryMutation) ResetAudienceID() {
+	m.audience_id = nil
+}
+
+// SetContactID sets the "contact_id" field.
+func (m *AudienceMemberHistoryMutation) SetContactID(s string) {
+	m.contact_id = &s
+}
+
+// ContactID returns the value of the "contact_id" field in the mutation.
+func (m *AudienceMemberHistoryMutation) ContactID() (r string, exists bool) {
+	v := m.contact_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldContactID returns the old "contact_id" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldContactID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldContactID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldContactID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldContactID: %w", err)
+	}
+	return oldValue.ContactID, nil
+}
+
+// ClearContactID clears the value of the "contact_id" field.
+func (m *AudienceMemberHistoryMutation) ClearContactID() {
+	m.contact_id = nil
+	m.clearedFields[audiencememberhistory.FieldContactID] = struct{}{}
+}
+
+// ContactIDCleared returns if the "contact_id" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) ContactIDCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldContactID]
+	return ok
+}
+
+// ResetContactID resets all changes to the "contact_id" field.
+func (m *AudienceMemberHistoryMutation) ResetContactID() {
+	m.contact_id = nil
+	delete(m.clearedFields, audiencememberhistory.FieldContactID)
+}
+
+// SetUserID sets the "user_id" field.
+func (m *AudienceMemberHistoryMutation) SetUserID(s string) {
+	m.user_id = &s
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *AudienceMemberHistoryMutation) UserID() (r string, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldUserID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ClearUserID clears the value of the "user_id" field.
+func (m *AudienceMemberHistoryMutation) ClearUserID() {
+	m.user_id = nil
+	m.clearedFields[audiencememberhistory.FieldUserID] = struct{}{}
+}
+
+// UserIDCleared returns if the "user_id" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) UserIDCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldUserID]
+	return ok
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *AudienceMemberHistoryMutation) ResetUserID() {
+	m.user_id = nil
+	delete(m.clearedFields, audiencememberhistory.FieldUserID)
+}
+
+// SetGroupID sets the "group_id" field.
+func (m *AudienceMemberHistoryMutation) SetGroupID(s string) {
+	m.group_id = &s
+}
+
+// GroupID returns the value of the "group_id" field in the mutation.
+func (m *AudienceMemberHistoryMutation) GroupID() (r string, exists bool) {
+	v := m.group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGroupID returns the old "group_id" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldGroupID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGroupID: %w", err)
+	}
+	return oldValue.GroupID, nil
+}
+
+// ClearGroupID clears the value of the "group_id" field.
+func (m *AudienceMemberHistoryMutation) ClearGroupID() {
+	m.group_id = nil
+	m.clearedFields[audiencememberhistory.FieldGroupID] = struct{}{}
+}
+
+// GroupIDCleared returns if the "group_id" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) GroupIDCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldGroupID]
+	return ok
+}
+
+// ResetGroupID resets all changes to the "group_id" field.
+func (m *AudienceMemberHistoryMutation) ResetGroupID() {
+	m.group_id = nil
+	delete(m.clearedFields, audiencememberhistory.FieldGroupID)
+}
+
+// SetIdentityHolderID sets the "identity_holder_id" field.
+func (m *AudienceMemberHistoryMutation) SetIdentityHolderID(s string) {
+	m.identity_holder_id = &s
+}
+
+// IdentityHolderID returns the value of the "identity_holder_id" field in the mutation.
+func (m *AudienceMemberHistoryMutation) IdentityHolderID() (r string, exists bool) {
+	v := m.identity_holder_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIdentityHolderID returns the old "identity_holder_id" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIdentityHolderID: %w", err)
+	}
+	return oldValue.IdentityHolderID, nil
+}
+
+// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
+func (m *AudienceMemberHistoryMutation) ClearIdentityHolderID() {
+	m.identity_holder_id = nil
+	m.clearedFields[audiencememberhistory.FieldIdentityHolderID] = struct{}{}
+}
+
+// IdentityHolderIDCleared returns if the "identity_holder_id" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) IdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldIdentityHolderID]
+	return ok
+}
+
+// ResetIdentityHolderID resets all changes to the "identity_holder_id" field.
+func (m *AudienceMemberHistoryMutation) ResetIdentityHolderID() {
+	m.identity_holder_id = nil
+	delete(m.clearedFields, audiencememberhistory.FieldIdentityHolderID)
+}
+
+// SetSubscriberID sets the "subscriber_id" field.
+func (m *AudienceMemberHistoryMutation) SetSubscriberID(s string) {
+	m.subscriber_id = &s
+}
+
+// SubscriberID returns the value of the "subscriber_id" field in the mutation.
+func (m *AudienceMemberHistoryMutation) SubscriberID() (r string, exists bool) {
+	v := m.subscriber_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSubscriberID returns the old "subscriber_id" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldSubscriberID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSubscriberID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSubscriberID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSubscriberID: %w", err)
+	}
+	return oldValue.SubscriberID, nil
+}
+
+// ClearSubscriberID clears the value of the "subscriber_id" field.
+func (m *AudienceMemberHistoryMutation) ClearSubscriberID() {
+	m.subscriber_id = nil
+	m.clearedFields[audiencememberhistory.FieldSubscriberID] = struct{}{}
+}
+
+// SubscriberIDCleared returns if the "subscriber_id" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) SubscriberIDCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldSubscriberID]
+	return ok
+}
+
+// ResetSubscriberID resets all changes to the "subscriber_id" field.
+func (m *AudienceMemberHistoryMutation) ResetSubscriberID() {
+	m.subscriber_id = nil
+	delete(m.clearedFields, audiencememberhistory.FieldSubscriberID)
+}
+
+// SetEmail sets the "email" field.
+func (m *AudienceMemberHistoryMutation) SetEmail(s string) {
+	m.email = &s
+}
+
+// Email returns the value of the "email" field in the mutation.
+func (m *AudienceMemberHistoryMutation) Email() (r string, exists bool) {
+	v := m.email
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmail returns the old "email" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldEmail(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmail requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
+	}
+	return oldValue.Email, nil
+}
+
+// ResetEmail resets all changes to the "email" field.
+func (m *AudienceMemberHistoryMutation) ResetEmail() {
+	m.email = nil
+}
+
+// SetFullName sets the "full_name" field.
+func (m *AudienceMemberHistoryMutation) SetFullName(s string) {
+	m.full_name = &s
+}
+
+// FullName returns the value of the "full_name" field in the mutation.
+func (m *AudienceMemberHistoryMutation) FullName() (r string, exists bool) {
+	v := m.full_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFullName returns the old "full_name" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldFullName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFullName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFullName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFullName: %w", err)
+	}
+	return oldValue.FullName, nil
+}
+
+// ClearFullName clears the value of the "full_name" field.
+func (m *AudienceMemberHistoryMutation) ClearFullName() {
+	m.full_name = nil
+	m.clearedFields[audiencememberhistory.FieldFullName] = struct{}{}
+}
+
+// FullNameCleared returns if the "full_name" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) FullNameCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldFullName]
+	return ok
+}
+
+// ResetFullName resets all changes to the "full_name" field.
+func (m *AudienceMemberHistoryMutation) ResetFullName() {
+	m.full_name = nil
+	delete(m.clearedFields, audiencememberhistory.FieldFullName)
+}
+
+// SetMetadata sets the "metadata" field.
+func (m *AudienceMemberHistoryMutation) SetMetadata(value map[string]interface{}) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *AudienceMemberHistoryMutation) Metadata() (r map[string]interface{}, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the AudienceMemberHistory entity.
+// If the AudienceMemberHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AudienceMemberHistoryMutation) OldMetadata(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *AudienceMemberHistoryMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[audiencememberhistory.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[audiencememberhistory.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *AudienceMemberHistoryMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, audiencememberhistory.FieldMetadata)
+}
+
+// Where appends a list predicates to the AudienceMemberHistoryMutation builder.
+func (m *AudienceMemberHistoryMutation) Where(ps ...predicate.AudienceMemberHistory) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the AudienceMemberHistoryMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *AudienceMemberHistoryMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.AudienceMemberHistory, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *AudienceMemberHistoryMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *AudienceMemberHistoryMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (AudienceMemberHistory).
+func (m *AudienceMemberHistoryMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *AudienceMemberHistoryMutation) Fields() []string {
+	fields := make([]string, 0, 22)
+	if m.history_time != nil {
+		fields = append(fields, audiencememberhistory.FieldHistoryTime)
+	}
+	if m.ref != nil {
+		fields = append(fields, audiencememberhistory.FieldRef)
+	}
+	if m.operation != nil {
+		fields = append(fields, audiencememberhistory.FieldOperation)
+	}
+	if m.created_at != nil {
+		fields = append(fields, audiencememberhistory.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, audiencememberhistory.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, audiencememberhistory.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, audiencememberhistory.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, audiencememberhistory.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, audiencememberhistory.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, audiencememberhistory.FieldDeletedBy)
+	}
+	if m.display_id != nil {
+		fields = append(fields, audiencememberhistory.FieldDisplayID)
+	}
+	if m.tags != nil {
+		fields = append(fields, audiencememberhistory.FieldTags)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, audiencememberhistory.FieldOwnerID)
+	}
+	if m.audience_id != nil {
+		fields = append(fields, audiencememberhistory.FieldAudienceID)
+	}
+	if m.contact_id != nil {
+		fields = append(fields, audiencememberhistory.FieldContactID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, audiencememberhistory.FieldUserID)
+	}
+	if m.group_id != nil {
+		fields = append(fields, audiencememberhistory.FieldGroupID)
+	}
+	if m.identity_holder_id != nil {
+		fields = append(fields, audiencememberhistory.FieldIdentityHolderID)
+	}
+	if m.subscriber_id != nil {
+		fields = append(fields, audiencememberhistory.FieldSubscriberID)
+	}
+	if m.email != nil {
+		fields = append(fields, audiencememberhistory.FieldEmail)
+	}
+	if m.full_name != nil {
+		fields = append(fields, audiencememberhistory.FieldFullName)
+	}
+	if m.metadata != nil {
+		fields = append(fields, audiencememberhistory.FieldMetadata)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *AudienceMemberHistoryMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case audiencememberhistory.FieldHistoryTime:
+		return m.HistoryTime()
+	case audiencememberhistory.FieldRef:
+		return m.Ref()
+	case audiencememberhistory.FieldOperation:
+		return m.Operation()
+	case audiencememberhistory.FieldCreatedAt:
+		return m.CreatedAt()
+	case audiencememberhistory.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case audiencememberhistory.FieldCreatedBy:
+		return m.CreatedBy()
+	case audiencememberhistory.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case audiencememberhistory.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case audiencememberhistory.FieldDeletedAt:
+		return m.DeletedAt()
+	case audiencememberhistory.FieldDeletedBy:
+		return m.DeletedBy()
+	case audiencememberhistory.FieldDisplayID:
+		return m.DisplayID()
+	case audiencememberhistory.FieldTags:
+		return m.Tags()
+	case audiencememberhistory.FieldOwnerID:
+		return m.OwnerID()
+	case audiencememberhistory.FieldAudienceID:
+		return m.AudienceID()
+	case audiencememberhistory.FieldContactID:
+		return m.ContactID()
+	case audiencememberhistory.FieldUserID:
+		return m.UserID()
+	case audiencememberhistory.FieldGroupID:
+		return m.GroupID()
+	case audiencememberhistory.FieldIdentityHolderID:
+		return m.IdentityHolderID()
+	case audiencememberhistory.FieldSubscriberID:
+		return m.SubscriberID()
+	case audiencememberhistory.FieldEmail:
+		return m.Email()
+	case audiencememberhistory.FieldFullName:
+		return m.FullName()
+	case audiencememberhistory.FieldMetadata:
+		return m.Metadata()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *AudienceMemberHistoryMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case audiencememberhistory.FieldHistoryTime:
+		return m.OldHistoryTime(ctx)
+	case audiencememberhistory.FieldRef:
+		return m.OldRef(ctx)
+	case audiencememberhistory.FieldOperation:
+		return m.OldOperation(ctx)
+	case audiencememberhistory.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case audiencememberhistory.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case audiencememberhistory.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case audiencememberhistory.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case audiencememberhistory.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case audiencememberhistory.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case audiencememberhistory.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case audiencememberhistory.FieldDisplayID:
+		return m.OldDisplayID(ctx)
+	case audiencememberhistory.FieldTags:
+		return m.OldTags(ctx)
+	case audiencememberhistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case audiencememberhistory.FieldAudienceID:
+		return m.OldAudienceID(ctx)
+	case audiencememberhistory.FieldContactID:
+		return m.OldContactID(ctx)
+	case audiencememberhistory.FieldUserID:
+		return m.OldUserID(ctx)
+	case audiencememberhistory.FieldGroupID:
+		return m.OldGroupID(ctx)
+	case audiencememberhistory.FieldIdentityHolderID:
+		return m.OldIdentityHolderID(ctx)
+	case audiencememberhistory.FieldSubscriberID:
+		return m.OldSubscriberID(ctx)
+	case audiencememberhistory.FieldEmail:
+		return m.OldEmail(ctx)
+	case audiencememberhistory.FieldFullName:
+		return m.OldFullName(ctx)
+	case audiencememberhistory.FieldMetadata:
+		return m.OldMetadata(ctx)
+	}
+	return nil, fmt.Errorf("unknown AudienceMemberHistory field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AudienceMemberHistoryMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case audiencememberhistory.FieldHistoryTime:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHistoryTime(v)
+		return nil
+	case audiencememberhistory.FieldRef:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRef(v)
+		return nil
+	case audiencememberhistory.FieldOperation:
+		v, ok := value.(history.OpType)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOperation(v)
+		return nil
+	case audiencememberhistory.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case audiencememberhistory.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case audiencememberhistory.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case audiencememberhistory.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case audiencememberhistory.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case audiencememberhistory.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case audiencememberhistory.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case audiencememberhistory.FieldDisplayID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDisplayID(v)
+		return nil
+	case audiencememberhistory.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case audiencememberhistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case audiencememberhistory.FieldAudienceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAudienceID(v)
+		return nil
+	case audiencememberhistory.FieldContactID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetContactID(v)
+		return nil
+	case audiencememberhistory.FieldUserID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case audiencememberhistory.FieldGroupID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGroupID(v)
+		return nil
+	case audiencememberhistory.FieldIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIdentityHolderID(v)
+		return nil
+	case audiencememberhistory.FieldSubscriberID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSubscriberID(v)
+		return nil
+	case audiencememberhistory.FieldEmail:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmail(v)
+		return nil
+	case audiencememberhistory.FieldFullName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFullName(v)
+		return nil
+	case audiencememberhistory.FieldMetadata:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceMemberHistory field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *AudienceMemberHistoryMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *AudienceMemberHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *AudienceMemberHistoryMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown AudienceMemberHistory numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *AudienceMemberHistoryMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(audiencememberhistory.FieldRef) {
+		fields = append(fields, audiencememberhistory.FieldRef)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldCreatedAt) {
+		fields = append(fields, audiencememberhistory.FieldCreatedAt)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldUpdatedAt) {
+		fields = append(fields, audiencememberhistory.FieldUpdatedAt)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldCreatedBy) {
+		fields = append(fields, audiencememberhistory.FieldCreatedBy)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldUpdatedBy) {
+		fields = append(fields, audiencememberhistory.FieldUpdatedBy)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldUpdatedByImpersonator) {
+		fields = append(fields, audiencememberhistory.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldDeletedAt) {
+		fields = append(fields, audiencememberhistory.FieldDeletedAt)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldDeletedBy) {
+		fields = append(fields, audiencememberhistory.FieldDeletedBy)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldTags) {
+		fields = append(fields, audiencememberhistory.FieldTags)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldOwnerID) {
+		fields = append(fields, audiencememberhistory.FieldOwnerID)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldContactID) {
+		fields = append(fields, audiencememberhistory.FieldContactID)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldUserID) {
+		fields = append(fields, audiencememberhistory.FieldUserID)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldGroupID) {
+		fields = append(fields, audiencememberhistory.FieldGroupID)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldIdentityHolderID) {
+		fields = append(fields, audiencememberhistory.FieldIdentityHolderID)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldSubscriberID) {
+		fields = append(fields, audiencememberhistory.FieldSubscriberID)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldFullName) {
+		fields = append(fields, audiencememberhistory.FieldFullName)
+	}
+	if m.FieldCleared(audiencememberhistory.FieldMetadata) {
+		fields = append(fields, audiencememberhistory.FieldMetadata)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *AudienceMemberHistoryMutation) ClearField(name string) error {
+	switch name {
+	case audiencememberhistory.FieldRef:
+		m.ClearRef()
+		return nil
+	case audiencememberhistory.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case audiencememberhistory.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case audiencememberhistory.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case audiencememberhistory.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case audiencememberhistory.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case audiencememberhistory.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case audiencememberhistory.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case audiencememberhistory.FieldTags:
+		m.ClearTags()
+		return nil
+	case audiencememberhistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	case audiencememberhistory.FieldContactID:
+		m.ClearContactID()
+		return nil
+	case audiencememberhistory.FieldUserID:
+		m.ClearUserID()
+		return nil
+	case audiencememberhistory.FieldGroupID:
+		m.ClearGroupID()
+		return nil
+	case audiencememberhistory.FieldIdentityHolderID:
+		m.ClearIdentityHolderID()
+		return nil
+	case audiencememberhistory.FieldSubscriberID:
+		m.ClearSubscriberID()
+		return nil
+	case audiencememberhistory.FieldFullName:
+		m.ClearFullName()
+		return nil
+	case audiencememberhistory.FieldMetadata:
+		m.ClearMetadata()
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceMemberHistory nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *AudienceMemberHistoryMutation) ResetField(name string) error {
+	switch name {
+	case audiencememberhistory.FieldHistoryTime:
+		m.ResetHistoryTime()
+		return nil
+	case audiencememberhistory.FieldRef:
+		m.ResetRef()
+		return nil
+	case audiencememberhistory.FieldOperation:
+		m.ResetOperation()
+		return nil
+	case audiencememberhistory.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case audiencememberhistory.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case audiencememberhistory.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case audiencememberhistory.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case audiencememberhistory.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case audiencememberhistory.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case audiencememberhistory.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case audiencememberhistory.FieldDisplayID:
+		m.ResetDisplayID()
+		return nil
+	case audiencememberhistory.FieldTags:
+		m.ResetTags()
+		return nil
+	case audiencememberhistory.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case audiencememberhistory.FieldAudienceID:
+		m.ResetAudienceID()
+		return nil
+	case audiencememberhistory.FieldContactID:
+		m.ResetContactID()
+		return nil
+	case audiencememberhistory.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case audiencememberhistory.FieldGroupID:
+		m.ResetGroupID()
+		return nil
+	case audiencememberhistory.FieldIdentityHolderID:
+		m.ResetIdentityHolderID()
+		return nil
+	case audiencememberhistory.FieldSubscriberID:
+		m.ResetSubscriberID()
+		return nil
+	case audiencememberhistory.FieldEmail:
+		m.ResetEmail()
+		return nil
+	case audiencememberhistory.FieldFullName:
+		m.ResetFullName()
+		return nil
+	case audiencememberhistory.FieldMetadata:
+		m.ResetMetadata()
+		return nil
+	}
+	return fmt.Errorf("unknown AudienceMemberHistory field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *AudienceMemberHistoryMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *AudienceMemberHistoryMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *AudienceMemberHistoryMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *AudienceMemberHistoryMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *AudienceMemberHistoryMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *AudienceMemberHistoryMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown AudienceMemberHistory unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *AudienceMemberHistoryMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown AudienceMemberHistory edge %s", name)
 }
 
 // CampaignHistoryMutation represents an operation that mutates the CampaignHistory nodes in the graph.

@@ -939,6 +939,14 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 			},
 		},
 	},
+	"Audience": {
+		SchemaName: "Audience",
+		Rules:      []CSVReferenceRule{},
+	},
+	"AudienceMember": {
+		SchemaName: "AudienceMember",
+		Rules:      []CSVReferenceRule{},
+	},
 	"Campaign": {
 		SchemaName: "Campaign",
 		Rules: []CSVReferenceRule{
@@ -2057,6 +2065,42 @@ type AssetCSVUpdateInput struct {
 
 // CSVInputWrapper marks AssetCSVUpdateInput for CSV header preprocessing.
 func (AssetCSVUpdateInput) CSVInputWrapper() {}
+
+// AudienceCSVInput wraps CreateAudienceInput with CSV reference columns.
+type AudienceCSVInput struct {
+	Input generated.CreateAudienceInput
+}
+
+// CSVInputWrapper marks AudienceCSVInput for CSV header preprocessing.
+func (AudienceCSVInput) CSVInputWrapper() {}
+
+// AudienceCSVUpdateInput wraps UpdateAudienceInput with CSV reference columns for bulk updates.
+type AudienceCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID    string `csv:"ID"`
+	Input generated.UpdateAudienceInput
+}
+
+// CSVInputWrapper marks AudienceCSVUpdateInput for CSV header preprocessing.
+func (AudienceCSVUpdateInput) CSVInputWrapper() {}
+
+// AudienceMemberCSVInput wraps CreateAudienceMemberInput with CSV reference columns.
+type AudienceMemberCSVInput struct {
+	Input generated.CreateAudienceMemberInput
+}
+
+// CSVInputWrapper marks AudienceMemberCSVInput for CSV header preprocessing.
+func (AudienceMemberCSVInput) CSVInputWrapper() {}
+
+// AudienceMemberCSVUpdateInput wraps UpdateAudienceMemberInput with CSV reference columns for bulk updates.
+type AudienceMemberCSVUpdateInput struct {
+	// ID is the entity ID to update
+	ID    string `csv:"ID"`
+	Input generated.UpdateAudienceMemberInput
+}
+
+// CSVInputWrapper marks AudienceMemberCSVUpdateInput for CSV header preprocessing.
+func (AudienceMemberCSVUpdateInput) CSVInputWrapper() {}
 
 // CampaignCSVInput wraps CreateCampaignInput with CSV reference columns.
 type CampaignCSVInput struct {

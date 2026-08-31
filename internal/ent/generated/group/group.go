@@ -113,6 +113,12 @@ const (
 	EdgeCampaignBlockedGroups = "campaign_blocked_groups"
 	// EdgeCampaignViewers holds the string denoting the campaign_viewers edge name in mutations.
 	EdgeCampaignViewers = "campaign_viewers"
+	// EdgeAudienceEditors holds the string denoting the audience_editors edge name in mutations.
+	EdgeAudienceEditors = "audience_editors"
+	// EdgeAudienceBlockedGroups holds the string denoting the audience_blocked_groups edge name in mutations.
+	EdgeAudienceBlockedGroups = "audience_blocked_groups"
+	// EdgeAudienceViewers holds the string denoting the audience_viewers edge name in mutations.
+	EdgeAudienceViewers = "audience_viewers"
 	// EdgeProcedureEditors holds the string denoting the procedure_editors edge name in mutations.
 	EdgeProcedureEditors = "procedure_editors"
 	// EdgeProcedureBlockedGroups holds the string denoting the procedure_blocked_groups edge name in mutations.
@@ -167,6 +173,8 @@ const (
 	EdgeCampaigns = "campaigns"
 	// EdgeCampaignTargets holds the string denoting the campaign_targets edge name in mutations.
 	EdgeCampaignTargets = "campaign_targets"
+	// EdgeAudienceMembers holds the string denoting the audience_members edge name in mutations.
+	EdgeAudienceMembers = "audience_members"
 	// EdgeInvites holds the string denoting the invites edge name in mutations.
 	EdgeInvites = "invites"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
@@ -300,6 +308,21 @@ const (
 	// CampaignViewersInverseTable is the table name for the Campaign entity.
 	// It exists in this package in order to avoid circular dependency with the "campaign" package.
 	CampaignViewersInverseTable = "campaigns"
+	// AudienceEditorsTable is the table that holds the audience_editors relation/edge. The primary key declared below.
+	AudienceEditorsTable = "audience_editors"
+	// AudienceEditorsInverseTable is the table name for the Audience entity.
+	// It exists in this package in order to avoid circular dependency with the "audience" package.
+	AudienceEditorsInverseTable = "audiences"
+	// AudienceBlockedGroupsTable is the table that holds the audience_blocked_groups relation/edge. The primary key declared below.
+	AudienceBlockedGroupsTable = "audience_blocked_groups"
+	// AudienceBlockedGroupsInverseTable is the table name for the Audience entity.
+	// It exists in this package in order to avoid circular dependency with the "audience" package.
+	AudienceBlockedGroupsInverseTable = "audiences"
+	// AudienceViewersTable is the table that holds the audience_viewers relation/edge. The primary key declared below.
+	AudienceViewersTable = "audience_viewers"
+	// AudienceViewersInverseTable is the table name for the Audience entity.
+	// It exists in this package in order to avoid circular dependency with the "audience" package.
+	AudienceViewersInverseTable = "audiences"
 	// ProcedureEditorsTable is the table that holds the procedure_editors relation/edge. The primary key declared below.
 	ProcedureEditorsTable = "procedure_editors"
 	// ProcedureEditorsInverseTable is the table name for the Procedure entity.
@@ -443,6 +466,13 @@ const (
 	CampaignTargetsInverseTable = "campaign_targets"
 	// CampaignTargetsColumn is the table column denoting the campaign_targets relation/edge.
 	CampaignTargetsColumn = "group_id"
+	// AudienceMembersTable is the table that holds the audience_members relation/edge.
+	AudienceMembersTable = "audience_members"
+	// AudienceMembersInverseTable is the table name for the AudienceMember entity.
+	// It exists in this package in order to avoid circular dependency with the "audiencemember" package.
+	AudienceMembersInverseTable = "audience_members"
+	// AudienceMembersColumn is the table column denoting the audience_members relation/edge.
+	AudienceMembersColumn = "group_id"
 	// InvitesTable is the table that holds the invites relation/edge. The primary key declared below.
 	InvitesTable = "invite_groups"
 	// InvitesInverseTable is the table name for the Invite entity.
@@ -508,6 +538,8 @@ var ForeignKeys = []string{
 	"organization_api_token_creators",
 	"organization_assessment_creators",
 	"organization_asset_creators",
+	"organization_audience_creators",
+	"organization_audience_member_creators",
 	"organization_campaign_creators",
 	"organization_campaign_target_creators",
 	"organization_check_result_creators",
@@ -681,6 +713,15 @@ var (
 	// CampaignViewersPrimaryKey and CampaignViewersColumn2 are the table columns denoting the
 	// primary key for the campaign_viewers relation (M2M).
 	CampaignViewersPrimaryKey = []string{"campaign_id", "group_id"}
+	// AudienceEditorsPrimaryKey and AudienceEditorsColumn2 are the table columns denoting the
+	// primary key for the audience_editors relation (M2M).
+	AudienceEditorsPrimaryKey = []string{"audience_id", "group_id"}
+	// AudienceBlockedGroupsPrimaryKey and AudienceBlockedGroupsColumn2 are the table columns denoting the
+	// primary key for the audience_blocked_groups relation (M2M).
+	AudienceBlockedGroupsPrimaryKey = []string{"audience_id", "group_id"}
+	// AudienceViewersPrimaryKey and AudienceViewersColumn2 are the table columns denoting the
+	// primary key for the audience_viewers relation (M2M).
+	AudienceViewersPrimaryKey = []string{"audience_id", "group_id"}
 	// ProcedureEditorsPrimaryKey and ProcedureEditorsColumn2 are the table columns denoting the
 	// primary key for the procedure_editors relation (M2M).
 	ProcedureEditorsPrimaryKey = []string{"procedure_id", "group_id"}
@@ -1270,6 +1311,48 @@ func ByCampaignViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAudienceEditorsCount orders the results by audience_editors count.
+func ByAudienceEditorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceEditorsStep(), opts...)
+	}
+}
+
+// ByAudienceEditors orders the results by audience_editors terms.
+func ByAudienceEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAudienceBlockedGroupsCount orders the results by audience_blocked_groups count.
+func ByAudienceBlockedGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceBlockedGroupsStep(), opts...)
+	}
+}
+
+// ByAudienceBlockedGroups orders the results by audience_blocked_groups terms.
+func ByAudienceBlockedGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceBlockedGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAudienceViewersCount orders the results by audience_viewers count.
+func ByAudienceViewersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceViewersStep(), opts...)
+	}
+}
+
+// ByAudienceViewers orders the results by audience_viewers terms.
+func ByAudienceViewers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceViewersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByProcedureEditorsCount orders the results by procedure_editors count.
 func ByProcedureEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1634,6 +1717,20 @@ func ByCampaignTargets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAudienceMembersCount orders the results by audience_members count.
+func ByAudienceMembersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceMembersStep(), opts...)
+	}
+}
+
+// ByAudienceMembers orders the results by audience_members terms.
+func ByAudienceMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByInvitesCount orders the results by invites count.
 func ByInvitesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1836,6 +1933,27 @@ func newCampaignViewersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, CampaignViewersTable, CampaignViewersPrimaryKey...),
 	)
 }
+func newAudienceEditorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceEditorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, AudienceEditorsTable, AudienceEditorsPrimaryKey...),
+	)
+}
+func newAudienceBlockedGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceBlockedGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, AudienceBlockedGroupsTable, AudienceBlockedGroupsPrimaryKey...),
+	)
+}
+func newAudienceViewersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceViewersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, AudienceViewersTable, AudienceViewersPrimaryKey...),
+	)
+}
 func newProcedureEditorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -2023,6 +2141,13 @@ func newCampaignTargetsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(CampaignTargetsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
+	)
+}
+func newAudienceMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceMembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
 	)
 }
 func newInvitesStep() *sqlgraph.Step {

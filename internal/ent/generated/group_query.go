@@ -14,6 +14,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
@@ -78,6 +80,9 @@ type GroupQuery struct {
 	withCampaignEditors                         *CampaignQuery
 	withCampaignBlockedGroups                   *CampaignQuery
 	withCampaignViewers                         *CampaignQuery
+	withAudienceEditors                         *AudienceQuery
+	withAudienceBlockedGroups                   *AudienceQuery
+	withAudienceViewers                         *AudienceQuery
 	withProcedureEditors                        *ProcedureQuery
 	withProcedureBlockedGroups                  *ProcedureQuery
 	withInternalPolicyEditors                   *InternalPolicyQuery
@@ -105,6 +110,7 @@ type GroupQuery struct {
 	withTasks                                   *TaskQuery
 	withCampaigns                               *CampaignQuery
 	withCampaignTargets                         *CampaignTargetQuery
+	withAudienceMembers                         *AudienceMemberQuery
 	withInvites                                 *InviteQuery
 	withMembers                                 *GroupMembershipQuery
 	withFKs                                     bool
@@ -134,6 +140,9 @@ type GroupQuery struct {
 	withNamedCampaignEditors                    map[string]*CampaignQuery
 	withNamedCampaignBlockedGroups              map[string]*CampaignQuery
 	withNamedCampaignViewers                    map[string]*CampaignQuery
+	withNamedAudienceEditors                    map[string]*AudienceQuery
+	withNamedAudienceBlockedGroups              map[string]*AudienceQuery
+	withNamedAudienceViewers                    map[string]*AudienceQuery
 	withNamedProcedureEditors                   map[string]*ProcedureQuery
 	withNamedProcedureBlockedGroups             map[string]*ProcedureQuery
 	withNamedInternalPolicyEditors              map[string]*InternalPolicyQuery
@@ -159,6 +168,7 @@ type GroupQuery struct {
 	withNamedTasks                              map[string]*TaskQuery
 	withNamedCampaigns                          map[string]*CampaignQuery
 	withNamedCampaignTargets                    map[string]*CampaignTargetQuery
+	withNamedAudienceMembers                    map[string]*AudienceMemberQuery
 	withNamedInvites                            map[string]*InviteQuery
 	withNamedMembers                            map[string]*GroupMembershipQuery
 	// intermediate query (i.e. traversal path).
@@ -740,6 +750,72 @@ func (_q *GroupQuery) QueryCampaignViewers() *CampaignQuery {
 			sqlgraph.From(group.Table, group.FieldID, selector),
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignViewersTable, group.CampaignViewersPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAudienceEditors chains the current query on the "audience_editors" edge.
+func (_q *GroupQuery) QueryAudienceEditors() *AudienceQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AudienceEditorsTable, group.AudienceEditorsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAudienceBlockedGroups chains the current query on the "audience_blocked_groups" edge.
+func (_q *GroupQuery) QueryAudienceBlockedGroups() *AudienceQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AudienceBlockedGroupsTable, group.AudienceBlockedGroupsPrimaryKey...),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAudienceViewers chains the current query on the "audience_viewers" edge.
+func (_q *GroupQuery) QueryAudienceViewers() *AudienceQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, group.AudienceViewersTable, group.AudienceViewersPrimaryKey...),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -1341,6 +1417,28 @@ func (_q *GroupQuery) QueryCampaignTargets() *CampaignTargetQuery {
 	return query
 }
 
+// QueryAudienceMembers chains the current query on the "audience_members" edge.
+func (_q *GroupQuery) QueryAudienceMembers() *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(group.Table, group.FieldID, selector),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, group.AudienceMembersTable, group.AudienceMembersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryInvites chains the current query on the "invites" edge.
 func (_q *GroupQuery) QueryInvites() *InviteQuery {
 	query := (&InviteClient{config: _q.config}).Query()
@@ -1602,6 +1700,9 @@ func (_q *GroupQuery) Clone() *GroupQuery {
 		withCampaignEditors:                    _q.withCampaignEditors.Clone(),
 		withCampaignBlockedGroups:              _q.withCampaignBlockedGroups.Clone(),
 		withCampaignViewers:                    _q.withCampaignViewers.Clone(),
+		withAudienceEditors:                    _q.withAudienceEditors.Clone(),
+		withAudienceBlockedGroups:              _q.withAudienceBlockedGroups.Clone(),
+		withAudienceViewers:                    _q.withAudienceViewers.Clone(),
 		withProcedureEditors:                   _q.withProcedureEditors.Clone(),
 		withProcedureBlockedGroups:             _q.withProcedureBlockedGroups.Clone(),
 		withInternalPolicyEditors:              _q.withInternalPolicyEditors.Clone(),
@@ -1629,6 +1730,7 @@ func (_q *GroupQuery) Clone() *GroupQuery {
 		withTasks:                              _q.withTasks.Clone(),
 		withCampaigns:                          _q.withCampaigns.Clone(),
 		withCampaignTargets:                    _q.withCampaignTargets.Clone(),
+		withAudienceMembers:                    _q.withAudienceMembers.Clone(),
 		withInvites:                            _q.withInvites.Clone(),
 		withMembers:                            _q.withMembers.Clone(),
 		// clone intermediate query.
@@ -1910,6 +2012,39 @@ func (_q *GroupQuery) WithCampaignViewers(opts ...func(*CampaignQuery)) *GroupQu
 		opt(query)
 	}
 	_q.withCampaignViewers = query
+	return _q
+}
+
+// WithAudienceEditors tells the query-builder to eager-load the nodes that are connected to
+// the "audience_editors" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithAudienceEditors(opts ...func(*AudienceQuery)) *GroupQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceEditors = query
+	return _q
+}
+
+// WithAudienceBlockedGroups tells the query-builder to eager-load the nodes that are connected to
+// the "audience_blocked_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithAudienceBlockedGroups(opts ...func(*AudienceQuery)) *GroupQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceBlockedGroups = query
+	return _q
+}
+
+// WithAudienceViewers tells the query-builder to eager-load the nodes that are connected to
+// the "audience_viewers" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithAudienceViewers(opts ...func(*AudienceQuery)) *GroupQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceViewers = query
 	return _q
 }
 
@@ -2210,6 +2345,17 @@ func (_q *GroupQuery) WithCampaignTargets(opts ...func(*CampaignTargetQuery)) *G
 	return _q
 }
 
+// WithAudienceMembers tells the query-builder to eager-load the nodes that are connected to
+// the "audience_members" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithAudienceMembers(opts ...func(*AudienceMemberQuery)) *GroupQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceMembers = query
+	return _q
+}
+
 // WithInvites tells the query-builder to eager-load the nodes that are connected to
 // the "invites" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *GroupQuery) WithInvites(opts ...func(*InviteQuery)) *GroupQuery {
@@ -2317,7 +2463,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		nodes       = []*Group{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [54]bool{
+		loadedTypes = [58]bool{
 			_q.withOwner != nil,
 			_q.withProgramEditors != nil,
 			_q.withProgramBlockedGroups != nil,
@@ -2343,6 +2489,9 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			_q.withCampaignEditors != nil,
 			_q.withCampaignBlockedGroups != nil,
 			_q.withCampaignViewers != nil,
+			_q.withAudienceEditors != nil,
+			_q.withAudienceBlockedGroups != nil,
+			_q.withAudienceViewers != nil,
 			_q.withProcedureEditors != nil,
 			_q.withProcedureBlockedGroups != nil,
 			_q.withInternalPolicyEditors != nil,
@@ -2370,6 +2519,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			_q.withTasks != nil,
 			_q.withCampaigns != nil,
 			_q.withCampaignTargets != nil,
+			_q.withAudienceMembers != nil,
 			_q.withInvites != nil,
 			_q.withMembers != nil,
 		}
@@ -2588,6 +2738,27 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
+	if query := _q.withAudienceEditors; query != nil {
+		if err := _q.loadAudienceEditors(ctx, query, nodes,
+			func(n *Group) { n.Edges.AudienceEditors = []*Audience{} },
+			func(n *Group, e *Audience) { n.Edges.AudienceEditors = append(n.Edges.AudienceEditors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAudienceBlockedGroups; query != nil {
+		if err := _q.loadAudienceBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.Edges.AudienceBlockedGroups = []*Audience{} },
+			func(n *Group, e *Audience) { n.Edges.AudienceBlockedGroups = append(n.Edges.AudienceBlockedGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAudienceViewers; query != nil {
+		if err := _q.loadAudienceViewers(ctx, query, nodes,
+			func(n *Group) { n.Edges.AudienceViewers = []*Audience{} },
+			func(n *Group, e *Audience) { n.Edges.AudienceViewers = append(n.Edges.AudienceViewers, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withProcedureEditors; query != nil {
 		if err := _q.loadProcedureEditors(ctx, query, nodes,
 			func(n *Group) { n.Edges.ProcedureEditors = []*Procedure{} },
@@ -2787,6 +2958,13 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
+	if query := _q.withAudienceMembers; query != nil {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *Group) { n.Edges.AudienceMembers = []*AudienceMember{} },
+			func(n *Group, e *AudienceMember) { n.Edges.AudienceMembers = append(n.Edges.AudienceMembers, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withInvites; query != nil {
 		if err := _q.loadInvites(ctx, query, nodes,
 			func(n *Group) { n.Edges.Invites = []*Invite{} },
@@ -2969,6 +3147,27 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedAudienceEditors {
+		if err := _q.loadAudienceEditors(ctx, query, nodes,
+			func(n *Group) { n.appendNamedAudienceEditors(name) },
+			func(n *Group, e *Audience) { n.appendNamedAudienceEditors(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceBlockedGroups {
+		if err := _q.loadAudienceBlockedGroups(ctx, query, nodes,
+			func(n *Group) { n.appendNamedAudienceBlockedGroups(name) },
+			func(n *Group, e *Audience) { n.appendNamedAudienceBlockedGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceViewers {
+		if err := _q.loadAudienceViewers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedAudienceViewers(name) },
+			func(n *Group, e *Audience) { n.appendNamedAudienceViewers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedProcedureEditors {
 		if err := _q.loadProcedureEditors(ctx, query, nodes,
 			func(n *Group) { n.appendNamedProcedureEditors(name) },
@@ -3141,6 +3340,13 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		if err := _q.loadCampaignTargets(ctx, query, nodes,
 			func(n *Group) { n.appendNamedCampaignTargets(name) },
 			func(n *Group, e *CampaignTarget) { n.appendNamedCampaignTargets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceMembers {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *Group) { n.appendNamedAudienceMembers(name) },
+			func(n *Group, e *AudienceMember) { n.appendNamedAudienceMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4652,6 +4858,189 @@ func (_q *GroupQuery) loadCampaignViewers(ctx context.Context, query *CampaignQu
 		nodes, ok := nids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected "campaign_viewers" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadAudienceEditors(ctx context.Context, query *AudienceQuery, nodes []*Group, init func(*Group), assign func(*Group, *Audience)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.AudienceEditorsTable)
+		s.Join(joinT).On(s.C(audience.FieldID), joinT.C(group.AudienceEditorsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.AudienceEditorsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.AudienceEditorsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Audience](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "audience_editors" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadAudienceBlockedGroups(ctx context.Context, query *AudienceQuery, nodes []*Group, init func(*Group), assign func(*Group, *Audience)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.AudienceBlockedGroupsTable)
+		s.Join(joinT).On(s.C(audience.FieldID), joinT.C(group.AudienceBlockedGroupsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.AudienceBlockedGroupsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.AudienceBlockedGroupsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Audience](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "audience_blocked_groups" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *GroupQuery) loadAudienceViewers(ctx context.Context, query *AudienceQuery, nodes []*Group, init func(*Group), assign func(*Group, *Audience)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Group)
+	nids := make(map[string]map[*Group]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(group.AudienceViewersTable)
+		s.Join(joinT).On(s.C(audience.FieldID), joinT.C(group.AudienceViewersPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(group.AudienceViewersPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(group.AudienceViewersPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Group]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Audience](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "audience_viewers" node returned %v`, n.ID)
 		}
 		for kn := range nodes {
 			assign(kn, n)
@@ -6182,6 +6571,36 @@ func (_q *GroupQuery) loadCampaignTargets(ctx context.Context, query *CampaignTa
 	}
 	return nil
 }
+func (_q *GroupQuery) loadAudienceMembers(ctx context.Context, query *AudienceMemberQuery, nodes []*Group, init func(*Group), assign func(*Group, *AudienceMember)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Group)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(audiencemember.FieldGroupID)
+	}
+	query.Where(predicate.AudienceMember(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(group.AudienceMembersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.GroupID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "group_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *GroupQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes []*Group, init func(*Group), assign func(*Group, *Invite)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Group)
@@ -6710,6 +7129,48 @@ func (_q *GroupQuery) WithNamedCampaignViewers(name string, opts ...func(*Campai
 	return _q
 }
 
+// WithNamedAudienceEditors tells the query-builder to eager-load the nodes that are connected to the "audience_editors"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedAudienceEditors(name string, opts ...func(*AudienceQuery)) *GroupQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceEditors == nil {
+		_q.withNamedAudienceEditors = make(map[string]*AudienceQuery)
+	}
+	_q.withNamedAudienceEditors[name] = query
+	return _q
+}
+
+// WithNamedAudienceBlockedGroups tells the query-builder to eager-load the nodes that are connected to the "audience_blocked_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedAudienceBlockedGroups(name string, opts ...func(*AudienceQuery)) *GroupQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceBlockedGroups == nil {
+		_q.withNamedAudienceBlockedGroups = make(map[string]*AudienceQuery)
+	}
+	_q.withNamedAudienceBlockedGroups[name] = query
+	return _q
+}
+
+// WithNamedAudienceViewers tells the query-builder to eager-load the nodes that are connected to the "audience_viewers"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedAudienceViewers(name string, opts ...func(*AudienceQuery)) *GroupQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceViewers == nil {
+		_q.withNamedAudienceViewers = make(map[string]*AudienceQuery)
+	}
+	_q.withNamedAudienceViewers[name] = query
+	return _q
+}
+
 // WithNamedProcedureEditors tells the query-builder to eager-load the nodes that are connected to the "procedure_editors"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *GroupQuery) WithNamedProcedureEditors(name string, opts ...func(*ProcedureQuery)) *GroupQuery {
@@ -7057,6 +7518,20 @@ func (_q *GroupQuery) WithNamedCampaignTargets(name string, opts ...func(*Campai
 		_q.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery)
 	}
 	_q.withNamedCampaignTargets[name] = query
+	return _q
+}
+
+// WithNamedAudienceMembers tells the query-builder to eager-load the nodes that are connected to the "audience_members"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *GroupQuery) WithNamedAudienceMembers(name string, opts ...func(*AudienceMemberQuery)) *GroupQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceMembers == nil {
+		_q.withNamedAudienceMembers = make(map[string]*AudienceMemberQuery)
+	}
+	_q.withNamedAudienceMembers[name] = query
 	return _q
 }
 

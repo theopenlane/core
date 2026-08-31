@@ -239,6 +239,80 @@ var (
 			},
 		},
 	}
+	// AudienceHistoryColumns holds the columns for the "audience_history" table.
+	AudienceHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "audience_type", Type: field.TypeEnum, Enums: []string{"MANUAL", "DYNAMIC"}, Default: "MANUAL"},
+		{Name: "filters", Type: field.TypeJSON, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+	}
+	// AudienceHistoryTable holds the schema information for the "audience_history" table.
+	AudienceHistoryTable = &schema.Table{
+		Name:       "audience_history",
+		Columns:    AudienceHistoryColumns,
+		PrimaryKey: []*schema.Column{AudienceHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "audiencehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{AudienceHistoryColumns[1]},
+			},
+		},
+	}
+	// AudienceMemberHistoryColumns holds the columns for the "audience_member_history" table.
+	AudienceMemberHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "audience_id", Type: field.TypeString},
+		{Name: "contact_id", Type: field.TypeString, Nullable: true},
+		{Name: "user_id", Type: field.TypeString, Nullable: true},
+		{Name: "group_id", Type: field.TypeString, Nullable: true},
+		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
+		{Name: "subscriber_id", Type: field.TypeString, Nullable: true},
+		{Name: "email", Type: field.TypeString},
+		{Name: "full_name", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+	}
+	// AudienceMemberHistoryTable holds the schema information for the "audience_member_history" table.
+	AudienceMemberHistoryTable = &schema.Table{
+		Name:       "audience_member_history",
+		Columns:    AudienceMemberHistoryColumns,
+		PrimaryKey: []*schema.Column{AudienceMemberHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "audiencememberhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{AudienceMemberHistoryColumns[1]},
+			},
+		},
+	}
 	// CampaignHistoryColumns holds the columns for the "campaign_history" table.
 	CampaignHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3105,6 +3179,8 @@ var (
 		AssessmentHistoryTable,
 		AssessmentResponseHistoryTable,
 		AssetHistoryTable,
+		AudienceHistoryTable,
+		AudienceMemberHistoryTable,
 		CampaignHistoryTable,
 		CampaignTargetHistoryTable,
 		ContactHistoryTable,
@@ -3182,6 +3258,12 @@ func init() {
 	}
 	AssetHistoryTable.Annotation = &entsql.Annotation{
 		Table: "asset_history",
+	}
+	AudienceHistoryTable.Annotation = &entsql.Annotation{
+		Table: "audience_history",
+	}
+	AudienceMemberHistoryTable.Annotation = &entsql.Annotation{
+		Table: "audience_member_history",
 	}
 	CampaignHistoryTable.Annotation = &entsql.Annotation{
 		Table: "campaign_history",

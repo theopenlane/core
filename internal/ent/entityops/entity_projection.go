@@ -185,6 +185,32 @@ type AssetProjection struct {
 	Website                     string           `json:"website,omitempty"`
 }
 
+// AudienceMemberProjection is the flat, CEL- and jsonschema-facing view of a AudienceMember: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.AudienceMember whose edge graph cannot be reflected
+type AudienceMemberProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string                 `json:"id,omitempty"`
+	AudienceID            string                 `json:"audience_id,omitempty"`
+	ContactID             string                 `json:"contact_id,omitempty"`
+	CreatedAt             time.Time              `json:"created_at,omitempty"`
+	CreatedBy             string                 `json:"created_by,omitempty"`
+	DisplayID             string                 `json:"display_id,omitempty"`
+	Email                 string                 `json:"email,omitempty"`
+	FullName              string                 `json:"full_name,omitempty"`
+	GroupID               string                 `json:"group_id,omitempty"`
+	IdentityHolderID      string                 `json:"identity_holder_id,omitempty"`
+	Metadata              map[string]interface{} `json:"metadata,omitempty"`
+	OwnerID               string                 `json:"owner_id,omitempty"`
+	SubscriberID          string                 `json:"subscriber_id,omitempty"`
+	Tags                  []string               `json:"tags,omitempty"`
+	UpdatedAt             time.Time              `json:"updated_at,omitempty"`
+	UpdatedBy             string                 `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string                 `json:"updated_by_impersonator,omitempty"`
+	UserID                string                 `json:"user_id,omitempty"`
+}
+
 // CampaignProjection is the flat, CEL- and jsonschema-facing view of a Campaign: its
 // readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
 // names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
