@@ -13,6 +13,8 @@ import (
 
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/v2/fga/modelversion"
+
 	"github.com/theopenlane/utils/cache"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -91,6 +93,11 @@ func serve(ctx context.Context) error {
 	// setup Authz connection
 	// this must come before the database setup because the FGA Client
 	// is used as an ent dependency
+	so.Config.Settings.Authz.ModelMatcher, err = modelversion.Matcher(ctx)
+	if err != nil {
+		return err
+	}
+
 	fgaClient, err = fgax.CreateFGAClientWithStore(ctx, so.Config.Settings.Authz)
 	if err != nil {
 		return err
