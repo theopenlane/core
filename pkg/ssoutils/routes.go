@@ -3,35 +3,36 @@ package ssoutils
 import (
 	"fmt"
 	"net/url"
+	"path"
 
 	echo "github.com/theopenlane/echox"
 )
 
 // SSOLogin returns the path for the SSO login route with the organization ID query parameter
 func SSOLogin(e *echo.Echo, orgID string) string {
-	path := "/v1/sso/login"
+	route := "/v1/sso/login"
 
 	if e != nil {
 		if p, err := e.Router().Routes().Reverse("SSOLogin"); err == nil {
-			path = p
+			route = path.Join("/", p)
 		}
 	}
 
 	if orgID == "" {
-		return path
+		return route
 	}
 
 	q := url.Values{}
 	q.Set("organization_id", orgID)
 
-	return fmt.Sprintf("%s?%s", path, q.Encode())
+	return fmt.Sprintf("%s?%s", route, q.Encode())
 }
 
 // SSOCallback returns the path for the SSO callback route
 func SSOCallback(e *echo.Echo) string {
 	if e != nil {
 		if p, err := e.Router().Routes().Reverse("SSOCallback"); err == nil {
-			return p
+			return path.Join("/", p)
 		}
 	}
 
@@ -40,11 +41,11 @@ func SSOCallback(e *echo.Echo) string {
 
 // SSOTokenAuthorize returns the path for the SSO token authorization route with token and org parameters
 func SSOTokenAuthorize(e *echo.Echo, orgID, tokenID, tokenType string) string {
-	path := "/v1/sso/token/authorize"
+	route := "/v1/sso/token/authorize"
 
 	if e != nil {
 		if p, err := e.Router().Routes().Reverse("SSOTokenAuthorize"); err == nil {
-			path = p
+			route = path.Join("/", p)
 		}
 	}
 
@@ -63,17 +64,17 @@ func SSOTokenAuthorize(e *echo.Echo, orgID, tokenID, tokenType string) string {
 	}
 
 	if len(q) == 0 {
-		return path
+		return route
 	}
 
-	return fmt.Sprintf("%s?%s", path, q.Encode())
+	return fmt.Sprintf("%s?%s", route, q.Encode())
 }
 
 // SSOTokenCallback returns the path for the SSO token callback route
 func SSOTokenCallback(e *echo.Echo) string {
 	if e != nil {
 		if p, err := e.Router().Routes().Reverse("SSOTokenCallback"); err == nil {
-			return p
+			return path.Join("/", p)
 		}
 	}
 
