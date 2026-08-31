@@ -111,7 +111,7 @@ require (
 	github.com/theopenlane/riverboat v0.13.3
 	github.com/theopenlane/utils v0.7.1
 	github.com/tmc/langchaingo v0.1.14
-	github.com/urfave/cli/v3 v3.10.1
+	github.com/urfave/cli/v3 v3.11.0
 	github.com/vektah/gqlparser/v2 v2.5.36
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/yuin/goldmark v1.8.5
