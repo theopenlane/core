@@ -10,6 +10,7 @@ contents:
     - base/task.fga
 
     - generated/crud.fga
+    - generated/version.fga
 
     - compliance/controls.fga
     - compliance/program.fga

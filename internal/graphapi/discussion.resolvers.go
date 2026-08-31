@@ -166,6 +166,10 @@ func (r *createDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 		return rout.NewMissingRequiredFieldError("owner_id")
 	}
 
+	if err := setParentObjectIDInInput(ctx, data); err != nil {
+		return err
+	}
+
 	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
 	if err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "comment"})
