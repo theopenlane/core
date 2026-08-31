@@ -94,7 +94,7 @@ type Config struct {
 // Backfill configures one-time startup data backfill routines that populate fields introduced by recent
 // migrations for organizations and memberships that pre-date them
 type Backfill struct {
-	// Enabled runs the backfill routines on server startup
+	// Enabled runs the backfill routines on server startup, this only setups up the main job, all configured backfills will run based on their settings
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 }
 

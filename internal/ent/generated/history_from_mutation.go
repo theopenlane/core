@@ -7639,6 +7639,10 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStorageProvider(storageProvider)
 	}
 
+	if backupState, exists := m.BackupState(); exists {
+		create = create.SetBackupState(backupState)
+	}
+
 	if lastAccessedAt, exists := m.LastAccessedAt(); exists {
 		create = create.SetNillableLastAccessedAt(&lastAccessedAt)
 	}
@@ -7887,6 +7891,12 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStorageProvider(file.StorageProvider)
 		}
 
+		if backupState, exists := m.BackupState(); exists {
+			create = create.SetBackupState(backupState)
+		} else {
+			create = create.SetBackupState(file.BackupState)
+		}
+
 		if lastAccessedAt, exists := m.LastAccessedAt(); exists {
 			create = create.SetNillableLastAccessedAt(&lastAccessedAt)
 		} else {
@@ -7966,6 +7976,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetMetadata(file.Metadata).
 			SetStorageRegion(file.StorageRegion).
 			SetStorageProvider(file.StorageProvider).
+			SetBackupState(file.BackupState).
 			SetNillableLastAccessedAt(file.LastAccessedAt).
 			Save(ctx)
 		if err != nil {

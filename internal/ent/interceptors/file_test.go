@@ -161,7 +161,7 @@ func newObjectManager(t *testing.T, provider storage.Provider) *objects.Service 
 	clientService := eddy.NewClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions](pool)
 
 	builder := &eddy.BuilderFunc[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
-		Type: string(provider.ProviderType()),
+		Type: provider.ProviderType().String(),
 		Func: func(context.Context, storage.ProviderCredentials, *storage.ProviderOptions) (storage.Provider, error) {
 			return provider, nil
 		},

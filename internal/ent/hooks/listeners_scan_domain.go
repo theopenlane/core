@@ -16,6 +16,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
+// init registers the domain scan listeners so gala setup picks them up automatically
+func init() { registerListeners(DomainScanListeners) }
+
 // DomainScanListeners submits pending domain scans and requests scans for changed
 // organization domains
 func DomainScanListeners() []gala.Registration {

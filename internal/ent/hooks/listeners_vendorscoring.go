@@ -13,6 +13,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the vendor scoring listeners so gala setup picks them up automatically
+func init() { registerListeners(VendorScoringListeners) }
+
 // VendorScoringListeners recomputes entity risk aggregates when vendor scoring configuration changes
 func VendorScoringListeners() []gala.Registration {
 	return []gala.Registration{

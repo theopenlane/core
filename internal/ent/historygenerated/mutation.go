@@ -45086,6 +45086,7 @@ type FileHistoryMutation struct {
 	metadata                *map[string]interface{}
 	storage_region          *string
 	storage_provider        *string
+	backup_state            *models.FileBackupState
 	last_accessed_at        *time.Time
 	clearedFields           map[string]struct{}
 	done                    bool
@@ -47052,6 +47053,55 @@ func (m *FileHistoryMutation) ResetStorageProvider() {
 	delete(m.clearedFields, filehistory.FieldStorageProvider)
 }
 
+// SetBackupState sets the "backup_state" field.
+func (m *FileHistoryMutation) SetBackupState(mbs models.FileBackupState) {
+	m.backup_state = &mbs
+}
+
+// BackupState returns the value of the "backup_state" field in the mutation.
+func (m *FileHistoryMutation) BackupState() (r models.FileBackupState, exists bool) {
+	v := m.backup_state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBackupState returns the old "backup_state" field's value of the FileHistory entity.
+// If the FileHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileHistoryMutation) OldBackupState(ctx context.Context) (v models.FileBackupState, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBackupState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBackupState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBackupState: %w", err)
+	}
+	return oldValue.BackupState, nil
+}
+
+// ClearBackupState clears the value of the "backup_state" field.
+func (m *FileHistoryMutation) ClearBackupState() {
+	m.backup_state = nil
+	m.clearedFields[filehistory.FieldBackupState] = struct{}{}
+}
+
+// BackupStateCleared returns if the "backup_state" field was cleared in this mutation.
+func (m *FileHistoryMutation) BackupStateCleared() bool {
+	_, ok := m.clearedFields[filehistory.FieldBackupState]
+	return ok
+}
+
+// ResetBackupState resets all changes to the "backup_state" field.
+func (m *FileHistoryMutation) ResetBackupState() {
+	m.backup_state = nil
+	delete(m.clearedFields, filehistory.FieldBackupState)
+}
+
 // SetLastAccessedAt sets the "last_accessed_at" field.
 func (m *FileHistoryMutation) SetLastAccessedAt(t time.Time) {
 	m.last_accessed_at = &t
@@ -47135,7 +47185,7 @@ func (m *FileHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 39)
+	fields := make([]string, 0, 40)
 	if m.history_time != nil {
 		fields = append(fields, filehistory.FieldHistoryTime)
 	}
@@ -47250,6 +47300,9 @@ func (m *FileHistoryMutation) Fields() []string {
 	if m.storage_provider != nil {
 		fields = append(fields, filehistory.FieldStorageProvider)
 	}
+	if m.backup_state != nil {
+		fields = append(fields, filehistory.FieldBackupState)
+	}
 	if m.last_accessed_at != nil {
 		fields = append(fields, filehistory.FieldLastAccessedAt)
 	}
@@ -47337,6 +47390,8 @@ func (m *FileHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.StorageRegion()
 	case filehistory.FieldStorageProvider:
 		return m.StorageProvider()
+	case filehistory.FieldBackupState:
+		return m.BackupState()
 	case filehistory.FieldLastAccessedAt:
 		return m.LastAccessedAt()
 	}
@@ -47424,6 +47479,8 @@ func (m *FileHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldStorageRegion(ctx)
 	case filehistory.FieldStorageProvider:
 		return m.OldStorageProvider(ctx)
+	case filehistory.FieldBackupState:
+		return m.OldBackupState(ctx)
 	case filehistory.FieldLastAccessedAt:
 		return m.OldLastAccessedAt(ctx)
 	}
@@ -47701,6 +47758,13 @@ func (m *FileHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStorageProvider(v)
 		return nil
+	case filehistory.FieldBackupState:
+		v, ok := value.(models.FileBackupState)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBackupState(v)
+		return nil
 	case filehistory.FieldLastAccessedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -47864,6 +47928,9 @@ func (m *FileHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(filehistory.FieldStorageProvider) {
 		fields = append(fields, filehistory.FieldStorageProvider)
 	}
+	if m.FieldCleared(filehistory.FieldBackupState) {
+		fields = append(fields, filehistory.FieldBackupState)
+	}
 	if m.FieldCleared(filehistory.FieldLastAccessedAt) {
 		fields = append(fields, filehistory.FieldLastAccessedAt)
 	}
@@ -47979,6 +48046,9 @@ func (m *FileHistoryMutation) ClearField(name string) error {
 		return nil
 	case filehistory.FieldStorageProvider:
 		m.ClearStorageProvider()
+		return nil
+	case filehistory.FieldBackupState:
+		m.ClearBackupState()
 		return nil
 	case filehistory.FieldLastAccessedAt:
 		m.ClearLastAccessedAt()
@@ -48104,6 +48174,9 @@ func (m *FileHistoryMutation) ResetField(name string) error {
 		return nil
 	case filehistory.FieldStorageProvider:
 		m.ResetStorageProvider()
+		return nil
+	case filehistory.FieldBackupState:
+		m.ResetBackupState()
 		return nil
 	case filehistory.FieldLastAccessedAt:
 		m.ResetLastAccessedAt()

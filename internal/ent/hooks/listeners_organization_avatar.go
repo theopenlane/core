@@ -14,6 +14,10 @@ import (
 	"github.com/theopenlane/httpsling/httpclient"
 )
 
+// init registers the organization avatar listeners with their default options so gala
+// setup picks them up automatically
+func init() { registerListeners(func() []gala.Registration { return OrganizationAvatarListeners() }) }
+
 const avatarFetchTimeout = 5 * time.Second
 
 // OrganizationAvatarListenerOption customizes avatar discovery

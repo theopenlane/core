@@ -194,6 +194,7 @@ func buildStorageFile(fileEntity *ent.File) *storagetypes.File {
 				KnownProvider: storagetypes.ProviderType(fileEntity.StorageProvider),
 			},
 		},
+		BackupLocation: fileEntity.BackupState.Location(),
 	}
 
 	return storFile

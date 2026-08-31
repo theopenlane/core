@@ -488,6 +488,8 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup: &{false  false }
       # -- R2 provider configuration
       r2:
         # -- Enabled indicates if this provider is enabled
@@ -506,6 +508,8 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup: &{false  false }
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled
@@ -524,6 +528,8 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup: &{false  false }
       # -- Database provider configuration
       database:
         # -- Enabled indicates if this provider is enabled
@@ -542,6 +548,8 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup: &{false  false }
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
     # -- Enabled determines if the entitlements service is enabled
@@ -702,7 +710,7 @@ coreConfiguration:
     endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
   # -- Backfill contains configuration for one-time startup data backfill routines
   backfill:
-    # -- Enabled runs the backfill routines on server startup
+    # -- Enabled runs the backfill routines on server startup, this only setups up the main job, all configured backfills will run based on their settings
     enabled: false  # @schema type:boolean; default:false
 
 # -- External Secrets configuration

@@ -9,6 +9,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the trust center watermark listeners so gala setup picks them up automatically
+func init() { registerListeners(TrustCenterWatermarkListeners) }
+
 // TrustCenterWatermarkListeners enqueues watermarking jobs when trust center document files change
 func TrustCenterWatermarkListeners() []gala.Registration {
 	return []gala.Registration{

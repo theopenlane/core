@@ -442,3 +442,123 @@ providers:
 	assert.Equal(t, "ol-trust-center", result.Config.Bucket, "trust center documents go to R2 as expected")
 	assert.Equal(t, "cloudflarer2", result.Builder.ProviderType(), "but provider reports 'cloudflarer2' type - validateProviderType would catch this mismatch")
 }
+
+// backupRuleResolver wires the rule chain for a config and returns the resolver
+func backupRuleResolver(config storage.ProviderConfig, builders providerBuilders) *eddy.Resolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions] {
+	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+
+	configureProviderRules(
+		resolver,
+		WithProviderConfig(config),
+		WithProviderBuilders(builders),
+		WithRuntimeOptions(serviceOptions{}),
+	)
+
+	return resolver
+}
+
+func TestBackupRuleResolvesDifferentProvider(t *testing.T) {
+	r2Builder := &stubBuilder{providerType: "r2"}
+	config := storage.ProviderConfig{
+		Providers: storage.Providers{
+			S3: storage.ProviderConfigs{
+				Enabled: true,
+				Bucket:  "live-bucket",
+				Region:  "us-east-1",
+				Backup: &storage.BackupConfig{
+					Enabled:  true,
+					Provider: storage.R2Provider,
+				},
+			},
+			R2: storage.ProviderConfigs{
+				Enabled: true,
+				Bucket:  "r2-bucket",
+				Region:  "auto",
+			},
+		},
+	}
+
+	resolver := backupRuleResolver(config, providerBuilders{
+		s3:   &stubBuilder{providerType: "s3"},
+		r2:   r2Builder,
+		disk: &stubBuilder{providerType: "disk"},
+		db:   &stubBuilder{providerType: "db"},
+	})
+
+	ctx := objects.WithBackupSourceHint(context.Background(), storage.S3Provider)
+
+	option := resolver.Resolve(ctx)
+	assert.True(t, option.IsPresent(), "expected backup rule to resolve")
+
+	result := option.MustGet()
+	assert.Equal(t, r2Builder, result.Builder)
+	assert.Equal(t, "r2-bucket-backup", result.Config.Bucket)
+
+	marker, ok := result.Config.Extra(storage.BackupTargetExtraKey)
+	assert.True(t, ok, "expected the resolved backup to carry its marker")
+	assert.Equal(t, true, marker)
+}
+
+func TestBackupRuleResolvesDifferentRegionOnSameProvider(t *testing.T) {
+	s3Builder := &stubBuilder{providerType: "s3"}
+	config := storage.ProviderConfig{
+		Providers: storage.Providers{
+			S3: storage.ProviderConfigs{
+				Enabled: true,
+				Bucket:  "live-bucket",
+				Region:  "us-east-1",
+				Backup: &storage.BackupConfig{
+					Enabled: true,
+					Region:  "us-west-2",
+				},
+			},
+		},
+	}
+
+	resolver := backupRuleResolver(config, providerBuilders{
+		s3:   s3Builder,
+		r2:   &stubBuilder{providerType: "r2"},
+		disk: &stubBuilder{providerType: "disk"},
+		db:   &stubBuilder{providerType: "db"},
+	})
+
+	ctx := objects.WithBackupSourceHint(context.Background(), storage.S3Provider)
+
+	option := resolver.Resolve(ctx)
+	assert.True(t, option.IsPresent(), "expected backup rule to resolve")
+
+	result := option.MustGet()
+	assert.Equal(t, s3Builder, result.Builder)
+	assert.Equal(t, "live-bucket-backup", result.Config.Bucket)
+	assert.Equal(t, "us-west-2", result.Config.Region)
+
+	// the live provider keeps its own region, so the two clients never share a configuration
+	liveOption := resolver.Resolve(objects.WithKnownProviderHint(context.Background(), storage.S3Provider))
+	assert.True(t, liveOption.IsPresent())
+	assert.Equal(t, "us-east-1", liveOption.MustGet().Config.Region)
+	assert.Equal(t, "live-bucket", liveOption.MustGet().Config.Bucket)
+}
+
+func TestBackupRuleAbsentWithoutBackupConfig(t *testing.T) {
+	config := storage.ProviderConfig{
+		Providers: storage.Providers{
+			S3: storage.ProviderConfigs{Enabled: true, Bucket: "live-bucket"},
+		},
+	}
+
+	resolver := backupRuleResolver(config, providerBuilders{
+		s3:   &stubBuilder{providerType: "s3"},
+		r2:   &stubBuilder{providerType: "r2"},
+		disk: &stubBuilder{providerType: "disk"},
+		db:   &stubBuilder{providerType: "db"},
+	})
+
+	ctx := objects.WithBackupSourceHint(context.Background(), storage.S3Provider)
+
+	// the default rule still answers, but without the marker, so a caller never mistakes the live
+	// provider for a backup destination
+	result := resolver.Resolve(ctx).MustGet()
+	_, ok := result.Config.Extra(storage.BackupTargetExtraKey)
+	assert.False(t, ok)
+	assert.Equal(t, "live-bucket", result.Config.Bucket)
+}

@@ -129,6 +129,63 @@ type ProviderConfigs struct {
 	BaseURL string `json:"baseurl" koanf:"baseurl" default:"http://localhost:17608/v1/files"`
 	// Credentials contains the credentials for accessing the provider
 	Credentials ProviderCredentials `json:"credentials" koanf:"credentials"`
+	// Backup optionally replicates this provider's objects to another provider asynchronously
+	Backup *BackupConfig `json:"backup" koanf:"backup"`
+}
+
+// BackupBucketSuffix is appended to the destination provider's bucket when writing backups, so
+// replicated objects never share a bucket with the destination's live objects
+const BackupBucketSuffix = "-backup"
+
+// BackupConfig defines an asynchronous replication target for a provider's objects. It only
+// names whether backups run and where they go; the destination provider's own configuration
+// supplies the region, endpoint, and credentials
+type BackupConfig struct {
+	// Enabled indicates if this backup target is enabled
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// Provider names the destination backend type, e.g. s3; empty replicates to the source
+	// provider itself, which writes the backup to the suffixed bucket alongside the live one
+	Provider ProviderType `json:"provider" koanf:"provider"`
+	// ReadFromBackup serves reads from this backup target instead of the source provider, intended
+	// to be enabled during a disaster recovery event when the source provider storage is lost
+	ReadFromBackup bool `json:"readfrombackup" koanf:"readfrombackup" default:"false"`
+	// Region optionally overrides the destination provider's region, so a backup can replicate
+	// into a region other than the one holding the live objects
+	Region string `json:"region" koanf:"region"`
+}
+
+// ByType returns each provider configuration keyed by its provider type
+func (p Providers) ByType() map[ProviderType]ProviderConfigs {
+	return map[ProviderType]ProviderConfigs{
+		S3Provider:       p.S3,
+		R2Provider:       p.R2,
+		DiskProvider:     p.Disk,
+		DatabaseProvider: p.Database,
+	}
+}
+
+// BackupDestination returns the provider type this provider's backups are written to and whether
+// an enabled backup is configured for it. A backup with no provider named replicates to the
+// source itself, which writes to the suffixed bucket alongside the live one
+func (c ProviderConfigs) BackupDestination(source ProviderType) (ProviderType, bool) {
+	if !c.Enabled || c.Backup == nil || !c.Backup.Enabled {
+		return "", false
+	}
+
+	if c.Backup.Provider == "" {
+		return source, true
+	}
+
+	return c.Backup.Provider, true
+}
+
+// BackupBucket returns the bucket backups are written to for the given destination bucket
+func BackupBucket(bucket string) string {
+	if bucket == "" {
+		return ""
+	}
+
+	return bucket + BackupBucketSuffix
 }
 
 // ProviderCredentials contains credentials for a storage provider
@@ -329,6 +386,10 @@ func WithLocalURL(url string) ProviderOption {
 		p.LocalURL = url
 	}
 }
+
+// BackupTargetExtraKey marks provider options that were built from a backup destination
+// configuration, so a caller can tell a resolved backup apart from a live provider
+const BackupTargetExtraKey = "backup_target"
 
 // WithExtra attaches provider specific metadata
 func WithExtra(key string, value any) ProviderOption {

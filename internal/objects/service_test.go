@@ -24,9 +24,23 @@ type fakeProvider struct {
 	presignCallCount int
 	uploadMetadata   *storagetypes.UploadedFileMetadata
 	uploadErr        error
+	uploadCallCount  int
+	lastUploadOpts   *storagetypes.UploadFileOptions
+	downloadMetadata *storagetypes.DownloadedFileMetadata
+	downloadErr      error
+	lastDownloadFile *storagetypes.File
+	lastPresignFile  *storagetypes.File
+	lastDeleteFile   *storagetypes.File
+	deleteErr        error
+	existsResult     bool
+	existsErr        error
+	lastExistsFile   *storagetypes.File
 }
 
-func (f *fakeProvider) Upload(context.Context, io.Reader, *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
+func (f *fakeProvider) Upload(_ context.Context, _ io.Reader, opts *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
+	f.uploadCallCount++
+	f.lastUploadOpts = opts
+
 	if f.uploadErr != nil {
 		return nil, f.uploadErr
 	}
@@ -36,24 +50,35 @@ func (f *fakeProvider) Upload(context.Context, io.Reader, *storagetypes.UploadFi
 	return &storagetypes.UploadedFileMetadata{}, nil
 }
 
-func (f *fakeProvider) Download(context.Context, *storagetypes.File, *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
-	return nil, nil
+func (f *fakeProvider) Download(_ context.Context, file *storagetypes.File, _ *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
+	f.lastDownloadFile = file
+
+	if f.downloadErr != nil {
+		return nil, f.downloadErr
+	}
+	return f.downloadMetadata, nil
 }
 
-func (f *fakeProvider) Delete(context.Context, *storagetypes.File, *storagetypes.DeleteFileOptions) error {
-	return nil
+func (f *fakeProvider) Delete(_ context.Context, file *storagetypes.File, _ *storagetypes.DeleteFileOptions) error {
+	f.lastDeleteFile = file
+
+	return f.deleteErr
 }
 
-func (f *fakeProvider) GetPresignedURL(context.Context, *storagetypes.File, *storagetypes.PresignedURLOptions) (string, error) {
+func (f *fakeProvider) GetPresignedURL(_ context.Context, file *storagetypes.File, _ *storagetypes.PresignedURLOptions) (string, error) {
 	f.presignCallCount++
+	f.lastPresignFile = file
+
 	if f.presignErr != nil {
 		return "", f.presignErr
 	}
 	return f.presignURL, nil
 }
 
-func (f *fakeProvider) Exists(context.Context, *storagetypes.File) (bool, error) {
-	return true, nil
+func (f *fakeProvider) Exists(_ context.Context, file *storagetypes.File) (bool, error) {
+	f.lastExistsFile = file
+
+	return f.existsResult, f.existsErr
 }
 
 func (f *fakeProvider) GetScheme() *string {

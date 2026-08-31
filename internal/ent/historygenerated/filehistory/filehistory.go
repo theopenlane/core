@@ -95,6 +95,8 @@ const (
 	FieldStorageRegion = "storage_region"
 	// FieldStorageProvider holds the string denoting the storage_provider field in the database.
 	FieldStorageProvider = "storage_provider"
+	// FieldBackupState holds the string denoting the backup_state field in the database.
+	FieldBackupState = "backup_state"
 	// FieldLastAccessedAt holds the string denoting the last_accessed_at field in the database.
 	FieldLastAccessedAt = "last_accessed_at"
 	// Table holds the table name of the filehistory in the database.
@@ -142,6 +144,7 @@ var Columns = []string{
 	FieldMetadata,
 	FieldStorageRegion,
 	FieldStorageProvider,
+	FieldBackupState,
 	FieldLastAccessedAt,
 }
 
