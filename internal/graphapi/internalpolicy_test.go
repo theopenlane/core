@@ -1031,14 +1031,14 @@ func TestMutationUpdateBulkInternalPolicy(t *testing.T) {
 }
 
 func TestQueryInternalPolicyDiscussionComments(t *testing.T) {
-	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	internalPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	ownerComment := "comment from the policy owner"
 	memberComment := "comment from the view only member"
 	adminComment := "comment from the org admin"
 
 	// the owner starts the discussion with the first comment
-	resp, err := suite.client.api.UpdateInternalPolicy(sharedTestUser1.UserCtx, internalPolicy.ID, testclient.UpdateInternalPolicyInput{
+	resp, err := suite.Client.API.UpdateInternalPolicy(th.SharedTestUser1.UserCtx, internalPolicy.ID, testclient.UpdateInternalPolicyInput{
 		AddDiscussion: &testclient.CreateDiscussionInput{
 			AddComment: &testclient.CreateNoteInput{
 				Text: ownerComment,
@@ -1055,10 +1055,10 @@ func TestQueryInternalPolicyDiscussionComments(t *testing.T) {
 		ctx     context.Context
 		comment string
 	}{
-		{ctx: sharedViewOnlyUser.UserCtx, comment: memberComment},
-		{ctx: sharedAdminUser.UserCtx, comment: adminComment},
+		{ctx: th.SharedViewOnlyUser.UserCtx, comment: memberComment},
+		{ctx: th.SharedAdminUser.UserCtx, comment: adminComment},
 	} {
-		_, err = suite.client.api.UpdateInternalPolicy(tc.ctx, internalPolicy.ID, testclient.UpdateInternalPolicyInput{
+		_, err = suite.Client.API.UpdateInternalPolicy(tc.ctx, internalPolicy.ID, testclient.UpdateInternalPolicyInput{
 			UpdateDiscussion: &testclient.UpdateDiscussionsInput{
 				ID: discussionID,
 				Input: &testclient.UpdateDiscussionInput{
@@ -1073,7 +1073,7 @@ func TestQueryInternalPolicyDiscussionComments(t *testing.T) {
 
 	// the view only member can see the policy, so they should see every comment on the
 	// discussion, not just the ones they authored
-	policyResp, err := suite.client.api.GetInternalPolicyByID(sharedViewOnlyUser.UserCtx, internalPolicy.ID)
+	policyResp, err := suite.Client.API.GetInternalPolicyByID(th.SharedViewOnlyUser.UserCtx, internalPolicy.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, is.Len(policyResp.InternalPolicy.Discussions.Edges, 1))
 
@@ -1087,14 +1087,14 @@ func TestQueryInternalPolicyDiscussionComments(t *testing.T) {
 	assert.Check(t, is.Contains(comments, memberComment))
 	assert.Check(t, is.Contains(comments, adminComment))
 
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: internalPolicy.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: internalPolicy.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationResolveInternalPolicyDiscussion(t *testing.T) {
-	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	internalPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// the org admin starts a discussion on the policy
-	resp, err := suite.client.api.UpdateInternalPolicy(sharedAdminUser.UserCtx, internalPolicy.ID, testclient.UpdateInternalPolicyInput{
+	resp, err := suite.Client.API.UpdateInternalPolicy(th.SharedAdminUser.UserCtx, internalPolicy.ID, testclient.UpdateInternalPolicyInput{
 		AddDiscussion: &testclient.CreateDiscussionInput{
 			AddComment: &testclient.CreateNoteInput{
 				Text: "this thread should be resolvable by its author",
@@ -1107,20 +1107,20 @@ func TestMutationResolveInternalPolicyDiscussion(t *testing.T) {
 	discussionID := resp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node.ID
 
 	// org admins can edit the policy, so they should be able to resolve a discussion on it
-	resolved, err := suite.client.api.UpdateDiscussion(sharedAdminUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
+	resolved, err := suite.Client.API.UpdateDiscussion(th.SharedAdminUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
 		IsResolved: lo.ToPtr(true),
 	})
 	assert.NilError(t, err)
 	assert.Check(t, resolved.UpdateDiscussion.Discussion.IsResolved)
 
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: internalPolicy.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: internalPolicy.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationResolveOwnInternalPolicyDiscussion(t *testing.T) {
-	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	internalPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// a view only member starts a discussion on a policy they cannot edit
-	resp, err := suite.client.api.UpdateInternalPolicy(sharedViewOnlyUser.UserCtx, internalPolicy.ID, testclient.UpdateInternalPolicyInput{
+	resp, err := suite.Client.API.UpdateInternalPolicy(th.SharedViewOnlyUser.UserCtx, internalPolicy.ID, testclient.UpdateInternalPolicyInput{
 		AddDiscussion: &testclient.CreateDiscussionInput{
 			AddComment: &testclient.CreateNoteInput{
 				Text: "a member should be able to resolve their own thread",
@@ -1133,17 +1133,17 @@ func TestMutationResolveOwnInternalPolicyDiscussion(t *testing.T) {
 	discussionID := resp.UpdateInternalPolicy.InternalPolicy.Discussions.Edges[0].Node.ID
 
 	// the creator owns the discussion, so they can resolve it without edit access to the policy
-	resolved, err := suite.client.api.UpdateDiscussion(sharedViewOnlyUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
+	resolved, err := suite.Client.API.UpdateDiscussion(th.SharedViewOnlyUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
 		IsResolved: lo.ToPtr(true),
 	})
 	assert.NilError(t, err)
 	assert.Check(t, resolved.UpdateDiscussion.Discussion.IsResolved)
 
 	// another user with only view access cannot resolve someone else's thread
-	_, err = suite.client.api.UpdateDiscussion(sharedAuditorUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
+	_, err = suite.Client.API.UpdateDiscussion(th.SharedAuditorUser.UserCtx, discussionID, testclient.UpdateDiscussionInput{
 		IsResolved: lo.ToPtr(false),
 	})
-	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+	assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: internalPolicy.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: internalPolicy.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

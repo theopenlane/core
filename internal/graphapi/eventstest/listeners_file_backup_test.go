@@ -1,6 +1,6 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"bytes"
@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/core/v2/internal/graphapi"
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 	coreutils "github.com/theopenlane/core/v2/internal/testutils"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	mock_shared "github.com/theopenlane/core/v2/pkg/objects/mocks"
@@ -27,24 +28,24 @@ import (
 const backupSourceProvider = storagetypes.ProviderType("mock")
 
 func TestFileBackupListener(t *testing.T) {
-	user := suite.userBuilder(context.Background(), t, models.CatalogBaseModule)
-	ctx := setContext(user.UserCtx, suite.client.db)
+	user := suite.UserBuilder(context.Background(), t, models.CatalogBaseModule)
+	ctx := th.SetContext(user.UserCtx, suite.Client.DB)
 
-	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.FileBackupListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.GalaRuntime, hooks.FileBackupListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
 	// the listener reads the object manager off the ent client, so swap in one with a backup target
-	original := suite.client.db.ObjectManager
+	original := suite.Client.DB.ObjectManager
 
 	t.Cleanup(func() {
-		suite.client.db.ObjectManager = original
+		suite.Client.DB.ObjectManager = original
 	})
 
 	newFile := func(t *testing.T, name string, state *models.FileBackupState) *generated.File {
 		t.Helper()
 
-		create := suite.client.db.File.Create()
+		create := suite.Client.DB.File.Create()
 		if state != nil {
 			create = create.SetBackupState(*state)
 		}
@@ -65,7 +66,7 @@ func TestFileBackupListener(t *testing.T) {
 	backupState := func(t *testing.T, id string) models.FileBackupState {
 		t.Helper()
 
-		f, err := suite.client.db.File.Get(ctx, id)
+		f, err := suite.Client.DB.File.Get(ctx, id)
 		assert.NilError(t, err)
 
 		return f.BackupState
@@ -85,7 +86,7 @@ func TestFileBackupListener(t *testing.T) {
 		svc, source, backup, err := coreutils.MockStorageServiceWithBackup(t, backupSourceProvider, false)
 		assert.NilError(t, err)
 
-		suite.client.db.ObjectManager = svc
+		suite.Client.DB.ObjectManager = svc
 
 		body := []byte("backup me")
 		expectDownload(source, body)
@@ -125,7 +126,7 @@ func TestFileBackupListener(t *testing.T) {
 		svc, source, backup, err := coreutils.MockStorageServiceWithBackup(t, backupSourceProvider, false)
 		assert.NilError(t, err)
 
-		suite.client.db.ObjectManager = svc
+		suite.Client.DB.ObjectManager = svc
 
 		expectDownload(source, []byte("backup me"))
 
@@ -155,7 +156,7 @@ func TestFileBackupListener(t *testing.T) {
 		svc, _, backup, err := coreutils.MockStorageServiceWithBackup(t, backupSourceProvider, true)
 		assert.NilError(t, err)
 
-		suite.client.db.ObjectManager = svc
+		suite.Client.DB.ObjectManager = svc
 
 		backup.EXPECT().ProviderType().Return(backupSourceProvider).Maybe()
 
@@ -176,7 +177,7 @@ func TestFileBackupListener(t *testing.T) {
 		assert.NilError(t, err)
 
 		idleBackup.EXPECT().ProviderType().Return(backupSourceProvider).Maybe()
-		suite.client.db.ObjectManager = idle
+		suite.Client.DB.ObjectManager = idle
 
 		f := newFile(t, "listener-backup-requested.txt", nil)
 
@@ -186,7 +187,7 @@ func TestFileBackupListener(t *testing.T) {
 		svc, source, backup, err := coreutils.MockStorageServiceWithBackup(t, backupSourceProvider, false)
 		assert.NilError(t, err)
 
-		suite.client.db.ObjectManager = svc
+		suite.Client.DB.ObjectManager = svc
 
 		expectDownload(source, []byte("backup me"))
 
@@ -201,7 +202,7 @@ func TestFileBackupListener(t *testing.T) {
 			}, nil).
 			Once()
 
-		_, err = suite.galaRuntime.EmitWithHeaders(ctx, hooks.FileBackupTopic.Name, hooks.FileBackupRequest{FileID: f.ID}, gala.Headers{})
+		_, err = suite.GalaRuntime.EmitWithHeaders(ctx, hooks.FileBackupTopic.Name, hooks.FileBackupRequest{FileID: f.ID}, gala.Headers{})
 		assert.NilError(t, err)
 
 		waitForCondition(t, func() bool {
@@ -217,7 +218,7 @@ func TestFileBackupListener(t *testing.T) {
 		svc, source, backup, err := coreutils.MockStorageServiceWithBackup(t, backupSourceProvider, false)
 		assert.NilError(t, err)
 
-		suite.client.db.ObjectManager = svc
+		suite.Client.DB.ObjectManager = svc
 
 		expectDownload(source, []byte("backup me"))
 
@@ -241,7 +242,7 @@ func TestFileBackupListener(t *testing.T) {
 		completedAt := backupState(t, f.ID).CompletedAt
 
 		// storage_provider untouched, so the field gate should reject this
-		assert.NilError(t, suite.client.db.File.UpdateOneID(f.ID).SetProvidedFileName("renamed.txt").Exec(ctx))
+		assert.NilError(t, suite.Client.DB.File.UpdateOneID(f.ID).SetProvidedFileName("renamed.txt").Exec(ctx))
 
 		waitForGala(t, setup.Runtime)
 
