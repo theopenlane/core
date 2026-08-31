@@ -53,7 +53,7 @@ require (
 	github.com/google/go-github/v88 v88.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gqlgo/gqlgenc v0.38.1
+	github.com/gqlgo/gqlgenc v0.38.2
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/invopop/jsonschema v0.14.0
 	github.com/invopop/yaml v0.3.1
@@ -106,7 +106,7 @@ require (
 	github.com/theopenlane/go-client v0.13.1
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.38.1-0.20260831170628-6518ed4d3e03
+	github.com/theopenlane/iam v0.38.1
 	github.com/theopenlane/newman v0.4.3
 	github.com/theopenlane/riverboat v0.13.3
 	github.com/theopenlane/utils v0.7.1
@@ -125,7 +125,7 @@ require (
 	golang.org/x/sync v0.22.0
 	golang.org/x/text v0.41.0
 	golang.org/x/tools v0.49.0
-	google.golang.org/api v0.292.0
+	google.golang.org/api v0.293.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
@@ -203,7 +203,7 @@ require (
 	ariga.io/atlas v1.3.0
 	cel.dev/expr v0.25.2 // indirect
 	cloud.google.com/go v0.123.0 // indirect
-	cloud.google.com/go/auth v0.22.0 // indirect
+	cloud.google.com/go/auth v0.23.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	cloud.google.com/go/iam v1.11.0 // indirect
@@ -323,7 +323,7 @@ require (
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.3.19 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.3.20 // indirect
 	github.com/googleapis/gax-go/v2 v2.23.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect

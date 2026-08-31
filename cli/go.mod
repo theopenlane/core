@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/v2 v2.3.0
 	github.com/theopenlane/go-client v0.13.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.37.0
+	github.com/theopenlane/iam v0.38.1
 	github.com/theopenlane/utils v0.7.1
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/term v0.45.0
@@ -53,7 +53,7 @@ require (
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/gqlgo/gqlgenc v0.38.1 // indirect
+	github.com/gqlgo/gqlgenc v0.38.2 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.30.0 // indirect
 	github.com/hokaccha/go-prettyjson v0.0.0-20211117102719-0474bc63780f // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
