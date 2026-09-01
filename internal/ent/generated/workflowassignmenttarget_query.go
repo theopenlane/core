@@ -785,7 +785,7 @@ func (watq *WorkflowAssignmentTargetQuery) CountIDs(ctx context.Context) (int, e
 
 	ids, err := watq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowAssignmentTarget").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "WorkflowAssignmentTarget").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

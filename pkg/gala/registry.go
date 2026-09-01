@@ -1,6 +1,7 @@
 package gala
 
 import (
+	"context"
 	"encoding/json"
 	"strings"
 	"sync"
@@ -10,7 +11,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // registry stores topic codecs, policies, and listeners
@@ -155,7 +156,7 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 
 		handlerCtx.Caller = caller
 
-		handlerCtx.Context = logx.WithCallerIdentity(handlerCtx.Context)
+		handlerCtx.Context = WithCallerIdentity(handlerCtx.Context)
 		handlerCtx.Context = logx.WithFields(handlerCtx.Context, map[string]any{
 			"event_id":  string(handlerCtx.Envelope.ID),
 			"topic":     string(handlerCtx.Envelope.Topic),
@@ -403,4 +404,34 @@ func wrapTopicUniqueKey[T any](topic Topic[T]) func(any) string {
 
 		return topic.UniqueKey(typedPayload)
 	}
+}
+
+// WithCallerIdentity adds the context caller's identity fields to the log context, making
+// caller replacement and capability escalation visible on every log line; contexts
+// without a caller pass through unchanged
+func WithCallerIdentity(ctx context.Context) context.Context {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		return ctx
+	}
+
+	fields := map[string]any{}
+
+	if caller.SubjectID != "" {
+		fields["subject_id"] = caller.SubjectID
+	}
+
+	if caller.SubjectEmail != "" {
+		fields["subject_email"] = caller.SubjectEmail
+	}
+
+	if caller.OrganizationID != "" {
+		fields["organization_id"] = caller.OrganizationID
+	}
+
+	if caller.Capabilities != 0 {
+		fields["capabilities"] = caller.Capabilities
+	}
+
+	return logx.WithFields(ctx, fields)
 }

@@ -29,4 +29,6 @@ var (
 	ErrMissingFileID = errors.New("file id required for presigned URL")
 	// ErrMissingFile is returned when the file is nul
 	ErrMissingFile = errors.New("file is not set")
+	// ErrRecordedProviderUnavailable is returned when a file's recorded storage provider is disabled or unknown
+	ErrRecordedProviderUnavailable = errors.New("file's recorded storage provider is unavailable")
 )

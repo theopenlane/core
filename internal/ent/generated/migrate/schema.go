@@ -688,6 +688,9 @@ var (
 				Name:    "campaign_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{CampaignsColumns[8], CampaignsColumns[40]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "campaign_owner_id_idx",
@@ -1026,6 +1029,9 @@ var (
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ControlsColumns[8], ControlsColumns[54]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "control_external_uuid_owner_id",
@@ -1191,6 +1197,9 @@ var (
 				Name:    "controlobjective_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ControlObjectivesColumns[8], ControlObjectivesColumns[22]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "control_objective_owner_id_idx",
@@ -2570,6 +2579,9 @@ var (
 				Name:    "evidence_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{EvidencesColumns[8], EvidencesColumns[27]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "evidence_owner_id_idx",
@@ -2945,6 +2957,9 @@ var (
 				Name:    "finding_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{FindingsColumns[8], FindingsColumns[63]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "finding_owner_id_idx",
@@ -3910,6 +3925,9 @@ var (
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{GroupsColumns[8], GroupsColumns[114]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "group_owner_id_idx",
@@ -4161,6 +4179,9 @@ var (
 				Name:    "identityholder_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{IdentityHoldersColumns[8], IdentityHoldersColumns[38]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "identity_holder_owner_id_idx",
@@ -4655,6 +4676,9 @@ var (
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{InternalPoliciesColumns[8], InternalPoliciesColumns[45]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "internal_policy_owner_id_idx",
@@ -4845,6 +4869,9 @@ var (
 				Name:    "narrative_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{NarrativesColumns[8], NarrativesColumns[17]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "narrative_owner_id_idx",
@@ -5006,6 +5033,9 @@ var (
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{NotesColumns[8], NotesColumns[22]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "note_owner_id_idx",
@@ -5973,6 +6003,9 @@ var (
 				Name:    "platform_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{PlatformsColumns[8], PlatformsColumns[43]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "platform_owner_id_idx",
@@ -6123,6 +6156,9 @@ var (
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ProceduresColumns[8], ProceduresColumns[39]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "procedure_owner_id_idx",
@@ -6207,6 +6243,9 @@ var (
 				Name:    "program_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ProgramsColumns[8], ProgramsColumns[29]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "program_owner_id_idx",
@@ -6346,6 +6385,9 @@ var (
 				Name:    "remediation_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{RemediationsColumns[8], RemediationsColumns[36]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "remediation_owner_id_idx",
@@ -6586,6 +6628,9 @@ var (
 				Name:    "risk_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{RisksColumns[8], RisksColumns[41]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "risk_owner_id_idx",
@@ -6636,6 +6681,9 @@ var (
 				Name:    "sladefinition_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{SLADefinitionsColumns[8], SLADefinitionsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "sla_definition_owner_id_idx",
@@ -6971,6 +7019,9 @@ var (
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{SubcontrolsColumns[8], SubcontrolsColumns[45]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "subcontrol_external_uuid_owner_id",
@@ -7209,6 +7260,9 @@ var (
 				Name:    "systemdetail_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{SystemDetailsColumns[8], SystemDetailsColumns[18]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "system_detail_owner_id_idx",
@@ -7465,6 +7519,9 @@ var (
 				Name:    "task_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{TasksColumns[8], TasksColumns[32]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "task_owner_id_idx",
@@ -8609,6 +8666,9 @@ var (
 				Name:    "vulnerability_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{VulnerabilitiesColumns[8], VulnerabilitiesColumns[61]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "vulnerability_owner_id_idx",
@@ -8757,6 +8817,9 @@ var (
 				Name:    "workflowassignment_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowAssignmentsColumns[8], WorkflowAssignmentsColumns[23]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "workflow_assignment_owner_id_idx",
@@ -8842,6 +8905,9 @@ var (
 				Name:    "workflowassignmenttarget_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[8], WorkflowAssignmentTargetsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "workflow_assignment_target_owner_id_idx",
@@ -8918,6 +8984,9 @@ var (
 				Name:    "workflowdefinition_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowDefinitionsColumns[8], WorkflowDefinitionsColumns[30]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "workflow_definition_owner_id_idx",
@@ -8979,6 +9048,9 @@ var (
 				Name:    "workflowevent_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowEventsColumns[8], WorkflowEventsColumns[12]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "workflow_event_owner_id_idx",
@@ -9259,6 +9331,9 @@ var (
 				Name:    "workflowinstance_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowInstancesColumns[8], WorkflowInstancesColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
 			},
 			{
 				Name:    "workflow_instance_owner_id_idx",

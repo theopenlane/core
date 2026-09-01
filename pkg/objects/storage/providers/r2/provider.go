@@ -181,9 +181,14 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 }
 
 // Download implements storagetypes.Provider
-func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
+func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
+	bucket := p.options.Bucket
+	if opts.Bucket != "" {
+		bucket = opts.Bucket
+	}
+
 	head, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
-		Bucket: aws.String(p.options.Bucket),
+		Bucket: aws.String(bucket),
 		Key:    aws.String(file.Key),
 	})
 	if err != nil {
@@ -194,7 +199,7 @@ func (p *Provider) Download(ctx context.Context, file *storagetypes.File, _ *sto
 	w := manager.NewWriteAtBuffer(buf)
 
 	_, err = p.downloader.DownloadObject(ctx, &transfermanager.DownloadObjectInput{
-		Bucket:   aws.String(p.options.Bucket),
+		Bucket:   aws.String(bucket),
 		Key:      aws.String(file.Key),
 		WriterAt: w,
 	})
@@ -252,8 +257,13 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 		expires = DefaultPresignedURLExpiry
 	}
 
+	bucket := p.options.Bucket
+	if file.Bucket != "" {
+		bucket = file.Bucket
+	}
+
 	presignURL, err := p.presignClient.PresignGetObject(ctx, &s3.GetObjectInput{
-		Bucket:                     aws.String(p.options.Bucket),
+		Bucket:                     aws.String(bucket),
 		Key:                        aws.String(file.Key),
 		ResponseContentType:        aws.String(file.ContentType),
 		ResponseContentDisposition: aws.String(storage.DispositionFor(file.ContentType)),
@@ -276,13 +286,17 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 
 // Exists checks if an object exists in R2
 func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
+	bucket := p.options.Bucket
+	if file.Bucket != "" {
+		bucket = file.Bucket
+	}
+
 	_, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
-		Bucket: aws.String(p.options.Bucket),
+		Bucket: aws.String(bucket),
 		Key:    aws.String(file.Key),
 	})
 	if err != nil {
-		var notFound *types.NotFound
-		if errors.As(err, &notFound) {
+		if _, ok := errors.AsType[*types.NotFound](err); ok {
 			return false, nil
 		}
 		return false, err

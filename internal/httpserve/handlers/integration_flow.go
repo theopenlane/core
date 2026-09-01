@@ -3,6 +3,7 @@ package handlers
 import (
 	"maps"
 	"net/http"
+	"net/url"
 	"slices"
 	"strings"
 
@@ -147,9 +148,6 @@ func (h *Handler) HandleIntegrationAuthCallback(ctx echo.Context) error {
 		State:    stateCookie.Value,
 		Callback: callbackInput,
 	})
-	if err != nil {
-		return h.BadRequest(ctx, err)
-	}
 
 	redirectTo := h.ConsoleURL
 	if redirectCookie, cookieErr := sessions.GetCookie(ctx.Request(), "redirect_to"); cookieErr == nil {
@@ -158,7 +156,34 @@ func (h *Handler) HandleIntegrationAuthCallback(ctx echo.Context) error {
 
 	h.clearAuthFlowCookies(ctx.Response().Writer, "state", "organization_id", "redirect_to")
 
+	if err != nil {
+		logx.FromContext(reqCtx).Warn().Err(err).Msg("integration auth callback failed")
+
+		return h.Redirect(ctx, appendAuthFailure(redirectTo))
+	}
+
 	return h.Redirect(ctx, redirectTo)
+}
+
+const (
+	// integrationAuthErrorParam is the query param carrying the auth failure code back to the console
+	integrationAuthErrorParam = "error"
+	// integrationAuthErrorValue is the auth failure code sent back to the console
+	integrationAuthErrorValue = "auth_failed"
+)
+
+// appendAuthFailure returns the redirect target with the auth failure error param applied
+func appendAuthFailure(redirectTo string) string {
+	target, err := url.Parse(redirectTo)
+	if err != nil {
+		return redirectTo
+	}
+
+	q := target.Query()
+	q.Set(integrationAuthErrorParam, integrationAuthErrorValue)
+	target.RawQuery = q.Encode()
+
+	return target.String()
 }
 
 // normalizeIntegrationAuthCallbackInput snapshots query params from the callback request

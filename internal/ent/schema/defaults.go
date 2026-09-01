@@ -52,6 +52,8 @@ type mixinConfig struct {
 	excludeAnnotations bool
 	// includeRequestor if true, the RequestorMixin will be included
 	includeRequestor bool
+	// displayIDLength overrides the display ID length, zero keeps the mixin default
+	displayIDLength int
 	// additionalMixins are any additional mixins that will be included
 	additionalMixins []ent.Mixin
 }
@@ -100,6 +102,11 @@ func (m mixinConfig) getMixins(s ent.Interface) []ent.Mixin {
 	idMixin := emixin.IDMixin{}
 	if m.prefix != "" {
 		idMixin = emixin.NewIDMixinWithPrefixedID(m.prefix)
+		idMixin.DisplayIDLength = m.displayIDLength
+
+		if !m.excludeSoftDelete {
+			idMixin.DisplayIDIndexWhere = "deleted_at is NULL"
+		}
 	}
 
 	if autoSetSkipForSystemAdmin(&m) {

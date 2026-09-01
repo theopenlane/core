@@ -1059,7 +1059,7 @@ func (tcdq *TrustCenterDocQuery) CountIDs(ctx context.Context) (int, error) {
 
 	ids, err := tcdq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterDoc").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "TrustCenterDoc").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

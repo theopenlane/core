@@ -2234,7 +2234,7 @@ func (worq *WorkflowObjectRefQuery) CountIDs(ctx context.Context) (int, error) {
 
 	ids, err := worq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "WorkflowObjectRef").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "WorkflowObjectRef").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

@@ -82,7 +82,7 @@ func setupLogging() {
 		Level:         level,
 		Pretty:        k.Bool("pretty"),
 		Writer:        os.Stderr,
-		IncludeCaller: debug,
+		IncludeCaller: true,
 		SetGlobal:     true,
 	})
 }

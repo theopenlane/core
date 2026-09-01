@@ -555,7 +555,7 @@ func (evtq *EmailVerificationTokenQuery) CountIDs(ctx context.Context) (int, err
 
 	ids, err := evtq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "EmailVerificationToken").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "EmailVerificationToken").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

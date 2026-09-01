@@ -93,7 +93,7 @@ func registerSecurityTxtHandler(router *Router) (err error) {
 		Tags:        []string{"well-known", "security"},
 		OperationID: "SecurityTxt",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
+		Middlewares: *staticEndpoint,
 		RateLimit:   publicStaticRateLimit,
 		Handler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("security.txt", securityTxt)(ctx)

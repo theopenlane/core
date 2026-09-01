@@ -468,7 +468,7 @@ func (tcnrhq *TrustCenterNDARequestHistoryQuery) CountIDs(ctx context.Context) (
 
 	ids, err := tcnrhq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterNDARequestHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "TrustCenterNDARequestHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

@@ -1129,7 +1129,7 @@ func (cq *ContactQuery) CountIDs(ctx context.Context) (int, error) {
 
 	ids, err := cq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "Contact").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "Contact").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

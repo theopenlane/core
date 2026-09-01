@@ -468,7 +468,7 @@ func (nphq *NotificationPreferenceHistoryQuery) CountIDs(ctx context.Context) (i
 
 	ids, err := nphq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "NotificationPreferenceHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "NotificationPreferenceHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

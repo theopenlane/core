@@ -2,8 +2,8 @@ package transaction
 
 import (
 	"context"
+	"database/sql"
 	"errors"
-	"net/http"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/contextx"
@@ -46,9 +46,9 @@ func (d *Client) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 		reqCtx := c.Request().Context()
 		client, err := d.EntDBClient.Tx(reqCtx)
 		if err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg(transactionStartErr)
+			logx.ErrorEvent(reqCtx, err).Msg(transactionStartErr)
 
-			return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
+			return ErrProcessingRequest
 		}
 
 		// add to context
@@ -64,10 +64,8 @@ func (d *Client) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 				Str("path", c.Request().URL.Path).
 				Msg("rolling back transaction in middleware")
 
-			if err := client.Rollback(); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg(rollbackErr)
-
-				return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
+			if rbErr := client.Rollback(); rbErr != nil && !errors.Is(rbErr, sql.ErrTxDone) {
+				logx.ErrorEvent(ctx, rbErr).Msg(rollbackErr)
 			}
 
 			return err
@@ -76,9 +74,9 @@ func (d *Client) Middleware(next echo.HandlerFunc) echo.HandlerFunc {
 		logx.FromContext(ctx).Debug().Msg("committing transaction in middleware")
 
 		if err := client.Commit(); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg(transactionCommitErr)
+			logx.ErrorEvent(ctx, err).Msg(transactionCommitErr)
 
-			return c.JSON(http.StatusInternalServerError, ErrProcessingRequest)
+			return ErrProcessingRequest
 		}
 
 		return nil

@@ -218,7 +218,7 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 			),
 		).IDs(ctx)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to get group IDs for user")
+			logx.ErrorEvent(ctx, err).Msg("failed to get group IDs for user")
 
 			return err
 		}

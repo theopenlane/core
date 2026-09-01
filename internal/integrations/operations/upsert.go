@@ -82,7 +82,7 @@ func persistCatalogUpsert(ctx context.Context, db *ent.Client, schema *entityops
 		lookupField, _ := schema.LookupField()
 		doc, _ := jsonx.Decode[map[string]any](payload)
 
-		logx.FromContext(ctx).Error().Err(err).Str(entityops.FieldSchema, schema.Snake).Str("lookup_field", lookupField.Name).Interface("lookup_value", doc[lookupField.InputKey]).Interface("record_name", doc["name"]).Msg("ingest upsert conflict: lookup key found no existing record but the insert violated a unique constraint")
+		logx.FromContext(ctx).Error().Err(err).Str(entityops.FieldSchema, schema.Snake).Str("lookup_field", lookupField.Name).Interface("lookup_value", doc[lookupField.InputKey]).Interface("record_name", doc["name"]).Msg("ingest upsert conflict")
 
 		return "", fmt.Errorf("%w: %w", ErrIngestUpsertConflict, err)
 	default:

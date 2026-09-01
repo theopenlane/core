@@ -338,6 +338,11 @@ func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetype
 		return nil, ErrProviderResolutionFailed
 	}
 
+	if file.ProviderType != "" && res.Builder.ProviderType() != string(file.ProviderType) {
+		logx.FromContext(ctx).Error().Str("file_id", file.ID).Str("recorded_provider", string(file.ProviderType)).Str("resolved_provider", res.Builder.ProviderType()).Msg("storage provider resolution mismatch for file")
+		return nil, ErrRecordedProviderUnavailable
+	}
+
 	// Build ProviderCacheKey using file metadata with auth context as backup
 	var orgID string
 	if dlCaller, dlOk := auth.CallerFromContext(ctx); dlOk && dlCaller != nil {

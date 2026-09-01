@@ -262,19 +262,19 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 
 // Download implements storagetypes.Provider
 func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
-	head, err := p.HeadObj(ctx, file.Key)
+	// Use bucket from options if provided, otherwise use default
+	bucket := p.options.Bucket
+	if opts.Bucket != "" {
+		bucket = opts.Bucket
+	}
+
+	head, err := p.HeadObj(ctx, bucket, file.Key)
 	if err != nil {
 		return nil, err
 	}
 
 	buf := make([]byte, int(*head.ContentLength))
 	w := manager.NewWriteAtBuffer(buf)
-
-	// Use bucket from options if provided, otherwise use default
-	bucket := p.options.Bucket
-	if opts.Bucket != "" {
-		bucket = opts.Bucket
-	}
 
 	_, err = p.downloader.DownloadObject(ctx, &transfermanager.DownloadObjectInput{
 		Bucket:   aws.String(bucket),
@@ -366,13 +366,9 @@ func (p *Provider) GetPresignedURL(ctx context.Context, file *storagetypes.File,
 
 // Exists checks if an object exists in S3
 func (p *Provider) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
-	_, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
-		Bucket: aws.String(p.options.Bucket),
-		Key:    aws.String(file.Key),
-	})
+	_, err := p.HeadObj(ctx, file.Bucket, file.Key)
 	if err != nil {
-		var notFound *types.NotFound
-		if errors.As(err, &notFound) {
+		if _, ok := errors.AsType[*types.NotFound](err); ok {
 			return false, nil
 		}
 		return false, err
@@ -409,10 +405,14 @@ func (p *Provider) ListBuckets() ([]string, error) {
 	return buckets, err
 }
 
-// HeadObj checks if an object exists in S3 and returns its metadata
-func (p *Provider) HeadObj(ctx context.Context, key string) (*s3.HeadObjectOutput, error) {
+// HeadObj checks if an object exists in the given bucket, defaulting to the configured bucket, and returns its metadata
+func (p *Provider) HeadObj(ctx context.Context, bucket, key string) (*s3.HeadObjectOutput, error) {
+	if bucket == "" {
+		bucket = p.options.Bucket
+	}
+
 	obj, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{
-		Bucket: aws.String(p.options.Bucket),
+		Bucket: aws.String(bucket),
 		Key:    aws.String(key),
 	})
 	if err != nil {

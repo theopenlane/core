@@ -21,7 +21,7 @@ func registerOpenAPIHandler(router *Router) (err error) {
 		Tags:         []string{"documentation"},
 		OperationID:  "APIDocs",
 		Security:     handlers.PublicSecurity,
-		Middlewares:  *publicEndpoint,
+		Middlewares:  *staticEndpoint,
 		IncludeInOAS: true,
 		RateLimit:    publicStaticRateLimit,
 		Handler:      apiDocsHandler,
@@ -53,7 +53,7 @@ func registerRobotsHandler(router *Router) (err error) {
 		Tags:        []string{"static"},
 		OperationID: "Robots",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
+		Middlewares: *staticEndpoint,
 		RateLimit:   publicStaticRateLimit,
 		Handler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("robots.txt", robotsTxt)(ctx)
@@ -76,7 +76,7 @@ func registerFaviconHandler(router *Router) (err error) {
 		Tags:        []string{"static"},
 		OperationID: "Favicon",
 		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
+		Middlewares: *staticEndpoint,
 		RateLimit:   publicStaticRateLimit,
 		Handler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("assets/favicon.ico", assets)(ctx)

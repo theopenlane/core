@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"errors"
+
+	"github.com/golang-jwt/jwt/v5"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -26,7 +29,16 @@ func (h *Handler) RefreshHandler(ctx echo.Context) error {
 	// verify the refresh token
 	claims, err := h.TokenManager.Verify(req.RefreshToken)
 	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying token")
+		switch {
+		case errors.Is(err, jwt.ErrTokenNotValidYet):
+			logx.FromContext(reqCtx).Warn().Err(err).Msg("refresh token used before its not-before window")
+
+			return h.BadRequest(ctx, ErrRefreshTokenNotYetValid)
+		case errors.Is(err, jwt.ErrTokenExpired):
+			logx.FromContext(reqCtx).Warn().Err(err).Msg("refresh token expired")
+		default:
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying token")
+		}
 
 		return h.BadRequest(ctx, ErrUnableToVerifyToken)
 	}

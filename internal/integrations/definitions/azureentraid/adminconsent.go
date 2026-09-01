@@ -71,7 +71,7 @@ func adminConsentRegistration(cfg Config) *types.AuthRegistration {
 			}
 
 			if errCode := input.First("error"); errCode != "" {
-				logx.FromContext(ctx).Error().Str("error", errCode).Str("description", input.First("error_description")).Msg("admin consent denied")
+				logx.FromContext(ctx).Warn().Str("error", errCode).Str("description", input.First("error_description")).Str("tenant", input.First("tenant")).Msg("admin consent denied")
 				return types.AuthCompleteResult{}, ErrConsentDenied
 			}
 

@@ -468,7 +468,7 @@ func (mdhq *MappableDomainHistoryQuery) CountIDs(ctx context.Context) (int, erro
 
 	ids, err := mdhq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "MappableDomainHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "MappableDomainHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

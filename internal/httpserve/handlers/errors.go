@@ -180,6 +180,9 @@ var (
 	ErrLoginFailed = errors.New("login failed, please check your credentials and try again")
 	// ErrUnableToVerifyToken is returned when unable to verify a token
 	ErrUnableToVerifyToken = errors.New("unable to verify token, please try again")
+
+	// ErrRefreshTokenNotYetValid is returned when a refresh token is used before its not-before time
+	ErrRefreshTokenNotYetValid = errors.New("refresh token not yet valid, retry closer to access token expiry")
 	// errIntegrationWebhookNotConfigured is returned when the webhook registration is missing
 	errIntegrationWebhookNotConfigured = errors.New("integration webhook not configured")
 	// errIntegrationWebhookSecretMissing is returned when the persisted webhook has no secret token

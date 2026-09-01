@@ -468,7 +468,7 @@ func (cdhq *CustomDomainHistoryQuery) CountIDs(ctx context.Context) (int, error)
 
 	ids, err := cdhq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "CustomDomainHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "CustomDomainHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

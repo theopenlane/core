@@ -1,5 +1,5 @@
 {{- define "import/additional/logx" }}
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 {{- end }}
 
 {{ define "query/additional/count" }}
@@ -13,7 +13,7 @@
 
 		ids, err := {{ $receiver }}.IDs(ctx)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("query_type", "{{ $.Name }}").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+			logx.ErrorEvent(ctx, err).Str("query_type", "{{ $.Name }}").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 			return 0, err
 		}

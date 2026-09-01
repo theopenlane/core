@@ -39,7 +39,6 @@ require (
 	github.com/didasy/tldr v0.7.0
 	github.com/elimity-com/scim v0.0.0-20260728105928-2641426a1539
 	github.com/fatih/camelcase v1.0.0
-	github.com/fatih/color v1.19.0
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b
 	github.com/gabriel-vasile/mimetype v1.4.15
@@ -102,11 +101,11 @@ require (
 	github.com/theopenlane/core/common v1.0.25
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.33.0
+	github.com/theopenlane/entx v0.33.3
 	github.com/theopenlane/go-client v0.13.1
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.38.1
+	github.com/theopenlane/iam v0.38.2
 	github.com/theopenlane/newman v0.4.3
 	github.com/theopenlane/riverboat v0.13.3
 	github.com/theopenlane/utils v0.7.1
@@ -136,6 +135,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/andybalholm/cascadia v1.3.4 // indirect
+	github.com/fatih/color v1.19.0 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/gofrs/flock v0.10.0 // indirect
@@ -171,6 +171,7 @@ require (
 	github.com/std-uritemplate/std-uritemplate/go/v2 v2.0.8 // indirect
 	github.com/tailscale/hujson v0.0.0-20220506213045-af5ed07155e5 // indirect
 	github.com/theopenlane/core v1.34.0 // indirect
+	github.com/theopenlane/logx v0.1.0 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/vanng822/css v1.0.1 // indirect

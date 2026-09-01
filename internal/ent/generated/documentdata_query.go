@@ -1034,7 +1034,7 @@ func (ddq *DocumentDataQuery) CountIDs(ctx context.Context) (int, error) {
 
 	ids, err := ddq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "DocumentData").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "DocumentData").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

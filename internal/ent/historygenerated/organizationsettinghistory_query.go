@@ -468,7 +468,7 @@ func (oshq *OrganizationSettingHistoryQuery) CountIDs(ctx context.Context) (int,
 
 	ids, err := oshq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "OrganizationSettingHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "OrganizationSettingHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

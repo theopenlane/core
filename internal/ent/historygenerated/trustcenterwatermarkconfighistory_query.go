@@ -468,7 +468,7 @@ func (tcwchq *TrustCenterWatermarkConfigHistoryQuery) CountIDs(ctx context.Conte
 
 	ids, err := tcwchq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "TrustCenterWatermarkConfigHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "TrustCenterWatermarkConfigHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}

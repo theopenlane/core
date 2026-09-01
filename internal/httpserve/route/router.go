@@ -84,6 +84,8 @@ var (
 	mw = []echo.MiddlewareFunc{}
 	// authMW is the middleware that is used on authenticated routes, it includes the transaction middleware, the auth middleware, and any additional middleware after the auth middleware
 	authMW = []echo.MiddlewareFunc{}
+	// staticMW is the middleware for routes serving embedded static content, without the transaction middleware
+	staticMW = []echo.MiddlewareFunc{}
 )
 
 // Middleware Semantic Names for better readability
@@ -94,6 +96,8 @@ var (
 	publicEndpoint = &mw
 	// unauthenticatedEndpoint for basic endpoints with minimal middleware
 	unauthenticatedEndpoint = &baseMW
+	// staticEndpoint for routes serving embedded static content
+	staticEndpoint = &staticMW
 )
 
 // Router is a struct that holds the echo router, the OpenAPI schema, and the handler - it's a way to group these components together
@@ -351,6 +355,7 @@ func RegisterRoutes(router *Router) error {
 	authMW = authMiddleware(router)
 	// Default middleware for other routes which includes additional middleware
 	mw = defaultMiddleware(router)
+	staticMW = staticMiddleware()
 
 	// routeHandlers that take the router and handler as input
 	routeHandlers := []any{
@@ -468,6 +473,11 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 	mimeMiddleware := mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})
 
 	return append(mw, mimeMiddleware, transactionConfig.Middleware)
+}
+
+// staticMiddleware returns the middleware for routes serving embedded static content, omitting the transaction middleware
+func staticMiddleware() []echo.MiddlewareFunc {
+	return []echo.MiddlewareFunc{mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})}
 }
 
 // authMiddleware returns the middleware for the router that is used on authenticated routes

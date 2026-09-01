@@ -468,7 +468,7 @@ func (cihq *ControlImplementationHistoryQuery) CountIDs(ctx context.Context) (in
 
 	ids, err := cihq.IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("query_type", "ControlImplementationHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
+		logx.ErrorEvent(ctx, err).Str("query_type", "ControlImplementationHistory").Str("operation", "count_ids").Msg("CountIDs: IDs() failed")
 
 		return 0, err
 	}
