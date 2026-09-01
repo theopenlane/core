@@ -86,9 +86,9 @@ require (
 	github.com/pressly/goose/v3 v3.27.3
 	github.com/prometheus/client_golang v1.24.1
 	github.com/redis/go-redis/v9 v9.22.0
-	github.com/riverqueue/river v0.44.1
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.44.1
-	github.com/riverqueue/river/rivertype v0.44.1
+	github.com/riverqueue/river v0.45.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.45.0
+	github.com/riverqueue/river/rivertype v0.45.0
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/do/v2 v2.1.0
 	github.com/samber/lo v1.53.0
@@ -365,8 +365,8 @@ require (
 	github.com/prometheus/common v0.70.1 // indirect
 	github.com/prometheus/procfs v0.21.1 // indirect
 	github.com/resend/resend-go/v3 v3.14.0
-	github.com/riverqueue/river/riverdriver v0.44.1 // indirect
-	github.com/riverqueue/river/rivershared v0.44.1 // indirect
+	github.com/riverqueue/river/riverdriver v0.45.0 // indirect
+	github.com/riverqueue/river/rivershared v0.45.0 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
 	github.com/samber/mo v1.17.0
 	github.com/segmentio/asm v1.2.1 // indirect
