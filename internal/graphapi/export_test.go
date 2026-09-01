@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -30,28 +32,28 @@ func TestMutationCreateExport(t *testing.T) {
 				Fields:     []string{"name", "details", "summary", "updatedAt"},
 				Filters:    &emptyFilter,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path with PAT",
 			request: testclient.CreateExportInput{
 				ExportType: enums.ExportTypeControl,
-				OwnerID:    &sharedTestUser1.OrganizationID,
+				OwnerID:    &th.SharedTestUser1.OrganizationID,
 				Format:     lo.ToPtr(enums.ExportFormatCsv),
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
 			name: "happy path with system admin",
 			request: testclient.CreateExportInput{
 				ExportType: enums.ExportTypeControl,
-				OwnerID:    &sharedTestUser1.OrganizationID,
+				OwnerID:    &th.SharedTestUser1.OrganizationID,
 				Format:     lo.ToPtr(enums.ExportFormatCsv),
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 	}
 
@@ -73,22 +75,22 @@ func TestMutationCreateExport(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.OwnerID, *resp.CreateExport.Export.OwnerID))
 			}
 
-			if tc.ctx == sharedSystemAdminUser.UserCtx {
-				export, err := suite.client.api.GetExportByID(sharedSystemAdminUser.UserCtx, resp.CreateExport.Export.ID)
+			if tc.ctx == th.SharedSystemAdminUser.UserCtx {
+				export, err := suite.Client.API.GetExportByID(th.SharedSystemAdminUser.UserCtx, resp.CreateExport.Export.ID)
 				assert.NilError(t, err)
 				assert.Assert(t, export != nil)
 				assert.Check(t, is.Equal(resp.CreateExport.Export.ID, export.Export.ID))
 			}
 
-			(&Cleanup[*generated.ExportDeleteOne]{client: suite.client.db.Export, ID: resp.CreateExport.Export.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+			(&th.Cleanup[*generated.ExportDeleteOne]{Client: suite.Client.DB.Export, ID: resp.CreateExport.Export.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateExport(t *testing.T) {
-	createResp, err := suite.client.api.CreateExport(sharedTestUser1.UserCtx, testclient.CreateExportInput{
+	createResp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
 		ExportType: enums.ExportTypeControl,
-		OwnerID:    &sharedTestUser1.OrganizationID,
+		OwnerID:    &th.SharedTestUser1.OrganizationID,
 		Format:     lo.ToPtr(enums.ExportFormatCsv),
 	})
 	assert.NilError(t, err)
@@ -109,8 +111,8 @@ func TestMutationUpdateExport(t *testing.T) {
 			request: testclient.UpdateExportInput{
 				Status: &enums.ExportStatusReady,
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:     "unauthorized user - regular user cannot update",
@@ -118,8 +120,8 @@ func TestMutationUpdateExport(t *testing.T) {
 			request: testclient.UpdateExportInput{
 				Status: &enums.ExportStatusReady,
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "export not found",
 		},
 		{
@@ -128,8 +130,8 @@ func TestMutationUpdateExport(t *testing.T) {
 			request: testclient.UpdateExportInput{
 				Status: &enums.ExportStatusReady,
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
 			expectedErr: "export not found",
 		},
 		{
@@ -138,8 +140,8 @@ func TestMutationUpdateExport(t *testing.T) {
 			request: testclient.UpdateExportInput{
 				Status: &enums.ExportStatusReady,
 			},
-			client:      suite.client.api,
-			ctx:         sharedSystemAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedSystemAdminUser.UserCtx,
 			expectedErr: "export not found",
 		},
 	}
@@ -163,13 +165,13 @@ func TestMutationUpdateExport(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ExportDeleteOne]{client: suite.client.db.Export, ID: exportID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.ExportDeleteOne]{Client: suite.Client.DB.Export, ID: exportID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestQueryExport(t *testing.T) {
-	createResp, err := suite.client.api.CreateExport(sharedTestUser1.UserCtx, testclient.CreateExportInput{
+	createResp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
 		ExportType: enums.ExportTypeControl,
-		OwnerID:    &sharedTestUser1.OrganizationID,
+		OwnerID:    &th.SharedTestUser1.OrganizationID,
 		Format:     lo.ToPtr(enums.ExportFormatCsv),
 	})
 	assert.NilError(t, err)
@@ -186,46 +188,46 @@ func TestQueryExport(t *testing.T) {
 		{
 			name:     "happy path with system admin",
 			exportID: exportID,
-			client:   suite.client.api,
-			ctx:      sharedSystemAdminUser.UserCtx,
+			client:   suite.Client.API,
+			ctx:      th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:     "happy path with PAT and system admin context",
 			exportID: exportID,
-			client:   suite.client.apiWithPAT,
+			client:   suite.Client.APIWithPAT,
 			ctx:      context.Background(),
 		},
 		{
 			name:     "regular user can query",
 			exportID: exportID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "unauthorized user - different org user cannot query",
 			exportID:    exportID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
 			expectedErr: "export not found",
 		},
 		{
 			name:     "view only user can query",
 			exportID: exportID,
-			client:   suite.client.api,
-			ctx:      sharedViewOnlyUser2.UserCtx,
+			client:   suite.Client.API,
+			ctx:      th.SharedViewOnlyUser2.UserCtx,
 		},
 		{
 			name:        "export not found",
 			exportID:    "non-existent-id",
-			client:      suite.client.api,
-			ctx:         sharedSystemAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedSystemAdminUser.UserCtx,
 			expectedErr: "export not found",
 		},
 		{
 			name:     "system admin can fetch item",
 			exportID: exportID,
-			client:   suite.client.api,
-			ctx:      sharedSystemAdminUser.UserCtx,
+			client:   suite.Client.API,
+			ctx:      th.SharedSystemAdminUser.UserCtx,
 		},
 	}
 
@@ -242,11 +244,11 @@ func TestQueryExport(t *testing.T) {
 			assert.Check(t, is.Equal(tc.exportID, export.Export.ID))
 			assert.Check(t, is.Equal(enums.ExportTypeControl.String(), export.Export.ExportType.String()))
 			assert.Check(t, is.Equal(enums.ExportStatusPending.String(), export.Export.Status.String()))
-			assert.Check(t, is.Equal(sharedTestUser1.OrganizationID, *export.Export.OwnerID))
+			assert.Check(t, is.Equal(th.SharedTestUser1.OrganizationID, *export.Export.OwnerID))
 		})
 	}
 
-	(&Cleanup[*generated.ExportDeleteOne]{client: suite.client.db.Export, ID: exportID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.ExportDeleteOne]{Client: suite.Client.DB.Export, ID: exportID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationDeleteExport(t *testing.T) {
@@ -260,45 +262,45 @@ func TestMutationDeleteExport(t *testing.T) {
 		{
 			name: "happy path with system admin",
 			setupExport: func() string {
-				resp, err := suite.client.api.CreateExport(sharedTestUser1.UserCtx, testclient.CreateExportInput{
+				resp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
 					ExportType: enums.ExportTypeControl,
-					OwnerID:    &sharedTestUser1.OrganizationID,
+					OwnerID:    &th.SharedTestUser1.OrganizationID,
 					Format:     lo.ToPtr(enums.ExportFormatCsv),
 				})
 				assert.NilError(t, err)
 				return resp.CreateExport.Export.ID
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "unauthorized user - regular user cannot delete",
 			setupExport: func() string {
-				resp, err := suite.client.api.CreateExport(sharedTestUser1.UserCtx, testclient.CreateExportInput{
+				resp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
 					Format:     lo.ToPtr(enums.ExportFormatCsv),
-					OwnerID:    &sharedTestUser1.OrganizationID,
+					OwnerID:    &th.SharedTestUser1.OrganizationID,
 					ExportType: enums.ExportTypeControl,
 				})
 				assert.NilError(t, err)
 				return resp.CreateExport.Export.ID
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "export not found",
 		},
 		{
 			name: "unauthorized user - different org user cannot delete",
 			setupExport: func() string {
-				resp, err := suite.client.api.CreateExport(sharedTestUser1.UserCtx, testclient.CreateExportInput{
+				resp, err := suite.Client.API.CreateExport(th.SharedTestUser1.UserCtx, testclient.CreateExportInput{
 					Format:     lo.ToPtr(enums.ExportFormatCsv),
 					ExportType: enums.ExportTypeControl,
-					OwnerID:    &sharedTestUser1.OrganizationID,
+					OwnerID:    &th.SharedTestUser1.OrganizationID,
 				})
 				assert.NilError(t, err)
 				return resp.CreateExport.Export.ID
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
 			expectedErr: "export not found",
 		},
 	}
@@ -307,7 +309,7 @@ func TestMutationDeleteExport(t *testing.T) {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
 			exportID := tc.setupExport()
 
-			cleanup := &Cleanup[*generated.ExportDeleteOne]{client: suite.client.db.Export, ID: exportID}
+			cleanup := &th.Cleanup[*generated.ExportDeleteOne]{Client: suite.Client.DB.Export, ID: exportID}
 
 			if tc.expectedErr != "" {
 				_, err := tc.client.UpdateExport(tc.ctx, exportID, testclient.UpdateExportInput{
@@ -315,13 +317,13 @@ func TestMutationDeleteExport(t *testing.T) {
 				}, nil)
 				assert.ErrorContains(t, err, tc.expectedErr)
 
-				cleanup.MustDelete(sharedSystemAdminUser.UserCtx, t)
+				cleanup.MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 				return
 			}
 
 			cleanup.MustDelete(tc.ctx, t)
 
-			_, err := suite.client.api.GetExportByID(sharedSystemAdminUser.UserCtx, exportID)
+			_, err := suite.Client.API.GetExportByID(th.SharedSystemAdminUser.UserCtx, exportID)
 			assert.ErrorContains(t, err, "export not found")
 		})
 	}

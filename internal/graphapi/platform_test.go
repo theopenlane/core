@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -17,8 +19,8 @@ import (
 )
 
 func TestQueryPlatform(t *testing.T) {
-	// create an platform to be queried using sharedTestUser1
-	platform := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create an platform to be queried using th.SharedTestUser1
+	platform := (&th.PlatformBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the Platform
 	testCases := []struct {
@@ -31,34 +33,34 @@ func TestQueryPlatform(t *testing.T) {
 		{
 			name:    "happy path, same org user",
 			queryID: platform.ID,
-			client:  suite.client.api,
-			ctx:     sharedAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: platform.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: platform.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "Platform not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "Platform not found, using not authorized user",
 			queryID:  platform.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -80,13 +82,13 @@ func TestQueryPlatform(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: platform.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.PlatformDeleteOne]{Client: suite.Client.DB.Platform, ID: platform.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryPlatforms(t *testing.T) {
-	// create multiple objects to be queried using sharedTestUser1
-	platform1 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	platform2 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create multiple objects to be queried using th.SharedTestUser1
+	platform1 := (&th.PlatformBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	platform2 := (&th.PlatformBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -96,32 +98,32 @@ func TestQueryPlatforms(t *testing.T) {
 	}{
 		{
 			name:            "happy path, admin user of the same org",
-			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedAdminUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          suite.Client.APIWithToken,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "another user, no Platforms should be returned",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -136,15 +138,15 @@ func TestQueryPlatforms(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, IDs: []string{platform1.ID, platform2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.PlatformDeleteOne]{Client: suite.Client.DB.Platform, IDs: []string{platform1.ID, platform2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreatePlatform(t *testing.T) {
-	asset := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	vendor := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	asset2 := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	pdfFile := uploadFile(t, pdfFilePath)
-	pngFile := uploadFile(t, logoFilePath)
+	asset := (&th.AssetBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	vendor := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	asset2 := (&th.AssetBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	pdfFile := th.UploadFile(t, th.PdfFilePath)
+	pngFile := th.UploadFile(t, th.LogoFilePath)
 
 	testCases := []struct {
 		name                  string
@@ -161,8 +163,8 @@ func TestMutationCreatePlatform(t *testing.T) {
 			request: testclient.CreatePlatformInput{
 				Name: gofakeit.AppName() + ulids.New().String(),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, admin user edges and files",
@@ -181,8 +183,8 @@ func TestMutationCreatePlatform(t *testing.T) {
 			archDiagrams:          []*graphql.Upload{pngFile, pdfFile},
 			dataFlowDiagrams:      []*graphql.Upload{pdfFile},
 			trustBoundaryDiagrams: []*graphql.Upload{pdfFile},
-			client:                suite.client.api,
-			ctx:                   sharedAdminUser.UserCtx,
+			client:                suite.Client.API,
+			ctx:                   th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
@@ -191,7 +193,7 @@ func TestMutationCreatePlatform(t *testing.T) {
 				SourceAssetIDs:  []string{asset2.ID},
 				SourceEntityIDs: []string{vendor.ID},
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -203,7 +205,7 @@ func TestMutationCreatePlatform(t *testing.T) {
 				DataFlowSummary:          lo.ToPtr(gofakeit.Paragraph()),
 				ScopeStatement:           lo.ToPtr(gofakeit.Paragraph()),
 			},
-			client: suite.client.apiWithToken,
+			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
 		{
@@ -215,15 +217,15 @@ func TestMutationCreatePlatform(t *testing.T) {
 				DataFlowSummary:          lo.ToPtr(gofakeit.Paragraph()),
 				ScopeStatement:           lo.ToPtr(gofakeit.Paragraph()),
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required name field",
 			request:     testclient.CreatePlatformInput{},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -231,15 +233,15 @@ func TestMutationCreatePlatform(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if len(tc.archDiagrams) > 0 {
-				expectUploadNillable(t, suite.client.mockProvider, tc.archDiagrams)
+				th.ExpectUploadNillable(t, suite.Client.MockProvider, tc.archDiagrams)
 			}
 
 			if len(tc.dataFlowDiagrams) > 0 {
-				expectUploadNillable(t, suite.client.mockProvider, tc.dataFlowDiagrams)
+				th.ExpectUploadNillable(t, suite.Client.MockProvider, tc.dataFlowDiagrams)
 			}
 
 			if len(tc.trustBoundaryDiagrams) > 0 {
-				expectUploadNillable(t, suite.client.mockProvider, tc.trustBoundaryDiagrams)
+				th.ExpectUploadNillable(t, suite.Client.MockProvider, tc.trustBoundaryDiagrams)
 			}
 
 			resp, err := tc.client.CreatePlatform(tc.ctx, tc.request, tc.archDiagrams, tc.dataFlowDiagrams, tc.trustBoundaryDiagrams)
@@ -311,33 +313,33 @@ func TestMutationCreatePlatform(t *testing.T) {
 			}
 
 			// cleanup each object created
-			(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: resp.CreatePlatform.Platform.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.PlatformDeleteOne]{Client: suite.Client.DB.Platform, ID: resp.CreatePlatform.Platform.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 			// cleanup files created for the platform
 			if len(tc.archDiagrams) > 0 {
-				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.ArchitectureDiagrams.Edges[0].Node.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+				(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, ID: resp.CreatePlatform.Platform.ArchitectureDiagrams.Edges[0].Node.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 			}
 			if len(tc.dataFlowDiagrams) > 0 {
-				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.DataFlowDiagrams.Edges[0].Node.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+				(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, ID: resp.CreatePlatform.Platform.DataFlowDiagrams.Edges[0].Node.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 			}
 			if len(tc.trustBoundaryDiagrams) > 0 {
-				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: resp.CreatePlatform.Platform.TrustBoundaryDiagrams.Edges[0].Node.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+				(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, ID: resp.CreatePlatform.Platform.TrustBoundaryDiagrams.Edges[0].Node.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 			}
 
 		})
 	}
 
 	// cleanup assets and entities created for the tests
-	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset.ID, asset2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssetDeleteOne]{Client: suite.Client.DB.Asset, IDs: []string{asset.ID, asset2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
 }
 
 func TestMutationUpdatePlatform(t *testing.T) {
-	platform := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	asset := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	vendor := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	outOfScopeAsset := (&AssetBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	outOfScopeVendor := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	pngFile := uploadFile(t, logoFilePath)
+	platform := (&th.PlatformBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	asset := (&th.AssetBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	vendor := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	outOfScopeAsset := (&th.AssetBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	outOfScopeVendor := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	pngFile := th.UploadFile(t, th.LogoFilePath)
 
 	diagramFileId := ""
 	testCases := []struct {
@@ -360,8 +362,8 @@ func TestMutationUpdatePlatform(t *testing.T) {
 				ExternalReferenceID:    lo.ToPtr("PLT-456"),
 				ContainsPii:            lo.ToPtr(true),
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields with personal access token",
@@ -373,47 +375,47 @@ func TestMutationUpdatePlatform(t *testing.T) {
 				ExternalReferenceID:      lo.ToPtr("PLT-456"),
 				ContainsPii:              lo.ToPtr(false),
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
 			name:         "happy path, add diagram",
 			request:      testclient.UpdatePlatformInput{},
 			archDiagrams: []*graphql.Upload{pngFile},
-			client:       suite.client.api,
-			ctx:          sharedAdminUser.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:          "happy path, remove diagram",
 			request:       testclient.UpdatePlatformInput{},
 			removeDiagram: true,
-			client:        suite.client.api,
-			ctx:           sharedAdminUser.UserCtx,
+			client:        suite.Client.API,
+			ctx:           th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdatePlatformInput{
 				Name: lo.ToPtr("New Name"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdatePlatformInput{
 				Name: lo.ToPtr("New Name"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if len(tc.archDiagrams) > 0 {
-				expectUploadNillable(t, suite.client.mockProvider, tc.archDiagrams)
+				th.ExpectUploadNillable(t, suite.Client.MockProvider, tc.archDiagrams)
 			}
 
 			if tc.removeDiagram {
@@ -474,26 +476,26 @@ func TestMutationUpdatePlatform(t *testing.T) {
 			}
 
 			if len(tc.request.RemoveArchitectureDiagramIDs) > 0 {
-				platform, err := suite.client.api.GetPlatformByID(tc.ctx, platform.ID)
+				platform, err := suite.Client.API.GetPlatformByID(tc.ctx, platform.ID)
 				assert.NilError(t, err)
 				assert.Check(t, is.Len(platform.Platform.ArchitectureDiagrams.Edges, 0))
 			}
 		})
 	}
 
-	(&Cleanup[*generated.PlatformDeleteOne]{client: suite.client.db.Platform, ID: platform.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.PlatformDeleteOne]{Client: suite.Client.DB.Platform, ID: platform.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup assets and entities created for the tests
-	(&Cleanup[*generated.AssetDeleteOne]{client: suite.client.db.Asset, IDs: []string{asset.ID, outOfScopeAsset.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: []string{vendor.ID, outOfScopeVendor.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssetDeleteOne]{Client: suite.Client.DB.Asset, IDs: []string{asset.ID, outOfScopeAsset.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: []string{vendor.ID, outOfScopeVendor.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup files created for the platform
-	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: diagramFileId}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, ID: diagramFileId}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeletePlatform(t *testing.T) {
 	// create objects to be deleted
-	platform1 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	platform2 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	platform3 := (&PlatformBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	platform1 := (&th.PlatformBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	platform2 := (&th.PlatformBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	platform3 := (&th.PlatformBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -505,48 +507,48 @@ func TestMutationDeletePlatform(t *testing.T) {
 		{
 			name:        "not found, delete",
 			idToDelete:  platform1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete",
 			idToDelete:  platform1.ID,
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: platform1.ID,
-			client:     suite.client.api,
-			ctx:        sharedAdminUser.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  platform1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: platform2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:       "happy path, delete using api token",
 			idToDelete: platform3.ID,
-			client:     suite.client.apiWithToken,
+			client:     suite.Client.APIWithToken,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
