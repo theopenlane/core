@@ -165,7 +165,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_StateMismatch() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, callbackReq.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
+
+	location, err := rec.Result().Location()
+	require.NoError(t, err)
+	assert.Contains(t, location.String(), "error=auth_failed")
 }
 
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCookies() {
@@ -279,7 +283,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingCode() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
+
+	location, err := rec.Result().Location()
+	require.NoError(t, err)
+	assert.Contains(t, location.String(), "error=auth_failed")
 }
 
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
@@ -309,7 +317,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_MissingProviderState() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
+
+	location, err := rec.Result().Location()
+	require.NoError(t, err)
+	assert.Contains(t, location.String(), "error=auth_failed")
 }
 
 func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
@@ -346,7 +358,11 @@ func (suite *HandlerTestSuite) TestHandleOAuthCallback_InvalidCookieOrgID() {
 	rec := httptest.NewRecorder()
 	suite.e.ServeHTTP(rec, req.WithContext(user.UserCtx))
 
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
+	assert.Equal(t, http.StatusFound, rec.Code)
+
+	location, err := rec.Result().Location()
+	require.NoError(t, err)
+	assert.Contains(t, location.String(), "error=auth_failed")
 }
 
 func (suite *HandlerTestSuite) startIntegrationAuth(t *testing.T, ctx context.Context, request handlers.IntegrationAuthStartRequest) (*httptest.ResponseRecorder, openapi.OAuthFlowResponse) {

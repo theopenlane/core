@@ -17,7 +17,7 @@ func TrustCenterScopePredicate() func(*sql.Selector) {
 
 		caller, ok := auth.CallerFromContext(ctx)
 		if !ok || caller == nil {
-			logx.FromContext(ctx).Debug().Msg("could not fetch caller when scoping trustcenter")
+			logx.FromContext(ctx).Warn().Msg("could not fetch caller when scoping trustcenter")
 			return
 		}
 

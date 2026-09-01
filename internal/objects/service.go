@@ -354,8 +354,13 @@ func (s *Service) resolveDownloadProvider(ctx context.Context, file *storagetype
 		IntegrationType: res.Builder.ProviderType(),
 	}
 
-	return s.clientService.GetClient(ctx, cacheKey, res.Builder, res.Output, res.Config).
-		OrElse(nil), nil
+	client := s.clientService.GetClient(ctx, cacheKey, res.Builder, res.Output, res.Config)
+	if !client.IsPresent() {
+		logx.FromContext(ctx).Error().Str("integration_type", res.Builder.ProviderType()).Msg("storage provider resolution failed: provider client unavailable")
+		return nil, ErrProviderResolutionFailed
+	}
+
+	return client.MustGet(), nil
 }
 
 // buildResolutionContext builds context for provider resolution from upload options
@@ -370,8 +375,14 @@ func (s *Service) buildResolutionContext(ctx context.Context, opts *storage.Uplo
 
 // buildResolutionContextForFile builds context for provider resolution from file metadata
 func (s *Service) buildResolutionContextForFile(ctx context.Context, file *storagetypes.File) context.Context {
-	// Add provider hints from file
-	ctx = ApplyProviderHints(ctx, file.ProviderHints)
+	hints := storagetypes.ProviderHints{}
+	if file.ProviderHints != nil {
+		hints = *file.ProviderHints
+	}
 
-	return ctx
+	if hints.KnownProvider == "" && file.ProviderType != "" {
+		hints.KnownProvider = file.ProviderType
+	}
+
+	return ApplyProviderHints(ctx, &hints)
 }

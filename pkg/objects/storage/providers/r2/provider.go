@@ -182,9 +182,13 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 
 // Download implements storagetypes.Provider
 func (p *Provider) Download(ctx context.Context, file *storagetypes.File, opts *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
-	bucket := p.options.Bucket
-	if opts.Bucket != "" {
+	bucket := file.Bucket
+	if opts != nil && opts.Bucket != "" {
 		bucket = opts.Bucket
+	}
+
+	if bucket == "" {
+		bucket = p.options.Bucket
 	}
 
 	head, err := p.client.HeadObject(ctx, &s3.HeadObjectInput{

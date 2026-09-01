@@ -355,7 +355,7 @@ func RegisterRoutes(router *Router) error {
 	authMW = authMiddleware(router)
 	// Default middleware for other routes which includes additional middleware
 	mw = defaultMiddleware(router)
-	staticMW = staticMiddleware()
+	staticMW = staticMiddleware(router)
 
 	// routeHandlers that take the router and handler as input
 	routeHandlers := []any{
@@ -475,9 +475,11 @@ func baseMiddleware(router *Router) []echo.MiddlewareFunc {
 	return append(mw, mimeMiddleware, transactionConfig.Middleware)
 }
 
-// staticMiddleware returns the middleware for routes serving embedded static content, omitting the transaction middleware
-func staticMiddleware() []echo.MiddlewareFunc {
-	return []echo.MiddlewareFunc{mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})}
+// staticMiddleware returns the middleware for routes serving embedded static content, omitting only the transaction middleware
+func staticMiddleware(router *Router) []echo.MiddlewareFunc {
+	mimeMiddleware := mime.NewWithConfig(mime.Config{DefaultContentType: httpsling.ContentTypeJSONUTF8})
+
+	return append([]echo.MiddlewareFunc{mimeMiddleware}, router.Handler.AdditionalMiddleware...)
 }
 
 // authMiddleware returns the middleware for the router that is used on authenticated routes
