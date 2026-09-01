@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // HookSubscriberCreate runs on subscriber create mutations

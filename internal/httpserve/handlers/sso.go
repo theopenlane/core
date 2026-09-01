@@ -24,9 +24,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/v2/internal/ent/validator"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

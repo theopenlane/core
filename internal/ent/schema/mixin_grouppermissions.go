@@ -26,8 +26,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/logx"
 )
 
 // GroupPermissionsMixin is a mixin for group permissions on an entity

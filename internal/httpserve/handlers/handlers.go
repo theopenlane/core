@@ -21,10 +21,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
+	"github.com/theopenlane/logx"
 )
 
 // SchemaRegistry interface for dynamic schema registration

@@ -355,7 +355,7 @@ func runParallelPostGenHooks(g *gen.Graph) {
 		entityops.WithEntPackage("github.com/theopenlane/core/v2/"+entGeneratedPath),
 		entityops.WithGalaPackage("github.com/theopenlane/core/v2/pkg/gala"),
 		entityops.WithJsonxPackage("github.com/theopenlane/core/v2/pkg/jsonx"),
-		entityops.WithLogxPackage("github.com/theopenlane/core/v2/pkg/logx"),
+		entityops.WithLogxPackage("github.com/theopenlane/logx"),
 		entityops.WithCelxPackage("github.com/theopenlane/core/v2/pkg/celx"),
 		entityops.WithMapxPackage("github.com/theopenlane/core/v2/pkg/mapx"),
 		entityops.WithEnumsPackage("github.com/theopenlane/core/common/enums"),

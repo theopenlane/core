@@ -25,7 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/pkg/catalog"
 	"github.com/theopenlane/core/v2/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // Reconciler reconciles organization subscriptions with Stripe

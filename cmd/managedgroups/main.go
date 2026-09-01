@@ -22,9 +22,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 	"github.com/theopenlane/core/v2/internal/entdb"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/urfave/cli/v3"
 )

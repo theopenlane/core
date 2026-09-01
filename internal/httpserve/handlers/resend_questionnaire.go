@@ -18,8 +18,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/logx"
 )
 
 const maxQuestionnaireResendAttempts = 5

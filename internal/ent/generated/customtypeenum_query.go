@@ -26,7 +26,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // CustomTypeEnumQuery is the builder for querying CustomTypeEnum entities.

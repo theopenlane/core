@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphsubscriptions"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/logx"
 )
 
 // handleNotificationSubscription handles the subscription logic for notifications.

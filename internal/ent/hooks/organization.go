@@ -28,8 +28,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/logx"
 )
 
 // HookOrganization runs on org mutations to set default values that are not provided

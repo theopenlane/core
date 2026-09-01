@@ -9,8 +9,8 @@ import (
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/logx"
 )
 
 // HookTrustCenterSubprocessor adds parent relationship tuples on create of trust center subprocessors for the subprocessor, allowing trust center access

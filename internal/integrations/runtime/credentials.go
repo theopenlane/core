@@ -17,9 +17,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/keymaker"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
+	"github.com/theopenlane/logx"
 )
 
 // BeginAuth starts one definition auth flow through the runtime-managed keymaker service

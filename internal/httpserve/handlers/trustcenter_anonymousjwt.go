@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/logx"
 )
 
 func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {

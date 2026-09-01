@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // resolveInstallationMetadata derives AWS connection metadata from whichever credential is bound.

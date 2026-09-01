@@ -9,7 +9,7 @@ import (
 	"google.golang.org/api/option"
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // Client builds Google Drive SDK clients for one installation

@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowdefinitionhistory"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // WorkflowDefinitionHistoryQuery is the builder for querying WorkflowDefinitionHistory entities.

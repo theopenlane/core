@@ -14,11 +14,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/core/v2/internal/objects"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	disk "github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
 	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
 	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
+	"github.com/theopenlane/logx"
 )
 
 const (

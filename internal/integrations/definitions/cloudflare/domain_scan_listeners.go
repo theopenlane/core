@@ -23,8 +23,8 @@ import (
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/urlx"
+	"github.com/theopenlane/logx"
 )
 
 // domainScanEnrichmentMetadataKey is the Scan.Metadata key used to carry the enrichment data

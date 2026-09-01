@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // HookCreateAssessmentResponse sends the email to the user to fill in and input their data.

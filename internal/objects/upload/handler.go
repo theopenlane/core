@@ -15,10 +15,10 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/objects"
 	"github.com/theopenlane/core/v2/internal/objects/store"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/logx"
 )
 
 // HandleUploads persists metadata, uploads files to storage, and enriches the request context with uploaded file details.

@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/logx"
 )
 
 // unhealthyReasonMetadataKey is the Integration.Metadata key recording why the installation

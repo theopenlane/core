@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 func createAssessmentTemplate(ctx context.Context, input model.CreateAssessmentTemplateInput) (*model.AssessmentTemplateCreatePayload, error) {

@@ -5,10 +5,10 @@ import (
 	"slices"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

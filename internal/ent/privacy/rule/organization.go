@@ -14,8 +14,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	access "github.com/theopenlane/core/v2/internal/ent/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/permissioncache"
+	"github.com/theopenlane/logx"
 )
 
 // ownerMutation is a minimal mutation contract used to resolve organization ownership.

@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // InterceptorGroupSetting is middleware to change the GroupSetting query

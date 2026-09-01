@@ -19,7 +19,7 @@ import (
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

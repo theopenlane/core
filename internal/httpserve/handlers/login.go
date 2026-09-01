@@ -16,9 +16,9 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
+	"github.com/theopenlane/logx"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie

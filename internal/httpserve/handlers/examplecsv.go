@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/logx"
 )
 
 //go:embed csv/*.csv

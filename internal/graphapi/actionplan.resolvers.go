@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

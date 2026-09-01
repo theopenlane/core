@@ -19,10 +19,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	dbprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/database"
 	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
+	"github.com/theopenlane/logx"
 )
 
 // InterceptorFile is an ent interceptor that filters the file query on the organization id

@@ -16,10 +16,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/httpserve/route"
 	"github.com/theopenlane/core/v2/internal/httpserve/specs"
 	"github.com/theopenlane/core/v2/internal/objects"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	echodebug "github.com/theopenlane/core/v2/pkg/middleware/debug"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/logx"
 )
 
 // Server is a struct that holds the configuration for the server

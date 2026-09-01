@@ -106,6 +106,7 @@ require (
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.38.2
+	github.com/theopenlane/logx v0.1.0
 	github.com/theopenlane/newman v0.4.3
 	github.com/theopenlane/riverboat v0.13.3
 	github.com/theopenlane/utils v0.7.1
@@ -171,7 +172,6 @@ require (
 	github.com/std-uritemplate/std-uritemplate/go/v2 v2.0.8 // indirect
 	github.com/tailscale/hujson v0.0.0-20220506213045-af5ed07155e5 // indirect
 	github.com/theopenlane/core v1.34.0 // indirect
-	github.com/theopenlane/logx v0.1.0 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/vanng822/css v1.0.1 // indirect

@@ -7,7 +7,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // AllowMutationIfSystemAdmin determines whether a mutation operation should be allowed based on whether the user is a system admin

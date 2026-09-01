@@ -17,9 +17,9 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/integrations/cli/cmd"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	openlaneclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
+	"github.com/theopenlane/logx"
 )
 
 // quickstartTag marks resources created by this command so they are easy to

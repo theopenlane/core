@@ -30,10 +30,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ssoenforcement"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/permissioncache"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
+	"github.com/theopenlane/logx"
 )
 
 // These are stored here, instead of iam because they are specific
@@ -539,28 +539,10 @@ func getSubjectName(user *ent.User) string {
 	return subjectName
 }
 
-// SSOUnauthorizedReply is the 401 body returned when credentials are rejected and the caller's
-// organization enforces SSO. The SSO login endpoint takes a POST with a JSON body, so a redirect
-// cannot be followed to it; the client starts the flow itself from these fields
-type SSOUnauthorizedReply struct {
-	rout.Reply
-
-	// SSORequired marks that the organization requires SSO for this caller
-	SSORequired bool `json:"sso_required"`
-	// OrganizationID is the organization whose SSO login flow the client should start
-	OrganizationID string `json:"organization_id"`
-	// SSOLoginPath is the path of the SSO login endpoint, which the client POSTs to with the
-	// organization ID in the body
-	SSOLoginPath string `json:"sso_login_path"`
-}
-
-// unauthorized returns a 401 Unauthorized response with the error message, annotated with the SSO
-// login details when the caller's organization enforces SSO
+// unauthorized returns a 401 Unauthorized response with the error message
 func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) error {
 	reqCtx := c.Request().Context()
 	logger := logx.FromContext(reqCtx)
-
-	var body any = rout.ErrorResponse(err)
 
 	if v != nil && conf != nil && conf.DBClient != nil {
 		orgID := orgIDFromToken(c, v)
@@ -573,18 +555,17 @@ func unauthorized(c echo.Context, err error, conf *Options, v tokens.Validator) 
 				}
 
 				if dbErr == nil && mustSSO {
-					body = SSOUnauthorizedReply{
-						Reply:          rout.ErrorResponse(err),
-						SSORequired:    true,
-						OrganizationID: orgID,
-						SSOLoginPath:   sso.SSOLogin(c.Echo(), ""),
+					if redirErr := c.Redirect(http.StatusFound, sso.SSOLogin(c.Echo(), orgID)); redirErr != nil {
+						return redirErr
 					}
+
+					return nil
 				}
 			}
 		}
 	}
 
-	if jsonErr := c.JSON(http.StatusUnauthorized, body); jsonErr != nil {
+	if jsonErr := c.JSON(http.StatusUnauthorized, rout.ErrorResponse(err)); jsonErr != nil {
 		logger.Error().Err(jsonErr).Msg("failed to write unauthorized JSON response")
 		return jsonErr
 	}

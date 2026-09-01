@@ -29,10 +29,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
+	"github.com/theopenlane/logx"
 )
 
 // updateUserLastSeen updates the last seen timestamp of the user and login method used

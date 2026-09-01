@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/utils/contextx"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 const (

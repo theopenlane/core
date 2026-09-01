@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // AccountAccessHandler list roles a subject has access to in relation an object

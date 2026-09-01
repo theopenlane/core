@@ -17,9 +17,9 @@ import (
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/version"
+	"github.com/theopenlane/logx"
 )
 
 // backfillBypassCaps lets the backfill write organizations and memberships without a request caller while

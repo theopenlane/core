@@ -64,8 +64,8 @@ import (
 	"github.com/theopenlane/core/v2/pkg/celx"
 	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
+	"github.com/theopenlane/logx"
 )
 
 // entityRef is a lightweight reference to an entity

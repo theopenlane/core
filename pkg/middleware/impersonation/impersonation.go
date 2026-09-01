@@ -6,10 +6,10 @@ import (
 	"slices"
 
 	"github.com/rs/zerolog"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/logx"
 )
 
 // Middleware handles detection and processing of impersonation tokens

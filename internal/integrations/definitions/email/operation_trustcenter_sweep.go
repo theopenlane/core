@@ -25,7 +25,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/internal/trustcenterurl"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // trustCenterNotificationGrace is the debounce window a post or subprocessor change must be stable

@@ -17,7 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // MappableDomainQuery is the builder for querying MappableDomain entities.

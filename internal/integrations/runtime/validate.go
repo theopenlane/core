@@ -6,7 +6,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // ValidateUserInput reports whether a payload satisfies the definition's user input schema, so a

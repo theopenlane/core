@@ -13,8 +13,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/logx"
 )
 
 var internalTrustCenterDocUpdateContextKey = contextx.NewKey[struct{}]()

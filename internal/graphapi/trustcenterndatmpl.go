@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/model"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/logx"
 )
 
 //go:embed trustcenternda.json.tpl

@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/notifications"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // NewGalaRuntimes creates the main and notification gala runtimes from configuration.

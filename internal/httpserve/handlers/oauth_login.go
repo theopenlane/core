@@ -24,8 +24,8 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/v2/internal/ent/validator"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
+	"github.com/theopenlane/logx"
 )
 
 // OauthProviderConfig represents the configuration for OAuth providers such as Github and Google

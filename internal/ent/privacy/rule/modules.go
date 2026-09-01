@@ -17,9 +17,9 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/mapx"
 	"github.com/theopenlane/core/v2/pkg/permissioncache"
+	"github.com/theopenlane/logx"
 )
 
 // HasFeature reports whether the current organization has the given feature enabled

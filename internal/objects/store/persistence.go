@@ -15,10 +15,10 @@ import (
 	"github.com/theopenlane/core/v2/internal/consts"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/logx"
 )
 
 // CreateFileRecord creates a file record in the database and returns the resulting ent.File entity.

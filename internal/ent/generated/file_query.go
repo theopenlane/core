@@ -34,7 +34,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
 
-	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/logx"
 )
 
 // FileQuery is the builder for querying File entities.

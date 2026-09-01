@@ -27,8 +27,8 @@ import (
 	catalogprices "github.com/theopenlane/core/v2/internal/entitlements"
 	em "github.com/theopenlane/core/v2/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/v2/pkg/entitlements"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
+	"github.com/theopenlane/logx"
 )
 
 const (

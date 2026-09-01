@@ -15,12 +15,12 @@ import (
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/logx"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"

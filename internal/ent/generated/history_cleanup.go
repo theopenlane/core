@@ -142,8 +142,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenttargethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowdefinitionhistory"
 	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/logx"
 )
 
 // PurgeHistoryEnabled reports whether the current operation is purging history rather than recording

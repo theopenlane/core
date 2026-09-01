@@ -7,9 +7,9 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/logx"
 )
 
 // filterAuthorizedIDs checks which IDs the caller has access to for the given relation
