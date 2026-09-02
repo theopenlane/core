@@ -55,7 +55,24 @@ func CheckIfCommentOnly() privacy.MutationRuleFunc {
 			newDetailsTyped, _ := newDetailsJSON.([]any)
 
 			if slateparser.NoDetailsChanged(oldDetailsTyped, newDetailsTyped) {
+				mergedComments, ok := slateparser.MergeComments(oldDetailsTyped, newDetailsTyped)
+				if !ok {
+					return privacy.Allowf("mutation has only comments added to details_json, allowing")
+				}
+
+				if err := m.SetField(detailsJSONFieldName, mergedComments); err != nil {
+					return privacy.Denyf("unable to merge comment markers")
+				}
+
 				return privacy.Allowf("mutation has only comments added to details_json, allowing")
+			}
+
+			if detailsJSONFieldName == "details_json" && len(oldDetailsTyped) == 0 {
+				oldDetails, _ := m.OldField(ctx, "details")
+				oldDetailsTyped, _ := oldDetails.(string)
+				if slateparser.DoesMarkdownMatchSlate(oldDetailsTyped, newDetailsTyped) {
+					return privacy.Allowf("mutation initializes details_json with comments without changing details, allowing")
+				}
 			}
 		}
 

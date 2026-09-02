@@ -3,8 +3,9 @@ package slateparser_test
 import (
 	"testing"
 
-	"github.com/theopenlane/core/v2/pkg/slateparser"
 	"gotest.tools/v3/assert"
+
+	"github.com/theopenlane/core/v2/pkg/slateparser"
 )
 
 func TestContainsCommentsInTextJSON(t *testing.T) {
@@ -426,4 +427,48 @@ func TestNoDetailsChanged(t *testing.T) {
 		newText := makeList(map[string]any{"text": "Confidentiality Policy", "comment": true, "comment_xyz": true})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
+}
+
+func TestMergeComments(t *testing.T) {
+
+	t.Run("existing marker is preserved from a stale snapshot", func(t *testing.T) {
+		oldText := makeSlate(t,
+			map[string]any{"text": "Existing", "comment": true, "comment_existing": true},
+			map[string]any{"text": " procedure applies"},
+		)
+		newExistingLeaf := map[string]any{"text": "Existing"}
+		newCommentLeaf := map[string]any{"text": " procedure a", "comment": true, "comment_new": true}
+
+		newText := makeSlate(t,
+			newExistingLeaf,
+			newCommentLeaf,
+			map[string]any{"text": "pplies"},
+		)
+
+		mergedText, merged := slateparser.MergeComments(oldText, newText)
+		assert.Check(t, merged)
+		assert.DeepEqual(t, mergedText, newText)
+		assert.Equal(t, newExistingLeaf["comment_existing"], true)
+		assert.Equal(t, newExistingLeaf["comment"], true)
+		assert.Equal(t, newCommentLeaf["comment_new"], true)
+	})
+
+	t.Run("does not restore a removed marker without a new marker", func(t *testing.T) {
+		oldText := makeSlate(t, map[string]any{"text": "Existing", "comment": true, "comment_existing": true})
+		newLeaf := map[string]any{"text": "Existing"}
+
+		_, merged := slateparser.MergeComments(oldText, makeSlate(t, newLeaf))
+		assert.Check(t, !merged)
+		_, exists := newLeaf["comment_existing"]
+		assert.Check(t, !exists)
+	})
+}
+
+func makeSlate(t *testing.T, children ...any) []any {
+	t.Helper()
+
+	return []any{map[string]any{
+		"type":     "paragraph",
+		"children": children,
+	}}
 }
