@@ -45938,6 +45938,15 @@ type IntegrationWhereInput struct {
 	StatusIn    []enums.IntegrationStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.IntegrationStatus `json:"statusNotIn,omitempty"`
 
+	// "expires_at" field predicates.
+	ExpiresAt       *time.Time `json:"expiresAt,omitempty"`
+	ExpiresAtGT     *time.Time `json:"expiresAtGT,omitempty"`
+	ExpiresAtGTE    *time.Time `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLT     *time.Time `json:"expiresAtLT,omitempty"`
+	ExpiresAtLTE    *time.Time `json:"expiresAtLTE,omitempty"`
+	ExpiresAtIsNil  bool       `json:"expiresAtIsNil,omitempty"`
+	ExpiresAtNotNil bool       `json:"expiresAtNotNil,omitempty"`
+
 	// "primary_directory" field predicates.
 	PrimaryDirectory    *bool `json:"primaryDirectory,omitempty"`
 	PrimaryDirectoryNEQ *bool `json:"primaryDirectoryNEQ,omitempty"`
@@ -46788,6 +46797,27 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	}
 	if len(i.StatusNotIn) > 0 {
 		predicates = append(predicates, integration.StatusNotIn(i.StatusNotIn...))
+	}
+	if i.ExpiresAt != nil {
+		predicates = append(predicates, integration.ExpiresAtEQ(*i.ExpiresAt))
+	}
+	if i.ExpiresAtGT != nil {
+		predicates = append(predicates, integration.ExpiresAtGT(*i.ExpiresAtGT))
+	}
+	if i.ExpiresAtGTE != nil {
+		predicates = append(predicates, integration.ExpiresAtGTE(*i.ExpiresAtGTE))
+	}
+	if i.ExpiresAtLT != nil {
+		predicates = append(predicates, integration.ExpiresAtLT(*i.ExpiresAtLT))
+	}
+	if i.ExpiresAtLTE != nil {
+		predicates = append(predicates, integration.ExpiresAtLTE(*i.ExpiresAtLTE))
+	}
+	if i.ExpiresAtIsNil {
+		predicates = append(predicates, integration.ExpiresAtIsNil())
+	}
+	if i.ExpiresAtNotNil {
+		predicates = append(predicates, integration.ExpiresAtNotNil())
 	}
 	if i.PrimaryDirectory != nil {
 		predicates = append(predicates, integration.PrimaryDirectoryEQ(*i.PrimaryDirectory))

@@ -64324,36 +64324,36 @@ func (t *GetAllIntegrations_Integrations) GetEdges() []*GetAllIntegrations_Integ
 }
 
 type GetIntegrationByID_Integration struct {
-	CampaignEmail            bool                      "json:\"campaignEmail\" graphql:\"campaignEmail\""
-	CreatedAt                *time.Time                "json:\"createdAt,omitempty\" graphql:\"createdAt\""
-	CreatedBy                *string                   "json:\"createdBy,omitempty\" graphql:\"createdBy\""
-	DefinitionID             *string                   "json:\"definitionID,omitempty\" graphql:\"definitionID\""
-	DefinitionSlug           *string                   "json:\"definitionSlug,omitempty\" graphql:\"definitionSlug\""
-	DefinitionVersion        *string                   "json:\"definitionVersion,omitempty\" graphql:\"definitionVersion\""
-	Description              *string                   "json:\"description,omitempty\" graphql:\"description\""
-	EnvironmentID            *string                   "json:\"environmentID,omitempty\" graphql:\"environmentID\""
-	EnvironmentName          *string                   "json:\"environmentName,omitempty\" graphql:\"environmentName\""
-	Family                   *string                   "json:\"family,omitempty\" graphql:\"family\""
-	Health                   *models.IntegrationHealth "json:\"health,omitempty\" graphql:\"health\""
-	ID                       string                    "json:\"id\" graphql:\"id\""
-	IntegrationType          *string                   "json:\"integrationType,omitempty\" graphql:\"integrationType\""
-	InternalNotes            *string                   "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
-	Kind                     *string                   "json:\"kind,omitempty\" graphql:\"kind\""
-	Metadata                 map[string]any            "json:\"metadata,omitempty\" graphql:\"metadata\""
-	Name                     string                    "json:\"name\" graphql:\"name\""
-	OwnerID                  *string                   "json:\"ownerID,omitempty\" graphql:\"ownerID\""
-	PlatformID               *string                   "json:\"platformID,omitempty\" graphql:\"platformID\""
-	PrimaryDirectory         bool                      "json:\"primaryDirectory\" graphql:\"primaryDirectory\""
-	ProviderMetadataSnapshot map[string]any            "json:\"providerMetadataSnapshot,omitempty\" graphql:\"providerMetadataSnapshot\""
-	ScopeID                  *string                   "json:\"scopeID,omitempty\" graphql:\"scopeID\""
-	ScopeName                *string                   "json:\"scopeName,omitempty\" graphql:\"scopeName\""
-	Status                   enums.IntegrationStatus   "json:\"status\" graphql:\"status\""
-	SystemInternalID         *string                   "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
-	SystemOwned              *bool                     "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
-	Tags                     []string                  "json:\"tags,omitempty\" graphql:\"tags\""
-	UpdatedAt                *time.Time                "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
-	UpdatedBy                *string                   "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
-	UpdatedByImpersonator    *string                   "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
+	CampaignEmail            bool                    "json:\"campaignEmail\" graphql:\"campaignEmail\""
+	CreatedAt                *time.Time              "json:\"createdAt,omitempty\" graphql:\"createdAt\""
+	CreatedBy                *string                 "json:\"createdBy,omitempty\" graphql:\"createdBy\""
+	DefinitionID             *string                 "json:\"definitionID,omitempty\" graphql:\"definitionID\""
+	DefinitionSlug           *string                 "json:\"definitionSlug,omitempty\" graphql:\"definitionSlug\""
+	DefinitionVersion        *string                 "json:\"definitionVersion,omitempty\" graphql:\"definitionVersion\""
+	Description              *string                 "json:\"description,omitempty\" graphql:\"description\""
+	EnvironmentID            *string                 "json:\"environmentID,omitempty\" graphql:\"environmentID\""
+	EnvironmentName          *string                 "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExpiresAt                *time.Time              "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
+	Family                   *string                 "json:\"family,omitempty\" graphql:\"family\""
+	ID                       string                  "json:\"id\" graphql:\"id\""
+	IntegrationType          *string                 "json:\"integrationType,omitempty\" graphql:\"integrationType\""
+	InternalNotes            *string                 "json:\"internalNotes,omitempty\" graphql:\"internalNotes\""
+	Kind                     *string                 "json:\"kind,omitempty\" graphql:\"kind\""
+	Metadata                 map[string]any          "json:\"metadata,omitempty\" graphql:\"metadata\""
+	Name                     string                  "json:\"name\" graphql:\"name\""
+	OwnerID                  *string                 "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	PlatformID               *string                 "json:\"platformID,omitempty\" graphql:\"platformID\""
+	PrimaryDirectory         bool                    "json:\"primaryDirectory\" graphql:\"primaryDirectory\""
+	ProviderMetadataSnapshot map[string]any          "json:\"providerMetadataSnapshot,omitempty\" graphql:\"providerMetadataSnapshot\""
+	ScopeID                  *string                 "json:\"scopeID,omitempty\" graphql:\"scopeID\""
+	ScopeName                *string                 "json:\"scopeName,omitempty\" graphql:\"scopeName\""
+	Status                   enums.IntegrationStatus "json:\"status\" graphql:\"status\""
+	SystemInternalID         *string                 "json:\"systemInternalID,omitempty\" graphql:\"systemInternalID\""
+	SystemOwned              *bool                   "json:\"systemOwned,omitempty\" graphql:\"systemOwned\""
+	Tags                     []string                "json:\"tags,omitempty\" graphql:\"tags\""
+	UpdatedAt                *time.Time              "json:\"updatedAt,omitempty\" graphql:\"updatedAt\""
+	UpdatedBy                *string                 "json:\"updatedBy,omitempty\" graphql:\"updatedBy\""
+	UpdatedByImpersonator    *string                 "json:\"updatedByImpersonator,omitempty\" graphql:\"updatedByImpersonator\""
 }
 
 func (t *GetIntegrationByID_Integration) GetCampaignEmail() bool {
@@ -64409,6 +64409,12 @@ func (t *GetIntegrationByID_Integration) GetEnvironmentName() *string {
 		t = &GetIntegrationByID_Integration{}
 	}
 	return t.EnvironmentName
+}
+func (t *GetIntegrationByID_Integration) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetIntegrationByID_Integration{}
+	}
+	return t.ExpiresAt
 }
 func (t *GetIntegrationByID_Integration) GetFamily() *string {
 	if t == nil {
@@ -187502,6 +187508,7 @@ const GetIntegrationByIDDocument = `query GetIntegrationByID ($integrationId: ID
 		description
 		environmentID
 		environmentName
+		expiresAt
 		family
 		health
 		id

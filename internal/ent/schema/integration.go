@@ -150,6 +150,13 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("status"),
 			),
+		field.Time("expires_at").
+			Comment("when a pending installation is considered abandoned and eligible for cleanup; cleared when the installation connects").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("expires_at"),
+			),
 		field.JSON("provider_metadata_snapshot", map[string]any{}).
 			Comment("snapshot of definition metadata captured on the installation").
 			Optional().

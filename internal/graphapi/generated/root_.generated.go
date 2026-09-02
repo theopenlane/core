@@ -3048,6 +3048,7 @@ type ComplexityRoot struct {
 		EnvironmentID            func(childComplexity int) int
 		EnvironmentName          func(childComplexity int) int
 		Events                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		ExpiresAt                func(childComplexity int) int
 		Family                   func(childComplexity int) int
 		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Findings                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
@@ -21975,6 +21976,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
+	case "Integration.expiresAt":
+		if e.ComplexityRoot.Integration.ExpiresAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.ExpiresAt(childComplexity), true
 	case "Integration.family":
 		if e.ComplexityRoot.Integration.Family == nil {
 			break
@@ -89359,6 +89366,10 @@ type Integration implements Node {
   """
   status: IntegrationIntegrationStatus!
   """
+  when a pending installation is considered abandoned and eligible for cleanup; cleared when the installation connects
+  """
+  expiresAt: Time
+  """
   snapshot of definition metadata captured on the installation
   """
   providerMetadataSnapshot: Map
@@ -90065,6 +90076,7 @@ enum IntegrationOrderField {
   definition_slug
   family
   status
+  expires_at
 }
 """
 IntegrationWhereInput is used for filtering Integration objects.
@@ -90367,6 +90379,16 @@ input IntegrationWhereInput {
   statusNEQ: IntegrationIntegrationStatus
   statusIn: [IntegrationIntegrationStatus!]
   statusNotIn: [IntegrationIntegrationStatus!]
+  """
+  expires_at field predicates
+  """
+  expiresAt: Time
+  expiresAtGT: Time
+  expiresAtGTE: Time
+  expiresAtLT: Time
+  expiresAtLTE: Time
+  expiresAtIsNil: Boolean
+  expiresAtNotNil: Boolean
   """
   primary_directory field predicates
   """
@@ -159413,6 +159435,8 @@ func (ec *executionContext) childFields_Integration(ctx context.Context, field g
 		return ec.fieldContext_Integration_family(ctx, field)
 	case "status":
 		return ec.fieldContext_Integration_status(ctx, field)
+	case "expiresAt":
+		return ec.fieldContext_Integration_expiresAt(ctx, field)
 	case "providerMetadataSnapshot":
 		return ec.fieldContext_Integration_providerMetadataSnapshot(ctx, field)
 	case "primaryDirectory":

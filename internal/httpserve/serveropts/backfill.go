@@ -13,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
 	"github.com/theopenlane/core/v2/internal/integrations/runtime"
@@ -109,6 +110,16 @@ var backfillRoutines = []backfillRoutine{
 		Enabled: true,
 		Run: func(ctx context.Context, deps backfillDeps) error {
 			backfillFileBackups(ctx, deps.Client, deps.Gala)
+
+			return nil
+		},
+	},
+	{
+		Name:    "integration-expiry",
+		Version: "v1",
+		Enabled: true,
+		Run: func(ctx context.Context, deps backfillDeps) error {
+			backfillIntegrationExpiry(ctx, deps.Client)
 
 			return nil
 		},
@@ -229,6 +240,37 @@ func backfillReconcileLoops(ctx context.Context, dbClient *ent.Client, rt *runti
 	}
 
 	logx.FromContext(ctx).Info().Int("reset", reset).Int("reviewed", len(installations)).Msg("backfill: reconcile loop reset completed")
+}
+
+// backfillIntegrationExpiry stamps expires_at on pending installations created before the
+// column existed, deriving the expiry from the row's last update
+func backfillIntegrationExpiry(ctx context.Context, dbClient *ent.Client) {
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	rows, err := dbClient.Integration.Query().
+		Where(integration.StatusEQ(enums.IntegrationStatusPending), integration.ExpiresAtIsNil()).
+		All(allowCtx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query pending integrations missing an expiry")
+
+		return
+	}
+
+	var stamped int
+
+	for _, row := range rows {
+		if err := dbClient.Integration.UpdateOneID(row.ID).
+			SetExpiresAt(row.UpdatedAt.Add(runtime.PendingInstallationTTL)).
+			Exec(allowCtx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("integration_id", row.ID).Msg("backfill: failed stamping installation expiry")
+
+			continue
+		}
+
+		stamped++
+	}
+
+	logx.FromContext(ctx).Info().Int("stamped", stamped).Int("reviewed", len(rows)).Msg("backfill: integration expiry stamping completed")
 }
 
 // backfillFileBackups enqueues a backup for existing files whose storage provider has a backup

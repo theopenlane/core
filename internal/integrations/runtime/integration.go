@@ -2,6 +2,7 @@ package runtime
 
 import (
 	"context"
+	"time"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
@@ -15,6 +16,10 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/core/v2/pkg/metrics"
 )
+
+// PendingInstallationTTL is how long a pending installation may wait for its auth flow
+// before it expires; live auth state lasts minutes, so anything older can only restart
+const PendingInstallationTTL = 168 * time.Hour
 
 // IntegrationLookup holds the query constraints for resolving an integration
 type IntegrationLookup struct {
@@ -59,6 +64,7 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 		SetDefinitionID(def.ID).
 		SetFamily(def.Family).
 		SetStatus(enums.IntegrationStatusPending).
+		SetExpiresAt(time.Now().Add(PendingInstallationTTL)).
 		Save(ctx)
 	if err != nil {
 		return nil, false, err

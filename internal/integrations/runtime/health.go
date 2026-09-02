@@ -112,6 +112,7 @@ func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *e
 	transitioned, err := r.DB().Integration.Update().
 		Where(integration.ID(installation.ID), integration.StatusEQ(enums.IntegrationStatusErrored)).
 		SetStatus(enums.IntegrationStatusConnected).
+		ClearExpiresAt().
 		SetHealth(health).
 		Save(systemCtx)
 	if err != nil {
@@ -443,20 +444,6 @@ func (r *Runtime) runOperationProbe(ctx context.Context, installation *ent.Integ
 	})
 
 	return err
-}
-
-// ProbeIntegrationRecovery re-verifies an errored installation and clears it on success
-func (r *Runtime) ProbeIntegrationRecovery(ctx context.Context, installation *ent.Integration) error {
-	def, err := r.resolveDefinitionForInstallation(installation)
-	if err != nil {
-		return err
-	}
-
-	if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
-		return err
-	}
-
-	return r.ClearIntegrationUnhealthy(ctx, installation)
 }
 
 // verifyInstallationHealth runs the persisted connection's health check under stored

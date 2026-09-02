@@ -4282,6 +4282,7 @@ var (
 		{Name: "definition_slug", Type: field.TypeString, Nullable: true},
 		{Name: "family", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "CONNECTED", "DEGRADED", "ERRORED", "DISABLED"}, Default: "PENDING"},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "provider_metadata_snapshot", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_directory", Type: field.TypeBool, Default: false},
 		{Name: "campaign_email", Type: field.TypeBool, Default: false},

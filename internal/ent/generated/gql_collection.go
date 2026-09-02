@@ -39332,6 +39332,11 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, integration.FieldStatus)
 				fieldSeen[integration.FieldStatus] = struct{}{}
 			}
+		case "expiresAt":
+			if _, ok := fieldSeen[integration.FieldExpiresAt]; !ok {
+				selectedFields = append(selectedFields, integration.FieldExpiresAt)
+				fieldSeen[integration.FieldExpiresAt] = struct{}{}
+			}
 		case "providerMetadataSnapshot":
 			if _, ok := fieldSeen[integration.FieldProviderMetadataSnapshot]; !ok {
 				selectedFields = append(selectedFields, integration.FieldProviderMetadataSnapshot)

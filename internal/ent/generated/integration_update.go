@@ -587,6 +587,26 @@ func (_u *IntegrationUpdate) SetNillableStatus(v *enums.IntegrationStatus) *Inte
 	return _u
 }
 
+// SetExpiresAt sets the "expires_at" field.
+func (_u *IntegrationUpdate) SetExpiresAt(v time.Time) *IntegrationUpdate {
+	_u.mutation.SetExpiresAt(v)
+	return _u
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableExpiresAt(v *time.Time) *IntegrationUpdate {
+	if v != nil {
+		_u.SetExpiresAt(*v)
+	}
+	return _u
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (_u *IntegrationUpdate) ClearExpiresAt() *IntegrationUpdate {
+	_u.mutation.ClearExpiresAt()
+	return _u
+}
+
 // SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
 func (_u *IntegrationUpdate) SetProviderMetadataSnapshot(v map[string]interface{}) *IntegrationUpdate {
 	_u.mutation.SetProviderMetadataSnapshot(v)
@@ -1689,6 +1709,12 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ExpiresAt(); ok {
+		_spec.SetField(integration.FieldExpiresAt, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiresAtCleared() {
+		_spec.ClearField(integration.FieldExpiresAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)
@@ -3331,6 +3357,26 @@ func (_u *IntegrationUpdateOne) SetNillableStatus(v *enums.IntegrationStatus) *I
 	return _u
 }
 
+// SetExpiresAt sets the "expires_at" field.
+func (_u *IntegrationUpdateOne) SetExpiresAt(v time.Time) *IntegrationUpdateOne {
+	_u.mutation.SetExpiresAt(v)
+	return _u
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableExpiresAt(v *time.Time) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetExpiresAt(*v)
+	}
+	return _u
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (_u *IntegrationUpdateOne) ClearExpiresAt() *IntegrationUpdateOne {
+	_u.mutation.ClearExpiresAt()
+	return _u
+}
+
 // SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
 func (_u *IntegrationUpdateOne) SetProviderMetadataSnapshot(v map[string]interface{}) *IntegrationUpdateOne {
 	_u.mutation.SetProviderMetadataSnapshot(v)
@@ -4463,6 +4509,12 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ExpiresAt(); ok {
+		_spec.SetField(integration.FieldExpiresAt, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiresAtCleared() {
+		_spec.ClearField(integration.FieldExpiresAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)

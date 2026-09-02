@@ -82,6 +82,8 @@ const (
 	FieldFamily = "family"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
+	// FieldExpiresAt holds the string denoting the expires_at field in the database.
+	FieldExpiresAt = "expires_at"
 	// FieldProviderMetadataSnapshot holds the string denoting the provider_metadata_snapshot field in the database.
 	FieldProviderMetadataSnapshot = "provider_metadata_snapshot"
 	// FieldPrimaryDirectory holds the string denoting the primary_directory field in the database.
@@ -343,6 +345,7 @@ var Columns = []string{
 	FieldDefinitionSlug,
 	FieldFamily,
 	FieldStatus,
+	FieldExpiresAt,
 	FieldProviderMetadataSnapshot,
 	FieldPrimaryDirectory,
 	FieldCampaignEmail,
@@ -574,6 +577,11 @@ func ByFamily(opts ...sql.OrderTermOption) OrderOption {
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
+}
+
+// ByExpiresAt orders the results by the expires_at field.
+func ByExpiresAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldExpiresAt, opts...).ToFunc()
 }
 
 // ByPrimaryDirectory orders the results by the primary_directory field.
