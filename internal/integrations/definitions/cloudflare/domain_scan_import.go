@@ -34,13 +34,13 @@ const domainScanImportVendorEntityType = "vendor"
 // notification. The per-type fields hold every resolved record; CreatedIDs holds the subset that
 // this import actually created, so a resubmission can report what was new versus already there
 type importSummary struct {
-	PlatformIDs           []string `json:"platform_ids,omitempty"`
-	SystemDetailIDs       []string `json:"system_detail_ids,omitempty"`
-	EntityIDs             []string `json:"entity_ids,omitempty"`
-	AssetIDs              []string `json:"asset_ids,omitempty"`
-	FindingIDs            []string `json:"finding_ids,omitempty"`
-	CreatedIDs            []string `json:"created_ids,omitempty"`
-	TrustCenterSettingID  string   `json:"trust_center_setting_id,omitempty"`
+	PlatformIDs          []string `json:"platform_ids,omitempty"`
+	SystemDetailIDs      []string `json:"system_detail_ids,omitempty"`
+	EntityIDs            []string `json:"entity_ids,omitempty"`
+	AssetIDs             []string `json:"asset_ids,omitempty"`
+	FindingIDs           []string `json:"finding_ids,omitempty"`
+	CreatedIDs           []string `json:"created_ids,omitempty"`
+	TrustCenterSettingID string   `json:"trust_center_setting_id,omitempty"`
 }
 
 // createdCount returns how many of ids this import created rather than reused
