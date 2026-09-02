@@ -55,11 +55,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/v2/pkg/gala"
-	"github.com/theopenlane/core/v2/pkg/logx"
 	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	mock_shared "github.com/theopenlane/core/v2/pkg/objects/mocks"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/core/v2/pkg/summarizer"
+	"github.com/theopenlane/logx"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
