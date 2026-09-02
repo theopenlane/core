@@ -37,6 +37,7 @@ query GetIntegrationByID($integrationId: ID!) {
     environmentName
     family
     health
+    expiresAt
     id
     integrationType
     internalNotes
