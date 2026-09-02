@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
-	generated "github.com/theopenlane/core/internal/ent/generated"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 func integrationRow(id string, status enums.IntegrationStatus, updatedAt time.Time) *generated.Integration {

@@ -1,6 +1,6 @@
 //go:build test
 
-package graphapi_test
+package eventstest_test
 
 import (
 	"context"
@@ -11,12 +11,13 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	systemdef "github.com/theopenlane/core/internal/integrations/definitions/system"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
-	testint "github.com/theopenlane/core/internal/testutils/integrations"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+	systemdef "github.com/theopenlane/core/v2/internal/integrations/definitions/system"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	testint "github.com/theopenlane/core/v2/internal/testutils/integrations"
 )
 
 // staleInstallationAge backdates a pending installation past the reap-abandoned-pending window
@@ -27,7 +28,7 @@ const staleInstallationAge = 169 * time.Hour
 func runLifecycleSweep(t *testing.T, ctx context.Context, config json.RawMessage) int {
 	t.Helper()
 
-	raw, err := suite.integrationsRT.ExecuteRuntimeOperation(ctx, systemdef.DefinitionID.ID(), systemdef.IntegrationLifecycleOp.Name(), config)
+	raw, err := suite.IntegrationsRT.ExecuteRuntimeOperation(ctx, systemdef.DefinitionID.ID(), systemdef.IntegrationLifecycleOp.Name(), config)
 	require.NoError(t, err)
 
 	var result integrationtypes.ScheduledCycleResult
@@ -40,7 +41,7 @@ func runLifecycleSweep(t *testing.T, ctx context.Context, config json.RawMessage
 func integrationVisible(t *testing.T, ctx context.Context, id string) bool {
 	t.Helper()
 
-	_, err := suite.client.db.Integration.Get(ctx, id)
+	_, err := suite.Client.DB.Integration.Get(ctx, id)
 	if ent.IsNotFound(err) {
 		return false
 	}
@@ -54,7 +55,7 @@ func integrationVisible(t *testing.T, ctx context.Context, id string) bool {
 func installationCredentialIDs(t *testing.T, ctx context.Context, integrationID string) []string {
 	t.Helper()
 
-	installation, err := suite.client.db.Integration.Get(ctx, integrationID)
+	installation, err := suite.Client.DB.Integration.Get(ctx, integrationID)
 	require.NoError(t, err)
 
 	ids, err := installation.QuerySecrets().IDs(ctx)
@@ -67,23 +68,23 @@ func installationCredentialIDs(t *testing.T, ctx context.Context, integrationID 
 // against persisted rows: stale pending installs are reaped, deleted installs are finalized with
 // their credentials, errored installs are probed back to connected, and untouched states survive
 func TestIntegrationLifecycleSweep(t *testing.T) {
-	org := suite.seedFreshMinimalOrgUsers(t, false)
+	org := suite.UserBuilder(context.Background(), t)
 
-	allowCtx := privacy.DecisionContext(setContext(org.owner.UserCtx, suite.client.db), privacy.Allow)
-	ownerCtx := setContext(org.owner.UserCtx, suite.client.db)
+	allowCtx := privacy.DecisionContext(th.SetContext(org.UserCtx, suite.Client.DB), privacy.Allow)
+	ownerCtx := th.SetContext(org.UserCtx, suite.Client.DB)
 
 	// the audit mixin only stamps updated_at on update mutations, so a backdated
 	// value survives creation but not any later update
-	stalePending, err := suite.client.db.Integration.Create().
-		SetName(randomName(t)).
+	stalePending, err := suite.Client.DB.Integration.Create().
+		SetName(th.RandomName(t)).
 		SetKind("testintegration").
 		SetDefinitionID(testint.DefinitionID.ID()).
 		SetUpdatedAt(time.Now().Add(-staleInstallationAge)).
 		Save(allowCtx)
 	require.NoError(t, err)
 
-	freshPending, err := suite.client.db.Integration.Create().
-		SetName(randomName(t)).
+	freshPending, err := suite.Client.DB.Integration.Create().
+		SetName(th.RandomName(t)).
 		SetKind("testintegration").
 		SetDefinitionID(testint.DefinitionID.ID()).
 		Save(allowCtx)
@@ -92,16 +93,16 @@ func TestIntegrationLifecycleSweep(t *testing.T) {
 	connected, connectedFragment := seedHarnessLoop(t, allowCtx)
 
 	errored, _ := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
-	require.NoError(t, suite.integrationsRT.MarkIntegrationUnhealthy(allowCtx, errored, "credentials revoked"))
+	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, errored, "credentials revoked"))
 
 	deleted, _ := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
 	deletedCredentialIDs := installationCredentialIDs(t, allowCtx, deleted.ID)
 	require.NotEmpty(t, deletedCredentialIDs)
-	require.NoError(t, suite.client.db.Integration.UpdateOneID(deleted.ID).
+	require.NoError(t, suite.Client.DB.Integration.UpdateOneID(deleted.ID).
 		SetStatus(enums.IntegrationStatusDeleted).
 		Exec(allowCtx))
 
-	suite.WaitForEvents()
+	waitForEvents()
 
 	t.Run("dry run dispatches nothing", func(t *testing.T) {
 		processed := runLifecycleSweep(t, allowCtx, json.RawMessage(`{"dryRun":true}`))
@@ -116,12 +117,12 @@ func TestIntegrationLifecycleSweep(t *testing.T) {
 		processed := runLifecycleSweep(t, allowCtx, nil)
 		require.GreaterOrEqual(t, processed, 3)
 
-		suite.WaitForEvents()
+		waitForEvents()
 
 		require.False(t, integrationVisible(t, allowCtx, stalePending.ID))
 		require.False(t, integrationVisible(t, allowCtx, deleted.ID))
 
-		credentialCount, err := suite.client.db.Hush.Query().
+		credentialCount, err := suite.Client.DB.Hush.Query().
 			Where(hush.IDIn(deletedCredentialIDs...)).
 			Count(allowCtx)
 		require.NoError(t, err)
