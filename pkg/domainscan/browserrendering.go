@@ -454,7 +454,10 @@ func buildBrandDesignProfileSchema() ResponseFormat {
 		Schema: JSONSchema{
 			Type: "object",
 			// https://developers.cloudflare.com/workers-ai/features/json-mode/#json-mode-example
+			// for some reson, required is needed to steer the llm to return these
 			Required: []string{
+				"logo_url",
+				"favicon_url",
 				"primary_color",
 				"font",
 				"foreground_color",
@@ -464,6 +467,14 @@ func buildBrandDesignProfileSchema() ResponseFormat {
 				"secondary_foreground_color",
 			},
 			Properties: map[string]JSONSchemaProperty{
+				"logo_url": {
+					Type:        "string",
+					Description: "The URL of the company logo shown in the header or navigation, or an empty string when unavailable",
+				},
+				"favicon_url": {
+					Type:        "string",
+					Description: "The URL of the site's favicon, or an empty string when unavailable",
+				},
 				"primary_color": {
 					Type:        "string",
 					Description: "The site's primary brand color as a six-digit hexadecimal value in #RRGGBB format",

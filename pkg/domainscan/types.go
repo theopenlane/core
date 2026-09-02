@@ -23,6 +23,8 @@ type ResponseFormat struct {
 
 // BrandDesignProfile is the visual branding extracted from a rendered website
 type BrandDesignProfile struct {
+	LogoURL                  string `json:"logo_url,omitempty"`
+	FaviconURL               string `json:"favicon_url,omitempty"`
 	PrimaryColor             string `json:"primary_color,omitempty"`
 	Font                     string `json:"font,omitempty"`
 	ForegroundColor          string `json:"foreground_color,omitempty"`
@@ -32,9 +34,9 @@ type BrandDesignProfile struct {
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 }
 
-// IsEmpty reports whether browser rendering found any branding values
+// IsEmpty checks if branding data was found after the browser rendering job completes
 func (b BrandDesignProfile) IsEmpty() bool {
-	return b.PrimaryColor == "" && b.Font == "" && b.ForegroundColor == "" &&
+	return b.LogoURL == "" && b.FaviconURL == "" && b.PrimaryColor == "" && b.Font == "" && b.ForegroundColor == "" &&
 		b.BackgroundColor == "" && b.AccentColor == "" &&
 		b.SecondaryBackgroundColor == "" && b.SecondaryForegroundColor == ""
 }
@@ -50,7 +52,7 @@ type CompanyProfile struct {
 	EmployeeRange    string      `json:"employee_range,omitempty"`
 	FoundedYear      string      `json:"founded_year,omitempty"`
 	EstimatedRevenue string      `json:"estimated_revenue,omitempty"`
-	SocialLinks      SocialLinks `json:"social_links,omitempty"`
+	SocialLinks      SocialLinks `json:"social_links"`
 	Customers        []string    `json:"customers,omitempty"`
 	Technologies     []string    `json:"technologies,omitempty"`
 	// ProvidedServices are the services or product categories the company itself provides

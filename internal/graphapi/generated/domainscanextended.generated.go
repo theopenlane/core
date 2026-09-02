@@ -47,6 +47,29 @@ func (ec *executionContext) fieldContext_ImportDomainScanReviewPayload_accepted(
 	return graphql.NewScalarFieldContext("ImportDomainScanReviewPayload", field, false, false, errors.New("field of type Boolean does not have child fields"))
 }
 
+func (ec *executionContext) _RequestDomainImportPayload_accepted(ctx context.Context, field graphql.CollectedField, obj *model.RequestDomainImportPayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RequestDomainImportPayload_accepted(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Accepted, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_RequestDomainImportPayload_accepted(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("RequestDomainImportPayload", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -109,6 +132,92 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewAssetInput(ctx c
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputImportDomainScanReviewBrandDesignInput(ctx context.Context, obj any) (model.ImportDomainScanReviewBrandDesignInput, error) {
+	var it model.ImportDomainScanReviewBrandDesignInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"logoURL", "faviconURL", "primaryColor", "font", "foregroundColor", "backgroundColor", "accentColor", "secondaryBackgroundColor", "secondaryForegroundColor"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "logoURL":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("logoURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LogoURL = data
+		case "faviconURL":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("faviconURL"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FaviconURL = data
+		case "primaryColor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryColor"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PrimaryColor = data
+		case "font":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("font"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Font = data
+		case "foregroundColor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("foregroundColor"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ForegroundColor = data
+		case "backgroundColor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("backgroundColor"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BackgroundColor = data
+		case "accentColor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("accentColor"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AccentColor = data
+		case "secondaryBackgroundColor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secondaryBackgroundColor"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecondaryBackgroundColor = data
+		case "secondaryForegroundColor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secondaryForegroundColor"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecondaryForegroundColor = data
+		}
+	}
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputImportDomainScanReviewFindingInput(ctx context.Context, obj any) (model.ImportDomainScanReviewFindingInput, error) {
 	var it model.ImportDomainScanReviewFindingInput
 	if obj == nil {
@@ -164,7 +273,7 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"scanIDs", "platforms", "systems", "vendors", "assets", "findings"}
+	fieldsInOrder := [...]string{"scanIDs", "platforms", "systems", "vendors", "assets", "findings", "branding"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -213,6 +322,13 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewInput(ctx contex
 				return it, err
 			}
 			it.Findings = data
+		case "branding":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("branding"))
+			data, err := ec.unmarshalOImportDomainScanReviewBrandDesignInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewBrandDesignInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Branding = data
 		}
 	}
 	return it, nil
@@ -392,6 +508,36 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewVendorInput(ctx 
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputRequestDomainImportInput(ctx context.Context, obj any) (model.RequestDomainImportInput, error) {
+	var it model.RequestDomainImportInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"url"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "url":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("url"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.URL = data
+		}
+	}
+	return it, nil
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -414,6 +560,44 @@ func (ec *executionContext) _ImportDomainScanReviewPayload(ctx context.Context, 
 			out.Values[i] = graphql.MarshalString("ImportDomainScanReviewPayload")
 		case "accepted":
 			out.Values[i] = ec._ImportDomainScanReviewPayload_accepted(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var requestDomainImportPayloadImplementors = []string{"RequestDomainImportPayload"}
+
+func (ec *executionContext) _RequestDomainImportPayload(ctx context.Context, sel ast.SelectionSet, obj *model.RequestDomainImportPayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, requestDomainImportPayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("RequestDomainImportPayload")
+		case "accepted":
+			out.Values[i] = ec._RequestDomainImportPayload_accepted(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -511,6 +695,33 @@ func (ec *executionContext) unmarshalNImportDomainScanReviewVendorInput2ᚕᚖgi
 
 func (ec *executionContext) unmarshalNImportDomainScanReviewVendorInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInput(ctx context.Context, v any) (*model.ImportDomainScanReviewVendorInput, error) {
 	res, err := ec.unmarshalInputImportDomainScanReviewVendorInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNRequestDomainImportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRequestDomainImportInput(ctx context.Context, v any) (model.RequestDomainImportInput, error) {
+	res, err := ec.unmarshalInputRequestDomainImportInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNRequestDomainImportPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRequestDomainImportPayload(ctx context.Context, sel ast.SelectionSet, v model.RequestDomainImportPayload) graphql.Marshaler {
+	return ec._RequestDomainImportPayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNRequestDomainImportPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRequestDomainImportPayload(ctx context.Context, sel ast.SelectionSet, v *model.RequestDomainImportPayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._RequestDomainImportPayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOImportDomainScanReviewBrandDesignInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewBrandDesignInput(ctx context.Context, v any) (*model.ImportDomainScanReviewBrandDesignInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputImportDomainScanReviewBrandDesignInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 

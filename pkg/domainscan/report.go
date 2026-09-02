@@ -40,7 +40,8 @@ type EnrichmentErrors struct {
 // technologies and which vendor names it always excludes
 type ReportConfig struct {
 	// BulkScan submits all domains through Cloudflare's bulk URL Scanner endpoint. When disabled,
-	// domains are submitted sequentially through the single URL Scanner endpoint
+	// domains are submitted sequentially through the single Scanner endpoint instead.
+	// Not all plans have bulk scanning available. free tier e.g does not
 	BulkScan bool `json:"bulkscan" koanf:"bulkscan" default:"true"`
 	// NonVendorCategories lists wappalyzer categories treated as technologies
 	// instead of vendors when building an onboarding domain scan report

@@ -10,6 +10,8 @@ import (
 func buildBranding(result *url_scanner.ScanGetResponse, profile *BrandDesignProfile) *Branding {
 	branding := &Branding{}
 	if profile != nil {
+		branding.Favicon.URL = profile.FaviconURL
+		branding.LogoURL = profile.LogoURL
 		branding.PrimaryColor = profile.PrimaryColor
 		branding.Font = profile.Font
 		branding.ForegroundColor = profile.ForegroundColor

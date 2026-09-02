@@ -882,6 +882,10 @@ type CreateTrustCenterPreviewSettingInput struct {
 	BackgroundColor *string `json:"backgroundColor,omitempty"`
 	// accent color for the trust center
 	AccentColor *string `json:"accentColor,omitempty"`
+	// secondary background color for the trust center
+	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
+	// secondary foreground color for the trust center
+	SecondaryForegroundColor *string `json:"secondaryForegroundColor,omitempty"`
 	// hero image local file ID
 	HeroImageFileID *string `json:"heroImageFileID,omitempty"`
 }
@@ -1925,6 +1929,19 @@ type ImportDomainScanReviewAssetInput struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
+// brand design data gotten from the domain scan
+type ImportDomainScanReviewBrandDesignInput struct {
+	LogoURL                  *string `json:"logoURL,omitempty"`
+	FaviconURL               *string `json:"faviconURL,omitempty"`
+	PrimaryColor             *string `json:"primaryColor,omitempty"`
+	Font                     *string `json:"font,omitempty"`
+	ForegroundColor          *string `json:"foregroundColor,omitempty"`
+	BackgroundColor          *string `json:"backgroundColor,omitempty"`
+	AccentColor              *string `json:"accentColor,omitempty"`
+	SecondaryBackgroundColor *string `json:"secondaryBackgroundColor,omitempty"`
+	SecondaryForegroundColor *string `json:"secondaryForegroundColor,omitempty"`
+}
+
 // One accepted finding
 type ImportDomainScanReviewFindingInput struct {
 	// the finding's category
@@ -1949,6 +1966,8 @@ type ImportDomainScanReviewInput struct {
 	Assets []*ImportDomainScanReviewAssetInput `json:"assets"`
 	// the accepted findings
 	Findings []*ImportDomainScanReviewFindingInput `json:"findings,omitempty"`
+	// the accepted trust center branding, if any
+	Branding *ImportDomainScanReviewBrandDesignInput `json:"branding,omitempty"`
 }
 
 // Return response for importDomainScanReview mutation. Creation happens asynchronously, so this
@@ -2777,6 +2796,18 @@ type RemediationDeletePayload struct {
 type RemediationUpdatePayload struct {
 	// Updated remediation
 	Remediation *generated.Remediation `json:"remediation"`
+}
+
+// Input for requesting fresh domain scan enrichment for a URL
+type RequestDomainImportInput struct {
+	// the URL to extract domain scan enrichment from
+	URL string `json:"url"`
+}
+
+// Return response for a domain scan enrichment request
+type RequestDomainImportPayload struct {
+	// whether the enrichment request was accepted
+	Accepted bool `json:"accepted"`
 }
 
 // Input for resendCampaignIncompleteTargets mutation

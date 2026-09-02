@@ -15,3 +15,8 @@ import (
 func (r *mutationResolver) ImportDomainScanReview(ctx context.Context, input model.ImportDomainScanReviewInput) (*model.ImportDomainScanReviewPayload, error) {
 	return r.importDomainScanReview(ctx, input)
 }
+
+// RequestDomainImport is the resolver for the requestDomainImport field.
+func (r *mutationResolver) RequestDomainImport(ctx context.Context, input model.RequestDomainImportInput) (*model.RequestDomainImportPayload, error) {
+	return r.requestDomainImport(ctx, input)
+}

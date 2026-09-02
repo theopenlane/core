@@ -27,7 +27,11 @@ const (
 // brandingPrompt guides the AI to extract the visual design tokens of the rendered site
 const brandingPrompt = `Extract the visual branding used by this rendered website.
 
-Inspect the rendered page and its computed styles, including the header, navigation, hero, buttons, links, cards, and footer. Make sure to return the primary brand color, foreground/text color, page background color, accent color, secondary background color, secondary foreground color, and primary font family.
+Inspect the rendered page and its computed styles, including the header, navigation, hero, buttons, links, cards, and footer. Make sure to return the primary logo URL, favicon URL, primary brand color, foreground/text color, page background color, accent color, secondary background color, secondary foreground color, and primary font family.
+
+Return logo_url as the absolute HTTP or HTTPS URL of the company's primary logo shown in the header or navigation. Prefer a direct image or SVG URL over a favicon. Return an empty string when the logo is inline, generated, or cannot be identified reliably.
+
+Return favicon_url as the absolute HTTP or HTTPS URL of the site's favicon. Inspect link elements with icon-related rel values and return an empty string when a favicon cannot be identified reliably.
 
 Return every color as a six-digit hexadecimal value in #RRGGBB format. Colors that are visibly used in the actual rendered UI should be preferred over those found only in metadata, hidden elements, illustrations and others like third-party widgets. 
 

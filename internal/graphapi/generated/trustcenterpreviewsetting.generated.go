@@ -71,7 +71,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"trustCenterID", "title", "overview", "primaryColor", "logoRemoteURL", "logoFileID", "faviconRemoteURL", "faviconFileID", "themeMode", "font", "foregroundColor", "backgroundColor", "accentColor", "heroImageFileID"}
+	fieldsInOrder := [...]string{"trustCenterID", "title", "overview", "primaryColor", "logoRemoteURL", "logoFileID", "faviconRemoteURL", "faviconFileID", "themeMode", "font", "foregroundColor", "backgroundColor", "accentColor", "secondaryBackgroundColor", "secondaryForegroundColor", "heroImageFileID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -169,6 +169,20 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterPreviewSettingInput(c
 				return it, err
 			}
 			it.AccentColor = data
+		case "secondaryBackgroundColor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secondaryBackgroundColor"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecondaryBackgroundColor = data
+		case "secondaryForegroundColor":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secondaryForegroundColor"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecondaryForegroundColor = data
 		case "heroImageFileID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("heroImageFileID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)

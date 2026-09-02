@@ -8,6 +8,7 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
+
 	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
@@ -16,10 +17,13 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // domainScanImportVendorEntityType is the entityTypeName to use when creating the entities from
@@ -30,12 +34,13 @@ const domainScanImportVendorEntityType = "vendor"
 // notification. The per-type fields hold every resolved record; CreatedIDs holds the subset that
 // this import actually created, so a resubmission can report what was new versus already there
 type importSummary struct {
-	PlatformIDs     []string `json:"platform_ids,omitempty"`
-	SystemDetailIDs []string `json:"system_detail_ids,omitempty"`
-	EntityIDs       []string `json:"entity_ids,omitempty"`
-	AssetIDs        []string `json:"asset_ids,omitempty"`
-	FindingIDs      []string `json:"finding_ids,omitempty"`
-	CreatedIDs      []string `json:"created_ids,omitempty"`
+	PlatformIDs           []string `json:"platform_ids,omitempty"`
+	SystemDetailIDs       []string `json:"system_detail_ids,omitempty"`
+	EntityIDs             []string `json:"entity_ids,omitempty"`
+	AssetIDs              []string `json:"asset_ids,omitempty"`
+	FindingIDs            []string `json:"finding_ids,omitempty"`
+	CreatedIDs            []string `json:"created_ids,omitempty"`
+	TrustCenterSettingID  string   `json:"trust_center_setting_id,omitempty"`
 }
 
 // createdCount returns how many of ids this import created rather than reused
@@ -88,6 +93,10 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 	// reporting zeros with no explanation
 	if reused := summary.resolvedCount() - len(summary.CreatedIDs); reused > 0 {
 		body += fmt.Sprintf("; %d existing record(s) were linked to this scan", reused)
+	}
+
+	if summary.TrustCenterSettingID != "" {
+		body += "; updated trust center branding"
 	}
 
 	_, err = s.services.DB().Notification.Create().
@@ -173,7 +182,208 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 
 	summary.CreatedIDs = append(summary.CreatedIDs, createdFindingIDs...)
 
+	if envelope.Branding != nil {
+		summary.TrustCenterSettingID, err = updateTrustcenterBrandDesign(ctx, client, envelope.ScanIDs, *envelope.Branding)
+		if err != nil {
+			return summary, err
+		}
+	}
+
 	return summary, nil
+}
+
+// updateTrustcenterBrandDesign updates the live setting of a trustcenter only when the scanned domain
+// matches the custom domain they have set up previously
+func updateTrustcenterBrandDesign(ctx context.Context, client *generated.Client, scanIDs []string, brandDesign DomainScanImportBranding) (string, error) {
+	tc, err := client.TrustCenter.Query().WithCustomDomain().First(ctx)
+	if generated.IsNotFound(err) {
+		return "", nil
+	}
+
+	if err != nil {
+		return "", fmt.Errorf("could not find trustcenter for brand design import: %w", err)
+	}
+
+	cd, err := tc.Edges.CustomDomainOrErr()
+	if generated.IsNotFound(err) {
+		return "", nil
+	}
+
+	if err != nil {
+		return "", fmt.Errorf("could not fetch external trust center domain for brand design import: %w", err)
+	}
+
+	hostName, err := urlx.NormalizeHostname(cd.CnameRecord)
+	if err != nil {
+		return "", fmt.Errorf("could not normalize external trust center domain for brand design import: %w", err)
+	}
+
+	domain, ok := domainscan.RegistrableDomain(hostName)
+	if !ok {
+		return "", nil
+	}
+
+	scans, err := client.Scan.Query().Where(scan.IDIn(scanIDs...)).All(ctx)
+	if err != nil {
+		return "", fmt.Errorf("could not fetch scans for brand design import: %w", err)
+	}
+
+	// check if any of the scanned items are on the same domain/asset as the live trustcenter domain we have
+	doesScanMatchDomain := lo.SomeBy(scans, func(scanRecord *generated.Scan) bool {
+		hostname, err := urlx.NormalizeHostname(scanRecord.Target)
+		if err != nil {
+			return false
+		}
+
+		d, ok := domainscan.RegistrableDomain(hostname)
+		return ok && d == domain
+	})
+
+	if !doesScanMatchDomain {
+		return "", nil
+	}
+
+	setting, err := client.TrustCenterSetting.Query().Where(
+		trustcentersetting.TrustCenterIDEQ(tc.ID),
+		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
+	).Only(ctx)
+	if generated.IsNotFound(err) {
+		return "", nil
+	}
+
+	if err != nil {
+		return "", fmt.Errorf("could not fetch live trust center setting for brand design import: %w", err)
+	}
+
+	updated, err := updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
+	if err != nil {
+		return "", err
+	}
+
+	if !updated {
+		return "", nil
+	}
+
+	return setting.ID, nil
+}
+
+func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated.TrustCenterSetting, brandDesign DomainScanImportBranding) (bool, error) {
+	input := generated.UpdateTrustCenterSettingInput{}
+	isChanged := false
+	chooseColor := func(newColor, existingColor string) (string, bool) {
+		color := strings.TrimSpace(newColor)
+		if color == "" || validator.HexColorValidator(color) != nil {
+			return existingColor, false
+		}
+
+		return color, color != existingColor
+	}
+
+	primaryColor, shouldUpdate := chooseColor(brandDesign.PrimaryColor, setting.PrimaryColor)
+	if shouldUpdate {
+		input.PrimaryColor = &primaryColor
+		isChanged = true
+	}
+
+	foregroundColor, shouldUpdate := chooseColor(brandDesign.ForegroundColor, setting.ForegroundColor)
+	if shouldUpdate {
+		input.ForegroundColor = &foregroundColor
+		isChanged = true
+	}
+
+	backgroundColor, shouldUpdate := chooseColor(brandDesign.BackgroundColor, setting.BackgroundColor)
+	if shouldUpdate {
+		input.BackgroundColor = &backgroundColor
+		isChanged = true
+	}
+
+	accentColor, shouldUpdate := chooseColor(brandDesign.AccentColor, setting.AccentColor)
+	if shouldUpdate {
+		input.AccentColor = &accentColor
+		isChanged = true
+	}
+
+	secondaryBackgroundColor, shouldUpdate := chooseColor(brandDesign.SecondaryBackgroundColor, setting.SecondaryBackgroundColor)
+	if shouldUpdate {
+		input.SecondaryBackgroundColor = &secondaryBackgroundColor
+		isChanged = true
+	}
+
+	secondaryForegroundColor, shouldUpdate := chooseColor(brandDesign.SecondaryForegroundColor, setting.SecondaryForegroundColor)
+	if shouldUpdate {
+		input.SecondaryForegroundColor = &secondaryForegroundColor
+		isChanged = true
+	}
+
+	palettes := []string{
+		brandDesign.PrimaryColor,
+		brandDesign.ForegroundColor,
+		brandDesign.BackgroundColor,
+		brandDesign.AccentColor,
+		brandDesign.SecondaryBackgroundColor,
+		brandDesign.SecondaryForegroundColor,
+	}
+
+	// check if this new palette imports have atleast one valid color code
+	hasAcceptedColor := lo.SomeBy(palettes, func(color string) bool {
+		color = strings.TrimSpace(color)
+		return color != "" && validator.HexColorValidator(color) == nil
+	})
+
+	if font := strings.TrimSpace(brandDesign.Font); font != "" && font != setting.Font {
+		input.Font = &font
+		isChanged = true
+	}
+
+	if setting.LogoLocalFileID == nil {
+		if logoURL := brandDesign.LogoURL; validator.ValidateURL()(logoURL) == nil {
+			if setting.LogoRemoteURL == nil || logoURL != *setting.LogoRemoteURL {
+				input.LogoRemoteURL = &logoURL
+				isChanged = true
+			}
+		}
+	}
+
+	if setting.FaviconLocalFileID == nil {
+		if faviconURL := brandDesign.FaviconURL; validator.ValidateURL()(faviconURL) == nil {
+			if setting.FaviconRemoteURL == nil || faviconURL != *setting.FaviconRemoteURL {
+				input.FaviconRemoteURL = &faviconURL
+				isChanged = true
+			}
+		}
+	}
+
+	newPalettes := []string{
+		primaryColor,
+		foregroundColor,
+		backgroundColor,
+		accentColor,
+		secondaryBackgroundColor,
+		secondaryForegroundColor,
+	}
+
+	hasCompletePalette := lo.EveryBy(newPalettes, func(color string) bool {
+		return validator.HexColorValidator(color) == nil
+	})
+
+	// only convert to advanced mode if we have the complete color palette
+	if hasAcceptedColor && hasCompletePalette {
+		if setting.ThemeMode != enums.TrustCenterThemeModeAdvanced {
+			input.ThemeMode = new(enums.TrustCenterThemeModeAdvanced)
+			isChanged = true
+		}
+	}
+
+	if !isChanged {
+		return false, nil
+	}
+
+	_, err := setting.Update().SetInput(input).Save(ctx)
+	if err != nil {
+		return false, fmt.Errorf("updating %s trust center brand design: %w", setting.Environment, err)
+	}
+
+	return true, nil
 }
 
 // findOrCreateDomainScanVendors resolves each accepted vendor to an Entity ID, reusing an
