@@ -3,7 +3,9 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -22,6 +24,8 @@ type DomainScanRequest struct {
 	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
 	// instead of reusing one from a previous scan of the same domain
 	ForceRefresh bool `json:"forceRefresh,omitempty" jsonschema:"title=Force Refresh,description=Bypass the render cache and force a fresh scan"`
+	// BrandDesignOnly extracts and applies the brand design without running the full domain scan
+	BrandDesignOnly bool `json:"brandDesignOnly,omitempty" jsonschema:"title=Brand Design Only,description=Extract and apply the brand design without building a full domain scan report"`
 	// GroupID links this scan to sibling scans requested together so they can be recombined into a
 	// single notification once the whole group finishes
 	GroupID string `json:"groupId,omitempty"`
@@ -70,6 +74,9 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 
 		if scanRecord == nil {
 			metadata := map[string]any{"forceRefresh": cfg.ForceRefresh}
+			if cfg.BrandDesignOnly {
+				metadata[DomainScanBrandDesignOnlyMetadataKey] = true
+			}
 			if groupID != "" {
 				metadata[DomainScanGroupMetadataKey] = groupID
 			}
@@ -107,6 +114,17 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 		}
 
 		saga := domainScanSaga{services: request.Services}
+
+		if cfg.BrandDesignOnly {
+			if err := saga.runBrandDesignScan(ctx, organizationID, scanRecord.ID, cfg.Domain); err != nil {
+				return nil, err
+			}
+
+			return providerkit.EncodeResult(DomainScanRequestResult{
+				Message: "domain brand design scan completed",
+				ScanID:  scanRecord.ID,
+			}, ErrResultEncode)
+		}
 
 		if err := saga.submitAndScheduleDomainScan(ctx, organizationID, scanRecord.ID, cfg.Domain, cfg.ForceRefresh); err != nil {
 			return nil, err

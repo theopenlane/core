@@ -16,6 +16,7 @@ import (
 	"golang.org/x/sync/errgroup"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -36,6 +37,77 @@ const domainScanEnrichmentMetadataKey = "enrichment"
 type domainScanSaga struct {
 	// services exposes runtime execution, persistence, and event capabilities
 	services types.RuntimeServices
+}
+
+// runBrandDesignScan runs only the brand design portion of the scan
+func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, scanID, domain string) error {
+	systemCtx := domainScanSystemContext(ctx, organizationID)
+
+	if err := s.services.DB().Scan.UpdateOneID(scanID).
+		SetStatus(enums.ScanStatusProcessing).
+		Exec(systemCtx); err != nil {
+		return err
+	}
+
+	config, err := json.Marshal(DomainScanGatherEnrichment{
+		Domain:          domain,
+		ForceRefresh:    true,
+		BrandDesignOnly: true,
+	})
+	if err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	response, err := s.services.ExecuteRuntimeOperation(ctx, DefinitionID.ID(), DomainScanEnrichmentOp.Name(), config)
+	if err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	var result DomainScanGatherEnrichmentResult
+	if err := json.Unmarshal(response, &result); err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	if result.Enrichment.Branding == nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return nil
+	}
+
+	brandDesign := DomainScanImportBranding{
+		LogoURL:                  result.Enrichment.Branding.LogoURL,
+		FaviconURL:               result.Enrichment.Branding.FaviconURL,
+		PrimaryColor:             result.Enrichment.Branding.PrimaryColor,
+		Font:                     result.Enrichment.Branding.Font,
+		ForegroundColor:          result.Enrichment.Branding.ForegroundColor,
+		BackgroundColor:          result.Enrichment.Branding.BackgroundColor,
+		AccentColor:              result.Enrichment.Branding.AccentColor,
+		SecondaryBackgroundColor: result.Enrichment.Branding.SecondaryBackgroundColor,
+		SecondaryForegroundColor: result.Enrichment.Branding.SecondaryForegroundColor,
+	}
+
+	_, err = updateTrustcenterBrandDesign(systemCtx, s.services.DB(), []string{scanID}, brandDesign)
+	if err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	if err := s.services.DB().Scan.UpdateOneID(scanID).
+		SetStatus(enums.ScanStatusCompleted).
+		Exec(systemCtx); err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	return nil
 }
 
 // domainScanListeners declares the standalone gala listeners implementing the domain scan saga

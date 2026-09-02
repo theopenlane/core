@@ -56,11 +56,13 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 	}
 
 	forceRefresh, _ := scanRecord.Metadata["forceRefresh"].(bool)
+	isBrandDesignOnly, _ := scanRecord.Metadata[cloudflare.DomainScanBrandDesignOnlyMetadataKey].(bool)
 
 	return dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID)), cloudflare.DomainScanRequest{
-		OrganizationID: scanRecord.OwnerID,
-		Domain:         scanRecord.Target,
-		ForceRefresh:   forceRefresh,
+		OrganizationID:  scanRecord.OwnerID,
+		Domain:          scanRecord.Target,
+		ForceRefresh:    forceRefresh,
+		BrandDesignOnly: isBrandDesignOnly,
 	})
 }
 

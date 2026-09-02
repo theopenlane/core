@@ -186,26 +186,6 @@ type ImportDomainScanReviewPayload {
     accepted: Boolean!
 }
 
-"""
-Input for requesting fresh domain scan enrichment for a URL
-"""
-input RequestDomainImportInput {
-    """
-    the URL to extract domain scan enrichment from
-    """
-    url: String!
-}
-
-"""
-Return response for a domain scan enrichment request
-"""
-type RequestDomainImportPayload {
-    """
-    whether the enrichment request was accepted
-    """
-    accepted: Boolean!
-}
-
 extend type Mutation {
     """
     Accept a domain scan review and asynchronously create the corresponding platform, system
@@ -217,14 +197,4 @@ extend type Mutation {
         """
         input: ImportDomainScanReviewInput!
     ): ImportDomainScanReviewPayload!
-
-    """
-    Request fresh branding enrichment for a URL through the domain scan workflow
-    """
-    requestDomainImport(
-        """
-        the domain scan enrichment request
-        """
-        input: RequestDomainImportInput!
-    ): RequestDomainImportPayload!
 }

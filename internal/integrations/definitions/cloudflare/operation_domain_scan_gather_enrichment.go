@@ -21,6 +21,9 @@ type DomainScanGatherEnrichment struct {
 	Domain string `json:"domain"`
 	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
 	ForceRefresh bool `json:"forceRefresh,omitempty"`
+	// BrandDesignOnly instructs the scanning process to only extract the brand design not the entire
+	// domain scan
+	BrandDesignOnly bool `json:"brandDesignOnly,omitempty"`
 }
 
 // DomainScanGatherEnrichmentResult carries the gathered enrichment data
@@ -56,6 +59,26 @@ func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareCli
 		APIToken:  client.Config.APIToken,
 		AccountID: client.Config.AccountID,
 		CacheTTL:  cacheTTL,
+	}
+
+	if cfg.BrandDesignOnly {
+		brandDesignCtx, cancel := context.WithTimeout(ctx, domainScanEnrichmentTimeout)
+		defer cancel()
+
+		branding, err := enrichmentCfg.GetBrandingData(brandDesignCtx, cfg.Domain)
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Msg("domain scan: failed to get brand design data")
+
+			return DomainScanGatherEnrichmentResult{}, nil
+		}
+
+		if branding.IsEmpty() {
+			return DomainScanGatherEnrichmentResult{}, nil
+		}
+
+		return DomainScanGatherEnrichmentResult{
+			Enrichment: domainscan.Enrichment{Branding: branding},
+		}, nil
 	}
 
 	enrichment, enrichmentErrs := enrichmentCfg.GatherEnrichment(ctx, cfg.Domain, domainScanEnrichmentTimeout)
