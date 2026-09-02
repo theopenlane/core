@@ -445,6 +445,20 @@ func (r *Runtime) runOperationProbe(ctx context.Context, installation *ent.Integ
 	return err
 }
 
+// ProbeIntegrationRecovery re-verifies an errored installation and clears it on success
+func (r *Runtime) ProbeIntegrationRecovery(ctx context.Context, installation *ent.Integration) error {
+	def, err := r.resolveDefinitionForInstallation(installation)
+	if err != nil {
+		return err
+	}
+
+	if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
+		return err
+	}
+
+	return r.ClearIntegrationUnhealthy(ctx, installation)
+}
+
 // verifyInstallationHealth runs the persisted connection's health check under stored
 // credentials; connections without one pass
 func (r *Runtime) verifyInstallationHealth(ctx context.Context, installation *ent.Integration, def types.Definition) error {

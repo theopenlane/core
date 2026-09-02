@@ -56,6 +56,11 @@ func (r *Runtime) cleanupInstallation(ctx context.Context, integrationID string)
 	return r.DB().Integration.DeleteOneID(integrationID).Exec(ctx)
 }
 
+// RemoveInstallation deletes one installation's credentials and record without provider teardown
+func (r *Runtime) RemoveInstallation(ctx context.Context, integrationID string) error {
+	return r.cleanupInstallation(ctx, integrationID)
+}
+
 // Disconnect executes the teardown flow for one installation
 func (r *Runtime) Disconnect(ctx context.Context, installation *ent.Integration) (types.DisconnectResult, error) {
 	def, err := r.resolveDefinitionForInstallation(installation)
