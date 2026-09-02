@@ -34,6 +34,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.107.2
 	github.com/brianvoe/gofakeit/v7 v7.16.0
 	github.com/cenkalti/backoff/v5 v5.0.3
+	github.com/cenkalti/backoff/v7 v7.0.0
 	github.com/cloudflare/cloudflare-go/v7 v7.9.0
 	github.com/coder/websocket v1.8.15
 	github.com/didasy/tldr v0.7.0
