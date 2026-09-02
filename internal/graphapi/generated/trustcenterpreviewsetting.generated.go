@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -37,7 +37,7 @@ func (ec *executionContext) _TrustCenterPreviewSettingCreatePayload_trustCenterS
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterSetting) graphql.Marshaler {
-			return ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx, selections, v)
+			return ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx, selections, v)
 		},
 		true,
 		true,
@@ -231,16 +231,16 @@ func (ec *executionContext) _TrustCenterPreviewSettingCreatePayload(ctx context.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNCreateTrustCenterPreviewSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateTrustCenterPreviewSettingInput(ctx context.Context, v any) (model.CreateTrustCenterPreviewSettingInput, error) {
+func (ec *executionContext) unmarshalNCreateTrustCenterPreviewSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCreateTrustCenterPreviewSettingInput(ctx context.Context, v any) (model.CreateTrustCenterPreviewSettingInput, error) {
 	res, err := ec.unmarshalInputCreateTrustCenterPreviewSettingInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterPreviewSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterPreviewSettingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterPreviewSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterPreviewSettingCreatePayload) graphql.Marshaler {
 	return ec._TrustCenterPreviewSettingCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterPreviewSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterPreviewSettingCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterPreviewSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterPreviewSettingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

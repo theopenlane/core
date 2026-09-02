@@ -19,14 +19,14 @@ import (
 	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 	"github.com/theopenlane/iam/auth"
 )
 

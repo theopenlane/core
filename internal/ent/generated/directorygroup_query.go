@@ -13,19 +13,18 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // DirectoryGroupQuery is the builder for querying DirectoryGroup entities.
@@ -101,9 +100,6 @@ func (_q *DirectoryGroupQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.OwnerTable, directorygroup.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -126,9 +122,6 @@ func (_q *DirectoryGroupQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, directorygroup.EnvironmentTable, directorygroup.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -151,9 +144,6 @@ func (_q *DirectoryGroupQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, directorygroup.ScopeTable, directorygroup.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -176,9 +166,6 @@ func (_q *DirectoryGroupQuery) QueryIntegration() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.IntegrationTable, directorygroup.IntegrationColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -201,9 +188,6 @@ func (_q *DirectoryGroupQuery) QueryDirectorySyncRun() *DirectorySyncRunQuery {
 			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.DirectorySyncRunTable, directorygroup.DirectorySyncRunColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectorySyncRun
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -226,9 +210,6 @@ func (_q *DirectoryGroupQuery) QueryPlatform() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.PlatformTable, directorygroup.PlatformColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -251,9 +232,6 @@ func (_q *DirectoryGroupQuery) QueryAccounts() *DirectoryAccountQuery {
 			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, directorygroup.AccountsTable, directorygroup.AccountsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -276,9 +254,6 @@ func (_q *DirectoryGroupQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, directorygroup.WorkflowObjectRefsTable, directorygroup.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -301,9 +276,6 @@ func (_q *DirectoryGroupQuery) QueryMembers() *DirectoryMembershipQuery {
 			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, directorygroup.MembersTable, directorygroup.MembersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -722,8 +694,6 @@ func (_q *DirectoryGroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.DirectoryGroup
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1011,7 +981,6 @@ func (_q *DirectoryGroupQuery) loadAccounts(ctx context.Context, query *Director
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(directorygroup.AccountsTable)
-		joinT.Schema(_q.schemaConfig.DirectoryMembership)
 		s.Join(joinT).On(s.C(directoryaccount.FieldID), joinT.C(directorygroup.AccountsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(directorygroup.AccountsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1124,8 +1093,6 @@ func (_q *DirectoryGroupQuery) loadMembers(ctx context.Context, query *Directory
 
 func (_q *DirectoryGroupQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.DirectoryGroup
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1209,9 +1176,6 @@ func (_q *DirectoryGroupQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.DirectoryGroup)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

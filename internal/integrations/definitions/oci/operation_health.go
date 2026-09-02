@@ -7,9 +7,9 @@ import (
 	"github.com/oracle/oci-go-sdk/v65/identity"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HealthCheck holds the result of an OCI health check

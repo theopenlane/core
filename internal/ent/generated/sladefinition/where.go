@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -795,9 +793,6 @@ func HasOwner() predicate.SLADefinition {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.SLADefinition
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -806,9 +801,6 @@ func HasOwner() predicate.SLADefinition {
 func HasOwnerWith(preds ...predicate.Organization) predicate.SLADefinition {
 	return predicate.SLADefinition(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.SLADefinition
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -824,9 +816,6 @@ func HasBlockedGroups() predicate.SLADefinition {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -835,9 +824,6 @@ func HasBlockedGroups() predicate.SLADefinition {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.SLADefinition {
 	return predicate.SLADefinition(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -853,9 +839,6 @@ func HasEditors() predicate.SLADefinition {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -864,9 +847,6 @@ func HasEditors() predicate.SLADefinition {
 func HasEditorsWith(preds ...predicate.Group) predicate.SLADefinition {
 	return predicate.SLADefinition(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

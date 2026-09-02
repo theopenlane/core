@@ -5,16 +5,15 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // sendSystemEmail marshals the input and executes a system email operation via
-// the integration runtime on the ent client
-func sendSystemEmail(ctx context.Context, client *generated.Client, operationName string, input any) error {
-	rt := intruntime.FromClient(ctx, client)
+// the process-wide integration runtime
+func sendSystemEmail(ctx context.Context, operationName string, input any) error {
+	rt := intruntime.Default()
 	if rt == nil {
 		return nil
 	}

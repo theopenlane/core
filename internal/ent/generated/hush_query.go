@@ -13,15 +13,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HushQuery is the builder for querying Hush entities.
@@ -92,9 +91,6 @@ func (_q *HushQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, hush.OwnerTable, hush.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Hush
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -117,9 +113,6 @@ func (_q *HushQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, hush.IntegrationsTable, hush.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationSecrets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -142,9 +135,6 @@ func (_q *HushQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, hush.FilesTable, hush.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.FileSecrets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -167,9 +157,6 @@ func (_q *HushQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, hush.EventsTable, hush.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.HushEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -523,8 +510,6 @@ func (_q *HushQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Hush, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Hush
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -635,7 +620,6 @@ func (_q *HushQuery) loadIntegrations(ctx context.Context, query *IntegrationQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(hush.IntegrationsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationSecrets)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(hush.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(hush.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -697,7 +681,6 @@ func (_q *HushQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*H
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(hush.FilesTable)
-		joinT.Schema(_q.schemaConfig.FileSecrets)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(hush.FilesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(hush.FilesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -759,7 +742,6 @@ func (_q *HushQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(hush.EventsTable)
-		joinT.Schema(_q.schemaConfig.HushEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(hush.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(hush.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -811,8 +793,6 @@ func (_q *HushQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 
 func (_q *HushQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Hush
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -881,9 +861,6 @@ func (_q *HushQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Hush)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

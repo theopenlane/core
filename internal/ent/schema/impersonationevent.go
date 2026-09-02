@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"

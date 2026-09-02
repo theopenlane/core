@@ -12,12 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // EntityTypeUpdate is the builder for updating EntityType entities.
@@ -416,7 +414,6 @@ func (_u *EntityTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -430,7 +427,6 @@ func (_u *EntityTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -447,7 +443,6 @@ func (_u *EntityTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
@@ -461,7 +456,6 @@ func (_u *EntityTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -478,14 +472,11 @@ func (_u *EntityTypeUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.EntityType
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -920,7 +911,6 @@ func (_u *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -934,7 +924,6 @@ func (_u *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, 
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -951,7 +940,6 @@ func (_u *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
@@ -965,7 +953,6 @@ func (_u *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -982,14 +969,11 @@ func (_u *EntityTypeUpdateOne) sqlSave(ctx context.Context) (_node *EntityType, 
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.EntityType
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &EntityType{config: _u.config}
 	_spec.Assign = _node.assignValues

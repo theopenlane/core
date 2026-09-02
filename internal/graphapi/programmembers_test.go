@@ -4,19 +4,21 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestMutationCreateProgramMembers(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	orgMember1 := (&OrgMemberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	orgMember2 := (&OrgMemberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	orgMember3 := (&OrgMemberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	orgMember1 := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	orgMember2 := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	orgMember3 := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name      string
@@ -32,42 +34,42 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 			programID: program.ID,
 			userID:    orgMember1.UserID,
 			role:      enums.RoleAdmin,
-			client:    suite.client.api,
-			ctx:       sharedTestUser1.UserCtx,
+			client:    suite.Client.API,
+			ctx:       th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "happy path, add member using personal access token",
 			programID: program.ID,
 			userID:    orgMember3.UserID,
 			role:      enums.RoleMember,
-			client:    suite.client.apiWithPAT,
+			client:    suite.Client.APIWithPAT,
 			ctx:       context.Background(),
 		},
 		{
 			name:      "cannot add self to program",
 			programID: program.ID,
-			userID:    sharedAdminUser.UserInfo.ID,
+			userID:    th.SharedAdminUser.UserInfo.ID,
 			role:      enums.RoleAdmin,
-			client:    suite.client.api,
-			ctx:       sharedAdminUser.UserCtx,
-			errMsg:    notAuthorizedErrorMsg,
+			client:    suite.Client.API,
+			ctx:       th.SharedAdminUser.UserCtx,
+			errMsg:    th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:      "add member, no access",
 			programID: program.ID,
 			userID:    orgMember2.UserID,
 			role:      enums.RoleMember,
-			client:    suite.client.api,
-			ctx:       sharedViewOnlyUser.UserCtx,
-			errMsg:    notAuthorizedErrorMsg,
+			client:    suite.Client.API,
+			ctx:       th.SharedViewOnlyUser.UserCtx,
+			errMsg:    th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:      "owner relation not valid for programs",
 			programID: program.ID,
 			userID:    orgMember2.UserID,
 			role:      enums.RoleOwner,
-			client:    suite.client.api,
-			ctx:       sharedTestUser1.UserCtx,
+			client:    suite.Client.API,
+			ctx:       th.SharedTestUser1.UserCtx,
 			errMsg:    "OWNER is not a valid ProgramMembershipRole",
 		},
 		{
@@ -75,8 +77,8 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 			programID: program.ID,
 			userID:    orgMember1.UserID,
 			role:      enums.RoleMember,
-			client:    suite.client.api,
-			ctx:       sharedTestUser1.UserCtx,
+			client:    suite.Client.API,
+			ctx:       th.SharedTestUser1.UserCtx,
 			errMsg:    "already exists",
 		},
 		{
@@ -84,26 +86,26 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 			programID: program.ID,
 			userID:    "not-a-valid-user-id",
 			role:      enums.RoleMember,
-			client:    suite.client.api,
-			ctx:       sharedTestUser1.UserCtx,
-			errMsg:    notAuthorizedErrorMsg,
+			client:    suite.Client.API,
+			ctx:       th.SharedTestUser1.UserCtx,
+			errMsg:    th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:      "invalid program",
 			programID: "not-a-valid-program-id",
 			userID:    orgMember1.UserID,
 			role:      enums.RoleMember,
-			client:    suite.client.api,
-			ctx:       sharedTestUser1.UserCtx,
-			errMsg:    notAuthorizedErrorMsg,
+			client:    suite.Client.API,
+			ctx:       th.SharedTestUser1.UserCtx,
+			errMsg:    th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:      "invalid role",
 			programID: program.ID,
 			userID:    orgMember1.UserID,
 			role:      enums.RoleInvalid,
-			client:    suite.client.api,
-			ctx:       sharedTestUser1.UserCtx,
+			client:    suite.Client.API,
+			ctx:       th.SharedTestUser1.UserCtx,
 			errMsg:    "not a valid ProgramMembershipRole",
 		},
 	}
@@ -134,30 +136,30 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 	}
 
 	// cleanup program
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup org members
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{orgMember1.ID, orgMember2.ID, orgMember3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.OrgMembershipDeleteOne]{Client: suite.Client.DB.OrgMembership, IDs: []string{orgMember1.ID, orgMember2.ID, orgMember3.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateProgramMembers(t *testing.T) {
-	pm := (&ProgramMemberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	pm := (&th.ProgramMemberBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// get all program members so we know the id of the test user program member
-	programMembers, err := suite.client.api.GetProgramMembersByProgramID(sharedTestUser1.UserCtx, &testclient.ProgramMembershipWhereInput{
+	programMembers, err := suite.Client.API.GetProgramMembersByProgramID(th.SharedTestUser1.UserCtx, &testclient.ProgramMembershipWhereInput{
 		ProgramID: &pm.ProgramID,
 	})
 	assert.NilError(t, err)
 
 	sharedTestUser1ProgramMember := ""
 	for _, pm := range programMembers.ProgramMemberships.Edges {
-		if pm.Node.UserID == sharedTestUser1.UserInfo.ID {
+		if pm.Node.UserID == th.SharedTestUser1.UserInfo.ID {
 			sharedTestUser1ProgramMember = pm.Node.ID
 			break
 		}
 	}
 
 	// add an admin user to the program as member
-	(&ProgramMemberBuilder{client: suite.client, UserID: sharedAdminUser.ID, ProgramID: pm.ProgramID, Role: enums.RoleMember.String()}).MustNew(sharedTestUser1.UserCtx, t)
+	(&th.ProgramMemberBuilder{Client: suite.Client, UserID: th.SharedAdminUser.ID, ProgramID: pm.ProgramID, Role: enums.RoleMember.String()}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -171,46 +173,46 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 			name:            "happy path, update to admin from member",
 			programMemberID: pm.ID,
 			role:            enums.RoleAdmin,
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:            "update self from admin to member allowed because user is org owner",
 			programMemberID: sharedTestUser1ProgramMember,
 			role:            enums.RoleMember,
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:            "update self from member to admin of self not allowed",
 			programMemberID: sharedTestUser1ProgramMember,
 			role:            enums.RoleAdmin,
-			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
-			errMsg:          notAuthorizedErrorMsg,
+			client:          suite.Client.API,
+			ctx:             th.SharedAdminUser.UserCtx,
+			errMsg:          th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:            "happy path, update to admin from member using personal access token",
 			programMemberID: pm.ID,
 			role:            enums.RoleAdmin,
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 		},
 		{
 			name:            "invalid role",
 			programMemberID: pm.ID,
 			role:            enums.RoleInvalid,
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			errMsg:          "not a valid ProgramMembershipRole",
 		},
 		{
 			name:            "no access",
 			programMemberID: pm.ID,
 			role:            enums.RoleMember,
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
-			errMsg:          notFoundErrorMsg,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
+			errMsg:          th.NotFoundErrorMsg,
 		},
 	}
 
@@ -235,7 +237,7 @@ func TestMutationUpdateProgramMembers(t *testing.T) {
 	}
 
 	// cleanup program
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: pm.ProgramID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: pm.ProgramID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup org members
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{pm.Edges.OrgMembership.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.OrgMembershipDeleteOne]{Client: suite.Client.DB.OrgMembership, IDs: []string{pm.Edges.OrgMembership.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

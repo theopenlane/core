@@ -11,14 +11,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 )
 
 // DirectorySyncRunCreate is the builder for creating a DirectorySyncRun entity.
@@ -569,7 +569,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 		_node = &DirectorySyncRun{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(directorysyncrun.Table, sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.DirectorySyncRun
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -657,7 +656,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -675,7 +673,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -693,7 +690,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -711,7 +707,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -729,7 +724,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -747,7 +741,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -764,7 +757,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -781,7 +773,6 @@ func (_c *DirectorySyncRunCreate) createSpec() (*DirectorySyncRun, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

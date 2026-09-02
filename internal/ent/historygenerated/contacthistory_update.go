@@ -8,355 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // ContactHistoryUpdate is the builder for updating ContactHistory entities.
 type ContactHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *ContactHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *ContactHistoryMutation
 }
 
 // Where appends a list predicates to the ContactHistoryUpdate builder.
 func (_u *ContactHistoryUpdate) Where(ps ...predicate.ContactHistory) *ContactHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *ContactHistoryUpdate) SetUpdatedAt(v time.Time) *ContactHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *ContactHistoryUpdate) ClearUpdatedAt() *ContactHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *ContactHistoryUpdate) SetUpdatedBy(v string) *ContactHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableUpdatedBy(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *ContactHistoryUpdate) ClearUpdatedBy() *ContactHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *ContactHistoryUpdate) SetUpdatedByImpersonator(v string) *ContactHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *ContactHistoryUpdate) ClearUpdatedByImpersonator() *ContactHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *ContactHistoryUpdate) SetDeletedAt(v time.Time) *ContactHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *ContactHistoryUpdate) ClearDeletedAt() *ContactHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *ContactHistoryUpdate) SetDeletedBy(v string) *ContactHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableDeletedBy(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *ContactHistoryUpdate) ClearDeletedBy() *ContactHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *ContactHistoryUpdate) SetTags(v []string) *ContactHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *ContactHistoryUpdate) AppendTags(v []string) *ContactHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *ContactHistoryUpdate) ClearTags() *ContactHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *ContactHistoryUpdate) SetOwnerID(v string) *ContactHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableOwnerID(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ContactHistoryUpdate) ClearOwnerID() *ContactHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetFullName sets the "full_name" field.
-func (_u *ContactHistoryUpdate) SetFullName(v string) *ContactHistoryUpdate {
-	_u.mutation.SetFullName(v)
-	return _u
-}
-
-// SetNillableFullName sets the "full_name" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableFullName(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetFullName(*v)
-	}
-	return _u
-}
-
-// ClearFullName clears the value of the "full_name" field.
-func (_u *ContactHistoryUpdate) ClearFullName() *ContactHistoryUpdate {
-	_u.mutation.ClearFullName()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *ContactHistoryUpdate) SetTitle(v string) *ContactHistoryUpdate {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableTitle(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// ClearTitle clears the value of the "title" field.
-func (_u *ContactHistoryUpdate) ClearTitle() *ContactHistoryUpdate {
-	_u.mutation.ClearTitle()
-	return _u
-}
-
-// SetCompany sets the "company" field.
-func (_u *ContactHistoryUpdate) SetCompany(v string) *ContactHistoryUpdate {
-	_u.mutation.SetCompany(v)
-	return _u
-}
-
-// SetNillableCompany sets the "company" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableCompany(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetCompany(*v)
-	}
-	return _u
-}
-
-// ClearCompany clears the value of the "company" field.
-func (_u *ContactHistoryUpdate) ClearCompany() *ContactHistoryUpdate {
-	_u.mutation.ClearCompany()
-	return _u
-}
-
-// SetEmail sets the "email" field.
-func (_u *ContactHistoryUpdate) SetEmail(v string) *ContactHistoryUpdate {
-	_u.mutation.SetEmail(v)
-	return _u
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableEmail(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetEmail(*v)
-	}
-	return _u
-}
-
-// ClearEmail clears the value of the "email" field.
-func (_u *ContactHistoryUpdate) ClearEmail() *ContactHistoryUpdate {
-	_u.mutation.ClearEmail()
-	return _u
-}
-
-// SetPhoneNumber sets the "phone_number" field.
-func (_u *ContactHistoryUpdate) SetPhoneNumber(v string) *ContactHistoryUpdate {
-	_u.mutation.SetPhoneNumber(v)
-	return _u
-}
-
-// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillablePhoneNumber(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetPhoneNumber(*v)
-	}
-	return _u
-}
-
-// ClearPhoneNumber clears the value of the "phone_number" field.
-func (_u *ContactHistoryUpdate) ClearPhoneNumber() *ContactHistoryUpdate {
-	_u.mutation.ClearPhoneNumber()
-	return _u
-}
-
-// SetAddress sets the "address" field.
-func (_u *ContactHistoryUpdate) SetAddress(v string) *ContactHistoryUpdate {
-	_u.mutation.SetAddress(v)
-	return _u
-}
-
-// SetNillableAddress sets the "address" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableAddress(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetAddress(*v)
-	}
-	return _u
-}
-
-// ClearAddress clears the value of the "address" field.
-func (_u *ContactHistoryUpdate) ClearAddress() *ContactHistoryUpdate {
-	_u.mutation.ClearAddress()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *ContactHistoryUpdate) SetStatus(v enums.UserStatus) *ContactHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableStatus(v *enums.UserStatus) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *ContactHistoryUpdate) SetExternalID(v string) *ContactHistoryUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableExternalID(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *ContactHistoryUpdate) ClearExternalID() *ContactHistoryUpdate {
-	_u.mutation.ClearExternalID()
-	return _u
-}
-
-// SetIntegrationID sets the "integration_id" field.
-func (_u *ContactHistoryUpdate) SetIntegrationID(v string) *ContactHistoryUpdate {
-	_u.mutation.SetIntegrationID(v)
-	return _u
-}
-
-// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableIntegrationID(v *string) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetIntegrationID(*v)
-	}
-	return _u
-}
-
-// ClearIntegrationID clears the value of the "integration_id" field.
-func (_u *ContactHistoryUpdate) ClearIntegrationID() *ContactHistoryUpdate {
-	_u.mutation.ClearIntegrationID()
-	return _u
-}
-
-// SetObservedAt sets the "observed_at" field.
-func (_u *ContactHistoryUpdate) SetObservedAt(v models.DateTime) *ContactHistoryUpdate {
-	_u.mutation.SetObservedAt(v)
-	return _u
-}
-
-// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
-func (_u *ContactHistoryUpdate) SetNillableObservedAt(v *models.DateTime) *ContactHistoryUpdate {
-	if v != nil {
-		_u.SetObservedAt(*v)
-	}
-	return _u
-}
-
-// ClearObservedAt clears the value of the "observed_at" field.
-func (_u *ContactHistoryUpdate) ClearObservedAt() *ContactHistoryUpdate {
-	_u.mutation.ClearObservedAt()
 	return _u
 }
 
@@ -367,9 +36,6 @@ func (_u *ContactHistoryUpdate) Mutation() *ContactHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *ContactHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -395,38 +61,7 @@ func (_u *ContactHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *ContactHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if contacthistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized contacthistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := contacthistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *ContactHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := contacthistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ContactHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *ContactHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ContactHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *ContactHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(contacthistory.Table, contacthistory.Columns, sqlgraph.NewFieldSpec(contacthistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -441,116 +76,57 @@ func (_u *ContactHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(contacthistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(contacthistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contacthistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(contacthistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(contacthistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(contacthistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(contacthistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(contacthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(contacthistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(contacthistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(contacthistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(contacthistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(contacthistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, contacthistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(contacthistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(contacthistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(contacthistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FullName(); ok {
-		_spec.SetField(contacthistory.FieldFullName, field.TypeString, value)
-	}
 	if _u.mutation.FullNameCleared() {
 		_spec.ClearField(contacthistory.FieldFullName, field.TypeString)
-	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(contacthistory.FieldTitle, field.TypeString, value)
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(contacthistory.FieldTitle, field.TypeString)
 	}
-	if value, ok := _u.mutation.Company(); ok {
-		_spec.SetField(contacthistory.FieldCompany, field.TypeString, value)
-	}
 	if _u.mutation.CompanyCleared() {
 		_spec.ClearField(contacthistory.FieldCompany, field.TypeString)
-	}
-	if value, ok := _u.mutation.Email(); ok {
-		_spec.SetField(contacthistory.FieldEmail, field.TypeString, value)
 	}
 	if _u.mutation.EmailCleared() {
 		_spec.ClearField(contacthistory.FieldEmail, field.TypeString)
 	}
-	if value, ok := _u.mutation.PhoneNumber(); ok {
-		_spec.SetField(contacthistory.FieldPhoneNumber, field.TypeString, value)
-	}
 	if _u.mutation.PhoneNumberCleared() {
 		_spec.ClearField(contacthistory.FieldPhoneNumber, field.TypeString)
-	}
-	if value, ok := _u.mutation.Address(); ok {
-		_spec.SetField(contacthistory.FieldAddress, field.TypeString, value)
 	}
 	if _u.mutation.AddressCleared() {
 		_spec.ClearField(contacthistory.FieldAddress, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(contacthistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(contacthistory.FieldExternalID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(contacthistory.FieldExternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.IntegrationID(); ok {
-		_spec.SetField(contacthistory.FieldIntegrationID, field.TypeString, value)
 	}
 	if _u.mutation.IntegrationIDCleared() {
 		_spec.ClearField(contacthistory.FieldIntegrationID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ObservedAt(); ok {
-		_spec.SetField(contacthistory.FieldObservedAt, field.TypeTime, value)
-	}
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(contacthistory.FieldObservedAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ContactHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{contacthistory.Label}
@@ -566,334 +142,9 @@ func (_u *ContactHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 // ContactHistoryUpdateOne is the builder for updating a single ContactHistory entity.
 type ContactHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *ContactHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *ContactHistoryUpdateOne) SetUpdatedAt(v time.Time) *ContactHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *ContactHistoryUpdateOne) ClearUpdatedAt() *ContactHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *ContactHistoryUpdateOne) SetUpdatedBy(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *ContactHistoryUpdateOne) ClearUpdatedBy() *ContactHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *ContactHistoryUpdateOne) SetUpdatedByImpersonator(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *ContactHistoryUpdateOne) ClearUpdatedByImpersonator() *ContactHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *ContactHistoryUpdateOne) SetDeletedAt(v time.Time) *ContactHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *ContactHistoryUpdateOne) ClearDeletedAt() *ContactHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *ContactHistoryUpdateOne) SetDeletedBy(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableDeletedBy(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *ContactHistoryUpdateOne) ClearDeletedBy() *ContactHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *ContactHistoryUpdateOne) SetTags(v []string) *ContactHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *ContactHistoryUpdateOne) AppendTags(v []string) *ContactHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *ContactHistoryUpdateOne) ClearTags() *ContactHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *ContactHistoryUpdateOne) SetOwnerID(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableOwnerID(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ContactHistoryUpdateOne) ClearOwnerID() *ContactHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetFullName sets the "full_name" field.
-func (_u *ContactHistoryUpdateOne) SetFullName(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetFullName(v)
-	return _u
-}
-
-// SetNillableFullName sets the "full_name" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableFullName(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetFullName(*v)
-	}
-	return _u
-}
-
-// ClearFullName clears the value of the "full_name" field.
-func (_u *ContactHistoryUpdateOne) ClearFullName() *ContactHistoryUpdateOne {
-	_u.mutation.ClearFullName()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *ContactHistoryUpdateOne) SetTitle(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableTitle(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// ClearTitle clears the value of the "title" field.
-func (_u *ContactHistoryUpdateOne) ClearTitle() *ContactHistoryUpdateOne {
-	_u.mutation.ClearTitle()
-	return _u
-}
-
-// SetCompany sets the "company" field.
-func (_u *ContactHistoryUpdateOne) SetCompany(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetCompany(v)
-	return _u
-}
-
-// SetNillableCompany sets the "company" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableCompany(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompany(*v)
-	}
-	return _u
-}
-
-// ClearCompany clears the value of the "company" field.
-func (_u *ContactHistoryUpdateOne) ClearCompany() *ContactHistoryUpdateOne {
-	_u.mutation.ClearCompany()
-	return _u
-}
-
-// SetEmail sets the "email" field.
-func (_u *ContactHistoryUpdateOne) SetEmail(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetEmail(v)
-	return _u
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableEmail(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmail(*v)
-	}
-	return _u
-}
-
-// ClearEmail clears the value of the "email" field.
-func (_u *ContactHistoryUpdateOne) ClearEmail() *ContactHistoryUpdateOne {
-	_u.mutation.ClearEmail()
-	return _u
-}
-
-// SetPhoneNumber sets the "phone_number" field.
-func (_u *ContactHistoryUpdateOne) SetPhoneNumber(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetPhoneNumber(v)
-	return _u
-}
-
-// SetNillablePhoneNumber sets the "phone_number" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillablePhoneNumber(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetPhoneNumber(*v)
-	}
-	return _u
-}
-
-// ClearPhoneNumber clears the value of the "phone_number" field.
-func (_u *ContactHistoryUpdateOne) ClearPhoneNumber() *ContactHistoryUpdateOne {
-	_u.mutation.ClearPhoneNumber()
-	return _u
-}
-
-// SetAddress sets the "address" field.
-func (_u *ContactHistoryUpdateOne) SetAddress(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetAddress(v)
-	return _u
-}
-
-// SetNillableAddress sets the "address" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableAddress(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetAddress(*v)
-	}
-	return _u
-}
-
-// ClearAddress clears the value of the "address" field.
-func (_u *ContactHistoryUpdateOne) ClearAddress() *ContactHistoryUpdateOne {
-	_u.mutation.ClearAddress()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *ContactHistoryUpdateOne) SetStatus(v enums.UserStatus) *ContactHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableStatus(v *enums.UserStatus) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *ContactHistoryUpdateOne) SetExternalID(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableExternalID(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *ContactHistoryUpdateOne) ClearExternalID() *ContactHistoryUpdateOne {
-	_u.mutation.ClearExternalID()
-	return _u
-}
-
-// SetIntegrationID sets the "integration_id" field.
-func (_u *ContactHistoryUpdateOne) SetIntegrationID(v string) *ContactHistoryUpdateOne {
-	_u.mutation.SetIntegrationID(v)
-	return _u
-}
-
-// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableIntegrationID(v *string) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetIntegrationID(*v)
-	}
-	return _u
-}
-
-// ClearIntegrationID clears the value of the "integration_id" field.
-func (_u *ContactHistoryUpdateOne) ClearIntegrationID() *ContactHistoryUpdateOne {
-	_u.mutation.ClearIntegrationID()
-	return _u
-}
-
-// SetObservedAt sets the "observed_at" field.
-func (_u *ContactHistoryUpdateOne) SetObservedAt(v models.DateTime) *ContactHistoryUpdateOne {
-	_u.mutation.SetObservedAt(v)
-	return _u
-}
-
-// SetNillableObservedAt sets the "observed_at" field if the given value is not nil.
-func (_u *ContactHistoryUpdateOne) SetNillableObservedAt(v *models.DateTime) *ContactHistoryUpdateOne {
-	if v != nil {
-		_u.SetObservedAt(*v)
-	}
-	return _u
-}
-
-// ClearObservedAt clears the value of the "observed_at" field.
-func (_u *ContactHistoryUpdateOne) ClearObservedAt() *ContactHistoryUpdateOne {
-	_u.mutation.ClearObservedAt()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *ContactHistoryMutation
 }
 
 // Mutation returns the ContactHistoryMutation object of the builder.
@@ -916,9 +167,6 @@ func (_u *ContactHistoryUpdateOne) Select(field string, fields ...string) *Conta
 
 // Save executes the query and returns the updated ContactHistory entity.
 func (_u *ContactHistoryUpdateOne) Save(ctx context.Context) (*ContactHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -944,38 +192,7 @@ func (_u *ContactHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *ContactHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if contacthistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized contacthistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := contacthistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *ContactHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := contacthistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ContactHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *ContactHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ContactHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *ContactHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ContactHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(contacthistory.Table, contacthistory.Columns, sqlgraph.NewFieldSpec(contacthistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1007,116 +224,57 @@ func (_u *ContactHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ContactH
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(contacthistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(contacthistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(contacthistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(contacthistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(contacthistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(contacthistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(contacthistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(contacthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(contacthistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(contacthistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(contacthistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(contacthistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(contacthistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, contacthistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(contacthistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(contacthistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(contacthistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FullName(); ok {
-		_spec.SetField(contacthistory.FieldFullName, field.TypeString, value)
-	}
 	if _u.mutation.FullNameCleared() {
 		_spec.ClearField(contacthistory.FieldFullName, field.TypeString)
-	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(contacthistory.FieldTitle, field.TypeString, value)
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(contacthistory.FieldTitle, field.TypeString)
 	}
-	if value, ok := _u.mutation.Company(); ok {
-		_spec.SetField(contacthistory.FieldCompany, field.TypeString, value)
-	}
 	if _u.mutation.CompanyCleared() {
 		_spec.ClearField(contacthistory.FieldCompany, field.TypeString)
-	}
-	if value, ok := _u.mutation.Email(); ok {
-		_spec.SetField(contacthistory.FieldEmail, field.TypeString, value)
 	}
 	if _u.mutation.EmailCleared() {
 		_spec.ClearField(contacthistory.FieldEmail, field.TypeString)
 	}
-	if value, ok := _u.mutation.PhoneNumber(); ok {
-		_spec.SetField(contacthistory.FieldPhoneNumber, field.TypeString, value)
-	}
 	if _u.mutation.PhoneNumberCleared() {
 		_spec.ClearField(contacthistory.FieldPhoneNumber, field.TypeString)
-	}
-	if value, ok := _u.mutation.Address(); ok {
-		_spec.SetField(contacthistory.FieldAddress, field.TypeString, value)
 	}
 	if _u.mutation.AddressCleared() {
 		_spec.ClearField(contacthistory.FieldAddress, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(contacthistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(contacthistory.FieldExternalID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(contacthistory.FieldExternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.IntegrationID(); ok {
-		_spec.SetField(contacthistory.FieldIntegrationID, field.TypeString, value)
 	}
 	if _u.mutation.IntegrationIDCleared() {
 		_spec.ClearField(contacthistory.FieldIntegrationID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ObservedAt(); ok {
-		_spec.SetField(contacthistory.FieldObservedAt, field.TypeTime, value)
-	}
 	if _u.mutation.ObservedAtCleared() {
 		_spec.ClearField(contacthistory.FieldObservedAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ContactHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &ContactHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 )
 
 // ContactCreate is the builder for creating a Contact entity.
@@ -510,7 +510,6 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 		_node = &Contact{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(contact.Table, sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Contact
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -598,7 +597,6 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -616,7 +614,6 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EntityContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -633,7 +630,6 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -650,7 +646,6 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -667,7 +662,6 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -684,7 +678,6 @@ func (_c *ContactCreate) createSpec() (*Contact, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

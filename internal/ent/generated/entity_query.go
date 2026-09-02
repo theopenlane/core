@@ -13,37 +13,36 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // EntityQuery is the builder for querying Entity entities.
@@ -174,9 +173,6 @@ func (_q *EntityQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, entity.OwnerTable, entity.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -199,9 +195,6 @@ func (_q *EntityQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.BlockedGroupsTable, entity.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.EntityBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -224,9 +217,6 @@ func (_q *EntityQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.EditorsTable, entity.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.EntityEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -249,9 +239,6 @@ func (_q *EntityQuery) QueryInternalOwnerUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.InternalOwnerUserTable, entity.InternalOwnerUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -274,9 +261,6 @@ func (_q *EntityQuery) QueryInternalOwnerGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.InternalOwnerGroupTable, entity.InternalOwnerGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -299,9 +283,6 @@ func (_q *EntityQuery) QueryReviewedByUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByUserTable, entity.ReviewedByUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -324,9 +305,6 @@ func (_q *EntityQuery) QueryReviewedByGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByGroupTable, entity.ReviewedByGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -349,9 +327,6 @@ func (_q *EntityQuery) QueryEntityRelationshipState() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntityRelationshipStateTable, entity.EntityRelationshipStateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -374,9 +349,6 @@ func (_q *EntityQuery) QueryEntitySecurityQuestionnaireStatus() *CustomTypeEnumQ
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntitySecurityQuestionnaireStatusTable, entity.EntitySecurityQuestionnaireStatusColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -399,9 +371,6 @@ func (_q *EntityQuery) QueryEntitySourceType() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntitySourceTypeTable, entity.EntitySourceTypeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -424,9 +393,6 @@ func (_q *EntityQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.EnvironmentTable, entity.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -449,9 +415,6 @@ func (_q *EntityQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.ScopeTable, entity.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -474,9 +437,6 @@ func (_q *EntityQuery) QueryContacts() *ContactQuery {
 			sqlgraph.To(contact.Table, contact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.ContactsTable, entity.ContactsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Contact
-		step.Edge.Schema = schemaConfig.EntityContacts
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -499,9 +459,6 @@ func (_q *EntityQuery) QueryDocuments() *DocumentDataQuery {
 			sqlgraph.To(documentdata.Table, documentdata.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.DocumentsTable, entity.DocumentsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.EntityDocuments
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -524,9 +481,6 @@ func (_q *EntityQuery) QueryNotes() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, entity.NotesTable, entity.NotesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -549,9 +503,6 @@ func (_q *EntityQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.FilesTable, entity.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.EntityFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -574,9 +525,6 @@ func (_q *EntityQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.AssetsTable, entity.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.EntityAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -599,9 +547,6 @@ func (_q *EntityQuery) QuerySystemDetails() *SystemDetailQuery {
 			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.SystemDetailsTable, entity.SystemDetailsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.EntitySystemDetails
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -624,9 +569,6 @@ func (_q *EntityQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.ScansTable, entity.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ScanEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -649,9 +591,6 @@ func (_q *EntityQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, entity.CampaignsTable, entity.CampaignsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -674,9 +613,6 @@ func (_q *EntityQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
 			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, entity.AssessmentResponsesTable, entity.AssessmentResponsesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -699,9 +635,6 @@ func (_q *EntityQuery) QueryVendorRiskScores() *VendorRiskScoreQuery {
 			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, entity.VendorRiskScoresTable, entity.VendorRiskScoresColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.VendorRiskScore
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -724,9 +657,6 @@ func (_q *EntityQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.IntegrationsTable, entity.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.EntityIntegrations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -749,9 +679,6 @@ func (_q *EntityQuery) QuerySubprocessors() *SubprocessorQuery {
 			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, entity.SubprocessorsTable, entity.SubprocessorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subprocessor
-		step.Edge.Schema = schemaConfig.EntitySubprocessors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -774,9 +701,6 @@ func (_q *EntityQuery) QueryAuthMethods() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, entity.AuthMethodsTable, entity.AuthMethodsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.CustomTypeEnum
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -799,9 +723,6 @@ func (_q *EntityQuery) QueryEmployerIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, entity.EmployerIdentityHoldersTable, entity.EmployerIdentityHoldersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -824,9 +745,6 @@ func (_q *EntityQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.IdentityHoldersTable, entity.IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.IdentityHolderEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -849,9 +767,6 @@ func (_q *EntityQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.ControlsTable, entity.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -874,9 +789,6 @@ func (_q *EntityQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.SubcontrolsTable, entity.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.SubcontrolEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -899,9 +811,6 @@ func (_q *EntityQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.FindingsTable, entity.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -924,9 +833,6 @@ func (_q *EntityQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.VulnerabilitiesTable, entity.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.VulnerabilityEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -949,9 +855,6 @@ func (_q *EntityQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.ReviewsTable, entity.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -974,9 +877,6 @@ func (_q *EntityQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.RemediationsTable, entity.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -999,9 +899,6 @@ func (_q *EntityQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.PlatformsTable, entity.PlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1024,9 +921,6 @@ func (_q *EntityQuery) QueryOutOfScopePlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.OutOfScopePlatformsTable, entity.OutOfScopePlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformOutOfScopeVendors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1049,9 +943,6 @@ func (_q *EntityQuery) QuerySourcePlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.SourcePlatformsTable, entity.SourcePlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformSourceEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1074,9 +965,6 @@ func (_q *EntityQuery) QueryEntityType() *EntityTypeQuery {
 			sqlgraph.To(entitytype.Table, entitytype.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.EntityTypeTable, entity.EntityTypeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EntityType
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1099,9 +987,6 @@ func (_q *EntityQuery) QueryLogoFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.LogoFileTable, entity.LogoFileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1124,9 +1009,6 @@ func (_q *EntityQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, entity.InternalPoliciesTable, entity.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1939,8 +1821,6 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Entity
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2457,7 +2337,6 @@ func (_q *EntityQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.EntityBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(entity.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2519,7 +2398,6 @@ func (_q *EntityQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.EditorsTable)
-		joinT.Schema(_q.schemaConfig.EntityEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(entity.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2842,7 +2720,6 @@ func (_q *EntityQuery) loadContacts(ctx context.Context, query *ContactQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.ContactsTable)
-		joinT.Schema(_q.schemaConfig.EntityContacts)
 		s.Join(joinT).On(s.C(contact.FieldID), joinT.C(entity.ContactsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.ContactsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2904,7 +2781,6 @@ func (_q *EntityQuery) loadDocuments(ctx context.Context, query *DocumentDataQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.DocumentsTable)
-		joinT.Schema(_q.schemaConfig.EntityDocuments)
 		s.Join(joinT).On(s.C(documentdata.FieldID), joinT.C(entity.DocumentsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.DocumentsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2997,7 +2873,6 @@ func (_q *EntityQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.FilesTable)
-		joinT.Schema(_q.schemaConfig.EntityFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(entity.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3059,7 +2934,6 @@ func (_q *EntityQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.AssetsTable)
-		joinT.Schema(_q.schemaConfig.EntityAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(entity.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3121,7 +2995,6 @@ func (_q *EntityQuery) loadSystemDetails(ctx context.Context, query *SystemDetai
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.SystemDetailsTable)
-		joinT.Schema(_q.schemaConfig.EntitySystemDetails)
 		s.Join(joinT).On(s.C(systemdetail.FieldID), joinT.C(entity.SystemDetailsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.SystemDetailsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3183,7 +3056,6 @@ func (_q *EntityQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.ScansTable)
-		joinT.Schema(_q.schemaConfig.ScanEntities)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(entity.ScansPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.ScansPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3336,7 +3208,6 @@ func (_q *EntityQuery) loadIntegrations(ctx context.Context, query *IntegrationQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.IntegrationsTable)
-		joinT.Schema(_q.schemaConfig.EntityIntegrations)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(entity.IntegrationsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.IntegrationsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3398,7 +3269,6 @@ func (_q *EntityQuery) loadSubprocessors(ctx context.Context, query *Subprocesso
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.SubprocessorsTable)
-		joinT.Schema(_q.schemaConfig.EntitySubprocessors)
 		s.Join(joinT).On(s.C(subprocessor.FieldID), joinT.C(entity.SubprocessorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(entity.SubprocessorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3521,7 +3391,6 @@ func (_q *EntityQuery) loadIdentityHolders(ctx context.Context, query *IdentityH
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.IdentityHoldersTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderEntities)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(entity.IdentityHoldersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.IdentityHoldersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3583,7 +3452,6 @@ func (_q *EntityQuery) loadControls(ctx context.Context, query *ControlQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlEntities)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(entity.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3645,7 +3513,6 @@ func (_q *EntityQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolEntities)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(entity.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3707,7 +3574,6 @@ func (_q *EntityQuery) loadFindings(ctx context.Context, query *FindingQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.FindingsTable)
-		joinT.Schema(_q.schemaConfig.FindingEntities)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(entity.FindingsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.FindingsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3769,7 +3635,6 @@ func (_q *EntityQuery) loadVulnerabilities(ctx context.Context, query *Vulnerabi
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.VulnerabilityEntities)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(entity.VulnerabilitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3831,7 +3696,6 @@ func (_q *EntityQuery) loadReviews(ctx context.Context, query *ReviewQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewEntities)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(entity.ReviewsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.ReviewsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3893,7 +3757,6 @@ func (_q *EntityQuery) loadRemediations(ctx context.Context, query *RemediationQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.RemediationEntities)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(entity.RemediationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.RemediationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3955,7 +3818,6 @@ func (_q *EntityQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.PlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformEntities)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(entity.PlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.PlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4017,7 +3879,6 @@ func (_q *EntityQuery) loadOutOfScopePlatforms(ctx context.Context, query *Platf
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.OutOfScopePlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformOutOfScopeVendors)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(entity.OutOfScopePlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.OutOfScopePlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4079,7 +3940,6 @@ func (_q *EntityQuery) loadSourcePlatforms(ctx context.Context, query *PlatformQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.SourcePlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformSourceEntities)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(entity.SourcePlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.SourcePlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4202,7 +4062,6 @@ func (_q *EntityQuery) loadInternalPolicies(ctx context.Context, query *Internal
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(entity.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyEntities)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(entity.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(entity.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4254,8 +4113,6 @@ func (_q *EntityQuery) loadInternalPolicies(ctx context.Context, query *Internal
 
 func (_q *EntityQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Entity
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -4357,9 +4214,6 @@ func (_q *EntityQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Entity)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

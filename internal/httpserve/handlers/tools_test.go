@@ -27,38 +27,39 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/fga/fgaversion"
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/httpserve/route"
-	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/v2/fga/fgaversion"
+	"github.com/theopenlane/core/v2/internal/ent/entconfig"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/entdb"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/route"
+	"github.com/theopenlane/core/v2/internal/httpserve/server"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
 
-	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/objects"
-	coreutils "github.com/theopenlane/core/internal/testutils"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/gala"
-	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
+	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
+	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keystore"
+	"github.com/theopenlane/core/v2/internal/objects"
+	coreutils "github.com/theopenlane/core/v2/internal/testutils"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	authmiddleware "github.com/theopenlane/core/v2/pkg/middleware/auth"
+	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 
 	// import generated runtime which is required to prevent cyclical dependencies
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
-	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
+	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
 )
 
 var (
@@ -73,8 +74,10 @@ var (
 )
 
 const (
-	fgaModuleFile            = "../../../fga/model/fga.mod"
-	seedStripeSubscriptionID = "sub_test_subscription"
+	fgaModuleFile                   = "../../../fga/model/fga.mod"
+	seedStripeSubscriptionID        = "sub_test_subscription"
+	previewCnameTargetTest          = "preview-cname.test.net"
+	previewMappableDomainZoneIDTest = "preview-zone-id"
 )
 
 // HandlerTestSuite handles the setup and teardown between tests
@@ -221,6 +224,17 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 	suite.galaDB = galaDB
 
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		PreviewCnameTarget: previewCnameTargetTest,
+	})
+
+	previewDomainCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	_, err = suite.galaDB.MappableDomain.Create().
+		SetName(previewCnameTargetTest).
+		SetZoneID(previewMappableDomainZoneIDTest).
+		Save(previewDomainCtx)
+	require.NoError(suite.T(), err)
+
 	// single integration runtime for the entire suite — listeners registered once
 	credStore, err := keystore.NewStore(suite.galaDB)
 	require.NoError(suite.T(), err)
@@ -314,7 +328,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.mockEmailSender().Reset()
 
 	// add db to test client and wire integration runtime so email dispatch works
-	db.IntegrationsRuntime = suite.sharedIntegrationsRT
+	runtime.SetDefault(suite.sharedIntegrationsRT)
 	suite.db = db
 
 	// add the client
@@ -472,25 +486,6 @@ var testAuthCredentialRef = types.NewCredentialSlotID("test_oauth")
 // configureIntegrationOAuthRuntime sets up the integrations runtime with a test OAuth definition
 func (suite *HandlerTestSuite) configureIntegrationOAuthRuntime() {
 	suite.h.IntegrationsRuntime = suite.sharedIntegrationsRT
-}
-
-// dispatchSystemEmail sends an email through the integrations runtime, mirroring
-// the sendSystemEmail path used by ent hooks and handler.sendEmail
-func (suite *HandlerTestSuite) dispatchSystemEmail(ctx context.Context, operationName string, input any) {
-	t := suite.T()
-	t.Helper()
-
-	config, err := json.Marshal(input)
-	require.NoError(t, err)
-
-	_, err = suite.sharedIntegrationsRT.Dispatch(ctx, types.DispatchRequest{
-		DefinitionID: emaildef.DefinitionID.ID(),
-		Operation:    operationName,
-		Config:       config,
-		RunType:      enums.IntegrationRunTypeEvent,
-		Runtime:      true,
-	})
-	require.NoError(t, err)
 }
 
 // mockEmailSender returns the mock email sender from the shared integration runtime

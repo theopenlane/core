@@ -1,6 +1,6 @@
 package graphapi
 
-import "github.com/theopenlane/core/pkg/gala"
+import "github.com/theopenlane/core/v2/pkg/gala"
 
 const (
 	// defaultMaxWorkers is the default number of workers when the pool was not created on server startup

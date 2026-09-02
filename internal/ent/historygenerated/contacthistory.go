@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/entx/history"
 )
 

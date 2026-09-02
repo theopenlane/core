@@ -6,12 +6,12 @@ import (
 
 	"github.com/samber/lo"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	intobvs "github.com/theopenlane/core/internal/integrations/observability"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ReconcileEnvelope is the durable payload for one recurring operation cycle, either
@@ -46,12 +46,13 @@ func LegacyTopicRenames() map[gala.TopicName]gala.TopicName {
 
 // ReconcileDefinition builds the Gala listener definition driving every recurring operation
 // cycle: installation-bound reconciliation and runtime-bound scheduled operations
-func ReconcileDefinition(reg *registry.Registry, handle func(context.Context, ReconcileEnvelope) (int, error), schedule gala.Schedule) gala.Definition[ReconcileEnvelope] {
+func ReconcileDefinition(reg *registry.Registry, handle func(context.Context, ReconcileEnvelope) (int, error), onExhausted func(context.Context, ReconcileEnvelope, error), schedule gala.Schedule) gala.Definition[ReconcileEnvelope] {
 	return gala.Definition[ReconcileEnvelope]{
 		Topic: ReconcileTopic,
 		Cancel: func(ctx context.Context, e ReconcileEnvelope, err error) bool {
 			return reconcileShouldCancel(ctx, reg, e, err)
 		},
+		OnExhausted: onExhausted,
 		Schedule: &gala.ScheduleSpec[ReconcileEnvelope]{
 			Schedule: schedule,
 			Handle:   handle,
@@ -67,16 +68,30 @@ func ReconcileDefinition(reg *registry.Registry, handle func(context.Context, Re
 				return intobvs.EmitContext(ctx, e.OperationContext)
 			},
 			Override: func(e ReconcileEnvelope) *gala.Schedule {
-				if reg == nil {
-					return nil
+				src := types.IntegrationSourceFrom(e.OperationContext)
+
+				var opSchedule *gala.Schedule
+
+				if reg != nil {
+					if op, err := reg.Operation(src.DefinitionID, e.Operation); err == nil {
+						opSchedule = op.Schedule
+					}
 				}
 
-				op, err := reg.Operation(types.IntegrationSourceFrom(e.OperationContext).DefinitionID, e.Operation)
-				if err != nil {
-					return nil
+				if !src.Runtime {
+					return opSchedule
 				}
 
-				return op.Schedule
+				// runtime-bound sweeps have no installation to mark unhealthy and no reseed
+				// path besides startup, so they back off forever instead of exhausting
+				override := schedule
+				if opSchedule != nil {
+					override = *opSchedule
+				}
+
+				override.MaxErrorStreak = gala.UnlimitedErrorStreak
+
+				return &override
 			},
 		},
 	}

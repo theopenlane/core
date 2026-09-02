@@ -6,8 +6,8 @@ import (
 	"github.com/99designs/gqlgen/api"
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/schema"
-	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/core/v2/internal/ent/schema"
+	"github.com/theopenlane/core/v2/internal/genhelpers"
 	"github.com/theopenlane/gqlgen-plugins/bulkgen"
 	"github.com/theopenlane/gqlgen-plugins/resolvergen"
 	"github.com/theopenlane/gqlgen-plugins/searchgen"
@@ -21,7 +21,7 @@ const (
 	// csvJsonFile is the file that contains the mapping of CSV fields to entity fields
 	csvJsonFile = "internal/ent/csvgenerated/csv_field_mappings.json"
 	// graphqlImport that includes the transaction wrappers and other common graphql helpers
-	graphqlImport = "github.com/theopenlane/core/internal/graphapi/common"
+	graphqlImport = "github.com/theopenlane/core/v2/internal/graphapi/common"
 
 	// checksum files to track schema changes
 	schemaChecksumFile  = "./internal/graphapi/checksum/.schema_checksum"
@@ -73,10 +73,10 @@ func gqlGenerate() {
 		log.Fatal().Err(err).Msg("failed to load config")
 	}
 
-	modelImport := "github.com/theopenlane/core/internal/graphapi/model"
-	entPackage := "github.com/theopenlane/core/internal/ent/generated"
-	csvGeneratedPackage := "github.com/theopenlane/core/internal/ent/csvgenerated"
-	rulePackage := "github.com/theopenlane/core/internal/ent/privacy/rule"
+	modelImport := "github.com/theopenlane/core/v2/internal/graphapi/model"
+	entPackage := "github.com/theopenlane/core/v2/internal/ent/generated"
+	csvGeneratedPackage := "github.com/theopenlane/core/v2/internal/ent/csvgenerated"
+	rulePackage := "github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 
 	if err := api.Generate(cfg,
 		api.ReplacePlugin(resolvergen.NewWithOptions(
@@ -128,7 +128,7 @@ func gqlHistoryGenerate() {
 		log.Fatal().Err(err).Msg("failed to load config")
 	}
 
-	entPackage := "github.com/theopenlane/core/internal/ent/historygenerated"
+	entPackage := "github.com/theopenlane/core/v2/internal/ent/historygenerated"
 
 	if err := api.Generate(cfg,
 		api.ReplacePlugin(resolvergen.NewWithOptions(

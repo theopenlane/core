@@ -25,37 +25,37 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/fga/fgaversion"
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/internal/entdb"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/keystore"
-	coreutils "github.com/theopenlane/core/internal/testutils"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/summarizer"
+	"github.com/theopenlane/core/v2/fga/fgaversion"
+	"github.com/theopenlane/core/v2/internal/ent/entconfig"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/entdb"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/keystore"
+	coreutils "github.com/theopenlane/core/v2/internal/testutils"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/entitlements/mocks"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/summarizer"
 
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
-	_ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
+	_ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
 )
 
 const (
@@ -181,21 +181,18 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.Require().NoError(err)
 
 	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true))
-	clientOpts := []entdb.Option{
-		entdb.WithWorkflows(workflowCfg, runtime),
-	}
 
-	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
+	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, nil, opts)
 	s.Require().NoError(err)
+
+	wfEngine, err := engine.NewWorkflowEngineWithConfig(db, runtime, workflowCfg)
+	s.Require().NoError(err)
+	engine.SetDefault(wfEngine)
 
 	db.Use(hooks.EmitGalaEventHook(runtime))
 
 	_, err = gala.Register(runtime, hooks.WorkflowListeners()...)
 	s.Require().NoError(err)
-
-	wfEngine, ok := db.WorkflowEngine.(*engine.WorkflowEngine)
-	s.Require().True(ok, "workflow engine not initialized")
-	s.Require().NotNil(wfEngine, "workflow engine not initialized")
 
 	s.Require().NoError(runtime.Attach(
 		gala.WithValue(runtime),
@@ -226,11 +223,8 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	})
 	s.Require().NoError(err)
 
-	db.IntegrationsRuntime = rt
+	intruntime.SetDefault(rt)
 	s.integrationsRT = rt
-
-	wfEngine, ok = db.WorkflowEngine.(*engine.WorkflowEngine)
-	s.Require().True(ok)
 
 	s.Require().NoError(wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
 		Runtime: rt,
@@ -290,8 +284,8 @@ func (s *WorkflowEngineTestSuite) Context() context.Context {
 
 // Engine returns the suite's workflow engine initialized in SetupSuite
 func (s *WorkflowEngineTestSuite) Engine() *engine.WorkflowEngine {
-	wfEngine, ok := s.client.WorkflowEngine.(*engine.WorkflowEngine)
-	s.Require().True(ok, "workflow engine not initialized")
+	wfEngine := engine.Default()
+	s.Require().NotNil(wfEngine, "workflow engine not initialized")
 
 	return wfEngine
 }
@@ -309,7 +303,7 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().NotNil(s.client, "ent client not initialized")
 	s.Require().NotNil(runtime, "gala runtime not initialized")
 
-	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
+	s.Require().NotNil(engine.Default(), "workflow engine not initialized")
 
 	s.Require().True(
 		runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
@@ -632,7 +626,7 @@ func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Cont
 	ctx = generated.NewContext(ctx, s.client)
 	ctxClient := generated.FromContext(ctx)
 	s.Require().NotNil(ctxClient, "seed context missing ent client")
-	s.Require().NotNil(ctxClient.WorkflowEngine, "seed context missing workflow engine")
+	s.Require().NotNil(engine.Default(), "workflow engine not initialized")
 	seedCaller, seedCallerOk := auth.CallerFromContext(ctx)
 	s.Require().True(seedCallerOk && seedCaller != nil && seedCaller.OrganizationID != "", "seed context missing org")
 	return ctx

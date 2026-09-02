@@ -8,179 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersubprocessorhistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
 )
 
 // TrustCenterSubprocessorHistoryUpdate is the builder for updating TrustCenterSubprocessorHistory entities.
 type TrustCenterSubprocessorHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *TrustCenterSubprocessorHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *TrustCenterSubprocessorHistoryMutation
 }
 
 // Where appends a list predicates to the TrustCenterSubprocessorHistoryUpdate builder.
 func (_u *TrustCenterSubprocessorHistoryUpdate) Where(ps ...predicate.TrustCenterSubprocessorHistory) *TrustCenterSubprocessorHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearUpdatedAt() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetUpdatedBy(v string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterSubprocessorHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearUpdatedBy() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetUpdatedByImpersonator(v string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterSubprocessorHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearUpdatedByImpersonator() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterSubprocessorHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearDeletedAt() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetDeletedBy(v string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterSubprocessorHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearDeletedBy() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetTrustCenterSubprocessorKindName(v string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetTrustCenterSubprocessorKindName(v)
-	return _u
-}
-
-// SetNillableTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableTrustCenterSubprocessorKindName(v *string) *TrustCenterSubprocessorHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterSubprocessorKindName(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterSubprocessorKindName clears the value of the "trust_center_subprocessor_kind_name" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearTrustCenterSubprocessorKindName() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearTrustCenterSubprocessorKindName()
-	return _u
-}
-
-// SetTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetTrustCenterSubprocessorKindID(v string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetTrustCenterSubprocessorKindID(v)
-	return _u
-}
-
-// SetNillableTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetNillableTrustCenterSubprocessorKindID(v *string) *TrustCenterSubprocessorHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterSubprocessorKindID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterSubprocessorKindID clears the value of the "trust_center_subprocessor_kind_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearTrustCenterSubprocessorKindID() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearTrustCenterSubprocessorKindID()
-	return _u
-}
-
-// SetCountries sets the "countries" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) SetCountries(v []string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.SetCountries(v)
-	return _u
-}
-
-// AppendCountries appends value to the "countries" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) AppendCountries(v []string) *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.AppendCountries(v)
-	return _u
-}
-
-// ClearCountries clears the value of the "countries" field.
-func (_u *TrustCenterSubprocessorHistoryUpdate) ClearCountries() *TrustCenterSubprocessorHistoryUpdate {
-	_u.mutation.ClearCountries()
 	return _u
 }
 
@@ -191,9 +36,6 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) Mutation() *TrustCenterSubproces
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TrustCenterSubprocessorHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -219,24 +61,6 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterSubprocessorHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcentersubprocessorhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcentersubprocessorhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcentersubprocessorhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterSubprocessorHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSubprocessorHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcentersubprocessorhistory.Table, trustcentersubprocessorhistory.Columns, sqlgraph.NewFieldSpec(trustcentersubprocessorhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -252,47 +76,26 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_n
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterSubprocessorKindName(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterSubprocessorKindNameCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterSubprocessorKindID(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterSubprocessorKindIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString)
@@ -300,20 +103,9 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_n
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Countries(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedCountries(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcentersubprocessorhistory.FieldCountries, value)
-		})
-	}
 	if _u.mutation.CountriesCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterSubprocessorHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcentersubprocessorhistory.Label}
@@ -329,160 +121,9 @@ func (_u *TrustCenterSubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_n
 // TrustCenterSubprocessorHistoryUpdateOne is the builder for updating a single TrustCenterSubprocessorHistory entity.
 type TrustCenterSubprocessorHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *TrustCenterSubprocessorHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearUpdatedAt() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearUpdatedBy() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetUpdatedByImpersonator(v string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearUpdatedByImpersonator() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterSubprocessorHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearDeletedAt() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearDeletedBy() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetTrustCenterSubprocessorKindName(v string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetTrustCenterSubprocessorKindName(v)
-	return _u
-}
-
-// SetNillableTrustCenterSubprocessorKindName sets the "trust_center_subprocessor_kind_name" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableTrustCenterSubprocessorKindName(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterSubprocessorKindName(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterSubprocessorKindName clears the value of the "trust_center_subprocessor_kind_name" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearTrustCenterSubprocessorKindName() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterSubprocessorKindName()
-	return _u
-}
-
-// SetTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetTrustCenterSubprocessorKindID(v string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetTrustCenterSubprocessorKindID(v)
-	return _u
-}
-
-// SetNillableTrustCenterSubprocessorKindID sets the "trust_center_subprocessor_kind_id" field if the given value is not nil.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetNillableTrustCenterSubprocessorKindID(v *string) *TrustCenterSubprocessorHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterSubprocessorKindID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterSubprocessorKindID clears the value of the "trust_center_subprocessor_kind_id" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearTrustCenterSubprocessorKindID() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterSubprocessorKindID()
-	return _u
-}
-
-// SetCountries sets the "countries" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) SetCountries(v []string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.SetCountries(v)
-	return _u
-}
-
-// AppendCountries appends value to the "countries" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) AppendCountries(v []string) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.AppendCountries(v)
-	return _u
-}
-
-// ClearCountries clears the value of the "countries" field.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) ClearCountries() *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.mutation.ClearCountries()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *TrustCenterSubprocessorHistoryMutation
 }
 
 // Mutation returns the TrustCenterSubprocessorHistoryMutation object of the builder.
@@ -505,9 +146,6 @@ func (_u *TrustCenterSubprocessorHistoryUpdateOne) Select(field string, fields .
 
 // Save executes the query and returns the updated TrustCenterSubprocessorHistory entity.
 func (_u *TrustCenterSubprocessorHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterSubprocessorHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -531,24 +169,6 @@ func (_u *TrustCenterSubprocessorHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcentersubprocessorhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcentersubprocessorhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcentersubprocessorhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterSubprocessorHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSubprocessorHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterSubprocessorHistory, err error) {
@@ -583,47 +203,26 @@ func (_u *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterSubprocessorKindName(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterSubprocessorKindNameCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterSubprocessorKindID(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterSubprocessorKindIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterSubprocessorKindID, field.TypeString)
@@ -631,20 +230,9 @@ func (_u *TrustCenterSubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) 
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Countries(); ok {
-		_spec.SetField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedCountries(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcentersubprocessorhistory.FieldCountries, value)
-		})
-	}
 	if _u.mutation.CountriesCleared() {
 		_spec.ClearField(trustcentersubprocessorhistory.FieldCountries, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterSubprocessorHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &TrustCenterSubprocessorHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -3,10 +3,10 @@ package serveropts
 import (
 	"maps"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // jobTopicRenames merges every owner's retired-topic mapping for the dispatch-time rename

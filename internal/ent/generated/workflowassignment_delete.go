@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
 )
 
 // WorkflowAssignmentDelete is the builder for deleting a WorkflowAssignment entity.
@@ -43,8 +41,6 @@ func (_d *WorkflowAssignmentDelete) ExecX(ctx context.Context) int {
 
 func (_d *WorkflowAssignmentDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(workflowassignment.Table, sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.WorkflowAssignment
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

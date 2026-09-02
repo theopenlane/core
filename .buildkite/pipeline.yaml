@@ -312,7 +312,7 @@ steps:
         matrix:
           setup:
             version:
-              - 17-alpine
+              - 18-alpine
         plugins:
           - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -331,6 +331,53 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
                 - "CGO_ENABLED=0"
         artifact_paths: ["coverage-graph.out", "junit-graph.xml"]
+      - label: ":golang: go test - events only"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+        key: "go_test_events"
+        cancel_on_build_failing: true
+        if_changed: # only run when event driven code changes
+          # the suite itself and the harness it shares with the graphapi suite
+          - internal/graphapi/eventstest/**
+          - internal/graphapi/testharness/**
+          # the event runtime the listeners and reconcile loops run on
+          - pkg/gala/**
+          # every ent listener and the hooks that emit the events they consume
+          - internal/ent/hooks/**
+          - internal/ent/taskrules/**
+          # the integrations and workflow feature and its test fixtures
+          - internal/integrations/**
+          - internal/workflows/**
+          - internal/testutils/integrations/**
+          # graphql resolvers and listener helpers for integrations
+          - internal/graphapi/integration*.go
+          - internal/graphapi/listener_helpers.go
+          - go.{mod,sum}
+        env:
+          TEST_DB_URL: "docker://postgres:{{matrix.version}}"
+        matrix:
+          setup:
+            version:
+              - 18-alpine
+        plugins:
+          - docker#v5.14.0:
+              image: ghcr.io/theopenlane/build-image:latest
+              always_pull: true
+              command: ["task", "go:testsum:ci:events"]
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+                - "/var/run/docker.sock:/var/run/docker.sock"
+              environment:
+                - "ANALYTICS_KEY"
+                - "TEST_DB_URL"
+                - "TEST_DB_CONTAINER_EXPIRY=20" # container expiry in minutes
+                - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
+                - "CGO_ENABLED=0"
+        artifact_paths: ["coverage-events.out", "junit-events.xml"]
       - label: ":golang: go test - handlers only"
         agents:
           queue: $LARGE_RUNNER_QUEUE
@@ -348,7 +395,7 @@ steps:
         matrix:
           setup:
             version:
-              - 17-alpine
+              - 18-alpine
         plugins:
           - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -384,7 +431,7 @@ steps:
         matrix:
           setup:
             version:
-              - 17-alpine
+              - 18-alpine
         plugins:
           - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
@@ -431,7 +478,7 @@ steps:
             - go.{mod,sum}
           exclude:
             - cli/**
-        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         commands: |
           #!/bin/bash
           curl \
@@ -440,6 +487,7 @@ steps:
             -H "Authorization: Token token=\"$$ANALYTICS_KEY\"" \
             -F "data=@junit-no-api.xml" \
             -F "data=@junit-graph.xml" \
+            -F "data=@junit-events.xml" \
             -F "data=@junit-handlers.xml" \
             -F "format=junit" \
             -F "run_env[CI]=buildkite" \
@@ -474,7 +522,7 @@ steps:
           exclude:
             - cli/**
         if: build.pull_request.id != null
-        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         plugins:
           - artifacts#v1.9.4:
               download: "coverage-handlers.out"
@@ -494,6 +542,14 @@ steps:
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
+          - artifacts#v1.9.4:
+              download: "coverage-events.out"
+              step: "go_test_events"
+              ignore_missing: true
+          - artifacts#v1.9.4:
+              download: "junit-events.xml"
+              step: "go_test_events"
+              ignore_missing: true
 
           - docker#v5.14.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
@@ -518,7 +574,7 @@ steps:
             - cli/**
         cancel_on_build_failing: true
         if: build.branch == "main" && build.tag == null
-        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers"]
+        depends_on: ["go_test_graph", "go_test_no_api", "go_test_handlers", "go_test_events"]
         plugins:
           - artifacts#v1.9.4:
               download: "coverage-no-api.out"
@@ -538,6 +594,14 @@ steps:
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
+          - artifacts#v1.9.4:
+              download: "coverage-events.out"
+              step: "go_test_events"
+              ignore_missing: true
+          - artifacts#v1.9.4:
+              download: "junit-events.xml"
+              step: "go_test_events"
+              ignore_missing: true
           - docker#v5.14.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
@@ -744,7 +808,7 @@ steps:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
               step: "gobuild-server"
-          - docker-login#v3.0.0: # we need to login for the image to be accessible on the host
+          - docker-login#v3.1.0: # we need to login for the image to be accessible on the host
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
               server: ghcr.io
@@ -777,7 +841,7 @@ steps:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
               step: "gobuild-server-release"
-          - docker-login#v3.0.0:
+          - docker-login#v3.1.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
               server: ghcr.io

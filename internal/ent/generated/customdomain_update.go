@@ -12,12 +12,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // CustomDomainUpdate is the builder for updating CustomDomain entities.
@@ -418,7 +416,6 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -432,7 +429,6 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -449,7 +445,6 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.DNSVerificationIDs(); len(nodes) > 0 {
@@ -463,14 +458,11 @@ func (_u *CustomDomainUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.CustomDomain
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -907,7 +899,6 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -921,7 +912,6 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -938,7 +928,6 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.DNSVerificationIDs(); len(nodes) > 0 {
@@ -952,14 +941,11 @@ func (_u *CustomDomainUpdateOne) sqlSave(ctx context.Context) (_node *CustomDoma
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.CustomDomain
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &CustomDomain{config: _u.config}
 	_spec.Assign = _node.assignValues

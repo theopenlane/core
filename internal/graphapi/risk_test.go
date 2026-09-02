@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -13,21 +15,21 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func TestQueryRisk(t *testing.T) {
-	viewUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &viewUser, enums.RoleMember, sharedTestUser1.OrganizationID)
+	viewUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &viewUser, enums.RoleMember, th.SharedTestUser1.OrganizationID)
 
-	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add viewer user to the program so that they can see/edit risk
-	(&ProgramMemberBuilder{client: suite.client, ProgramID: program.ID,
+	(&th.ProgramMemberBuilder{Client: suite.Client, ProgramID: program.ID,
 		UserID: viewUser.ID, Role: enums.RoleAdmin.String()}).
-		MustNew(sharedTestUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
+		MustNew(th.SharedTestUser1.UserCtx, t)
+	anonymousContext := th.CreateAnonymousTrustCenterContext(ulids.New().String(), th.SharedTestUser1.OrganizationID)
 
 	riskIDs := []string{}
 	// add test cases for querying the Risk
@@ -41,52 +43,52 @@ func TestQueryRisk(t *testing.T) {
 	}{
 		{
 			name:             "happy path",
-			client:           suite.client.api,
-			ctx:              sharedTestUser1.UserCtx,
+			client:           suite.Client.API,
+			ctx:              th.SharedTestUser1.UserCtx,
 			hasProgramAccess: true,
 		},
 		{
 			name:     "read only user, same org, no access to the program",
-			client:   suite.client.api,
-			ctx:      sharedViewOnlyUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedViewOnlyUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:             "admin user, has full access to risks",
-			client:           suite.client.api,
-			ctx:              sharedAdminUser.UserCtx,
+			client:           suite.Client.API,
+			ctx:              th.SharedAdminUser.UserCtx,
 			hasProgramAccess: false, // admins do not automatically have program access, only super admins + owners
 		},
 		{
 			name:             "member user, but has access to the program",
-			client:           suite.client.api,
+			client:           suite.Client.API,
 			ctx:              viewUser.UserCtx,
 			hasProgramAccess: true, // member was given program access
 		},
 		{
 			name:             "happy path using personal access token",
-			client:           suite.client.apiWithPAT,
+			client:           suite.Client.APIWithPAT,
 			ctx:              context.Background(),
 			hasProgramAccess: true, // this is the owner's PAT
 		},
 		{
 			name:     "risk not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "risk not found, using not authorized user",
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, anonymous user",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      anonymousContext,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -94,7 +96,7 @@ func TestQueryRisk(t *testing.T) {
 		t.Run("Get "+tc.name, func(t *testing.T) {
 			// setup the risk if it is not already created
 			if tc.queryID == "" {
-				resp, err := suite.client.api.CreateRisk(sharedTestUser1.UserCtx,
+				resp, err := suite.Client.API.CreateRisk(th.SharedTestUser1.UserCtx,
 					testclient.CreateRiskInput{
 						Name:       "Risk",
 						ProgramIDs: []string{program.ID},
@@ -131,14 +133,14 @@ func TestQueryRisk(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.RiskDeleteOne]{client: suite.client.db.Risk, IDs: riskIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.RiskDeleteOne]{Client: suite.Client.DB.Risk, IDs: riskIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryRisks(t *testing.T) {
-	// create multiple objects to be queried using sharedTestUser1
-	risk1 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	risk2 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create multiple objects to be queried using th.SharedTestUser1
+	risk1 := (&th.RiskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	risk2 := (&th.RiskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -148,32 +150,32 @@ func TestQueryRisks(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org, no programs or groups associated",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 0,
 		},
 		{
 			name:            "happy path, has scope using api token",
-			client:          suite.client.apiWithToken,
+			client:          suite.Client.APIWithToken,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "another user, no risks should be returned",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -189,30 +191,30 @@ func TestQueryRisks(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.RiskDeleteOne]{client: suite.client.db.Risk, IDs: []string{risk1.ID, risk2.ID}}).
-		MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.RiskDeleteOne]{Client: suite.Client.DB.Risk, IDs: []string{risk1.ID, risk2.ID}}).
+		MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateRisk(t *testing.T) {
-	program1 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	programAnotherUser := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	program1 := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	program2 := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	programAnotherUser := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	// group to be used for checking access, defaulting to a read only user
-	groupMember := (&GroupMemberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	groupMember := (&th.GroupMemberBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	groupMemberCtx := auth.NewTestContextWithOrgID(groupMember.UserID, groupMember.Edges.OrgMembership.OrganizationID)
 
 	// add adminUser to the program so that they can create a risk associated with the program1
-	(&ProgramMemberBuilder{client: suite.client, ProgramID: program1.ID,
-		UserID: sharedAdminUser.ID, Role: enums.RoleAdmin.String()}).
-		MustNew(sharedTestUser1.UserCtx, t)
+	(&th.ProgramMemberBuilder{Client: suite.Client, ProgramID: program1.ID,
+		UserID: th.SharedAdminUser.ID, Role: enums.RoleAdmin.String()}).
+		MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// create groups to be associated with the risk
-	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	blockedGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	viewerGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	stakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	stakeholderGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	delegateGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -229,8 +231,8 @@ func TestMutationCreateRisk(t *testing.T) {
 			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedStatus: enums.RiskIdentified,
 			expectedImpact: enums.RiskImpactLow,
 		},
@@ -249,8 +251,8 @@ func TestMutationCreateRisk(t *testing.T) {
 				StakeholderID: &stakeholderGroup.ID,
 				DelegateID:    &delegateGroup.ID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, hook defaults are applied",
@@ -258,8 +260,8 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name:  "Another Risk",
 				Score: lo.ToPtr(int64(19)),
 			},
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedStatus: enums.RiskIdentified,
 			expectedImpact: enums.RiskImpactCritical,
 		},
@@ -267,12 +269,12 @@ func TestMutationCreateRisk(t *testing.T) {
 			name: "add groups",
 			request: testclient.CreateRiskInput{
 				Name:            "Test Risk",
-				EditorIDs:       []string{sharedTestUser1.GroupID},
+				EditorIDs:       []string{th.SharedTestUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
 			},
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedStatus: enums.RiskIdentified,
 			expectedImpact: enums.RiskImpactLow,
 		},
@@ -280,9 +282,9 @@ func TestMutationCreateRisk(t *testing.T) {
 			name: "happy path, using pat",
 			request: testclient.CreateRiskInput{
 				Name:    "Risk",
-				OwnerID: &sharedTestUser1.OrganizationID,
+				OwnerID: &th.SharedTestUser1.OrganizationID,
 			},
-			client:         suite.client.apiWithPAT,
+			client:         suite.Client.APIWithPAT,
 			ctx:            context.Background(),
 			expectedStatus: enums.RiskIdentified,
 			expectedImpact: enums.RiskImpactLow,
@@ -292,7 +294,7 @@ func TestMutationCreateRisk(t *testing.T) {
 			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
-			client:         suite.client.apiWithToken,
+			client:         suite.Client.APIWithToken,
 			ctx:            context.Background(),
 			expectedStatus: enums.RiskIdentified,
 			expectedImpact: enums.RiskImpactLow,
@@ -303,7 +305,7 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name: "Risk",
 			},
 			// the group and program are specific to the risk query in CreateRisk
-			client:         setupAPIToken(sharedTestUser1.UserCtx, t, []string{"risk:write", "group:read", "program:read"}),
+			client:         th.SetupAPIToken(th.SharedTestUser1.UserCtx, t, []string{"risk:write", "group:read", "program:read"}),
 			ctx:            context.Background(),
 			expectedStatus: enums.RiskIdentified,
 			expectedImpact: enums.RiskImpactLow,
@@ -313,9 +315,9 @@ func TestMutationCreateRisk(t *testing.T) {
 			request: testclient.CreateRiskInput{
 				Name: "Risk",
 			},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         groupMemberCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "user now authorized, added group to org",
@@ -323,7 +325,7 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name: "Risk",
 			},
 			addGroupToOrg:  true,
-			client:         suite.client.api,
+			client:         suite.Client.API,
 			ctx:            groupMemberCtx,
 			expectedStatus: enums.RiskIdentified,
 			expectedImpact: enums.RiskImpactLow,
@@ -334,8 +336,8 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name:       "Risk",
 				ProgramIDs: []string{program1.ID},
 			},
-			client:         suite.client.api,
-			ctx:            sharedAdminUser.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedAdminUser.UserCtx,
 			expectedStatus: enums.RiskIdentified,
 			expectedImpact: enums.RiskImpactLow,
 		},
@@ -345,15 +347,15 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name:       "Risk",
 				ProgramIDs: []string{program1.ID, program2.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedAdminUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedAdminUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required name",
 			request:     testclient.CreateRiskInput{},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -362,16 +364,16 @@ func TestMutationCreateRisk(t *testing.T) {
 				Name:       "Risk",
 				ProgramIDs: []string{programAnotherUser.ID, program1.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
-				_, err := suite.client.api.UpdateOrganization(sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID,
+				_, err := suite.Client.API.UpdateOrganization(th.SharedTestUser1.UserCtx, th.SharedTestUser1.OrganizationID,
 					testclient.UpdateOrganizationInput{
 						AddRiskCreatorIDs: []string{groupMember.GroupID},
 					}, nil, nil)
@@ -451,7 +453,7 @@ func TestMutationCreateRisk(t *testing.T) {
 			if len(tc.request.EditorIDs) > 0 {
 				assert.Assert(t, is.Len(resp.CreateRisk.Risk.Editors.Edges, 1))
 				for _, edge := range resp.CreateRisk.Risk.Editors.Edges {
-					assert.Check(t, is.Equal(sharedTestUser1.GroupID, edge.Node.ID))
+					assert.Check(t, is.Equal(th.SharedTestUser1.GroupID, edge.Node.ID))
 				}
 			}
 
@@ -490,8 +492,8 @@ func TestMutationCreateRisk(t *testing.T) {
 			}
 
 			// ensure the org owner has access to the risk that was created by an api token
-			if tc.client == suite.client.apiWithToken {
-				res, err := suite.client.api.GetRiskByID(sharedTestUser1.UserCtx, resp.CreateRisk.Risk.ID)
+			if tc.client == suite.Client.APIWithToken {
+				res, err := suite.Client.API.GetRiskByID(th.SharedTestUser1.UserCtx, resp.CreateRisk.Risk.ID)
 				assert.NilError(t, err)
 				assert.Assert(t, res != nil)
 				assert.Check(t, is.Equal(resp.CreateRisk.Risk.ID, res.Risk.ID))
@@ -500,46 +502,46 @@ func TestMutationCreateRisk(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: programAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockedGroup.ID, viewerGroup.ID, groupMember.GroupID, stakeholderGroup.ID, delegateGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: programAnotherUser.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{blockedGroup.ID, viewerGroup.ID, groupMember.GroupID, stakeholderGroup.ID, delegateGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
 }
 
 func TestMutationUpdateRisk(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client, EditorIDs: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
-	risk := (&RiskBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	program := (&th.ProgramBuilder{Client: suite.Client, EditorIDs: th.SharedTestUser1.GroupID}).MustNew(th.SharedTestUser1.UserCtx, t)
+	risk := (&th.RiskBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	// create another viewer user and add them to the same organization and group as sharedTestUser1
+	// create another viewer user and add them to the same organization and group as th.SharedTestUser1
 	// this will allow us to test the group editor/viewer permissions
-	anotherViewUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewUser, enums.RoleMember, sharedTestUser1.OrganizationID)
+	anotherViewUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &anotherViewUser, enums.RoleMember, th.SharedTestUser1.OrganizationID)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	groupMember := (&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherViewUser.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	stakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	stakeholderGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	delegateGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	anotherStakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	anotherStakeholderGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the risk
-	_, err := suite.client.api.GetRiskByID(anotherViewUser.UserCtx, risk.ID)
-	assert.ErrorContains(t, err, notFoundErrorMsg)
+	_, err := suite.Client.API.GetRiskByID(anotherViewUser.UserCtx, risk.ID)
+	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
-	createRemediation, err := suite.client.api.CreateRemediation(sharedTestUser1.UserCtx, testclient.CreateRemediationInput{
+	createRemediation, err := suite.Client.API.CreateRemediation(th.SharedTestUser1.UserCtx, testclient.CreateRemediationInput{
 		Title:   lo.ToPtr("Test Remediation"),
 		Summary: lo.ToPtr("Test summary for query"),
 		Status:  &enums.RemediationStatusCompleted,
 	})
 	assert.NilError(t, err)
 
-	createActionPlan, err := suite.client.api.CreateActionPlan(sharedTestUser1.UserCtx, testclient.CreateActionPlanInput{
+	createActionPlan, err := suite.Client.API.CreateActionPlan(th.SharedTestUser1.UserCtx, testclient.CreateActionPlanInput{
 		Name:  "Test Action Plan",
 		Title: "Test Action Plan",
 	})
 	assert.NilError(t, err)
 
-	createReview, err := suite.client.api.CreateReview(sharedAdminUser.UserCtx, testclient.CreateReviewInput{
+	createReview, err := suite.Client.API.CreateReview(th.SharedAdminUser.UserCtx, testclient.CreateReviewInput{
 		Title:  "Test Review",
 		Status: &enums.ReviewStatusCompleted,
 	})
@@ -561,16 +563,16 @@ func TestMutationUpdateRisk(t *testing.T) {
 				DelegateID:    &delegateGroup.ID,
 				Status:        &enums.RiskOpen,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, add action plan, status should be set to in progress",
 			request: testclient.UpdateRiskInput{
 				AddActionPlanIDs: []string{createActionPlan.CreateActionPlan.ActionPlan.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -583,7 +585,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 				RiskDecision:      &enums.RiskDecisionTransfer,
 				AddRemediationIDs: []string{createRemediation.CreateRemediation.Remediation.ID},
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -592,7 +594,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 				Status:          &enums.RiskMitigated,
 				ReviewFrequency: &enums.FrequencyYearly,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -600,7 +602,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 			request: testclient.UpdateRiskInput{
 				AddReviewIDs: []string{createReview.CreateReview.Review.ID},
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -608,7 +610,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 			request: testclient.UpdateRiskInput{
 				ReviewFrequency: &enums.FrequencyMonthly,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -616,18 +618,18 @@ func TestMutationUpdateRisk(t *testing.T) {
 			request: testclient.UpdateRiskInput{
 				Likelihood: &enums.RiskLikelihoodLow,
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateRiskInput{
 				Likelihood: &enums.RiskLikelihoodLow,
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -726,7 +728,7 @@ func TestMutationUpdateRisk(t *testing.T) {
 				assert.Check(t, found)
 
 				// ensure the user has access to the risk now
-				res, err := suite.client.api.GetRiskByID(anotherViewUser.UserCtx, risk.ID)
+				res, err := suite.Client.API.GetRiskByID(anotherViewUser.UserCtx, risk.ID)
 				assert.NilError(t, err)
 				assert.Assert(t, res != nil)
 				assert.Check(t, is.Equal(risk.ID, res.Risk.ID))
@@ -735,15 +737,15 @@ func TestMutationUpdateRisk(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.RiskDeleteOne]{client: suite.client.db.Risk, ID: risk.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{stakeholderGroup.ID, delegateGroup.ID, anotherStakeholderGroup.ID, groupMember.GroupID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.RiskDeleteOne]{Client: suite.Client.DB.Risk, ID: risk.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{stakeholderGroup.ID, delegateGroup.ID, anotherStakeholderGroup.ID, groupMember.GroupID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteRisk(t *testing.T) {
 	// create objects to be deleted
-	risk1 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	risk2 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	risk1 := (&th.RiskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	risk2 := (&th.RiskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -755,35 +757,35 @@ func TestMutationDeleteRisk(t *testing.T) {
 		{
 			name:        "not authorized, delete",
 			idToDelete:  risk1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: risk1.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  risk1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: risk2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -805,17 +807,17 @@ func TestMutationDeleteRisk(t *testing.T) {
 
 func TestMutationUpdateBulkRisk(t *testing.T) {
 	// create risks to be updated
-	risk1 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	risk2 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	risk3 := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	risk1 := (&th.RiskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	risk2 := (&th.RiskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	risk3 := (&th.RiskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	stakeholderGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	stakeholderGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	delegateGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	riskAnotherUser := (&RiskBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	riskAnotherUser := (&th.RiskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the risk
-	res, err := suite.client.api.UpdateBulkRisk(sharedTestUser2.UserCtx, []string{risk1.ID}, testclient.UpdateRiskInput{
+	res, err := suite.Client.API.UpdateBulkRisk(th.SharedTestUser2.UserCtx, []string{risk1.ID}, testclient.UpdateRiskInput{
 		Status: lo.ToPtr(enums.RiskArchived),
 	})
 
@@ -839,8 +841,8 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 				Details: lo.ToPtr("Updated details for all risks"),
 				Impact:  &enums.RiskImpactModerate,
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedUpdatedCount: 3,
 		},
 		{
@@ -849,16 +851,16 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			input: testclient.UpdateRiskInput{
 				Score: lo.ToPtr(int64(8)),
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedUpdatedCount: 2,
 		},
 		{
 			name:        "empty ids array",
 			ids:         []string{},
 			input:       testclient.UpdateRiskInput{Details: lo.ToPtr("test")},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "ids is required",
 		},
 		{
@@ -867,8 +869,8 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			input: testclient.UpdateRiskInput{
 				Status: &enums.RiskIdentified,
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedUpdatedCount: 1, // only risk1 should be updated
 		},
 		{
@@ -877,8 +879,8 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 			input: testclient.UpdateRiskInput{
 				Status: &enums.RiskArchived,
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser2.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser2.UserCtx,
 			expectedUpdatedCount: 0, // should not find any risks to update
 		},
 	}
@@ -965,7 +967,7 @@ func TestMutationUpdateBulkRisk(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.RiskDeleteOne]{client: suite.client.db.Risk, IDs: []string{risk1.ID, risk2.ID, risk3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.RiskDeleteOne]{client: suite.client.db.Risk, ID: riskAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{stakeholderGroup.ID, delegateGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.RiskDeleteOne]{Client: suite.Client.DB.Risk, IDs: []string{risk1.ID, risk2.ID, risk3.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.RiskDeleteOne]{Client: suite.Client.DB.Risk, ID: riskAnotherUser.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{stakeholderGroup.ID, delegateGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

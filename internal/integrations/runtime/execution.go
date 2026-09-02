@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/riverqueue/river"
@@ -11,16 +12,16 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	intobvs "github.com/theopenlane/core/internal/integrations/observability"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // reconcileOperations emits one reconciliation envelope per reconcilable operation,
@@ -526,32 +527,6 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 
 		opCtx := intobvs.WithOperation(ctx, op.Name)
 
-		// successor cycles carry per-cycle unique keys, so a live loop only surfaces
-		// through its metadata, never through the seed's insert-time key
-		fragment, err := types.PropertiesFragment(map[string]string{
-			"entityId":  inst.ID,
-			"operation": op.Name,
-			"runType":   enums.IntegrationRunTypeReconcile.String(),
-		})
-		if err != nil {
-			errs = append(errs, err)
-			continue
-		}
-
-		active, err := r.Gala().HasActiveJobWithMetadata(opCtx, fragment)
-		if err != nil {
-			logx.FromContext(opCtx).Error().Err(err).Msg("failed to check for active reconcile job")
-			errs = append(errs, err)
-
-			continue
-		}
-
-		if active {
-			continue
-		}
-
-		logx.FromContext(opCtx).Info().Msg("seeding reconcile loop")
-
 		if err := r.emitReconcileLoop(opCtx, inst, op.Name); err != nil {
 			logx.FromContext(opCtx).Error().Err(err).Msg("failed to seed reconcile job")
 			errs = append(errs, err)
@@ -696,7 +671,7 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("client build failed")
 
-		return nil, credentials, integration.DefinitionID, err
+		return nil, credentials, integration.DefinitionID, types.Unhealthy(err, fmt.Sprintf(clientUnresolvedReasonFmt, err))
 	}
 
 	logx.FromContext(ctx).Debug().Msg("client initialized")

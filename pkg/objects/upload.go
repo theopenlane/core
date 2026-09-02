@@ -16,7 +16,7 @@ import (
 	"github.com/theopenlane/utils/contextx"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
 
 // FileContextKey is the context key for the files

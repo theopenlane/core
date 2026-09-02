@@ -8,287 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // NoteHistoryUpdate is the builder for updating NoteHistory entities.
 type NoteHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *NoteHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *NoteHistoryMutation
 }
 
 // Where appends a list predicates to the NoteHistoryUpdate builder.
 func (_u *NoteHistoryUpdate) Where(ps ...predicate.NoteHistory) *NoteHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *NoteHistoryUpdate) SetUpdatedAt(v time.Time) *NoteHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *NoteHistoryUpdate) ClearUpdatedAt() *NoteHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *NoteHistoryUpdate) SetUpdatedBy(v string) *NoteHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableUpdatedBy(v *string) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *NoteHistoryUpdate) ClearUpdatedBy() *NoteHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *NoteHistoryUpdate) SetUpdatedByImpersonator(v string) *NoteHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *NoteHistoryUpdate) ClearUpdatedByImpersonator() *NoteHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *NoteHistoryUpdate) SetDeletedAt(v time.Time) *NoteHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableDeletedAt(v *time.Time) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *NoteHistoryUpdate) ClearDeletedAt() *NoteHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *NoteHistoryUpdate) SetDeletedBy(v string) *NoteHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableDeletedBy(v *string) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *NoteHistoryUpdate) ClearDeletedBy() *NoteHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *NoteHistoryUpdate) SetTitle(v string) *NoteHistoryUpdate {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableTitle(v *string) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// ClearTitle clears the value of the "title" field.
-func (_u *NoteHistoryUpdate) ClearTitle() *NoteHistoryUpdate {
-	_u.mutation.ClearTitle()
-	return _u
-}
-
-// SetText sets the "text" field.
-func (_u *NoteHistoryUpdate) SetText(v string) *NoteHistoryUpdate {
-	_u.mutation.SetText(v)
-	return _u
-}
-
-// SetNillableText sets the "text" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableText(v *string) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetText(*v)
-	}
-	return _u
-}
-
-// SetTextJSON sets the "text_json" field.
-func (_u *NoteHistoryUpdate) SetTextJSON(v []interface{}) *NoteHistoryUpdate {
-	_u.mutation.SetTextJSON(v)
-	return _u
-}
-
-// AppendTextJSON appends value to the "text_json" field.
-func (_u *NoteHistoryUpdate) AppendTextJSON(v []interface{}) *NoteHistoryUpdate {
-	_u.mutation.AppendTextJSON(v)
-	return _u
-}
-
-// ClearTextJSON clears the value of the "text_json" field.
-func (_u *NoteHistoryUpdate) ClearTextJSON() *NoteHistoryUpdate {
-	_u.mutation.ClearTextJSON()
-	return _u
-}
-
-// SetNoteRef sets the "note_ref" field.
-func (_u *NoteHistoryUpdate) SetNoteRef(v string) *NoteHistoryUpdate {
-	_u.mutation.SetNoteRef(v)
-	return _u
-}
-
-// SetNillableNoteRef sets the "note_ref" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableNoteRef(v *string) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetNoteRef(*v)
-	}
-	return _u
-}
-
-// ClearNoteRef clears the value of the "note_ref" field.
-func (_u *NoteHistoryUpdate) ClearNoteRef() *NoteHistoryUpdate {
-	_u.mutation.ClearNoteRef()
-	return _u
-}
-
-// SetDiscussionID sets the "discussion_id" field.
-func (_u *NoteHistoryUpdate) SetDiscussionID(v string) *NoteHistoryUpdate {
-	_u.mutation.SetDiscussionID(v)
-	return _u
-}
-
-// SetNillableDiscussionID sets the "discussion_id" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableDiscussionID(v *string) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetDiscussionID(*v)
-	}
-	return _u
-}
-
-// ClearDiscussionID clears the value of the "discussion_id" field.
-func (_u *NoteHistoryUpdate) ClearDiscussionID() *NoteHistoryUpdate {
-	_u.mutation.ClearDiscussionID()
-	return _u
-}
-
-// SetIsEdited sets the "is_edited" field.
-func (_u *NoteHistoryUpdate) SetIsEdited(v bool) *NoteHistoryUpdate {
-	_u.mutation.SetIsEdited(v)
-	return _u
-}
-
-// SetNillableIsEdited sets the "is_edited" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableIsEdited(v *bool) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetIsEdited(*v)
-	}
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *NoteHistoryUpdate) SetTrustCenterID(v string) *NoteHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableTrustCenterID(v *string) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *NoteHistoryUpdate) ClearTrustCenterID() *NoteHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
-// SetNotifySubscribers sets the "notify_subscribers" field.
-func (_u *NoteHistoryUpdate) SetNotifySubscribers(v bool) *NoteHistoryUpdate {
-	_u.mutation.SetNotifySubscribers(v)
-	return _u
-}
-
-// SetNillableNotifySubscribers sets the "notify_subscribers" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableNotifySubscribers(v *bool) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetNotifySubscribers(*v)
-	}
-	return _u
-}
-
-// ClearNotifySubscribers clears the value of the "notify_subscribers" field.
-func (_u *NoteHistoryUpdate) ClearNotifySubscribers() *NoteHistoryUpdate {
-	_u.mutation.ClearNotifySubscribers()
-	return _u
-}
-
-// SetNotifiedAt sets the "notified_at" field.
-func (_u *NoteHistoryUpdate) SetNotifiedAt(v time.Time) *NoteHistoryUpdate {
-	_u.mutation.SetNotifiedAt(v)
-	return _u
-}
-
-// SetNillableNotifiedAt sets the "notified_at" field if the given value is not nil.
-func (_u *NoteHistoryUpdate) SetNillableNotifiedAt(v *time.Time) *NoteHistoryUpdate {
-	if v != nil {
-		_u.SetNotifiedAt(*v)
-	}
-	return _u
-}
-
-// ClearNotifiedAt clears the value of the "notified_at" field.
-func (_u *NoteHistoryUpdate) ClearNotifiedAt() *NoteHistoryUpdate {
-	_u.mutation.ClearNotifiedAt()
 	return _u
 }
 
@@ -299,9 +36,6 @@ func (_u *NoteHistoryUpdate) Mutation() *NoteHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *NoteHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -327,24 +61,6 @@ func (_u *NoteHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *NoteHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if notehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized notehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := notehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *NoteHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(notehistory.Table, notehistory.Columns, sqlgraph.NewFieldSpec(notehistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -360,35 +76,20 @@ func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(notehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(notehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(notehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(notehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(notehistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(notehistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(notehistory.FieldDeletedBy, field.TypeString)
@@ -396,62 +97,27 @@ func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(notehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(notehistory.FieldTitle, field.TypeString, value)
-	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(notehistory.FieldTitle, field.TypeString)
-	}
-	if value, ok := _u.mutation.Text(); ok {
-		_spec.SetField(notehistory.FieldText, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.TextJSON(); ok {
-		_spec.SetField(notehistory.FieldTextJSON, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTextJSON(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, notehistory.FieldTextJSON, value)
-		})
 	}
 	if _u.mutation.TextJSONCleared() {
 		_spec.ClearField(notehistory.FieldTextJSON, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.NoteRef(); ok {
-		_spec.SetField(notehistory.FieldNoteRef, field.TypeString, value)
-	}
 	if _u.mutation.NoteRefCleared() {
 		_spec.ClearField(notehistory.FieldNoteRef, field.TypeString)
-	}
-	if value, ok := _u.mutation.DiscussionID(); ok {
-		_spec.SetField(notehistory.FieldDiscussionID, field.TypeString, value)
 	}
 	if _u.mutation.DiscussionIDCleared() {
 		_spec.ClearField(notehistory.FieldDiscussionID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IsEdited(); ok {
-		_spec.SetField(notehistory.FieldIsEdited, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(notehistory.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(notehistory.FieldTrustCenterID, field.TypeString)
-	}
-	if value, ok := _u.mutation.NotifySubscribers(); ok {
-		_spec.SetField(notehistory.FieldNotifySubscribers, field.TypeBool, value)
 	}
 	if _u.mutation.NotifySubscribersCleared() {
 		_spec.ClearField(notehistory.FieldNotifySubscribers, field.TypeBool)
 	}
-	if value, ok := _u.mutation.NotifiedAt(); ok {
-		_spec.SetField(notehistory.FieldNotifiedAt, field.TypeTime, value)
-	}
 	if _u.mutation.NotifiedAtCleared() {
 		_spec.ClearField(notehistory.FieldNotifiedAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.NoteHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{notehistory.Label}
@@ -467,268 +133,9 @@ func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 // NoteHistoryUpdateOne is the builder for updating a single NoteHistory entity.
 type NoteHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *NoteHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *NoteHistoryUpdateOne) SetUpdatedAt(v time.Time) *NoteHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *NoteHistoryUpdateOne) ClearUpdatedAt() *NoteHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *NoteHistoryUpdateOne) SetUpdatedBy(v string) *NoteHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableUpdatedBy(v *string) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *NoteHistoryUpdateOne) ClearUpdatedBy() *NoteHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *NoteHistoryUpdateOne) SetUpdatedByImpersonator(v string) *NoteHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *NoteHistoryUpdateOne) ClearUpdatedByImpersonator() *NoteHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *NoteHistoryUpdateOne) SetDeletedAt(v time.Time) *NoteHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *NoteHistoryUpdateOne) ClearDeletedAt() *NoteHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *NoteHistoryUpdateOne) SetDeletedBy(v string) *NoteHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableDeletedBy(v *string) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *NoteHistoryUpdateOne) ClearDeletedBy() *NoteHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *NoteHistoryUpdateOne) SetTitle(v string) *NoteHistoryUpdateOne {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableTitle(v *string) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// ClearTitle clears the value of the "title" field.
-func (_u *NoteHistoryUpdateOne) ClearTitle() *NoteHistoryUpdateOne {
-	_u.mutation.ClearTitle()
-	return _u
-}
-
-// SetText sets the "text" field.
-func (_u *NoteHistoryUpdateOne) SetText(v string) *NoteHistoryUpdateOne {
-	_u.mutation.SetText(v)
-	return _u
-}
-
-// SetNillableText sets the "text" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableText(v *string) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetText(*v)
-	}
-	return _u
-}
-
-// SetTextJSON sets the "text_json" field.
-func (_u *NoteHistoryUpdateOne) SetTextJSON(v []interface{}) *NoteHistoryUpdateOne {
-	_u.mutation.SetTextJSON(v)
-	return _u
-}
-
-// AppendTextJSON appends value to the "text_json" field.
-func (_u *NoteHistoryUpdateOne) AppendTextJSON(v []interface{}) *NoteHistoryUpdateOne {
-	_u.mutation.AppendTextJSON(v)
-	return _u
-}
-
-// ClearTextJSON clears the value of the "text_json" field.
-func (_u *NoteHistoryUpdateOne) ClearTextJSON() *NoteHistoryUpdateOne {
-	_u.mutation.ClearTextJSON()
-	return _u
-}
-
-// SetNoteRef sets the "note_ref" field.
-func (_u *NoteHistoryUpdateOne) SetNoteRef(v string) *NoteHistoryUpdateOne {
-	_u.mutation.SetNoteRef(v)
-	return _u
-}
-
-// SetNillableNoteRef sets the "note_ref" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableNoteRef(v *string) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetNoteRef(*v)
-	}
-	return _u
-}
-
-// ClearNoteRef clears the value of the "note_ref" field.
-func (_u *NoteHistoryUpdateOne) ClearNoteRef() *NoteHistoryUpdateOne {
-	_u.mutation.ClearNoteRef()
-	return _u
-}
-
-// SetDiscussionID sets the "discussion_id" field.
-func (_u *NoteHistoryUpdateOne) SetDiscussionID(v string) *NoteHistoryUpdateOne {
-	_u.mutation.SetDiscussionID(v)
-	return _u
-}
-
-// SetNillableDiscussionID sets the "discussion_id" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableDiscussionID(v *string) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetDiscussionID(*v)
-	}
-	return _u
-}
-
-// ClearDiscussionID clears the value of the "discussion_id" field.
-func (_u *NoteHistoryUpdateOne) ClearDiscussionID() *NoteHistoryUpdateOne {
-	_u.mutation.ClearDiscussionID()
-	return _u
-}
-
-// SetIsEdited sets the "is_edited" field.
-func (_u *NoteHistoryUpdateOne) SetIsEdited(v bool) *NoteHistoryUpdateOne {
-	_u.mutation.SetIsEdited(v)
-	return _u
-}
-
-// SetNillableIsEdited sets the "is_edited" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableIsEdited(v *bool) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsEdited(*v)
-	}
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *NoteHistoryUpdateOne) SetTrustCenterID(v string) *NoteHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableTrustCenterID(v *string) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *NoteHistoryUpdateOne) ClearTrustCenterID() *NoteHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
-// SetNotifySubscribers sets the "notify_subscribers" field.
-func (_u *NoteHistoryUpdateOne) SetNotifySubscribers(v bool) *NoteHistoryUpdateOne {
-	_u.mutation.SetNotifySubscribers(v)
-	return _u
-}
-
-// SetNillableNotifySubscribers sets the "notify_subscribers" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableNotifySubscribers(v *bool) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetNotifySubscribers(*v)
-	}
-	return _u
-}
-
-// ClearNotifySubscribers clears the value of the "notify_subscribers" field.
-func (_u *NoteHistoryUpdateOne) ClearNotifySubscribers() *NoteHistoryUpdateOne {
-	_u.mutation.ClearNotifySubscribers()
-	return _u
-}
-
-// SetNotifiedAt sets the "notified_at" field.
-func (_u *NoteHistoryUpdateOne) SetNotifiedAt(v time.Time) *NoteHistoryUpdateOne {
-	_u.mutation.SetNotifiedAt(v)
-	return _u
-}
-
-// SetNillableNotifiedAt sets the "notified_at" field if the given value is not nil.
-func (_u *NoteHistoryUpdateOne) SetNillableNotifiedAt(v *time.Time) *NoteHistoryUpdateOne {
-	if v != nil {
-		_u.SetNotifiedAt(*v)
-	}
-	return _u
-}
-
-// ClearNotifiedAt clears the value of the "notified_at" field.
-func (_u *NoteHistoryUpdateOne) ClearNotifiedAt() *NoteHistoryUpdateOne {
-	_u.mutation.ClearNotifiedAt()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *NoteHistoryMutation
 }
 
 // Mutation returns the NoteHistoryMutation object of the builder.
@@ -751,9 +158,6 @@ func (_u *NoteHistoryUpdateOne) Select(field string, fields ...string) *NoteHist
 
 // Save executes the query and returns the updated NoteHistory entity.
 func (_u *NoteHistoryUpdateOne) Save(ctx context.Context) (*NoteHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -777,24 +181,6 @@ func (_u *NoteHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *NoteHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if notehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized notehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := notehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *NoteHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *NoteHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory, err error) {
@@ -829,35 +215,20 @@ func (_u *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(notehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(notehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(notehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(notehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(notehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(notehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(notehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(notehistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(notehistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(notehistory.FieldDeletedBy, field.TypeString)
@@ -865,62 +236,27 @@ func (_u *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(notehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(notehistory.FieldTitle, field.TypeString, value)
-	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(notehistory.FieldTitle, field.TypeString)
-	}
-	if value, ok := _u.mutation.Text(); ok {
-		_spec.SetField(notehistory.FieldText, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.TextJSON(); ok {
-		_spec.SetField(notehistory.FieldTextJSON, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTextJSON(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, notehistory.FieldTextJSON, value)
-		})
 	}
 	if _u.mutation.TextJSONCleared() {
 		_spec.ClearField(notehistory.FieldTextJSON, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.NoteRef(); ok {
-		_spec.SetField(notehistory.FieldNoteRef, field.TypeString, value)
-	}
 	if _u.mutation.NoteRefCleared() {
 		_spec.ClearField(notehistory.FieldNoteRef, field.TypeString)
-	}
-	if value, ok := _u.mutation.DiscussionID(); ok {
-		_spec.SetField(notehistory.FieldDiscussionID, field.TypeString, value)
 	}
 	if _u.mutation.DiscussionIDCleared() {
 		_spec.ClearField(notehistory.FieldDiscussionID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IsEdited(); ok {
-		_spec.SetField(notehistory.FieldIsEdited, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(notehistory.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(notehistory.FieldTrustCenterID, field.TypeString)
-	}
-	if value, ok := _u.mutation.NotifySubscribers(); ok {
-		_spec.SetField(notehistory.FieldNotifySubscribers, field.TypeBool, value)
 	}
 	if _u.mutation.NotifySubscribersCleared() {
 		_spec.ClearField(notehistory.FieldNotifySubscribers, field.TypeBool)
 	}
-	if value, ok := _u.mutation.NotifiedAt(); ok {
-		_spec.SetField(notehistory.FieldNotifiedAt, field.TypeTime, value)
-	}
 	if _u.mutation.NotifiedAtCleared() {
 		_spec.ClearField(notehistory.FieldNotifiedAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.NoteHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &NoteHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

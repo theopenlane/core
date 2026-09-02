@@ -13,16 +13,15 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // TrustCenterDocQuery is the builder for querying TrustCenterDoc entities.
@@ -96,9 +95,6 @@ func (_q *TrustCenterDocQuery) QueryTrustCenterDocKind() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.TrustCenterDocKindTable, trustcenterdoc.TrustCenterDocKindColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -121,9 +117,6 @@ func (_q *TrustCenterDocQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterdoc.BlockedGroupsTable, trustcenterdoc.BlockedGroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -146,9 +139,6 @@ func (_q *TrustCenterDocQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenterdoc.EditorsTable, trustcenterdoc.EditorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -171,9 +161,6 @@ func (_q *TrustCenterDocQuery) QueryTrustCenter() *TrustCenterQuery {
 			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.TrustCenterTable, trustcenterdoc.TrustCenterColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -196,9 +183,6 @@ func (_q *TrustCenterDocQuery) QueryStandard() *StandardQuery {
 			sqlgraph.To(standard.Table, standard.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.StandardTable, trustcenterdoc.StandardColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -221,9 +205,6 @@ func (_q *TrustCenterDocQuery) QueryFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.FileTable, trustcenterdoc.FileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -246,9 +227,6 @@ func (_q *TrustCenterDocQuery) QueryOriginalFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterdoc.OriginalFileTable, trustcenterdoc.OriginalFileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -645,8 +623,6 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.TrustCenterDoc
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -941,8 +917,6 @@ func (_q *TrustCenterDocQuery) loadOriginalFile(ctx context.Context, query *File
 
 func (_q *TrustCenterDocQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.TrustCenterDoc
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1023,9 +997,6 @@ func (_q *TrustCenterDocQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.TrustCenterDoc)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

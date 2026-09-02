@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // supportUserEdgeExtension prevents list-edge model methods on a synthetic support

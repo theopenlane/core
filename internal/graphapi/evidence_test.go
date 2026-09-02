@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
@@ -14,117 +16,139 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func TestQueryEvidence(t *testing.T) {
-	evidenceNoParent := (&EvidenceBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	evidenceNoParent := (&th.EvidenceBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 
-	(&ProgramMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID, ProgramID: program.ID}).MustNew(sharedAdminUser.UserCtx, t)
+	(&th.ProgramMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID, ProgramID: program.ID}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	// create an Evidence to be queried using adminUser
-	// org owner (sharedTestUser1) should automatically have access to the Evidence
-	evidence := (&EvidenceBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedAdminUser.UserCtx, t)
+	// org owner (th.SharedTestUser1) should automatically have access to the Evidence
+	evidence := (&th.EvidenceBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	// create a control to be queried using adminUser that access is granted via the control
-	control := (&ControlBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	evidenceControl := (&th.EvidenceBuilder{Client: suite.Client, ControlID: control.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	evidenceControl := (&EvidenceBuilder{client: suite.client, ControlID: control.ID}).MustNew(sharedTestUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
+	internalPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	evidenceInternalPolicy := (&th.EvidenceBuilder{Client: suite.Client, InternalPolicyID: internalPolicy.ID}).MustNew(th.SharedAdminUser.UserCtx, t)
+
+	procedure := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	evidenceProcedure := (&th.EvidenceBuilder{Client: suite.Client, ProcedureID: procedure.ID}).MustNew(th.SharedAdminUser.UserCtx, t)
+
+	anonymousContext := th.CreateAnonymousTrustCenterContext(ulids.New().String(), th.SharedTestUser1.OrganizationID)
 
 	// add test cases for querying the Evidence
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *testclient.TestClient
-		ctx      context.Context
-		errorMsg string
+		name        string
+		queryID     string
+		client      *testclient.TestClient
+		ctx         context.Context
+		errorMsg    string
+		policyID    string
+		procedureID string
 	}{
 		{
 			name:    "happy path, creator of the evidence no parent",
 			queryID: evidenceNoParent.ID,
-			client:  suite.client.api,
-			ctx:     sharedAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:    "happy path, creator of the evidence with program parent",
 			queryID: evidence.ID,
-			client:  suite.client.api,
-			ctx:     sharedAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:    "happy path, permissions via control",
 			queryID: evidenceControl.ID,
-			client:  suite.client.api,
-			ctx:     sharedAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:    "happy path, org owner",
 			queryID: evidence.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "read only user in organization, authorized via program",
 			queryID: evidence.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:     "read only user in organization, no access given via parent",
 			queryID:  evidence.ID,
-			client:   suite.client.api,
-			ctx:      sharedViewOnlyUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedViewOnlyUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "read only user in organization, no access",
 			queryID:  evidenceNoParent.ID,
-			client:   suite.client.api,
-			ctx:      sharedViewOnlyUser.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedViewOnlyUser.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "read only user 2 in organization, no access",
 			queryID:  evidenceNoParent.ID,
-			client:   suite.client.api,
-			ctx:      sharedViewOnlyUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedViewOnlyUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:    "read only user in organization, has access via control",
 			queryID: evidenceControl.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
+		},
+		{
+			name:     "read only user in organization, has access via internal policy",
+			queryID:  evidenceInternalPolicy.ID,
+			client:   suite.Client.API,
+			ctx:      th.SharedViewOnlyUser.UserCtx,
+			policyID: internalPolicy.ID,
+		},
+		{
+			name:        "read only user in organization, has access via procedure",
+			queryID:     evidenceProcedure.ID,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			procedureID: procedure.ID,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: evidence.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "evidence not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "evidence not found, using not authorized user",
 			queryID:  evidence.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, anonymous user",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      anonymousContext,
 			queryID:  evidence.ID,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -147,25 +171,37 @@ func TestQueryEvidence(t *testing.T) {
 			assert.Check(t, len(resp.Evidence.DisplayID) != 0)
 			assert.Check(t, !resp.Evidence.CreatedAt.IsZero())
 			assert.Check(t, !resp.Evidence.UpdatedAt.IsZero())
+
+			if tc.policyID != "" {
+				assert.Check(t, is.Len(resp.Evidence.InternalPolicies.Edges, 1))
+				assert.Check(t, is.Equal(tc.policyID, resp.Evidence.InternalPolicies.Edges[0].Node.ID))
+			}
+
+			if tc.procedureID != "" {
+				assert.Check(t, is.Len(resp.Evidence.Procedures.Edges, 1))
+				assert.Check(t, is.Equal(tc.procedureID, resp.Evidence.Procedures.Edges[0].Node.ID))
+			}
 		})
 	}
 
 	// delete created evidence
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{evidence.ID, evidenceControl.ID, evidenceNoParent.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, IDs: []string{evidence.ID, evidenceControl.ID, evidenceInternalPolicy.ID, evidenceProcedure.ID, evidenceNoParent.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: control.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: internalPolicy.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: procedure.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryEvidences(t *testing.T) {
 	// create multiple objects by adminUser, org owner should have access to them as well
-	e1 := (&EvidenceBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	e2 := (&EvidenceBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	e1 := (&th.EvidenceBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	e2 := (&th.EvidenceBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 
-	userAnotherOrg := suite.userBuilder(context.Background(), t)
+	userAnotherOrg := suite.UserBuilder(context.Background(), t)
 
 	// add evidence for the user to another org; this should not be returned for JWT auth, since it's
 	// restricted to a single org. PAT auth would return it if both orgs are authorized on the token
-	e3 := (&EvidenceBuilder{client: suite.client}).MustNew(userAnotherOrg.UserCtx, t)
+	e3 := (&th.EvidenceBuilder{Client: suite.Client}).MustNew(userAnotherOrg.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -175,32 +211,32 @@ func TestQueryEvidences(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedAdminUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org, access not automatically granted",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 0,
 		},
 		{
 			name:            "happy path, using api token, includes evidence scope",
-			client:          suite.client.apiWithToken,
+			client:          suite.Client.APIWithToken,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat, which is for the org owner so access is granted",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "another user, no Evidences should be returned",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -216,33 +252,39 @@ func TestQueryEvidences(t *testing.T) {
 	}
 
 	// delete created evidences
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{e1.ID, e2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: e3.ID}).MustDelete(userAnotherOrg.UserCtx, t)
+	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, IDs: []string{e1.ID, e2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: e3.ID}).MustDelete(userAnotherOrg.UserCtx, t)
 }
 
 func TestMutationCreateEvidence(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	task := (&TaskBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	task := (&th.TaskBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	pngFile := uploadFile(t, logoFilePath)
-	csvFile := uploadFile(t, "testdata/uploads/orgs.csv")
-	pdfFile := uploadFile(t, pdfFilePath)
-	txtFile := uploadFile(t, txtFilePath)
+	pngFile := th.UploadFile(t, th.LogoFilePath)
+	csvFile := th.UploadFile(t, "testdata/uploads/orgs.csv")
+	pdfFile := th.UploadFile(t, th.PdfFilePath)
+	txtFile := th.UploadFile(t, th.TxtFilePath)
 
 	// create edges to be used in the test cases
-	control1 := (&ControlBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	controlObjective1 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	controlObjective2 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	subcontrol1 := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	subcontrol2 := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	control1 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	control2 := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	controlObjective1 := (&th.ControlObjectiveBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	controlObjective2 := (&th.ControlObjectiveBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	subcontrol1 := (&th.SubcontrolBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	subcontrol2 := (&th.SubcontrolBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	internalPolicy1 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	internalPolicy2 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	procedure1 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	procedure2 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	// create system owned control to test that it cannot be linked
-	systemOwnedSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	systemOwnedControl := (&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemOwnedSubcontrol := (&th.SubcontrolBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	systemOwnedControl := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	systemOwnedInternalPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	systemOwnedProcedure := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	// create a task for view only user
-	taskViewOnly := (&TaskBuilder{client: suite.client}).MustNew(sharedViewOnlyUser.UserCtx, t)
+	taskViewOnly := (&th.TaskBuilder{Client: suite.Client}).MustNew(th.SharedViewOnlyUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -257,8 +299,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 			request: testclient.CreateEvidenceInput{
 				Name: "Test Evidence",
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, view only user should be able to associate evidence to a task they can edit",
@@ -266,8 +308,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Name:    "Test Evidence",
 				TaskIDs: []string{taskViewOnly.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedViewOnlyUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "happy path, view only user should be able to associate evidence to a task they can edit and control they can view",
@@ -276,8 +318,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				TaskIDs:    []string{taskViewOnly.ID},
 				ControlIDs: []string{control1.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedViewOnlyUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -295,13 +337,15 @@ func TestMutationCreateEvidence(t *testing.T) {
 				ControlIDs:          []string{control1.ID, control2.ID},
 				ControlObjectiveIDs: []string{controlObjective1.ID, controlObjective2.ID},
 				SubcontrolIDs:       []string{subcontrol1.ID, subcontrol2.ID},
+				InternalPolicyIDs:   []string{internalPolicy1.ID, internalPolicy2.ID},
+				ProcedureIDs:        []string{procedure1.ID, procedure2.ID},
 			},
 			files: []*graphql.Upload{
 				pngFile,
 				csvFile,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, admin user in org",
@@ -318,8 +362,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				ControlObjectiveIDs: []string{controlObjective1.ID, controlObjective2.ID}, // ensure the same control objectives can be added to multiple evidences
 				SubcontrolIDs:       []string{subcontrol1.ID, subcontrol2.ID},             // ensure the same subcontrols can be added to multiple evidences
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, auditor can associate evidence to a program they can view",
@@ -327,8 +371,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Name:       "Test Evidence",
 				ProgramIDs: []string{program.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedAuditorUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAuditorUser.UserCtx,
 		},
 		{
 			name: "attempt to link system owned control",
@@ -337,9 +381,9 @@ func TestMutationCreateEvidence(t *testing.T) {
 				TaskIDs:    []string{taskViewOnly.ID},
 				ControlIDs: []string{systemOwnedControl.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "attempt to link system owned subcontrol",
@@ -348,32 +392,54 @@ func TestMutationCreateEvidence(t *testing.T) {
 				TaskIDs:       []string{taskViewOnly.ID},
 				SubcontrolIDs: []string{systemOwnedSubcontrol.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
+		},
+		{
+			name: "attempt to link system owned internal policy",
+			request: testclient.CreateEvidenceInput{
+				Name:              "System owned Evidence",
+				TaskIDs:           []string{taskViewOnly.ID},
+				InternalPolicyIDs: []string{systemOwnedInternalPolicy.ID},
+			},
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
+		},
+		{
+			name: "attempt to link system owned procedure",
+			request: testclient.CreateEvidenceInput{
+				Name:         "System owned Evidence",
+				TaskIDs:      []string{taskViewOnly.ID},
+				ProcedureIDs: []string{systemOwnedProcedure.ID},
+			},
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "attempt to link system owned control and org owned control",
 			request: testclient.CreateEvidenceInput{
-				Name:       "Test Evidence",
+				Name:       "System owned Evidence",
 				TaskIDs:    []string{taskViewOnly.ID},
 				ControlIDs: []string{systemOwnedControl.ID, control1.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateEvidenceInput{
 				Name:    "Test Evidence - TSK-123",
 				TaskIDs: []string{task.ID},
-				OwnerID: &sharedTestUser1.OrganizationID,
+				OwnerID: &th.SharedTestUser1.OrganizationID,
 			},
 			files: []*graphql.Upload{
 				pdfFile,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -384,7 +450,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			files: []*graphql.Upload{
 				txtFile,
 			},
-			client: suite.client.apiWithToken,
+			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
 		{
@@ -392,9 +458,9 @@ func TestMutationCreateEvidence(t *testing.T) {
 			request: testclient.CreateEvidenceInput{
 				Name: "Test Evidence",
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "user not authorized, not enough permissions and edit access to linked task",
@@ -402,9 +468,9 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Name:    "Test Evidence",
 				TaskIDs: []string{task.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "no access to linked control",
@@ -413,17 +479,17 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Description: lo.ToPtr("This is a test Evidence"),
 				ControlIDs:  []string{control1.ID, control2.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "missing required field",
 			request: testclient.CreateEvidenceInput{
 				Description: lo.ToPtr("This is a test Evidence"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -432,8 +498,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Name: "TSK-11123F Evidence",
 				URL:  lo.ToPtr("invalid"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "invalid or unparsable field",
 		},
 		{
@@ -442,8 +508,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Name:         "Test Evidence",
 				CreationDate: lo.ToPtr(models.DateTime(time.Now().Add(time.Hour))),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "time cannot be in the future",
 		},
 		{
@@ -452,8 +518,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				Name:        "Test Evidence",
 				RenewalDate: lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "time cannot be in the past",
 		},
 	}
@@ -461,7 +527,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if len(tc.files) > 0 {
-				expectUploadNillable(t, suite.client.mockProvider, tc.files)
+				th.ExpectUploadNillable(t, suite.Client.MockProvider, tc.files)
 			}
 
 			resp, err := tc.client.CreateEvidence(tc.ctx, tc.request, tc.files)
@@ -556,6 +622,18 @@ func TestMutationCreateEvidence(t *testing.T) {
 				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Tasks.Edges, 0))
 			}
 
+			if tc.request.InternalPolicyIDs != nil {
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.InternalPolicies.Edges, len(tc.request.InternalPolicyIDs)))
+			} else {
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.InternalPolicies.Edges, 0))
+			}
+
+			if tc.request.ProcedureIDs != nil {
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Procedures.Edges, len(tc.request.ProcedureIDs)))
+			} else {
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Procedures.Edges, 0))
+			}
+
 			if len(tc.files) > 0 {
 				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Files.Edges, len(tc.files)))
 			} else {
@@ -564,37 +642,41 @@ func TestMutationCreateEvidence(t *testing.T) {
 
 			// attempt to retrieve the created evidence by org owner, no matter who created it
 			// the org owner should have access to it
-			resp2, err := suite.client.api.GetEvidenceByID(sharedTestUser1.UserCtx, resp.CreateEvidence.Evidence.ID)
+			resp2, err := suite.Client.API.GetEvidenceByID(th.SharedTestUser1.UserCtx, resp.CreateEvidence.Evidence.ID)
 			assert.NilError(t, err)
 			assert.Assert(t, resp2 != nil)
 
 			// delete the created evidence, update for the token user cases
 			if tc.ctx == context.Background() {
-				tc.ctx = sharedTestUser1.UserCtx
+				tc.ctx = th.SharedTestUser1.UserCtx
 			}
 
 			// delete the evidence
-			(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: resp.CreateEvidence.Evidence.ID}).MustDelete(tc.ctx, t)
+			(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: resp.CreateEvidence.Evidence.ID}).MustDelete(tc.ctx, t)
 			// delete the files created for the evidence
 			for _, file := range resp.CreateEvidence.Evidence.Files.Edges {
-				(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, IDs: []string{file.Node.ID}}).MustDelete(tc.ctx, t)
+				(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, IDs: []string{file.Node.ID}}).MustDelete(tc.ctx, t)
 			}
 		})
 	}
 	// delete created objects
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID, subcontrol1.ControlID, subcontrol2.ControlID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlObjectiveDeleteOne]{client: suite.client.db.ControlObjective, IDs: []string{controlObjective1.ID, controlObjective2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID, taskViewOnly.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{control1.ID, control2.ID, subcontrol1.ControlID, subcontrol2.ControlID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlObjectiveDeleteOne]{Client: suite.Client.DB.ControlObjective, IDs: []string{controlObjective1.ID, controlObjective2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, IDs: []string{task.ID, taskViewOnly.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: []string{internalPolicy1.ID, internalPolicy2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, IDs: []string{procedure1.ID, procedure2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// delete system owned controls and subcontrols
-	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemOwnedSubcontrol.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemOwnedControl.ID, systemOwnedSubcontrol.ControlID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.SubcontrolDeleteOne]{Client: suite.Client.DB.Subcontrol, ID: systemOwnedSubcontrol.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{systemOwnedControl.ID, systemOwnedSubcontrol.ControlID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: systemOwnedInternalPolicy.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: systemOwnedProcedure.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateBulkCSVEvidence(t *testing.T) {
-	bulkFile := uploadFile(t, "testdata/uploads/evidence.csv")
-	plainTagFile := uploadFile(t, "testdata/uploads/evidence_invalid.csv")
+	bulkFile := th.UploadFile(t, "testdata/uploads/evidence.csv")
+	plainTagFile := th.UploadFile(t, "testdata/uploads/evidence_invalid.csv")
 
 	evidences := []string{}
 	testCases := []struct {
@@ -608,16 +690,16 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 	}{
 		{
 			name:         "happy path, valid file with json array tags",
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 			fileInput:    *bulkFile,
 			expectedLen:  2,
 			expectedTags: 3,
 		},
 		{
 			name:         "happy path, plain string tag converted to array",
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 			fileInput:    *plainTagFile,
 			expectedLen:  1,
 			expectedTags: 1,
@@ -651,17 +733,21 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: evidences}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, IDs: evidences}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateEvidence(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	evidence := (&EvidenceBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedAdminUser.UserCtx, t)
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	evidence := (&th.EvidenceBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(th.SharedAdminUser.UserCtx, t)
+	internalPolicy1 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	internalPolicy2 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	procedure1 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	procedure2 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	// add view only user to the program so that they have access to the evidence for testing update permissions
-	pm := (&ProgramMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID, ProgramID: program.ID}).MustNew(sharedAdminUser.UserCtx, t)
+	pm := (&th.ProgramMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID, ProgramID: program.ID}).MustNew(th.SharedAdminUser.UserCtx, t)
 
-	pdfFile := uploadFile(t, pdfFilePath)
+	pdfFile := th.UploadFile(t, th.PdfFilePath)
 
 	testCases := []struct {
 		name        string
@@ -670,14 +756,16 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
+		policyID    string
+		procedureID string
 	}{
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateEvidenceInput{
 				CollectionProcedure: lo.ToPtr("This is how we collected the updated Evidence"),
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields using PAT",
@@ -690,7 +778,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			files: []*graphql.Upload{
 				pdfFile,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -700,42 +788,75 @@ func TestMutationUpdateEvidence(t *testing.T) {
 					Text: "This is a comment",
 				},
 			},
-			client: suite.client.api,
-			ctx:    sharedViewOnlyUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "auditor allowed to updated",
 			request: testclient.UpdateEvidenceInput{
 				Status: &enums.EvidenceStatusAuditorApproved,
 			},
-			client: suite.client.api,
-			ctx:    sharedAuditorUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAuditorUser.UserCtx,
+		},
+		{
+			name: "add internal policy and procedure",
+			request: testclient.UpdateEvidenceInput{
+				AddInternalPolicyIDs: []string{internalPolicy1.ID},
+				AddProcedureIDs:      []string{procedure1.ID},
+			},
+			client:      suite.Client.API,
+			ctx:         th.SharedAdminUser.UserCtx,
+			policyID:    internalPolicy1.ID,
+			procedureID: procedure1.ID,
+		},
+		{
+			name: "replace internal policy and procedure",
+			request: testclient.UpdateEvidenceInput{
+				AddInternalPolicyIDs:    []string{internalPolicy2.ID},
+				RemoveInternalPolicyIDs: []string{internalPolicy1.ID},
+				AddProcedureIDs:         []string{procedure2.ID},
+				RemoveProcedureIDs:      []string{procedure1.ID},
+			},
+			client:      suite.Client.API,
+			ctx:         th.SharedAdminUser.UserCtx,
+			policyID:    internalPolicy2.ID,
+			procedureID: procedure2.ID,
+		},
+		{
+			name: "clear internal policies and procedures",
+			request: testclient.UpdateEvidenceInput{
+				ClearInternalPolicies: lo.ToPtr(true),
+				ClearProcedures:       lo.ToPtr(true),
+			},
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, no permissions to update but can view due to program membership",
 			request: testclient.UpdateEvidenceInput{
 				Description: lo.ToPtr("This is an updated description of evidence"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateEvidenceInput{
 				Source: lo.ToPtr("woofs"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "update not allowed, creation date is in the future",
 			request: testclient.UpdateEvidenceInput{
 				CreationDate: lo.ToPtr(models.DateTime(time.Now().Add(time.Minute))),
 			},
-			client:      suite.client.api,
-			ctx:         sharedAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedAdminUser.UserCtx,
 			expectedErr: "time cannot be in the future",
 		},
 		{
@@ -743,8 +864,8 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			request: testclient.UpdateEvidenceInput{
 				RenewalDate: lo.ToPtr(models.DateTime(time.Now().Add(-time.Hour))),
 			},
-			client:      suite.client.api,
-			ctx:         sharedAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedAdminUser.UserCtx,
 			expectedErr: "time cannot be in the past",
 		},
 	}
@@ -752,7 +873,7 @@ func TestMutationUpdateEvidence(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if len(tc.files) > 0 {
-				expectUploadNillable(t, suite.client.mockProvider, tc.files)
+				th.ExpectUploadNillable(t, suite.Client.MockProvider, tc.files)
 			}
 
 			resp, err := tc.client.UpdateEvidence(tc.ctx, evidence.ID, tc.request, tc.files)
@@ -785,20 +906,36 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			if len(tc.files) > 0 {
 				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Files.Edges, len(tc.files)))
 			}
+
+			if tc.policyID != "" {
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.InternalPolicies.Edges, 1))
+				assert.Check(t, is.Equal(tc.policyID, resp.UpdateEvidence.Evidence.InternalPolicies.Edges[0].Node.ID))
+			} else if tc.request.ClearInternalPolicies != nil && *tc.request.ClearInternalPolicies {
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.InternalPolicies.Edges, 0))
+			}
+
+			if tc.procedureID != "" {
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Procedures.Edges, 1))
+				assert.Check(t, is.Equal(tc.procedureID, resp.UpdateEvidence.Evidence.Procedures.Edges[0].Node.ID))
+			} else if tc.request.ClearProcedures != nil && *tc.request.ClearProcedures {
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Procedures.Edges, 0))
+			}
 		})
 	}
 
 	// delete created evidence
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: evidence.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// delete created program and membership
-	(&Cleanup[*generated.ProgramMembershipDeleteOne]{client: suite.client.db.ProgramMembership, ID: pm.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramMembershipDeleteOne]{Client: suite.Client.DB.ProgramMembership, ID: pm.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: []string{internalPolicy1.ID, internalPolicy2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, IDs: []string{procedure1.ID, procedure2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteEvidence(t *testing.T) {
 	// create objects to be deleted
-	evidence1 := (&EvidenceBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	evidence2 := (&EvidenceBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	evidence1 := (&th.EvidenceBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	evidence2 := (&th.EvidenceBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -810,35 +947,35 @@ func TestMutationDeleteEvidence(t *testing.T) {
 		{
 			name:        "not authorized, delete",
 			idToDelete:  evidence1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: evidence1.ID,
-			client:     suite.client.api,
-			ctx:        sharedAdminUser.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  evidence1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: evidence2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -860,7 +997,7 @@ func TestMutationDeleteEvidence(t *testing.T) {
 }
 
 func TestEvidenceMissingArtifactStatus(t *testing.T) {
-	pngFile := uploadFile(t, logoFilePath)
+	pngFile := th.UploadFile(t, th.LogoFilePath)
 
 	testCases := []struct {
 		name           string
@@ -983,10 +1120,10 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			if len(tc.createFiles) > 0 {
-				expectUploadNillable(t, suite.client.mockProvider, tc.createFiles)
+				th.ExpectUploadNillable(t, suite.Client.MockProvider, tc.createFiles)
 			}
 
-			createResp, err := suite.client.api.CreateEvidence(sharedAdminUser.UserCtx, tc.createInput, tc.createFiles)
+			createResp, err := suite.Client.API.CreateEvidence(th.SharedAdminUser.UserCtx, tc.createInput, tc.createFiles)
 			assert.NilError(t, err)
 			assert.Assert(t, createResp != nil)
 
@@ -995,20 +1132,20 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 			if tc.updateInput == nil {
 				assert.Check(t, is.Equal(tc.expectedStatus, *createResp.CreateEvidence.Evidence.Status), tc.description)
 			} else {
-				updateResp, err := suite.client.api.UpdateEvidence(sharedAdminUser.UserCtx, evidenceID, *tc.updateInput, nil)
+				updateResp, err := suite.Client.API.UpdateEvidence(th.SharedAdminUser.UserCtx, evidenceID, *tc.updateInput, nil)
 				assert.NilError(t, err)
 				assert.Assert(t, updateResp != nil)
 
 				assert.Check(t, is.Equal(tc.expectedStatus, *updateResp.UpdateEvidence.Evidence.Status), tc.description)
 			}
 
-			evidenceResp, err := suite.client.api.GetEvidenceByID(sharedAdminUser.UserCtx, evidenceID)
+			evidenceResp, err := suite.Client.API.GetEvidenceByID(th.SharedAdminUser.UserCtx, evidenceID)
 			if err == nil && evidenceResp != nil {
 				for _, edge := range evidenceResp.Evidence.Files.Edges {
-					(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: edge.Node.ID}).MustDelete(sharedAdminUser.UserCtx, t)
+					(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, ID: edge.Node.ID}).MustDelete(th.SharedAdminUser.UserCtx, t)
 				}
 			}
-			(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidenceID}).MustDelete(sharedAdminUser.UserCtx, t)
+			(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: evidenceID}).MustDelete(th.SharedAdminUser.UserCtx, t)
 		})
 	}
 }
@@ -1020,7 +1157,7 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 	monthlyFreq := enums.FrequencyMonthly
 	quarterlyFreq := enums.FrequencyQuarterly
 
-	createResp, err := suite.client.api.CreateEvidence(sharedAdminUser.UserCtx, testclient.CreateEvidenceInput{
+	createResp, err := suite.Client.API.CreateEvidence(th.SharedAdminUser.UserCtx, testclient.CreateEvidenceInput{
 		Name:            "Evidence review date",
 		CreationDate:    lo.ToPtr(initialCreationDate),
 		ReviewFrequency: lo.ToPtr(monthlyFreq),
@@ -1030,7 +1167,7 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 
 	id := createResp.CreateEvidence.Evidence.ID
 
-	bulkUpdateResp, err := suite.client.api.CreateEvidence(sharedAdminUser.UserCtx, testclient.CreateEvidenceInput{
+	bulkUpdateResp, err := suite.Client.API.CreateEvidence(th.SharedAdminUser.UserCtx, testclient.CreateEvidenceInput{
 		Name:            "Bulk evidence review date",
 		CreationDate:    lo.ToPtr(initialCreationDate),
 		ReviewFrequency: lo.ToPtr(quarterlyFreq),
@@ -1040,7 +1177,7 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 
 	bulkUpdateID := bulkUpdateResp.CreateEvidence.Evidence.ID
 
-	resp, err := suite.client.api.GetEvidenceByID(sharedAdminUser.UserCtx, id)
+	resp, err := suite.Client.API.GetEvidenceByID(th.SharedAdminUser.UserCtx, id)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 	assert.Assert(t, resp.Evidence.RenewalDate != nil)
@@ -1048,29 +1185,29 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 	assert.Assert(t, resp.Evidence.ReviewFrequency != nil)
 	assert.Check(t, is.Equal(monthlyFreq, *resp.Evidence.ReviewFrequency))
 
-	_, err = suite.client.api.UpdateEvidence(sharedAdminUser.UserCtx, id, testclient.UpdateEvidenceInput{
+	_, err = suite.Client.API.UpdateEvidence(th.SharedAdminUser.UserCtx, id, testclient.UpdateEvidenceInput{
 		CreationDate: lo.ToPtr(updatedCreationDate),
 	}, nil)
 	assert.NilError(t, err)
 
-	resp, err = suite.client.api.GetEvidenceByID(sharedAdminUser.UserCtx, id)
+	resp, err = suite.Client.API.GetEvidenceByID(th.SharedAdminUser.UserCtx, id)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 	assert.Assert(t, resp.Evidence.RenewalDate != nil)
 	assert.Check(t, is.Equal(time.Time(updatedCreationDate).AddDate(0, 1, 0), time.Time(*resp.Evidence.RenewalDate)))
 
-	_, err = suite.client.api.UpdateEvidence(sharedAdminUser.UserCtx, id, testclient.UpdateEvidenceInput{
+	_, err = suite.Client.API.UpdateEvidence(th.SharedAdminUser.UserCtx, id, testclient.UpdateEvidenceInput{
 		ReviewFrequency: lo.ToPtr(quarterlyFreq),
 	}, nil)
 	assert.NilError(t, err)
 
-	resp, err = suite.client.api.GetEvidenceByID(sharedAdminUser.UserCtx, id)
+	resp, err = suite.Client.API.GetEvidenceByID(th.SharedAdminUser.UserCtx, id)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 	assert.Assert(t, resp.Evidence.RenewalDate != nil)
 	assert.Check(t, is.Equal(time.Time(updatedCreationDate).AddDate(0, 3, 0), time.Time(*resp.Evidence.RenewalDate)))
 
-	updateBulkResp, err := suite.client.api.UpdateBulkEvidence(sharedAdminUser.UserCtx, []string{id, bulkUpdateID}, testclient.UpdateEvidenceInput{
+	updateBulkResp, err := suite.Client.API.UpdateBulkEvidence(th.SharedAdminUser.UserCtx, []string{id, bulkUpdateID}, testclient.UpdateEvidenceInput{
 		ReviewFrequency: lo.ToPtr(monthlyFreq),
 	})
 	assert.NilError(t, err)
@@ -1083,12 +1220,12 @@ func TestEvidence_NextReviewDate(t *testing.T) {
 	}
 
 	for evidenceID, expectedRenewalDate := range expectedRenewalDates {
-		resp, err = suite.client.api.GetEvidenceByID(sharedAdminUser.UserCtx, evidenceID)
+		resp, err = suite.Client.API.GetEvidenceByID(th.SharedAdminUser.UserCtx, evidenceID)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Assert(t, resp.Evidence.RenewalDate != nil)
 		assert.Check(t, is.Equal(expectedRenewalDate, time.Time(*resp.Evidence.RenewalDate)))
 	}
 
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{id, bulkUpdateID}}).MustDelete(sharedAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, IDs: []string{id, bulkUpdateID}}).MustDelete(th.SharedAdminUser.UserCtx, t)
 }

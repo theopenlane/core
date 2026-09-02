@@ -6,8 +6,8 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/oidc"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/pkg/oidc"
 )
 
 //go:embed webauthn

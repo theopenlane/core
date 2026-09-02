@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
@@ -12,21 +14,21 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 const errStartDateLaterThanEndDate = "mutation's start date cannot be later than end date"
 
 func TestQueryProgram(t *testing.T) {
 	// create program1 with a linked procedure and policy
-	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(sharedTestUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(sharedAdminUser.UserCtx, t)
+	program1 := (&th.ProgramBuilder{Client: suite.Client, WithProcedure: true, WithPolicy: true}).MustNew(th.SharedTestUser1.UserCtx, t)
+	program2 := (&th.ProgramBuilder{Client: suite.Client, WithProcedure: true, WithPolicy: true}).MustNew(th.SharedAdminUser.UserCtx, t)
 
-	archivedProgram := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true, Status: enums.ProgramStatusArchived}).MustNew(sharedAdminUser.UserCtx, t)
+	archivedProgram := (&th.ProgramBuilder{Client: suite.Client, WithProcedure: true, WithPolicy: true, Status: enums.ProgramStatusArchived}).MustNew(th.SharedAdminUser.UserCtx, t)
 
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
+	anonymousContext := th.CreateAnonymousTrustCenterContext(ulids.New().String(), th.SharedTestUser1.OrganizationID)
 
 	testCases := []struct {
 		name           string
@@ -39,51 +41,51 @@ func TestQueryProgram(t *testing.T) {
 		{
 			name:           "happy path",
 			queryID:        program1.ID,
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedResult: program1,
 		},
 		{
 			name:           "happy path, program created by admin user",
 			queryID:        program2.ID,
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedResult: program2,
 		},
 		{
 			name:           "happy path using personal access token",
 			queryID:        program1.ID,
-			client:         suite.client.apiWithPAT,
+			client:         suite.Client.APIWithPAT,
 			ctx:            context.Background(),
 			expectedResult: program1,
 		},
 		{
 			name:           "archived program - happy path using personal access token",
 			queryID:        archivedProgram.ID,
-			client:         suite.client.apiWithPAT,
+			client:         suite.Client.APIWithPAT,
 			ctx:            context.Background(),
 			expectedResult: archivedProgram,
 		},
 		{
 			name:     "no access, user of same org",
 			queryID:  program1.ID,
-			client:   suite.client.api,
-			ctx:      sharedViewOnlyUser.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedViewOnlyUser.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, user of different org",
 			queryID:  program1.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, anonymous user",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      anonymousContext,
 			queryID:  program1.ID,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -108,7 +110,7 @@ func TestQueryProgram(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, IDs: []string{program1.ID, program2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup procedure and policy
 	procedureIDs := []string{}
 	for _, p := range program1.Edges.Procedures {
@@ -119,24 +121,24 @@ func TestQueryProgram(t *testing.T) {
 		policyIDs = append(policyIDs, p.ID)
 	}
 
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: procedureIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: policyIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, IDs: procedureIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: policyIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryPrograms(t *testing.T) {
 	// programs for the first organization with a linked procedure and policy
-	program1 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(sharedTestUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(sharedTestUser1.UserCtx, t)
+	program1 := (&th.ProgramBuilder{Client: suite.Client, WithProcedure: true, WithPolicy: true}).MustNew(th.SharedTestUser1.UserCtx, t)
+	program2 := (&th.ProgramBuilder{Client: suite.Client, WithProcedure: true, WithPolicy: true}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// program created by an admin user of the first organization with a linked procedure and policy
-	program3 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(sharedAdminUser.UserCtx, t)
+	program3 := (&th.ProgramBuilder{Client: suite.Client, WithProcedure: true, WithPolicy: true}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	// archived program for the first organization
-	archivedProgram := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true, Status: enums.ProgramStatusArchived}).MustNew(sharedTestUser1.UserCtx, t)
+	archivedProgram := (&th.ProgramBuilder{Client: suite.Client, WithProcedure: true, WithPolicy: true, Status: enums.ProgramStatusArchived}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// program for the other organization with a linked procedure and policy
-	anotherUser := suite.userBuilder(context.Background(), t)
-	program4 := (&ProgramBuilder{client: suite.client, WithProcedure: true, WithPolicy: true}).MustNew(anotherUser.UserCtx, t)
+	anotherUser := suite.UserBuilder(context.Background(), t)
+	program4 := (&th.ProgramBuilder{Client: suite.Client, WithProcedure: true, WithPolicy: true}).MustNew(anotherUser.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -147,37 +149,37 @@ func TestQueryPrograms(t *testing.T) {
 	}{
 		{
 			name:            "happy path, org owner should see all programs",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 3, // archived programs not listed by default
 		},
 		{
 			name:            "happy path using personal access token",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: 3, // archived programs not listed by default
 		},
 		{
 			name:            "view only user has not been added to any programs",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 0,
 		},
 		{
 			name:            "super admin should see all programs in the org",
-			client:          suite.client.api,
-			ctx:             sharedSuperAdminUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedSuperAdminUser.UserCtx,
 			expectedResults: 3, // archived programs not listed by default
 		},
 		{
 			name:            "admin user should see the program they created",
-			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedAdminUser.UserCtx,
 			expectedResults: 1,
 		},
 		{
 			name:            "owner of the other organization should see the program they created",
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             anotherUser.UserCtx,
 			expectedResults: 1,
 		},
@@ -206,8 +208,8 @@ func TestQueryPrograms(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: []string{program1.ID, program2.ID, program3.ID, archivedProgram.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program4.ID}).MustDelete(anotherUser.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, IDs: []string{program1.ID, program2.ID, program3.ID, archivedProgram.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program4.ID}).MustDelete(anotherUser.UserCtx, t)
 
 	// cleanup procedures and policies
 	procedureIDs := []string{}
@@ -244,9 +246,9 @@ func TestQueryPrograms(t *testing.T) {
 		policyIDs = append(policyIDs, p.ID)
 	}
 
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: procedureIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, IDs: procedureIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: policyIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, IDs: policyIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
 	// we can ignore the cleanup for the new user, it won't conflict with other tests
 }
@@ -255,18 +257,18 @@ func TestMutationCreateProgram(t *testing.T) {
 	startDate := time.Now().AddDate(0, 0, 1)
 	endDate := time.Now().AddDate(0, 0, 360)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	groupMemberUserCtx := auth.NewTestContextWithOrgID(groupMember.UserID, sharedTestUser1.OrganizationID)
+	groupMember := (&th.GroupMemberBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	groupMemberUserCtx := auth.NewTestContextWithOrgID(groupMember.UserID, th.SharedTestUser1.OrganizationID)
 
 	// Create some edge objects
-	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	procedure := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	policy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	blockedGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	blockedGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	viewerGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// group that the user does not have access to (for testing permissions)
-	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	anotherGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	programIDsToCleanup := []string{}
 	testCases := []struct {
@@ -282,8 +284,8 @@ func TestMutationCreateProgram(t *testing.T) {
 			request: testclient.CreateProgramInput{
 				Name: "mitb program",
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all basic input",
@@ -291,7 +293,7 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name:                 "mitb program",
 				Description:          lo.ToPtr("being the best"),
 				FrameworkName:        lo.ToPtr("SOC 2"),
-				ProgramOwnerID:       &sharedTestUser1.ID,
+				ProgramOwnerID:       &th.SharedTestUser1.ID,
 				Status:               &enums.ProgramStatusInProgress,
 				StartDate:            &startDate,
 				EndDate:              &endDate,
@@ -302,8 +304,8 @@ func TestMutationCreateProgram(t *testing.T) {
 				Auditor:              lo.ToPtr("Meowz Meow"),
 				AuditorEmail:         lo.ToPtr("m@meow-audit.com"),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, edges",
@@ -311,22 +313,22 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name:              "mitb program",
 				ProcedureIDs:      []string{procedure.ID},
 				InternalPolicyIDs: []string{policy.ID},
-				ProgramOwnerID:    &sharedAdminUser.ID,
+				ProgramOwnerID:    &th.SharedAdminUser.ID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "add editor group",
 			request: testclient.CreateProgramInput{
 				Name:            "Test Program MITB",
-				EditorIDs:       []string{sharedTestUser1.GroupID},
+				EditorIDs:       []string{th.SharedTestUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
-				ProgramOwnerID:  &sharedTestUser1.ID,
+				ProgramOwnerID:  &th.SharedTestUser1.ID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "add editor group, no access to group",
@@ -334,18 +336,18 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name:      "Test Program Meow",
 				EditorIDs: []string{anotherGroup.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateProgramInput{
 				Name:        "mitb program",
 				Description: lo.ToPtr("being the best"),
-				OwnerID:     &sharedTestUser1.OrganizationID,
+				OwnerID:     &th.SharedTestUser1.OrganizationID,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -354,7 +356,7 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name:        "mitb program",
 				Description: lo.ToPtr("being the best"),
 			},
-			client: suite.client.apiWithToken,
+			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
 		{
@@ -364,8 +366,8 @@ func TestMutationCreateProgram(t *testing.T) {
 				StartDate: lo.ToPtr(startDate),
 				EndDate:   lo.ToPtr(endDate),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "only start date",
@@ -373,8 +375,8 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name:      "Start Date Only",
 				StartDate: lo.ToPtr(startDate),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "only end date",
@@ -382,17 +384,17 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name:    "End Date Only",
 				EndDate: lo.ToPtr(endDate),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateProgramInput{
 				Name: "mitb program",
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "user now authorized, added to group with creator permissions",
@@ -400,7 +402,7 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name: "mitb program",
 			},
 			addGroupToOrg: true,
-			client:        suite.client.api,
+			client:        suite.Client.API,
 			ctx:           groupMemberUserCtx,
 		},
 		{
@@ -408,8 +410,8 @@ func TestMutationCreateProgram(t *testing.T) {
 			request: testclient.CreateProgramInput{
 				Description: lo.ToPtr("soc2 2024"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -418,8 +420,8 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name:         "mitb program",
 				AuditorEmail: lo.ToPtr("invalid email"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "validator failed for field",
 		},
 		{
@@ -429,8 +431,8 @@ func TestMutationCreateProgram(t *testing.T) {
 				StartDate: lo.ToPtr(time.Now().AddDate(0, 10, 22)),
 				EndDate:   lo.ToPtr(time.Now().AddDate(0, 9, 17)),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: errStartDateLaterThanEndDate,
 		},
 	}
@@ -438,7 +440,7 @@ func TestMutationCreateProgram(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
-				_, err := suite.client.api.UpdateOrganization(sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID,
+				_, err := suite.Client.API.UpdateOrganization(th.SharedTestUser1.UserCtx, th.SharedTestUser1.OrganizationID,
 					testclient.UpdateOrganizationInput{
 						AddProgramCreatorIDs: []string{groupMember.GroupID},
 					}, nil, nil)
@@ -464,8 +466,8 @@ func TestMutationCreateProgram(t *testing.T) {
 			assert.Check(t, is.Contains(resp.CreateProgram.Program.DisplayID, "PRG-"))
 
 			// ensure the owner is set to the user's organization, not the  input
-			if tc.request.OwnerID != nil && tc.ctx == sharedTestUser2.UserCtx {
-				assert.Check(t, is.Equal(sharedTestUser2.OrganizationID, *resp.CreateProgram.Program.OwnerID))
+			if tc.request.OwnerID != nil && tc.ctx == th.SharedTestUser2.UserCtx {
+				assert.Check(t, is.Equal(th.SharedTestUser2.OrganizationID, *resp.CreateProgram.Program.OwnerID))
 			}
 
 			// check optional fields
@@ -557,7 +559,7 @@ func TestMutationCreateProgram(t *testing.T) {
 			if len(tc.request.EditorIDs) > 0 {
 				assert.Assert(t, is.Len(resp.CreateProgram.Program.Editors.Edges, 1))
 				for _, edge := range resp.CreateProgram.Program.Editors.Edges {
-					assert.Check(t, is.Equal(sharedTestUser1.GroupID, edge.Node.ID))
+					assert.Check(t, is.Equal(th.SharedTestUser1.GroupID, edge.Node.ID))
 				}
 			}
 
@@ -578,20 +580,20 @@ func TestMutationCreateProgram(t *testing.T) {
 	}
 
 	// cleanup policy and procedure
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: procedure.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: policy.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup group
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupMember.GroupID, blockedGroup.ID, viewerGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: anotherGroup.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{groupMember.GroupID, blockedGroup.ID, viewerGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, ID: anotherGroup.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 
 	// cleanup programs
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programIDsToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, IDs: programIDsToCleanup}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateProgram(t *testing.T) {
-	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	archivedProgram := (&ProgramBuilder{client: suite.client, Status: enums.ProgramStatusArchived}).MustNew(sharedTestUser1.UserCtx, t)
+	archivedProgram := (&th.ProgramBuilder{Client: suite.Client, Status: enums.ProgramStatusArchived}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// data to test the date validation logic in the update mutation, we want to ensure that the validation is working and that it is possible to update the dates successfully when they are valid
 	baseStart := time.Now().AddDate(0, 0, 5)
@@ -600,65 +602,65 @@ func TestMutationUpdateProgram(t *testing.T) {
 	program.StartDate = baseStart
 	program.EndDate = baseEnd
 
-	programMembers, err := suite.client.api.GetProgramMembersByProgramID(sharedTestUser1.UserCtx, &testclient.ProgramMembershipWhereInput{
+	programMembers, err := suite.Client.API.GetProgramMembersByProgramID(th.SharedTestUser1.UserCtx, &testclient.ProgramMembershipWhereInput{
 		ProgramID: &program.ID,
 	})
 	assert.NilError(t, err)
 
 	testUserProgramMemberID := ""
 	for _, pm := range programMembers.ProgramMemberships.Edges {
-		if pm.Node.UserID == sharedTestUser1.ID {
+		if pm.Node.UserID == th.SharedTestUser1.ID {
 			testUserProgramMemberID = pm.Node.ID
 		}
 	}
 
 	// create program user to remove
-	programUser := suite.userBuilder(context.Background(), t)
-	om := (&OrgMemberBuilder{client: suite.client, UserID: programUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	programUser := suite.UserBuilder(context.Background(), t)
+	om := (&th.OrgMemberBuilder{Client: suite.Client, UserID: programUser.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	pm := (&ProgramMemberBuilder{client: suite.client, UserID: programUser.ID, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	pm := (&th.ProgramMemberBuilder{Client: suite.Client, UserID: programUser.ID, ProgramID: program.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// Create some edge objects
-	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	policy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	procedure1 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	policy1 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// Create some edge objects for another organization
-	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
-	policy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	procedure2 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
+	policy2 := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
-	// create another admin user and add them to the same organization and group as sharedTestUser1
+	// create another admin user and add them to the same organization and group as th.SharedTestUser1
 	// this will allow us to test the group editor permissions
-	anotherAdminUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, sharedTestUser1.OrganizationID)
+	anotherAdminUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &anotherAdminUser, enums.RoleAdmin, th.SharedTestUser1.OrganizationID)
 
-	gm1 := (&GroupMemberBuilder{client: suite.client, UserID: anotherAdminUser.ID, GroupID: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
+	gm1 := (&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherAdminUser.ID, GroupID: th.SharedTestUser1.GroupID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	// create a viewer user and add them to the same organization as sharedTestUser1
-	// also add them to the same group as sharedTestUser1, this should still allow them to edit the policy
+	// create a viewer user and add them to the same organization as th.SharedTestUser1
+	// also add them to the same group as th.SharedTestUser1, this should still allow them to edit the policy
 	// despite not not being an organization admin
-	anotherViewerUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
+	anotherViewerUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, th.SharedTestUser1.OrganizationID)
 
-	gm2 := (&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
-
-	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
-	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
-
-	// create a view only user and add them to the same organization as sharedTestUser1
-	meowViewerUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &meowViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
+	gm2 := (&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherViewerUser.ID, GroupID: th.SharedTestUser1.GroupID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
-	viewerGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	gm3 := (&GroupMemberBuilder{client: suite.client, UserID: meowViewerUser.ID, GroupID: blockGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	blockGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+
+	// create a view only user and add them to the same organization as th.SharedTestUser1
+	meowViewerUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &meowViewerUser, enums.RoleMember, th.SharedTestUser1.OrganizationID)
+
+	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
+	viewerGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	gm3 := (&th.GroupMemberBuilder{Client: suite.Client, UserID: meowViewerUser.ID, GroupID: blockGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add add user to the viewer group
-	gm4 := (&GroupMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	gm4 := (&th.GroupMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID, GroupID: viewerGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// ensure the user does not currently have access to the program
-	_, err = suite.client.api.GetProgramByID(sharedViewOnlyUser.UserCtx, program.ID)
-	assert.ErrorContains(t, err, notFoundErrorMsg)
+	_, err = suite.Client.API.GetProgramByID(th.SharedViewOnlyUser.UserCtx, program.ID)
+	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
 	testCases := []struct {
 		name              string
@@ -674,11 +676,11 @@ func TestMutationUpdateProgram(t *testing.T) {
 			programID: program.ID,
 			request: testclient.UpdateProgramInput{
 				Description:  lo.ToPtr("new description"),
-				AddEditorIDs: []string{sharedTestUser1.GroupID}, // add the group to the editor groups for the subsequent tests
-				AddViewerIDs: []string{viewerGroup.ID},          // add the group to the viewer groups and ensure the user has access to the program
+				AddEditorIDs: []string{th.SharedTestUser1.GroupID}, // add the group to the editor groups for the subsequent tests
+				AddViewerIDs: []string{viewerGroup.ID},             // add the group to the viewer groups and ensure the user has access to the program
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "happy path, update multiple fields using pat",
@@ -694,7 +696,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 				AuditorWriteComments: lo.ToPtr(true),
 				AuditorReadComments:  lo.ToPtr(true),
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -703,8 +705,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				RemoveProgramMembers: []string{testUserProgramMemberID},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "add program member, cannot add self",
@@ -712,13 +714,13 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				AddProgramMembers: []*testclient.AddProgramMembershipInput{
 					{
-						UserID: sharedAdminUser.ID,
+						UserID: th.SharedAdminUser.ID,
 					},
 				},
 			},
-			client:      suite.client.api,
-			ctx:         sharedAdminUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedAdminUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:      "add program member, can add another user",
@@ -726,12 +728,12 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				AddProgramMembers: []*testclient.AddProgramMembershipInput{
 					{
-						UserID: sharedAdminUser.ID,
+						UserID: th.SharedAdminUser.ID,
 					},
 				},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "happy path, remove program member",
@@ -739,7 +741,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				RemoveProgramMembers: []string{pm.ID},
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -753,8 +755,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 					},
 				},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "happy path, update edge - procedure",
@@ -762,8 +764,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				AddProcedureIDs: []string{procedure1.ID},
 			},
-			client:            suite.client.api,
-			ctx:               sharedTestUser1.UserCtx,
+			client:            suite.Client.API,
+			ctx:               th.SharedTestUser1.UserCtx,
 			expectedEdgeCount: 1,
 		},
 		{
@@ -772,8 +774,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				AddInternalPolicyIDs: []string{policy1.ID},
 			},
-			client:            suite.client.api,
-			ctx:               sharedTestUser1.UserCtx,
+			client:            suite.Client.API,
+			ctx:               th.SharedTestUser1.UserCtx,
 			expectedEdgeCount: 1,
 		},
 		{
@@ -783,8 +785,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 				StartDate: lo.ToPtr(baseStart.AddDate(0, 0, -1)),
 				EndDate:   lo.ToPtr(baseEnd.AddDate(0, 0, 1)),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "happy path, valid start date update",
@@ -793,8 +795,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 				StartDate: lo.ToPtr(time.Now().AddDate(0, 0, 2)),
 				EndDate:   lo.ToPtr(baseEnd),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "happy path, valid end date update",
@@ -803,8 +805,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 				StartDate: lo.ToPtr(baseStart),
 				EndDate:   lo.ToPtr(time.Now().AddDate(1, 2, 5)),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "invalid start and end date update",
@@ -813,8 +815,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 				StartDate: lo.ToPtr(time.Now().AddDate(2, 2, 5)),
 				EndDate:   lo.ToPtr(time.Now().AddDate(1, 2, 5)),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: errStartDateLaterThanEndDate,
 		},
 		{
@@ -824,8 +826,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 				StartDate: lo.ToPtr(time.Now().AddDate(0, 0, 15)),
 				EndDate:   lo.ToPtr(baseEnd),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: errStartDateLaterThanEndDate,
 		},
 		{
@@ -835,8 +837,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 				StartDate: lo.ToPtr(baseStart),
 				EndDate:   lo.ToPtr(time.Now().AddDate(0, 0, -15)),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: errStartDateLaterThanEndDate,
 		},
 		{
@@ -845,9 +847,9 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				AddProcedureIDs: []string{procedure2.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:      "update edge - policy - not allowed to access procedure",
@@ -855,9 +857,9 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				AddInternalPolicyIDs: []string{policy2.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:      "update not allowed, not enough permissions",
@@ -865,9 +867,9 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("newer description"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg, // user in in viewer group, but has no edit access
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg, // user in in viewer group, but has no edit access
 		},
 		{
 			name:      "update not allowed, no permissions",
@@ -875,9 +877,9 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("newer description"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:      "update allowed, user in editor group",
@@ -885,7 +887,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("soc2 2024"),
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    anotherAdminUser.UserCtx, // user assigned to the group which has editor permissions
 		},
 		{
@@ -895,8 +897,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 				Description: lo.ToPtr("newer description"),
 				Status:      lo.ToPtr(enums.ProgramStatusArchived),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: hooks.ErrArchivedProgramUpdateNotAllowed.Error(),
 		},
 		{
@@ -905,8 +907,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				Description: lo.ToPtr("newer description"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: hooks.ErrArchivedProgramUpdateNotAllowed.Error(),
 		},
 		{
@@ -915,8 +917,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				Status: lo.ToPtr(enums.ProgramStatusInProgress),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "update allowed, program is not archived but updated to archived state",
@@ -924,8 +926,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				Status: lo.ToPtr(enums.ProgramStatusArchived),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:      "update allowed, program is archived but updated to in progress state",
@@ -933,8 +935,8 @@ func TestMutationUpdateProgram(t *testing.T) {
 			request: testclient.UpdateProgramInput{
 				Status: lo.ToPtr(enums.ProgramStatusInProgress),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 	}
 
@@ -1017,7 +1019,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 			if len(tc.request.AddEditorIDs) > 0 {
 				assert.Assert(t, is.Len(resp.UpdateProgram.Program.Editors.Edges, 1))
 				for _, edge := range resp.UpdateProgram.Program.Editors.Edges {
-					assert.Check(t, is.Equal(sharedTestUser1.GroupID, edge.Node.ID))
+					assert.Check(t, is.Equal(th.SharedTestUser1.GroupID, edge.Node.ID))
 				}
 			}
 
@@ -1035,7 +1037,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 				}
 
 				// ensure the user has access to the program now
-				res, err := suite.client.api.GetProgramByID(sharedViewOnlyUser.UserCtx, program.ID)
+				res, err := suite.Client.API.GetProgramByID(th.SharedViewOnlyUser.UserCtx, program.ID)
 				assert.NilError(t, err)
 				assert.Assert(t, res != nil)
 				assert.Check(t, is.Equal(program.ID, res.Program.ID))
@@ -1049,7 +1051,7 @@ func TestMutationUpdateProgram(t *testing.T) {
 				for _, edge := range resp.UpdateProgram.Program.Members.Edges {
 					if edge.Node.User.ID == programUser.ID {
 						programUserFound = true
-					} else if edge.Node.User.ID == sharedAdminUser.ID {
+					} else if edge.Node.User.ID == th.SharedAdminUser.ID {
 						adminUserFound = true
 					}
 				}
@@ -1066,22 +1068,22 @@ func TestMutationUpdateProgram(t *testing.T) {
 	}
 
 	// cleanup program
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, ID: program.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// cleanup policy and procedure
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure1.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy1.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure2.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: policy2.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: procedure1.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: policy1.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: procedure2.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.InternalPolicyDeleteOne]{Client: suite.Client.DB.InternalPolicy, ID: policy2.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 	// cleanup group
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockGroup.ID, viewerGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{blockGroup.ID, viewerGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	// org member cleanup
-	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, IDs: []string{om.ID, gm1.Edges.OrgMembership.ID, gm2.Edges.OrgMembership.ID, gm3.Edges.OrgMembership.ID, gm4.Edges.OrgMembership.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.OrgMembershipDeleteOne]{Client: suite.Client.DB.OrgMembership, IDs: []string{om.ID, gm1.Edges.OrgMembership.ID, gm2.Edges.OrgMembership.ID, gm3.Edges.OrgMembership.ID, gm4.Edges.OrgMembership.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteProgram(t *testing.T) {
 	// create Programs to be deleted
-	program1 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program1 := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	program2 := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -1093,35 +1095,35 @@ func TestMutationDeleteProgram(t *testing.T) {
 		{
 			name:        "not authorized, delete program",
 			idToDelete:  program1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete program",
 			idToDelete: program1.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "program already deleted, not found",
 			idToDelete:  program1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete program using personal access token",
 			idToDelete: program2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown program, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 

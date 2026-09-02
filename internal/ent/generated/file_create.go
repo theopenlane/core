@@ -10,25 +10,26 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
 )
 
 // FileCreate is the builder for creating a File entity.
@@ -480,6 +481,20 @@ func (_c *FileCreate) SetNillableStorageProvider(v *string) *FileCreate {
 	return _c
 }
 
+// SetBackupState sets the "backup_state" field.
+func (_c *FileCreate) SetBackupState(v models.FileBackupState) *FileCreate {
+	_c.mutation.SetBackupState(v)
+	return _c
+}
+
+// SetNillableBackupState sets the "backup_state" field if the given value is not nil.
+func (_c *FileCreate) SetNillableBackupState(v *models.FileBackupState) *FileCreate {
+	if v != nil {
+		_c.SetBackupState(*v)
+	}
+	return _c
+}
+
 // SetLastAccessedAt sets the "last_accessed_at" field.
 func (_c *FileCreate) SetLastAccessedAt(v time.Time) *FileCreate {
 	_c.mutation.SetLastAccessedAt(v)
@@ -914,7 +929,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_node = &File{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(file.Table, sqlgraph.NewFieldSpec(file.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.File
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -1047,6 +1061,10 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldStorageProvider, field.TypeString, value)
 		_node.StorageProvider = value
 	}
+	if value, ok := _c.mutation.BackupState(); ok {
+		_spec.SetField(file.FieldBackupState, field.TypeJSON, value)
+		_node.BackupState = value
+	}
 	if value, ok := _c.mutation.LastAccessedAt(); ok {
 		_spec.SetField(file.FieldLastAccessedAt, field.TypeTime, value)
 		_node.LastAccessedAt = &value
@@ -1062,7 +1080,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1080,7 +1097,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1098,7 +1114,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1116,7 +1131,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1133,7 +1147,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1150,7 +1163,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ContactFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1167,7 +1179,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EntityFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1184,7 +1195,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrganizationSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1201,7 +1211,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TemplateFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1218,7 +1227,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1235,7 +1243,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1252,7 +1259,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.PlatformFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1269,7 +1275,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1286,7 +1291,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1303,7 +1307,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ScanFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1320,7 +1323,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1337,7 +1339,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1354,7 +1355,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FileSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1371,7 +1371,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1388,7 +1387,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1405,7 +1403,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

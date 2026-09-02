@@ -5,7 +5,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 
-	"github.com/theopenlane/core/internal/httpserve/specs"
+	"github.com/theopenlane/core/v2/internal/httpserve/specs"
 )
 
 func TestNewOpenAPISpec(t *testing.T) {

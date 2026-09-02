@@ -12,97 +12,88 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/export"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/notification"
-	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgprice"
-	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
-	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/export"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 )
 
 // OrganizationUpdate is the builder for updating Organization entities.
@@ -858,66 +849,6 @@ func (_u *OrganizationUpdate) AddInviteCreators(v ...*Group) *OrganizationUpdate
 	return _u.AddInviteCreatorIDs(ids...)
 }
 
-// AddJobRunnerCreatorIDs adds the "job_runner_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddJobRunnerCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobRunnerCreatorIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerCreators adds the "job_runner_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) AddJobRunnerCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerCreatorIDs(ids...)
-}
-
-// AddJobRunnerRegistrationTokenCreatorIDs adds the "job_runner_registration_token_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerRegistrationTokenCreators adds the "job_runner_registration_token_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) AddJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
-}
-
-// AddJobRunnerTokenCreatorIDs adds the "job_runner_token_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddJobRunnerTokenCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobRunnerTokenCreatorIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerTokenCreators adds the "job_runner_token_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) AddJobRunnerTokenCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerTokenCreatorIDs(ids...)
-}
-
-// AddJobTemplateCreatorIDs adds the "job_template_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddJobTemplateCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobTemplateCreatorIDs(ids...)
-	return _u
-}
-
-// AddJobTemplateCreators adds the "job_template_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) AddJobTemplateCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobTemplateCreatorIDs(ids...)
-}
-
 // AddMappedControlCreatorIDs adds the "mapped_control_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdate) AddMappedControlCreatorIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddMappedControlCreatorIDs(ids...)
@@ -1111,36 +1042,6 @@ func (_u *OrganizationUpdate) AddScanCreators(v ...*Group) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddScanCreatorIDs(ids...)
-}
-
-// AddScheduledJobCreatorIDs adds the "scheduled_job_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddScheduledJobCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddScheduledJobCreatorIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobCreators adds the "scheduled_job_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) AddScheduledJobCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobCreatorIDs(ids...)
-}
-
-// AddScheduledJobRunCreatorIDs adds the "scheduled_job_run_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddScheduledJobRunCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddScheduledJobRunCreatorIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobRunCreators adds the "scheduled_job_run_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) AddScheduledJobRunCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobRunCreatorIDs(ids...)
 }
 
 // AddSLADefinitionCreatorIDs adds the "sla_definition_creators" edge to the Group entity by IDs.
@@ -2306,51 +2207,6 @@ func (_u *OrganizationUpdate) AddCustomDomains(v ...*CustomDomain) *Organization
 	return _u.AddCustomDomainIDs(ids...)
 }
 
-// AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
-func (_u *OrganizationUpdate) AddJobRunnerIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobRunnerIDs(ids...)
-	return _u
-}
-
-// AddJobRunners adds the "job_runners" edges to the JobRunner entity.
-func (_u *OrganizationUpdate) AddJobRunners(v ...*JobRunner) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerIDs(ids...)
-}
-
-// AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (_u *OrganizationUpdate) AddJobRunnerTokenIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobRunnerTokenIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (_u *OrganizationUpdate) AddJobRunnerTokens(v ...*JobRunnerToken) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerTokenIDs(ids...)
-}
-
-// AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
-func (_u *OrganizationUpdate) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (_u *OrganizationUpdate) AddJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerRegistrationTokenIDs(ids...)
-}
-
 // AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
 func (_u *OrganizationUpdate) AddDNSVerificationIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddDNSVerificationIDs(ids...)
@@ -2364,66 +2220,6 @@ func (_u *OrganizationUpdate) AddDNSVerifications(v ...*DNSVerification) *Organi
 		ids[i] = v[i].ID
 	}
 	return _u.AddDNSVerificationIDs(ids...)
-}
-
-// AddJobTemplateIDs adds the "job_templates" edge to the JobTemplate entity by IDs.
-func (_u *OrganizationUpdate) AddJobTemplateIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobTemplateIDs(ids...)
-	return _u
-}
-
-// AddJobTemplates adds the "job_templates" edges to the JobTemplate entity.
-func (_u *OrganizationUpdate) AddJobTemplates(v ...*JobTemplate) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobTemplateIDs(ids...)
-}
-
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (_u *OrganizationUpdate) AddScheduledJobIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddScheduledJobIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (_u *OrganizationUpdate) AddScheduledJobs(v ...*ScheduledJob) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobIDs(ids...)
-}
-
-// AddJobResultIDs adds the "job_results" edge to the JobResult entity by IDs.
-func (_u *OrganizationUpdate) AddJobResultIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddJobResultIDs(ids...)
-	return _u
-}
-
-// AddJobResults adds the "job_results" edges to the JobResult entity.
-func (_u *OrganizationUpdate) AddJobResults(v ...*JobResult) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobResultIDs(ids...)
-}
-
-// AddScheduledJobRunIDs adds the "scheduled_job_runs" edge to the ScheduledJobRun entity by IDs.
-func (_u *OrganizationUpdate) AddScheduledJobRunIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddScheduledJobRunIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobRuns adds the "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (_u *OrganizationUpdate) AddScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobRunIDs(ids...)
 }
 
 // AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
@@ -3619,90 +3415,6 @@ func (_u *OrganizationUpdate) RemoveInviteCreators(v ...*Group) *OrganizationUpd
 	return _u.RemoveInviteCreatorIDs(ids...)
 }
 
-// ClearJobRunnerCreators clears all "job_runner_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearJobRunnerCreators() *OrganizationUpdate {
-	_u.mutation.ClearJobRunnerCreators()
-	return _u
-}
-
-// RemoveJobRunnerCreatorIDs removes the "job_runner_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobRunnerCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobRunnerCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerCreators removes "job_runner_creators" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveJobRunnerCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerCreatorIDs(ids...)
-}
-
-// ClearJobRunnerRegistrationTokenCreators clears all "job_runner_registration_token_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearJobRunnerRegistrationTokenCreators() *OrganizationUpdate {
-	_u.mutation.ClearJobRunnerRegistrationTokenCreators()
-	return _u
-}
-
-// RemoveJobRunnerRegistrationTokenCreatorIDs removes the "job_runner_registration_token_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobRunnerRegistrationTokenCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerRegistrationTokenCreators removes "job_runner_registration_token_creators" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerRegistrationTokenCreatorIDs(ids...)
-}
-
-// ClearJobRunnerTokenCreators clears all "job_runner_token_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearJobRunnerTokenCreators() *OrganizationUpdate {
-	_u.mutation.ClearJobRunnerTokenCreators()
-	return _u
-}
-
-// RemoveJobRunnerTokenCreatorIDs removes the "job_runner_token_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobRunnerTokenCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobRunnerTokenCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerTokenCreators removes "job_runner_token_creators" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveJobRunnerTokenCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerTokenCreatorIDs(ids...)
-}
-
-// ClearJobTemplateCreators clears all "job_template_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearJobTemplateCreators() *OrganizationUpdate {
-	_u.mutation.ClearJobTemplateCreators()
-	return _u
-}
-
-// RemoveJobTemplateCreatorIDs removes the "job_template_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobTemplateCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobTemplateCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveJobTemplateCreators removes "job_template_creators" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveJobTemplateCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobTemplateCreatorIDs(ids...)
-}
-
 // ClearMappedControlCreators clears all "mapped_control_creators" edges to the Group entity.
 func (_u *OrganizationUpdate) ClearMappedControlCreators() *OrganizationUpdate {
 	_u.mutation.ClearMappedControlCreators()
@@ -3974,48 +3686,6 @@ func (_u *OrganizationUpdate) RemoveScanCreators(v ...*Group) *OrganizationUpdat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveScanCreatorIDs(ids...)
-}
-
-// ClearScheduledJobCreators clears all "scheduled_job_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearScheduledJobCreators() *OrganizationUpdate {
-	_u.mutation.ClearScheduledJobCreators()
-	return _u
-}
-
-// RemoveScheduledJobCreatorIDs removes the "scheduled_job_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveScheduledJobCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveScheduledJobCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobCreators removes "scheduled_job_creators" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveScheduledJobCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobCreatorIDs(ids...)
-}
-
-// ClearScheduledJobRunCreators clears all "scheduled_job_run_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearScheduledJobRunCreators() *OrganizationUpdate {
-	_u.mutation.ClearScheduledJobRunCreators()
-	return _u
-}
-
-// RemoveScheduledJobRunCreatorIDs removes the "scheduled_job_run_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveScheduledJobRunCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveScheduledJobRunCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobRunCreators removes "scheduled_job_run_creators" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveScheduledJobRunCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobRunCreatorIDs(ids...)
 }
 
 // ClearSLADefinitionCreators clears all "sla_definition_creators" edges to the Group entity.
@@ -5605,69 +5275,6 @@ func (_u *OrganizationUpdate) RemoveCustomDomains(v ...*CustomDomain) *Organizat
 	return _u.RemoveCustomDomainIDs(ids...)
 }
 
-// ClearJobRunners clears all "job_runners" edges to the JobRunner entity.
-func (_u *OrganizationUpdate) ClearJobRunners() *OrganizationUpdate {
-	_u.mutation.ClearJobRunners()
-	return _u
-}
-
-// RemoveJobRunnerIDs removes the "job_runners" edge to JobRunner entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobRunnerIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobRunnerIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunners removes "job_runners" edges to JobRunner entities.
-func (_u *OrganizationUpdate) RemoveJobRunners(v ...*JobRunner) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerIDs(ids...)
-}
-
-// ClearJobRunnerTokens clears all "job_runner_tokens" edges to the JobRunnerToken entity.
-func (_u *OrganizationUpdate) ClearJobRunnerTokens() *OrganizationUpdate {
-	_u.mutation.ClearJobRunnerTokens()
-	return _u
-}
-
-// RemoveJobRunnerTokenIDs removes the "job_runner_tokens" edge to JobRunnerToken entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobRunnerTokenIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobRunnerTokenIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerTokens removes "job_runner_tokens" edges to JobRunnerToken entities.
-func (_u *OrganizationUpdate) RemoveJobRunnerTokens(v ...*JobRunnerToken) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerTokenIDs(ids...)
-}
-
-// ClearJobRunnerRegistrationTokens clears all "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (_u *OrganizationUpdate) ClearJobRunnerRegistrationTokens() *OrganizationUpdate {
-	_u.mutation.ClearJobRunnerRegistrationTokens()
-	return _u
-}
-
-// RemoveJobRunnerRegistrationTokenIDs removes the "job_runner_registration_tokens" edge to JobRunnerRegistrationToken entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobRunnerRegistrationTokenIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerRegistrationTokens removes "job_runner_registration_tokens" edges to JobRunnerRegistrationToken entities.
-func (_u *OrganizationUpdate) RemoveJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerRegistrationTokenIDs(ids...)
-}
-
 // ClearDNSVerifications clears all "dns_verifications" edges to the DNSVerification entity.
 func (_u *OrganizationUpdate) ClearDNSVerifications() *OrganizationUpdate {
 	_u.mutation.ClearDNSVerifications()
@@ -5687,90 +5294,6 @@ func (_u *OrganizationUpdate) RemoveDNSVerifications(v ...*DNSVerification) *Org
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDNSVerificationIDs(ids...)
-}
-
-// ClearJobTemplates clears all "job_templates" edges to the JobTemplate entity.
-func (_u *OrganizationUpdate) ClearJobTemplates() *OrganizationUpdate {
-	_u.mutation.ClearJobTemplates()
-	return _u
-}
-
-// RemoveJobTemplateIDs removes the "job_templates" edge to JobTemplate entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobTemplateIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobTemplateIDs(ids...)
-	return _u
-}
-
-// RemoveJobTemplates removes "job_templates" edges to JobTemplate entities.
-func (_u *OrganizationUpdate) RemoveJobTemplates(v ...*JobTemplate) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobTemplateIDs(ids...)
-}
-
-// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
-func (_u *OrganizationUpdate) ClearScheduledJobs() *OrganizationUpdate {
-	_u.mutation.ClearScheduledJobs()
-	return _u
-}
-
-// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
-func (_u *OrganizationUpdate) RemoveScheduledJobIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveScheduledJobIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
-func (_u *OrganizationUpdate) RemoveScheduledJobs(v ...*ScheduledJob) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobIDs(ids...)
-}
-
-// ClearJobResults clears all "job_results" edges to the JobResult entity.
-func (_u *OrganizationUpdate) ClearJobResults() *OrganizationUpdate {
-	_u.mutation.ClearJobResults()
-	return _u
-}
-
-// RemoveJobResultIDs removes the "job_results" edge to JobResult entities by IDs.
-func (_u *OrganizationUpdate) RemoveJobResultIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveJobResultIDs(ids...)
-	return _u
-}
-
-// RemoveJobResults removes "job_results" edges to JobResult entities.
-func (_u *OrganizationUpdate) RemoveJobResults(v ...*JobResult) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobResultIDs(ids...)
-}
-
-// ClearScheduledJobRuns clears all "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (_u *OrganizationUpdate) ClearScheduledJobRuns() *OrganizationUpdate {
-	_u.mutation.ClearScheduledJobRuns()
-	return _u
-}
-
-// RemoveScheduledJobRunIDs removes the "scheduled_job_runs" edge to ScheduledJobRun entities by IDs.
-func (_u *OrganizationUpdate) RemoveScheduledJobRunIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveScheduledJobRunIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobRuns removes "scheduled_job_runs" edges to ScheduledJobRun entities.
-func (_u *OrganizationUpdate) RemoveScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobRunIDs(ids...)
 }
 
 // ClearTrustCenters clears all "trust_centers" edges to the TrustCenter entity.
@@ -6640,7 +6163,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedActionPlanCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ActionPlanCreatorsCleared() {
@@ -6654,7 +6176,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6671,7 +6192,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6688,7 +6208,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAPITokenCreatorsIDs(); len(nodes) > 0 && !_u.mutation.APITokenCreatorsCleared() {
@@ -6702,7 +6221,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6719,7 +6237,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6736,7 +6253,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentCreatorsCleared() {
@@ -6750,7 +6266,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6767,7 +6282,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6784,7 +6298,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssetCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AssetCreatorsCleared() {
@@ -6798,7 +6311,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6815,7 +6327,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6832,7 +6343,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CampaignCreatorsCleared() {
@@ -6846,7 +6356,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6863,7 +6372,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6880,7 +6388,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignTargetCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CampaignTargetCreatorsCleared() {
@@ -6894,7 +6401,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6911,7 +6417,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6928,7 +6433,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCheckResultCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultCreatorsCleared() {
@@ -6942,7 +6446,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6959,7 +6462,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -6976,7 +6478,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedContactCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ContactCreatorsCleared() {
@@ -6990,7 +6491,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7007,7 +6507,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7024,7 +6523,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlCreatorsCleared() {
@@ -7038,7 +6536,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7055,7 +6552,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7072,7 +6568,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlImplementationCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationCreatorsCleared() {
@@ -7086,7 +6581,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7103,7 +6597,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7120,7 +6613,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlObjectiveCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectiveCreatorsCleared() {
@@ -7134,7 +6626,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7151,7 +6642,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7168,7 +6658,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCustomDomainCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CustomDomainCreatorsCleared() {
@@ -7182,7 +6671,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7199,7 +6687,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7216,7 +6703,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCustomTypeEnumCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CustomTypeEnumCreatorsCleared() {
@@ -7230,7 +6716,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7247,7 +6732,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7264,7 +6748,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryAccountCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountCreatorsCleared() {
@@ -7278,7 +6761,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7295,7 +6777,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7312,7 +6793,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryGroupCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupCreatorsCleared() {
@@ -7326,7 +6806,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7343,7 +6822,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7360,7 +6838,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryMembershipCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipCreatorsCleared() {
@@ -7374,7 +6851,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7391,7 +6867,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7408,7 +6883,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectorySyncRunCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunCreatorsCleared() {
@@ -7422,7 +6896,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7439,7 +6912,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7456,7 +6928,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDiscussionCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionCreatorsCleared() {
@@ -7470,7 +6941,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7487,7 +6957,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7504,7 +6973,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDocumentDataCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DocumentDataCreatorsCleared() {
@@ -7518,7 +6986,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7535,7 +7002,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7552,7 +7018,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEmailTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplateCreatorsCleared() {
@@ -7566,7 +7031,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7583,7 +7047,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7600,7 +7063,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntityCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EntityCreatorsCleared() {
@@ -7614,7 +7076,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7631,7 +7092,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7648,7 +7108,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntityTypeCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EntityTypeCreatorsCleared() {
@@ -7662,7 +7121,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7679,7 +7137,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7696,7 +7153,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEvidenceCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCreatorsCleared() {
@@ -7710,7 +7166,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7727,7 +7182,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7744,7 +7198,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFileCreatorsIDs(); len(nodes) > 0 && !_u.mutation.FileCreatorsCleared() {
@@ -7758,7 +7211,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7775,7 +7227,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7792,7 +7243,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingCreatorsIDs(); len(nodes) > 0 && !_u.mutation.FindingCreatorsCleared() {
@@ -7806,7 +7256,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7823,7 +7272,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7840,7 +7288,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.FindingControlCreatorsCleared() {
@@ -7854,7 +7301,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7871,7 +7317,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7888,7 +7333,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupCreatorsIDs(); len(nodes) > 0 && !_u.mutation.GroupCreatorsCleared() {
@@ -7902,7 +7346,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7919,7 +7362,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7936,7 +7378,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupMembershipCreatorsIDs(); len(nodes) > 0 && !_u.mutation.GroupMembershipCreatorsCleared() {
@@ -7950,7 +7391,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7967,7 +7407,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -7984,7 +7423,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupSettingCreatorsIDs(); len(nodes) > 0 && !_u.mutation.GroupSettingCreatorsCleared() {
@@ -7998,7 +7436,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8015,7 +7452,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8032,7 +7468,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedHushCreatorsIDs(); len(nodes) > 0 && !_u.mutation.HushCreatorsCleared() {
@@ -8046,7 +7481,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8063,7 +7497,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8080,7 +7513,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIdentityHolderCreatorsIDs(); len(nodes) > 0 && !_u.mutation.IdentityHolderCreatorsCleared() {
@@ -8094,7 +7526,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8111,7 +7542,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8128,7 +7558,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPolicyCreatorsIDs(); len(nodes) > 0 && !_u.mutation.InternalPolicyCreatorsCleared() {
@@ -8142,7 +7571,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8159,7 +7587,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8176,7 +7603,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInviteCreatorsIDs(); len(nodes) > 0 && !_u.mutation.InviteCreatorsCleared() {
@@ -8190,7 +7616,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8207,199 +7632,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerCreatorsTable,
-			Columns: []string{organization.JobRunnerCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerCreatorsTable,
-			Columns: []string{organization.JobRunnerCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerCreatorsTable,
-			Columns: []string{organization.JobRunnerCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerRegistrationTokenCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerRegistrationTokenCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerTokenCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerTokenCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokenCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerTokenCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobTemplateCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplateCreatorsTable,
-			Columns: []string{organization.JobTemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobTemplateCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplateCreatorsTable,
-			Columns: []string{organization.JobTemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobTemplateCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplateCreatorsTable,
-			Columns: []string{organization.JobTemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8416,7 +7648,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedMappedControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.MappedControlCreatorsCleared() {
@@ -8430,7 +7661,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8447,7 +7677,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8464,7 +7693,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNarrativeCreatorsIDs(); len(nodes) > 0 && !_u.mutation.NarrativeCreatorsCleared() {
@@ -8478,7 +7706,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8495,7 +7722,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8512,7 +7738,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNoteCreatorsIDs(); len(nodes) > 0 && !_u.mutation.NoteCreatorsCleared() {
@@ -8526,7 +7751,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8543,7 +7767,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8560,7 +7783,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.NotificationTemplateCreatorsCleared() {
@@ -8574,7 +7796,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8591,7 +7812,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8608,7 +7828,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgMembershipCreatorsIDs(); len(nodes) > 0 && !_u.mutation.OrgMembershipCreatorsCleared() {
@@ -8622,7 +7841,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8639,7 +7857,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8656,7 +7873,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPlatformCreatorsIDs(); len(nodes) > 0 && !_u.mutation.PlatformCreatorsCleared() {
@@ -8670,7 +7886,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8687,7 +7902,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8704,7 +7918,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProcedureCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProcedureCreatorsCleared() {
@@ -8718,7 +7931,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8735,7 +7947,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8752,7 +7963,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProgramCreatorsCleared() {
@@ -8766,7 +7976,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8783,7 +7992,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8800,7 +8008,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramMembershipCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProgramMembershipCreatorsCleared() {
@@ -8814,7 +8021,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8831,7 +8037,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8848,7 +8053,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRemediationCreatorsIDs(); len(nodes) > 0 && !_u.mutation.RemediationCreatorsCleared() {
@@ -8862,7 +8066,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8879,7 +8082,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8896,7 +8098,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedReviewCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ReviewCreatorsCleared() {
@@ -8910,7 +8111,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8927,7 +8127,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8944,7 +8143,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRiskCreatorsIDs(); len(nodes) > 0 && !_u.mutation.RiskCreatorsCleared() {
@@ -8958,7 +8156,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8975,7 +8172,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -8992,7 +8188,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedScanCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ScanCreatorsCleared() {
@@ -9006,7 +8201,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9023,103 +8217,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobCreatorsTable,
-			Columns: []string{organization.ScheduledJobCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobCreatorsTable,
-			Columns: []string{organization.ScheduledJobCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobCreatorsTable,
-			Columns: []string{organization.ScheduledJobCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobRunCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunCreatorsTable,
-			Columns: []string{organization.ScheduledJobRunCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobRunCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobRunCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunCreatorsTable,
-			Columns: []string{organization.ScheduledJobRunCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobRunCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunCreatorsTable,
-			Columns: []string{organization.ScheduledJobRunCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9136,7 +8233,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSLADefinitionCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SLADefinitionCreatorsCleared() {
@@ -9150,7 +8246,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9167,7 +8262,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9184,7 +8278,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedStandardCreatorsIDs(); len(nodes) > 0 && !_u.mutation.StandardCreatorsCleared() {
@@ -9198,7 +8291,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9215,7 +8307,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9232,7 +8323,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolCreatorsCleared() {
@@ -9246,7 +8336,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9263,7 +8352,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9280,7 +8368,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubprocessorCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorCreatorsCleared() {
@@ -9294,7 +8381,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9311,7 +8397,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9328,7 +8413,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubscriberCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SubscriberCreatorsCleared() {
@@ -9342,7 +8426,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9359,7 +8442,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9376,7 +8458,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSystemDetailCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailCreatorsCleared() {
@@ -9390,7 +8471,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9407,7 +8487,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9424,7 +8503,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTagDefinitionCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TagDefinitionCreatorsCleared() {
@@ -9438,7 +8516,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9455,7 +8532,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9472,7 +8548,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTaskCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TaskCreatorsCleared() {
@@ -9486,7 +8561,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9503,7 +8577,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9520,7 +8593,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TemplateCreatorsCleared() {
@@ -9534,7 +8606,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9551,7 +8622,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9568,7 +8638,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterCreatorsCleared() {
@@ -9582,7 +8651,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9599,7 +8667,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9616,7 +8683,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterComplianceCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterComplianceCreatorsCleared() {
@@ -9630,7 +8696,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9647,7 +8712,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9664,7 +8728,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterDocCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocCreatorsCleared() {
@@ -9678,7 +8741,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9695,7 +8757,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9712,7 +8773,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterEntityCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterEntityCreatorsCleared() {
@@ -9726,7 +8786,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9743,7 +8802,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9760,7 +8818,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterFaqCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterFaqCreatorsCleared() {
@@ -9774,7 +8831,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9791,7 +8847,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9808,7 +8863,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterNdaRequestCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterNdaRequestCreatorsCleared() {
@@ -9822,7 +8876,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9839,7 +8892,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9856,7 +8908,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterSubprocessorCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSubprocessorCreatorsCleared() {
@@ -9870,7 +8921,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9887,7 +8937,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9904,7 +8953,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterWatermarkConfigCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterWatermarkConfigCreatorsCleared() {
@@ -9918,7 +8966,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9935,7 +8982,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9952,7 +8998,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVendorRiskScoreCreatorsIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoreCreatorsCleared() {
@@ -9966,7 +9011,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -9983,7 +9027,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10000,7 +9043,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVendorScoringConfigCreatorsIDs(); len(nodes) > 0 && !_u.mutation.VendorScoringConfigCreatorsCleared() {
@@ -10014,7 +9056,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10031,7 +9072,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10048,7 +9088,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilityCreatorsIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilityCreatorsCleared() {
@@ -10062,7 +9101,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10079,7 +9117,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10096,7 +9133,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowDefinitionCreatorsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowDefinitionCreatorsCleared() {
@@ -10110,7 +9146,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10127,7 +9162,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10144,7 +9178,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignsManagerIDs(); len(nodes) > 0 && !_u.mutation.CampaignsManagerCleared() {
@@ -10158,7 +9191,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10175,7 +9207,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10192,7 +9223,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedComplianceManagerIDs(); len(nodes) > 0 && !_u.mutation.ComplianceManagerCleared() {
@@ -10206,7 +9236,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10223,7 +9252,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10240,7 +9268,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupManagerIDs(); len(nodes) > 0 && !_u.mutation.GroupManagerCleared() {
@@ -10254,7 +9281,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10271,7 +9297,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10288,7 +9313,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPoliciesManagerIDs(); len(nodes) > 0 && !_u.mutation.PoliciesManagerCleared() {
@@ -10302,7 +9326,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10319,7 +9342,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10336,7 +9358,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRegistryManagerIDs(); len(nodes) > 0 && !_u.mutation.RegistryManagerCleared() {
@@ -10350,7 +9371,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10367,7 +9387,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10384,7 +9403,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRiskManagerIDs(); len(nodes) > 0 && !_u.mutation.RiskManagerCleared() {
@@ -10398,7 +9416,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10415,7 +9432,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10432,7 +9448,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterManagerIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterManagerCleared() {
@@ -10446,7 +9461,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10463,7 +9477,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10480,7 +9493,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowsManagerIDs(); len(nodes) > 0 && !_u.mutation.WorkflowsManagerCleared() {
@@ -10494,7 +9506,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10511,7 +9522,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10528,7 +9538,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !_u.mutation.ChildrenCleared() {
@@ -10542,7 +9551,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10559,7 +9567,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10576,7 +9583,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.SettingIDs(); len(nodes) > 0 {
@@ -10590,7 +9596,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10607,7 +9612,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPersonalAccessTokensIDs(); len(nodes) > 0 && !_u.mutation.PersonalAccessTokensCleared() {
@@ -10621,7 +9625,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10638,7 +9641,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10655,7 +9657,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.APIToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAPITokensIDs(); len(nodes) > 0 && !_u.mutation.APITokensCleared() {
@@ -10669,7 +9670,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10686,7 +9686,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10703,7 +9702,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEmailTemplatesIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplatesCleared() {
@@ -10717,7 +9715,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10734,7 +9731,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10751,7 +9747,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationWebhook
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIntegrationWebhooksIDs(); len(nodes) > 0 && !_u.mutation.IntegrationWebhooksCleared() {
@@ -10765,7 +9760,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationWebhook
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10782,7 +9776,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationWebhook
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10799,7 +9792,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
@@ -10813,7 +9805,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10830,7 +9821,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10847,7 +9837,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationPreference
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationPreferencesIDs(); len(nodes) > 0 && !_u.mutation.NotificationPreferencesCleared() {
@@ -10861,7 +9850,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationPreference
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10878,7 +9866,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationPreference
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10895,7 +9882,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationTemplatesIDs(); len(nodes) > 0 && !_u.mutation.NotificationTemplatesCleared() {
@@ -10909,7 +9895,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10926,7 +9911,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10943,7 +9927,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		createE := &OrgMembershipCreate{config: _u.config, mutation: newOrgMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
@@ -10964,7 +9947,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -10988,7 +9970,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11012,7 +9993,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -11026,7 +10006,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11043,7 +10022,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11060,7 +10038,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
@@ -11074,7 +10051,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11091,7 +10067,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11108,7 +10083,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Hush
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !_u.mutation.SecretsCleared() {
@@ -11122,7 +10096,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11139,7 +10112,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11156,7 +10128,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
@@ -11170,7 +10141,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11187,7 +10157,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !_u.mutation.GroupsCleared() {
@@ -11201,7 +10170,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11218,7 +10186,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11235,7 +10202,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Template
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !_u.mutation.TemplatesCleared() {
@@ -11249,7 +10215,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11266,7 +10231,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11283,7 +10247,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Integration
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
@@ -11297,7 +10260,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11314,7 +10276,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11331,7 +10292,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DocumentData
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !_u.mutation.DocumentsCleared() {
@@ -11345,7 +10305,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11362,7 +10321,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11379,7 +10337,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !_u.mutation.OrgSubscriptionsCleared() {
@@ -11393,7 +10350,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11410,7 +10366,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11427,7 +10382,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !_u.mutation.OrgProductsCleared() {
@@ -11441,7 +10395,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11458,7 +10411,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11475,7 +10427,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !_u.mutation.OrgPricesCleared() {
@@ -11489,7 +10440,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11506,7 +10456,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11523,7 +10472,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgModulesIDs(); len(nodes) > 0 && !_u.mutation.OrgModulesCleared() {
@@ -11537,7 +10485,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11554,7 +10501,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11571,7 +10517,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Invite
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !_u.mutation.InvitesCleared() {
@@ -11585,7 +10530,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11602,7 +10546,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11619,7 +10562,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subscriber
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
@@ -11633,7 +10575,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11650,7 +10591,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11667,7 +10607,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
@@ -11681,7 +10620,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11698,7 +10636,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11715,7 +10652,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
@@ -11729,7 +10665,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11746,7 +10681,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11763,7 +10697,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
@@ -11777,7 +10710,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11794,7 +10726,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11811,7 +10742,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
@@ -11825,7 +10755,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11842,7 +10771,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11859,7 +10787,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignTargetsIDs(); len(nodes) > 0 && !_u.mutation.CampaignTargetsCleared() {
@@ -11873,7 +10800,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11890,7 +10816,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11907,7 +10832,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntityTypesIDs(); len(nodes) > 0 && !_u.mutation.EntityTypesCleared() {
@@ -11921,7 +10845,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11938,7 +10861,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11955,7 +10877,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Contact
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
@@ -11969,7 +10890,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -11986,7 +10906,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12003,7 +10922,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
@@ -12017,7 +10935,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12034,7 +10951,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12051,7 +10967,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
@@ -12065,7 +10980,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12082,7 +10996,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12099,7 +11012,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
@@ -12113,7 +11025,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12130,7 +11041,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12147,7 +11057,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSystemDetailsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailsCleared() {
@@ -12161,7 +11070,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12178,7 +11086,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12195,7 +11102,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Procedure
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
@@ -12209,7 +11115,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12226,7 +11131,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12243,7 +11147,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
@@ -12257,7 +11160,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12274,7 +11176,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12291,7 +11192,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
@@ -12305,7 +11205,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12322,7 +11221,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12339,7 +11237,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlObjective
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
@@ -12353,7 +11250,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12370,7 +11266,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12387,7 +11282,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !_u.mutation.NarrativesCleared() {
@@ -12401,7 +11295,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12418,7 +11311,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12435,7 +11327,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Control
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
@@ -12449,7 +11340,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12466,7 +11356,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12483,7 +11372,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
@@ -12497,7 +11385,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12514,7 +11401,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12531,7 +11417,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
@@ -12545,7 +11430,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12562,7 +11446,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12579,7 +11462,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.MappedControl
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedMappedControlsIDs(); len(nodes) > 0 && !_u.mutation.MappedControlsCleared() {
@@ -12593,7 +11475,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12610,7 +11491,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12627,7 +11507,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
@@ -12641,7 +11520,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12658,7 +11536,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12675,7 +11552,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !_u.mutation.StandardsCleared() {
@@ -12689,7 +11565,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12706,7 +11581,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12723,7 +11597,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
@@ -12737,7 +11610,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12754,7 +11626,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12771,7 +11642,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCustomDomainsIDs(); len(nodes) > 0 && !_u.mutation.CustomDomainsCleared() {
@@ -12785,7 +11655,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12802,151 +11671,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnersTable,
-			Columns: []string{organization.JobRunnersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunner
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnersIDs(); len(nodes) > 0 && !_u.mutation.JobRunnersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnersTable,
-			Columns: []string{organization.JobRunnersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunner
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnersTable,
-			Columns: []string{organization.JobRunnersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunner
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerTokensCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokensTable,
-			Columns: []string{organization.JobRunnerTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerToken
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokensCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokensTable,
-			Columns: []string{organization.JobRunnerTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokensTable,
-			Columns: []string{organization.JobRunnerTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerRegistrationTokensCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokensTable,
-			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerRegistrationTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerRegistrationTokensCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokensTable,
-			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokensTable,
-			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12963,7 +11687,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DNSVerification
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDNSVerificationsIDs(); len(nodes) > 0 && !_u.mutation.DNSVerificationsCleared() {
@@ -12977,7 +11700,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -12994,199 +11716,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DNSVerification
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobTemplatesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplatesTable,
-			Columns: []string{organization.JobTemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobTemplate
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobTemplatesIDs(); len(nodes) > 0 && !_u.mutation.JobTemplatesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplatesTable,
-			Columns: []string{organization.JobTemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobTemplate
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobTemplatesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplatesTable,
-			Columns: []string{organization.JobTemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobTemplate
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobsTable,
-			Columns: []string{organization.ScheduledJobsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJob
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobsTable,
-			Columns: []string{organization.ScheduledJobsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJob
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobsTable,
-			Columns: []string{organization.ScheduledJobsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJob
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobResultsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobResultsTable,
-			Columns: []string{organization.JobResultsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobResult
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobResultsIDs(); len(nodes) > 0 && !_u.mutation.JobResultsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobResultsTable,
-			Columns: []string{organization.JobResultsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobResult
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobResultsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobResultsTable,
-			Columns: []string{organization.JobResultsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobResult
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobRunsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunsTable,
-			Columns: []string{organization.ScheduledJobRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJobRun
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobRunsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobRunsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunsTable,
-			Columns: []string{organization.ScheduledJobRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJobRun
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunsTable,
-			Columns: []string{organization.ScheduledJobRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJobRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13203,7 +11732,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCentersIDs(); len(nodes) > 0 && !_u.mutation.TrustCentersCleared() {
@@ -13217,7 +11745,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13234,7 +11761,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13251,7 +11777,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Asset
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
@@ -13265,7 +11790,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13282,7 +11806,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13299,7 +11822,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
@@ -13313,7 +11835,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13330,7 +11851,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13347,7 +11867,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SLADefinition
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSLADefinitionsIDs(); len(nodes) > 0 && !_u.mutation.SLADefinitionsCleared() {
@@ -13361,7 +11880,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SLADefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13378,7 +11896,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SLADefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13395,7 +11912,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorsCleared() {
@@ -13409,7 +11925,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13426,7 +11941,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13443,7 +11957,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Export
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedExportsIDs(); len(nodes) > 0 && !_u.mutation.ExportsCleared() {
@@ -13457,7 +11970,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13474,7 +11986,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13491,7 +12002,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterWatermarkConfigsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterWatermarkConfigsCleared() {
@@ -13505,7 +12015,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13522,7 +12031,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13539,7 +12047,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedImpersonationEventsIDs(); len(nodes) > 0 && !_u.mutation.ImpersonationEventsCleared() {
@@ -13553,7 +12060,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13570,7 +12076,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13587,7 +12092,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Assessment
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentsCleared() {
@@ -13601,7 +12105,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13618,7 +12121,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13635,7 +12137,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentResponsesIDs(); len(nodes) > 0 && !_u.mutation.AssessmentResponsesCleared() {
@@ -13649,7 +12150,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13666,7 +12166,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13683,7 +12182,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomTypeEnum
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCustomTypeEnumsIDs(); len(nodes) > 0 && !_u.mutation.CustomTypeEnumsCleared() {
@@ -13697,7 +12195,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomTypeEnum
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13714,7 +12211,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomTypeEnum
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13731,7 +12227,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TagDefinition
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTagDefinitionsIDs(); len(nodes) > 0 && !_u.mutation.TagDefinitionsCleared() {
@@ -13745,7 +12240,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TagDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13762,7 +12256,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TagDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13779,7 +12272,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
@@ -13793,7 +12285,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13810,7 +12301,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13827,7 +12317,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
@@ -13841,7 +12330,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13858,7 +12346,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13875,7 +12362,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingControl
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingControlsIDs(); len(nodes) > 0 && !_u.mutation.FindingControlsCleared() {
@@ -13889,7 +12375,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13906,7 +12391,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13923,7 +12407,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
@@ -13937,7 +12420,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13954,7 +12436,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -13971,7 +12452,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
@@ -13985,7 +12465,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14002,7 +12481,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14019,7 +12497,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationsIDs(); len(nodes) > 0 && !_u.mutation.NotificationsCleared() {
@@ -14033,7 +12510,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14050,7 +12526,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14067,7 +12542,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowDefinitionsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowDefinitionsCleared() {
@@ -14081,7 +12555,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14098,7 +12571,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14115,7 +12587,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowInstancesIDs(); len(nodes) > 0 && !_u.mutation.WorkflowInstancesCleared() {
@@ -14129,7 +12600,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14146,7 +12616,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14163,7 +12632,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowEvent
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowEventsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowEventsCleared() {
@@ -14177,7 +12645,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14194,7 +12661,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14211,7 +12677,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignment
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowAssignmentsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowAssignmentsCleared() {
@@ -14225,7 +12690,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14242,7 +12706,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14259,7 +12722,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowAssignmentTargetsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowAssignmentTargetsCleared() {
@@ -14273,7 +12735,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14290,7 +12751,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14307,7 +12767,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
@@ -14321,7 +12780,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14338,7 +12796,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14355,7 +12812,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowProposalsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowProposalsCleared() {
@@ -14369,7 +12825,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14386,7 +12841,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14403,7 +12857,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
@@ -14417,7 +12870,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14434,7 +12886,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14451,7 +12902,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
@@ -14465,7 +12915,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14482,7 +12931,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14499,7 +12947,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
@@ -14513,7 +12960,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14530,7 +12976,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14547,7 +12992,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectorySyncRunsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunsCleared() {
@@ -14561,7 +13005,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14578,7 +13021,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14595,7 +13037,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Discussion
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
@@ -14609,7 +13050,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14626,7 +13066,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14643,7 +13082,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorScoringConfig
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVendorScoringConfigsIDs(); len(nodes) > 0 && !_u.mutation.VendorScoringConfigsCleared() {
@@ -14657,7 +13095,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorScoringConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14674,7 +13111,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorScoringConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14691,7 +13127,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorRiskScore
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVendorRiskScoresIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoresCleared() {
@@ -14705,7 +13140,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14722,7 +13156,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14739,7 +13172,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedMembersIDs(); len(nodes) > 0 && !_u.mutation.MembersCleared() {
@@ -14753,7 +13185,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -14770,14 +13201,11 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Organization
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -15539,66 +13967,6 @@ func (_u *OrganizationUpdateOne) AddInviteCreators(v ...*Group) *OrganizationUpd
 	return _u.AddInviteCreatorIDs(ids...)
 }
 
-// AddJobRunnerCreatorIDs adds the "job_runner_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobRunnerCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobRunnerCreatorIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerCreators adds the "job_runner_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddJobRunnerCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerCreatorIDs(ids...)
-}
-
-// AddJobRunnerRegistrationTokenCreatorIDs adds the "job_runner_registration_token_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerRegistrationTokenCreators adds the "job_runner_registration_token_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
-}
-
-// AddJobRunnerTokenCreatorIDs adds the "job_runner_token_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobRunnerTokenCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobRunnerTokenCreatorIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerTokenCreators adds the "job_runner_token_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddJobRunnerTokenCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerTokenCreatorIDs(ids...)
-}
-
-// AddJobTemplateCreatorIDs adds the "job_template_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobTemplateCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobTemplateCreatorIDs(ids...)
-	return _u
-}
-
-// AddJobTemplateCreators adds the "job_template_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddJobTemplateCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobTemplateCreatorIDs(ids...)
-}
-
 // AddMappedControlCreatorIDs adds the "mapped_control_creators" edge to the Group entity by IDs.
 func (_u *OrganizationUpdateOne) AddMappedControlCreatorIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddMappedControlCreatorIDs(ids...)
@@ -15792,36 +14160,6 @@ func (_u *OrganizationUpdateOne) AddScanCreators(v ...*Group) *OrganizationUpdat
 		ids[i] = v[i].ID
 	}
 	return _u.AddScanCreatorIDs(ids...)
-}
-
-// AddScheduledJobCreatorIDs adds the "scheduled_job_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddScheduledJobCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddScheduledJobCreatorIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobCreators adds the "scheduled_job_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddScheduledJobCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobCreatorIDs(ids...)
-}
-
-// AddScheduledJobRunCreatorIDs adds the "scheduled_job_run_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddScheduledJobRunCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddScheduledJobRunCreatorIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobRunCreators adds the "scheduled_job_run_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddScheduledJobRunCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobRunCreatorIDs(ids...)
 }
 
 // AddSLADefinitionCreatorIDs adds the "sla_definition_creators" edge to the Group entity by IDs.
@@ -16987,51 +15325,6 @@ func (_u *OrganizationUpdateOne) AddCustomDomains(v ...*CustomDomain) *Organizat
 	return _u.AddCustomDomainIDs(ids...)
 }
 
-// AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobRunnerIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobRunnerIDs(ids...)
-	return _u
-}
-
-// AddJobRunners adds the "job_runners" edges to the JobRunner entity.
-func (_u *OrganizationUpdateOne) AddJobRunners(v ...*JobRunner) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerIDs(ids...)
-}
-
-// AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobRunnerTokenIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobRunnerTokenIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (_u *OrganizationUpdateOne) AddJobRunnerTokens(v ...*JobRunnerToken) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerTokenIDs(ids...)
-}
-
-// AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
-	return _u
-}
-
-// AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (_u *OrganizationUpdateOne) AddJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobRunnerRegistrationTokenIDs(ids...)
-}
-
 // AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
 func (_u *OrganizationUpdateOne) AddDNSVerificationIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddDNSVerificationIDs(ids...)
@@ -17045,66 +15338,6 @@ func (_u *OrganizationUpdateOne) AddDNSVerifications(v ...*DNSVerification) *Org
 		ids[i] = v[i].ID
 	}
 	return _u.AddDNSVerificationIDs(ids...)
-}
-
-// AddJobTemplateIDs adds the "job_templates" edge to the JobTemplate entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobTemplateIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobTemplateIDs(ids...)
-	return _u
-}
-
-// AddJobTemplates adds the "job_templates" edges to the JobTemplate entity.
-func (_u *OrganizationUpdateOne) AddJobTemplates(v ...*JobTemplate) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobTemplateIDs(ids...)
-}
-
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (_u *OrganizationUpdateOne) AddScheduledJobIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddScheduledJobIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (_u *OrganizationUpdateOne) AddScheduledJobs(v ...*ScheduledJob) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobIDs(ids...)
-}
-
-// AddJobResultIDs adds the "job_results" edge to the JobResult entity by IDs.
-func (_u *OrganizationUpdateOne) AddJobResultIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddJobResultIDs(ids...)
-	return _u
-}
-
-// AddJobResults adds the "job_results" edges to the JobResult entity.
-func (_u *OrganizationUpdateOne) AddJobResults(v ...*JobResult) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddJobResultIDs(ids...)
-}
-
-// AddScheduledJobRunIDs adds the "scheduled_job_runs" edge to the ScheduledJobRun entity by IDs.
-func (_u *OrganizationUpdateOne) AddScheduledJobRunIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddScheduledJobRunIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobRuns adds the "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (_u *OrganizationUpdateOne) AddScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobRunIDs(ids...)
 }
 
 // AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
@@ -18300,90 +16533,6 @@ func (_u *OrganizationUpdateOne) RemoveInviteCreators(v ...*Group) *Organization
 	return _u.RemoveInviteCreatorIDs(ids...)
 }
 
-// ClearJobRunnerCreators clears all "job_runner_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearJobRunnerCreators() *OrganizationUpdateOne {
-	_u.mutation.ClearJobRunnerCreators()
-	return _u
-}
-
-// RemoveJobRunnerCreatorIDs removes the "job_runner_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobRunnerCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerCreators removes "job_runner_creators" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerCreatorIDs(ids...)
-}
-
-// ClearJobRunnerRegistrationTokenCreators clears all "job_runner_registration_token_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearJobRunnerRegistrationTokenCreators() *OrganizationUpdateOne {
-	_u.mutation.ClearJobRunnerRegistrationTokenCreators()
-	return _u
-}
-
-// RemoveJobRunnerRegistrationTokenCreatorIDs removes the "job_runner_registration_token_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobRunnerRegistrationTokenCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerRegistrationTokenCreators removes "job_runner_registration_token_creators" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerRegistrationTokenCreatorIDs(ids...)
-}
-
-// ClearJobRunnerTokenCreators clears all "job_runner_token_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearJobRunnerTokenCreators() *OrganizationUpdateOne {
-	_u.mutation.ClearJobRunnerTokenCreators()
-	return _u
-}
-
-// RemoveJobRunnerTokenCreatorIDs removes the "job_runner_token_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerTokenCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobRunnerTokenCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerTokenCreators removes "job_runner_token_creators" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerTokenCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerTokenCreatorIDs(ids...)
-}
-
-// ClearJobTemplateCreators clears all "job_template_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearJobTemplateCreators() *OrganizationUpdateOne {
-	_u.mutation.ClearJobTemplateCreators()
-	return _u
-}
-
-// RemoveJobTemplateCreatorIDs removes the "job_template_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobTemplateCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobTemplateCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveJobTemplateCreators removes "job_template_creators" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveJobTemplateCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobTemplateCreatorIDs(ids...)
-}
-
 // ClearMappedControlCreators clears all "mapped_control_creators" edges to the Group entity.
 func (_u *OrganizationUpdateOne) ClearMappedControlCreators() *OrganizationUpdateOne {
 	_u.mutation.ClearMappedControlCreators()
@@ -18655,48 +16804,6 @@ func (_u *OrganizationUpdateOne) RemoveScanCreators(v ...*Group) *OrganizationUp
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveScanCreatorIDs(ids...)
-}
-
-// ClearScheduledJobCreators clears all "scheduled_job_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearScheduledJobCreators() *OrganizationUpdateOne {
-	_u.mutation.ClearScheduledJobCreators()
-	return _u
-}
-
-// RemoveScheduledJobCreatorIDs removes the "scheduled_job_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveScheduledJobCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveScheduledJobCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobCreators removes "scheduled_job_creators" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveScheduledJobCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobCreatorIDs(ids...)
-}
-
-// ClearScheduledJobRunCreators clears all "scheduled_job_run_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearScheduledJobRunCreators() *OrganizationUpdateOne {
-	_u.mutation.ClearScheduledJobRunCreators()
-	return _u
-}
-
-// RemoveScheduledJobRunCreatorIDs removes the "scheduled_job_run_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveScheduledJobRunCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveScheduledJobRunCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobRunCreators removes "scheduled_job_run_creators" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveScheduledJobRunCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobRunCreatorIDs(ids...)
 }
 
 // ClearSLADefinitionCreators clears all "sla_definition_creators" edges to the Group entity.
@@ -20286,69 +18393,6 @@ func (_u *OrganizationUpdateOne) RemoveCustomDomains(v ...*CustomDomain) *Organi
 	return _u.RemoveCustomDomainIDs(ids...)
 }
 
-// ClearJobRunners clears all "job_runners" edges to the JobRunner entity.
-func (_u *OrganizationUpdateOne) ClearJobRunners() *OrganizationUpdateOne {
-	_u.mutation.ClearJobRunners()
-	return _u
-}
-
-// RemoveJobRunnerIDs removes the "job_runners" edge to JobRunner entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobRunnerIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunners removes "job_runners" edges to JobRunner entities.
-func (_u *OrganizationUpdateOne) RemoveJobRunners(v ...*JobRunner) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerIDs(ids...)
-}
-
-// ClearJobRunnerTokens clears all "job_runner_tokens" edges to the JobRunnerToken entity.
-func (_u *OrganizationUpdateOne) ClearJobRunnerTokens() *OrganizationUpdateOne {
-	_u.mutation.ClearJobRunnerTokens()
-	return _u
-}
-
-// RemoveJobRunnerTokenIDs removes the "job_runner_tokens" edge to JobRunnerToken entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerTokenIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobRunnerTokenIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerTokens removes "job_runner_tokens" edges to JobRunnerToken entities.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerTokens(v ...*JobRunnerToken) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerTokenIDs(ids...)
-}
-
-// ClearJobRunnerRegistrationTokens clears all "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (_u *OrganizationUpdateOne) ClearJobRunnerRegistrationTokens() *OrganizationUpdateOne {
-	_u.mutation.ClearJobRunnerRegistrationTokens()
-	return _u
-}
-
-// RemoveJobRunnerRegistrationTokenIDs removes the "job_runner_registration_tokens" edge to JobRunnerRegistrationToken entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobRunnerRegistrationTokenIDs(ids...)
-	return _u
-}
-
-// RemoveJobRunnerRegistrationTokens removes "job_runner_registration_tokens" edges to JobRunnerRegistrationToken entities.
-func (_u *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobRunnerRegistrationTokenIDs(ids...)
-}
-
 // ClearDNSVerifications clears all "dns_verifications" edges to the DNSVerification entity.
 func (_u *OrganizationUpdateOne) ClearDNSVerifications() *OrganizationUpdateOne {
 	_u.mutation.ClearDNSVerifications()
@@ -20368,90 +18412,6 @@ func (_u *OrganizationUpdateOne) RemoveDNSVerifications(v ...*DNSVerification) *
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveDNSVerificationIDs(ids...)
-}
-
-// ClearJobTemplates clears all "job_templates" edges to the JobTemplate entity.
-func (_u *OrganizationUpdateOne) ClearJobTemplates() *OrganizationUpdateOne {
-	_u.mutation.ClearJobTemplates()
-	return _u
-}
-
-// RemoveJobTemplateIDs removes the "job_templates" edge to JobTemplate entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobTemplateIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobTemplateIDs(ids...)
-	return _u
-}
-
-// RemoveJobTemplates removes "job_templates" edges to JobTemplate entities.
-func (_u *OrganizationUpdateOne) RemoveJobTemplates(v ...*JobTemplate) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobTemplateIDs(ids...)
-}
-
-// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
-func (_u *OrganizationUpdateOne) ClearScheduledJobs() *OrganizationUpdateOne {
-	_u.mutation.ClearScheduledJobs()
-	return _u
-}
-
-// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveScheduledJobIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveScheduledJobIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
-func (_u *OrganizationUpdateOne) RemoveScheduledJobs(v ...*ScheduledJob) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobIDs(ids...)
-}
-
-// ClearJobResults clears all "job_results" edges to the JobResult entity.
-func (_u *OrganizationUpdateOne) ClearJobResults() *OrganizationUpdateOne {
-	_u.mutation.ClearJobResults()
-	return _u
-}
-
-// RemoveJobResultIDs removes the "job_results" edge to JobResult entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveJobResultIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveJobResultIDs(ids...)
-	return _u
-}
-
-// RemoveJobResults removes "job_results" edges to JobResult entities.
-func (_u *OrganizationUpdateOne) RemoveJobResults(v ...*JobResult) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveJobResultIDs(ids...)
-}
-
-// ClearScheduledJobRuns clears all "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (_u *OrganizationUpdateOne) ClearScheduledJobRuns() *OrganizationUpdateOne {
-	_u.mutation.ClearScheduledJobRuns()
-	return _u
-}
-
-// RemoveScheduledJobRunIDs removes the "scheduled_job_runs" edge to ScheduledJobRun entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveScheduledJobRunIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveScheduledJobRunIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobRuns removes "scheduled_job_runs" edges to ScheduledJobRun entities.
-func (_u *OrganizationUpdateOne) RemoveScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobRunIDs(ids...)
 }
 
 // ClearTrustCenters clears all "trust_centers" edges to the TrustCenter entity.
@@ -21351,7 +19311,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedActionPlanCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ActionPlanCreatorsCleared() {
@@ -21365,7 +19324,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21382,7 +19340,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21399,7 +19356,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAPITokenCreatorsIDs(); len(nodes) > 0 && !_u.mutation.APITokenCreatorsCleared() {
@@ -21413,7 +19369,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21430,7 +19385,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21447,7 +19401,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentCreatorsCleared() {
@@ -21461,7 +19414,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21478,7 +19430,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21495,7 +19446,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssetCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AssetCreatorsCleared() {
@@ -21509,7 +19459,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21526,7 +19475,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21543,7 +19491,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CampaignCreatorsCleared() {
@@ -21557,7 +19504,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21574,7 +19520,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21591,7 +19536,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignTargetCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CampaignTargetCreatorsCleared() {
@@ -21605,7 +19549,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21622,7 +19565,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21639,7 +19581,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCheckResultCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CheckResultCreatorsCleared() {
@@ -21653,7 +19594,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21670,7 +19610,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21687,7 +19626,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedContactCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ContactCreatorsCleared() {
@@ -21701,7 +19639,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21718,7 +19655,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21735,7 +19671,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlCreatorsCleared() {
@@ -21749,7 +19684,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21766,7 +19700,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21783,7 +19716,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlImplementationCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationCreatorsCleared() {
@@ -21797,7 +19729,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21814,7 +19745,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21831,7 +19761,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlObjectiveCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectiveCreatorsCleared() {
@@ -21845,7 +19774,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21862,7 +19790,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21879,7 +19806,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCustomDomainCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CustomDomainCreatorsCleared() {
@@ -21893,7 +19819,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21910,7 +19835,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21927,7 +19851,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCustomTypeEnumCreatorsIDs(); len(nodes) > 0 && !_u.mutation.CustomTypeEnumCreatorsCleared() {
@@ -21941,7 +19864,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21958,7 +19880,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -21975,7 +19896,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryAccountCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountCreatorsCleared() {
@@ -21989,7 +19909,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22006,7 +19925,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22023,7 +19941,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryGroupCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupCreatorsCleared() {
@@ -22037,7 +19954,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22054,7 +19970,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22071,7 +19986,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryMembershipCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipCreatorsCleared() {
@@ -22085,7 +19999,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22102,7 +20015,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22119,7 +20031,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectorySyncRunCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunCreatorsCleared() {
@@ -22133,7 +20044,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22150,7 +20060,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22167,7 +20076,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDiscussionCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionCreatorsCleared() {
@@ -22181,7 +20089,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22198,7 +20105,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22215,7 +20121,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDocumentDataCreatorsIDs(); len(nodes) > 0 && !_u.mutation.DocumentDataCreatorsCleared() {
@@ -22229,7 +20134,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22246,7 +20150,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22263,7 +20166,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEmailTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplateCreatorsCleared() {
@@ -22277,7 +20179,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22294,7 +20195,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22311,7 +20211,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntityCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EntityCreatorsCleared() {
@@ -22325,7 +20224,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22342,7 +20240,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22359,7 +20256,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntityTypeCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EntityTypeCreatorsCleared() {
@@ -22373,7 +20269,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22390,7 +20285,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22407,7 +20301,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEvidenceCreatorsIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCreatorsCleared() {
@@ -22421,7 +20314,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22438,7 +20330,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22455,7 +20346,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFileCreatorsIDs(); len(nodes) > 0 && !_u.mutation.FileCreatorsCleared() {
@@ -22469,7 +20359,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22486,7 +20375,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22503,7 +20391,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingCreatorsIDs(); len(nodes) > 0 && !_u.mutation.FindingCreatorsCleared() {
@@ -22517,7 +20404,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22534,7 +20420,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22551,7 +20436,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.FindingControlCreatorsCleared() {
@@ -22565,7 +20449,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22582,7 +20465,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22599,7 +20481,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupCreatorsIDs(); len(nodes) > 0 && !_u.mutation.GroupCreatorsCleared() {
@@ -22613,7 +20494,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22630,7 +20510,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22647,7 +20526,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupMembershipCreatorsIDs(); len(nodes) > 0 && !_u.mutation.GroupMembershipCreatorsCleared() {
@@ -22661,7 +20539,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22678,7 +20555,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22695,7 +20571,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupSettingCreatorsIDs(); len(nodes) > 0 && !_u.mutation.GroupSettingCreatorsCleared() {
@@ -22709,7 +20584,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22726,7 +20600,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22743,7 +20616,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedHushCreatorsIDs(); len(nodes) > 0 && !_u.mutation.HushCreatorsCleared() {
@@ -22757,7 +20629,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22774,7 +20645,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22791,7 +20661,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIdentityHolderCreatorsIDs(); len(nodes) > 0 && !_u.mutation.IdentityHolderCreatorsCleared() {
@@ -22805,7 +20674,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22822,7 +20690,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22839,7 +20706,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPolicyCreatorsIDs(); len(nodes) > 0 && !_u.mutation.InternalPolicyCreatorsCleared() {
@@ -22853,7 +20719,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22870,7 +20735,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22887,7 +20751,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInviteCreatorsIDs(); len(nodes) > 0 && !_u.mutation.InviteCreatorsCleared() {
@@ -22901,7 +20764,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -22918,199 +20780,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerCreatorsTable,
-			Columns: []string{organization.JobRunnerCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerCreatorsTable,
-			Columns: []string{organization.JobRunnerCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerCreatorsTable,
-			Columns: []string{organization.JobRunnerCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerRegistrationTokenCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerRegistrationTokenCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerTokenCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerTokenCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokenCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerTokenCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobTemplateCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplateCreatorsTable,
-			Columns: []string{organization.JobTemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobTemplateCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplateCreatorsTable,
-			Columns: []string{organization.JobTemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobTemplateCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplateCreatorsTable,
-			Columns: []string{organization.JobTemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23127,7 +20796,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedMappedControlCreatorsIDs(); len(nodes) > 0 && !_u.mutation.MappedControlCreatorsCleared() {
@@ -23141,7 +20809,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23158,7 +20825,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23175,7 +20841,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNarrativeCreatorsIDs(); len(nodes) > 0 && !_u.mutation.NarrativeCreatorsCleared() {
@@ -23189,7 +20854,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23206,7 +20870,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23223,7 +20886,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNoteCreatorsIDs(); len(nodes) > 0 && !_u.mutation.NoteCreatorsCleared() {
@@ -23237,7 +20899,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23254,7 +20915,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23271,7 +20931,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.NotificationTemplateCreatorsCleared() {
@@ -23285,7 +20944,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23302,7 +20960,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23319,7 +20976,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgMembershipCreatorsIDs(); len(nodes) > 0 && !_u.mutation.OrgMembershipCreatorsCleared() {
@@ -23333,7 +20989,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23350,7 +21005,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23367,7 +21021,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPlatformCreatorsIDs(); len(nodes) > 0 && !_u.mutation.PlatformCreatorsCleared() {
@@ -23381,7 +21034,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23398,7 +21050,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23415,7 +21066,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProcedureCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProcedureCreatorsCleared() {
@@ -23429,7 +21079,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23446,7 +21095,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23463,7 +21111,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProgramCreatorsCleared() {
@@ -23477,7 +21124,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23494,7 +21140,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23511,7 +21156,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramMembershipCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ProgramMembershipCreatorsCleared() {
@@ -23525,7 +21169,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23542,7 +21185,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23559,7 +21201,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRemediationCreatorsIDs(); len(nodes) > 0 && !_u.mutation.RemediationCreatorsCleared() {
@@ -23573,7 +21214,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23590,7 +21230,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23607,7 +21246,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedReviewCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ReviewCreatorsCleared() {
@@ -23621,7 +21259,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23638,7 +21275,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23655,7 +21291,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRiskCreatorsIDs(); len(nodes) > 0 && !_u.mutation.RiskCreatorsCleared() {
@@ -23669,7 +21304,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23686,7 +21320,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23703,7 +21336,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedScanCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ScanCreatorsCleared() {
@@ -23717,7 +21349,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23734,103 +21365,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobCreatorsTable,
-			Columns: []string{organization.ScheduledJobCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobCreatorsTable,
-			Columns: []string{organization.ScheduledJobCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobCreatorsTable,
-			Columns: []string{organization.ScheduledJobCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobRunCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunCreatorsTable,
-			Columns: []string{organization.ScheduledJobRunCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobRunCreatorsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobRunCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunCreatorsTable,
-			Columns: []string{organization.ScheduledJobRunCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobRunCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunCreatorsTable,
-			Columns: []string{organization.ScheduledJobRunCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23847,7 +21381,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSLADefinitionCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SLADefinitionCreatorsCleared() {
@@ -23861,7 +21394,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23878,7 +21410,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23895,7 +21426,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedStandardCreatorsIDs(); len(nodes) > 0 && !_u.mutation.StandardCreatorsCleared() {
@@ -23909,7 +21439,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23926,7 +21455,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23943,7 +21471,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolCreatorsCleared() {
@@ -23957,7 +21484,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23974,7 +21500,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -23991,7 +21516,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubprocessorCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorCreatorsCleared() {
@@ -24005,7 +21529,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24022,7 +21545,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24039,7 +21561,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubscriberCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SubscriberCreatorsCleared() {
@@ -24053,7 +21574,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24070,7 +21590,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24087,7 +21606,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSystemDetailCreatorsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailCreatorsCleared() {
@@ -24101,7 +21619,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24118,7 +21635,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24135,7 +21651,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTagDefinitionCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TagDefinitionCreatorsCleared() {
@@ -24149,7 +21664,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24166,7 +21680,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24183,7 +21696,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTaskCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TaskCreatorsCleared() {
@@ -24197,7 +21709,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24214,7 +21725,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24231,7 +21741,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTemplateCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TemplateCreatorsCleared() {
@@ -24245,7 +21754,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24262,7 +21770,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24279,7 +21786,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterCreatorsCleared() {
@@ -24293,7 +21799,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24310,7 +21815,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24327,7 +21831,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterComplianceCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterComplianceCreatorsCleared() {
@@ -24341,7 +21844,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24358,7 +21860,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24375,7 +21876,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterDocCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocCreatorsCleared() {
@@ -24389,7 +21889,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24406,7 +21905,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24423,7 +21921,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterEntityCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterEntityCreatorsCleared() {
@@ -24437,7 +21934,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24454,7 +21950,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24471,7 +21966,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterFaqCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterFaqCreatorsCleared() {
@@ -24485,7 +21979,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24502,7 +21995,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24519,7 +22011,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterNdaRequestCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterNdaRequestCreatorsCleared() {
@@ -24533,7 +22024,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24550,7 +22040,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24567,7 +22056,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterSubprocessorCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSubprocessorCreatorsCleared() {
@@ -24581,7 +22069,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24598,7 +22085,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24615,7 +22101,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterWatermarkConfigCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterWatermarkConfigCreatorsCleared() {
@@ -24629,7 +22114,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24646,7 +22130,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24663,7 +22146,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVendorRiskScoreCreatorsIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoreCreatorsCleared() {
@@ -24677,7 +22159,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24694,7 +22175,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24711,7 +22191,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVendorScoringConfigCreatorsIDs(); len(nodes) > 0 && !_u.mutation.VendorScoringConfigCreatorsCleared() {
@@ -24725,7 +22204,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24742,7 +22220,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24759,7 +22236,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilityCreatorsIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilityCreatorsCleared() {
@@ -24773,7 +22249,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24790,7 +22265,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24807,7 +22281,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowDefinitionCreatorsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowDefinitionCreatorsCleared() {
@@ -24821,7 +22294,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24838,7 +22310,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24855,7 +22326,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignsManagerIDs(); len(nodes) > 0 && !_u.mutation.CampaignsManagerCleared() {
@@ -24869,7 +22339,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24886,7 +22355,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24903,7 +22371,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedComplianceManagerIDs(); len(nodes) > 0 && !_u.mutation.ComplianceManagerCleared() {
@@ -24917,7 +22384,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24934,7 +22400,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24951,7 +22416,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupManagerIDs(); len(nodes) > 0 && !_u.mutation.GroupManagerCleared() {
@@ -24965,7 +22429,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24982,7 +22445,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -24999,7 +22461,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPoliciesManagerIDs(); len(nodes) > 0 && !_u.mutation.PoliciesManagerCleared() {
@@ -25013,7 +22474,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25030,7 +22490,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25047,7 +22506,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRegistryManagerIDs(); len(nodes) > 0 && !_u.mutation.RegistryManagerCleared() {
@@ -25061,7 +22519,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25078,7 +22535,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25095,7 +22551,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRiskManagerIDs(); len(nodes) > 0 && !_u.mutation.RiskManagerCleared() {
@@ -25109,7 +22564,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25126,7 +22580,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25143,7 +22596,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterManagerIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterManagerCleared() {
@@ -25157,7 +22609,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25174,7 +22625,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25191,7 +22641,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowsManagerIDs(); len(nodes) > 0 && !_u.mutation.WorkflowsManagerCleared() {
@@ -25205,7 +22654,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25222,7 +22670,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25239,7 +22686,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedChildrenIDs(); len(nodes) > 0 && !_u.mutation.ChildrenCleared() {
@@ -25253,7 +22699,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25270,7 +22715,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25287,7 +22731,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationSetting
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.SettingIDs(); len(nodes) > 0 {
@@ -25301,7 +22744,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(organizationsetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25318,7 +22760,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPersonalAccessTokensIDs(); len(nodes) > 0 && !_u.mutation.PersonalAccessTokensCleared() {
@@ -25332,7 +22773,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25349,7 +22789,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25366,7 +22805,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.APIToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAPITokensIDs(); len(nodes) > 0 && !_u.mutation.APITokensCleared() {
@@ -25380,7 +22818,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25397,7 +22834,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(apitoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.APIToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25414,7 +22850,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEmailTemplatesIDs(); len(nodes) > 0 && !_u.mutation.EmailTemplatesCleared() {
@@ -25428,7 +22863,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25445,7 +22879,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25462,7 +22895,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationWebhook
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIntegrationWebhooksIDs(); len(nodes) > 0 && !_u.mutation.IntegrationWebhooksCleared() {
@@ -25476,7 +22908,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationWebhook
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25493,7 +22924,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationWebhook
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25510,7 +22940,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIntegrationRunsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRunsCleared() {
@@ -25524,7 +22953,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25541,7 +22969,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25558,7 +22985,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationPreference
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationPreferencesIDs(); len(nodes) > 0 && !_u.mutation.NotificationPreferencesCleared() {
@@ -25572,7 +22998,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationPreference
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25589,7 +23014,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationPreference
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25606,7 +23030,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationTemplatesIDs(); len(nodes) > 0 && !_u.mutation.NotificationTemplatesCleared() {
@@ -25620,7 +23043,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25637,7 +23059,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25654,7 +23075,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		createE := &OrgMembershipCreate{config: _u.config, mutation: newOrgMembershipMutation(_u.config, OpCreate)}
 		_ = createE.defaults()
 		_, specE := createE.createSpec()
@@ -25675,7 +23095,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25699,7 +23118,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25723,7 +23141,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -25737,7 +23154,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25754,7 +23170,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25771,7 +23186,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
@@ -25785,7 +23199,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25802,7 +23215,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25819,7 +23231,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Hush
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSecretsIDs(); len(nodes) > 0 && !_u.mutation.SecretsCleared() {
@@ -25833,7 +23244,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25850,7 +23260,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25867,7 +23276,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.AvatarFileIDs(); len(nodes) > 0 {
@@ -25881,7 +23289,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Organization
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25898,7 +23305,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedGroupsIDs(); len(nodes) > 0 && !_u.mutation.GroupsCleared() {
@@ -25912,7 +23318,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25929,7 +23334,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25946,7 +23350,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Template
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !_u.mutation.TemplatesCleared() {
@@ -25960,7 +23363,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25977,7 +23379,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Template
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -25994,7 +23395,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Integration
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
@@ -26008,7 +23408,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26025,7 +23424,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Integration
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26042,7 +23440,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DocumentData
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDocumentsIDs(); len(nodes) > 0 && !_u.mutation.DocumentsCleared() {
@@ -26056,7 +23453,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26073,7 +23469,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26090,7 +23485,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgSubscriptionsIDs(); len(nodes) > 0 && !_u.mutation.OrgSubscriptionsCleared() {
@@ -26104,7 +23498,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26121,7 +23514,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26138,7 +23530,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgProductsIDs(); len(nodes) > 0 && !_u.mutation.OrgProductsCleared() {
@@ -26152,7 +23543,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26169,7 +23559,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26186,7 +23575,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgPricesIDs(); len(nodes) > 0 && !_u.mutation.OrgPricesCleared() {
@@ -26200,7 +23588,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26217,7 +23604,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26234,7 +23620,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrgModulesIDs(); len(nodes) > 0 && !_u.mutation.OrgModulesCleared() {
@@ -26248,7 +23633,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26265,7 +23649,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26282,7 +23665,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Invite
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInvitesIDs(); len(nodes) > 0 && !_u.mutation.InvitesCleared() {
@@ -26296,7 +23678,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26313,7 +23694,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Invite
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26330,7 +23710,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subscriber
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubscribersIDs(); len(nodes) > 0 && !_u.mutation.SubscribersCleared() {
@@ -26344,7 +23723,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26361,7 +23739,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26378,7 +23755,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
@@ -26392,7 +23768,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26409,7 +23784,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26426,7 +23800,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
@@ -26440,7 +23813,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26457,7 +23829,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26474,7 +23845,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIdentityHoldersIDs(); len(nodes) > 0 && !_u.mutation.IdentityHoldersCleared() {
@@ -26488,7 +23858,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26505,7 +23874,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26522,7 +23890,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
@@ -26536,7 +23903,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26553,7 +23919,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26570,7 +23935,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignTargetsIDs(); len(nodes) > 0 && !_u.mutation.CampaignTargetsCleared() {
@@ -26584,7 +23948,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26601,7 +23964,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26618,7 +23980,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntityTypesIDs(); len(nodes) > 0 && !_u.mutation.EntityTypesCleared() {
@@ -26632,7 +23993,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26649,7 +24009,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26666,7 +24025,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Contact
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
@@ -26680,7 +24038,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26697,7 +24054,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Contact
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26714,7 +24070,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotesIDs(); len(nodes) > 0 && !_u.mutation.NotesCleared() {
@@ -26728,7 +24083,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26745,7 +24099,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26762,7 +24115,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
@@ -26776,7 +24128,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26793,7 +24144,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26810,7 +24160,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
@@ -26824,7 +24173,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26841,7 +24189,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26858,7 +24205,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSystemDetailsIDs(); len(nodes) > 0 && !_u.mutation.SystemDetailsCleared() {
@@ -26872,7 +24218,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26889,7 +24234,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26906,7 +24250,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Procedure
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
@@ -26920,7 +24263,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26937,7 +24279,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26954,7 +24295,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicy
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
@@ -26968,7 +24308,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -26985,7 +24324,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27002,7 +24340,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
@@ -27016,7 +24353,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27033,7 +24369,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27050,7 +24385,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlObjective
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
@@ -27064,7 +24398,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27081,7 +24414,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27098,7 +24430,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Narrative
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNarrativesIDs(); len(nodes) > 0 && !_u.mutation.NarrativesCleared() {
@@ -27112,7 +24443,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27129,7 +24459,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27146,7 +24475,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Control
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
@@ -27160,7 +24488,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27177,7 +24504,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27194,7 +24520,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
@@ -27208,7 +24533,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27225,7 +24549,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27242,7 +24565,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
@@ -27256,7 +24578,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27273,7 +24594,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27290,7 +24610,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.MappedControl
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedMappedControlsIDs(); len(nodes) > 0 && !_u.mutation.MappedControlsCleared() {
@@ -27304,7 +24623,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27321,7 +24639,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27338,7 +24655,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
@@ -27352,7 +24668,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27369,7 +24684,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27386,7 +24700,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Standard
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !_u.mutation.StandardsCleared() {
@@ -27400,7 +24713,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27417,7 +24729,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27434,7 +24745,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ActionPlan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
@@ -27448,7 +24758,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27465,7 +24774,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27482,7 +24790,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCustomDomainsIDs(); len(nodes) > 0 && !_u.mutation.CustomDomainsCleared() {
@@ -27496,7 +24803,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27513,151 +24819,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomDomain
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnersTable,
-			Columns: []string{organization.JobRunnersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunner
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnersIDs(); len(nodes) > 0 && !_u.mutation.JobRunnersCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnersTable,
-			Columns: []string{organization.JobRunnersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunner
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnersTable,
-			Columns: []string{organization.JobRunnersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunner
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerTokensCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokensTable,
-			Columns: []string{organization.JobRunnerTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerToken
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokensCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokensTable,
-			Columns: []string{organization.JobRunnerTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokensTable,
-			Columns: []string{organization.JobRunnerTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobRunnerRegistrationTokensCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokensTable,
-			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobRunnerRegistrationTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerRegistrationTokensCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokensTable,
-			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokensTable,
-			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27674,7 +24835,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DNSVerification
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDNSVerificationsIDs(); len(nodes) > 0 && !_u.mutation.DNSVerificationsCleared() {
@@ -27688,7 +24848,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27705,199 +24864,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DNSVerification
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobTemplatesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplatesTable,
-			Columns: []string{organization.JobTemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobTemplate
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobTemplatesIDs(); len(nodes) > 0 && !_u.mutation.JobTemplatesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplatesTable,
-			Columns: []string{organization.JobTemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobTemplate
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobTemplatesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplatesTable,
-			Columns: []string{organization.JobTemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobTemplate
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobsTable,
-			Columns: []string{organization.ScheduledJobsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJob
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobsTable,
-			Columns: []string{organization.ScheduledJobsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJob
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobsTable,
-			Columns: []string{organization.ScheduledJobsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJob
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.JobResultsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobResultsTable,
-			Columns: []string{organization.JobResultsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobResult
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedJobResultsIDs(); len(nodes) > 0 && !_u.mutation.JobResultsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobResultsTable,
-			Columns: []string{organization.JobResultsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobResult
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.JobResultsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobResultsTable,
-			Columns: []string{organization.JobResultsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.JobResult
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobRunsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunsTable,
-			Columns: []string{organization.ScheduledJobRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJobRun
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobRunsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobRunsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunsTable,
-			Columns: []string{organization.ScheduledJobRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJobRun
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunsTable,
-			Columns: []string{organization.ScheduledJobRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.ScheduledJobRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27914,7 +24880,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCentersIDs(); len(nodes) > 0 && !_u.mutation.TrustCentersCleared() {
@@ -27928,7 +24893,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27945,7 +24909,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27962,7 +24925,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Asset
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
@@ -27976,7 +24938,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -27993,7 +24954,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Asset
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28010,7 +24970,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
@@ -28024,7 +24983,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28041,7 +24999,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Scan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28058,7 +25015,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SLADefinition
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSLADefinitionsIDs(); len(nodes) > 0 && !_u.mutation.SLADefinitionsCleared() {
@@ -28072,7 +25028,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SLADefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28089,7 +25044,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SLADefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28106,7 +25060,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subprocessor
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubprocessorsIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorsCleared() {
@@ -28120,7 +25073,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28137,7 +25089,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28154,7 +25105,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Export
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedExportsIDs(); len(nodes) > 0 && !_u.mutation.ExportsCleared() {
@@ -28168,7 +25118,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28185,7 +25134,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28202,7 +25150,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterWatermarkConfigsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterWatermarkConfigsCleared() {
@@ -28216,7 +25163,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28233,7 +25179,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterWatermarkConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28250,7 +25195,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedImpersonationEventsIDs(); len(nodes) > 0 && !_u.mutation.ImpersonationEventsCleared() {
@@ -28264,7 +25208,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28281,7 +25224,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28298,7 +25240,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Assessment
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentsCleared() {
@@ -28312,7 +25253,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28329,7 +25269,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28346,7 +25285,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentResponsesIDs(); len(nodes) > 0 && !_u.mutation.AssessmentResponsesCleared() {
@@ -28360,7 +25298,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28377,7 +25314,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28394,7 +25330,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomTypeEnum
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCustomTypeEnumsIDs(); len(nodes) > 0 && !_u.mutation.CustomTypeEnumsCleared() {
@@ -28408,7 +25343,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomTypeEnum
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28425,7 +25359,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CustomTypeEnum
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28442,7 +25375,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TagDefinition
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTagDefinitionsIDs(); len(nodes) > 0 && !_u.mutation.TagDefinitionsCleared() {
@@ -28456,7 +25388,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TagDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28473,7 +25404,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TagDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28490,7 +25420,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
@@ -28504,7 +25433,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28521,7 +25449,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Remediation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28538,7 +25465,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
@@ -28552,7 +25478,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28569,7 +25494,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Finding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28586,7 +25510,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingControl
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingControlsIDs(); len(nodes) > 0 && !_u.mutation.FindingControlsCleared() {
@@ -28600,7 +25523,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28617,7 +25539,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28634,7 +25555,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedReviewsIDs(); len(nodes) > 0 && !_u.mutation.ReviewsCleared() {
@@ -28648,7 +25568,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28665,7 +25584,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28682,7 +25600,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
@@ -28696,7 +25613,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28713,7 +25629,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Vulnerability
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28730,7 +25645,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationsIDs(); len(nodes) > 0 && !_u.mutation.NotificationsCleared() {
@@ -28744,7 +25658,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28761,7 +25674,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28778,7 +25690,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowDefinitionsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowDefinitionsCleared() {
@@ -28792,7 +25703,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28809,7 +25719,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28826,7 +25735,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowInstancesIDs(); len(nodes) > 0 && !_u.mutation.WorkflowInstancesCleared() {
@@ -28840,7 +25748,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28857,7 +25764,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28874,7 +25780,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowEvent
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowEventsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowEventsCleared() {
@@ -28888,7 +25793,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28905,7 +25809,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28922,7 +25825,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignment
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowAssignmentsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowAssignmentsCleared() {
@@ -28936,7 +25838,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28953,7 +25854,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -28970,7 +25870,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowAssignmentTargetsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowAssignmentTargetsCleared() {
@@ -28984,7 +25883,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29001,7 +25899,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29018,7 +25915,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
@@ -29032,7 +25928,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29049,7 +25944,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29066,7 +25960,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowProposalsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowProposalsCleared() {
@@ -29080,7 +25973,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29097,7 +25989,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29114,7 +26005,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
@@ -29128,7 +26018,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29145,7 +26034,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29162,7 +26050,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
@@ -29176,7 +26063,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29193,7 +26079,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29210,7 +26095,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
@@ -29224,7 +26108,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29241,7 +26124,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29258,7 +26140,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectorySyncRunsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunsCleared() {
@@ -29272,7 +26153,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29289,7 +26169,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29306,7 +26185,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Discussion
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
@@ -29320,7 +26198,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29337,7 +26214,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29354,7 +26230,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorScoringConfig
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVendorScoringConfigsIDs(); len(nodes) > 0 && !_u.mutation.VendorScoringConfigsCleared() {
@@ -29368,7 +26243,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorScoringConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29385,7 +26259,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorScoringConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29402,7 +26275,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorRiskScore
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVendorRiskScoresIDs(); len(nodes) > 0 && !_u.mutation.VendorRiskScoresCleared() {
@@ -29416,7 +26288,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29433,7 +26304,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29450,7 +26320,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedMembersIDs(); len(nodes) > 0 && !_u.mutation.MembersCleared() {
@@ -29464,7 +26333,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -29481,14 +26349,11 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Organization
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &Organization{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -10,19 +10,19 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/utils/rout"
 )
 
 // ForceCompleteWorkflowInstance is the resolver for the forceCompleteWorkflowInstance field.
 func (r *mutationResolver) ForceCompleteWorkflowInstance(ctx context.Context, id string, applyProposal *bool) (*model.WorkflowInstanceAdminPayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -43,7 +43,7 @@ func (r *mutationResolver) ForceCompleteWorkflowInstance(ctx context.Context, id
 
 // CancelWorkflowInstance is the resolver for the cancelWorkflowInstance field.
 func (r *mutationResolver) CancelWorkflowInstance(ctx context.Context, id string, reason *string) (*model.WorkflowInstanceAdminPayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -59,7 +59,7 @@ func (r *mutationResolver) CancelWorkflowInstance(ctx context.Context, id string
 
 // BulkForceCompleteWorkflowInstances is the resolver for the bulkForceCompleteWorkflowInstances field.
 func (r *mutationResolver) BulkForceCompleteWorkflowInstances(ctx context.Context, ids []string, applyProposal *bool) (*model.WorkflowInstanceBulkAdminPayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -84,7 +84,7 @@ func (r *mutationResolver) BulkForceCompleteWorkflowInstances(ctx context.Contex
 
 // BulkCancelWorkflowInstances is the resolver for the bulkCancelWorkflowInstances field.
 func (r *mutationResolver) BulkCancelWorkflowInstances(ctx context.Context, ids []string, reason *string) (*model.WorkflowInstanceBulkAdminPayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -104,7 +104,8 @@ func (r *mutationResolver) BulkCancelWorkflowInstances(ctx context.Context, ids 
 
 // AdminReassignWorkflowAssignment is the resolver for the adminReassignWorkflowAssignment field.
 func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, input model.ReassignWorkflowAssignmentInput) (*model.WorkflowAssignmentReassignPayload, error) {
-	if !workflowsEnabled(r.db) {
+	wfEngine := engine.Default()
+	if wfEngine == nil {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -160,11 +161,6 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 
 	if err := validateTargets(targets); err != nil {
 		return nil, err
-	}
-
-	wfEngine, ok := r.db.WorkflowEngine.(*engine.WorkflowEngine)
-	if !ok || wfEngine == nil {
-		return nil, ErrWorkflowsDisabled
 	}
 
 	skipCtx := entityops.WithEmissionVetoed(allowCtx)

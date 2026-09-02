@@ -10,9 +10,9 @@ import (
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/internal/integrations/definitions/email/themes"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email/themes"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // defaultHeader returns the standard header block used by all system emails

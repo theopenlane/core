@@ -12,11 +12,11 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 )
 
 // CheckResultCreate is the builder for creating a CheckResult entity.
@@ -427,7 +427,6 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 		_node = &CheckResult{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(checkresult.Table, sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.CheckResult
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -499,7 +498,6 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -516,7 +514,6 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -533,7 +530,6 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -550,7 +546,6 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CheckResultControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -567,7 +562,6 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FindingCheckResults
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -584,7 +578,6 @@ func (_c *CheckResultCreate) createSpec() (*CheckResult, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CheckResult
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

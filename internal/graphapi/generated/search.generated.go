@@ -12,8 +12,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -95,7 +95,7 @@ func (ec *executionContext) _SearchResults_actionPlans(ctx context.Context, fiel
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ActionPlanConnection) graphql.Marshaler {
-			return ec.marshalOActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx, selections, v)
+			return ec.marshalOActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -127,7 +127,7 @@ func (ec *executionContext) _SearchResults_assessments(ctx context.Context, fiel
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentConnection) graphql.Marshaler {
-			return ec.marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx, selections, v)
+			return ec.marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -159,7 +159,7 @@ func (ec *executionContext) _SearchResults_assessmentResponses(ctx context.Conte
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssessmentResponseConnection) graphql.Marshaler {
-			return ec.marshalOAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx, selections, v)
+			return ec.marshalOAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -191,7 +191,7 @@ func (ec *executionContext) _SearchResults_assets(ctx context.Context, field gra
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.AssetConnection) graphql.Marshaler {
-			return ec.marshalOAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx, selections, v)
+			return ec.marshalOAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -223,7 +223,7 @@ func (ec *executionContext) _SearchResults_campaigns(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CampaignConnection) graphql.Marshaler {
-			return ec.marshalOCampaignConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignConnection(ctx, selections, v)
+			return ec.marshalOCampaignConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -255,7 +255,7 @@ func (ec *executionContext) _SearchResults_campaignTargets(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CampaignTargetConnection) graphql.Marshaler {
-			return ec.marshalOCampaignTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection(ctx, selections, v)
+			return ec.marshalOCampaignTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -287,7 +287,7 @@ func (ec *executionContext) _SearchResults_contacts(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ContactConnection) graphql.Marshaler {
-			return ec.marshalOContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx, selections, v)
+			return ec.marshalOContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -319,7 +319,7 @@ func (ec *executionContext) _SearchResults_controls(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlConnection) graphql.Marshaler {
-			return ec.marshalOControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, selections, v)
+			return ec.marshalOControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -351,7 +351,7 @@ func (ec *executionContext) _SearchResults_controlObjectives(ctx context.Context
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ControlObjectiveConnection) graphql.Marshaler {
-			return ec.marshalOControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx, selections, v)
+			return ec.marshalOControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -383,7 +383,7 @@ func (ec *executionContext) _SearchResults_customTypeEnums(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnumConnection) graphql.Marshaler {
-			return ec.marshalOCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection(ctx, selections, v)
+			return ec.marshalOCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -415,7 +415,7 @@ func (ec *executionContext) _SearchResults_emailTemplates(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.EmailTemplateConnection) graphql.Marshaler {
-			return ec.marshalOEmailTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection(ctx, selections, v)
+			return ec.marshalOEmailTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -447,7 +447,7 @@ func (ec *executionContext) _SearchResults_entities(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.EntityConnection) graphql.Marshaler {
-			return ec.marshalOEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx, selections, v)
+			return ec.marshalOEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -479,7 +479,7 @@ func (ec *executionContext) _SearchResults_evidences(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.EvidenceConnection) graphql.Marshaler {
-			return ec.marshalOEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx, selections, v)
+			return ec.marshalOEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -511,7 +511,7 @@ func (ec *executionContext) _SearchResults_findings(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
-			return ec.marshalOFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
+			return ec.marshalOFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -543,7 +543,7 @@ func (ec *executionContext) _SearchResults_groups(ctx context.Context, field gra
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
-			return ec.marshalOGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
+			return ec.marshalOGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -575,7 +575,7 @@ func (ec *executionContext) _SearchResults_identityHolders(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolderConnection) graphql.Marshaler {
-			return ec.marshalOIdentityHolderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection(ctx, selections, v)
+			return ec.marshalOIdentityHolderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -607,7 +607,7 @@ func (ec *executionContext) _SearchResults_integrations(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.IntegrationConnection) graphql.Marshaler {
-			return ec.marshalOIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx, selections, v)
+			return ec.marshalOIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -639,7 +639,7 @@ func (ec *executionContext) _SearchResults_internalPolicies(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.InternalPolicyConnection) graphql.Marshaler {
-			return ec.marshalOInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx, selections, v)
+			return ec.marshalOInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -671,7 +671,7 @@ func (ec *executionContext) _SearchResults_invites(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.InviteConnection) graphql.Marshaler {
-			return ec.marshalOInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteConnection(ctx, selections, v)
+			return ec.marshalOInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInviteConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -690,70 +690,6 @@ func (ec *executionContext) fieldContext_SearchResults_invites(_ context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _SearchResults_jobRunners(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SearchResults_jobRunners(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.JobRunners, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.JobRunnerConnection) graphql.Marshaler {
-			return ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerConnection(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_SearchResults_jobRunners(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchResults",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_JobRunnerConnection(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _SearchResults_jobTemplates(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SearchResults_jobTemplates(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.JobTemplates, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.JobTemplateConnection) graphql.Marshaler {
-			return ec.marshalOJobTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateConnection(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_SearchResults_jobTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchResults",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_JobTemplateConnection(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _SearchResults_narratives(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -767,7 +703,7 @@ func (ec *executionContext) _SearchResults_narratives(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.NarrativeConnection) graphql.Marshaler {
-			return ec.marshalONarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx, selections, v)
+			return ec.marshalONarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -799,7 +735,7 @@ func (ec *executionContext) _SearchResults_notificationTemplates(ctx context.Con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.NotificationTemplateConnection) graphql.Marshaler {
-			return ec.marshalONotificationTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection(ctx, selections, v)
+			return ec.marshalONotificationTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -831,7 +767,7 @@ func (ec *executionContext) _SearchResults_organizations(ctx context.Context, fi
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.OrganizationConnection) graphql.Marshaler {
-			return ec.marshalOOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationConnection(ctx, selections, v)
+			return ec.marshalOOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -863,7 +799,7 @@ func (ec *executionContext) _SearchResults_platforms(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.PlatformConnection) graphql.Marshaler {
-			return ec.marshalOPlatformConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPlatformConnection(ctx, selections, v)
+			return ec.marshalOPlatformConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -895,7 +831,7 @@ func (ec *executionContext) _SearchResults_procedures(ctx context.Context, field
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ProcedureConnection) graphql.Marshaler {
-			return ec.marshalOProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx, selections, v)
+			return ec.marshalOProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -927,7 +863,7 @@ func (ec *executionContext) _SearchResults_programs(ctx context.Context, field g
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ProgramConnection) graphql.Marshaler {
-			return ec.marshalOProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx, selections, v)
+			return ec.marshalOProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -959,7 +895,7 @@ func (ec *executionContext) _SearchResults_remediations(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
-			return ec.marshalORemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx, selections, v)
+			return ec.marshalORemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -991,7 +927,7 @@ func (ec *executionContext) _SearchResults_reviews(ctx context.Context, field gr
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ReviewConnection) graphql.Marshaler {
-			return ec.marshalOReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx, selections, v)
+			return ec.marshalOReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1023,7 +959,7 @@ func (ec *executionContext) _SearchResults_risks(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.RiskConnection) graphql.Marshaler {
-			return ec.marshalORiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx, selections, v)
+			return ec.marshalORiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1055,7 +991,7 @@ func (ec *executionContext) _SearchResults_scans(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.ScanConnection) graphql.Marshaler {
-			return ec.marshalOScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx, selections, v)
+			return ec.marshalOScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1087,7 +1023,7 @@ func (ec *executionContext) _SearchResults_standards(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.StandardConnection) graphql.Marshaler {
-			return ec.marshalOStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx, selections, v)
+			return ec.marshalOStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1119,7 +1055,7 @@ func (ec *executionContext) _SearchResults_subcontrols(ctx context.Context, fiel
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubcontrolConnection) graphql.Marshaler {
-			return ec.marshalOSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx, selections, v)
+			return ec.marshalOSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1151,7 +1087,7 @@ func (ec *executionContext) _SearchResults_subprocessors(ctx context.Context, fi
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubprocessorConnection) graphql.Marshaler {
-			return ec.marshalOSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx, selections, v)
+			return ec.marshalOSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1183,7 +1119,7 @@ func (ec *executionContext) _SearchResults_subscribers(ctx context.Context, fiel
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.SubscriberConnection) graphql.Marshaler {
-			return ec.marshalOSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx, selections, v)
+			return ec.marshalOSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1215,7 +1151,7 @@ func (ec *executionContext) _SearchResults_systemDetails(ctx context.Context, fi
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.SystemDetailConnection) graphql.Marshaler {
-			return ec.marshalOSystemDetailConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection(ctx, selections, v)
+			return ec.marshalOSystemDetailConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1247,7 +1183,7 @@ func (ec *executionContext) _SearchResults_tagDefinitions(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TagDefinitionConnection) graphql.Marshaler {
-			return ec.marshalOTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection(ctx, selections, v)
+			return ec.marshalOTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1279,7 +1215,7 @@ func (ec *executionContext) _SearchResults_tasks(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TaskConnection) graphql.Marshaler {
-			return ec.marshalOTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx, selections, v)
+			return ec.marshalOTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1311,7 +1247,7 @@ func (ec *executionContext) _SearchResults_templates(ctx context.Context, field 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TemplateConnection) graphql.Marshaler {
-			return ec.marshalOTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx, selections, v)
+			return ec.marshalOTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1343,7 +1279,7 @@ func (ec *executionContext) _SearchResults_trustCenterEntities(ctx context.Conte
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterEntityConnection) graphql.Marshaler {
-			return ec.marshalOTrustCenterEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityConnection(ctx, selections, v)
+			return ec.marshalOTrustCenterEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1375,7 +1311,7 @@ func (ec *executionContext) _SearchResults_vulnerabilities(ctx context.Context, 
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
-			return ec.marshalOVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
+			return ec.marshalOVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
 		},
 		true,
 		false,
@@ -1555,16 +1491,6 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
-		case "jobRunners":
-			out.Values[i] = ec._SearchResults_jobRunners(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "jobTemplates":
-			out.Values[i] = ec._SearchResults_jobTemplates(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
 		case "narratives":
 			out.Values[i] = ec._SearchResults_narratives(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -1695,7 +1621,7 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalOSearchResults2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSearchResults(ctx context.Context, sel ast.SelectionSet, v *model.SearchResults) graphql.Marshaler {
+func (ec *executionContext) marshalOSearchResults2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSearchResults(ctx context.Context, sel ast.SelectionSet, v *model.SearchResults) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

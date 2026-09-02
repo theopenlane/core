@@ -13,13 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // VendorScoringConfigQuery is the builder for querying VendorScoringConfig entities.
@@ -86,9 +85,6 @@ func (_q *VendorScoringConfigQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, vendorscoringconfig.OwnerTable, vendorscoringconfig.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.VendorScoringConfig
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -111,9 +107,6 @@ func (_q *VendorScoringConfigQuery) QueryVendorRiskScores() *VendorRiskScoreQuer
 			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, vendorscoringconfig.VendorRiskScoresTable, vendorscoringconfig.VendorRiskScoresColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.VendorRiskScore
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -441,8 +434,6 @@ func (_q *VendorScoringConfigQuery) sqlAll(ctx context.Context, hooks ...queryHo
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.VendorScoringConfig
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -548,8 +539,6 @@ func (_q *VendorScoringConfigQuery) loadVendorRiskScores(ctx context.Context, qu
 
 func (_q *VendorScoringConfigQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.VendorScoringConfig
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -618,9 +607,6 @@ func (_q *VendorScoringConfigQuery) sqlQuery(ctx context.Context) *sql.Selector 
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.VendorScoringConfig)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

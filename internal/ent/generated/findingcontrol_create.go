@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 )
 
 // FindingControlCreate is the builder for creating a FindingControl entity.
@@ -356,7 +356,6 @@ func (_c *FindingControlCreate) createSpec() (*FindingControl, *sqlgraph.CreateS
 		_node = &FindingControl{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(findingcontrol.Table, sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.FindingControl
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -416,7 +415,6 @@ func (_c *FindingControlCreate) createSpec() (*FindingControl, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -434,7 +432,6 @@ func (_c *FindingControlCreate) createSpec() (*FindingControl, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -452,7 +449,6 @@ func (_c *FindingControlCreate) createSpec() (*FindingControl, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -470,7 +466,6 @@ func (_c *FindingControlCreate) createSpec() (*FindingControl, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

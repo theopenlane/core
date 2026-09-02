@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // OrgMembershipDelete is the builder for deleting a OrgMembership entity.
@@ -43,8 +41,6 @@ func (_d *OrgMembershipDelete) ExecX(ctx context.Context) int {
 
 func (_d *OrgMembershipDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(orgmembership.Table, sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.OrgMembership
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

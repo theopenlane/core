@@ -10,14 +10,6 @@ type OauthTooToken struct {
 	email string
 }
 
-// NewOauthTooWithEmail creates a new PrivacyToken of type OauthTooToken with
-// email set
-func NewOauthTooWithEmail(email string) OauthTooToken {
-	return OauthTooToken{
-		email: email,
-	}
-}
-
 // GetEmail from oauth2 token
 func (token *OauthTooToken) GetEmail() string {
 	return token.email

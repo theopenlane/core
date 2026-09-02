@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
 )
 
 // DocumentDataCreate is the builder for creating a DocumentData entity.
@@ -389,7 +389,6 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 		_node = &DocumentData{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(documentdata.Table, sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.DocumentData
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -449,7 +448,6 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -467,7 +465,6 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -485,7 +482,6 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -503,7 +499,6 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DocumentData
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -521,7 +516,6 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EntityDocuments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -538,7 +532,6 @@ func (_c *DocumentDataCreate) createSpec() (*DocumentData, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DocumentDataFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

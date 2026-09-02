@@ -8,322 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // CampaignTargetHistoryUpdate is the builder for updating CampaignTargetHistory entities.
 type CampaignTargetHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *CampaignTargetHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *CampaignTargetHistoryMutation
 }
 
 // Where appends a list predicates to the CampaignTargetHistoryUpdate builder.
 func (_u *CampaignTargetHistoryUpdate) Where(ps ...predicate.CampaignTargetHistory) *CampaignTargetHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *CampaignTargetHistoryUpdate) SetUpdatedAt(v time.Time) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *CampaignTargetHistoryUpdate) ClearUpdatedAt() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *CampaignTargetHistoryUpdate) SetUpdatedBy(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableUpdatedBy(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *CampaignTargetHistoryUpdate) ClearUpdatedBy() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *CampaignTargetHistoryUpdate) SetUpdatedByImpersonator(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *CampaignTargetHistoryUpdate) ClearUpdatedByImpersonator() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *CampaignTargetHistoryUpdate) SetDeletedAt(v time.Time) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableDeletedAt(v *time.Time) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *CampaignTargetHistoryUpdate) ClearDeletedAt() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *CampaignTargetHistoryUpdate) SetDeletedBy(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableDeletedBy(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *CampaignTargetHistoryUpdate) ClearDeletedBy() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *CampaignTargetHistoryUpdate) SetWorkflowEligibleMarker(v bool) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *CampaignTargetHistoryUpdate) ClearWorkflowEligibleMarker() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetContactID sets the "contact_id" field.
-func (_u *CampaignTargetHistoryUpdate) SetContactID(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetContactID(v)
-	return _u
-}
-
-// SetNillableContactID sets the "contact_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableContactID(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetContactID(*v)
-	}
-	return _u
-}
-
-// ClearContactID clears the value of the "contact_id" field.
-func (_u *CampaignTargetHistoryUpdate) ClearContactID() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearContactID()
-	return _u
-}
-
-// SetUserID sets the "user_id" field.
-func (_u *CampaignTargetHistoryUpdate) SetUserID(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableUserID(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// ClearUserID clears the value of the "user_id" field.
-func (_u *CampaignTargetHistoryUpdate) ClearUserID() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearUserID()
-	return _u
-}
-
-// SetGroupID sets the "group_id" field.
-func (_u *CampaignTargetHistoryUpdate) SetGroupID(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetGroupID(v)
-	return _u
-}
-
-// SetNillableGroupID sets the "group_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableGroupID(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetGroupID(*v)
-	}
-	return _u
-}
-
-// ClearGroupID clears the value of the "group_id" field.
-func (_u *CampaignTargetHistoryUpdate) ClearGroupID() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearGroupID()
-	return _u
-}
-
-// SetSubscriberID sets the "subscriber_id" field.
-func (_u *CampaignTargetHistoryUpdate) SetSubscriberID(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetSubscriberID(v)
-	return _u
-}
-
-// SetNillableSubscriberID sets the "subscriber_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableSubscriberID(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetSubscriberID(*v)
-	}
-	return _u
-}
-
-// ClearSubscriberID clears the value of the "subscriber_id" field.
-func (_u *CampaignTargetHistoryUpdate) ClearSubscriberID() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearSubscriberID()
-	return _u
-}
-
-// SetEmail sets the "email" field.
-func (_u *CampaignTargetHistoryUpdate) SetEmail(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetEmail(v)
-	return _u
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableEmail(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetEmail(*v)
-	}
-	return _u
-}
-
-// SetFullName sets the "full_name" field.
-func (_u *CampaignTargetHistoryUpdate) SetFullName(v string) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetFullName(v)
-	return _u
-}
-
-// SetNillableFullName sets the "full_name" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableFullName(v *string) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetFullName(*v)
-	}
-	return _u
-}
-
-// ClearFullName clears the value of the "full_name" field.
-func (_u *CampaignTargetHistoryUpdate) ClearFullName() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearFullName()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *CampaignTargetHistoryUpdate) SetStatus(v enums.AssessmentResponseStatus) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableStatus(v *enums.AssessmentResponseStatus) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetSentAt sets the "sent_at" field.
-func (_u *CampaignTargetHistoryUpdate) SetSentAt(v models.DateTime) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetSentAt(v)
-	return _u
-}
-
-// SetNillableSentAt sets the "sent_at" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableSentAt(v *models.DateTime) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetSentAt(*v)
-	}
-	return _u
-}
-
-// ClearSentAt clears the value of the "sent_at" field.
-func (_u *CampaignTargetHistoryUpdate) ClearSentAt() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearSentAt()
-	return _u
-}
-
-// SetCompletedAt sets the "completed_at" field.
-func (_u *CampaignTargetHistoryUpdate) SetCompletedAt(v models.DateTime) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetCompletedAt(v)
-	return _u
-}
-
-// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdate) SetNillableCompletedAt(v *models.DateTime) *CampaignTargetHistoryUpdate {
-	if v != nil {
-		_u.SetCompletedAt(*v)
-	}
-	return _u
-}
-
-// ClearCompletedAt clears the value of the "completed_at" field.
-func (_u *CampaignTargetHistoryUpdate) ClearCompletedAt() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearCompletedAt()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *CampaignTargetHistoryUpdate) SetMetadata(v map[string]interface{}) *CampaignTargetHistoryUpdate {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *CampaignTargetHistoryUpdate) ClearMetadata() *CampaignTargetHistoryUpdate {
-	_u.mutation.ClearMetadata()
 	return _u
 }
 
@@ -334,9 +36,6 @@ func (_u *CampaignTargetHistoryUpdate) Mutation() *CampaignTargetHistoryMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *CampaignTargetHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -362,38 +61,7 @@ func (_u *CampaignTargetHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *CampaignTargetHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if campaigntargethistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized campaigntargethistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := campaigntargethistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *CampaignTargetHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := campaigntargethistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "CampaignTargetHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *CampaignTargetHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CampaignTargetHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *CampaignTargetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(campaigntargethistory.Table, campaigntargethistory.Columns, sqlgraph.NewFieldSpec(campaigntargethistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -408,35 +76,20 @@ func (_u *CampaignTargetHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(campaigntargethistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(campaigntargethistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(campaigntargethistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(campaigntargethistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(campaigntargethistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(campaigntargethistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(campaigntargethistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(campaigntargethistory.FieldDeletedBy, field.TypeString)
@@ -444,72 +97,36 @@ func (_u *CampaignTargetHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(campaigntargethistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(campaigntargethistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if _u.mutation.CampaignIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCampaignID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ContactID(); ok {
-		_spec.SetField(campaigntargethistory.FieldContactID, field.TypeString, value)
-	}
 	if _u.mutation.ContactIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldContactID, field.TypeString)
-	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(campaigntargethistory.FieldUserID, field.TypeString, value)
 	}
 	if _u.mutation.UserIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldUserID, field.TypeString)
 	}
-	if value, ok := _u.mutation.GroupID(); ok {
-		_spec.SetField(campaigntargethistory.FieldGroupID, field.TypeString, value)
-	}
 	if _u.mutation.GroupIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldGroupID, field.TypeString)
-	}
-	if value, ok := _u.mutation.SubscriberID(); ok {
-		_spec.SetField(campaigntargethistory.FieldSubscriberID, field.TypeString, value)
 	}
 	if _u.mutation.SubscriberIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldSubscriberID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Email(); ok {
-		_spec.SetField(campaigntargethistory.FieldEmail, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.FullName(); ok {
-		_spec.SetField(campaigntargethistory.FieldFullName, field.TypeString, value)
-	}
 	if _u.mutation.FullNameCleared() {
 		_spec.ClearField(campaigntargethistory.FieldFullName, field.TypeString)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(campaigntargethistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.SentAt(); ok {
-		_spec.SetField(campaigntargethistory.FieldSentAt, field.TypeTime, value)
 	}
 	if _u.mutation.SentAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldSentAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.CompletedAt(); ok {
-		_spec.SetField(campaigntargethistory.FieldCompletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.CompletedAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCompletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(campaigntargethistory.FieldMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(campaigntargethistory.FieldMetadata, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.CampaignTargetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{campaigntargethistory.Label}
@@ -525,302 +142,9 @@ func (_u *CampaignTargetHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 // CampaignTargetHistoryUpdateOne is the builder for updating a single CampaignTargetHistory entity.
 type CampaignTargetHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *CampaignTargetHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetUpdatedAt(v time.Time) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearUpdatedAt() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetUpdatedBy(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableUpdatedBy(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearUpdatedBy() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetUpdatedByImpersonator(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearUpdatedByImpersonator() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetDeletedAt(v time.Time) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearDeletedAt() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetDeletedBy(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableDeletedBy(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearDeletedBy() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearWorkflowEligibleMarker() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetContactID sets the "contact_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetContactID(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetContactID(v)
-	return _u
-}
-
-// SetNillableContactID sets the "contact_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableContactID(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetContactID(*v)
-	}
-	return _u
-}
-
-// ClearContactID clears the value of the "contact_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearContactID() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearContactID()
-	return _u
-}
-
-// SetUserID sets the "user_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetUserID(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetUserID(v)
-	return _u
-}
-
-// SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableUserID(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetUserID(*v)
-	}
-	return _u
-}
-
-// ClearUserID clears the value of the "user_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearUserID() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearUserID()
-	return _u
-}
-
-// SetGroupID sets the "group_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetGroupID(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetGroupID(v)
-	return _u
-}
-
-// SetNillableGroupID sets the "group_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableGroupID(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetGroupID(*v)
-	}
-	return _u
-}
-
-// ClearGroupID clears the value of the "group_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearGroupID() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearGroupID()
-	return _u
-}
-
-// SetSubscriberID sets the "subscriber_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetSubscriberID(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetSubscriberID(v)
-	return _u
-}
-
-// SetNillableSubscriberID sets the "subscriber_id" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableSubscriberID(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetSubscriberID(*v)
-	}
-	return _u
-}
-
-// ClearSubscriberID clears the value of the "subscriber_id" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearSubscriberID() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearSubscriberID()
-	return _u
-}
-
-// SetEmail sets the "email" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetEmail(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetEmail(v)
-	return _u
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableEmail(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmail(*v)
-	}
-	return _u
-}
-
-// SetFullName sets the "full_name" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetFullName(v string) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetFullName(v)
-	return _u
-}
-
-// SetNillableFullName sets the "full_name" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableFullName(v *string) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetFullName(*v)
-	}
-	return _u
-}
-
-// ClearFullName clears the value of the "full_name" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearFullName() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearFullName()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetStatus(v enums.AssessmentResponseStatus) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableStatus(v *enums.AssessmentResponseStatus) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetSentAt sets the "sent_at" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetSentAt(v models.DateTime) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetSentAt(v)
-	return _u
-}
-
-// SetNillableSentAt sets the "sent_at" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableSentAt(v *models.DateTime) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetSentAt(*v)
-	}
-	return _u
-}
-
-// ClearSentAt clears the value of the "sent_at" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearSentAt() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearSentAt()
-	return _u
-}
-
-// SetCompletedAt sets the "completed_at" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetCompletedAt(v models.DateTime) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetCompletedAt(v)
-	return _u
-}
-
-// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
-func (_u *CampaignTargetHistoryUpdateOne) SetNillableCompletedAt(v *models.DateTime) *CampaignTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompletedAt(*v)
-	}
-	return _u
-}
-
-// ClearCompletedAt clears the value of the "completed_at" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearCompletedAt() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearCompletedAt()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *CampaignTargetHistoryUpdateOne) SetMetadata(v map[string]interface{}) *CampaignTargetHistoryUpdateOne {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *CampaignTargetHistoryUpdateOne) ClearMetadata() *CampaignTargetHistoryUpdateOne {
-	_u.mutation.ClearMetadata()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *CampaignTargetHistoryMutation
 }
 
 // Mutation returns the CampaignTargetHistoryMutation object of the builder.
@@ -843,9 +167,6 @@ func (_u *CampaignTargetHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated CampaignTargetHistory entity.
 func (_u *CampaignTargetHistoryUpdateOne) Save(ctx context.Context) (*CampaignTargetHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -871,38 +192,7 @@ func (_u *CampaignTargetHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *CampaignTargetHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if campaigntargethistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized campaigntargethistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := campaigntargethistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *CampaignTargetHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := campaigntargethistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "CampaignTargetHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *CampaignTargetHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CampaignTargetHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *CampaignTargetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *CampaignTargetHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(campaigntargethistory.Table, campaigntargethistory.Columns, sqlgraph.NewFieldSpec(campaigntargethistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -934,35 +224,20 @@ func (_u *CampaignTargetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *C
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(campaigntargethistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(campaigntargethistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(campaigntargethistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(campaigntargethistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(campaigntargethistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(campaigntargethistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(campaigntargethistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(campaigntargethistory.FieldDeletedBy, field.TypeString)
@@ -970,72 +245,36 @@ func (_u *CampaignTargetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *C
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(campaigntargethistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(campaigntargethistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if _u.mutation.CampaignIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCampaignID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ContactID(); ok {
-		_spec.SetField(campaigntargethistory.FieldContactID, field.TypeString, value)
-	}
 	if _u.mutation.ContactIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldContactID, field.TypeString)
-	}
-	if value, ok := _u.mutation.UserID(); ok {
-		_spec.SetField(campaigntargethistory.FieldUserID, field.TypeString, value)
 	}
 	if _u.mutation.UserIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldUserID, field.TypeString)
 	}
-	if value, ok := _u.mutation.GroupID(); ok {
-		_spec.SetField(campaigntargethistory.FieldGroupID, field.TypeString, value)
-	}
 	if _u.mutation.GroupIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldGroupID, field.TypeString)
-	}
-	if value, ok := _u.mutation.SubscriberID(); ok {
-		_spec.SetField(campaigntargethistory.FieldSubscriberID, field.TypeString, value)
 	}
 	if _u.mutation.SubscriberIDCleared() {
 		_spec.ClearField(campaigntargethistory.FieldSubscriberID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Email(); ok {
-		_spec.SetField(campaigntargethistory.FieldEmail, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.FullName(); ok {
-		_spec.SetField(campaigntargethistory.FieldFullName, field.TypeString, value)
-	}
 	if _u.mutation.FullNameCleared() {
 		_spec.ClearField(campaigntargethistory.FieldFullName, field.TypeString)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(campaigntargethistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.SentAt(); ok {
-		_spec.SetField(campaigntargethistory.FieldSentAt, field.TypeTime, value)
 	}
 	if _u.mutation.SentAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldSentAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.CompletedAt(); ok {
-		_spec.SetField(campaigntargethistory.FieldCompletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.CompletedAtCleared() {
 		_spec.ClearField(campaigntargethistory.FieldCompletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(campaigntargethistory.FieldMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(campaigntargethistory.FieldMetadata, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.CampaignTargetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &CampaignTargetHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/jsonx"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 func workflowPayloadFieldValue(projectionType reflect.Type, field FieldDescriptor, raw json.RawMessage) (any, error) {

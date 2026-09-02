@@ -12,22 +12,22 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
 
 // CampaignCreate is the builder for creating a Campaign entity.
@@ -1009,7 +1009,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 		_node = &Campaign{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(campaign.Table, sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Campaign
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -1157,7 +1156,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1175,7 +1173,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1192,7 +1189,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1209,7 +1205,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1226,7 +1221,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1244,7 +1238,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1262,7 +1255,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1280,7 +1272,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1298,7 +1289,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1316,7 +1306,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1334,7 +1323,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1352,7 +1340,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1370,7 +1357,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1387,7 +1373,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1404,7 +1389,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignContacts
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1421,7 +1405,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignUsers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1438,7 +1421,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1455,7 +1437,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1472,7 +1453,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlCampaigns
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1489,7 +1469,6 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

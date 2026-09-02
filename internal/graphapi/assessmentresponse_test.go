@@ -4,14 +4,16 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -19,19 +21,19 @@ import (
 
 // TestQueryAssessmentResponse verifies fetching a single assessment response.
 func TestQueryAssessmentResponse(t *testing.T) {
-	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	response1 := (&AssessmentResponseBuilder{
-		client:       suite.client,
+	assessment1 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	response1 := (&th.AssessmentResponseBuilder{
+		Client:       suite.Client,
 		AssessmentID: assessment1.ID,
 		OwnerID:      assessment1.OwnerID,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-	response2 := (&AssessmentResponseBuilder{
-		client:       suite.client,
+	assessment2 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
+	response2 := (&th.AssessmentResponseBuilder{
+		Client:       suite.Client,
 		AssessmentID: assessment2.ID,
 		OwnerID:      assessment2.OwnerID,
-	}).MustNew(sharedAdminUser.UserCtx, t)
+	}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -44,37 +46,37 @@ func TestQueryAssessmentResponse(t *testing.T) {
 		{
 			name:           "happy path",
 			queryID:        response1.ID,
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedResult: response1,
 		},
 		{
 			name:           "happy path, response created by admin user",
 			queryID:        response2.ID,
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedResult: response2,
 		},
 		{
 			name:           "happy path using personal access token",
 			queryID:        response1.ID,
-			client:         suite.client.apiWithPAT,
+			client:         suite.Client.APIWithPAT,
 			ctx:            context.Background(),
 			expectedResult: response1,
 		},
 		{
 			name:     "no access, user of different org",
 			queryID:  response1.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "not found, invalid ID",
 			queryID:  ulids.New().String(),
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -98,37 +100,37 @@ func TestQueryAssessmentResponse(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{response1.ID, response2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment1.ID, assessment2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: []string{response1.ID, response2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, IDs: []string{assessment1.ID, assessment2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 // TestQueryAssessmentResponses verifies listing assessment responses.
 func TestQueryAssessmentResponses(t *testing.T) {
-	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	response1 := (&AssessmentResponseBuilder{
-		client:       suite.client,
+	assessment1 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	response1 := (&th.AssessmentResponseBuilder{
+		Client:       suite.Client,
 		AssessmentID: assessment1.ID,
 		OwnerID:      assessment1.OwnerID,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	response2 := (&AssessmentResponseBuilder{
-		client:       suite.client,
+	assessment2 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	response2 := (&th.AssessmentResponseBuilder{
+		Client:       suite.Client,
 		AssessmentID: assessment2.ID,
 		OwnerID:      assessment2.OwnerID,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	anotherUser := suite.userBuilder(context.Background(), t)
-	assessment3 := (&AssessmentBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
-	(&AssessmentResponseBuilder{
-		client:       suite.client,
+	anotherUser := suite.UserBuilder(context.Background(), t)
+	assessment3 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(anotherUser.UserCtx, t)
+	(&th.AssessmentResponseBuilder{
+		Client:       suite.Client,
 		AssessmentID: assessment3.ID,
 		OwnerID:      assessment3.OwnerID,
 	}).MustNew(anotherUser.UserCtx, t)
 
 	t.Run("Get all assessment responses", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllAssessmentResponses(sharedTestUser1.UserCtx)
+		resp, err := suite.Client.API.GetAllAssessmentResponses(th.SharedTestUser1.UserCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -141,7 +143,7 @@ func TestQueryAssessmentResponses(t *testing.T) {
 			Email: &email,
 		}
 
-		resp, err := suite.client.api.GetAssessmentResponses(sharedTestUser1.UserCtx, nil, nil, whereInput)
+		resp, err := suite.Client.API.GetAssessmentResponses(th.SharedTestUser1.UserCtx, nil, nil, whereInput)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -150,59 +152,59 @@ func TestQueryAssessmentResponses(t *testing.T) {
 	})
 
 	t.Run("Get assessment responses using personal access token", func(t *testing.T) {
-		resp, err := suite.client.apiWithPAT.GetAllAssessmentResponses(context.Background())
+		resp, err := suite.Client.APIWithPAT.GetAllAssessmentResponses(context.Background())
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, resp.AssessmentResponses.TotalCount >= 2)
 	})
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{response1.ID, response2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment1.ID, assessment2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: []string{response1.ID, response2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, IDs: []string{assessment1.ID, assessment2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
-	cleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
 }
 
 // TestAssessmentResponseCampaignIsolation ensures responses are isolated per campaign.
 func TestAssessmentResponseCampaignIsolation(t *testing.T) {
-	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
-	campaignA, err := suite.client.db.Campaign.Create().
+	campaignA, err := suite.Client.DB.Campaign.Create().
 		SetName("Campaign A").
-		SetOwnerID(sharedTestUser1.OrganizationID).
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetAssessmentID(assessment.ID).
 		SetRecurrenceFrequency(enums.FrequencyYearly).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	campaignB, err := suite.client.db.Campaign.Create().
+	campaignB, err := suite.Client.DB.Campaign.Create().
 		SetName("Campaign B").
-		SetOwnerID(sharedTestUser1.OrganizationID).
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetAssessmentID(assessment.ID).
 		SetRecurrenceFrequency(enums.FrequencyYearly).
 		Save(ctx)
 	assert.NilError(t, err)
 
 	email := gofakeit.Email()
-	responseA, err := suite.client.db.AssessmentResponse.Create().
-		SetOwnerID(sharedTestUser1.OrganizationID).
+	responseA, err := suite.Client.DB.AssessmentResponse.Create().
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetAssessmentID(assessment.ID).
 		SetCampaignID(campaignA.ID).
 		SetEmail(email).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	responseB, err := suite.client.db.AssessmentResponse.Create().
-		SetOwnerID(sharedTestUser1.OrganizationID).
+	responseB, err := suite.Client.DB.AssessmentResponse.Create().
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetAssessmentID(assessment.ID).
 		SetCampaignID(campaignB.ID).
 		SetEmail(email).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	countA, err := suite.client.db.AssessmentResponse.Query().
+	countA, err := suite.Client.DB.AssessmentResponse.Query().
 		Where(
 			assessmentresponse.CampaignIDEQ(campaignA.ID),
 			assessmentresponse.EmailEqualFold(email),
@@ -211,7 +213,7 @@ func TestAssessmentResponseCampaignIsolation(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(1, countA))
 
-	countB, err := suite.client.db.AssessmentResponse.Query().
+	countB, err := suite.Client.DB.AssessmentResponse.Query().
 		Where(
 			assessmentresponse.CampaignIDEQ(campaignB.ID),
 			assessmentresponse.EmailEqualFold(email),
@@ -220,20 +222,20 @@ func TestAssessmentResponseCampaignIsolation(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(1, countB))
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{responseA.ID, responseB.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, IDs: []string{campaignA.ID, campaignB.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: []string{responseA.ID, responseB.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, IDs: []string{campaignA.ID, campaignB.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 // TestAssessmentResponseUpdatesCampaignTargetsAndCompletion verifies campaign rollups on completion.
 func TestAssessmentResponseUpdatesCampaignTargetsAndCompletion(t *testing.T) {
-	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
-	campaignObj, err := suite.client.db.Campaign.Create().
+	campaignObj, err := suite.Client.DB.Campaign.Create().
 		SetName("Campaign Target Sync").
-		SetOwnerID(sharedTestUser1.OrganizationID).
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetAssessmentID(assessment.ID).
 		SetRecurrenceFrequency(enums.FrequencyYearly).
 		Save(ctx)
@@ -242,8 +244,8 @@ func TestAssessmentResponseUpdatesCampaignTargetsAndCompletion(t *testing.T) {
 	emails := []string{"alpha@example.com", "beta@example.com"}
 	targetIDs := make([]string, 0, len(emails))
 	for _, email := range emails {
-		target, err := suite.client.db.CampaignTarget.Create().
-			SetOwnerID(sharedTestUser1.OrganizationID).
+		target, err := suite.Client.DB.CampaignTarget.Create().
+			SetOwnerID(th.SharedTestUser1.OrganizationID).
 			SetCampaignID(campaignObj.ID).
 			SetEmail(email).
 			Save(ctx)
@@ -251,28 +253,28 @@ func TestAssessmentResponseUpdatesCampaignTargetsAndCompletion(t *testing.T) {
 		targetIDs = append(targetIDs, target.ID)
 	}
 
-	responseA, err := suite.client.db.AssessmentResponse.Create().
-		SetOwnerID(sharedTestUser1.OrganizationID).
+	responseA, err := suite.Client.DB.AssessmentResponse.Create().
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetAssessmentID(assessment.ID).
 		SetCampaignID(campaignObj.ID).
 		SetEmail(emails[0]).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	responseB, err := suite.client.db.AssessmentResponse.Create().
-		SetOwnerID(sharedTestUser1.OrganizationID).
+	responseB, err := suite.Client.DB.AssessmentResponse.Create().
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetAssessmentID(assessment.ID).
 		SetCampaignID(campaignObj.ID).
 		SetEmail(emails[1]).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	_, err = suite.client.db.AssessmentResponse.UpdateOneID(responseA.ID).
+	_, err = suite.Client.DB.AssessmentResponse.UpdateOneID(responseA.ID).
 		SetStatus(enums.AssessmentResponseStatusCompleted).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	targetA, err := suite.client.db.CampaignTarget.Query().
+	targetA, err := suite.Client.DB.CampaignTarget.Query().
 		Where(
 			campaigntarget.CampaignIDEQ(campaignObj.ID),
 			campaigntarget.EmailEqualFold(emails[0]),
@@ -281,7 +283,7 @@ func TestAssessmentResponseUpdatesCampaignTargetsAndCompletion(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(enums.AssessmentResponseStatusCompleted, targetA.Status))
 
-	targetB, err := suite.client.db.CampaignTarget.Query().
+	targetB, err := suite.Client.DB.CampaignTarget.Query().
 		Where(
 			campaigntarget.CampaignIDEQ(campaignObj.ID),
 			campaigntarget.EmailEqualFold(emails[1]),
@@ -290,35 +292,35 @@ func TestAssessmentResponseUpdatesCampaignTargetsAndCompletion(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(enums.AssessmentResponseStatusNotStarted, targetB.Status))
 
-	campaignAfterFirst, err := suite.client.db.Campaign.Query().
+	campaignAfterFirst, err := suite.Client.DB.Campaign.Query().
 		Where(campaign.IDEQ(campaignObj.ID)).
 		Only(ctx)
 	assert.NilError(t, err)
 	assert.Check(t, campaignAfterFirst.Status != enums.CampaignStatusCompleted)
 
-	_, err = suite.client.db.AssessmentResponse.UpdateOneID(responseB.ID).
+	_, err = suite.Client.DB.AssessmentResponse.UpdateOneID(responseB.ID).
 		SetStatus(enums.AssessmentResponseStatusCompleted).
 		Save(ctx)
 	assert.NilError(t, err)
 
-	campaignAfterSecond, err := suite.client.db.Campaign.Query().
+	campaignAfterSecond, err := suite.Client.DB.Campaign.Query().
 		Where(campaign.IDEQ(campaignObj.ID)).
 		Only(ctx)
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(enums.CampaignStatusCompleted, campaignAfterSecond.Status))
 	assert.Check(t, !campaignAfterSecond.IsActive)
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{responseA.ID, responseB.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.CampaignTargetDeleteOne]{client: suite.client.db.CampaignTarget, IDs: targetIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignObj.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: []string{responseA.ID, responseB.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.CampaignTargetDeleteOne]{Client: suite.Client.DB.CampaignTarget, IDs: targetIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, ID: campaignObj.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 // TestMutationCreateAssessmentResponse validates create mutation behavior.
 func TestMutationCreateAssessmentResponse(t *testing.T) {
-	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	assessment2 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name    string
@@ -331,10 +333,10 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 			request: testclient.CreateAssessmentResponseInput{
 				Email:        lo.ToPtr(gofakeit.Email()),
 				AssessmentID: assessment.ID,
-				OwnerID:      &sharedTestUser1.OrganizationID,
+				OwnerID:      &th.SharedTestUser1.OrganizationID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "success - can create via PAT",
@@ -342,7 +344,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 				Email:        lo.ToPtr(gofakeit.Email()),
 				AssessmentID: assessment.ID,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -350,10 +352,10 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 			request: testclient.CreateAssessmentResponseInput{
 				Email:        lo.ToPtr(gofakeit.Email()),
 				AssessmentID: assessment2.ID,
-				OwnerID:      &sharedTestUser2.OrganizationID,
+				OwnerID:      &th.SharedTestUser2.OrganizationID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser2.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser2.UserCtx,
 		},
 	}
 
@@ -367,7 +369,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 			assert.Assert(t, resp != nil)
 			assert.Assert(t, resp.CreateAssessmentResponse.AssessmentResponse.ID != "")
 
-			if tc.ctx == sharedTestUser2.UserCtx {
+			if tc.ctx == th.SharedTestUser2.UserCtx {
 				responseIDsOrg2 = append(responseIDsOrg2, resp.CreateAssessmentResponse.AssessmentResponse.ID)
 			} else {
 				responseIDsOrg1 = append(responseIDsOrg1, resp.CreateAssessmentResponse.AssessmentResponse.ID)
@@ -379,10 +381,10 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		req := testclient.CreateAssessmentResponseInput{
 			Email:        lo.ToPtr(gofakeit.Email()),
 			AssessmentID: assessment.ID,
-			OwnerID:      &sharedTestUser1.OrganizationID,
+			OwnerID:      &th.SharedTestUser1.OrganizationID,
 		}
 
-		resp, err := suite.client.api.CreateAssessmentResponse(sharedTestUser1.UserCtx, req)
+		resp, err := suite.Client.API.CreateAssessmentResponse(th.SharedTestUser1.UserCtx, req)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
@@ -390,7 +392,7 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		assert.Check(t, is.Equal(int64(1), firstResponse.SendAttempts))
 		responseIDsOrg1 = append(responseIDsOrg1, firstResponse.ID)
 
-		secondResp, err := suite.client.api.CreateAssessmentResponse(sharedTestUser1.UserCtx, req)
+		secondResp, err := suite.Client.API.CreateAssessmentResponse(th.SharedTestUser1.UserCtx, req)
 		assert.NilError(t, err)
 		assert.Assert(t, secondResp != nil)
 
@@ -403,48 +405,48 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 		req := testclient.CreateAssessmentResponseInput{
 			Email:        lo.ToPtr(gofakeit.Email()),
 			AssessmentID: assessment.ID,
-			OwnerID:      &sharedTestUser1.OrganizationID,
+			OwnerID:      &th.SharedTestUser1.OrganizationID,
 		}
 
-		resp, err := suite.client.api.CreateAssessmentResponse(sharedTestUser1.UserCtx, req)
+		resp, err := suite.Client.API.CreateAssessmentResponse(th.SharedTestUser1.UserCtx, req)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
 		response := resp.CreateAssessmentResponse.AssessmentResponse
 		responseIDsOrg1 = append(responseIDsOrg1, response.ID)
 
-		updateCtx := setContext(sharedTestUser1.UserCtx, suite.client.db)
-		_, err = suite.client.db.AssessmentResponse.UpdateOneID(response.ID).
+		updateCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+		_, err = suite.Client.DB.AssessmentResponse.UpdateOneID(response.ID).
 			SetStatus(enums.AssessmentResponseStatusCompleted).
 			Save(updateCtx)
 		assert.NilError(t, err)
 
-		_, err = suite.client.api.CreateAssessmentResponse(sharedTestUser1.UserCtx, req)
+		_, err = suite.Client.API.CreateAssessmentResponse(th.SharedTestUser1.UserCtx, req)
 		assert.ErrorContains(t, err, "assessment is already completed")
 	})
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: responseIDsOrg1}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: responseIDsOrg1}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: responseIDsOrg2}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment2.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment2.TemplateID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, IDs: responseIDsOrg2}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment2.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment2.TemplateID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 }
 
 // TestMutationDeleteAssessmentResponse validates delete mutation behavior.
 func TestMutationDeleteAssessmentResponse(t *testing.T) {
-	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	response1 := (&AssessmentResponseBuilder{
-		client:       suite.client,
+	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	response1 := (&th.AssessmentResponseBuilder{
+		Client:       suite.Client,
 		AssessmentID: assessment.ID,
 		OwnerID:      assessment.OwnerID,
-	}).MustNew(sharedTestUser1.UserCtx, t)
-	response2 := (&AssessmentResponseBuilder{
-		client:       suite.client,
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
+	response2 := (&th.AssessmentResponseBuilder{
+		Client:       suite.Client,
 		AssessmentID: assessment.ID,
 		OwnerID:      assessment.OwnerID,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -456,42 +458,42 @@ func TestMutationDeleteAssessmentResponse(t *testing.T) {
 		{
 			name:        "not authorized, different org user",
 			idToDelete:  response1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete response using view only user",
 			idToDelete:  response1.ID,
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
 			expectedErr: "you are not authorized to perform this action",
 		},
 		{
 			name:       "happy path, delete response",
 			idToDelete: response1.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "response already deleted, not found",
 			idToDelete:  response1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete response using personal access token",
 			idToDelete: response2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown response, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -510,6 +512,6 @@ func TestMutationDeleteAssessmentResponse(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

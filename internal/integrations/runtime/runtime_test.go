@@ -9,11 +9,11 @@ import (
 
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/keystore"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 func newTestGala(t *testing.T) *gala.Gala {

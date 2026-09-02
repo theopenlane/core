@@ -12,15 +12,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // VendorRiskScoreQuery is the builder for querying VendorRiskScore entities.
@@ -89,9 +88,6 @@ func (_q *VendorRiskScoreQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, vendorriskscore.OwnerTable, vendorriskscore.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -114,9 +110,6 @@ func (_q *VendorRiskScoreQuery) QueryVendorScoringConfig() *VendorScoringConfigQ
 			sqlgraph.To(vendorscoringconfig.Table, vendorscoringconfig.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, vendorriskscore.VendorScoringConfigTable, vendorriskscore.VendorScoringConfigColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.VendorScoringConfig
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -139,9 +132,6 @@ func (_q *VendorRiskScoreQuery) QueryEntity() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, vendorriskscore.EntityTable, vendorriskscore.EntityColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -164,9 +154,6 @@ func (_q *VendorRiskScoreQuery) QueryAssessmentResponse() *AssessmentResponseQue
 			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, vendorriskscore.AssessmentResponseTable, vendorriskscore.AssessmentResponseColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -524,8 +511,6 @@ func (_q *VendorRiskScoreQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.VendorRiskScore
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -689,8 +674,6 @@ func (_q *VendorRiskScoreQuery) loadAssessmentResponse(ctx context.Context, quer
 
 func (_q *VendorRiskScoreQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.VendorRiskScore
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -768,9 +751,6 @@ func (_q *VendorRiskScoreQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.VendorRiskScore)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

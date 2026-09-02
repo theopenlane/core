@@ -11,9 +11,9 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/models"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 )
 
 // TemplateContexts is the resolver for the templateContexts field.

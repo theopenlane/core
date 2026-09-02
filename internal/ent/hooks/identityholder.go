@@ -6,11 +6,11 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/entx"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/logx"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
 // HookIdentityHolderFiles runs on identity holder mutations to check for uploaded files

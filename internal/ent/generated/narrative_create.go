@@ -10,13 +10,13 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 )
 
 // NarrativeCreate is the builder for creating a Narrative entity.
@@ -473,7 +473,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 		_node = &Narrative{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(narrative.Table, sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Narrative
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -549,7 +548,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -567,7 +565,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -584,7 +581,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -601,7 +597,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -618,7 +613,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -635,7 +629,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -652,7 +645,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -669,7 +661,6 @@ func (_c *NarrativeCreate) createSpec() (*Narrative, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

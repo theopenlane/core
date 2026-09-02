@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // TFASettingCreate is the builder for creating a TFASetting entity.
@@ -341,7 +341,6 @@ func (_c *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 		_node = &TFASetting{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tfasetting.Table, sqlgraph.NewFieldSpec(tfasetting.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TFASetting
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -409,7 +408,6 @@ func (_c *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TFASetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	historygenerated "github.com/theopenlane/core/internal/ent/historygenerated"
+	historygenerated "github.com/theopenlane/core/v2/internal/ent/historygenerated"
 )
 
 func TestControlDiffValuesEqual(t *testing.T) {

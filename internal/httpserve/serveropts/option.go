@@ -32,26 +32,26 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/graphapi"
-	graphapihistory "github.com/theopenlane/core/internal/graphapi/history"
-	"github.com/theopenlane/core/internal/httpserve/config"
-	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/objects/resolver"
-	"github.com/theopenlane/core/internal/objects/validators"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/entitlements"
-	authmw "github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
-	"github.com/theopenlane/core/pkg/middleware/cors"
-	"github.com/theopenlane/core/pkg/middleware/csrf"
-	"github.com/theopenlane/core/pkg/middleware/impersonation"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/shortlinks"
-	"github.com/theopenlane/core/pkg/summarizer"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/graphapi"
+	graphapihistory "github.com/theopenlane/core/v2/internal/graphapi/history"
+	"github.com/theopenlane/core/v2/internal/httpserve/config"
+	"github.com/theopenlane/core/v2/internal/httpserve/server"
+	"github.com/theopenlane/core/v2/internal/objects/resolver"
+	"github.com/theopenlane/core/v2/internal/objects/validators"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
+	"github.com/theopenlane/core/v2/pkg/middleware/cachecontrol"
+	"github.com/theopenlane/core/v2/pkg/middleware/cors"
+	"github.com/theopenlane/core/v2/pkg/middleware/csrf"
+	"github.com/theopenlane/core/v2/pkg/middleware/impersonation"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
+	"github.com/theopenlane/core/v2/pkg/middleware/secure"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
+	"github.com/theopenlane/core/v2/pkg/summarizer"
 )
 
 type ServerOption interface {
@@ -545,11 +545,14 @@ func WithObjectStorage() ServerOption {
 		authTokenCfg := s.Config.Settings.Auth.Token
 
 		// Create StorageService with resolver and cp using runtime config
-		storageService := resolver.NewServiceFromConfig(cfg,
+		storageService, err := resolver.NewServiceFromConfig(cfg,
 			resolver.WithPresignConfig(func() *tokens.TokenManager {
 				return s.Config.Handler.TokenManager
 			}, authTokenCfg.Issuer, authTokenCfg.Audience),
 		)
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to initialize object storage")
+		}
 
 		// Store in config for access
 		s.Config.StorageService = storageService

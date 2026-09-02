@@ -7,10 +7,11 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/iam/fgax"
 )
 
 // Discussion holds the schema definition for the Discussion entity
@@ -61,6 +62,9 @@ func (d Discussion) Mixin() []ent.Mixin {
 				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Risk{}, Evidence{}),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
+				// the user who starts a discussion can always manage it, e.g. resolve it,
+				// even if they only have view access to the parent object
+				withOwnerRelation(fgax.OwnerRelation),
 			),
 		},
 	}.getMixins(d)

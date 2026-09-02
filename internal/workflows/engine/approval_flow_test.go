@@ -12,16 +12,16 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -448,10 +448,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	// Use engine with listeners so workflow infrastructure is created automatically
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
-
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
 			Targets: []workflows.TargetConfig{
@@ -568,10 +564,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	// Enable engine + listeners so hooks and proposal submission are wired.
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
-
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
 			Targets: []workflows.TargetConfig{
@@ -683,9 +675,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
-
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	group, err := s.client.Group.Create().
 		SetName("Empty Approval Group " + ulid.Make().String()).
@@ -802,9 +791,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookAppliesIneligibleFields() {
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
-
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -982,7 +968,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 	approver2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -1135,9 +1120,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatching
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
-
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
 			Targets: []workflows.TargetConfig{
@@ -1221,9 +1203,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
-
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -1333,9 +1312,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
-
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -1569,7 +1545,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 
 	// Use engine with listeners so workflow infrastructure is created automatically
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	// Create approval workflow definition
 	params := workflows.ApprovalActionParams{
@@ -1709,7 +1684,6 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	// Create approval workflow definition for InternalPolicy details field
 	params := workflows.ApprovalActionParams{

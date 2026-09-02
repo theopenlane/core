@@ -8,298 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlimplementationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // ControlImplementationHistoryUpdate is the builder for updating ControlImplementationHistory entities.
 type ControlImplementationHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *ControlImplementationHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *ControlImplementationHistoryMutation
 }
 
 // Where appends a list predicates to the ControlImplementationHistoryUpdate builder.
 func (_u *ControlImplementationHistoryUpdate) Where(ps ...predicate.ControlImplementationHistory) *ControlImplementationHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *ControlImplementationHistoryUpdate) SetUpdatedAt(v time.Time) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *ControlImplementationHistoryUpdate) ClearUpdatedAt() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *ControlImplementationHistoryUpdate) SetUpdatedBy(v string) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableUpdatedBy(v *string) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *ControlImplementationHistoryUpdate) ClearUpdatedBy() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *ControlImplementationHistoryUpdate) SetUpdatedByImpersonator(v string) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *ControlImplementationHistoryUpdate) ClearUpdatedByImpersonator() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *ControlImplementationHistoryUpdate) SetDeletedAt(v time.Time) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *ControlImplementationHistoryUpdate) ClearDeletedAt() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *ControlImplementationHistoryUpdate) SetDeletedBy(v string) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableDeletedBy(v *string) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *ControlImplementationHistoryUpdate) ClearDeletedBy() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *ControlImplementationHistoryUpdate) SetTags(v []string) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *ControlImplementationHistoryUpdate) AppendTags(v []string) *ControlImplementationHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *ControlImplementationHistoryUpdate) ClearTags() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *ControlImplementationHistoryUpdate) SetInternalNotes(v string) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableInternalNotes(v *string) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *ControlImplementationHistoryUpdate) ClearInternalNotes() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *ControlImplementationHistoryUpdate) SetSystemInternalID(v string) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableSystemInternalID(v *string) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *ControlImplementationHistoryUpdate) ClearSystemInternalID() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *ControlImplementationHistoryUpdate) SetStatus(v enums.DocumentStatus) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableStatus(v *enums.DocumentStatus) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *ControlImplementationHistoryUpdate) ClearStatus() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetImplementationDate sets the "implementation_date" field.
-func (_u *ControlImplementationHistoryUpdate) SetImplementationDate(v time.Time) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetImplementationDate(v)
-	return _u
-}
-
-// SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableImplementationDate(v *time.Time) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetImplementationDate(*v)
-	}
-	return _u
-}
-
-// ClearImplementationDate clears the value of the "implementation_date" field.
-func (_u *ControlImplementationHistoryUpdate) ClearImplementationDate() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearImplementationDate()
-	return _u
-}
-
-// SetVerified sets the "verified" field.
-func (_u *ControlImplementationHistoryUpdate) SetVerified(v bool) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetVerified(v)
-	return _u
-}
-
-// SetNillableVerified sets the "verified" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableVerified(v *bool) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetVerified(*v)
-	}
-	return _u
-}
-
-// ClearVerified clears the value of the "verified" field.
-func (_u *ControlImplementationHistoryUpdate) ClearVerified() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearVerified()
-	return _u
-}
-
-// SetVerificationDate sets the "verification_date" field.
-func (_u *ControlImplementationHistoryUpdate) SetVerificationDate(v time.Time) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetVerificationDate(v)
-	return _u
-}
-
-// SetNillableVerificationDate sets the "verification_date" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableVerificationDate(v *time.Time) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetVerificationDate(*v)
-	}
-	return _u
-}
-
-// ClearVerificationDate clears the value of the "verification_date" field.
-func (_u *ControlImplementationHistoryUpdate) ClearVerificationDate() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearVerificationDate()
-	return _u
-}
-
-// SetDetails sets the "details" field.
-func (_u *ControlImplementationHistoryUpdate) SetDetails(v string) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetDetails(v)
-	return _u
-}
-
-// SetNillableDetails sets the "details" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdate) SetNillableDetails(v *string) *ControlImplementationHistoryUpdate {
-	if v != nil {
-		_u.SetDetails(*v)
-	}
-	return _u
-}
-
-// ClearDetails clears the value of the "details" field.
-func (_u *ControlImplementationHistoryUpdate) ClearDetails() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearDetails()
-	return _u
-}
-
-// SetDetailsJSON sets the "details_json" field.
-func (_u *ControlImplementationHistoryUpdate) SetDetailsJSON(v []interface{}) *ControlImplementationHistoryUpdate {
-	_u.mutation.SetDetailsJSON(v)
-	return _u
-}
-
-// AppendDetailsJSON appends value to the "details_json" field.
-func (_u *ControlImplementationHistoryUpdate) AppendDetailsJSON(v []interface{}) *ControlImplementationHistoryUpdate {
-	_u.mutation.AppendDetailsJSON(v)
-	return _u
-}
-
-// ClearDetailsJSON clears the value of the "details_json" field.
-func (_u *ControlImplementationHistoryUpdate) ClearDetailsJSON() *ControlImplementationHistoryUpdate {
-	_u.mutation.ClearDetailsJSON()
 	return _u
 }
 
@@ -310,9 +36,6 @@ func (_u *ControlImplementationHistoryUpdate) Mutation() *ControlImplementationH
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *ControlImplementationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -338,38 +61,7 @@ func (_u *ControlImplementationHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *ControlImplementationHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if controlimplementationhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized controlimplementationhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := controlimplementationhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *ControlImplementationHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := controlimplementationhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlImplementationHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *ControlImplementationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementationhistory.Table, controlimplementationhistory.Columns, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -384,46 +76,23 @@ func (_u *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(controlimplementationhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(controlimplementationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(controlimplementationhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(controlimplementationhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(controlimplementationhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, controlimplementationhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
@@ -434,62 +103,30 @@ func (_u *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(controlimplementationhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(controlimplementationhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
-	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.ImplementationDate(); ok {
-		_spec.SetField(controlimplementationhistory.FieldImplementationDate, field.TypeTime, value)
 	}
 	if _u.mutation.ImplementationDateCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldImplementationDate, field.TypeTime)
 	}
-	if value, ok := _u.mutation.Verified(); ok {
-		_spec.SetField(controlimplementationhistory.FieldVerified, field.TypeBool, value)
-	}
 	if _u.mutation.VerifiedCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldVerified, field.TypeBool)
-	}
-	if value, ok := _u.mutation.VerificationDate(); ok {
-		_spec.SetField(controlimplementationhistory.FieldVerificationDate, field.TypeTime, value)
 	}
 	if _u.mutation.VerificationDateCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldVerificationDate, field.TypeTime)
 	}
-	if value, ok := _u.mutation.Details(); ok {
-		_spec.SetField(controlimplementationhistory.FieldDetails, field.TypeString, value)
-	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDetails, field.TypeString)
-	}
-	if value, ok := _u.mutation.DetailsJSON(); ok {
-		_spec.SetField(controlimplementationhistory.FieldDetailsJSON, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, controlimplementationhistory.FieldDetailsJSON, value)
-		})
 	}
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDetailsJSON, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ControlImplementationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{controlimplementationhistory.Label}
@@ -505,278 +142,9 @@ func (_u *ControlImplementationHistoryUpdate) sqlSave(ctx context.Context) (_nod
 // ControlImplementationHistoryUpdateOne is the builder for updating a single ControlImplementationHistory entity.
 type ControlImplementationHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *ControlImplementationHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetUpdatedAt(v time.Time) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearUpdatedAt() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetUpdatedBy(v string) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearUpdatedBy() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetUpdatedByImpersonator(v string) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearUpdatedByImpersonator() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetDeletedAt(v time.Time) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearDeletedAt() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetDeletedBy(v string) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableDeletedBy(v *string) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearDeletedBy() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetTags(v []string) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *ControlImplementationHistoryUpdateOne) AppendTags(v []string) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearTags() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetInternalNotes(v string) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableInternalNotes(v *string) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearInternalNotes() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetSystemInternalID(v string) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableSystemInternalID(v *string) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearSystemInternalID() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetStatus(v enums.DocumentStatus) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableStatus(v *enums.DocumentStatus) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearStatus() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetImplementationDate sets the "implementation_date" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetImplementationDate(v time.Time) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetImplementationDate(v)
-	return _u
-}
-
-// SetNillableImplementationDate sets the "implementation_date" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableImplementationDate(v *time.Time) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetImplementationDate(*v)
-	}
-	return _u
-}
-
-// ClearImplementationDate clears the value of the "implementation_date" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearImplementationDate() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearImplementationDate()
-	return _u
-}
-
-// SetVerified sets the "verified" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetVerified(v bool) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetVerified(v)
-	return _u
-}
-
-// SetNillableVerified sets the "verified" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableVerified(v *bool) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetVerified(*v)
-	}
-	return _u
-}
-
-// ClearVerified clears the value of the "verified" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearVerified() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearVerified()
-	return _u
-}
-
-// SetVerificationDate sets the "verification_date" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetVerificationDate(v time.Time) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetVerificationDate(v)
-	return _u
-}
-
-// SetNillableVerificationDate sets the "verification_date" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableVerificationDate(v *time.Time) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetVerificationDate(*v)
-	}
-	return _u
-}
-
-// ClearVerificationDate clears the value of the "verification_date" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearVerificationDate() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearVerificationDate()
-	return _u
-}
-
-// SetDetails sets the "details" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetDetails(v string) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetDetails(v)
-	return _u
-}
-
-// SetNillableDetails sets the "details" field if the given value is not nil.
-func (_u *ControlImplementationHistoryUpdateOne) SetNillableDetails(v *string) *ControlImplementationHistoryUpdateOne {
-	if v != nil {
-		_u.SetDetails(*v)
-	}
-	return _u
-}
-
-// ClearDetails clears the value of the "details" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearDetails() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearDetails()
-	return _u
-}
-
-// SetDetailsJSON sets the "details_json" field.
-func (_u *ControlImplementationHistoryUpdateOne) SetDetailsJSON(v []interface{}) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.SetDetailsJSON(v)
-	return _u
-}
-
-// AppendDetailsJSON appends value to the "details_json" field.
-func (_u *ControlImplementationHistoryUpdateOne) AppendDetailsJSON(v []interface{}) *ControlImplementationHistoryUpdateOne {
-	_u.mutation.AppendDetailsJSON(v)
-	return _u
-}
-
-// ClearDetailsJSON clears the value of the "details_json" field.
-func (_u *ControlImplementationHistoryUpdateOne) ClearDetailsJSON() *ControlImplementationHistoryUpdateOne {
-	_u.mutation.ClearDetailsJSON()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *ControlImplementationHistoryMutation
 }
 
 // Mutation returns the ControlImplementationHistoryMutation object of the builder.
@@ -799,9 +167,6 @@ func (_u *ControlImplementationHistoryUpdateOne) Select(field string, fields ...
 
 // Save executes the query and returns the updated ControlImplementationHistory entity.
 func (_u *ControlImplementationHistoryUpdateOne) Save(ctx context.Context) (*ControlImplementationHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -827,38 +192,7 @@ func (_u *ControlImplementationHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *ControlImplementationHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if controlimplementationhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized controlimplementationhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := controlimplementationhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *ControlImplementationHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := controlimplementationhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ControlImplementationHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *ControlImplementationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ControlImplementationHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ControlImplementationHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(controlimplementationhistory.Table, controlimplementationhistory.Columns, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -890,46 +224,23 @@ func (_u *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(controlimplementationhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(controlimplementationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(controlimplementationhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(controlimplementationhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(controlimplementationhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, controlimplementationhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldTags, field.TypeJSON)
@@ -940,62 +251,30 @@ func (_u *ControlImplementationHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(controlimplementationhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(controlimplementationhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(controlimplementationhistory.FieldStatus, field.TypeEnum, value)
-	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.ImplementationDate(); ok {
-		_spec.SetField(controlimplementationhistory.FieldImplementationDate, field.TypeTime, value)
 	}
 	if _u.mutation.ImplementationDateCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldImplementationDate, field.TypeTime)
 	}
-	if value, ok := _u.mutation.Verified(); ok {
-		_spec.SetField(controlimplementationhistory.FieldVerified, field.TypeBool, value)
-	}
 	if _u.mutation.VerifiedCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldVerified, field.TypeBool)
-	}
-	if value, ok := _u.mutation.VerificationDate(); ok {
-		_spec.SetField(controlimplementationhistory.FieldVerificationDate, field.TypeTime, value)
 	}
 	if _u.mutation.VerificationDateCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldVerificationDate, field.TypeTime)
 	}
-	if value, ok := _u.mutation.Details(); ok {
-		_spec.SetField(controlimplementationhistory.FieldDetails, field.TypeString, value)
-	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDetails, field.TypeString)
-	}
-	if value, ok := _u.mutation.DetailsJSON(); ok {
-		_spec.SetField(controlimplementationhistory.FieldDetailsJSON, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, controlimplementationhistory.FieldDetailsJSON, value)
-		})
 	}
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(controlimplementationhistory.FieldDetailsJSON, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ControlImplementationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &ControlImplementationHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

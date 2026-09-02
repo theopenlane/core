@@ -6,9 +6,9 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/internal/ent/entconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 )
 
 func testInterceptorLogic(client *generated.Client) bool {

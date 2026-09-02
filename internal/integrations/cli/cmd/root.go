@@ -6,7 +6,7 @@ import (
 	"github.com/knadh/koanf/v2"
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/internal/integrations/cli/config"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/config"
 )
 
 // AppName is the binary / application name

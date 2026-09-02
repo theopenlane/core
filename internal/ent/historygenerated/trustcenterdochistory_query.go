@@ -14,11 +14,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterdochistory"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // TrustCenterDocHistoryQuery is the builder for querying TrustCenterDocHistory entities.
@@ -28,8 +27,8 @@ type TrustCenterDocHistoryQuery struct {
 	order      []trustcenterdochistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.TrustCenterDocHistory
-	loadTotal  []func(context.Context, []*TrustCenterDocHistory) error
 	modifiers  []func(*sql.Selector)
+	loadTotal  []func(context.Context, []*TrustCenterDocHistory) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -259,9 +258,8 @@ func (_q *TrustCenterDocHistoryQuery) Clone() *TrustCenterDocHistoryQuery {
 		inters:     append([]Interceptor{}, _q.inters...),
 		predicates: append([]predicate.TrustCenterDocHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       _q.sql.Clone(),
-		path:      _q.path,
-		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -358,8 +356,6 @@ func (_q *TrustCenterDocHistoryQuery) sqlAll(ctx context.Context, hooks ...query
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.TrustCenterDocHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -382,8 +378,6 @@ func (_q *TrustCenterDocHistoryQuery) sqlAll(ctx context.Context, hooks ...query
 
 func (_q *TrustCenterDocHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.TrustCenterDocHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -449,12 +443,6 @@ func (_q *TrustCenterDocHistoryQuery) sqlQuery(ctx context.Context) *sql.Selecto
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.TrustCenterDocHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
-	for _, m := range _q.modifiers {
-		m(selector)
-	}
 	for _, p := range _q.predicates {
 		p(selector)
 	}
@@ -470,12 +458,6 @@ func (_q *TrustCenterDocHistoryQuery) sqlQuery(ctx context.Context) *sql.Selecto
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_q *TrustCenterDocHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterDocHistorySelect {
-	_q.modifiers = append(_q.modifiers, modifiers...)
-	return _q.Select()
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied
@@ -584,10 +566,4 @@ func (_s *TrustCenterDocHistorySelect) sqlScan(ctx context.Context, root *TrustC
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_s *TrustCenterDocHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *TrustCenterDocHistorySelect {
-	_s.modifiers = append(_s.modifiers, modifiers...)
-	return _s
 }

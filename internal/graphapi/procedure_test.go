@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/ulids"
@@ -14,14 +16,14 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func TestQueryProcedure(t *testing.T) {
-	// create an Procedure to be queried using sharedTestUser1
-	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
+	// create an Procedure to be queried using th.SharedTestUser1
+	procedure := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	anonymousContext := th.CreateAnonymousTrustCenterContext(ulids.New().String(), th.SharedTestUser1.OrganizationID)
 
 	// add test cases for querying the procedure
 	testCases := []struct {
@@ -34,41 +36,41 @@ func TestQueryProcedure(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: procedure.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: procedure.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: procedure.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "procedure not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "procedure not found, using not authorized user",
 			queryID:  procedure.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, anonymous user",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      anonymousContext,
 			queryID:  procedure.ID,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -92,16 +94,16 @@ func TestQueryProcedure(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: procedure.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryProcedures(t *testing.T) {
-	// create multiple Procedures to be queried using sharedTestUser1
-	p1 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	p2 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create multiple Procedures to be queried using th.SharedTestUser1
+	p1 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	p2 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add procedure for another org; it should not be returned in the list
-	p3 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	p3 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -111,32 +113,32 @@ func TestQueryProcedures(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          suite.Client.APIWithToken,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "another user, no procedures should be returned",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 1,
 		},
 	}
@@ -152,14 +154,14 @@ func TestQueryProcedures(t *testing.T) {
 	}
 
 	// cleanup procedures created for the test
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{p1.ID, p2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: p3.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, IDs: []string{p1.ID, p2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: p3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 }
 
 func TestQueryProcedureTaskTemplates(t *testing.T) {
-	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	procedure := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	templateTask, err := suite.client.api.CreateTask(sharedTestUser1.UserCtx, testclient.CreateTaskInput{
+	templateTask, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 		Title:        "procedure task template",
 		IsTemplate:   lo.ToPtr(true),
 		ProcedureIDs: []string{procedure.ID},
@@ -167,14 +169,14 @@ func TestQueryProcedureTaskTemplates(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, templateTask != nil)
 
-	task, err := suite.client.api.CreateTask(sharedTestUser1.UserCtx, testclient.CreateTaskInput{
+	task, err := suite.Client.API.CreateTask(th.SharedTestUser1.UserCtx, testclient.CreateTaskInput{
 		Title:        "procedure standard task",
 		ProcedureIDs: []string{procedure.ID},
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, task != nil)
 
-	resp, err := suite.client.api.GetTasks(sharedTestUser1.UserCtx, nil, nil, nil, nil, nil, &testclient.TaskWhereInput{
+	resp, err := suite.Client.API.GetTasks(th.SharedTestUser1.UserCtx, nil, nil, nil, nil, nil, &testclient.TaskWhereInput{
 		IsTemplate: lo.ToPtr(true),
 		HasProceduresWith: []*testclient.ProcedureWhereInput{
 			{
@@ -190,18 +192,18 @@ func TestQueryProcedureTaskTemplates(t *testing.T) {
 	assert.Check(t, is.Equal(templateTask.CreateTask.Task.ID, resp.Tasks.Edges[0].Node.ID))
 	assert.Check(t, resp.Tasks.Edges[0].Node.IsTemplate)
 
-	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{templateTask.CreateTask.Task.ID, task.CreateTask.Task.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TaskDeleteOne]{Client: suite.Client.DB.Task, IDs: []string{templateTask.CreateTask.Task.ID, task.CreateTask.Task.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: procedure.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateProcedure(t *testing.T) {
-	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	anotherGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// group for the view only user
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	groupMember := (&th.GroupMemberBuilder{Client: suite.Client, UserID: th.SharedViewOnlyUser.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	approverGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	delegateGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -216,8 +218,8 @@ func TestMutationCreateProcedure(t *testing.T) {
 			request: testclient.CreateProcedureInput{
 				Name: "Test Procedure",
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input except edges, you should have to have view access to a group to add it as an edge on this object",
@@ -229,46 +231,46 @@ func TestMutationCreateProcedure(t *testing.T) {
 				ApproverID: &approverGroup.ID,
 				DelegateID: &delegateGroup.ID,
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "add editor group",
 			request: testclient.CreateProcedureInput{
 				Name:            "Test Procedure",
-				EditorIDs:       []string{sharedTestUser1.GroupID},
+				EditorIDs:       []string{th.SharedTestUser1.GroupID},
 				BlockedGroupIDs: []string{anotherGroup.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "add editor group, again - ensures the same group can be added to multiple procedures",
 			request: testclient.CreateProcedureInput{
 				Name:            "Test Procedure",
-				EditorIDs:       []string{sharedTestUser1.GroupID},
+				EditorIDs:       []string{th.SharedTestUser1.GroupID},
 				BlockedGroupIDs: []string{anotherGroup.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateProcedureInput{
 				Name:    "Test Procedure",
-				OwnerID: &sharedTestUser1.OrganizationID,
+				OwnerID: &th.SharedTestUser1.OrganizationID,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
 			name: "happy path with details, using pat",
 			request: testclient.CreateProcedureInput{
 				Name:    "Test Procedure",
-				OwnerID: &sharedTestUser1.OrganizationID,
+				OwnerID: &th.SharedTestUser1.OrganizationID,
 				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -276,7 +278,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 			request: testclient.CreateProcedureInput{
 				Name: "Test Procedure",
 			},
-			client: suite.client.apiWithToken,
+			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
 		{
@@ -284,9 +286,9 @@ func TestMutationCreateProcedure(t *testing.T) {
 			request: testclient.CreateProcedureInput{
 				Name: "Test Procedure",
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "user now authorized, add group to org first",
@@ -294,16 +296,16 @@ func TestMutationCreateProcedure(t *testing.T) {
 				Name: "Test Procedure",
 			},
 			addGroupToOrg: true,
-			client:        suite.client.api,
-			ctx:           sharedViewOnlyUser.UserCtx,
+			client:        suite.Client.API,
+			ctx:           th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name: "missing required field",
 			request: testclient.CreateProcedureInput{
 				Details: lo.ToPtr("instructions on how to release a new version"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -311,7 +313,7 @@ func TestMutationCreateProcedure(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.addGroupToOrg {
-				_, err := suite.client.api.UpdateOrganization(sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID,
+				_, err := suite.Client.API.UpdateOrganization(th.SharedTestUser1.UserCtx, th.SharedTestUser1.OrganizationID,
 					testclient.UpdateOrganizationInput{
 						AddProcedureCreatorIDs: []string{groupMember.GroupID},
 					}, nil, nil)
@@ -382,34 +384,34 @@ func TestMutationCreateProcedure(t *testing.T) {
 			}
 
 			// cleanup
-			(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: resp.CreateProcedure.Procedure.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: resp.CreateProcedure.Procedure.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		})
 	}
 
 	// cleanup group created for the test
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{anotherGroup.ID, groupMember.GroupID, approverGroup.ID, delegateGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{anotherGroup.ID, groupMember.GroupID, approverGroup.ID, delegateGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateProcedure(t *testing.T) {
 	// create procedure to be updated
-	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	procedure := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	// create a viewer user and add them to the same organization as sharedTestUser1
-	// also add them to the same group as sharedTestUser1, this should still allow them to edit the procedure
+	// create a viewer user and add them to the same organization as th.SharedTestUser1
+	// also add them to the same group as th.SharedTestUser1, this should still allow them to edit the procedure
 	// despite not not being an organization admin
-	anotherViewerUser := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(sharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, sharedTestUser1.OrganizationID)
+	anotherViewerUser := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(th.SharedTestUser1.UserCtx, t, &anotherViewerUser, enums.RoleMember, th.SharedTestUser1.OrganizationID)
 
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: sharedTestUser1.GroupID}).MustNew(sharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherViewerUser.ID, GroupID: th.SharedTestUser1.GroupID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// create one more group that will be used to test the blocked group permissions and add anotherViewerUser to it
-	blockGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	(&GroupMemberBuilder{client: suite.client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	blockGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, UserID: anotherViewerUser.ID, GroupID: blockGroup.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	delegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	anotherApproverGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	anotherDelegateGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	approverGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	delegateGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	anotherApproverGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	anotherDelegateGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	log.Error().Msg("starting test cases")
 	log.Error().Str("procedureID", procedure.ID).Str("revision", procedure.Revision).Msg("Procedure created for testing")
@@ -425,12 +427,12 @@ func TestMutationUpdateProcedure(t *testing.T) {
 			name: "happy path, update name field, and add group",
 			request: testclient.UpdateProcedureInput{
 				Name:         lo.ToPtr("Updated Procedure Name"),
-				AddEditorIDs: []string{sharedTestUser1.GroupID}, // add the group to the editor groups for subsequent tests
+				AddEditorIDs: []string{th.SharedTestUser1.GroupID}, // add the group to the editor groups for subsequent tests
 				ApproverID:   &approverGroup.ID,
 				DelegateID:   &delegateGroup.ID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -441,40 +443,40 @@ func TestMutationUpdateProcedure(t *testing.T) {
 				ApproverID:   &anotherApproverGroup.ID,
 				DelegateID:   &anotherDelegateGroup.ID,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "update allowed by admin user",
 			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Meow"),
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "update allowed, details updated by admin",
 			request: testclient.UpdateProcedureInput{
 				Details: lo.ToPtr(gofakeit.Sentence()),
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "member update allowed, user in editor group",
 			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    anotherViewerUser.UserCtx, // user assigned to the group which has editor permissions
 		},
 		{
@@ -482,49 +484,49 @@ func TestMutationUpdateProcedure(t *testing.T) {
 			request: testclient.UpdateProcedureInput{
 				AddBlockedGroupIDs: []string{blockGroup.ID}, // block the group
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "member update no longer allowed, user in blocked group",
 			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Again"),
 			},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         anotherViewerUser.UserCtx, // user assigned to the group which was blocked
-			expectedErr: notFoundErrorMsg,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "happy path, remove the group",
 			request: testclient.UpdateProcedureInput{
-				RemoveEditorIDs: []string{sharedTestUser1.GroupID}, // remove the group from the editor groups
+				RemoveEditorIDs: []string{th.SharedTestUser1.GroupID}, // remove the group from the editor groups
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "update not allowed, editor group was removed",
 			request: testclient.UpdateProcedureInput{
 				Name: lo.ToPtr("Updated Procedure Name Again Again"),
 			},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         anotherViewerUser.UserCtx,
-			expectedErr: notFoundErrorMsg, // TODO: this will change back to not authorized on the new permissions branch
+			expectedErr: th.NotFoundErrorMsg, // TODO: this will change back to not authorized on the new permissions branch
 		},
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateProcedureInput{
 				Details: lo.ToPtr("Updated details"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			tc.ctx = resetContext(tc.ctx, t)
+			tc.ctx = th.ResetContext(tc.ctx, t)
 
 			resp, err := tc.client.UpdateProcedure(tc.ctx, procedure.ID, tc.request)
 			if tc.expectedErr != "" {
@@ -570,14 +572,14 @@ func TestMutationUpdateProcedure(t *testing.T) {
 	}
 
 	// cleanup
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{blockGroup.ID, approverGroup.ID, delegateGroup.ID, anotherApproverGroup.ID, anotherDelegateGroup.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: procedure.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.GroupDeleteOne]{Client: suite.Client.DB.Group, IDs: []string{blockGroup.ID, approverGroup.ID, delegateGroup.ID, anotherApproverGroup.ID, anotherDelegateGroup.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteProcedure(t *testing.T) {
 	// create procedures to be deleted
-	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	procedure1 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	procedure2 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -589,35 +591,35 @@ func TestMutationDeleteProcedure(t *testing.T) {
 		{
 			name:        "not authorized, delete",
 			idToDelete:  procedure1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: procedure1.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  procedure1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: procedure2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -638,23 +640,23 @@ func TestMutationDeleteProcedure(t *testing.T) {
 }
 
 func TestMutationUpdateBulkProcedure(t *testing.T) {
-	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
-	newUser := localTestOrg.owner
-	adminUser := localTestOrg.admin
+	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	newUser := localTestOrg.Owner
+	adminUser := localTestOrg.Admin
 
 	// create procedures to be updated
-	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
-	procedure3 := (&ProcedureBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	procedure1 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(newUser.UserCtx, t)
+	procedure2 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(newUser.UserCtx, t)
+	procedure3 := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(newUser.UserCtx, t)
 
-	approverGroup := (&GroupBuilder{client: suite.client}).MustNew(newUser.UserCtx, t)
+	approverGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(newUser.UserCtx, t)
 
-	groupMember := (&GroupMemberBuilder{client: suite.client, UserID: adminUser.ID}).MustNew(newUser.UserCtx, t)
+	groupMember := (&th.GroupMemberBuilder{Client: suite.Client, UserID: adminUser.ID}).MustNew(newUser.UserCtx, t)
 
-	procedureAnotherUser := (&ProcedureBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	procedureAnotherUser := (&th.ProcedureBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	// ensure the user does not currently have access to update the procedure
-	res, err := suite.client.api.UpdateBulkProcedure(sharedTestUser2.UserCtx, []string{procedure1.ID}, testclient.UpdateProcedureInput{
+	res, err := suite.Client.API.UpdateBulkProcedure(th.SharedTestUser2.UserCtx, []string{procedure1.ID}, testclient.UpdateProcedureInput{
 		Status: lo.ToPtr(enums.DocumentPublished),
 	})
 
@@ -679,7 +681,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 				ApproverID:   &approverGroup.ID,
 				RevisionBump: &models.Minor,
 			},
-			client:               suite.client.api,
+			client:               suite.Client.API,
 			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 3,
 		},
@@ -690,7 +692,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 				AddEditorIDs: []string{groupMember.GroupID},
 				RevisionBump: &models.Major,
 			},
-			client:               suite.client.api,
+			client:               suite.Client.API,
 			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 2,
 		},
@@ -698,7 +700,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 			name:        "empty ids array",
 			ids:         []string{},
 			input:       testclient.UpdateProcedureInput{Details: lo.ToPtr("test")},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         newUser.UserCtx,
 			expectedErr: "ids is required",
 		},
@@ -708,7 +710,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 			input: testclient.UpdateProcedureInput{
 				Status: &enums.DocumentDraft,
 			},
-			client:               suite.client.api,
+			client:               suite.Client.API,
 			ctx:                  newUser.UserCtx,
 			expectedUpdatedCount: 1, // only procedure1 should be updated
 		},
@@ -718,15 +720,15 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 			input: testclient.UpdateProcedureInput{
 				Status: &enums.DocumentPublished,
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser2.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser2.UserCtx,
 			expectedUpdatedCount: 0, // should not find any procedures to update
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Bulk Update "+tc.name, func(t *testing.T) {
-			tc.ctx = resetContext(tc.ctx, t)
+			tc.ctx = th.ResetContext(tc.ctx, t)
 
 			resp, err := tc.client.UpdateBulkProcedure(tc.ctx, tc.ids, tc.input)
 			if tc.expectedErr != "" {
@@ -788,7 +790,7 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 
 				if len(tc.input.AddEditorIDs) > 0 {
 					// ensure the user has access to the procedure now
-					res, err := suite.client.api.UpdateProcedure(adminUser.UserCtx, responseProcedure.ID, testclient.UpdateProcedureInput{
+					res, err := suite.Client.API.UpdateProcedure(adminUser.UserCtx, responseProcedure.ID, testclient.UpdateProcedureInput{
 						Tags: []string{"bulk-test-tag"},
 					})
 					assert.NilError(t, err)
@@ -810,6 +812,6 @@ func TestMutationUpdateBulkProcedure(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedureAnotherUser.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	cleanupOrganizationDataWithContext(newUser.UserCtx, t)
+	(&th.Cleanup[*generated.ProcedureDeleteOne]{Client: suite.Client.DB.Procedure, ID: procedureAnotherUser.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(newUser.UserCtx, t)
 }

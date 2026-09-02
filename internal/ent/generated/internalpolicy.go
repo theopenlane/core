@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // InternalPolicy is the model entity for the InternalPolicy schema.
@@ -113,6 +113,7 @@ type InternalPolicy struct {
 	// The values are being populated by the InternalPolicyQuery when eager-loading is set.
 	Edges                              InternalPolicyEdges `json:"edges"`
 	custom_type_enum_internal_policies *string
+	evidence_internal_policies         *string
 	selectValues                       sql.SelectValues
 }
 
@@ -460,6 +461,8 @@ func (*InternalPolicy) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case internalpolicy.ForeignKeys[0]: // custom_type_enum_internal_policies
 			values[i] = new(sql.NullString)
+		case internalpolicy.ForeignKeys[1]: // evidence_internal_policies
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -769,6 +772,13 @@ func (_m *InternalPolicy) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.custom_type_enum_internal_policies = new(string)
 				*_m.custom_type_enum_internal_policies = value.String
+			}
+		case internalpolicy.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_internal_policies", values[i])
+			} else if value.Valid {
+				_m.evidence_internal_policies = new(string)
+				*_m.evidence_internal_policies = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

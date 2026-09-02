@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -101,11 +101,11 @@ func (ec *executionContext) _WebauthnDeletePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNWebauthnDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWebauthnDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.WebauthnDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWebauthnDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWebauthnDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.WebauthnDeletePayload) graphql.Marshaler {
 	return ec._WebauthnDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWebauthnDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWebauthnDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.WebauthnDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWebauthnDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWebauthnDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.WebauthnDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

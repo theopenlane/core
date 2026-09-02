@@ -17,9 +17,9 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/genhelpers"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/httpserve/specs"
+	"github.com/theopenlane/core/v2/internal/genhelpers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/specs"
 )
 
 // specVersion returns the version stamped into the published OpenAPI spec.

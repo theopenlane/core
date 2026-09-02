@@ -13,17 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // WorkflowDefinitionQuery is the builder for querying WorkflowDefinition entities.
@@ -104,9 +103,6 @@ func (_q *WorkflowDefinitionQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, workflowdefinition.OwnerTable, workflowdefinition.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.WorkflowDefinition
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -129,9 +125,6 @@ func (_q *WorkflowDefinitionQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.BlockedGroupsTable, workflowdefinition.BlockedGroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -154,9 +147,6 @@ func (_q *WorkflowDefinitionQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.EditorsTable, workflowdefinition.EditorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -179,9 +169,6 @@ func (_q *WorkflowDefinitionQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.ViewersTable, workflowdefinition.ViewersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -204,9 +191,6 @@ func (_q *WorkflowDefinitionQuery) QueryTagDefinitions() *TagDefinitionQuery {
 			sqlgraph.To(tagdefinition.Table, tagdefinition.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.TagDefinitionsTable, workflowdefinition.TagDefinitionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TagDefinition
-		step.Edge.Schema = schemaConfig.TagDefinition
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -229,9 +213,6 @@ func (_q *WorkflowDefinitionQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.GroupsTable, workflowdefinition.GroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -254,9 +235,6 @@ func (_q *WorkflowDefinitionQuery) QueryWorkflowInstances() *WorkflowInstanceQue
 			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, workflowdefinition.WorkflowInstancesTable, workflowdefinition.WorkflowInstancesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowInstance
-		step.Edge.Schema = schemaConfig.WorkflowInstance
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -279,9 +257,6 @@ func (_q *WorkflowDefinitionQuery) QueryNotificationTemplates() *NotificationTem
 			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.NotificationTemplatesTable, workflowdefinition.NotificationTemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.NotificationTemplate
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -304,9 +279,6 @@ func (_q *WorkflowDefinitionQuery) QueryEmailTemplates() *EmailTemplateQuery {
 			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.EmailTemplatesTable, workflowdefinition.EmailTemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -725,8 +697,6 @@ func (_q *WorkflowDefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.WorkflowDefinition
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1150,8 +1120,6 @@ func (_q *WorkflowDefinitionQuery) loadEmailTemplates(ctx context.Context, query
 
 func (_q *WorkflowDefinitionQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.WorkflowDefinition
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1220,9 +1188,6 @@ func (_q *WorkflowDefinitionQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.WorkflowDefinition)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

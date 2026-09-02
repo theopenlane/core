@@ -13,35 +13,34 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // FindingQuery is the builder for querying Finding entities.
@@ -157,9 +156,6 @@ func (_q *FindingQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, finding.OwnerTable, finding.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -182,9 +178,6 @@ func (_q *FindingQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.BlockedGroupsTable, finding.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.FindingBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -207,9 +200,6 @@ func (_q *FindingQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.EditorsTable, finding.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.FindingEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -232,9 +222,6 @@ func (_q *FindingQuery) QueryReviewedByUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.ReviewedByUserTable, finding.ReviewedByUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -257,9 +244,6 @@ func (_q *FindingQuery) QueryReviewedByGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.ReviewedByGroupTable, finding.ReviewedByGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -282,9 +266,6 @@ func (_q *FindingQuery) QueryAssignedToUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToUserTable, finding.AssignedToUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -307,9 +288,6 @@ func (_q *FindingQuery) QueryAssignedToGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToGroupTable, finding.AssignedToGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -332,9 +310,6 @@ func (_q *FindingQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.EnvironmentTable, finding.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -357,9 +332,6 @@ func (_q *FindingQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.ScopeTable, finding.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,9 +354,6 @@ func (_q *FindingQuery) QueryFindingStatus() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, finding.FindingStatusTable, finding.FindingStatusColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -407,9 +376,6 @@ func (_q *FindingQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, finding.IntegrationsTable, finding.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -432,9 +398,6 @@ func (_q *FindingQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.VulnerabilitiesTable, finding.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.FindingVulnerabilities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -457,9 +420,6 @@ func (_q *FindingQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.ActionPlansTable, finding.ActionPlansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.FindingActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -482,9 +442,6 @@ func (_q *FindingQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.ControlsTable, finding.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.FindingControl
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -507,9 +464,6 @@ func (_q *FindingQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.SubcontrolsTable, finding.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.FindingSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -532,9 +486,6 @@ func (_q *FindingQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.RisksTable, finding.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.FindingRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -557,9 +508,6 @@ func (_q *FindingQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.ProgramsTable, finding.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.FindingPrograms
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -582,9 +530,6 @@ func (_q *FindingQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.AssetsTable, finding.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.FindingAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -607,9 +552,6 @@ func (_q *FindingQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.EntitiesTable, finding.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.FindingEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -632,9 +574,6 @@ func (_q *FindingQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.ScansTable, finding.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.FindingScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -657,9 +596,6 @@ func (_q *FindingQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.TasksTable, finding.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.FindingTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -682,9 +618,6 @@ func (_q *FindingQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.DirectoryAccountsTable, finding.DirectoryAccountsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.FindingDirectoryAccounts
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -707,9 +640,6 @@ func (_q *FindingQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.IdentityHoldersTable, finding.IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.FindingIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -732,9 +662,6 @@ func (_q *FindingQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, finding.RemediationsTable, finding.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -757,9 +684,6 @@ func (_q *FindingQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, finding.ReviewsTable, finding.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -782,9 +706,6 @@ func (_q *FindingQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, finding.CommentsTable, finding.CommentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -807,9 +728,6 @@ func (_q *FindingQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, finding.FilesTable, finding.FilesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -832,9 +750,6 @@ func (_q *FindingQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, finding.WorkflowObjectRefsTable, finding.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -857,9 +772,6 @@ func (_q *FindingQuery) QueryCheckResults() *CheckResultQuery {
 			sqlgraph.To(checkresult.Table, checkresult.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, finding.CheckResultsTable, finding.CheckResultsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CheckResult
-		step.Edge.Schema = schemaConfig.FindingCheckResults
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -882,9 +794,6 @@ func (_q *FindingQuery) QueryControlMappings() *FindingControlQuery {
 			sqlgraph.To(findingcontrol.Table, findingcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, finding.ControlMappingsTable, finding.ControlMappingsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.FindingControl
-		step.Edge.Schema = schemaConfig.FindingControl
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1576,8 +1485,6 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Finding
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2000,7 +1907,6 @@ func (_q *FindingQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.FindingBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(finding.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2062,7 +1968,6 @@ func (_q *FindingQuery) loadEditors(ctx context.Context, query *GroupQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.EditorsTable)
-		joinT.Schema(_q.schemaConfig.FindingEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(finding.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2327,7 +2232,6 @@ func (_q *FindingQuery) loadIntegrations(ctx context.Context, query *Integration
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.IntegrationsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationFindings)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(finding.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(finding.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2389,7 +2293,6 @@ func (_q *FindingQuery) loadVulnerabilities(ctx context.Context, query *Vulnerab
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.FindingVulnerabilities)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(finding.VulnerabilitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.VulnerabilitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2451,7 +2354,6 @@ func (_q *FindingQuery) loadActionPlans(ctx context.Context, query *ActionPlanQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.ActionPlansTable)
-		joinT.Schema(_q.schemaConfig.FindingActionPlans)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(finding.ActionPlansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2513,7 +2415,6 @@ func (_q *FindingQuery) loadControls(ctx context.Context, query *ControlQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.ControlsTable)
-		joinT.Schema(_q.schemaConfig.FindingControl)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(finding.ControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.ControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2575,7 +2476,6 @@ func (_q *FindingQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.FindingSubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(finding.SubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.SubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2637,7 +2537,6 @@ func (_q *FindingQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.RisksTable)
-		joinT.Schema(_q.schemaConfig.FindingRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(finding.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2699,7 +2598,6 @@ func (_q *FindingQuery) loadPrograms(ctx context.Context, query *ProgramQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.FindingPrograms)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(finding.ProgramsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.ProgramsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2761,7 +2659,6 @@ func (_q *FindingQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.AssetsTable)
-		joinT.Schema(_q.schemaConfig.FindingAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(finding.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2823,7 +2720,6 @@ func (_q *FindingQuery) loadEntities(ctx context.Context, query *EntityQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.FindingEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(finding.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2885,7 +2781,6 @@ func (_q *FindingQuery) loadScans(ctx context.Context, query *ScanQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.ScansTable)
-		joinT.Schema(_q.schemaConfig.FindingScans)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(finding.ScansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.ScansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2947,7 +2842,6 @@ func (_q *FindingQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.TasksTable)
-		joinT.Schema(_q.schemaConfig.FindingTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(finding.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3009,7 +2903,6 @@ func (_q *FindingQuery) loadDirectoryAccounts(ctx context.Context, query *Direct
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.DirectoryAccountsTable)
-		joinT.Schema(_q.schemaConfig.FindingDirectoryAccounts)
 		s.Join(joinT).On(s.C(directoryaccount.FieldID), joinT.C(finding.DirectoryAccountsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.DirectoryAccountsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3071,7 +2964,6 @@ func (_q *FindingQuery) loadIdentityHolders(ctx context.Context, query *Identity
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.IdentityHoldersTable)
-		joinT.Schema(_q.schemaConfig.FindingIdentityHolders)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(finding.IdentityHoldersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.IdentityHoldersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3133,7 +3025,6 @@ func (_q *FindingQuery) loadRemediations(ctx context.Context, query *Remediation
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.RemediationFindings)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(finding.RemediationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(finding.RemediationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3195,7 +3086,6 @@ func (_q *FindingQuery) loadReviews(ctx context.Context, query *ReviewQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewFindings)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(finding.ReviewsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(finding.ReviewsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3350,7 +3240,6 @@ func (_q *FindingQuery) loadCheckResults(ctx context.Context, query *CheckResult
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(finding.CheckResultsTable)
-		joinT.Schema(_q.schemaConfig.FindingCheckResults)
 		s.Join(joinT).On(s.C(checkresult.FieldID), joinT.C(finding.CheckResultsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(finding.CheckResultsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3432,8 +3321,6 @@ func (_q *FindingQuery) loadControlMappings(ctx context.Context, query *FindingC
 
 func (_q *FindingQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Finding
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -3523,9 +3410,6 @@ func (_q *FindingQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Finding)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

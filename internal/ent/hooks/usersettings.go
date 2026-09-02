@@ -10,25 +10,25 @@ import (
 
 	"github.com/theopenlane/iam/fgax"
 
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookUserSetting runs on user settings mutations and validates input on update
@@ -139,7 +139,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}
 
 			// send a welcome email to the user
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.WelcomeOp.Name(), emaildef.WelcomeRequest{
+			if err := sendSystemEmail(ctx, emaildef.WelcomeOp.Name(), emaildef.WelcomeRequest{
 				RecipientInfo: emaildef.RecipientInfo{
 					Email:     user.Email,
 					FirstName: user.FirstName,
@@ -151,7 +151,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 				return nil, err
 			}
 
-			if err := sendSystemSlack(ctx, m.Client(), slackdef.NewUserOp.Name(), slackdef.NewUserMessage{
+			if err := sendSystemSlack(ctx, slackdef.NewUserOp.Name(), slackdef.NewUserMessage{
 				Email: user.Email,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to send new user slack notification")

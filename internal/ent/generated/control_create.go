@@ -12,39 +12,38 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
 
 // ControlCreate is the builder for creating a Control entity.
@@ -1142,21 +1141,6 @@ func (_c *ControlCreate) AddSubcontrols(v ...*Subcontrol) *ControlCreate {
 	return _c.AddSubcontrolIDs(ids...)
 }
 
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (_c *ControlCreate) AddScheduledJobIDs(ids ...string) *ControlCreate {
-	_c.mutation.AddScheduledJobIDs(ids...)
-	return _c
-}
-
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (_c *ControlCreate) AddScheduledJobs(v ...*ScheduledJob) *ControlCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddScheduledJobIDs(ids...)
-}
-
 // AddMappedToControlIDs adds the "mapped_to_controls" edge to the MappedControl entity by IDs.
 func (_c *ControlCreate) AddMappedToControlIDs(ids ...string) *ControlCreate {
 	_c.mutation.AddMappedToControlIDs(ids...)
@@ -1389,7 +1373,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 		_node = &Control{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(control.Table, sqlgraph.NewFieldSpec(control.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Control
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -1589,7 +1572,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1606,7 +1588,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1623,7 +1604,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1640,7 +1620,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1657,7 +1636,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1674,7 +1652,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1691,7 +1668,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlProcedures
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1708,7 +1684,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.InternalPolicyControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1725,7 +1700,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1742,7 +1716,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1759,7 +1732,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1777,7 +1749,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1795,7 +1766,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1813,7 +1783,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1830,7 +1799,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.RemediationControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1847,7 +1815,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1864,7 +1831,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1882,7 +1848,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1899,7 +1864,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1916,7 +1880,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1934,7 +1897,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1952,7 +1914,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1970,7 +1931,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1988,7 +1948,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(checkresult.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CheckResultControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2005,7 +1964,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2022,7 +1980,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.PlatformControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2039,7 +1996,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VulnerabilityControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2056,7 +2012,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2073,7 +2028,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2090,7 +2044,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2107,7 +2060,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlCampaigns
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2124,7 +2076,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2148,7 +2099,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2165,24 +2115,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subcontrol
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ScheduledJobsTable,
-			Columns: control.ScheduledJobsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2199,7 +2131,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2216,7 +2147,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2233,7 +2163,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2250,7 +2179,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

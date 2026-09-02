@@ -8,8 +8,8 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
 )
 
 // NotificationCreated is the resolver for the notificationCreated field.

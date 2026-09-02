@@ -3,8 +3,8 @@ package githubapp
 import (
 	"strconv"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
 // webhookBaseEntries returns CEL map entries for webhook alert payloads (snake_case JSON keys)

@@ -9,9 +9,9 @@ import (
 
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // LoadExample reads a JSON file from the given directory and returns it as a raw message
@@ -35,21 +35,6 @@ func MappingSpec(t *testing.T, mappings []types.MappingRegistration, schema stri
 	}
 
 	t.Fatalf("no mapping found for schema %s", schema)
-
-	return types.MappingOverride{}
-}
-
-// MappingSpecForVariant returns the MappingOverride for the mapping matching both schema and variant
-func MappingSpecForVariant(t *testing.T, mappings []types.MappingRegistration, schema, variant string) types.MappingOverride {
-	t.Helper()
-
-	for _, m := range mappings {
-		if m.Schema == schema && m.Variant == variant {
-			return m.Spec
-		}
-	}
-
-	t.Fatalf("no mapping found for schema %s variant %s", schema, variant)
 
 	return types.MappingOverride{}
 }

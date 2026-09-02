@@ -11,22 +11,22 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
 
 // ActionPlanCreate is the builder for creating a ActionPlan entity.
@@ -1080,7 +1080,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_node = &ActionPlan{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(actionplan.Table, sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ActionPlan
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -1268,7 +1267,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1286,7 +1284,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1304,7 +1301,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1322,7 +1318,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlanBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1339,7 +1334,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlanEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1356,7 +1350,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlanViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1373,7 +1366,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1391,7 +1383,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.RiskActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1408,7 +1399,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1425,7 +1415,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1442,7 +1431,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FindingActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1459,7 +1447,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VulnerabilityActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1476,7 +1463,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ScanActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1493,7 +1479,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ReviewActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1510,7 +1495,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.RemediationActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1527,7 +1511,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlanTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1544,7 +1527,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1561,7 +1543,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1579,7 +1560,6 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

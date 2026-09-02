@@ -14,28 +14,26 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 )
 
 // ReviewUpdate is the builder for updating Review entities.
@@ -1555,7 +1553,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -1569,7 +1566,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1586,7 +1582,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1603,7 +1598,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -1617,7 +1611,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1634,7 +1627,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1651,7 +1643,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -1665,7 +1656,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1682,7 +1672,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -1696,7 +1685,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1713,7 +1701,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationReviews
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
@@ -1727,7 +1714,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationReviews
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1744,7 +1730,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationReviews
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1761,7 +1746,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewFindings
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
@@ -1775,7 +1759,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1792,7 +1775,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1809,7 +1791,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
@@ -1823,7 +1804,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1840,7 +1820,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1857,7 +1836,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
@@ -1871,7 +1849,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1888,7 +1865,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1905,7 +1881,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRemediations
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
@@ -1919,7 +1894,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1936,7 +1910,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1953,7 +1926,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
@@ -1967,7 +1939,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1984,7 +1955,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2001,7 +1971,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
@@ -2015,7 +1984,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2032,7 +2000,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2049,7 +2016,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
@@ -2063,7 +2029,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2080,7 +2045,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2097,7 +2061,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewPrograms
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
@@ -2111,7 +2074,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2128,7 +2090,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2145,7 +2106,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
@@ -2159,7 +2119,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2176,7 +2135,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2193,7 +2151,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEntities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
@@ -2207,7 +2164,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2224,7 +2180,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2241,7 +2196,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
@@ -2255,7 +2209,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2272,7 +2225,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2289,7 +2241,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ReviewerIDs(); len(nodes) > 0 {
@@ -2303,7 +2254,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2320,7 +2270,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
@@ -2334,7 +2283,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2351,7 +2299,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2368,7 +2315,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -2382,7 +2328,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2399,7 +2344,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2416,7 +2360,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewInternalPolicies
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
@@ -2430,7 +2373,6 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2447,14 +2389,11 @@ func (_u *ReviewUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Review
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -4010,7 +3949,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -4024,7 +3962,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4041,7 +3978,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4058,7 +3994,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -4072,7 +4007,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4089,7 +4023,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4106,7 +4039,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -4120,7 +4052,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4137,7 +4068,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -4151,7 +4081,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4168,7 +4097,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationReviews
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedIntegrationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationsCleared() {
@@ -4182,7 +4110,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationReviews
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4199,7 +4126,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationReviews
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4216,7 +4142,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewFindings
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
@@ -4230,7 +4155,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4247,7 +4171,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewFindings
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4264,7 +4187,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
@@ -4278,7 +4200,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4295,7 +4216,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewVulnerabilities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4312,7 +4232,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewActionPlans
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedActionPlansIDs(); len(nodes) > 0 && !_u.mutation.ActionPlansCleared() {
@@ -4326,7 +4245,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4343,7 +4261,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4360,7 +4277,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRemediations
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRemediationsIDs(); len(nodes) > 0 && !_u.mutation.RemediationsCleared() {
@@ -4374,7 +4290,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4391,7 +4306,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRemediations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4408,7 +4322,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
@@ -4422,7 +4335,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4439,7 +4351,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4456,7 +4367,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
@@ -4470,7 +4380,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4487,7 +4396,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4504,7 +4412,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRisks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
@@ -4518,7 +4425,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4535,7 +4441,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4552,7 +4457,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewPrograms
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
@@ -4566,7 +4470,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4583,7 +4486,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4600,7 +4502,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
@@ -4614,7 +4515,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4631,7 +4531,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4648,7 +4547,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEntities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
@@ -4662,7 +4560,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4679,7 +4576,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4696,7 +4592,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
@@ -4710,7 +4605,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4727,7 +4621,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4744,7 +4637,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ReviewerIDs(); len(nodes) > 0 {
@@ -4758,7 +4650,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Review
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4775,7 +4666,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
@@ -4789,7 +4679,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4806,7 +4695,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4823,7 +4711,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -4837,7 +4724,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4854,7 +4740,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4871,7 +4756,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewInternalPolicies
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
@@ -4885,7 +4769,6 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4902,14 +4785,11 @@ func (_u *ReviewUpdateOne) sqlSave(ctx context.Context) (_node *Review, err erro
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ReviewInternalPolicies
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Review
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &Review{config: _u.config}
 	_spec.Assign = _node.assignValues

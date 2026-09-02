@@ -10,6 +10,7 @@ contents:
     - base/task.fga
 
     - generated/crud.fga
+    - generated/version.fga
 
     - compliance/controls.fga
     - compliance/program.fga
@@ -20,7 +21,6 @@ contents:
     - automation/assessments.fga
     - automation/directory.fga
     - automation/integrations.fga
-    - automation/jobs.fga
     - automation/notifications.fga
     - automation/workflows.fga
 

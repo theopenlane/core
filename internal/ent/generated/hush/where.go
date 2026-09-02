@@ -7,9 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1344,9 +1342,6 @@ func HasOwner() predicate.Hush {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Hush
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1355,9 +1350,6 @@ func HasOwner() predicate.Hush {
 func HasOwnerWith(preds ...predicate.Organization) predicate.Hush {
 	return predicate.Hush(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Hush
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1373,9 +1365,6 @@ func HasIntegrations() predicate.Hush {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, IntegrationsTable, IntegrationsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationSecrets
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1384,9 +1373,6 @@ func HasIntegrations() predicate.Hush {
 func HasIntegrationsWith(preds ...predicate.Integration) predicate.Hush {
 	return predicate.Hush(func(s *sql.Selector) {
 		step := newIntegrationsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationSecrets
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1402,9 +1388,6 @@ func HasFiles() predicate.Hush {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, FilesTable, FilesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.FileSecrets
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1413,9 +1396,6 @@ func HasFiles() predicate.Hush {
 func HasFilesWith(preds ...predicate.File) predicate.Hush {
 	return predicate.Hush(func(s *sql.Selector) {
 		step := newFilesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.FileSecrets
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1431,9 +1411,6 @@ func HasEvents() predicate.Hush {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.HushEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1442,9 +1419,6 @@ func HasEvents() predicate.Hush {
 func HasEventsWith(preds ...predicate.Event) predicate.Hush {
 	return predicate.Hush(func(s *sql.Selector) {
 		step := newEventsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.HushEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

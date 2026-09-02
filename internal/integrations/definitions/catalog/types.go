@@ -1,18 +1,18 @@
 package catalog
 
 import (
-	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
-	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
-	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
-	"github.com/theopenlane/core/internal/integrations/definitions/googledrive"
-	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
-	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
-	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
-	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
-	"github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/definitions/system"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/awssecurityhub"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/azureentraid"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/googledrive"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/googleworkspace"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/microsoftteams"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/oidclocal"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/onedrive"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/system"
 )
 
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)

@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
 )
 
 // VendorRiskScoreCreate is the builder for creating a VendorRiskScore entity.
@@ -472,7 +472,6 @@ func (_c *VendorRiskScoreCreate) createSpec() (*VendorRiskScore, *sqlgraph.Creat
 		_node = &VendorRiskScore{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(vendorriskscore.Table, sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.VendorRiskScore
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -560,7 +559,6 @@ func (_c *VendorRiskScoreCreate) createSpec() (*VendorRiskScore, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -578,7 +576,6 @@ func (_c *VendorRiskScoreCreate) createSpec() (*VendorRiskScore, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -596,7 +593,6 @@ func (_c *VendorRiskScoreCreate) createSpec() (*VendorRiskScore, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -614,7 +610,6 @@ func (_c *VendorRiskScoreCreate) createSpec() (*VendorRiskScore, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

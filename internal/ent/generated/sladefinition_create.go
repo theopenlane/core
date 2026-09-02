@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 )
 
 // SLADefinitionCreate is the builder for creating a SLADefinition entity.
@@ -347,7 +347,6 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 		_node = &SLADefinition{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(sladefinition.Table, sqlgraph.NewFieldSpec(sladefinition.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.SLADefinition
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -407,7 +406,6 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SLADefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -425,7 +423,6 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -442,7 +439,6 @@ func (_c *SLADefinitionCreate) createSpec() (*SLADefinition, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

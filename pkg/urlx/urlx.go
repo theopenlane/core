@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/url"
 
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/shortlinks"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 )
 
 // BuildTokenURL appends a token query parameter to the base URL and optionally

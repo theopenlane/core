@@ -12,8 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 )
 
 // CheckResult is the model entity for the CheckResult schema.

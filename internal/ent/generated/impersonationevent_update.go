@@ -12,10 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ImpersonationEventUpdate is the builder for updating ImpersonationEvent entities.
@@ -277,8 +275,6 @@ func (_u *ImpersonationEventUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(impersonationevent.FieldScopes, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ImpersonationEvent
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -576,8 +572,6 @@ func (_u *ImpersonationEventUpdateOne) sqlSave(ctx context.Context) (_node *Impe
 	if _u.mutation.ScopesCleared() {
 		_spec.ClearField(impersonationevent.FieldScopes, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ImpersonationEvent
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &ImpersonationEvent{config: _u.config}
 	_spec.Assign = _node.assignValues

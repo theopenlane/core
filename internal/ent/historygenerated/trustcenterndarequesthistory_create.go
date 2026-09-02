@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -478,7 +478,6 @@ func (_c *TrustCenterNDARequestHistoryCreate) createSpec() (*TrustCenterNDAReque
 		_node = &TrustCenterNDARequestHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcenterndarequesthistory.Table, sqlgraph.NewFieldSpec(trustcenterndarequesthistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustCenterNDARequestHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

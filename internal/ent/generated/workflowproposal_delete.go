@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 )
 
 // WorkflowProposalDelete is the builder for deleting a WorkflowProposal entity.
@@ -43,8 +41,6 @@ func (_d *WorkflowProposalDelete) ExecX(ctx context.Context) int {
 
 func (_d *WorkflowProposalDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(workflowproposal.Table, sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.WorkflowProposal
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

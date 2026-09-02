@@ -1,7 +1,10 @@
 package graphapi_test
 
 import (
+	"context"
 	"testing"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
@@ -13,10 +16,10 @@ import (
 	auth "github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func TestQueryUser(t *testing.T) {
@@ -28,12 +31,12 @@ func TestQueryUser(t *testing.T) {
 	}{
 		{
 			name:     "happy path user",
-			queryID:  sharedTestUser1.ID,
-			expected: sharedTestUser1.UserInfo,
+			queryID:  th.SharedTestUser1.ID,
+			expected: th.SharedTestUser1.UserInfo,
 		},
 		{
 			name:     "valid user, but no auth",
-			queryID:  sharedTestUser2.ID,
+			queryID:  th.SharedTestUser2.ID,
 			errorMsg: "user not found",
 		},
 		{
@@ -45,7 +48,7 @@ func TestQueryUser(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Get "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.GetUserByID(sharedTestUser1.UserCtx, tc.queryID)
+			resp, err := suite.Client.API.GetUserByID(th.SharedTestUser1.UserCtx, tc.queryID)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -65,7 +68,7 @@ func TestQueryUser(t *testing.T) {
 func TestQueryUsers(t *testing.T) {
 
 	t.Run("Get Users", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllUsers(sharedTestUser1.UserCtx)
+		resp, err := suite.Client.API.GetAllUsers(th.SharedTestUser1.UserCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -75,9 +78,9 @@ func TestQueryUsers(t *testing.T) {
 		assert.Check(t, is.Len(resp.Users.Edges, 1))
 
 		// setup valid user context
-		reqCtx := sharedTestUser1.UserCtx
+		reqCtx := th.SharedTestUser1.UserCtx
 
-		resp, err = suite.client.api.GetAllUsers(reqCtx)
+		resp, err = suite.Client.API.GetAllUsers(reqCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -90,9 +93,9 @@ func TestQueryUsers(t *testing.T) {
 		user2Found := false
 
 		for _, o := range resp.Users.Edges {
-			if o.Node.ID == sharedTestUser1.ID {
+			if o.Node.ID == th.SharedTestUser1.ID {
 				user1Found = true
-			} else if o.Node.ID == sharedTestUser2.ID {
+			} else if o.Node.ID == th.SharedTestUser2.ID {
 				user2Found = true
 			}
 		}
@@ -128,7 +131,7 @@ func TestMutationCreateUser(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.CreateUser(sharedTestUser1.UserCtx, tc.userInput, tc.avatarFile, nil)
+			resp, err := suite.Client.API.CreateUser(th.SharedTestUser1.UserCtx, tc.userInput, tc.avatarFile, nil)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -155,7 +158,7 @@ func TestMutationCreateUser(t *testing.T) {
 			// default org will always be the personal org when the user is first created
 			personalOrgID := resp.CreateUser.User.Setting.DefaultOrg.ID
 
-			org, err := suite.client.api.GetOrganizationByID(sharedTestUser1.UserCtx, personalOrgID)
+			org, err := suite.Client.API.GetOrganizationByID(th.SharedTestUser1.UserCtx, personalOrgID)
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal(personalOrgID, org.Organization.ID))
 			assert.Check(t, *org.Organization.PersonalOrg)
@@ -170,7 +173,7 @@ func TestMutationUpdateUser(t *testing.T) {
 	displayNameUpdate := gofakeit.LetterN(40)
 	nameUpdateLong := gofakeit.LetterN(200)
 
-	user := (&UserBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	user := (&th.UserBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	orgID := user.Edges.Setting.Edges.DefaultOrg.ID
 
@@ -179,9 +182,9 @@ func TestMutationUpdateUser(t *testing.T) {
 
 	weakPassword := "notsecure"
 
-	avatarFile := uploadFile(t, logoFilePath)
+	avatarFile := th.UploadFile(t, th.LogoFilePath)
 
-	invalidAvatarFile := uploadFile(t, txtFilePath)
+	invalidAvatarFile := th.UploadFile(t, th.TxtFilePath)
 
 	testCases := []struct {
 		name        string
@@ -278,14 +281,14 @@ func TestMutationUpdateUser(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
-					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.avatarFile})
+					th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*tc.avatarFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.mockProvider)
+					th.ExpectUploadCheckOnly(t, suite.Client.MockProvider)
 				}
 			}
 
 			// update user
-			resp, err := suite.client.api.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile, nil)
+			resp, err := suite.Client.API.UpdateUser(reqCtx, user.ID, tc.updateInput, tc.avatarFile, nil)
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
 
@@ -312,9 +315,9 @@ func TestMutationUpdateUser(t *testing.T) {
 
 func TestMutationDeleteUser(t *testing.T) {
 	// bypass auth on object creation
-	ctx := privacy.DecisionContext(sharedTestUser1.UserCtx, privacy.Allow)
+	ctx := privacy.DecisionContext(th.SharedTestUser1.UserCtx, privacy.Allow)
 
-	user := (&UserBuilder{client: suite.client}).MustNew(ctx, t)
+	user := (&th.UserBuilder{Client: suite.Client}).MustNew(ctx, t)
 
 	userSetting := user.Edges.Setting
 
@@ -336,13 +339,13 @@ func TestMutationDeleteUser(t *testing.T) {
 		{
 			name:     "delete user, not found",
 			userID:   "tacos-tuesday",
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.DeleteUser(reqCtx, tc.userID)
+			resp, err := suite.Client.API.DeleteUser(reqCtx, tc.userID)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -358,92 +361,92 @@ func TestMutationDeleteUser(t *testing.T) {
 			// add allow context to bypass auth since the tuple will be deleted
 			reqCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
 
-			_, err = suite.client.api.GetOrganizationByID(reqCtx, personalOrgID)
+			_, err = suite.Client.API.GetOrganizationByID(reqCtx, personalOrgID)
 
-			assert.ErrorContains(t, err, notFoundErrorMsg)
+			assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
 			// make sure the deletedID matches the ID we wanted to delete
 			assert.Check(t, is.Equal(tc.userID, resp.DeleteUser.DeletedID))
 
 			// make sure the user setting is deleted
-			_, err = suite.client.api.GetUserSettingByID(reqCtx, userSetting.ID)
-			assert.ErrorContains(t, err, notFoundErrorMsg)
+			_, err = suite.Client.API.GetUserSettingByID(reqCtx, userSetting.ID)
+			assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 		})
 	}
 }
 
 func TestQueryUserSupportContext(t *testing.T) {
-	orgID := sharedTestUser1.OrganizationID
+	orgID := th.SharedTestUser1.OrganizationID
 
-	caller := auth.NewOrgSupportCaller(orgID, auth.SupportSubjectID, supportSubjectName, supportSubjectEmail)
-	supportCtx := auth.WithCaller(sharedTestUser1.UserCtx, caller)
+	caller := auth.NewOrgSupportCaller(orgID, auth.SupportSubjectID, th.SupportSubjectName, th.SupportSubjectEmail)
+	supportCtx := auth.WithCaller(th.SharedTestUser1.UserCtx, caller)
 
 	t.Run("Self returns synthetic support user", func(t *testing.T) {
-		resp, err := suite.client.api.GetSelf(supportCtx)
+		resp, err := suite.Client.API.GetSelf(supportCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
 		assert.Check(t, is.Equal(auth.SupportSubjectID, resp.Self.ID))
-		assert.Check(t, is.Equal(supportSubjectName, resp.Self.DisplayName))
-		assert.Check(t, is.Equal(supportSubjectEmail, resp.Self.Email))
+		assert.Check(t, is.Equal(th.SupportSubjectName, resp.Self.DisplayName))
+		assert.Check(t, is.Equal(th.SupportSubjectEmail, resp.Self.Email))
 		assert.Check(t, resp.Self.Setting.EmailConfirmed)
 		assert.Check(t, resp.Self.Setting.DefaultOrg != nil)
 		assert.Check(t, is.Equal(orgID, resp.Self.Setting.DefaultOrg.ID))
 	})
 
 	t.Run("User returns synthetic support user", func(t *testing.T) {
-		resp, err := suite.client.api.GetUserByID(supportCtx, auth.SupportSubjectID)
+		resp, err := suite.Client.API.GetUserByID(supportCtx, auth.SupportSubjectID)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
 		assert.Check(t, is.Equal(auth.SupportSubjectID, resp.User.ID))
-		assert.Check(t, is.Equal(supportSubjectName, resp.User.DisplayName))
-		assert.Check(t, is.Equal(supportSubjectEmail, resp.User.Email))
+		assert.Check(t, is.Equal(th.SupportSubjectName, resp.User.DisplayName))
+		assert.Check(t, is.Equal(th.SupportSubjectEmail, resp.User.Email))
 	})
 }
 
 func TestMutationDeleteUser_OrgOwnerCannotBeDeleted(t *testing.T) {
 	t.Parallel()
-	localTestOrg := suite.seedFreshOrgUsers(t)
+	localTestOrg := suite.UserBuilder(context.Background(), t)
 
-	_, err := suite.client.api.DeleteUser(localTestOrg.owner.UserCtx, localTestOrg.owner.ID)
+	_, err := suite.Client.API.DeleteUser(localTestOrg.UserCtx, localTestOrg.ID)
 
 	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
 
 	// cleanup
-	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.UserCtx, t)
 }
 
 func TestMutationDeleteUser_OrgOwnerCannotDeleteFromAnotherOrg(t *testing.T) {
 	t.Parallel()
 
-	newOrgAsOwner := suite.seedOrgOwner(t)
+	newOrgAsOwner := suite.SeedOrgOwner(t)
 
 	// storing here to use in cleanup because addUserToOrganization updates the active org context of the user
-	ownerOrgCtx := newOrgAsOwner.owner.UserCtx
+	ownerOrgCtx := newOrgAsOwner.Owner.UserCtx
 
-	newOrgAsMember := suite.seedFreshMinimalOrgUsers(t, false)
+	newOrgAsMember := suite.UserBuilder(context.Background(), t)
 
-	suite.addUserToOrganization(newOrgAsMember.owner.UserCtx, t, newOrgAsOwner.owner, enums.RoleMember, newOrgAsMember.owner.OrganizationID)
+	suite.AddUserToOrganization(newOrgAsMember.UserCtx, t, newOrgAsOwner.Owner, enums.RoleMember, newOrgAsMember.OrganizationID)
 
-	_, err := suite.client.api.DeleteUser(newOrgAsOwner.owner.UserCtx, newOrgAsOwner.owner.ID)
+	_, err := suite.Client.API.DeleteUser(newOrgAsOwner.Owner.UserCtx, newOrgAsOwner.Owner.ID)
 
 	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
 
-	cleanupOrganizationDataWithContext(ownerOrgCtx, t)
-	cleanupOrganizationDataWithContext(newOrgAsMember.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(ownerOrgCtx, t)
+	th.CleanupOrganizationDataWithContext(newOrgAsMember.UserCtx, t)
 }
 
 func TestMutationUserCascadeDelete(t *testing.T) {
-	user := (&UserBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	user := (&th.UserBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	reqCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.Setting.Edges.DefaultOrg.ID)
 
-	token := (&PersonalAccessTokenBuilder{client: suite.client, OrganizationIDs: []string{user.Edges.Setting.Edges.DefaultOrg.ID}}).MustNew(reqCtx, t)
+	token := (&th.PersonalAccessTokenBuilder{Client: suite.Client, OrganizationIDs: []string{user.Edges.Setting.Edges.DefaultOrg.ID}}).MustNew(reqCtx, t)
 
-	resp, err := suite.client.api.DeleteUser(reqCtx, user.ID)
+	resp, err := suite.Client.API.DeleteUser(reqCtx, user.ID)
 
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
@@ -452,11 +455,11 @@ func TestMutationUserCascadeDelete(t *testing.T) {
 	// make sure the deletedID matches the ID we wanted to delete
 	assert.Check(t, is.Equal(user.ID, resp.DeleteUser.DeletedID))
 
-	_, err = suite.client.api.GetUserByID(reqCtx, user.ID)
+	_, err = suite.Client.API.GetUserByID(reqCtx, user.ID)
 
-	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
-	_, err = suite.client.api.GetPersonalAccessTokenByID(reqCtx, token.ID)
+	_, err = suite.Client.API.GetPersonalAccessTokenByID(reqCtx, token.ID)
 
-	assert.ErrorContains(t, err, notFoundErrorMsg)
+	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 }

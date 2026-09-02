@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1140,9 +1138,6 @@ func HasUser() predicate.UserSetting {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, UserTable, UserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserSetting
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1151,9 +1146,6 @@ func HasUser() predicate.UserSetting {
 func HasUserWith(preds ...predicate.User) predicate.UserSetting {
 	return predicate.UserSetting(func(s *sql.Selector) {
 		step := newUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserSetting
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1169,9 +1161,6 @@ func HasDefaultOrg() predicate.UserSetting {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, DefaultOrgTable, DefaultOrgColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.UserSetting
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1180,9 +1169,6 @@ func HasDefaultOrg() predicate.UserSetting {
 func HasDefaultOrgWith(preds ...predicate.Organization) predicate.UserSetting {
 	return predicate.UserSetting(func(s *sql.Selector) {
 		step := newDefaultOrgStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.UserSetting
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

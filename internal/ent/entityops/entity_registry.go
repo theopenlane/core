@@ -18,54 +18,54 @@ import (
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/pkg/celx"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/mapx"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/pkg/celx"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 // entityRef is a lightweight reference to an entity
@@ -3015,116 +3015,6 @@ var (
 			return data, nil
 		},
 	}
-	SchemaJobResult = &Schema{
-		SchemaDescriptor: SchemaDescriptor{
-			Name:  "JobResult",
-			Snake: "job_result",
-			Lower: "jobresult",
-		},
-		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "job_result", Operation: refOpLoad, EntityID: entityID}
-
-			entity, err := client.JobResult.Get(ctx, entityID)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrLoadFailed, err)
-			}
-
-			data, err := json.Marshal(entity)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrMarshalFailed, err)
-			}
-
-			return data, nil
-		},
-	}
-	SchemaJobRunner = &Schema{
-		SchemaDescriptor: SchemaDescriptor{
-			Name:  "JobRunner",
-			Snake: "job_runner",
-			Lower: "jobrunner",
-		},
-		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "job_runner", Operation: refOpLoad, EntityID: entityID}
-
-			entity, err := client.JobRunner.Get(ctx, entityID)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrLoadFailed, err)
-			}
-
-			data, err := json.Marshal(entity)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrMarshalFailed, err)
-			}
-
-			return data, nil
-		},
-	}
-	SchemaJobRunnerRegistrationToken = &Schema{
-		SchemaDescriptor: SchemaDescriptor{
-			Name:  "JobRunnerRegistrationToken",
-			Snake: "job_runner_registration_token",
-			Lower: "jobrunnerregistrationtoken",
-		},
-		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "job_runner_registration_token", Operation: refOpLoad, EntityID: entityID}
-
-			entity, err := client.JobRunnerRegistrationToken.Get(ctx, entityID)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrLoadFailed, err)
-			}
-
-			data, err := json.Marshal(entity)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrMarshalFailed, err)
-			}
-
-			return data, nil
-		},
-	}
-	SchemaJobRunnerToken = &Schema{
-		SchemaDescriptor: SchemaDescriptor{
-			Name:  "JobRunnerToken",
-			Snake: "job_runner_token",
-			Lower: "jobrunnertoken",
-		},
-		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "job_runner_token", Operation: refOpLoad, EntityID: entityID}
-
-			entity, err := client.JobRunnerToken.Get(ctx, entityID)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrLoadFailed, err)
-			}
-
-			data, err := json.Marshal(entity)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrMarshalFailed, err)
-			}
-
-			return data, nil
-		},
-	}
-	SchemaJobTemplate = &Schema{
-		SchemaDescriptor: SchemaDescriptor{
-			Name:  "JobTemplate",
-			Snake: "job_template",
-			Lower: "jobtemplate",
-		},
-		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "job_template", Operation: refOpLoad, EntityID: entityID}
-
-			entity, err := client.JobTemplate.Get(ctx, entityID)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrLoadFailed, err)
-			}
-
-			data, err := json.Marshal(entity)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrMarshalFailed, err)
-			}
-
-			return data, nil
-		},
-	}
 	SchemaMappableDomain = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
 			Name:  "MappableDomain",
@@ -4076,50 +3966,6 @@ var (
 			ref := SchemaRef{Schema: "scan", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Scan.Get(ctx, entityID)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrLoadFailed, err)
-			}
-
-			data, err := json.Marshal(entity)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrMarshalFailed, err)
-			}
-
-			return data, nil
-		},
-	}
-	SchemaScheduledJob = &Schema{
-		SchemaDescriptor: SchemaDescriptor{
-			Name:  "ScheduledJob",
-			Snake: "scheduled_job",
-			Lower: "scheduledjob",
-		},
-		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "scheduled_job", Operation: refOpLoad, EntityID: entityID}
-
-			entity, err := client.ScheduledJob.Get(ctx, entityID)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrLoadFailed, err)
-			}
-
-			data, err := json.Marshal(entity)
-			if err != nil {
-				return nil, logError(ctx, ref, ErrMarshalFailed, err)
-			}
-
-			return data, nil
-		},
-	}
-	SchemaScheduledJobRun = &Schema{
-		SchemaDescriptor: SchemaDescriptor{
-			Name:  "ScheduledJobRun",
-			Snake: "scheduled_job_run",
-			Lower: "scheduledjobrun",
-		},
-		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "scheduled_job_run", Operation: refOpLoad, EntityID: entityID}
-
-			entity, err := client.ScheduledJobRun.Get(ctx, entityID)
 			if err != nil {
 				return nil, logError(ctx, ref, ErrLoadFailed, err)
 			}
@@ -5875,6 +5721,7 @@ func init() {
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaEvidence.Fields = []FieldDescriptor{
+		{Name: "auditor_reference_id", Label: "AuditorReferenceID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "collection_procedure", Label: "CollectionProcedure", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
@@ -5922,6 +5769,7 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaFile.Fields = []FieldDescriptor{
+		{Name: "backup_state", Label: "BackupState", Type: "models.FileBackupState", Clearable: true},
 		{Name: "category_id", Label: "CategoryID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "category_name", Label: "CategoryName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "category_type", Label: "CategoryType", Type: "string", MatchKey: true, Clearable: true},
@@ -6339,99 +6187,6 @@ func init() {
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-	}
-	SchemaJobResult.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "exit_code", Label: "ExitCode", Type: "int", Clearable: true},
-		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true},
-		{Name: "finished_at", Label: "FinishedAt", Type: "time.Time"},
-		{Name: "log", Label: "Log", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scheduled_job_id", Label: "ScheduledJobID", Type: "string", MatchKey: true},
-		{Name: "started_at", Label: "StartedAt", Type: "time.Time"},
-		{Name: "status", Label: "Status", Type: "enums.JobExecutionStatus"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-	}
-	SchemaJobRunner.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "ip_address", Label: "IPAddress", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "last_seen", Label: "LastSeen", Type: "time.Time", Clearable: true},
-		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "os", Label: "Os", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "status", Label: "Status", Type: "enums.JobRunnerStatus"},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "version", Label: "Version", Type: "string", MatchKey: true, Clearable: true},
-	}
-	SchemaJobRunnerRegistrationToken.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time"},
-		{Name: "job_runner_id", Label: "JobRunnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "last_used_at", Label: "LastUsedAt", Type: "time.Time", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "token", Label: "Token", Type: "string", MatchKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-	}
-	SchemaJobRunnerToken.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time", Clearable: true},
-		{Name: "is_active", Label: "IsActive", Type: "bool", Clearable: true},
-		{Name: "last_used_at", Label: "LastUsedAt", Type: "time.Time", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "revoked_at", Label: "RevokedAt", Type: "time.Time", Clearable: true},
-		{Name: "revoked_by", Label: "RevokedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "revoked_reason", Label: "RevokedReason", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "token", Label: "Token", Type: "string", MatchKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-	}
-	SchemaJobTemplate.Fields = []FieldDescriptor{
-		{Name: "configuration", Label: "Configuration", Type: "models.JobConfiguration", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "cron", Label: "Cron", Type: "models.Cron", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "download_url", Label: "DownloadURL", Type: "string", MatchKey: true},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "platform", Label: "Platform", Type: "enums.JobPlatformType"},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "windmill_path", Label: "WindmillPath", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaMappableDomain.Fields = []FieldDescriptor{
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
@@ -7097,37 +6852,6 @@ func init() {
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "target", Label: "Target", Type: "string", MatchKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-	}
-	SchemaScheduledJob.Fields = []FieldDescriptor{
-		{Name: "active", Label: "Active", Type: "bool"},
-		{Name: "configuration", Label: "Configuration", Type: "models.JobConfiguration", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "cron", Label: "Cron", Type: "models.Cron", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "job_id", Label: "JobID", Type: "string", MatchKey: true},
-		{Name: "job_runner_id", Label: "JobRunnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-	}
-	SchemaScheduledJobRun.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "expected_execution_time", Label: "ExpectedExecutionTime", Type: "time.Time"},
-		{Name: "job_runner_id", Label: "JobRunnerID", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scheduled_job_id", Label: "ScheduledJobID", Type: "string", MatchKey: true},
-		{Name: "script", Label: "Script", Type: "string", MatchKey: true},
-		{Name: "status", Label: "Status", Type: "enums.ScheduledJobRunStatus"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
@@ -9122,14 +8846,6 @@ func init() {
 			AddField:    "add_scan_ids",
 		},
 		{
-			Name:        "scheduled_jobs",
-			Label:       "ScheduledJobs",
-			Target:      SchemaScheduledJob,
-			TargetType:  "ScheduledJob",
-			CreateField: "scheduled_job_ids",
-			AddField:    "add_scheduled_job_ids",
-		},
-		{
 			Name:        "scope",
 			Label:       "Scope",
 			Target:      SchemaCustomTypeEnum,
@@ -10572,6 +10288,14 @@ func init() {
 			AddField:    "add_file_ids",
 		},
 		{
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+		},
+		{
 			Name:        "owner",
 			Label:       "Owner",
 			Target:      SchemaOrganization,
@@ -10587,6 +10311,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+		},
+		{
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
 		},
 		{
 			Name:        "programs",
@@ -12463,112 +12195,6 @@ func init() {
 			Field:       "owner_id",
 		},
 	}
-	SchemaJobResult.Edges = []EdgeDescriptor{
-		{
-			Name:        "file",
-			Label:       "File",
-			Target:      SchemaFile,
-			TargetType:  "File",
-			Unique:      true,
-			CreateField: "file_id",
-			Field:       "file_id",
-		},
-		{
-			Name:        "owner",
-			Label:       "Owner",
-			Target:      SchemaOrganization,
-			TargetType:  "Organization",
-			Unique:      true,
-			CreateField: "owner_id",
-			Field:       "owner_id",
-		},
-		{
-			Name:        "scheduled_job",
-			Label:       "ScheduledJob",
-			Target:      SchemaScheduledJob,
-			TargetType:  "ScheduledJob",
-			Unique:      true,
-			CreateField: "scheduled_job_id",
-			Field:       "scheduled_job_id",
-		},
-	}
-	SchemaJobRunner.Edges = []EdgeDescriptor{
-		{
-			Name:        "job_runner_tokens",
-			Label:       "JobRunnerTokens",
-			Target:      SchemaJobRunnerToken,
-			TargetType:  "JobRunnerToken",
-			CreateField: "job_runner_token_ids",
-			AddField:    "add_job_runner_token_ids",
-		},
-		{
-			Name:        "owner",
-			Label:       "Owner",
-			Target:      SchemaOrganization,
-			TargetType:  "Organization",
-			Unique:      true,
-			CreateField: "owner_id",
-			Field:       "owner_id",
-		},
-	}
-	SchemaJobRunnerRegistrationToken.Edges = []EdgeDescriptor{
-		{
-			Name:        "job_runner",
-			Label:       "JobRunner",
-			Target:      SchemaJobRunner,
-			TargetType:  "JobRunner",
-			Unique:      true,
-			CreateField: "job_runner_id",
-			Field:       "job_runner_id",
-		},
-		{
-			Name:        "owner",
-			Label:       "Owner",
-			Target:      SchemaOrganization,
-			TargetType:  "Organization",
-			Unique:      true,
-			CreateField: "owner_id",
-			Field:       "owner_id",
-		},
-	}
-	SchemaJobRunnerToken.Edges = []EdgeDescriptor{
-		{
-			Name:        "job_runners",
-			Label:       "JobRunners",
-			Target:      SchemaJobRunner,
-			TargetType:  "JobRunner",
-			CreateField: "job_runner_ids",
-			AddField:    "add_job_runner_ids",
-		},
-		{
-			Name:        "owner",
-			Label:       "Owner",
-			Target:      SchemaOrganization,
-			TargetType:  "Organization",
-			Unique:      true,
-			CreateField: "owner_id",
-			Field:       "owner_id",
-		},
-	}
-	SchemaJobTemplate.Edges = []EdgeDescriptor{
-		{
-			Name:        "owner",
-			Label:       "Owner",
-			Target:      SchemaOrganization,
-			TargetType:  "Organization",
-			Unique:      true,
-			CreateField: "owner_id",
-			Field:       "owner_id",
-		},
-		{
-			Name:        "scheduled_jobs",
-			Label:       "ScheduledJobs",
-			Target:      SchemaScheduledJob,
-			TargetType:  "ScheduledJob",
-			CreateField: "scheduled_job_ids",
-			AddField:    "add_scheduled_job_ids",
-		},
-	}
 	SchemaMappableDomain.Edges = []EdgeDescriptor{
 		{
 			Name:        "custom_domains",
@@ -13710,78 +13336,6 @@ func init() {
 			AddField:    "add_invite_ids",
 		},
 		{
-			Name:        "job_results",
-			Label:       "JobResults",
-			Target:      SchemaJobResult,
-			TargetType:  "JobResult",
-			CreateField: "job_result_ids",
-			AddField:    "add_job_result_ids",
-		},
-		{
-			Name:        "job_runner_creators",
-			Label:       "JobRunnerCreators",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "job_runner_creator_ids",
-			AddField:    "add_job_runner_creator_ids",
-		},
-		{
-			Name:        "job_runner_registration_token_creators",
-			Label:       "JobRunnerRegistrationTokenCreators",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "job_runner_registration_token_creator_ids",
-			AddField:    "add_job_runner_registration_token_creator_ids",
-		},
-		{
-			Name:        "job_runner_registration_tokens",
-			Label:       "JobRunnerRegistrationTokens",
-			Target:      SchemaJobRunnerRegistrationToken,
-			TargetType:  "JobRunnerRegistrationToken",
-			CreateField: "job_runner_registration_token_ids",
-			AddField:    "add_job_runner_registration_token_ids",
-		},
-		{
-			Name:        "job_runner_token_creators",
-			Label:       "JobRunnerTokenCreators",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "job_runner_token_creator_ids",
-			AddField:    "add_job_runner_token_creator_ids",
-		},
-		{
-			Name:        "job_runner_tokens",
-			Label:       "JobRunnerTokens",
-			Target:      SchemaJobRunnerToken,
-			TargetType:  "JobRunnerToken",
-			CreateField: "job_runner_token_ids",
-			AddField:    "add_job_runner_token_ids",
-		},
-		{
-			Name:        "job_runners",
-			Label:       "JobRunners",
-			Target:      SchemaJobRunner,
-			TargetType:  "JobRunner",
-			CreateField: "job_runner_ids",
-			AddField:    "add_job_runner_ids",
-		},
-		{
-			Name:        "job_template_creators",
-			Label:       "JobTemplateCreators",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "job_template_creator_ids",
-			AddField:    "add_job_template_creator_ids",
-		},
-		{
-			Name:        "job_templates",
-			Label:       "JobTemplates",
-			Target:      SchemaJobTemplate,
-			TargetType:  "JobTemplate",
-			CreateField: "job_template_ids",
-			AddField:    "add_job_template_ids",
-		},
-		{
 			Name:        "mapped_control_creators",
 			Label:       "MappedControlCreators",
 			Target:      SchemaGroup,
@@ -14069,38 +13623,6 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
-		},
-		{
-			Name:        "scheduled_job_creators",
-			Label:       "ScheduledJobCreators",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "scheduled_job_creator_ids",
-			AddField:    "add_scheduled_job_creator_ids",
-		},
-		{
-			Name:        "scheduled_job_run_creators",
-			Label:       "ScheduledJobRunCreators",
-			Target:      SchemaGroup,
-			TargetType:  "Group",
-			CreateField: "scheduled_job_run_creator_ids",
-			AddField:    "add_scheduled_job_run_creator_ids",
-		},
-		{
-			Name:        "scheduled_job_runs",
-			Label:       "ScheduledJobRuns",
-			Target:      SchemaScheduledJobRun,
-			TargetType:  "ScheduledJobRun",
-			CreateField: "scheduled_job_run_ids",
-			AddField:    "add_scheduled_job_run_ids",
-		},
-		{
-			Name:        "scheduled_jobs",
-			Label:       "ScheduledJobs",
-			Target:      SchemaScheduledJob,
-			TargetType:  "ScheduledJob",
-			CreateField: "scheduled_job_ids",
-			AddField:    "add_scheduled_job_ids",
 		},
 		{
 			Name:        "secrets",
@@ -16171,80 +15693,6 @@ func init() {
 			AddField:    "add_vulnerability_ids",
 		},
 	}
-	SchemaScheduledJob.Edges = []EdgeDescriptor{
-		{
-			Name:        "controls",
-			Label:       "Controls",
-			Target:      SchemaControl,
-			TargetType:  "Control",
-			CreateField: "control_ids",
-			AddField:    "add_control_ids",
-		},
-		{
-			Name:        "job_runner",
-			Label:       "JobRunner",
-			Target:      SchemaJobRunner,
-			TargetType:  "JobRunner",
-			Unique:      true,
-			CreateField: "job_runner_id",
-			Field:       "job_runner_id",
-		},
-		{
-			Name:        "job_template",
-			Label:       "JobTemplate",
-			Target:      SchemaJobTemplate,
-			TargetType:  "JobTemplate",
-			Unique:      true,
-			CreateField: "job_template_id",
-			Field:       "job_id",
-		},
-		{
-			Name:        "owner",
-			Label:       "Owner",
-			Target:      SchemaOrganization,
-			TargetType:  "Organization",
-			Unique:      true,
-			CreateField: "owner_id",
-			Field:       "owner_id",
-		},
-		{
-			Name:        "subcontrols",
-			Label:       "Subcontrols",
-			Target:      SchemaSubcontrol,
-			TargetType:  "Subcontrol",
-			CreateField: "subcontrol_ids",
-			AddField:    "add_subcontrol_ids",
-		},
-	}
-	SchemaScheduledJobRun.Edges = []EdgeDescriptor{
-		{
-			Name:        "job_runner",
-			Label:       "JobRunner",
-			Target:      SchemaJobRunner,
-			TargetType:  "JobRunner",
-			Unique:      true,
-			CreateField: "job_runner_id",
-			Field:       "job_runner_id",
-		},
-		{
-			Name:        "owner",
-			Label:       "Owner",
-			Target:      SchemaOrganization,
-			TargetType:  "Organization",
-			Unique:      true,
-			CreateField: "owner_id",
-			Field:       "owner_id",
-		},
-		{
-			Name:        "scheduled_job",
-			Label:       "ScheduledJob",
-			Target:      SchemaScheduledJob,
-			TargetType:  "ScheduledJob",
-			Unique:      true,
-			CreateField: "scheduled_job_id",
-			Field:       "scheduled_job_id",
-		},
-	}
 	SchemaStandard.Edges = []EdgeDescriptor{
 		{
 			Name:        "applicable_platforms",
@@ -16510,14 +15958,6 @@ func init() {
 			TargetType:  "Scan",
 			CreateField: "scan_ids",
 			AddField:    "add_scan_ids",
-		},
-		{
-			Name:        "scheduled_jobs",
-			Label:       "ScheduledJobs",
-			Target:      SchemaScheduledJob,
-			TargetType:  "ScheduledJob",
-			CreateField: "scheduled_job_ids",
-			AddField:    "add_scheduled_job_ids",
 		},
 		{
 			Name:        "subcontrol_kind",
@@ -20065,11 +19505,6 @@ var allSchemas = []*Schema{
 	SchemaIntegrationWebhook,
 	SchemaInternalPolicy,
 	SchemaInvite,
-	SchemaJobResult,
-	SchemaJobRunner,
-	SchemaJobRunnerRegistrationToken,
-	SchemaJobRunnerToken,
-	SchemaJobTemplate,
 	SchemaMappableDomain,
 	SchemaMappedControl,
 	SchemaNarrative,
@@ -20096,8 +19531,6 @@ var allSchemas = []*Schema{
 	SchemaRisk,
 	SchemaSLADefinition,
 	SchemaScan,
-	SchemaScheduledJob,
-	SchemaScheduledJobRun,
 	SchemaStandard,
 	SchemaSubcontrol,
 	SchemaSubprocessor,

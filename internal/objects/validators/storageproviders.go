@@ -10,20 +10,19 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	disk "github.com/theopenlane/core/pkg/objects/storage/providers/disk"
-	r2provider "github.com/theopenlane/core/pkg/objects/storage/providers/r2"
-	s3provider "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	disk "github.com/theopenlane/core/v2/pkg/objects/storage/providers/disk"
+	r2provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/r2"
+	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
 )
 
 const (
-	StorageValidationTimeout     = 10 * time.Second
-	StorageCredentialSyncTimeout = 10 * time.Second
+	StorageValidationTimeout = 10 * time.Second
 	// StorageCheckCacheTTL is how long a readiness check result is reused before revalidating providers
 	StorageCheckCacheTTL = 5 * time.Minute
 )

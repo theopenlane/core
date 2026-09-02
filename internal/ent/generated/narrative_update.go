@@ -12,15 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 )
 
 // NarrativeUpdate is the builder for updating Narrative entities.
@@ -656,7 +654,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -670,7 +667,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -687,7 +683,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -704,7 +699,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -718,7 +712,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -735,7 +728,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -752,7 +744,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
@@ -766,7 +757,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -783,7 +773,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -800,7 +789,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSatisfiesIDs(); len(nodes) > 0 && !_u.mutation.SatisfiesCleared() {
@@ -814,7 +802,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -831,7 +818,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -848,7 +834,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
@@ -862,7 +847,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -879,7 +863,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -896,7 +879,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
@@ -910,7 +892,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -927,7 +908,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -944,7 +924,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
@@ -958,7 +937,6 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -975,14 +953,11 @@ func (_u *NarrativeUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1654,7 +1629,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -1668,7 +1642,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1685,7 +1658,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1702,7 +1674,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeEditors
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -1716,7 +1687,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1733,7 +1703,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1750,7 +1719,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeViewers
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
@@ -1764,7 +1732,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1781,7 +1748,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NarrativeViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1798,7 +1764,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSatisfiesIDs(); len(nodes) > 0 && !_u.mutation.SatisfiesCleared() {
@@ -1812,7 +1777,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1829,7 +1793,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1846,7 +1809,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
@@ -1860,7 +1822,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1877,7 +1838,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1894,7 +1854,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
@@ -1908,7 +1867,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1925,7 +1883,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1942,7 +1899,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
@@ -1956,7 +1912,6 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1973,14 +1928,11 @@ func (_u *NarrativeUpdateOne) sqlSave(ctx context.Context) (_node *Narrative, er
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProcedureNarratives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &Narrative{config: _u.config}
 	_spec.Assign = _node.assignValues

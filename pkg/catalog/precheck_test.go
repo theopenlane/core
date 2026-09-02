@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v86"
 
-	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/v2/pkg/catalog"
 )
 
 type fakeLookup struct {

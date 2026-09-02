@@ -13,33 +13,32 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // PlatformQuery is the builder for querying Platform entities.
@@ -180,9 +179,6 @@ func (_q *PlatformQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, platform.OwnerTable, platform.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -205,9 +201,6 @@ func (_q *PlatformQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.BlockedGroupsTable, platform.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -230,9 +223,6 @@ func (_q *PlatformQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.EditorsTable, platform.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -255,9 +245,6 @@ func (_q *PlatformQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.ViewersTable, platform.ViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -280,9 +267,6 @@ func (_q *PlatformQuery) QueryInternalOwnerUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.InternalOwnerUserTable, platform.InternalOwnerUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -305,9 +289,6 @@ func (_q *PlatformQuery) QueryInternalOwnerGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.InternalOwnerGroupTable, platform.InternalOwnerGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -330,9 +311,6 @@ func (_q *PlatformQuery) QueryBusinessOwnerUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.BusinessOwnerUserTable, platform.BusinessOwnerUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -355,9 +333,6 @@ func (_q *PlatformQuery) QueryBusinessOwnerGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.BusinessOwnerGroupTable, platform.BusinessOwnerGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -380,9 +355,6 @@ func (_q *PlatformQuery) QueryTechnicalOwnerUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.TechnicalOwnerUserTable, platform.TechnicalOwnerUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -405,9 +377,6 @@ func (_q *PlatformQuery) QueryTechnicalOwnerGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.TechnicalOwnerGroupTable, platform.TechnicalOwnerGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -430,9 +399,6 @@ func (_q *PlatformQuery) QuerySecurityOwnerUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityOwnerUserTable, platform.SecurityOwnerUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -455,9 +421,6 @@ func (_q *PlatformQuery) QuerySecurityOwnerGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityOwnerGroupTable, platform.SecurityOwnerGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -480,9 +443,6 @@ func (_q *PlatformQuery) QueryPlatformKind() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.PlatformKindTable, platform.PlatformKindColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -505,9 +465,6 @@ func (_q *PlatformQuery) QueryPlatformDataClassification() *CustomTypeEnumQuery 
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.PlatformDataClassificationTable, platform.PlatformDataClassificationColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -530,9 +487,6 @@ func (_q *PlatformQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.EnvironmentTable, platform.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -555,9 +509,6 @@ func (_q *PlatformQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.ScopeTable, platform.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -580,9 +531,6 @@ func (_q *PlatformQuery) QueryAccessModel() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.AccessModelTable, platform.AccessModelColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -605,9 +553,6 @@ func (_q *PlatformQuery) QueryEncryptionStatus() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.EncryptionStatusTable, platform.EncryptionStatusColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -630,9 +575,6 @@ func (_q *PlatformQuery) QuerySecurityTier() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityTierTable, platform.SecurityTierColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -655,9 +597,6 @@ func (_q *PlatformQuery) QueryCriticality() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.CriticalityTable, platform.CriticalityColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -680,9 +619,6 @@ func (_q *PlatformQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.AssetsTable, platform.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.PlatformAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -705,9 +641,6 @@ func (_q *PlatformQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.EntitiesTable, platform.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -730,9 +663,6 @@ func (_q *PlatformQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.EvidenceTable, platform.EvidencePrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.PlatformEvidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -755,9 +685,6 @@ func (_q *PlatformQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.FilesTable, platform.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.PlatformFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -780,9 +707,6 @@ func (_q *PlatformQuery) QueryArchitectureDiagrams() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.ArchitectureDiagramsTable, platform.ArchitectureDiagramsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -805,9 +729,6 @@ func (_q *PlatformQuery) QueryDataFlowDiagrams() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.DataFlowDiagramsTable, platform.DataFlowDiagramsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -830,9 +751,6 @@ func (_q *PlatformQuery) QueryTrustBoundaryDiagrams() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.TrustBoundaryDiagramsTable, platform.TrustBoundaryDiagramsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -855,9 +773,6 @@ func (_q *PlatformQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.RisksTable, platform.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.PlatformRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -880,9 +795,6 @@ func (_q *PlatformQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.ControlsTable, platform.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.PlatformControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -905,9 +817,6 @@ func (_q *PlatformQuery) QueryAssessments() *AssessmentQuery {
 			sqlgraph.To(assessment.Table, assessment.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.AssessmentsTable, platform.AssessmentsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.PlatformAssessments
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -930,9 +839,6 @@ func (_q *PlatformQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.ScansTable, platform.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.PlatformScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -955,9 +861,6 @@ func (_q *PlatformQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.TasksTable, platform.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.PlatformTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -980,9 +883,6 @@ func (_q *PlatformQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.IdentityHoldersTable, platform.IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.PlatformIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1005,9 +905,6 @@ func (_q *PlatformQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.IntegrationsTable, platform.IntegrationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1030,9 +927,6 @@ func (_q *PlatformQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectorySyncRunsTable, platform.DirectorySyncRunsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectorySyncRun
-		step.Edge.Schema = schemaConfig.DirectorySyncRun
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1055,9 +949,6 @@ func (_q *PlatformQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectoryAccountsTable, platform.DirectoryAccountsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryAccount
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1080,9 +971,6 @@ func (_q *PlatformQuery) QueryDirectoryGroups() *DirectoryGroupQuery {
 			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectoryGroupsTable, platform.DirectoryGroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1105,9 +993,6 @@ func (_q *PlatformQuery) QueryDirectoryMemberships() *DirectoryMembershipQuery {
 			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.DirectoryMembershipsTable, platform.DirectoryMembershipsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1130,9 +1015,6 @@ func (_q *PlatformQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, platform.WorkflowObjectRefsTable, platform.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1155,9 +1037,6 @@ func (_q *PlatformQuery) QuerySourceAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.SourceAssetsTable, platform.SourceAssetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1180,9 +1059,6 @@ func (_q *PlatformQuery) QuerySourceEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.SourceEntitiesTable, platform.SourceEntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformSourceEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1205,9 +1081,6 @@ func (_q *PlatformQuery) QueryOutOfScopeAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.OutOfScopeAssetsTable, platform.OutOfScopeAssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.PlatformOutOfScopeAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1230,9 +1103,6 @@ func (_q *PlatformQuery) QueryOutOfScopeVendors() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.OutOfScopeVendorsTable, platform.OutOfScopeVendorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformOutOfScopeVendors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1255,9 +1125,6 @@ func (_q *PlatformQuery) QueryApplicableFrameworks() *StandardQuery {
 			sqlgraph.To(standard.Table, standard.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.ApplicableFrameworksTable, platform.ApplicableFrameworksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1280,9 +1147,6 @@ func (_q *PlatformQuery) QueryGeneratedScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, platform.GeneratedScansTable, platform.GeneratedScansColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1305,9 +1169,6 @@ func (_q *PlatformQuery) QueryPlatformOwner() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, platform.PlatformOwnerTable, platform.PlatformOwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1330,9 +1191,6 @@ func (_q *PlatformQuery) QuerySystemDetails() *SystemDetailQuery {
 			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, platform.SystemDetailsTable, platform.SystemDetailsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.PlatformSystemDetails
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2249,8 +2107,6 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Platform
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2835,7 +2691,6 @@ func (_q *PlatformQuery) loadBlockedGroups(ctx context.Context, query *GroupQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.PlatformBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(platform.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2897,7 +2752,6 @@ func (_q *PlatformQuery) loadEditors(ctx context.Context, query *GroupQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.EditorsTable)
-		joinT.Schema(_q.schemaConfig.PlatformEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(platform.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2959,7 +2813,6 @@ func (_q *PlatformQuery) loadViewers(ctx context.Context, query *GroupQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.ViewersTable)
-		joinT.Schema(_q.schemaConfig.PlatformViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(platform.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3485,7 +3338,6 @@ func (_q *PlatformQuery) loadAssets(ctx context.Context, query *AssetQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.AssetsTable)
-		joinT.Schema(_q.schemaConfig.PlatformAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(platform.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3547,7 +3399,6 @@ func (_q *PlatformQuery) loadEntities(ctx context.Context, query *EntityQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.PlatformEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(platform.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3609,7 +3460,6 @@ func (_q *PlatformQuery) loadEvidence(ctx context.Context, query *EvidenceQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.EvidenceTable)
-		joinT.Schema(_q.schemaConfig.PlatformEvidence)
 		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(platform.EvidencePrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.EvidencePrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3671,7 +3521,6 @@ func (_q *PlatformQuery) loadFiles(ctx context.Context, query *FileQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.FilesTable)
-		joinT.Schema(_q.schemaConfig.PlatformFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(platform.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3826,7 +3675,6 @@ func (_q *PlatformQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.RisksTable)
-		joinT.Schema(_q.schemaConfig.PlatformRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(platform.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3888,7 +3736,6 @@ func (_q *PlatformQuery) loadControls(ctx context.Context, query *ControlQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.ControlsTable)
-		joinT.Schema(_q.schemaConfig.PlatformControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(platform.ControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.ControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3950,7 +3797,6 @@ func (_q *PlatformQuery) loadAssessments(ctx context.Context, query *AssessmentQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.AssessmentsTable)
-		joinT.Schema(_q.schemaConfig.PlatformAssessments)
 		s.Join(joinT).On(s.C(assessment.FieldID), joinT.C(platform.AssessmentsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.AssessmentsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4012,7 +3858,6 @@ func (_q *PlatformQuery) loadScans(ctx context.Context, query *ScanQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.ScansTable)
-		joinT.Schema(_q.schemaConfig.PlatformScans)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(platform.ScansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.ScansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4074,7 +3919,6 @@ func (_q *PlatformQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.TasksTable)
-		joinT.Schema(_q.schemaConfig.PlatformTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(platform.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4136,7 +3980,6 @@ func (_q *PlatformQuery) loadIdentityHolders(ctx context.Context, query *Identit
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.IdentityHoldersTable)
-		joinT.Schema(_q.schemaConfig.PlatformIdentityHolders)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(platform.IdentityHoldersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.IdentityHoldersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4411,7 +4254,6 @@ func (_q *PlatformQuery) loadSourceEntities(ctx context.Context, query *EntityQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.SourceEntitiesTable)
-		joinT.Schema(_q.schemaConfig.PlatformSourceEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(platform.SourceEntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.SourceEntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4473,7 +4315,6 @@ func (_q *PlatformQuery) loadOutOfScopeAssets(ctx context.Context, query *AssetQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.OutOfScopeAssetsTable)
-		joinT.Schema(_q.schemaConfig.PlatformOutOfScopeAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(platform.OutOfScopeAssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.OutOfScopeAssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4535,7 +4376,6 @@ func (_q *PlatformQuery) loadOutOfScopeVendors(ctx context.Context, query *Entit
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.OutOfScopeVendorsTable)
-		joinT.Schema(_q.schemaConfig.PlatformOutOfScopeVendors)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(platform.OutOfScopeVendorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.OutOfScopeVendorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4597,7 +4437,6 @@ func (_q *PlatformQuery) loadApplicableFrameworks(ctx context.Context, query *St
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.ApplicableFrameworksTable)
-		joinT.Schema(_q.schemaConfig.PlatformApplicableFrameworks)
 		s.Join(joinT).On(s.C(standard.FieldID), joinT.C(platform.ApplicableFrameworksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.ApplicableFrameworksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4719,7 +4558,6 @@ func (_q *PlatformQuery) loadSystemDetails(ctx context.Context, query *SystemDet
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(platform.SystemDetailsTable)
-		joinT.Schema(_q.schemaConfig.PlatformSystemDetails)
 		s.Join(joinT).On(s.C(systemdetail.FieldID), joinT.C(platform.SystemDetailsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(platform.SystemDetailsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4771,8 +4609,6 @@ func (_q *PlatformQuery) loadSystemDetails(ctx context.Context, query *SystemDet
 
 func (_q *PlatformQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Platform
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -4892,9 +4728,6 @@ func (_q *PlatformQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Platform)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

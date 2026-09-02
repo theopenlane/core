@@ -3,8 +3,8 @@ package providerkit
 import (
 	"encoding/json"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // CredentialSchema reflects a credential schema type and returns both the JSON schema
@@ -21,15 +21,6 @@ func OperationSchema[T any]() (json.RawMessage, types.OperationRef[T]) {
 	schema := jsonx.SchemaFrom[T]()
 
 	return schema, types.NewOperationRef[T](jsonx.SchemaID(schema))
-}
-
-// OperationSchemaVariant reflects the same schema as OperationSchema but registers
-// the operation under a composite key of TypeName.variant, allowing the same input
-// type to back multiple catalog entries (e.g. themed visual variants)
-func OperationSchemaVariant[T any](variant string) (json.RawMessage, types.OperationRef[T]) {
-	schema := jsonx.SchemaFrom[T]()
-
-	return schema, types.NewOperationRef[T](jsonx.SchemaID(schema) + "." + variant)
 }
 
 // WebhookEventSchema reflects a webhook event payload type and returns both the JSON schema

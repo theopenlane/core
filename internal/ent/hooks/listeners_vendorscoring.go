@@ -5,13 +5,16 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
+
+// init registers the vendor scoring listeners so gala setup picks them up automatically
+func init() { registerListeners(VendorScoringListeners) }
 
 // VendorScoringListeners recomputes entity risk aggregates when vendor scoring configuration changes
 func VendorScoringListeners() []gala.Registration {

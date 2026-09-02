@@ -10,19 +10,19 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // EventCreate is the builder for creating a Event entity.
@@ -429,7 +429,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 		_node = &Event{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(event.Table, sqlgraph.NewFieldSpec(event.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Event
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -481,7 +480,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.UserEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -498,7 +496,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -515,7 +512,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -532,7 +528,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrganizationEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -549,7 +544,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(invite.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.InviteEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -566,7 +560,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -583,7 +576,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.HushEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -600,7 +592,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -617,7 +608,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -634,7 +624,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SubscriberEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -651,7 +640,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FileEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -668,7 +656,6 @@ func (_c *EventCreate) createSpec() (*Event, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

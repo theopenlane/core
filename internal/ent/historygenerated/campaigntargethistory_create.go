@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -468,7 +468,6 @@ func (_c *CampaignTargetHistoryCreate) createSpec() (*CampaignTargetHistory, *sq
 		_node = &CampaignTargetHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(campaigntargethistory.Table, sqlgraph.NewFieldSpec(campaigntargethistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.CampaignTargetHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

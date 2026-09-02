@@ -3,7 +3,7 @@ package workflows
 import (
 	"fmt"
 
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 // BuildObjectReplacements builds string replacements from object fields for template substitution

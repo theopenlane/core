@@ -2,12 +2,15 @@ package hooks
 
 import (
 	"github.com/theopenlane/core/common/jobspec"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
+
+// init registers the trust center watermark listeners so gala setup picks them up automatically
+func init() { registerListeners(TrustCenterWatermarkListeners) }
 
 // TrustCenterWatermarkListeners enqueues watermarking jobs when trust center document files change
 func TrustCenterWatermarkListeners() []gala.Registration {

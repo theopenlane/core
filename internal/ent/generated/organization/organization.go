@@ -117,14 +117,6 @@ const (
 	EdgeInternalPolicyCreators = "internal_policy_creators"
 	// EdgeInviteCreators holds the string denoting the invite_creators edge name in mutations.
 	EdgeInviteCreators = "invite_creators"
-	// EdgeJobRunnerCreators holds the string denoting the job_runner_creators edge name in mutations.
-	EdgeJobRunnerCreators = "job_runner_creators"
-	// EdgeJobRunnerRegistrationTokenCreators holds the string denoting the job_runner_registration_token_creators edge name in mutations.
-	EdgeJobRunnerRegistrationTokenCreators = "job_runner_registration_token_creators"
-	// EdgeJobRunnerTokenCreators holds the string denoting the job_runner_token_creators edge name in mutations.
-	EdgeJobRunnerTokenCreators = "job_runner_token_creators"
-	// EdgeJobTemplateCreators holds the string denoting the job_template_creators edge name in mutations.
-	EdgeJobTemplateCreators = "job_template_creators"
 	// EdgeMappedControlCreators holds the string denoting the mapped_control_creators edge name in mutations.
 	EdgeMappedControlCreators = "mapped_control_creators"
 	// EdgeNarrativeCreators holds the string denoting the narrative_creators edge name in mutations.
@@ -151,10 +143,6 @@ const (
 	EdgeRiskCreators = "risk_creators"
 	// EdgeScanCreators holds the string denoting the scan_creators edge name in mutations.
 	EdgeScanCreators = "scan_creators"
-	// EdgeScheduledJobCreators holds the string denoting the scheduled_job_creators edge name in mutations.
-	EdgeScheduledJobCreators = "scheduled_job_creators"
-	// EdgeScheduledJobRunCreators holds the string denoting the scheduled_job_run_creators edge name in mutations.
-	EdgeScheduledJobRunCreators = "scheduled_job_run_creators"
 	// EdgeSLADefinitionCreators holds the string denoting the sla_definition_creators edge name in mutations.
 	EdgeSLADefinitionCreators = "sla_definition_creators"
 	// EdgeStandardCreators holds the string denoting the standard_creators edge name in mutations.
@@ -311,22 +299,8 @@ const (
 	EdgeActionPlans = "action_plans"
 	// EdgeCustomDomains holds the string denoting the custom_domains edge name in mutations.
 	EdgeCustomDomains = "custom_domains"
-	// EdgeJobRunners holds the string denoting the job_runners edge name in mutations.
-	EdgeJobRunners = "job_runners"
-	// EdgeJobRunnerTokens holds the string denoting the job_runner_tokens edge name in mutations.
-	EdgeJobRunnerTokens = "job_runner_tokens"
-	// EdgeJobRunnerRegistrationTokens holds the string denoting the job_runner_registration_tokens edge name in mutations.
-	EdgeJobRunnerRegistrationTokens = "job_runner_registration_tokens"
 	// EdgeDNSVerifications holds the string denoting the dns_verifications edge name in mutations.
 	EdgeDNSVerifications = "dns_verifications"
-	// EdgeJobTemplates holds the string denoting the job_templates edge name in mutations.
-	EdgeJobTemplates = "job_templates"
-	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
-	EdgeScheduledJobs = "scheduled_jobs"
-	// EdgeJobResults holds the string denoting the job_results edge name in mutations.
-	EdgeJobResults = "job_results"
-	// EdgeScheduledJobRuns holds the string denoting the scheduled_job_runs edge name in mutations.
-	EdgeScheduledJobRuns = "scheduled_job_runs"
 	// EdgeTrustCenters holds the string denoting the trust_centers edge name in mutations.
 	EdgeTrustCenters = "trust_centers"
 	// EdgeAssets holds the string denoting the assets edge name in mutations.
@@ -626,34 +600,6 @@ const (
 	InviteCreatorsInverseTable = "groups"
 	// InviteCreatorsColumn is the table column denoting the invite_creators relation/edge.
 	InviteCreatorsColumn = "organization_invite_creators"
-	// JobRunnerCreatorsTable is the table that holds the job_runner_creators relation/edge.
-	JobRunnerCreatorsTable = "groups"
-	// JobRunnerCreatorsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	JobRunnerCreatorsInverseTable = "groups"
-	// JobRunnerCreatorsColumn is the table column denoting the job_runner_creators relation/edge.
-	JobRunnerCreatorsColumn = "organization_job_runner_creators"
-	// JobRunnerRegistrationTokenCreatorsTable is the table that holds the job_runner_registration_token_creators relation/edge.
-	JobRunnerRegistrationTokenCreatorsTable = "groups"
-	// JobRunnerRegistrationTokenCreatorsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	JobRunnerRegistrationTokenCreatorsInverseTable = "groups"
-	// JobRunnerRegistrationTokenCreatorsColumn is the table column denoting the job_runner_registration_token_creators relation/edge.
-	JobRunnerRegistrationTokenCreatorsColumn = "organization_job_runner_registration_token_creators"
-	// JobRunnerTokenCreatorsTable is the table that holds the job_runner_token_creators relation/edge.
-	JobRunnerTokenCreatorsTable = "groups"
-	// JobRunnerTokenCreatorsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	JobRunnerTokenCreatorsInverseTable = "groups"
-	// JobRunnerTokenCreatorsColumn is the table column denoting the job_runner_token_creators relation/edge.
-	JobRunnerTokenCreatorsColumn = "organization_job_runner_token_creators"
-	// JobTemplateCreatorsTable is the table that holds the job_template_creators relation/edge.
-	JobTemplateCreatorsTable = "groups"
-	// JobTemplateCreatorsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	JobTemplateCreatorsInverseTable = "groups"
-	// JobTemplateCreatorsColumn is the table column denoting the job_template_creators relation/edge.
-	JobTemplateCreatorsColumn = "organization_job_template_creators"
 	// MappedControlCreatorsTable is the table that holds the mapped_control_creators relation/edge.
 	MappedControlCreatorsTable = "groups"
 	// MappedControlCreatorsInverseTable is the table name for the Group entity.
@@ -745,20 +691,6 @@ const (
 	ScanCreatorsInverseTable = "groups"
 	// ScanCreatorsColumn is the table column denoting the scan_creators relation/edge.
 	ScanCreatorsColumn = "organization_scan_creators"
-	// ScheduledJobCreatorsTable is the table that holds the scheduled_job_creators relation/edge.
-	ScheduledJobCreatorsTable = "groups"
-	// ScheduledJobCreatorsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	ScheduledJobCreatorsInverseTable = "groups"
-	// ScheduledJobCreatorsColumn is the table column denoting the scheduled_job_creators relation/edge.
-	ScheduledJobCreatorsColumn = "organization_scheduled_job_creators"
-	// ScheduledJobRunCreatorsTable is the table that holds the scheduled_job_run_creators relation/edge.
-	ScheduledJobRunCreatorsTable = "groups"
-	// ScheduledJobRunCreatorsInverseTable is the table name for the Group entity.
-	// It exists in this package in order to avoid circular dependency with the "group" package.
-	ScheduledJobRunCreatorsInverseTable = "groups"
-	// ScheduledJobRunCreatorsColumn is the table column denoting the scheduled_job_run_creators relation/edge.
-	ScheduledJobRunCreatorsColumn = "organization_scheduled_job_run_creators"
 	// SLADefinitionCreatorsTable is the table that holds the sla_definition_creators relation/edge.
 	SLADefinitionCreatorsTable = "groups"
 	// SLADefinitionCreatorsInverseTable is the table name for the Group entity.
@@ -1291,27 +1223,6 @@ const (
 	CustomDomainsInverseTable = "custom_domains"
 	// CustomDomainsColumn is the table column denoting the custom_domains relation/edge.
 	CustomDomainsColumn = "owner_id"
-	// JobRunnersTable is the table that holds the job_runners relation/edge.
-	JobRunnersTable = "job_runners"
-	// JobRunnersInverseTable is the table name for the JobRunner entity.
-	// It exists in this package in order to avoid circular dependency with the "jobrunner" package.
-	JobRunnersInverseTable = "job_runners"
-	// JobRunnersColumn is the table column denoting the job_runners relation/edge.
-	JobRunnersColumn = "owner_id"
-	// JobRunnerTokensTable is the table that holds the job_runner_tokens relation/edge.
-	JobRunnerTokensTable = "job_runner_tokens"
-	// JobRunnerTokensInverseTable is the table name for the JobRunnerToken entity.
-	// It exists in this package in order to avoid circular dependency with the "jobrunnertoken" package.
-	JobRunnerTokensInverseTable = "job_runner_tokens"
-	// JobRunnerTokensColumn is the table column denoting the job_runner_tokens relation/edge.
-	JobRunnerTokensColumn = "owner_id"
-	// JobRunnerRegistrationTokensTable is the table that holds the job_runner_registration_tokens relation/edge.
-	JobRunnerRegistrationTokensTable = "job_runner_registration_tokens"
-	// JobRunnerRegistrationTokensInverseTable is the table name for the JobRunnerRegistrationToken entity.
-	// It exists in this package in order to avoid circular dependency with the "jobrunnerregistrationtoken" package.
-	JobRunnerRegistrationTokensInverseTable = "job_runner_registration_tokens"
-	// JobRunnerRegistrationTokensColumn is the table column denoting the job_runner_registration_tokens relation/edge.
-	JobRunnerRegistrationTokensColumn = "owner_id"
 	// DNSVerificationsTable is the table that holds the dns_verifications relation/edge.
 	DNSVerificationsTable = "dns_verifications"
 	// DNSVerificationsInverseTable is the table name for the DNSVerification entity.
@@ -1319,34 +1230,6 @@ const (
 	DNSVerificationsInverseTable = "dns_verifications"
 	// DNSVerificationsColumn is the table column denoting the dns_verifications relation/edge.
 	DNSVerificationsColumn = "owner_id"
-	// JobTemplatesTable is the table that holds the job_templates relation/edge.
-	JobTemplatesTable = "job_templates"
-	// JobTemplatesInverseTable is the table name for the JobTemplate entity.
-	// It exists in this package in order to avoid circular dependency with the "jobtemplate" package.
-	JobTemplatesInverseTable = "job_templates"
-	// JobTemplatesColumn is the table column denoting the job_templates relation/edge.
-	JobTemplatesColumn = "owner_id"
-	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge.
-	ScheduledJobsTable = "scheduled_jobs"
-	// ScheduledJobsInverseTable is the table name for the ScheduledJob entity.
-	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
-	ScheduledJobsInverseTable = "scheduled_jobs"
-	// ScheduledJobsColumn is the table column denoting the scheduled_jobs relation/edge.
-	ScheduledJobsColumn = "owner_id"
-	// JobResultsTable is the table that holds the job_results relation/edge.
-	JobResultsTable = "job_results"
-	// JobResultsInverseTable is the table name for the JobResult entity.
-	// It exists in this package in order to avoid circular dependency with the "jobresult" package.
-	JobResultsInverseTable = "job_results"
-	// JobResultsColumn is the table column denoting the job_results relation/edge.
-	JobResultsColumn = "owner_id"
-	// ScheduledJobRunsTable is the table that holds the scheduled_job_runs relation/edge.
-	ScheduledJobRunsTable = "scheduled_job_runs"
-	// ScheduledJobRunsInverseTable is the table name for the ScheduledJobRun entity.
-	// It exists in this package in order to avoid circular dependency with the "scheduledjobrun" package.
-	ScheduledJobRunsInverseTable = "scheduled_job_runs"
-	// ScheduledJobRunsColumn is the table column denoting the scheduled_job_runs relation/edge.
-	ScheduledJobRunsColumn = "owner_id"
 	// TrustCentersTable is the table that holds the trust_centers relation/edge.
 	TrustCentersTable = "trust_centers"
 	// TrustCentersInverseTable is the table name for the TrustCenter entity.
@@ -1632,9 +1515,9 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
+//	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
-	Hooks        [89]ent.Hook
+	Hooks        [83]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -2218,62 +2101,6 @@ func ByInviteCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByJobRunnerCreatorsCount orders the results by job_runner_creators count.
-func ByJobRunnerCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobRunnerCreatorsStep(), opts...)
-	}
-}
-
-// ByJobRunnerCreators orders the results by job_runner_creators terms.
-func ByJobRunnerCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobRunnerCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByJobRunnerRegistrationTokenCreatorsCount orders the results by job_runner_registration_token_creators count.
-func ByJobRunnerRegistrationTokenCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobRunnerRegistrationTokenCreatorsStep(), opts...)
-	}
-}
-
-// ByJobRunnerRegistrationTokenCreators orders the results by job_runner_registration_token_creators terms.
-func ByJobRunnerRegistrationTokenCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobRunnerRegistrationTokenCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByJobRunnerTokenCreatorsCount orders the results by job_runner_token_creators count.
-func ByJobRunnerTokenCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobRunnerTokenCreatorsStep(), opts...)
-	}
-}
-
-// ByJobRunnerTokenCreators orders the results by job_runner_token_creators terms.
-func ByJobRunnerTokenCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobRunnerTokenCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByJobTemplateCreatorsCount orders the results by job_template_creators count.
-func ByJobTemplateCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobTemplateCreatorsStep(), opts...)
-	}
-}
-
-// ByJobTemplateCreators orders the results by job_template_creators terms.
-func ByJobTemplateCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobTemplateCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByMappedControlCreatorsCount orders the results by mapped_control_creators count.
 func ByMappedControlCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2453,34 +2280,6 @@ func ByScanCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByScanCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newScanCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByScheduledJobCreatorsCount orders the results by scheduled_job_creators count.
-func ByScheduledJobCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScheduledJobCreatorsStep(), opts...)
-	}
-}
-
-// ByScheduledJobCreators orders the results by scheduled_job_creators terms.
-func ByScheduledJobCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScheduledJobCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByScheduledJobRunCreatorsCount orders the results by scheduled_job_run_creators count.
-func ByScheduledJobRunCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScheduledJobRunCreatorsStep(), opts...)
-	}
-}
-
-// ByScheduledJobRunCreators orders the results by scheduled_job_run_creators terms.
-func ByScheduledJobRunCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScheduledJobRunCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -3555,48 +3354,6 @@ func ByCustomDomains(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByJobRunnersCount orders the results by job_runners count.
-func ByJobRunnersCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobRunnersStep(), opts...)
-	}
-}
-
-// ByJobRunners orders the results by job_runners terms.
-func ByJobRunners(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobRunnersStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByJobRunnerTokensCount orders the results by job_runner_tokens count.
-func ByJobRunnerTokensCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobRunnerTokensStep(), opts...)
-	}
-}
-
-// ByJobRunnerTokens orders the results by job_runner_tokens terms.
-func ByJobRunnerTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobRunnerTokensStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByJobRunnerRegistrationTokensCount orders the results by job_runner_registration_tokens count.
-func ByJobRunnerRegistrationTokensCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobRunnerRegistrationTokensStep(), opts...)
-	}
-}
-
-// ByJobRunnerRegistrationTokens orders the results by job_runner_registration_tokens terms.
-func ByJobRunnerRegistrationTokens(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobRunnerRegistrationTokensStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByDNSVerificationsCount orders the results by dns_verifications count.
 func ByDNSVerificationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -3608,62 +3365,6 @@ func ByDNSVerificationsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByDNSVerifications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newDNSVerificationsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByJobTemplatesCount orders the results by job_templates count.
-func ByJobTemplatesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobTemplatesStep(), opts...)
-	}
-}
-
-// ByJobTemplates orders the results by job_templates terms.
-func ByJobTemplates(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobTemplatesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByScheduledJobsCount orders the results by scheduled_jobs count.
-func ByScheduledJobsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScheduledJobsStep(), opts...)
-	}
-}
-
-// ByScheduledJobs orders the results by scheduled_jobs terms.
-func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByJobResultsCount orders the results by job_results count.
-func ByJobResultsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newJobResultsStep(), opts...)
-	}
-}
-
-// ByJobResults orders the results by job_results terms.
-func ByJobResults(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newJobResultsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByScheduledJobRunsCount orders the results by scheduled_job_runs count.
-func ByScheduledJobRunsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScheduledJobRunsStep(), opts...)
-	}
-}
-
-// ByScheduledJobRuns orders the results by scheduled_job_runs terms.
-func ByScheduledJobRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScheduledJobRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -4359,34 +4060,6 @@ func newInviteCreatorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, InviteCreatorsTable, InviteCreatorsColumn),
 	)
 }
-func newJobRunnerCreatorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobRunnerCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerCreatorsTable, JobRunnerCreatorsColumn),
-	)
-}
-func newJobRunnerRegistrationTokenCreatorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobRunnerRegistrationTokenCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerRegistrationTokenCreatorsTable, JobRunnerRegistrationTokenCreatorsColumn),
-	)
-}
-func newJobRunnerTokenCreatorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobRunnerTokenCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerTokenCreatorsTable, JobRunnerTokenCreatorsColumn),
-	)
-}
-func newJobTemplateCreatorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobTemplateCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobTemplateCreatorsTable, JobTemplateCreatorsColumn),
-	)
-}
 func newMappedControlCreatorsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -4476,20 +4149,6 @@ func newScanCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScanCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ScanCreatorsTable, ScanCreatorsColumn),
-	)
-}
-func newScheduledJobCreatorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScheduledJobCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobCreatorsTable, ScheduledJobCreatorsColumn),
-	)
-}
-func newScheduledJobRunCreatorsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScheduledJobRunCreatorsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobRunCreatorsTable, ScheduledJobRunCreatorsColumn),
 	)
 }
 func newSLADefinitionCreatorsStep() *sqlgraph.Step {
@@ -5038,60 +4697,11 @@ func newCustomDomainsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, CustomDomainsTable, CustomDomainsColumn),
 	)
 }
-func newJobRunnersStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobRunnersInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnersTable, JobRunnersColumn),
-	)
-}
-func newJobRunnerTokensStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobRunnerTokensInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerTokensTable, JobRunnerTokensColumn),
-	)
-}
-func newJobRunnerRegistrationTokensStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobRunnerRegistrationTokensInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerRegistrationTokensTable, JobRunnerRegistrationTokensColumn),
-	)
-}
 func newDNSVerificationsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DNSVerificationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, DNSVerificationsTable, DNSVerificationsColumn),
-	)
-}
-func newJobTemplatesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobTemplatesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobTemplatesTable, JobTemplatesColumn),
-	)
-}
-func newScheduledJobsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobsTable, ScheduledJobsColumn),
-	)
-}
-func newJobResultsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(JobResultsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, JobResultsTable, JobResultsColumn),
-	)
-}
-func newScheduledJobRunsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScheduledJobRunsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobRunsTable, ScheduledJobRunsColumn),
 	)
 }
 func newTrustCentersStep() *sqlgraph.Step {

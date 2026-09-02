@@ -11,9 +11,9 @@ import (
 
 	"github.com/theopenlane/iam/sessions"
 
-	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/v2/config"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/objects"
 )
 
 var (

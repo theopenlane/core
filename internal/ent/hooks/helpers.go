@@ -8,10 +8,11 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 )
 
 // isDeleteOp checks if the mutation is a deletion operation.
@@ -32,35 +33,6 @@ func transactionFromContext(ctx context.Context) *generated.Tx {
 	// check if the transaction is in the context
 	// from the REST middleware
 	return transaction.FromContext(ctx)
-}
-
-// runtimeHooks is a list of post-mutation hooks that are executed after a mutation operation is performed
-var runtimeHooks []func(ent.Mutator) ent.Mutator
-
-// The `AddPostMutationHook` function is used to add a post-mutation hook to the list of runtime hooks.
-// This function takes a hook function as a parameter, which will be executed after a mutation
-// operation is performed. The hook function is expected to take a context and a value of type `T` as
-// input parameters and return an error if any
-func AddPostMutationHook[T any](hook func(ctx context.Context, v T) error) {
-	runtimeHooks = append(runtimeHooks, func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			v, err := next.Mutate(ctx, m)
-			if err != nil {
-				return v, err
-			}
-
-			entvalue, ok := v.(T)
-
-			if ok {
-				err2 := hook(ctx, entvalue)
-				if err2 != nil {
-					logx.FromContext(ctx).Debug().Ctx(ctx).Err(err2).Msg("post mutation hook error")
-				}
-			}
-
-			return v, err
-		})
-	})
 }
 
 // getMutationIDs retrieves the IDs from the mutation, handling both single and multiple ID cases
@@ -101,14 +73,7 @@ func enqueueJob(ctx context.Context, jobClient riverqueue.JobClient, args river.
 	return err
 }
 
-// workflowEngineEnabled reports whether workflows are enabled for this client.
-// It checks the context first (for the original client with WorkflowEngine set),
-// falling back to the provided client. This handles the case where WorkflowEngine
-// is set after client initialization, since entity clients copy config by value.
-func workflowEngineEnabled(ctx context.Context, client *generated.Client) bool {
-	if ctxClient := generated.FromContext(ctx); ctxClient != nil && ctxClient.WorkflowEngine != nil {
-		return true
-	}
-
-	return client != nil && client.WorkflowEngine != nil
+// workflowEngineEnabled reports whether the process-wide workflow engine is registered
+func workflowEngineEnabled() bool {
+	return engine.Enabled()
 }

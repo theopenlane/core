@@ -7,10 +7,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -24,7 +24,8 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments() {
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
-	suite.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
+	suite.T().Cleanup(func() { engine.SetDefault(nil) })
 
 	def := suite.client.WorkflowDefinition.Create().
 		SetName("Invalidate Test " + ulids.New().String()).
@@ -119,7 +120,8 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_DraftS
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
-	suite.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
+	suite.T().Cleanup(func() { engine.SetDefault(nil) })
 
 	def := suite.client.WorkflowDefinition.Create().
 		SetName("Draft Test " + ulids.New().String()).
@@ -188,7 +190,8 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_NonCha
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
-	suite.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
+	suite.T().Cleanup(func() { engine.SetDefault(nil) })
 
 	def := suite.client.WorkflowDefinition.Create().
 		SetName("NonChanges Test " + ulids.New().String()).
@@ -257,7 +260,8 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
-	suite.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
+	suite.T().Cleanup(func() { engine.SetDefault(nil) })
 
 	params := struct {
 		Targets []workflows.TargetConfig `json:"targets"`

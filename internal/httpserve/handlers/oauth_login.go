@@ -21,11 +21,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	entval "github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	entval "github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
 // OauthProviderConfig represents the configuration for OAuth providers such as Github and Google

@@ -12,10 +12,10 @@ import (
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // Handle adapts the document export to the generic operation registration boundary

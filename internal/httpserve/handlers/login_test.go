@@ -24,12 +24,12 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/models"
 	apimodels "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	sso "github.com/theopenlane/core/pkg/ssoutils"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
 func (suite *HandlerTestSuite) TestLoginHandler() {
@@ -167,7 +167,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		models.CatalogBaseModule.String(),
 		models.CatalogComplianceModule.String(),
 		models.CatalogTrustCenterModule.String(),
-		models.CatalogRegistryModule.String(),
 	}
 
 	testCases := []struct {

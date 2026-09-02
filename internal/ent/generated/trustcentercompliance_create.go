@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
 )
 
 // TrustCenterComplianceCreate is the builder for creating a TrustCenterCompliance entity.
@@ -315,7 +315,6 @@ func (_c *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sq
 		_node = &TrustCenterCompliance{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcentercompliance.Table, sqlgraph.NewFieldSpec(trustcentercompliance.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustCenterCompliance
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -363,7 +362,6 @@ func (_c *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sq
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -380,7 +378,6 @@ func (_c *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sq
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -397,7 +394,6 @@ func (_c *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sq
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterCompliance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -415,7 +411,6 @@ func (_c *TrustCenterComplianceCreate) createSpec() (*TrustCenterCompliance, *sq
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterCompliance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

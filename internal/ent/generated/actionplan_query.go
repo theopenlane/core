@@ -13,26 +13,25 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ActionPlanQuery is the builder for querying ActionPlan entities.
@@ -130,9 +129,6 @@ func (_q *ActionPlanQuery) QueryApprover() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.ApproverTable, actionplan.ApproverColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -155,9 +151,6 @@ func (_q *ActionPlanQuery) QueryDelegate() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.DelegateTable, actionplan.DelegateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -180,9 +173,6 @@ func (_q *ActionPlanQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, actionplan.OwnerTable, actionplan.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -205,9 +195,6 @@ func (_q *ActionPlanQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.BlockedGroupsTable, actionplan.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ActionPlanBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -230,9 +217,6 @@ func (_q *ActionPlanQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.EditorsTable, actionplan.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ActionPlanEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -255,9 +239,6 @@ func (_q *ActionPlanQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.ViewersTable, actionplan.ViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ActionPlanViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -280,9 +261,6 @@ func (_q *ActionPlanQuery) QueryActionPlanKind() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.ActionPlanKindTable, actionplan.ActionPlanKindColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -305,9 +283,6 @@ func (_q *ActionPlanQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.RisksTable, actionplan.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.RiskActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -330,9 +305,6 @@ func (_q *ActionPlanQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ControlsTable, actionplan.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -355,9 +327,6 @@ func (_q *ActionPlanQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ProgramsTable, actionplan.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -380,9 +349,6 @@ func (_q *ActionPlanQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.FindingsTable, actionplan.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -405,9 +371,6 @@ func (_q *ActionPlanQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.VulnerabilitiesTable, actionplan.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.VulnerabilityActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -430,9 +393,6 @@ func (_q *ActionPlanQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ScansTable, actionplan.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ScanActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -455,9 +415,6 @@ func (_q *ActionPlanQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ReviewsTable, actionplan.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -480,9 +437,6 @@ func (_q *ActionPlanQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.RemediationsTable, actionplan.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -505,9 +459,6 @@ func (_q *ActionPlanQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.TasksTable, actionplan.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.ActionPlanTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -530,9 +481,6 @@ func (_q *ActionPlanQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.IntegrationsTable, actionplan.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -555,9 +503,6 @@ func (_q *ActionPlanQuery) QueryFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, actionplan.FileTable, actionplan.FileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -580,9 +525,6 @@ func (_q *ActionPlanQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, actionplan.WorkflowObjectRefsTable, actionplan.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1135,8 +1077,6 @@ func (_q *ActionPlanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.ActionPlan
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1485,7 +1425,6 @@ func (_q *ActionPlanQuery) loadBlockedGroups(ctx context.Context, query *GroupQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ActionPlanBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(actionplan.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(actionplan.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1547,7 +1486,6 @@ func (_q *ActionPlanQuery) loadEditors(ctx context.Context, query *GroupQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.EditorsTable)
-		joinT.Schema(_q.schemaConfig.ActionPlanEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(actionplan.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(actionplan.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1609,7 +1547,6 @@ func (_q *ActionPlanQuery) loadViewers(ctx context.Context, query *GroupQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.ViewersTable)
-		joinT.Schema(_q.schemaConfig.ActionPlanViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(actionplan.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(actionplan.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1700,7 +1637,6 @@ func (_q *ActionPlanQuery) loadRisks(ctx context.Context, query *RiskQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.RisksTable)
-		joinT.Schema(_q.schemaConfig.RiskActionPlans)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(actionplan.RisksPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.RisksPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1762,7 +1698,6 @@ func (_q *ActionPlanQuery) loadControls(ctx context.Context, query *ControlQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlActionPlans)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(actionplan.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1824,7 +1759,6 @@ func (_q *ActionPlanQuery) loadPrograms(ctx context.Context, query *ProgramQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramActionPlans)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(actionplan.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1886,7 +1820,6 @@ func (_q *ActionPlanQuery) loadFindings(ctx context.Context, query *FindingQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.FindingsTable)
-		joinT.Schema(_q.schemaConfig.FindingActionPlans)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(actionplan.FindingsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.FindingsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1948,7 +1881,6 @@ func (_q *ActionPlanQuery) loadVulnerabilities(ctx context.Context, query *Vulne
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.VulnerabilityActionPlans)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(actionplan.VulnerabilitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2010,7 +1942,6 @@ func (_q *ActionPlanQuery) loadScans(ctx context.Context, query *ScanQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.ScansTable)
-		joinT.Schema(_q.schemaConfig.ScanActionPlans)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(actionplan.ScansPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.ScansPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2072,7 +2003,6 @@ func (_q *ActionPlanQuery) loadReviews(ctx context.Context, query *ReviewQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewActionPlans)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(actionplan.ReviewsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.ReviewsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2134,7 +2064,6 @@ func (_q *ActionPlanQuery) loadRemediations(ctx context.Context, query *Remediat
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.RemediationActionPlans)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(actionplan.RemediationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.RemediationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2196,7 +2125,6 @@ func (_q *ActionPlanQuery) loadTasks(ctx context.Context, query *TaskQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.TasksTable)
-		joinT.Schema(_q.schemaConfig.ActionPlanTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(actionplan.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(actionplan.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2258,7 +2186,6 @@ func (_q *ActionPlanQuery) loadIntegrations(ctx context.Context, query *Integrat
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(actionplan.IntegrationsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationActionPlans)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(actionplan.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(actionplan.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2373,8 +2300,6 @@ func (_q *ActionPlanQuery) loadWorkflowObjectRefs(ctx context.Context, query *Wo
 
 func (_q *ActionPlanQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.ActionPlan
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2455,9 +2380,6 @@ func (_q *ActionPlanQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.ActionPlan)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

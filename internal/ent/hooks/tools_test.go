@@ -13,18 +13,18 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	"github.com/theopenlane/core/fga/fgaversion"
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/enttest"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/entdb"
-	coreutils "github.com/theopenlane/core/internal/testutils"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/gala"
-	authmw "github.com/theopenlane/core/pkg/middleware/auth"
+	"github.com/theopenlane/core/v2/fga/fgaversion"
+	"github.com/theopenlane/core/v2/internal/ent/entconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/enttest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/entdb"
+	coreutils "github.com/theopenlane/core/v2/internal/testutils"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	authmw "github.com/theopenlane/core/v2/pkg/middleware/auth"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
@@ -33,7 +33,9 @@ import (
 )
 
 const (
-	fgaModuleFile = "../../../fga/model/fga.mod"
+	fgaModuleFile             = "../../../fga/model/fga.mod"
+	previewCnameTargetTest    = "preview-cname.test.net"
+	previewMappableZoneIDTest = "preview-zone-id"
 )
 
 // TestHookSuite runs all the tests in the TestHookSuite
@@ -63,6 +65,17 @@ func (suite *HookTestSuite) SetupSuite() {
 	}
 
 	suite.client = suite.setupClient()
+
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		PreviewCnameTarget: previewCnameTargetTest,
+	})
+
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	_, err := suite.client.MappableDomain.Create().
+		SetName(previewCnameTargetTest).
+		SetZoneID(previewMappableZoneIDTest).
+		Save(ctx)
+	require.NoError(suite.T(), err)
 }
 
 // TearDownSuite runs after the test suite

@@ -8,703 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // OrganizationSettingHistoryUpdate is the builder for updating OrganizationSettingHistory entities.
 type OrganizationSettingHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrganizationSettingHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrganizationSettingHistoryMutation
 }
 
 // Where appends a list predicates to the OrganizationSettingHistoryUpdate builder.
 func (_u *OrganizationSettingHistoryUpdate) Where(ps ...predicate.OrganizationSettingHistory) *OrganizationSettingHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *OrganizationSettingHistoryUpdate) SetUpdatedAt(v time.Time) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedAt() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *OrganizationSettingHistoryUpdate) SetUpdatedBy(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableUpdatedBy(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedBy() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *OrganizationSettingHistoryUpdate) SetUpdatedByImpersonator(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearUpdatedByImpersonator() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *OrganizationSettingHistoryUpdate) SetDeletedAt(v time.Time) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableDeletedAt(v *time.Time) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearDeletedAt() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *OrganizationSettingHistoryUpdate) SetDeletedBy(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableDeletedBy(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearDeletedBy() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *OrganizationSettingHistoryUpdate) SetTags(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *OrganizationSettingHistoryUpdate) AppendTags(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearTags() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetDomains sets the "domains" field.
-func (_u *OrganizationSettingHistoryUpdate) SetDomains(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetDomains(v)
-	return _u
-}
-
-// AppendDomains appends value to the "domains" field.
-func (_u *OrganizationSettingHistoryUpdate) AppendDomains(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.AppendDomains(v)
-	return _u
-}
-
-// ClearDomains clears the value of the "domains" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearDomains() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearDomains()
-	return _u
-}
-
-// SetBillingContact sets the "billing_contact" field.
-func (_u *OrganizationSettingHistoryUpdate) SetBillingContact(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetBillingContact(v)
-	return _u
-}
-
-// SetNillableBillingContact sets the "billing_contact" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingContact(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetBillingContact(*v)
-	}
-	return _u
-}
-
-// ClearBillingContact clears the value of the "billing_contact" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearBillingContact() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearBillingContact()
-	return _u
-}
-
-// SetBillingEmail sets the "billing_email" field.
-func (_u *OrganizationSettingHistoryUpdate) SetBillingEmail(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetBillingEmail(v)
-	return _u
-}
-
-// SetNillableBillingEmail sets the "billing_email" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingEmail(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetBillingEmail(*v)
-	}
-	return _u
-}
-
-// ClearBillingEmail clears the value of the "billing_email" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearBillingEmail() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearBillingEmail()
-	return _u
-}
-
-// SetBillingPhone sets the "billing_phone" field.
-func (_u *OrganizationSettingHistoryUpdate) SetBillingPhone(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetBillingPhone(v)
-	return _u
-}
-
-// SetNillableBillingPhone sets the "billing_phone" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingPhone(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetBillingPhone(*v)
-	}
-	return _u
-}
-
-// ClearBillingPhone clears the value of the "billing_phone" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearBillingPhone() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearBillingPhone()
-	return _u
-}
-
-// SetBillingAddress sets the "billing_address" field.
-func (_u *OrganizationSettingHistoryUpdate) SetBillingAddress(v models.Address) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetBillingAddress(v)
-	return _u
-}
-
-// SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingAddress(v *models.Address) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetBillingAddress(*v)
-	}
-	return _u
-}
-
-// ClearBillingAddress clears the value of the "billing_address" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearBillingAddress() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearBillingAddress()
-	return _u
-}
-
-// SetTaxIdentifier sets the "tax_identifier" field.
-func (_u *OrganizationSettingHistoryUpdate) SetTaxIdentifier(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetTaxIdentifier(v)
-	return _u
-}
-
-// SetNillableTaxIdentifier sets the "tax_identifier" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableTaxIdentifier(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetTaxIdentifier(*v)
-	}
-	return _u
-}
-
-// ClearTaxIdentifier clears the value of the "tax_identifier" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearTaxIdentifier() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearTaxIdentifier()
-	return _u
-}
-
-// SetGeoLocation sets the "geo_location" field.
-func (_u *OrganizationSettingHistoryUpdate) SetGeoLocation(v enums.Region) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetGeoLocation(v)
-	return _u
-}
-
-// SetNillableGeoLocation sets the "geo_location" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableGeoLocation(v *enums.Region) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetGeoLocation(*v)
-	}
-	return _u
-}
-
-// ClearGeoLocation clears the value of the "geo_location" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearGeoLocation() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearGeoLocation()
-	return _u
-}
-
-// SetOrganizationID sets the "organization_id" field.
-func (_u *OrganizationSettingHistoryUpdate) SetOrganizationID(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetOrganizationID(v)
-	return _u
-}
-
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableOrganizationID(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetOrganizationID(*v)
-	}
-	return _u
-}
-
-// ClearOrganizationID clears the value of the "organization_id" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearOrganizationID() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearOrganizationID()
-	return _u
-}
-
-// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
-func (_u *OrganizationSettingHistoryUpdate) SetBillingNotificationsEnabled(v bool) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetBillingNotificationsEnabled(v)
-	return _u
-}
-
-// SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableBillingNotificationsEnabled(v *bool) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetBillingNotificationsEnabled(*v)
-	}
-	return _u
-}
-
-// SetAllowedEmailDomains sets the "allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) SetAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetAllowedEmailDomains(v)
-	return _u
-}
-
-// AppendAllowedEmailDomains appends value to the "allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) AppendAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.AppendAllowedEmailDomains(v)
-	return _u
-}
-
-// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearAllowedEmailDomains() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearAllowedEmailDomains()
-	return _u
-}
-
-// SetAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field.
-func (_u *OrganizationSettingHistoryUpdate) SetAllowMatchingDomainsAutojoin(v bool) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetAllowMatchingDomainsAutojoin(v)
-	return _u
-}
-
-// SetNillableAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableAllowMatchingDomainsAutojoin(v *bool) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetAllowMatchingDomainsAutojoin(*v)
-	}
-	return _u
-}
-
-// ClearAllowMatchingDomainsAutojoin clears the value of the "allow_matching_domains_autojoin" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearAllowMatchingDomainsAutojoin() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearAllowMatchingDomainsAutojoin()
-	return _u
-}
-
-// SetIdentityProvider sets the "identity_provider" field.
-func (_u *OrganizationSettingHistoryUpdate) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetIdentityProvider(v)
-	return _u
-}
-
-// SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProvider(v *enums.SSOProvider) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityProvider(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProvider clears the value of the "identity_provider" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProvider() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearIdentityProvider()
-	return _u
-}
-
-// SetIdentityProviderClientID sets the "identity_provider_client_id" field.
-func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderClientID(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetIdentityProviderClientID(v)
-	return _u
-}
-
-// SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderClientID(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityProviderClientID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderClientID() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearIdentityProviderClientID()
-	return _u
-}
-
-// SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
-func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderClientSecret(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetIdentityProviderClientSecret(v)
-	return _u
-}
-
-// SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderClientSecret(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityProviderClientSecret(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderClientSecret() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearIdentityProviderClientSecret()
-	return _u
-}
-
-// SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
-func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderMetadataEndpoint(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetIdentityProviderMetadataEndpoint(v)
-	return _u
-}
-
-// SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderMetadataEndpoint(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityProviderMetadataEndpoint(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearIdentityProviderMetadataEndpoint()
-	return _u
-}
-
-// SetIdentityProviderAuthTested sets the "identity_provider_auth_tested" field.
-func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderAuthTested(v bool) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetIdentityProviderAuthTested(v)
-	return _u
-}
-
-// SetNillableIdentityProviderAuthTested sets the "identity_provider_auth_tested" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderAuthTested(v *bool) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityProviderAuthTested(*v)
-	}
-	return _u
-}
-
-// SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
-func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderEntityID(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetIdentityProviderEntityID(v)
-	return _u
-}
-
-// SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderEntityID(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityProviderEntityID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearIdentityProviderEntityID() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearIdentityProviderEntityID()
-	return _u
-}
-
-// SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
-func (_u *OrganizationSettingHistoryUpdate) SetOidcDiscoveryEndpoint(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetOidcDiscoveryEndpoint(v)
-	return _u
-}
-
-// SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableOidcDiscoveryEndpoint(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetOidcDiscoveryEndpoint(*v)
-	}
-	return _u
-}
-
-// ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearOidcDiscoveryEndpoint() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearOidcDiscoveryEndpoint()
-	return _u
-}
-
-// SetSamlSigninURL sets the "saml_signin_url" field.
-func (_u *OrganizationSettingHistoryUpdate) SetSamlSigninURL(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetSamlSigninURL(v)
-	return _u
-}
-
-// SetNillableSamlSigninURL sets the "saml_signin_url" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableSamlSigninURL(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetSamlSigninURL(*v)
-	}
-	return _u
-}
-
-// ClearSamlSigninURL clears the value of the "saml_signin_url" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearSamlSigninURL() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearSamlSigninURL()
-	return _u
-}
-
-// SetSamlIssuer sets the "saml_issuer" field.
-func (_u *OrganizationSettingHistoryUpdate) SetSamlIssuer(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetSamlIssuer(v)
-	return _u
-}
-
-// SetNillableSamlIssuer sets the "saml_issuer" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableSamlIssuer(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetSamlIssuer(*v)
-	}
-	return _u
-}
-
-// ClearSamlIssuer clears the value of the "saml_issuer" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearSamlIssuer() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearSamlIssuer()
-	return _u
-}
-
-// SetSamlCert sets the "saml_cert" field.
-func (_u *OrganizationSettingHistoryUpdate) SetSamlCert(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetSamlCert(v)
-	return _u
-}
-
-// SetNillableSamlCert sets the "saml_cert" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableSamlCert(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetSamlCert(*v)
-	}
-	return _u
-}
-
-// ClearSamlCert clears the value of the "saml_cert" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearSamlCert() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearSamlCert()
-	return _u
-}
-
-// SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
-func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetIdentityProviderLoginEnforced(v)
-	return _u
-}
-
-// SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderLoginEnforced(v *bool) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityProviderLoginEnforced(*v)
-	}
-	return _u
-}
-
-// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
-func (_u *OrganizationSettingHistoryUpdate) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetIdentityProviderJitProvisioning(v)
-	return _u
-}
-
-// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityProviderJitProvisioning(*v)
-	}
-	return _u
-}
-
-// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) SetJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetJitAllowedEmailDomains(v)
-	return _u
-}
-
-// AppendJitAllowedEmailDomains appends value to the "jit_allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) AppendJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.AppendJitAllowedEmailDomains(v)
-	return _u
-}
-
-// ClearJitAllowedEmailDomains clears the value of the "jit_allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearJitAllowedEmailDomains() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearJitAllowedEmailDomains()
-	return _u
-}
-
-// SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
-func (_u *OrganizationSettingHistoryUpdate) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetMultifactorAuthEnforced(v)
-	return _u
-}
-
-// SetNillableMultifactorAuthEnforced sets the "multifactor_auth_enforced" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableMultifactorAuthEnforced(v *bool) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetMultifactorAuthEnforced(*v)
-	}
-	return _u
-}
-
-// ClearMultifactorAuthEnforced clears the value of the "multifactor_auth_enforced" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearMultifactorAuthEnforced() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearMultifactorAuthEnforced()
-	return _u
-}
-
-// SetSSOExemptDomains sets the "sso_exempt_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) SetSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetSSOExemptDomains(v)
-	return _u
-}
-
-// AppendSSOExemptDomains appends value to the "sso_exempt_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) AppendSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.AppendSSOExemptDomains(v)
-	return _u
-}
-
-// ClearSSOExemptDomains clears the value of the "sso_exempt_domains" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearSSOExemptDomains() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearSSOExemptDomains()
-	return _u
-}
-
-// SetAllowSupportAccess sets the "allow_support_access" field.
-func (_u *OrganizationSettingHistoryUpdate) SetAllowSupportAccess(v bool) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetAllowSupportAccess(v)
-	return _u
-}
-
-// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetAllowSupportAccess(*v)
-	}
-	return _u
-}
-
-// ClearAllowSupportAccess clears the value of the "allow_support_access" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearAllowSupportAccess() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearAllowSupportAccess()
-	return _u
-}
-
-// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (_u *OrganizationSettingHistoryUpdate) SetComplianceWebhookToken(v string) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetComplianceWebhookToken(v)
-	return _u
-}
-
-// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetComplianceWebhookToken(*v)
-	}
-	return _u
-}
-
-// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearComplianceWebhookToken() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearComplianceWebhookToken()
-	return _u
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_u *OrganizationSettingHistoryUpdate) SetPaymentMethodAdded(v bool) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetPaymentMethodAdded(v)
-	return _u
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillablePaymentMethodAdded(v *bool) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetPaymentMethodAdded(*v)
-	}
-	return _u
-}
-
-// SetPendingDeletionAt sets the "pending_deletion_at" field.
-func (_u *OrganizationSettingHistoryUpdate) SetPendingDeletionAt(v models.DateTime) *OrganizationSettingHistoryUpdate {
-	_u.mutation.SetPendingDeletionAt(v)
-	return _u
-}
-
-// SetNillablePendingDeletionAt sets the "pending_deletion_at" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdate) SetNillablePendingDeletionAt(v *models.DateTime) *OrganizationSettingHistoryUpdate {
-	if v != nil {
-		_u.SetPendingDeletionAt(*v)
-	}
-	return _u
-}
-
-// ClearPendingDeletionAt clears the value of the "pending_deletion_at" field.
-func (_u *OrganizationSettingHistoryUpdate) ClearPendingDeletionAt() *OrganizationSettingHistoryUpdate {
-	_u.mutation.ClearPendingDeletionAt()
 	return _u
 }
 
@@ -715,9 +36,6 @@ func (_u *OrganizationSettingHistoryUpdate) Mutation() *OrganizationSettingHisto
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *OrganizationSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -743,43 +61,7 @@ func (_u *OrganizationSettingHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *OrganizationSettingHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if organizationsettinghistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized organizationsettinghistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := organizationsettinghistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *OrganizationSettingHistoryUpdate) check() error {
-	if v, ok := _u.mutation.GeoLocation(); ok {
-		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
-			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`historygenerated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.IdentityProvider(); ok {
-		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
-			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`historygenerated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *OrganizationSettingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(organizationsettinghistory.Table, organizationsettinghistory.Columns, sqlgraph.NewFieldSpec(organizationsettinghistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -794,238 +76,102 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(organizationsettinghistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(organizationsettinghistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(organizationsettinghistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Domains(); ok {
-		_spec.SetField(organizationsettinghistory.FieldDomains, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDomains(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldDomains, value)
-		})
 	}
 	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.BillingContact(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingContact, field.TypeString, value)
-	}
 	if _u.mutation.BillingContactCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingContact, field.TypeString)
-	}
-	if value, ok := _u.mutation.BillingEmail(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingEmail, field.TypeString, value)
 	}
 	if _u.mutation.BillingEmailCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingEmail, field.TypeString)
 	}
-	if value, ok := _u.mutation.BillingPhone(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingPhone, field.TypeString, value)
-	}
 	if _u.mutation.BillingPhoneCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingPhone, field.TypeString)
-	}
-	if value, ok := _u.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON, value)
 	}
 	if _u.mutation.BillingAddressCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TaxIdentifier(); ok {
-		_spec.SetField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString, value)
-	}
 	if _u.mutation.TaxIdentifierCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString)
-	}
-	if value, ok := _u.mutation.GeoLocation(); ok {
-		_spec.SetField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum, value)
 	}
 	if _u.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.OrganizationID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
-	}
 	if _u.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
-	}
-	if value, ok := _u.mutation.BillingNotificationsEnabled(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.AllowedEmailDomains(); ok {
-		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedAllowedEmailDomains(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldAllowedEmailDomains, value)
-		})
 	}
 	if _u.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.AllowMatchingDomainsAutojoin(); ok {
-		_spec.SetField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool, value)
-	}
 	if _u.mutation.AllowMatchingDomainsAutojoinCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool)
-	}
-	if value, ok := _u.mutation.IdentityProvider(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
 	}
 	if _u.mutation.IdentityProviderCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.IdentityProviderClientID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString, value)
-	}
 	if _u.mutation.IdentityProviderClientIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString)
-	}
-	if value, ok := _u.mutation.IdentityProviderClientSecret(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString, value)
 	}
 	if _u.mutation.IdentityProviderClientSecretCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString)
 	}
-	if value, ok := _u.mutation.IdentityProviderMetadataEndpoint(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
-	}
 	if _u.mutation.IdentityProviderMetadataEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString)
-	}
-	if value, ok := _u.mutation.IdentityProviderAuthTested(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderAuthTested, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.IdentityProviderEntityID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
 	}
 	if _u.mutation.IdentityProviderEntityIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString)
 	}
-	if value, ok := _u.mutation.OidcDiscoveryEndpoint(); ok {
-		_spec.SetField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString, value)
-	}
 	if _u.mutation.OidcDiscoveryEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString)
-	}
-	if value, ok := _u.mutation.SamlSigninURL(); ok {
-		_spec.SetField(organizationsettinghistory.FieldSamlSigninURL, field.TypeString, value)
 	}
 	if _u.mutation.SamlSigninURLCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldSamlSigninURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.SamlIssuer(); ok {
-		_spec.SetField(organizationsettinghistory.FieldSamlIssuer, field.TypeString, value)
-	}
 	if _u.mutation.SamlIssuerCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldSamlIssuer, field.TypeString)
-	}
-	if value, ok := _u.mutation.SamlCert(); ok {
-		_spec.SetField(organizationsettinghistory.FieldSamlCert, field.TypeString, value)
 	}
 	if _u.mutation.SamlCertCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldSamlCert, field.TypeString)
 	}
-	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.JitAllowedEmailDomains(); ok {
-		_spec.SetField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedJitAllowedEmailDomains(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldJitAllowedEmailDomains, value)
-		})
-	}
 	if _u.mutation.JitAllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
-		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
 	}
 	if _u.mutation.MultifactorAuthEnforcedCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool)
 	}
-	if value, ok := _u.mutation.SSOExemptDomains(); ok {
-		_spec.SetField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedSSOExemptDomains(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldSSOExemptDomains, value)
-		})
-	}
 	if _u.mutation.SSOExemptDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.AllowSupportAccess(); ok {
-		_spec.SetField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool, value)
 	}
 	if _u.mutation.AllowSupportAccessCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool)
 	}
-	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
-		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
-	}
 	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
-	}
-	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(organizationsettinghistory.FieldPaymentMethodAdded, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.PendingDeletionAt(); ok {
-		_spec.SetField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime, value)
 	}
 	if _u.mutation.PendingDeletionAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.OrganizationSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{organizationsettinghistory.Label}
@@ -1041,682 +187,9 @@ func (_u *OrganizationSettingHistoryUpdate) sqlSave(ctx context.Context) (_node 
 // OrganizationSettingHistoryUpdateOne is the builder for updating a single OrganizationSettingHistory entity.
 type OrganizationSettingHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrganizationSettingHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetUpdatedAt(v time.Time) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedAt() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetUpdatedBy(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableUpdatedBy(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedBy() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetUpdatedByImpersonator(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearUpdatedByImpersonator() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetDeletedAt(v time.Time) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearDeletedAt() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetDeletedBy(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableDeletedBy(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearDeletedBy() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetTags(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *OrganizationSettingHistoryUpdateOne) AppendTags(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearTags() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetDomains sets the "domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetDomains(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetDomains(v)
-	return _u
-}
-
-// AppendDomains appends value to the "domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) AppendDomains(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.AppendDomains(v)
-	return _u
-}
-
-// ClearDomains clears the value of the "domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearDomains() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearDomains()
-	return _u
-}
-
-// SetBillingContact sets the "billing_contact" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetBillingContact(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetBillingContact(v)
-	return _u
-}
-
-// SetNillableBillingContact sets the "billing_contact" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingContact(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetBillingContact(*v)
-	}
-	return _u
-}
-
-// ClearBillingContact clears the value of the "billing_contact" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearBillingContact() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearBillingContact()
-	return _u
-}
-
-// SetBillingEmail sets the "billing_email" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetBillingEmail(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetBillingEmail(v)
-	return _u
-}
-
-// SetNillableBillingEmail sets the "billing_email" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingEmail(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetBillingEmail(*v)
-	}
-	return _u
-}
-
-// ClearBillingEmail clears the value of the "billing_email" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearBillingEmail() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearBillingEmail()
-	return _u
-}
-
-// SetBillingPhone sets the "billing_phone" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetBillingPhone(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetBillingPhone(v)
-	return _u
-}
-
-// SetNillableBillingPhone sets the "billing_phone" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingPhone(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetBillingPhone(*v)
-	}
-	return _u
-}
-
-// ClearBillingPhone clears the value of the "billing_phone" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearBillingPhone() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearBillingPhone()
-	return _u
-}
-
-// SetBillingAddress sets the "billing_address" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetBillingAddress(v models.Address) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetBillingAddress(v)
-	return _u
-}
-
-// SetNillableBillingAddress sets the "billing_address" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingAddress(v *models.Address) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetBillingAddress(*v)
-	}
-	return _u
-}
-
-// ClearBillingAddress clears the value of the "billing_address" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearBillingAddress() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearBillingAddress()
-	return _u
-}
-
-// SetTaxIdentifier sets the "tax_identifier" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetTaxIdentifier(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetTaxIdentifier(v)
-	return _u
-}
-
-// SetNillableTaxIdentifier sets the "tax_identifier" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableTaxIdentifier(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetTaxIdentifier(*v)
-	}
-	return _u
-}
-
-// ClearTaxIdentifier clears the value of the "tax_identifier" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearTaxIdentifier() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearTaxIdentifier()
-	return _u
-}
-
-// SetGeoLocation sets the "geo_location" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetGeoLocation(v enums.Region) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetGeoLocation(v)
-	return _u
-}
-
-// SetNillableGeoLocation sets the "geo_location" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableGeoLocation(v *enums.Region) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetGeoLocation(*v)
-	}
-	return _u
-}
-
-// ClearGeoLocation clears the value of the "geo_location" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearGeoLocation() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearGeoLocation()
-	return _u
-}
-
-// SetOrganizationID sets the "organization_id" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetOrganizationID(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetOrganizationID(v)
-	return _u
-}
-
-// SetNillableOrganizationID sets the "organization_id" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableOrganizationID(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetOrganizationID(*v)
-	}
-	return _u
-}
-
-// ClearOrganizationID clears the value of the "organization_id" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearOrganizationID() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearOrganizationID()
-	return _u
-}
-
-// SetBillingNotificationsEnabled sets the "billing_notifications_enabled" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetBillingNotificationsEnabled(v bool) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetBillingNotificationsEnabled(v)
-	return _u
-}
-
-// SetNillableBillingNotificationsEnabled sets the "billing_notifications_enabled" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableBillingNotificationsEnabled(v *bool) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetBillingNotificationsEnabled(*v)
-	}
-	return _u
-}
-
-// SetAllowedEmailDomains sets the "allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetAllowedEmailDomains(v)
-	return _u
-}
-
-// AppendAllowedEmailDomains appends value to the "allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) AppendAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.AppendAllowedEmailDomains(v)
-	return _u
-}
-
-// ClearAllowedEmailDomains clears the value of the "allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearAllowedEmailDomains() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearAllowedEmailDomains()
-	return _u
-}
-
-// SetAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetAllowMatchingDomainsAutojoin(v bool) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetAllowMatchingDomainsAutojoin(v)
-	return _u
-}
-
-// SetNillableAllowMatchingDomainsAutojoin sets the "allow_matching_domains_autojoin" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableAllowMatchingDomainsAutojoin(v *bool) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetAllowMatchingDomainsAutojoin(*v)
-	}
-	return _u
-}
-
-// ClearAllowMatchingDomainsAutojoin clears the value of the "allow_matching_domains_autojoin" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearAllowMatchingDomainsAutojoin() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearAllowMatchingDomainsAutojoin()
-	return _u
-}
-
-// SetIdentityProvider sets the "identity_provider" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProvider(v enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetIdentityProvider(v)
-	return _u
-}
-
-// SetNillableIdentityProvider sets the "identity_provider" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProvider(v *enums.SSOProvider) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityProvider(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProvider clears the value of the "identity_provider" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProvider() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearIdentityProvider()
-	return _u
-}
-
-// SetIdentityProviderClientID sets the "identity_provider_client_id" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderClientID(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetIdentityProviderClientID(v)
-	return _u
-}
-
-// SetNillableIdentityProviderClientID sets the "identity_provider_client_id" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderClientID(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityProviderClientID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProviderClientID clears the value of the "identity_provider_client_id" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderClientID() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearIdentityProviderClientID()
-	return _u
-}
-
-// SetIdentityProviderClientSecret sets the "identity_provider_client_secret" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderClientSecret(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetIdentityProviderClientSecret(v)
-	return _u
-}
-
-// SetNillableIdentityProviderClientSecret sets the "identity_provider_client_secret" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderClientSecret(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityProviderClientSecret(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProviderClientSecret clears the value of the "identity_provider_client_secret" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderClientSecret() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearIdentityProviderClientSecret()
-	return _u
-}
-
-// SetIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderMetadataEndpoint(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetIdentityProviderMetadataEndpoint(v)
-	return _u
-}
-
-// SetNillableIdentityProviderMetadataEndpoint sets the "identity_provider_metadata_endpoint" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderMetadataEndpoint(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityProviderMetadataEndpoint(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProviderMetadataEndpoint clears the value of the "identity_provider_metadata_endpoint" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderMetadataEndpoint() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearIdentityProviderMetadataEndpoint()
-	return _u
-}
-
-// SetIdentityProviderAuthTested sets the "identity_provider_auth_tested" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderAuthTested(v bool) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetIdentityProviderAuthTested(v)
-	return _u
-}
-
-// SetNillableIdentityProviderAuthTested sets the "identity_provider_auth_tested" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderAuthTested(v *bool) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityProviderAuthTested(*v)
-	}
-	return _u
-}
-
-// SetIdentityProviderEntityID sets the "identity_provider_entity_id" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderEntityID(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetIdentityProviderEntityID(v)
-	return _u
-}
-
-// SetNillableIdentityProviderEntityID sets the "identity_provider_entity_id" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderEntityID(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityProviderEntityID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityProviderEntityID clears the value of the "identity_provider_entity_id" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearIdentityProviderEntityID() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearIdentityProviderEntityID()
-	return _u
-}
-
-// SetOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetOidcDiscoveryEndpoint(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetOidcDiscoveryEndpoint(v)
-	return _u
-}
-
-// SetNillableOidcDiscoveryEndpoint sets the "oidc_discovery_endpoint" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableOidcDiscoveryEndpoint(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetOidcDiscoveryEndpoint(*v)
-	}
-	return _u
-}
-
-// ClearOidcDiscoveryEndpoint clears the value of the "oidc_discovery_endpoint" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearOidcDiscoveryEndpoint() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearOidcDiscoveryEndpoint()
-	return _u
-}
-
-// SetSamlSigninURL sets the "saml_signin_url" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetSamlSigninURL(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetSamlSigninURL(v)
-	return _u
-}
-
-// SetNillableSamlSigninURL sets the "saml_signin_url" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableSamlSigninURL(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetSamlSigninURL(*v)
-	}
-	return _u
-}
-
-// ClearSamlSigninURL clears the value of the "saml_signin_url" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearSamlSigninURL() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearSamlSigninURL()
-	return _u
-}
-
-// SetSamlIssuer sets the "saml_issuer" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetSamlIssuer(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetSamlIssuer(v)
-	return _u
-}
-
-// SetNillableSamlIssuer sets the "saml_issuer" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableSamlIssuer(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetSamlIssuer(*v)
-	}
-	return _u
-}
-
-// ClearSamlIssuer clears the value of the "saml_issuer" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearSamlIssuer() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearSamlIssuer()
-	return _u
-}
-
-// SetSamlCert sets the "saml_cert" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetSamlCert(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetSamlCert(v)
-	return _u
-}
-
-// SetNillableSamlCert sets the "saml_cert" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableSamlCert(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetSamlCert(*v)
-	}
-	return _u
-}
-
-// ClearSamlCert clears the value of the "saml_cert" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearSamlCert() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearSamlCert()
-	return _u
-}
-
-// SetIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderLoginEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetIdentityProviderLoginEnforced(v)
-	return _u
-}
-
-// SetNillableIdentityProviderLoginEnforced sets the "identity_provider_login_enforced" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderLoginEnforced(v *bool) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityProviderLoginEnforced(*v)
-	}
-	return _u
-}
-
-// SetIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetIdentityProviderJitProvisioning(v bool) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetIdentityProviderJitProvisioning(v)
-	return _u
-}
-
-// SetNillableIdentityProviderJitProvisioning sets the "identity_provider_jit_provisioning" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableIdentityProviderJitProvisioning(v *bool) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityProviderJitProvisioning(*v)
-	}
-	return _u
-}
-
-// SetJitAllowedEmailDomains sets the "jit_allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetJitAllowedEmailDomains(v)
-	return _u
-}
-
-// AppendJitAllowedEmailDomains appends value to the "jit_allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) AppendJitAllowedEmailDomains(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.AppendJitAllowedEmailDomains(v)
-	return _u
-}
-
-// ClearJitAllowedEmailDomains clears the value of the "jit_allowed_email_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearJitAllowedEmailDomains() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearJitAllowedEmailDomains()
-	return _u
-}
-
-// SetMultifactorAuthEnforced sets the "multifactor_auth_enforced" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetMultifactorAuthEnforced(v bool) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetMultifactorAuthEnforced(v)
-	return _u
-}
-
-// SetNillableMultifactorAuthEnforced sets the "multifactor_auth_enforced" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableMultifactorAuthEnforced(v *bool) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetMultifactorAuthEnforced(*v)
-	}
-	return _u
-}
-
-// ClearMultifactorAuthEnforced clears the value of the "multifactor_auth_enforced" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearMultifactorAuthEnforced() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearMultifactorAuthEnforced()
-	return _u
-}
-
-// SetSSOExemptDomains sets the "sso_exempt_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetSSOExemptDomains(v)
-	return _u
-}
-
-// AppendSSOExemptDomains appends value to the "sso_exempt_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) AppendSSOExemptDomains(v []string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.AppendSSOExemptDomains(v)
-	return _u
-}
-
-// ClearSSOExemptDomains clears the value of the "sso_exempt_domains" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearSSOExemptDomains() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearSSOExemptDomains()
-	return _u
-}
-
-// SetAllowSupportAccess sets the "allow_support_access" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetAllowSupportAccess(v bool) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetAllowSupportAccess(v)
-	return _u
-}
-
-// SetNillableAllowSupportAccess sets the "allow_support_access" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableAllowSupportAccess(v *bool) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetAllowSupportAccess(*v)
-	}
-	return _u
-}
-
-// ClearAllowSupportAccess clears the value of the "allow_support_access" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearAllowSupportAccess() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearAllowSupportAccess()
-	return _u
-}
-
-// SetComplianceWebhookToken sets the "compliance_webhook_token" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetComplianceWebhookToken(v string) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetComplianceWebhookToken(v)
-	return _u
-}
-
-// SetNillableComplianceWebhookToken sets the "compliance_webhook_token" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillableComplianceWebhookToken(v *string) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetComplianceWebhookToken(*v)
-	}
-	return _u
-}
-
-// ClearComplianceWebhookToken clears the value of the "compliance_webhook_token" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearComplianceWebhookToken() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearComplianceWebhookToken()
-	return _u
-}
-
-// SetPaymentMethodAdded sets the "payment_method_added" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetPaymentMethodAdded(v bool) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetPaymentMethodAdded(v)
-	return _u
-}
-
-// SetNillablePaymentMethodAdded sets the "payment_method_added" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillablePaymentMethodAdded(v *bool) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetPaymentMethodAdded(*v)
-	}
-	return _u
-}
-
-// SetPendingDeletionAt sets the "pending_deletion_at" field.
-func (_u *OrganizationSettingHistoryUpdateOne) SetPendingDeletionAt(v models.DateTime) *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.SetPendingDeletionAt(v)
-	return _u
-}
-
-// SetNillablePendingDeletionAt sets the "pending_deletion_at" field if the given value is not nil.
-func (_u *OrganizationSettingHistoryUpdateOne) SetNillablePendingDeletionAt(v *models.DateTime) *OrganizationSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetPendingDeletionAt(*v)
-	}
-	return _u
-}
-
-// ClearPendingDeletionAt clears the value of the "pending_deletion_at" field.
-func (_u *OrganizationSettingHistoryUpdateOne) ClearPendingDeletionAt() *OrganizationSettingHistoryUpdateOne {
-	_u.mutation.ClearPendingDeletionAt()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *OrganizationSettingHistoryMutation
 }
 
 // Mutation returns the OrganizationSettingHistoryMutation object of the builder.
@@ -1739,9 +212,6 @@ func (_u *OrganizationSettingHistoryUpdateOne) Select(field string, fields ...st
 
 // Save executes the query and returns the updated OrganizationSettingHistory entity.
 func (_u *OrganizationSettingHistoryUpdateOne) Save(ctx context.Context) (*OrganizationSettingHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1767,43 +237,7 @@ func (_u *OrganizationSettingHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *OrganizationSettingHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if organizationsettinghistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized organizationsettinghistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := organizationsettinghistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *OrganizationSettingHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.GeoLocation(); ok {
-		if err := organizationsettinghistory.GeoLocationValidator(v); err != nil {
-			return &ValidationError{Name: "geo_location", err: fmt.Errorf(`historygenerated: validator failed for field "OrganizationSettingHistory.geo_location": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.IdentityProvider(); ok {
-		if err := organizationsettinghistory.IdentityProviderValidator(v); err != nil {
-			return &ValidationError{Name: "identity_provider", err: fmt.Errorf(`historygenerated: validator failed for field "OrganizationSettingHistory.identity_provider": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *OrganizationSettingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrganizationSettingHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrganizationSettingHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(organizationsettinghistory.Table, organizationsettinghistory.Columns, sqlgraph.NewFieldSpec(organizationsettinghistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1835,238 +269,102 @@ func (_u *OrganizationSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(organizationsettinghistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(organizationsettinghistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(organizationsettinghistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(organizationsettinghistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Domains(); ok {
-		_spec.SetField(organizationsettinghistory.FieldDomains, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDomains(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldDomains, value)
-		})
 	}
 	if _u.mutation.DomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldDomains, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.BillingContact(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingContact, field.TypeString, value)
-	}
 	if _u.mutation.BillingContactCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingContact, field.TypeString)
-	}
-	if value, ok := _u.mutation.BillingEmail(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingEmail, field.TypeString, value)
 	}
 	if _u.mutation.BillingEmailCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingEmail, field.TypeString)
 	}
-	if value, ok := _u.mutation.BillingPhone(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingPhone, field.TypeString, value)
-	}
 	if _u.mutation.BillingPhoneCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingPhone, field.TypeString)
-	}
-	if value, ok := _u.mutation.BillingAddress(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON, value)
 	}
 	if _u.mutation.BillingAddressCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldBillingAddress, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TaxIdentifier(); ok {
-		_spec.SetField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString, value)
-	}
 	if _u.mutation.TaxIdentifierCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldTaxIdentifier, field.TypeString)
-	}
-	if value, ok := _u.mutation.GeoLocation(); ok {
-		_spec.SetField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum, value)
 	}
 	if _u.mutation.GeoLocationCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldGeoLocation, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.OrganizationID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldOrganizationID, field.TypeString, value)
-	}
 	if _u.mutation.OrganizationIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOrganizationID, field.TypeString)
-	}
-	if value, ok := _u.mutation.BillingNotificationsEnabled(); ok {
-		_spec.SetField(organizationsettinghistory.FieldBillingNotificationsEnabled, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.AllowedEmailDomains(); ok {
-		_spec.SetField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedAllowedEmailDomains(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldAllowedEmailDomains, value)
-		})
 	}
 	if _u.mutation.AllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowedEmailDomains, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.AllowMatchingDomainsAutojoin(); ok {
-		_spec.SetField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool, value)
-	}
 	if _u.mutation.AllowMatchingDomainsAutojoinCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowMatchingDomainsAutojoin, field.TypeBool)
-	}
-	if value, ok := _u.mutation.IdentityProvider(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum, value)
 	}
 	if _u.mutation.IdentityProviderCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProvider, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.IdentityProviderClientID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString, value)
-	}
 	if _u.mutation.IdentityProviderClientIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientID, field.TypeString)
-	}
-	if value, ok := _u.mutation.IdentityProviderClientSecret(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString, value)
 	}
 	if _u.mutation.IdentityProviderClientSecretCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderClientSecret, field.TypeString)
 	}
-	if value, ok := _u.mutation.IdentityProviderMetadataEndpoint(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString, value)
-	}
 	if _u.mutation.IdentityProviderMetadataEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderMetadataEndpoint, field.TypeString)
-	}
-	if value, ok := _u.mutation.IdentityProviderAuthTested(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderAuthTested, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.IdentityProviderEntityID(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString, value)
 	}
 	if _u.mutation.IdentityProviderEntityIDCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldIdentityProviderEntityID, field.TypeString)
 	}
-	if value, ok := _u.mutation.OidcDiscoveryEndpoint(); ok {
-		_spec.SetField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString, value)
-	}
 	if _u.mutation.OidcDiscoveryEndpointCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldOidcDiscoveryEndpoint, field.TypeString)
-	}
-	if value, ok := _u.mutation.SamlSigninURL(); ok {
-		_spec.SetField(organizationsettinghistory.FieldSamlSigninURL, field.TypeString, value)
 	}
 	if _u.mutation.SamlSigninURLCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldSamlSigninURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.SamlIssuer(); ok {
-		_spec.SetField(organizationsettinghistory.FieldSamlIssuer, field.TypeString, value)
-	}
 	if _u.mutation.SamlIssuerCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldSamlIssuer, field.TypeString)
-	}
-	if value, ok := _u.mutation.SamlCert(); ok {
-		_spec.SetField(organizationsettinghistory.FieldSamlCert, field.TypeString, value)
 	}
 	if _u.mutation.SamlCertCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldSamlCert, field.TypeString)
 	}
-	if value, ok := _u.mutation.IdentityProviderLoginEnforced(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderLoginEnforced, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.IdentityProviderJitProvisioning(); ok {
-		_spec.SetField(organizationsettinghistory.FieldIdentityProviderJitProvisioning, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.JitAllowedEmailDomains(); ok {
-		_spec.SetField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedJitAllowedEmailDomains(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldJitAllowedEmailDomains, value)
-		})
-	}
 	if _u.mutation.JitAllowedEmailDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldJitAllowedEmailDomains, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.MultifactorAuthEnforced(); ok {
-		_spec.SetField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool, value)
 	}
 	if _u.mutation.MultifactorAuthEnforcedCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldMultifactorAuthEnforced, field.TypeBool)
 	}
-	if value, ok := _u.mutation.SSOExemptDomains(); ok {
-		_spec.SetField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedSSOExemptDomains(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, organizationsettinghistory.FieldSSOExemptDomains, value)
-		})
-	}
 	if _u.mutation.SSOExemptDomainsCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldSSOExemptDomains, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.AllowSupportAccess(); ok {
-		_spec.SetField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool, value)
 	}
 	if _u.mutation.AllowSupportAccessCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldAllowSupportAccess, field.TypeBool)
 	}
-	if value, ok := _u.mutation.ComplianceWebhookToken(); ok {
-		_spec.SetField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString, value)
-	}
 	if _u.mutation.ComplianceWebhookTokenCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldComplianceWebhookToken, field.TypeString)
-	}
-	if value, ok := _u.mutation.PaymentMethodAdded(); ok {
-		_spec.SetField(organizationsettinghistory.FieldPaymentMethodAdded, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.PendingDeletionAt(); ok {
-		_spec.SetField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime, value)
 	}
 	if _u.mutation.PendingDeletionAtCleared() {
 		_spec.ClearField(organizationsettinghistory.FieldPendingDeletionAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.OrganizationSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &OrganizationSettingHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

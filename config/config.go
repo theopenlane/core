@@ -25,19 +25,19 @@ import (
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/cache"
 
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
-	"github.com/theopenlane/core/pkg/middleware/cors"
-	"github.com/theopenlane/core/pkg/middleware/csrf"
-	"github.com/theopenlane/core/pkg/middleware/mime"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/shortlinks"
+	"github.com/theopenlane/core/v2/internal/ent/entconfig"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/catalog"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/middleware/cachecontrol"
+	"github.com/theopenlane/core/v2/pkg/middleware/cors"
+	"github.com/theopenlane/core/v2/pkg/middleware/csrf"
+	"github.com/theopenlane/core/v2/pkg/middleware/mime"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
+	"github.com/theopenlane/core/v2/pkg/middleware/secure"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 )
 
 const (
@@ -94,7 +94,7 @@ type Config struct {
 // Backfill configures one-time startup data backfill routines that populate fields introduced by recent
 // migrations for organizations and memberships that pre-date them
 type Backfill struct {
-	// Enabled runs the backfill routines on server startup
+	// Enabled runs the backfill routines on server startup, this only setups up the main job, all configured backfills will run based on their settings
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 }
 
@@ -149,8 +149,8 @@ type Server struct {
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
 	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`
-	// TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain
-	TrustCenterPreviewZoneID string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:""`
+	// TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
+	TrustCenterPreviewCnameTarget string `json:"trustcenterpreviewcnametarget" koanf:"trustcenterpreviewcnametarget" default:""`
 	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
 	// Unread notifications are always pulled regardless of this setting
 	NotificationLookbackDays int `json:"notificationlookbackdays" koanf:"notificationlookbackdays" default:"30"`

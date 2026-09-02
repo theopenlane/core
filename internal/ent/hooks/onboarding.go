@@ -10,12 +10,12 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookOnboarding runs on onboarding mutations to create the organization and settings
@@ -71,7 +71,7 @@ func HookOnboarding() ent.Hook {
 			compliance, _ := m.Compliance()
 			demoRequested, _ := m.DemoRequested()
 
-			if err := sendSystemSlack(ctx, m.Client(), slackdef.DemoRequestOp.Name(), slackdef.DemoRequestMessage{
+			if err := sendSystemSlack(ctx, slackdef.DemoRequestOp.Name(), slackdef.DemoRequestMessage{
 				CompanyName:    companyName,
 				Email:          callerEmail,
 				Domains:        domains,

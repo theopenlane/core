@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _EvidenceBulkCreatePayload_evidences(ctx context.Con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Evidence) graphql.Marshaler {
-			return ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ(ctx, selections, v)
+			return ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _EvidenceBulkUpdatePayload_evidences(ctx context.Con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Evidence) graphql.Marshaler {
-			return ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ(ctx, selections, v)
+			return ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _EvidenceCreatePayload_evidence(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Evidence) graphql.Marshaler {
-			return ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence(ctx, selections, v)
+			return ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidence(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _EvidenceUpdatePayload_evidence(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Evidence) graphql.Marshaler {
-			return ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence(ctx, selections, v)
+			return ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidence(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _EvidenceUpdatePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNEvidenceBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkCreatePayload) graphql.Marshaler {
 	return ec._EvidenceBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEvidenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNEvidenceBulkCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._EvidenceBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEvidenceBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkDeletePayload) graphql.Marshaler {
 	return ec._EvidenceBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEvidenceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNEvidenceBulkDeletePayload2ᚖgithubᚗcomᚋ
 	return ec._EvidenceBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkUpdatePayload) graphql.Marshaler {
 	return ec._EvidenceBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2ᚖgithubᚗcomᚋ
 	return ec._EvidenceBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEvidenceCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceCreatePayload) graphql.Marshaler {
 	return ec._EvidenceCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEvidenceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNEvidenceCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._EvidenceCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEvidenceDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceDeletePayload) graphql.Marshaler {
 	return ec._EvidenceDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEvidenceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNEvidenceDeletePayload2ᚖgithubᚗcomᚋtheo
 	return ec._EvidenceDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEvidenceUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceUpdatePayload) graphql.Marshaler {
 	return ec._EvidenceUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // InternalPolicyDelete is the builder for deleting a InternalPolicy entity.
@@ -43,8 +41,6 @@ func (_d *InternalPolicyDelete) ExecX(ctx context.Context) int {
 
 func (_d *InternalPolicyDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(internalpolicy.Table, sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.InternalPolicy
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

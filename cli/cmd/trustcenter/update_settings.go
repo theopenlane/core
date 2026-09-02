@@ -14,7 +14,7 @@ import (
 
 	"github.com/theopenlane/core/cli/cmd"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	openlane "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )

@@ -19,10 +19,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 )
 
 const githubAppWebhookPath = "/github/app/webhook"

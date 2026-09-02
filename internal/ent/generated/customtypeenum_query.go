@@ -13,21 +13,20 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // CustomTypeEnumQuery is the builder for querying CustomTypeEnum entities.
@@ -113,9 +112,6 @@ func (_q *CustomTypeEnumQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, customtypeenum.OwnerTable, customtypeenum.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.CustomTypeEnum
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -138,9 +134,6 @@ func (_q *CustomTypeEnumQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.TasksTable, customtypeenum.TasksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -163,9 +156,6 @@ func (_q *CustomTypeEnumQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.ControlsTable, customtypeenum.ControlsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -188,9 +178,6 @@ func (_q *CustomTypeEnumQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.SubcontrolsTable, customtypeenum.SubcontrolsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -213,9 +200,6 @@ func (_q *CustomTypeEnumQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.RisksTable, customtypeenum.RisksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -238,9 +222,6 @@ func (_q *CustomTypeEnumQuery) QueryRiskCategories() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.RiskCategoriesTable, customtypeenum.RiskCategoriesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -263,9 +244,6 @@ func (_q *CustomTypeEnumQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.InternalPoliciesTable, customtypeenum.InternalPoliciesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -288,9 +266,6 @@ func (_q *CustomTypeEnumQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.ProceduresTable, customtypeenum.ProceduresColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -313,9 +288,6 @@ func (_q *CustomTypeEnumQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.ActionPlansTable, customtypeenum.ActionPlansColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -338,9 +310,6 @@ func (_q *CustomTypeEnumQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.ProgramsTable, customtypeenum.ProgramsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Program
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -363,9 +332,6 @@ func (_q *CustomTypeEnumQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, customtypeenum.PlatformsTable, customtypeenum.PlatformsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -814,8 +780,6 @@ func (_q *CustomTypeEnumQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.CustomTypeEnum
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1326,8 +1290,6 @@ func (_q *CustomTypeEnumQuery) loadPlatforms(ctx context.Context, query *Platfor
 
 func (_q *CustomTypeEnumQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.CustomTypeEnum
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1396,9 +1358,6 @@ func (_q *CustomTypeEnumQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.CustomTypeEnum)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

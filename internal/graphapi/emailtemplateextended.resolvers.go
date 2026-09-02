@@ -10,15 +10,15 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // EmailTemplateCatalog is the resolver for the emailTemplateCatalog field.
 func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailTemplateCatalog, error) {
-	emailClient, err := r.emailRuntimeClient(ctx)
+	emailClient, err := r.emailRuntimeClient()
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed resolving email runtime client for template catalog")
 
@@ -77,7 +77,7 @@ func (r *queryResolver) EmailTemplateCatalog(ctx context.Context) (*model.EmailT
 
 // PreviewEmailTemplate is the resolver for the previewEmailTemplate field.
 func (r *queryResolver) PreviewEmailTemplate(ctx context.Context, key string, defaults map[string]any) (string, error) {
-	emailClient, err := r.emailRuntimeClient(ctx)
+	emailClient, err := r.emailRuntimeClient()
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("key", key).Msg("failed resolving email runtime client for template preview")
 

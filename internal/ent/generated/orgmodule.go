@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
 )
 
 // OrgModule is the model entity for the OrgModule schema.

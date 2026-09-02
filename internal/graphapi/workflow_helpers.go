@@ -6,9 +6,10 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 )
 
 const (
@@ -55,9 +56,9 @@ func pollUntil[T any](ctx context.Context, timeout time.Duration, query func() (
 	return result, ErrTimedOutWaitingForCondition
 }
 
-// workflowsEnabled reports whether workflows are enabled for this resolver
-func workflowsEnabled(client *generated.Client) bool {
-	return client != nil && client.WorkflowEngine != nil
+// workflowsEnabled reports whether the process-wide workflow engine is registered
+func workflowsEnabled() bool {
+	return engine.Enabled()
 }
 
 // WaitForInstanceState polls until the workflow instance reaches the expected state or times out.

@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
 )
 
 // Procedure is the model entity for the Procedure schema.
@@ -112,6 +112,7 @@ type Procedure struct {
 	Edges                        ProcedureEdges `json:"edges"`
 	control_objective_procedures *string
 	custom_type_enum_procedures  *string
+	evidence_procedures          *string
 	selectValues                 sql.SelectValues
 }
 
@@ -376,6 +377,8 @@ func (*Procedure) scanValues(columns []string) ([]any, error) {
 		case procedure.ForeignKeys[0]: // control_objective_procedures
 			values[i] = new(sql.NullString)
 		case procedure.ForeignKeys[1]: // custom_type_enum_procedures
+			values[i] = new(sql.NullString)
+		case procedure.ForeignKeys[2]: // evidence_procedures
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -686,6 +689,13 @@ func (_m *Procedure) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.custom_type_enum_procedures = new(string)
 				*_m.custom_type_enum_procedures = value.String
+			}
+		case procedure.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field evidence_procedures", values[i])
+			} else if value.Valid {
+				_m.evidence_procedures = new(string)
+				*_m.evidence_procedures = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

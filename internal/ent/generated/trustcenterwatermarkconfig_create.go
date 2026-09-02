@@ -10,11 +10,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
 )
 
 // TrustCenterWatermarkConfigCreate is the builder for creating a TrustCenterWatermarkConfig entity.
@@ -498,7 +498,6 @@ func (_c *TrustCenterWatermarkConfigCreate) createSpec() (*TrustCenterWatermarkC
 		_node = &TrustCenterWatermarkConfig{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcenterwatermarkconfig.Table, sqlgraph.NewFieldSpec(trustcenterwatermarkconfig.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustCenterWatermarkConfig
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -574,7 +573,6 @@ func (_c *TrustCenterWatermarkConfigCreate) createSpec() (*TrustCenterWatermarkC
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterWatermarkConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -592,7 +590,6 @@ func (_c *TrustCenterWatermarkConfigCreate) createSpec() (*TrustCenterWatermarkC
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -609,7 +606,6 @@ func (_c *TrustCenterWatermarkConfigCreate) createSpec() (*TrustCenterWatermarkC
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -626,7 +622,6 @@ func (_c *TrustCenterWatermarkConfigCreate) createSpec() (*TrustCenterWatermarkC
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -643,7 +638,6 @@ func (_c *TrustCenterWatermarkConfigCreate) createSpec() (*TrustCenterWatermarkC
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterWatermarkConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

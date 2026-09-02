@@ -9,17 +9,17 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgprice"
-	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 
-	em "github.com/theopenlane/core/internal/entitlements/entmapping"
+	em "github.com/theopenlane/core/v2/internal/entitlements/entmapping"
 )
 
 // syncSubscriptionItemsWithStripe ensures OrgProduct, OrgPrice, and OrgModule

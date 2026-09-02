@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 )
 
 // WorkflowDefinitionCreate is the builder for creating a WorkflowDefinition entity.
@@ -706,7 +706,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 		_node = &WorkflowDefinition{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(workflowdefinition.Table, sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.WorkflowDefinition
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -838,7 +837,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -856,7 +854,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -873,7 +870,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -890,7 +886,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -907,7 +902,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TagDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -924,7 +918,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -941,7 +934,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -958,7 +950,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -975,7 +966,6 @@ func (_c *WorkflowDefinitionCreate) createSpec() (*WorkflowDefinition, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

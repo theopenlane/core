@@ -11,15 +11,15 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
-	wfworkflows "github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	wfworkflows "github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -28,9 +28,7 @@ import (
 // a linked integration installation or the runtime email definition
 func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
 	if e.integrationRuntime == nil {
-		if rt := intruntime.FromClient(ctx, e.client); rt != nil {
-			e.integrationRuntime = rt
-		}
+		e.integrationRuntime = intruntime.Default()
 	}
 
 	if e.integrationRuntime == nil {

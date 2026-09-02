@@ -13,36 +13,35 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // IntegrationQuery is the builder for querying Integration entities.
@@ -155,9 +154,6 @@ func (_q *IntegrationQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, integration.OwnerTable, integration.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -180,9 +176,6 @@ func (_q *IntegrationQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, integration.EnvironmentTable, integration.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -205,9 +198,6 @@ func (_q *IntegrationQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, integration.ScopeTable, integration.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -230,9 +220,6 @@ func (_q *IntegrationQuery) QuerySecrets() *HushQuery {
 			sqlgraph.To(hush.Table, hush.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, integration.SecretsTable, integration.SecretsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.IntegrationSecrets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -255,9 +242,6 @@ func (_q *IntegrationQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.FilesTable, integration.FilesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -280,9 +264,6 @@ func (_q *IntegrationQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, integration.EventsTable, integration.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.IntegrationEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -305,9 +286,6 @@ func (_q *IntegrationQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, integration.FindingsTable, integration.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.IntegrationFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -330,9 +308,6 @@ func (_q *IntegrationQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, integration.VulnerabilitiesTable, integration.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.IntegrationVulnerabilities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -355,9 +330,6 @@ func (_q *IntegrationQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, integration.InternalPoliciesTable, integration.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.IntegrationInternalPolicies
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -380,9 +352,6 @@ func (_q *IntegrationQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, integration.ReviewsTable, integration.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.IntegrationReviews
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -405,9 +374,6 @@ func (_q *IntegrationQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, integration.RemediationsTable, integration.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.IntegrationRemediations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -430,9 +396,6 @@ func (_q *IntegrationQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.TasksTable, integration.TasksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -455,9 +418,6 @@ func (_q *IntegrationQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, integration.ActionPlansTable, integration.ActionPlansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.IntegrationActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -480,9 +440,6 @@ func (_q *IntegrationQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.AssetsTable, integration.AssetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -505,9 +462,6 @@ func (_q *IntegrationQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectoryAccountsTable, integration.DirectoryAccountsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryAccount
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -530,9 +484,6 @@ func (_q *IntegrationQuery) QueryDirectoryGroups() *DirectoryGroupQuery {
 			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectoryGroupsTable, integration.DirectoryGroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -555,9 +506,6 @@ func (_q *IntegrationQuery) QueryDirectoryMemberships() *DirectoryMembershipQuer
 			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectoryMembershipsTable, integration.DirectoryMembershipsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -580,9 +528,6 @@ func (_q *IntegrationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectorySyncRunsTable, integration.DirectorySyncRunsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectorySyncRun
-		step.Edge.Schema = schemaConfig.DirectorySyncRun
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -605,9 +550,6 @@ func (_q *IntegrationQuery) QueryCheckResults() *CheckResultQuery {
 			sqlgraph.To(checkresult.Table, checkresult.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.CheckResultsTable, integration.CheckResultsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CheckResult
-		step.Edge.Schema = schemaConfig.CheckResult
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -630,9 +572,6 @@ func (_q *IntegrationQuery) QueryPlatform() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, integration.PlatformTable, integration.PlatformColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -655,9 +594,6 @@ func (_q *IntegrationQuery) QueryNotificationTemplates() *NotificationTemplateQu
 			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.NotificationTemplatesTable, integration.NotificationTemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.NotificationTemplate
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -680,9 +616,6 @@ func (_q *IntegrationQuery) QueryEmailTemplates() *EmailTemplateQuery {
 			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.EmailTemplatesTable, integration.EmailTemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -705,9 +638,6 @@ func (_q *IntegrationQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.CampaignsTable, integration.CampaignsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -730,9 +660,6 @@ func (_q *IntegrationQuery) QueryIntegrationWebhooks() *IntegrationWebhookQuery 
 			sqlgraph.To(integrationwebhook.Table, integrationwebhook.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.IntegrationWebhooksTable, integration.IntegrationWebhooksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IntegrationWebhook
-		step.Edge.Schema = schemaConfig.IntegrationWebhook
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -755,9 +682,6 @@ func (_q *IntegrationQuery) QueryIntegrationRuns() *IntegrationRunQuery {
 			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, integration.IntegrationRunsTable, integration.IntegrationRunsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IntegrationRun
-		step.Edge.Schema = schemaConfig.IntegrationRun
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -780,9 +704,6 @@ func (_q *IntegrationQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, integration.EntitiesTable, integration.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntityIntegrations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1426,8 +1347,6 @@ func (_q *IntegrationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Integration
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1892,7 +1811,6 @@ func (_q *IntegrationQuery) loadSecrets(ctx context.Context, query *HushQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.SecretsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationSecrets)
 		s.Join(joinT).On(s.C(hush.FieldID), joinT.C(integration.SecretsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(integration.SecretsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1985,7 +1903,6 @@ func (_q *IntegrationQuery) loadEvents(ctx context.Context, query *EventQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.EventsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(integration.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(integration.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2047,7 +1964,6 @@ func (_q *IntegrationQuery) loadFindings(ctx context.Context, query *FindingQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.FindingsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationFindings)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(integration.FindingsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(integration.FindingsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2109,7 +2025,6 @@ func (_q *IntegrationQuery) loadVulnerabilities(ctx context.Context, query *Vuln
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.IntegrationVulnerabilities)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(integration.VulnerabilitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(integration.VulnerabilitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2171,7 +2086,6 @@ func (_q *IntegrationQuery) loadInternalPolicies(ctx context.Context, query *Int
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.IntegrationInternalPolicies)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(integration.InternalPoliciesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(integration.InternalPoliciesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2233,7 +2147,6 @@ func (_q *IntegrationQuery) loadReviews(ctx context.Context, query *ReviewQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationReviews)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(integration.ReviewsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(integration.ReviewsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2295,7 +2208,6 @@ func (_q *IntegrationQuery) loadRemediations(ctx context.Context, query *Remedia
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationRemediations)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(integration.RemediationsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(integration.RemediationsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2388,7 +2300,6 @@ func (_q *IntegrationQuery) loadActionPlans(ctx context.Context, query *ActionPl
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.ActionPlansTable)
-		joinT.Schema(_q.schemaConfig.IntegrationActionPlans)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(integration.ActionPlansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(integration.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2810,7 +2721,6 @@ func (_q *IntegrationQuery) loadEntities(ctx context.Context, query *EntityQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(integration.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.EntityIntegrations)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(integration.EntitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(integration.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2862,8 +2772,6 @@ func (_q *IntegrationQuery) loadEntities(ctx context.Context, query *EntityQuery
 
 func (_q *IntegrationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Integration
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2941,9 +2849,6 @@ func (_q *IntegrationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Integration)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

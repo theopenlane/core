@@ -14,11 +14,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // RemediationHistoryQuery is the builder for querying RemediationHistory entities.
@@ -28,8 +27,8 @@ type RemediationHistoryQuery struct {
 	order      []remediationhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.RemediationHistory
-	loadTotal  []func(context.Context, []*RemediationHistory) error
 	modifiers  []func(*sql.Selector)
+	loadTotal  []func(context.Context, []*RemediationHistory) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -259,9 +258,8 @@ func (_q *RemediationHistoryQuery) Clone() *RemediationHistoryQuery {
 		inters:     append([]Interceptor{}, _q.inters...),
 		predicates: append([]predicate.RemediationHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       _q.sql.Clone(),
-		path:      _q.path,
-		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -358,8 +356,6 @@ func (_q *RemediationHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.RemediationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -382,8 +378,6 @@ func (_q *RemediationHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 
 func (_q *RemediationHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.RemediationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -449,12 +443,6 @@ func (_q *RemediationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.RemediationHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
-	for _, m := range _q.modifiers {
-		m(selector)
-	}
 	for _, p := range _q.predicates {
 		p(selector)
 	}
@@ -470,12 +458,6 @@ func (_q *RemediationHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_q *RemediationHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *RemediationHistorySelect {
-	_q.modifiers = append(_q.modifiers, modifiers...)
-	return _q.Select()
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied
@@ -584,10 +566,4 @@ func (_s *RemediationHistorySelect) sqlScan(ctx context.Context, root *Remediati
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_s *RemediationHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *RemediationHistorySelect {
-	_s.modifiers = append(_s.modifiers, modifiers...)
-	return _s
 }

@@ -3,8 +3,8 @@ package operations
 import (
 	"context"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 )
 
 // persistContactInput upserts one Contact record using the ingest lookup key fields

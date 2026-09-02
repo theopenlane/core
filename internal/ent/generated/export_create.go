@@ -12,10 +12,10 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/export"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/export"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // ExportCreate is the builder for creating a Export entity.
@@ -443,7 +443,6 @@ func (_c *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 		_node = &Export{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(export.Table, sqlgraph.NewFieldSpec(export.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Export
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -523,7 +522,6 @@ func (_c *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Export
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -541,7 +539,6 @@ func (_c *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -558,7 +555,6 @@ func (_c *ExportCreate) createSpec() (*Export, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

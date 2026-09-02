@@ -13,14 +13,13 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // InviteQuery is the builder for querying Invite entities.
@@ -89,9 +88,6 @@ func (_q *InviteQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, invite.OwnerTable, invite.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Invite
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -114,9 +110,6 @@ func (_q *InviteQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, invite.EventsTable, invite.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.InviteEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -139,9 +132,6 @@ func (_q *InviteQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, invite.GroupsTable, invite.GroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InviteGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -482,8 +472,6 @@ func (_q *InviteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Invit
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Invite
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -580,7 +568,6 @@ func (_q *InviteQuery) loadEvents(ctx context.Context, query *EventQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(invite.EventsTable)
-		joinT.Schema(_q.schemaConfig.InviteEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(invite.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(invite.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -642,7 +629,6 @@ func (_q *InviteQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(invite.GroupsTable)
-		joinT.Schema(_q.schemaConfig.InviteGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(invite.GroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(invite.GroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -694,8 +680,6 @@ func (_q *InviteQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes 
 
 func (_q *InviteQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Invite
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -764,9 +748,6 @@ func (_q *InviteQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Invite)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

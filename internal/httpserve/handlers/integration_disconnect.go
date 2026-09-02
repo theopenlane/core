@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	models "github.com/theopenlane/core/common/openapi"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/pkg/logx"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // DisconnectIntegration executes the definition-driven teardown flow for one installed integration

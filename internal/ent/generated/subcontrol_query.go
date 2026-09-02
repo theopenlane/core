@@ -13,37 +13,35 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // SubcontrolQuery is the builder for querying Subcontrol entities.
@@ -73,7 +71,6 @@ type SubcontrolQuery struct {
 	withSubcontrolKind              *CustomTypeEnumQuery
 	withControl                     *ControlQuery
 	withControlImplementations      *ControlImplementationQuery
-	withScheduledJobs               *ScheduledJobQuery
 	withMappedToSubcontrols         *MappedControlQuery
 	withMappedFromSubcontrols       *MappedControlQuery
 	withWorkflowObjectRefs          *WorkflowObjectRefQuery
@@ -99,7 +96,6 @@ type SubcontrolQuery struct {
 	withNamedRemediations           map[string]*RemediationQuery
 	withNamedScans                  map[string]*ScanQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
-	withNamedScheduledJobs          map[string]*ScheduledJobQuery
 	withNamedMappedToSubcontrols    map[string]*MappedControlQuery
 	withNamedMappedFromSubcontrols  map[string]*MappedControlQuery
 	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
@@ -160,9 +156,6 @@ func (_q *SubcontrolQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.EvidenceTable, subcontrol.EvidencePrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -185,9 +178,6 @@ func (_q *SubcontrolQuery) QueryControlObjectives() *ControlObjectiveQuery {
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ControlObjectivesTable, subcontrol.ControlObjectivesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.SubcontrolControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -210,9 +200,6 @@ func (_q *SubcontrolQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.TasksTable, subcontrol.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.SubcontrolTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -235,9 +222,6 @@ func (_q *SubcontrolQuery) QueryNarratives() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.NarrativesTable, subcontrol.NarrativesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.Narrative
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -260,9 +244,6 @@ func (_q *SubcontrolQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.RisksTable, subcontrol.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.SubcontrolRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -285,9 +266,6 @@ func (_q *SubcontrolQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.ActionPlansTable, subcontrol.ActionPlansColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -310,9 +288,6 @@ func (_q *SubcontrolQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ProceduresTable, subcontrol.ProceduresPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.SubcontrolProcedures
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -335,9 +310,6 @@ func (_q *SubcontrolQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.InternalPoliciesTable, subcontrol.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicySubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -360,9 +332,6 @@ func (_q *SubcontrolQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.CommentsTable, subcontrol.CommentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -385,9 +354,6 @@ func (_q *SubcontrolQuery) QueryDiscussions() *DiscussionQuery {
 			sqlgraph.To(discussion.Table, discussion.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, subcontrol.DiscussionsTable, subcontrol.DiscussionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Discussion
-		step.Edge.Schema = schemaConfig.Discussion
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -410,9 +376,6 @@ func (_q *SubcontrolQuery) QueryControlOwner() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ControlOwnerTable, subcontrol.ControlOwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -435,9 +398,6 @@ func (_q *SubcontrolQuery) QueryDelegate() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.DelegateTable, subcontrol.DelegateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -460,9 +420,6 @@ func (_q *SubcontrolQuery) QueryResponsibleParty() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.ResponsiblePartyTable, subcontrol.ResponsiblePartyColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -485,9 +442,6 @@ func (_q *SubcontrolQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ReviewsTable, subcontrol.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -510,9 +464,6 @@ func (_q *SubcontrolQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.RemediationsTable, subcontrol.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -535,9 +486,6 @@ func (_q *SubcontrolQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ScansTable, subcontrol.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.SubcontrolScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -560,9 +508,6 @@ func (_q *SubcontrolQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, subcontrol.OwnerTable, subcontrol.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -585,9 +530,6 @@ func (_q *SubcontrolQuery) QuerySubcontrolKind() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, subcontrol.SubcontrolKindTable, subcontrol.SubcontrolKindColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -610,9 +552,6 @@ func (_q *SubcontrolQuery) QueryControl() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, subcontrol.ControlTable, subcontrol.ControlColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -635,34 +574,6 @@ func (_q *SubcontrolQuery) QueryControlImplementations() *ControlImplementationQ
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ControlImplementationsTable, subcontrol.ControlImplementationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.SubcontrolControlImplementations
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryScheduledJobs chains the current query on the "scheduled_jobs" edge.
-func (_q *SubcontrolQuery) QueryScheduledJobs() *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, selector),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ScheduledJobsTable, subcontrol.ScheduledJobsPrimaryKey...),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.ScheduledJobSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -685,9 +596,6 @@ func (_q *SubcontrolQuery) QueryMappedToSubcontrols() *MappedControlQuery {
 			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.MappedToSubcontrolsTable, subcontrol.MappedToSubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlToSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -710,9 +618,6 @@ func (_q *SubcontrolQuery) QueryMappedFromSubcontrols() *MappedControlQuery {
 			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.MappedFromSubcontrolsTable, subcontrol.MappedFromSubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -735,9 +640,6 @@ func (_q *SubcontrolQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, subcontrol.WorkflowObjectRefsTable, subcontrol.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -760,9 +662,6 @@ func (_q *SubcontrolQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.AssetsTable, subcontrol.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.SubcontrolAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -785,9 +684,6 @@ func (_q *SubcontrolQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.EntitiesTable, subcontrol.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.SubcontrolEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -810,9 +706,6 @@ func (_q *SubcontrolQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.IdentityHoldersTable, subcontrol.IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.SubcontrolIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -835,9 +728,6 @@ func (_q *SubcontrolQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.VulnerabilitiesTable, subcontrol.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.VulnerabilitySubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -860,9 +750,6 @@ func (_q *SubcontrolQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.FindingsTable, subcontrol.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1081,7 +968,6 @@ func (_q *SubcontrolQuery) Clone() *SubcontrolQuery {
 		withSubcontrolKind:         _q.withSubcontrolKind.Clone(),
 		withControl:                _q.withControl.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
-		withScheduledJobs:          _q.withScheduledJobs.Clone(),
 		withMappedToSubcontrols:    _q.withMappedToSubcontrols.Clone(),
 		withMappedFromSubcontrols:  _q.withMappedFromSubcontrols.Clone(),
 		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
@@ -1317,17 +1203,6 @@ func (_q *SubcontrolQuery) WithControlImplementations(opts ...func(*ControlImple
 	return _q
 }
 
-// WithScheduledJobs tells the query-builder to eager-load the nodes that are connected to
-// the "scheduled_jobs" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *SubcontrolQuery) WithScheduledJobs(opts ...func(*ScheduledJobQuery)) *SubcontrolQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withScheduledJobs = query
-	return _q
-}
-
 // WithMappedToSubcontrols tells the query-builder to eager-load the nodes that are connected to
 // the "mapped_to_subcontrols" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *SubcontrolQuery) WithMappedToSubcontrols(opts ...func(*MappedControlQuery)) *SubcontrolQuery {
@@ -1501,7 +1376,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		nodes       = []*Subcontrol{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [29]bool{
+		loadedTypes = [28]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1522,7 +1397,6 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			_q.withSubcontrolKind != nil,
 			_q.withControl != nil,
 			_q.withControlImplementations != nil,
-			_q.withScheduledJobs != nil,
 			_q.withMappedToSubcontrols != nil,
 			_q.withMappedFromSubcontrols != nil,
 			_q.withWorkflowObjectRefs != nil,
@@ -1545,8 +1419,6 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Subcontrol
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1694,13 +1566,6 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			func(n *Subcontrol, e *ControlImplementation) {
 				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
 			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withScheduledJobs; query != nil {
-		if err := _q.loadScheduledJobs(ctx, query, nodes,
-			func(n *Subcontrol) { n.Edges.ScheduledJobs = []*ScheduledJob{} },
-			func(n *Subcontrol, e *ScheduledJob) { n.Edges.ScheduledJobs = append(n.Edges.ScheduledJobs, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1864,13 +1729,6 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
-	for name, query := range _q.withNamedScheduledJobs {
-		if err := _q.loadScheduledJobs(ctx, query, nodes,
-			func(n *Subcontrol) { n.appendNamedScheduledJobs(name) },
-			func(n *Subcontrol, e *ScheduledJob) { n.appendNamedScheduledJobs(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range _q.withNamedMappedToSubcontrols {
 		if err := _q.loadMappedToSubcontrols(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedMappedToSubcontrols(name) },
@@ -1948,7 +1806,6 @@ func (_q *SubcontrolQuery) loadEvidence(ctx context.Context, query *EvidenceQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.EvidenceTable)
-		joinT.Schema(_q.schemaConfig.EvidenceSubcontrols)
 		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(subcontrol.EvidencePrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subcontrol.EvidencePrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2010,7 +1867,6 @@ func (_q *SubcontrolQuery) loadControlObjectives(ctx context.Context, query *Con
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.ControlObjectivesTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolControlObjectives)
 		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(subcontrol.ControlObjectivesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.ControlObjectivesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2072,7 +1928,6 @@ func (_q *SubcontrolQuery) loadTasks(ctx context.Context, query *TaskQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.TasksTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(subcontrol.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2165,7 +2020,6 @@ func (_q *SubcontrolQuery) loadRisks(ctx context.Context, query *RiskQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.RisksTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(subcontrol.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2258,7 +2112,6 @@ func (_q *SubcontrolQuery) loadProcedures(ctx context.Context, query *ProcedureQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.ProceduresTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolProcedures)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(subcontrol.ProceduresPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.ProceduresPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2320,7 +2173,6 @@ func (_q *SubcontrolQuery) loadInternalPolicies(ctx context.Context, query *Inte
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicySubcontrols)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(subcontrol.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subcontrol.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2534,7 +2386,6 @@ func (_q *SubcontrolQuery) loadReviews(ctx context.Context, query *ReviewQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewSubcontrols)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(subcontrol.ReviewsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subcontrol.ReviewsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2596,7 +2447,6 @@ func (_q *SubcontrolQuery) loadRemediations(ctx context.Context, query *Remediat
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.RemediationSubcontrols)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(subcontrol.RemediationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subcontrol.RemediationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2658,7 +2508,6 @@ func (_q *SubcontrolQuery) loadScans(ctx context.Context, query *ScanQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.ScansTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolScans)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(subcontrol.ScansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.ScansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2807,7 +2656,6 @@ func (_q *SubcontrolQuery) loadControlImplementations(ctx context.Context, query
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.ControlImplementationsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolControlImplementations)
 		s.Join(joinT).On(s.C(controlimplementation.FieldID), joinT.C(subcontrol.ControlImplementationsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.ControlImplementationsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2856,68 +2704,6 @@ func (_q *SubcontrolQuery) loadControlImplementations(ctx context.Context, query
 	}
 	return nil
 }
-func (_q *SubcontrolQuery) loadScheduledJobs(ctx context.Context, query *ScheduledJobQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *ScheduledJob)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Subcontrol)
-	nids := make(map[string]map[*Subcontrol]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(subcontrol.ScheduledJobsTable)
-		joinT.Schema(_q.schemaConfig.ScheduledJobSubcontrols)
-		s.Join(joinT).On(s.C(scheduledjob.FieldID), joinT.C(subcontrol.ScheduledJobsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(subcontrol.ScheduledJobsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(subcontrol.ScheduledJobsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Subcontrol]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*ScheduledJob](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "scheduled_jobs" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (_q *SubcontrolQuery) loadMappedToSubcontrols(ctx context.Context, query *MappedControlQuery, nodes []*Subcontrol, init func(*Subcontrol), assign func(*Subcontrol, *MappedControl)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Subcontrol)
@@ -2931,7 +2717,6 @@ func (_q *SubcontrolQuery) loadMappedToSubcontrols(ctx context.Context, query *M
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.MappedToSubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlToSubcontrols)
 		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(subcontrol.MappedToSubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subcontrol.MappedToSubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2993,7 +2778,6 @@ func (_q *SubcontrolQuery) loadMappedFromSubcontrols(ctx context.Context, query 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.MappedFromSubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlFromSubcontrols)
 		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(subcontrol.MappedFromSubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subcontrol.MappedFromSubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3086,7 +2870,6 @@ func (_q *SubcontrolQuery) loadAssets(ctx context.Context, query *AssetQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.AssetsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(subcontrol.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3148,7 +2931,6 @@ func (_q *SubcontrolQuery) loadEntities(ctx context.Context, query *EntityQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(subcontrol.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3210,7 +2992,6 @@ func (_q *SubcontrolQuery) loadIdentityHolders(ctx context.Context, query *Ident
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.IdentityHoldersTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolIdentityHolders)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(subcontrol.IdentityHoldersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subcontrol.IdentityHoldersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3272,7 +3053,6 @@ func (_q *SubcontrolQuery) loadVulnerabilities(ctx context.Context, query *Vulne
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.VulnerabilitySubcontrols)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(subcontrol.VulnerabilitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subcontrol.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3334,7 +3114,6 @@ func (_q *SubcontrolQuery) loadFindings(ctx context.Context, query *FindingQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subcontrol.FindingsTable)
-		joinT.Schema(_q.schemaConfig.FindingSubcontrols)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(subcontrol.FindingsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subcontrol.FindingsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3386,8 +3165,6 @@ func (_q *SubcontrolQuery) loadFindings(ctx context.Context, query *FindingQuery
 
 func (_q *SubcontrolQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Subcontrol
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -3471,9 +3248,6 @@ func (_q *SubcontrolQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Subcontrol)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}
@@ -3693,20 +3467,6 @@ func (_q *SubcontrolQuery) WithNamedControlImplementations(name string, opts ...
 		_q.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
 	}
 	_q.withNamedControlImplementations[name] = query
-	return _q
-}
-
-// WithNamedScheduledJobs tells the query-builder to eager-load the nodes that are connected to the "scheduled_jobs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *SubcontrolQuery) WithNamedScheduledJobs(name string, opts ...func(*ScheduledJobQuery)) *SubcontrolQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedScheduledJobs == nil {
-		_q.withNamedScheduledJobs = make(map[string]*ScheduledJobQuery)
-	}
-	_q.withNamedScheduledJobs[name] = query
 	return _q
 }
 

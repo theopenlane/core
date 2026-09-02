@@ -15,9 +15,9 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/cli/cmd"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/cmd"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	openlaneclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/go-client/graphclient"
 )

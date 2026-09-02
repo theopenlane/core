@@ -6,10 +6,10 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/common/jobspec"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
 )
 
 // HookDNSVerificationDelete cleans up preview domain DNS records when a verification record is deleted
@@ -25,7 +25,7 @@ func HookDNSVerificationDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			if trustCenterConfig.PreviewZoneID == "" {
+			if trustCenterConfig.PreviewCnameTarget == "" {
 				return next.Mutate(ctx, m)
 			}
 
@@ -33,6 +33,15 @@ func HookDNSVerificationDelete() ent.Hook {
 				Where(customdomain.DNSVerificationID(id)).
 				Select(customdomain.FieldID).
 				All(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			if len(customDomains) == 0 {
+				return next.Mutate(ctx, m)
+			}
+
+			previewZoneID, err := getTrustCenterPreviewZoneID(ctx, m.Client())
 			if err != nil {
 				return nil, err
 			}
@@ -50,7 +59,7 @@ func HookDNSVerificationDelete() ent.Hook {
 
 				if err := enqueueJob(ctx, m.Job, jobspec.DeletePreviewDomainArgs{
 					CustomDomainID:           cd.ID,
-					TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+					TrustCenterPreviewZoneID: previewZoneID,
 				}, nil); err != nil {
 					return nil, err
 				}

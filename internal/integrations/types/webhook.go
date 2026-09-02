@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/gala"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // StaticWebhookEntry pairs a definition ID with a webhook registration that declares a static route

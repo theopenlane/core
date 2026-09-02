@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -900,7 +900,6 @@ func (_c *AssetHistoryCreate) createSpec() (*AssetHistory, *sqlgraph.CreateSpec)
 		_node = &AssetHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(assethistory.Table, sqlgraph.NewFieldSpec(assethistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.AssetHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

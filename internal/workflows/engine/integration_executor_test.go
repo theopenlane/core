@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 func TestEvaluateInstallationScope(t *testing.T) {

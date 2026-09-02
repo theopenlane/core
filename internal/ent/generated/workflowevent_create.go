@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 )
 
 // WorkflowEventCreate is the builder for creating a WorkflowEvent entity.
@@ -328,7 +328,6 @@ func (_c *WorkflowEventCreate) createSpec() (*WorkflowEvent, *sqlgraph.CreateSpe
 		_node = &WorkflowEvent{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(workflowevent.Table, sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.WorkflowEvent
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -388,7 +387,6 @@ func (_c *WorkflowEventCreate) createSpec() (*WorkflowEvent, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -406,7 +404,6 @@ func (_c *WorkflowEventCreate) createSpec() (*WorkflowEvent, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

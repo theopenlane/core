@@ -17,10 +17,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	apimodels "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/logx"
-	sso "github.com/theopenlane/core/pkg/ssoutils"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	sso "github.com/theopenlane/core/v2/pkg/ssoutils"
 )
 
 // support access cookie names carry first factor state into the second factor identity provider step

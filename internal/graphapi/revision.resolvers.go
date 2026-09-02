@@ -9,7 +9,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // RevisionBump is the resolver for the RevisionBump field.

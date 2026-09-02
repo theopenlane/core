@@ -2,7 +2,7 @@
 
 package main
 
-import "github.com/theopenlane/core/pkg/gencmd/generate/cmd"
+import "github.com/theopenlane/core/v2/pkg/gencmd/generate/cmd"
 
 func main() {
 	cmd.Execute()

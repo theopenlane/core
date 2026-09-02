@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // ImpersonationEventCreate is the builder for creating a ImpersonationEvent entity.
@@ -373,7 +373,6 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 		_node = &ImpersonationEvent{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(impersonationevent.Table, sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ImpersonationEvent
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -445,7 +444,6 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -463,7 +461,6 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -481,7 +478,6 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

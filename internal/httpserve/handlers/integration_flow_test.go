@@ -13,13 +13,12 @@ import (
 	"github.com/stretchr/testify/require"
 
 	openapi "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 const (
@@ -374,47 +373,6 @@ func (suite *HandlerTestSuite) startIntegrationAuth(t *testing.T, ctx context.Co
 	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 
 	return rec, resp
-}
-
-func (suite *HandlerTestSuite) completeOAuthInstallation(t *testing.T, ctx context.Context) string {
-	t.Helper()
-
-	startRec, startResp := suite.startIntegrationAuth(t, ctx, handlers.IntegrationAuthStartRequest{DefinitionID: testAuthDefinitionID})
-	cookies := cookieMap(startRec.Result().Cookies())
-
-	authURL, err := url.Parse(startResp.AuthURL)
-	assert.NoError(t, err)
-	oauthState := authURL.Query().Get("state")
-	assert.NotEmpty(t, oauthState)
-
-	req := httptest.NewRequest(http.MethodGet, integrationCallbackPath, nil)
-	query := req.URL.Query()
-	query.Set("code", "test-code")
-	query.Set("state", oauthState)
-	req.URL.RawQuery = query.Encode()
-
-	for _, name := range []string{stateCookieName, orgCookieName} {
-		req.AddCookie(cookies[name])
-	}
-	if redirectCookie, ok := cookies["redirect_to"]; ok {
-		req.AddCookie(redirectCookie)
-	}
-
-	rec := httptest.NewRecorder()
-	suite.e.ServeHTTP(rec, req.WithContext(ctx))
-	assert.Equal(t, http.StatusFound, rec.Code)
-
-	orgID, err := auth.GetOrganizationIDFromContext(ctx)
-	assert.NoError(t, err)
-
-	record := suite.db.Integration.Query().
-		Where(
-			integration.OwnerIDEQ(orgID),
-			integration.DefinitionIDEQ(testAuthDefinitionID),
-		).
-		OnlyX(ctx)
-
-	return record.ID
 }
 
 func cookieMap(cookies []*http.Cookie) map[string]*http.Cookie {

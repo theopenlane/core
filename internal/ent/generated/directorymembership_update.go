@@ -12,14 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
 
 // DirectoryMembershipUpdate is the builder for updating DirectoryMembership entities.
@@ -684,7 +682,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -698,7 +695,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -715,7 +711,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -729,7 +724,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -746,7 +740,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -760,7 +753,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -777,7 +769,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Event
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
@@ -791,7 +782,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -808,7 +798,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -825,7 +814,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
@@ -839,7 +827,6 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -856,14 +843,11 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.DirectoryMembership
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1564,7 +1548,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -1578,7 +1561,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1595,7 +1577,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -1609,7 +1590,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1626,7 +1606,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -1640,7 +1619,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1657,7 +1635,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Event
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
@@ -1671,7 +1648,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1688,7 +1664,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Event
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1705,7 +1680,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
@@ -1719,7 +1693,6 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1736,14 +1709,11 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.DirectoryMembership
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &DirectoryMembership{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -5,29 +5,31 @@ import (
 	"fmt"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
 )
 
 func TestDocumentDataAnonymousTrustCenterAccess(t *testing.T) {
-	tcOrg := createFreshOrgWithTrustCenter(t, withNDATemplate())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithNDATemplate())
+	trustCenter := tcOrg.TrustCenter
 
-	pdfHash := getMD5Hash(t, pdfFilePath)
+	pdfHash := th.GetMD5Hash(t, th.PdfFilePath)
 
 	newAnonCtx := func(email string) (context.Context, string) {
 		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustCenterJWTPrefix, ulids.New().String())
 		caller := auth.NewTrustCenterCaller(trustCenter.OwnerID, anonUserID, "Anon User", email)
-		return newAnonTrustCenterCtxFromCaller(caller, trustCenter.ID), anonUserID
+		return th.NewAnonTrustCenterCtxFromCaller(caller, trustCenter.ID), anonUserID
 	}
 
 	submitNDA := func(ctx context.Context, anonUserID, email string) string {
-		_, err := suite.client.api.CreateTrustCenterNDARequest(ctx, testclient.CreateTrustCenterNDARequestInput{
+		_, err := suite.Client.API.CreateTrustCenterNDARequest(ctx, testclient.CreateTrustCenterNDARequestInput{
 			FirstName:     "Anon",
 			LastName:      "User",
 			CompanyName:   lo.ToPtr("Test Company"),
@@ -36,10 +38,10 @@ func TestDocumentDataAnonymousTrustCenterAccess(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		expectAttestedUpload(t, suite.client.mockProvider)
+		th.ExpectAttestedUpload(t, suite.Client.MockProvider)
 
-		resp, err := suite.client.api.SubmitTrustCenterNDAResponse(ctx, testclient.SubmitTrustCenterNDAResponseInput{
-			TemplateID: *tcOrg.ndaTemplateID,
+		resp, err := suite.Client.API.SubmitTrustCenterNDAResponse(ctx, testclient.SubmitTrustCenterNDAResponseInput{
+			TemplateID: *tcOrg.NDATemplateID,
 			Response: map[string]any{
 				"signatory_info": map[string]any{
 					"email": email,
@@ -51,7 +53,7 @@ func TestDocumentDataAnonymousTrustCenterAccess(t *testing.T) {
 					"pdf_hash":   pdfHash,
 					"user_id":    anonUserID,
 				},
-				"pdf_file_id":     *tcOrg.ndaFileID,
+				"pdf_file_id":     *tcOrg.NDAFileID,
 				"trust_center_id": trustCenter.ID,
 			},
 		})
@@ -76,24 +78,24 @@ func TestDocumentDataAnonymousTrustCenterAccess(t *testing.T) {
 			name:        "anon user cannot read their own document data",
 			ctx:         anonCtx1,
 			queryID:     docDataID1,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "anon user cannot read another user's document data",
 			ctx:         anonCtx1,
 			queryID:     docDataID2,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:    "org owner can read document data",
-			ctx:     tcOrg.owner.UserCtx,
+			ctx:     tcOrg.Owner.UserCtx,
 			queryID: docDataID1,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.GetDocumentDataByID(tc.ctx, tc.queryID)
+			resp, err := suite.Client.API.GetDocumentDataByID(tc.ctx, tc.queryID)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 				return
@@ -104,5 +106,5 @@ func TestDocumentDataAnonymousTrustCenterAccess(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }

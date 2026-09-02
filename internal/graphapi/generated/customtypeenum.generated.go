@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _CustomTypeEnumBulkCreatePayload_customTypeEnums(ctx
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.CustomTypeEnum) graphql.Marshaler {
-			return ec.marshalOCustomTypeEnum2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumᚄ(ctx, selections, v)
+			return ec.marshalOCustomTypeEnum2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _CustomTypeEnumCreatePayload_customTypeEnum(ctx cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
-			return ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
+			return ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _CustomTypeEnumUpdatePayload_customTypeEnum(ctx cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
-			return ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
+			return ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _CustomTypeEnumUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumBulkCreatePayload) graphql.Marshaler {
 	return ec._CustomTypeEnumBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗ
 	return ec._CustomTypeEnumBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumCreatePayload) graphql.Marshaler {
 	return ec._CustomTypeEnumCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2ᚖgithubᚗcom�
 	return ec._CustomTypeEnumCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumDeletePayload) graphql.Marshaler {
 	return ec._CustomTypeEnumDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -354,11 +354,11 @@ func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2ᚖgithubᚗcom�
 	return ec._CustomTypeEnumDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnumUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomTypeEnumUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumUpdatePayload) graphql.Marshaler {
 	return ec._CustomTypeEnumUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnumUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomTypeEnumUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

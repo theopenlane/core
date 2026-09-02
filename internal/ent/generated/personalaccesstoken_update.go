@@ -13,13 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // PersonalAccessTokenUpdate is the builder for updating PersonalAccessToken entities.
@@ -625,7 +623,6 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -639,7 +636,6 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -656,7 +652,6 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !_u.mutation.OrganizationsCleared() {
@@ -670,7 +665,6 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -687,7 +681,6 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -704,7 +697,6 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
@@ -718,7 +710,6 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -735,14 +726,11 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.PersonalAccessToken
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1384,7 +1372,6 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessToken
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -1398,7 +1385,6 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1415,7 +1401,6 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedOrganizationsIDs(); len(nodes) > 0 && !_u.mutation.OrganizationsCleared() {
@@ -1429,7 +1414,6 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1446,7 +1430,6 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1463,7 +1446,6 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
@@ -1477,7 +1459,6 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1494,14 +1475,11 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.PersonalAccessToken
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &PersonalAccessToken{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -12,18 +12,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 )
 
 // EmailTemplateUpdate is the builder for updating EmailTemplate entities.
@@ -1044,7 +1042,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -1058,7 +1055,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1075,7 +1071,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1092,7 +1087,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -1106,7 +1100,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1123,7 +1116,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1140,7 +1132,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
@@ -1154,7 +1145,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1171,7 +1161,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1188,7 +1177,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
@@ -1202,7 +1190,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1219,7 +1206,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowDefinitionIDs(); len(nodes) > 0 {
@@ -1233,7 +1219,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1250,7 +1235,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowInstanceIDs(); len(nodes) > 0 {
@@ -1264,7 +1248,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1281,7 +1264,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
@@ -1295,7 +1277,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1312,7 +1293,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
@@ -1326,7 +1306,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1343,7 +1322,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1360,7 +1338,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationTemplatesIDs(); len(nodes) > 0 && !_u.mutation.NotificationTemplatesCleared() {
@@ -1374,7 +1351,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1391,7 +1367,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1408,7 +1383,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -1422,7 +1396,6 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1439,14 +1412,11 @@ func (_u *EmailTemplateUpdate) sqlSave(ctx context.Context) (_node int, err erro
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.EmailTemplate
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -2503,7 +2473,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -2517,7 +2486,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2534,7 +2502,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2551,7 +2518,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -2565,7 +2531,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2582,7 +2547,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2599,7 +2563,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
@@ -2613,7 +2576,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2630,7 +2592,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2647,7 +2608,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
@@ -2661,7 +2621,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2678,7 +2637,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowDefinitionIDs(); len(nodes) > 0 {
@@ -2692,7 +2650,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2709,7 +2666,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowInstanceIDs(); len(nodes) > 0 {
@@ -2723,7 +2679,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2740,7 +2695,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
@@ -2754,7 +2708,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2771,7 +2724,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
@@ -2785,7 +2737,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2802,7 +2753,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2819,7 +2769,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationTemplatesIDs(); len(nodes) > 0 && !_u.mutation.NotificationTemplatesCleared() {
@@ -2833,7 +2782,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2850,7 +2798,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2867,7 +2814,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -2881,7 +2827,6 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2898,14 +2843,11 @@ func (_u *EmailTemplateUpdateOne) sqlSave(ctx context.Context) (_node *EmailTemp
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.EmailTemplate
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &EmailTemplate{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -8,285 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/systemdetailhistory"
 )
 
 // SystemDetailHistoryUpdate is the builder for updating SystemDetailHistory entities.
 type SystemDetailHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *SystemDetailHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *SystemDetailHistoryMutation
 }
 
 // Where appends a list predicates to the SystemDetailHistoryUpdate builder.
 func (_u *SystemDetailHistoryUpdate) Where(ps ...predicate.SystemDetailHistory) *SystemDetailHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *SystemDetailHistoryUpdate) SetUpdatedAt(v time.Time) *SystemDetailHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *SystemDetailHistoryUpdate) ClearUpdatedAt() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *SystemDetailHistoryUpdate) SetUpdatedBy(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableUpdatedBy(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *SystemDetailHistoryUpdate) ClearUpdatedBy() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *SystemDetailHistoryUpdate) SetUpdatedByImpersonator(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *SystemDetailHistoryUpdate) ClearUpdatedByImpersonator() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *SystemDetailHistoryUpdate) SetDeletedAt(v time.Time) *SystemDetailHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableDeletedAt(v *time.Time) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *SystemDetailHistoryUpdate) ClearDeletedAt() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *SystemDetailHistoryUpdate) SetDeletedBy(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableDeletedBy(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *SystemDetailHistoryUpdate) ClearDeletedBy() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *SystemDetailHistoryUpdate) SetTags(v []string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *SystemDetailHistoryUpdate) AppendTags(v []string) *SystemDetailHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *SystemDetailHistoryUpdate) ClearTags() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetSystemName sets the "system_name" field.
-func (_u *SystemDetailHistoryUpdate) SetSystemName(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetSystemName(v)
-	return _u
-}
-
-// SetNillableSystemName sets the "system_name" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableSystemName(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetSystemName(*v)
-	}
-	return _u
-}
-
-// SetVersion sets the "version" field.
-func (_u *SystemDetailHistoryUpdate) SetVersion(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetVersion(v)
-	return _u
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableVersion(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetVersion(*v)
-	}
-	return _u
-}
-
-// ClearVersion clears the value of the "version" field.
-func (_u *SystemDetailHistoryUpdate) ClearVersion() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearVersion()
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *SystemDetailHistoryUpdate) SetDescription(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableDescription(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *SystemDetailHistoryUpdate) ClearDescription() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetAuthorizationBoundary sets the "authorization_boundary" field.
-func (_u *SystemDetailHistoryUpdate) SetAuthorizationBoundary(v string) *SystemDetailHistoryUpdate {
-	_u.mutation.SetAuthorizationBoundary(v)
-	return _u
-}
-
-// SetNillableAuthorizationBoundary sets the "authorization_boundary" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableAuthorizationBoundary(v *string) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetAuthorizationBoundary(*v)
-	}
-	return _u
-}
-
-// ClearAuthorizationBoundary clears the value of the "authorization_boundary" field.
-func (_u *SystemDetailHistoryUpdate) ClearAuthorizationBoundary() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearAuthorizationBoundary()
-	return _u
-}
-
-// SetSensitivityLevel sets the "sensitivity_level" field.
-func (_u *SystemDetailHistoryUpdate) SetSensitivityLevel(v enums.SystemSensitivityLevel) *SystemDetailHistoryUpdate {
-	_u.mutation.SetSensitivityLevel(v)
-	return _u
-}
-
-// SetNillableSensitivityLevel sets the "sensitivity_level" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableSensitivityLevel(v *enums.SystemSensitivityLevel) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetSensitivityLevel(*v)
-	}
-	return _u
-}
-
-// ClearSensitivityLevel clears the value of the "sensitivity_level" field.
-func (_u *SystemDetailHistoryUpdate) ClearSensitivityLevel() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearSensitivityLevel()
-	return _u
-}
-
-// SetLastReviewed sets the "last_reviewed" field.
-func (_u *SystemDetailHistoryUpdate) SetLastReviewed(v models.DateTime) *SystemDetailHistoryUpdate {
-	_u.mutation.SetLastReviewed(v)
-	return _u
-}
-
-// SetNillableLastReviewed sets the "last_reviewed" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdate) SetNillableLastReviewed(v *models.DateTime) *SystemDetailHistoryUpdate {
-	if v != nil {
-		_u.SetLastReviewed(*v)
-	}
-	return _u
-}
-
-// ClearLastReviewed clears the value of the "last_reviewed" field.
-func (_u *SystemDetailHistoryUpdate) ClearLastReviewed() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearLastReviewed()
-	return _u
-}
-
-// SetRevisionHistory sets the "revision_history" field.
-func (_u *SystemDetailHistoryUpdate) SetRevisionHistory(v []interface{}) *SystemDetailHistoryUpdate {
-	_u.mutation.SetRevisionHistory(v)
-	return _u
-}
-
-// AppendRevisionHistory appends value to the "revision_history" field.
-func (_u *SystemDetailHistoryUpdate) AppendRevisionHistory(v []interface{}) *SystemDetailHistoryUpdate {
-	_u.mutation.AppendRevisionHistory(v)
-	return _u
-}
-
-// ClearRevisionHistory clears the value of the "revision_history" field.
-func (_u *SystemDetailHistoryUpdate) ClearRevisionHistory() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearRevisionHistory()
-	return _u
-}
-
-// SetOscalMetadataJSON sets the "oscal_metadata_json" field.
-func (_u *SystemDetailHistoryUpdate) SetOscalMetadataJSON(v map[string]interface{}) *SystemDetailHistoryUpdate {
-	_u.mutation.SetOscalMetadataJSON(v)
-	return _u
-}
-
-// ClearOscalMetadataJSON clears the value of the "oscal_metadata_json" field.
-func (_u *SystemDetailHistoryUpdate) ClearOscalMetadataJSON() *SystemDetailHistoryUpdate {
-	_u.mutation.ClearOscalMetadataJSON()
 	return _u
 }
 
@@ -297,9 +36,6 @@ func (_u *SystemDetailHistoryUpdate) Mutation() *SystemDetailHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *SystemDetailHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -325,38 +61,7 @@ func (_u *SystemDetailHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *SystemDetailHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if systemdetailhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized systemdetailhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := systemdetailhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *SystemDetailHistoryUpdate) check() error {
-	if v, ok := _u.mutation.SensitivityLevel(); ok {
-		if err := systemdetailhistory.SensitivityLevelValidator(v); err != nil {
-			return &ValidationError{Name: "sensitivity_level", err: fmt.Errorf(`historygenerated: validator failed for field "SystemDetailHistory.sensitivity_level": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *SystemDetailHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SystemDetailHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *SystemDetailHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(systemdetailhistory.Table, systemdetailhistory.Columns, sqlgraph.NewFieldSpec(systemdetailhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -371,46 +76,23 @@ func (_u *SystemDetailHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(systemdetailhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(systemdetailhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(systemdetailhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(systemdetailhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(systemdetailhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(systemdetailhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(systemdetailhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(systemdetailhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(systemdetailhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(systemdetailhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(systemdetailhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(systemdetailhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(systemdetailhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, systemdetailhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(systemdetailhistory.FieldTags, field.TypeJSON)
@@ -418,59 +100,27 @@ func (_u *SystemDetailHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(systemdetailhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.SystemName(); ok {
-		_spec.SetField(systemdetailhistory.FieldSystemName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Version(); ok {
-		_spec.SetField(systemdetailhistory.FieldVersion, field.TypeString, value)
-	}
 	if _u.mutation.VersionCleared() {
 		_spec.ClearField(systemdetailhistory.FieldVersion, field.TypeString)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(systemdetailhistory.FieldDescription, field.TypeString, value)
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(systemdetailhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := _u.mutation.AuthorizationBoundary(); ok {
-		_spec.SetField(systemdetailhistory.FieldAuthorizationBoundary, field.TypeString, value)
-	}
 	if _u.mutation.AuthorizationBoundaryCleared() {
 		_spec.ClearField(systemdetailhistory.FieldAuthorizationBoundary, field.TypeString)
-	}
-	if value, ok := _u.mutation.SensitivityLevel(); ok {
-		_spec.SetField(systemdetailhistory.FieldSensitivityLevel, field.TypeEnum, value)
 	}
 	if _u.mutation.SensitivityLevelCleared() {
 		_spec.ClearField(systemdetailhistory.FieldSensitivityLevel, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.LastReviewed(); ok {
-		_spec.SetField(systemdetailhistory.FieldLastReviewed, field.TypeTime, value)
-	}
 	if _u.mutation.LastReviewedCleared() {
 		_spec.ClearField(systemdetailhistory.FieldLastReviewed, field.TypeTime)
-	}
-	if value, ok := _u.mutation.RevisionHistory(); ok {
-		_spec.SetField(systemdetailhistory.FieldRevisionHistory, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedRevisionHistory(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, systemdetailhistory.FieldRevisionHistory, value)
-		})
 	}
 	if _u.mutation.RevisionHistoryCleared() {
 		_spec.ClearField(systemdetailhistory.FieldRevisionHistory, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OscalMetadataJSON(); ok {
-		_spec.SetField(systemdetailhistory.FieldOscalMetadataJSON, field.TypeJSON, value)
-	}
 	if _u.mutation.OscalMetadataJSONCleared() {
 		_spec.ClearField(systemdetailhistory.FieldOscalMetadataJSON, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.SystemDetailHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{systemdetailhistory.Label}
@@ -486,264 +136,9 @@ func (_u *SystemDetailHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 // SystemDetailHistoryUpdateOne is the builder for updating a single SystemDetailHistory entity.
 type SystemDetailHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *SystemDetailHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *SystemDetailHistoryUpdateOne) SetUpdatedAt(v time.Time) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearUpdatedAt() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *SystemDetailHistoryUpdateOne) SetUpdatedBy(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableUpdatedBy(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearUpdatedBy() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *SystemDetailHistoryUpdateOne) SetUpdatedByImpersonator(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearUpdatedByImpersonator() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *SystemDetailHistoryUpdateOne) SetDeletedAt(v time.Time) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearDeletedAt() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *SystemDetailHistoryUpdateOne) SetDeletedBy(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableDeletedBy(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearDeletedBy() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *SystemDetailHistoryUpdateOne) SetTags(v []string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *SystemDetailHistoryUpdateOne) AppendTags(v []string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearTags() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetSystemName sets the "system_name" field.
-func (_u *SystemDetailHistoryUpdateOne) SetSystemName(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetSystemName(v)
-	return _u
-}
-
-// SetNillableSystemName sets the "system_name" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableSystemName(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemName(*v)
-	}
-	return _u
-}
-
-// SetVersion sets the "version" field.
-func (_u *SystemDetailHistoryUpdateOne) SetVersion(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetVersion(v)
-	return _u
-}
-
-// SetNillableVersion sets the "version" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableVersion(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetVersion(*v)
-	}
-	return _u
-}
-
-// ClearVersion clears the value of the "version" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearVersion() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearVersion()
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *SystemDetailHistoryUpdateOne) SetDescription(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableDescription(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearDescription() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetAuthorizationBoundary sets the "authorization_boundary" field.
-func (_u *SystemDetailHistoryUpdateOne) SetAuthorizationBoundary(v string) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetAuthorizationBoundary(v)
-	return _u
-}
-
-// SetNillableAuthorizationBoundary sets the "authorization_boundary" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableAuthorizationBoundary(v *string) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetAuthorizationBoundary(*v)
-	}
-	return _u
-}
-
-// ClearAuthorizationBoundary clears the value of the "authorization_boundary" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearAuthorizationBoundary() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearAuthorizationBoundary()
-	return _u
-}
-
-// SetSensitivityLevel sets the "sensitivity_level" field.
-func (_u *SystemDetailHistoryUpdateOne) SetSensitivityLevel(v enums.SystemSensitivityLevel) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetSensitivityLevel(v)
-	return _u
-}
-
-// SetNillableSensitivityLevel sets the "sensitivity_level" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableSensitivityLevel(v *enums.SystemSensitivityLevel) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetSensitivityLevel(*v)
-	}
-	return _u
-}
-
-// ClearSensitivityLevel clears the value of the "sensitivity_level" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearSensitivityLevel() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearSensitivityLevel()
-	return _u
-}
-
-// SetLastReviewed sets the "last_reviewed" field.
-func (_u *SystemDetailHistoryUpdateOne) SetLastReviewed(v models.DateTime) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetLastReviewed(v)
-	return _u
-}
-
-// SetNillableLastReviewed sets the "last_reviewed" field if the given value is not nil.
-func (_u *SystemDetailHistoryUpdateOne) SetNillableLastReviewed(v *models.DateTime) *SystemDetailHistoryUpdateOne {
-	if v != nil {
-		_u.SetLastReviewed(*v)
-	}
-	return _u
-}
-
-// ClearLastReviewed clears the value of the "last_reviewed" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearLastReviewed() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearLastReviewed()
-	return _u
-}
-
-// SetRevisionHistory sets the "revision_history" field.
-func (_u *SystemDetailHistoryUpdateOne) SetRevisionHistory(v []interface{}) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetRevisionHistory(v)
-	return _u
-}
-
-// AppendRevisionHistory appends value to the "revision_history" field.
-func (_u *SystemDetailHistoryUpdateOne) AppendRevisionHistory(v []interface{}) *SystemDetailHistoryUpdateOne {
-	_u.mutation.AppendRevisionHistory(v)
-	return _u
-}
-
-// ClearRevisionHistory clears the value of the "revision_history" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearRevisionHistory() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearRevisionHistory()
-	return _u
-}
-
-// SetOscalMetadataJSON sets the "oscal_metadata_json" field.
-func (_u *SystemDetailHistoryUpdateOne) SetOscalMetadataJSON(v map[string]interface{}) *SystemDetailHistoryUpdateOne {
-	_u.mutation.SetOscalMetadataJSON(v)
-	return _u
-}
-
-// ClearOscalMetadataJSON clears the value of the "oscal_metadata_json" field.
-func (_u *SystemDetailHistoryUpdateOne) ClearOscalMetadataJSON() *SystemDetailHistoryUpdateOne {
-	_u.mutation.ClearOscalMetadataJSON()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *SystemDetailHistoryMutation
 }
 
 // Mutation returns the SystemDetailHistoryMutation object of the builder.
@@ -766,9 +161,6 @@ func (_u *SystemDetailHistoryUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated SystemDetailHistory entity.
 func (_u *SystemDetailHistoryUpdateOne) Save(ctx context.Context) (*SystemDetailHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -794,38 +186,7 @@ func (_u *SystemDetailHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *SystemDetailHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if systemdetailhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized systemdetailhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := systemdetailhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *SystemDetailHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.SensitivityLevel(); ok {
-		if err := systemdetailhistory.SensitivityLevelValidator(v); err != nil {
-			return &ValidationError{Name: "sensitivity_level", err: fmt.Errorf(`historygenerated: validator failed for field "SystemDetailHistory.sensitivity_level": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *SystemDetailHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SystemDetailHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *SystemDetailHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SystemDetailHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(systemdetailhistory.Table, systemdetailhistory.Columns, sqlgraph.NewFieldSpec(systemdetailhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -857,46 +218,23 @@ func (_u *SystemDetailHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sys
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(systemdetailhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(systemdetailhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(systemdetailhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(systemdetailhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(systemdetailhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(systemdetailhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(systemdetailhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(systemdetailhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(systemdetailhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(systemdetailhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(systemdetailhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(systemdetailhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(systemdetailhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, systemdetailhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(systemdetailhistory.FieldTags, field.TypeJSON)
@@ -904,59 +242,27 @@ func (_u *SystemDetailHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sys
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(systemdetailhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.SystemName(); ok {
-		_spec.SetField(systemdetailhistory.FieldSystemName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Version(); ok {
-		_spec.SetField(systemdetailhistory.FieldVersion, field.TypeString, value)
-	}
 	if _u.mutation.VersionCleared() {
 		_spec.ClearField(systemdetailhistory.FieldVersion, field.TypeString)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(systemdetailhistory.FieldDescription, field.TypeString, value)
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(systemdetailhistory.FieldDescription, field.TypeString)
 	}
-	if value, ok := _u.mutation.AuthorizationBoundary(); ok {
-		_spec.SetField(systemdetailhistory.FieldAuthorizationBoundary, field.TypeString, value)
-	}
 	if _u.mutation.AuthorizationBoundaryCleared() {
 		_spec.ClearField(systemdetailhistory.FieldAuthorizationBoundary, field.TypeString)
-	}
-	if value, ok := _u.mutation.SensitivityLevel(); ok {
-		_spec.SetField(systemdetailhistory.FieldSensitivityLevel, field.TypeEnum, value)
 	}
 	if _u.mutation.SensitivityLevelCleared() {
 		_spec.ClearField(systemdetailhistory.FieldSensitivityLevel, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.LastReviewed(); ok {
-		_spec.SetField(systemdetailhistory.FieldLastReviewed, field.TypeTime, value)
-	}
 	if _u.mutation.LastReviewedCleared() {
 		_spec.ClearField(systemdetailhistory.FieldLastReviewed, field.TypeTime)
-	}
-	if value, ok := _u.mutation.RevisionHistory(); ok {
-		_spec.SetField(systemdetailhistory.FieldRevisionHistory, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedRevisionHistory(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, systemdetailhistory.FieldRevisionHistory, value)
-		})
 	}
 	if _u.mutation.RevisionHistoryCleared() {
 		_spec.ClearField(systemdetailhistory.FieldRevisionHistory, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OscalMetadataJSON(); ok {
-		_spec.SetField(systemdetailhistory.FieldOscalMetadataJSON, field.TypeJSON, value)
-	}
 	if _u.mutation.OscalMetadataJSONCleared() {
 		_spec.ClearField(systemdetailhistory.FieldOscalMetadataJSON, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.SystemDetailHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &SystemDetailHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

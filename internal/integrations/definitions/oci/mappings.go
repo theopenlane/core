@@ -1,8 +1,8 @@
 package oci
 
 import (
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
 // mapExprFinding is the CEL mapping expression for OCI Cloud Guard problem payloads mapped to Finding; unset SDK pointer fields marshal as null, hence the != null guards

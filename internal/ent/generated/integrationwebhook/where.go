@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1535,9 +1533,6 @@ func HasOwner() predicate.IntegrationWebhook {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.IntegrationWebhook
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1546,9 +1541,6 @@ func HasOwner() predicate.IntegrationWebhook {
 func HasOwnerWith(preds ...predicate.Organization) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.IntegrationWebhook
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1564,9 +1556,6 @@ func HasIntegration() predicate.IntegrationWebhook {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationWebhook
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1575,9 +1564,6 @@ func HasIntegration() predicate.IntegrationWebhook {
 func HasIntegrationWith(preds ...predicate.Integration) predicate.IntegrationWebhook {
 	return predicate.IntegrationWebhook(func(s *sql.Selector) {
 		step := newIntegrationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationWebhook
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -9,9 +9,9 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/internal/entitlements/features"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/internal/entitlements/features"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/utils/contextx"
 )
 
@@ -22,12 +22,17 @@ type KnownProviderHint storagetypes.ProviderType
 type SizeBytesHint int64
 type TemplateKindHint enums.TemplateKind
 
+// BackupSourceHint names the source provider whose backup destination should be resolved, so a
+// write to a backup goes through the same rule chain as any other provider lookup
+type BackupSourceHint storagetypes.ProviderType
+
 var (
 	moduleHintContextKey            = contextx.NewKey[ModuleHint]()
 	preferredProviderHintContextKey = contextx.NewKey[PreferredProviderHint]()
 	knownProviderHintContextKey     = contextx.NewKey[KnownProviderHint]()
 	sizeBytesHintContextKey         = contextx.NewKey[SizeBytesHint]()
 	templateKindHintContextKey      = contextx.NewKey[TemplateKindHint]()
+	backupSourceHintContextKey      = contextx.NewKey[BackupSourceHint]()
 )
 
 const TemplateKindMetadataKey = "template_kind"
@@ -153,6 +158,17 @@ func KnownProviderHintFromContext(ctx context.Context) (KnownProviderHint, bool)
 // WithKnownProviderHint returns a context with the known provider hint set.
 func WithKnownProviderHint(ctx context.Context, provider storagetypes.ProviderType) context.Context {
 	return knownProviderHintContextKey.Set(ctx, KnownProviderHint(provider))
+}
+
+// BackupSourceHintFromContext returns the backup source hint when present.
+func BackupSourceHintFromContext(ctx context.Context) (BackupSourceHint, bool) {
+	return backupSourceHintContextKey.Get(ctx)
+}
+
+// WithBackupSourceHint returns a context that resolves to the backup destination configured for
+// the given source provider.
+func WithBackupSourceHint(ctx context.Context, source storagetypes.ProviderType) context.Context {
+	return backupSourceHintContextKey.Set(ctx, BackupSourceHint(source))
 }
 
 // SizeBytesHintFromContext returns the size hint when present.

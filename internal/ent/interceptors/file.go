@@ -13,16 +13,16 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/intercept"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	dbprovider "github.com/theopenlane/core/pkg/objects/storage/providers/database"
-	"github.com/theopenlane/core/pkg/objects/storage/proxy"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/intercept"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	dbprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/database"
+	"github.com/theopenlane/core/v2/pkg/objects/storage/proxy"
 )
 
 // InterceptorFile is an ent interceptor that filters the file query on the organization id
@@ -155,6 +155,7 @@ func StorageFileFromEnt(file *generated.File) *storagetypes.File {
 	storageFile := &storagetypes.File{
 		ID:           file.ID,
 		OriginalName: file.ProvidedFileName,
+		ProviderType: storagetypes.ProviderType(file.StorageProvider),
 		FileMetadata: storagetypes.FileMetadata{
 			Key:          file.StoragePath,
 			Bucket:       file.StorageVolume,
@@ -177,6 +178,8 @@ func StorageFileFromEnt(file *generated.File) *storagetypes.File {
 
 		storageFile.Metadata = metadata
 	}
+
+	storageFile.BackupLocation = file.BackupState.Location()
 
 	return storageFile
 }

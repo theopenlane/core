@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1890,9 +1888,6 @@ func HasOwner() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1901,9 +1896,6 @@ func HasOwner() predicate.DirectoryMembership {
 func HasOwnerWith(preds ...predicate.Organization) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1919,9 +1911,6 @@ func HasEnvironment() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1930,9 +1919,6 @@ func HasEnvironment() predicate.DirectoryMembership {
 func HasEnvironmentWith(preds ...predicate.CustomTypeEnum) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newEnvironmentStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1948,9 +1934,6 @@ func HasScope() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1959,9 +1942,6 @@ func HasScope() predicate.DirectoryMembership {
 func HasScopeWith(preds ...predicate.CustomTypeEnum) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newScopeStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1977,9 +1957,6 @@ func HasIntegration() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1988,9 +1965,6 @@ func HasIntegration() predicate.DirectoryMembership {
 func HasIntegrationWith(preds ...predicate.Integration) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newIntegrationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2006,9 +1980,6 @@ func HasDirectorySyncRun() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, DirectorySyncRunTable, DirectorySyncRunColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectorySyncRun
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2017,9 +1988,6 @@ func HasDirectorySyncRun() predicate.DirectoryMembership {
 func HasDirectorySyncRunWith(preds ...predicate.DirectorySyncRun) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newDirectorySyncRunStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectorySyncRun
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2035,9 +2003,6 @@ func HasPlatform() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, PlatformTable, PlatformColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2046,9 +2011,6 @@ func HasPlatform() predicate.DirectoryMembership {
 func HasPlatformWith(preds ...predicate.Platform) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newPlatformStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2064,9 +2026,6 @@ func HasDirectoryAccount() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, DirectoryAccountTable, DirectoryAccountColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2075,9 +2034,6 @@ func HasDirectoryAccount() predicate.DirectoryMembership {
 func HasDirectoryAccountWith(preds ...predicate.DirectoryAccount) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newDirectoryAccountStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2093,9 +2049,6 @@ func HasDirectoryGroup() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, DirectoryGroupTable, DirectoryGroupColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2104,9 +2057,6 @@ func HasDirectoryGroup() predicate.DirectoryMembership {
 func HasDirectoryGroupWith(preds ...predicate.DirectoryGroup) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newDirectoryGroupStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2122,9 +2072,6 @@ func HasEvents() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, EventsTable, EventsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.Event
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2133,9 +2080,6 @@ func HasEvents() predicate.DirectoryMembership {
 func HasEventsWith(preds ...predicate.Event) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newEventsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.Event
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2151,9 +2095,6 @@ func HasWorkflowObjectRefs() predicate.DirectoryMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2162,9 +2103,6 @@ func HasWorkflowObjectRefs() predicate.DirectoryMembership {
 func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.DirectoryMembership {
 	return predicate.DirectoryMembership(func(s *sql.Selector) {
 		step := newWorkflowObjectRefsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

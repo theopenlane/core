@@ -18,9 +18,9 @@ import (
 	echo "github.com/theopenlane/echox"
 
 	models "github.com/theopenlane/core/common/openapi"
-	entEvent "github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	entEvent "github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 )
 
 type webhookBinder struct {

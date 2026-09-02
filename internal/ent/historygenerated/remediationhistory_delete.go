@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
-	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
 )
 
 // RemediationHistoryDelete is the builder for deleting a RemediationHistory entity.
@@ -45,8 +43,6 @@ func (_d *RemediationHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *RemediationHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(remediationhistory.Table, sqlgraph.NewFieldSpec(remediationhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.RemediationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

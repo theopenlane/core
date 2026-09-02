@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 )
 

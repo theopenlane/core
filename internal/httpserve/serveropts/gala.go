@@ -4,14 +4,13 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-	"github.com/samber/lo"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/notifications"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/notifications"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // NewGalaRuntimes creates the main and notification gala runtimes from configuration.
@@ -59,8 +58,9 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 }
 
 // ConfigureGala wires the gala runtimes to the database client and registers all listeners;
-// it must be called after the database client is created
-func ConfigureGala(galaApp, notificationGala *gala.Gala, dbClient *ent.Client) error {
+// it must be called after the database client is created. wfEngine is nil when workflows
+// are disabled
+func ConfigureGala(galaApp, notificationGala *gala.Gala, dbClient *ent.Client, wfEngine *engine.WorkflowEngine) error {
 	if galaApp == nil {
 		return nil
 	}
@@ -77,36 +77,19 @@ func ConfigureGala(galaApp, notificationGala *gala.Gala, dbClient *ent.Client) e
 
 	dbClient.Use(hooks.EmitGalaEventHook(galaApp, notificationGala))
 
-	if err := provideGalaDependencies(galaApp, dbClient); err != nil {
+	if err := provideGalaDependencies(galaApp, dbClient, wfEngine); err != nil {
 		closeRuntimes()
 
 		return err
 	}
 
-	if err := provideGalaDependencies(notificationGala, dbClient); err != nil {
+	if err := provideGalaDependencies(notificationGala, dbClient, wfEngine); err != nil {
 		closeRuntimes()
 
 		return err
 	}
 
-	registrations := lo.Flatten([][]gala.Registration{
-		hooks.OrganizationAvatarListeners(),
-		hooks.TaskRuleListeners(),
-		hooks.EntitlementListeners(),
-		hooks.OrganizationCleanupListeners(),
-		hooks.TrustCenterCacheListeners(),
-		hooks.TrustCenterWatermarkListeners(),
-		hooks.WorkflowListeners(),
-		hooks.VendorScoringListeners(),
-		hooks.IdentityResolutionListeners(),
-		hooks.DocumentAssociationListeners(),
-		hooks.QuestionnaireTransformListeners(),
-		hooks.CampaignRecurringListeners(),
-		hooks.SubscriberLinkListeners(),
-		hooks.NDAAttestationListeners(),
-		hooks.DomainScanListeners(),
-		hooks.IntegrationCleanupListeners(),
-	})
+	registrations := hooks.AllListeners()
 
 	if _, err := gala.Register(galaApp, registrations...); err != nil {
 		closeRuntimes()
@@ -145,14 +128,14 @@ func StartGalaWorkers(ctx context.Context, galaApp *gala.Gala) error {
 // registration failure is a wiring error and fails startup. Subsystems riding on the client
 // (workflow engine, entitlement manager) register here; the integrations runtime attaches
 // itself when it is constructed
-func provideGalaDependencies(galaApp *gala.Gala, dbClient *ent.Client) error {
+func provideGalaDependencies(galaApp *gala.Gala, dbClient *ent.Client, wfEngine *engine.WorkflowEngine) error {
 	opts := []gala.AttachOption{
 		gala.WithValue(galaApp),
 		gala.WithValue(dbClient),
 		gala.WithRestoredValue("ent_client", ent.NewContext),
 	}
 
-	if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok && wfEngine != nil {
+	if wfEngine != nil {
 		opts = append(opts, gala.WithValue(wfEngine))
 	}
 

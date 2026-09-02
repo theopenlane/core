@@ -14,12 +14,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
-	"github.com/theopenlane/core/internal/controls"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/controls"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookTrustCenter runs on trust center create mutations
@@ -137,11 +137,16 @@ func HookTrustCenter() ent.Hook {
 
 			if createPreview {
 				if trustCenter.PreviewDomainID != "" {
+					previewZoneID, err := getTrustCenterPreviewZoneID(ctx, m.Client())
+					if err != nil {
+						return nil, err
+					}
+
 					// delete the old preview if it exists
 					if err = enqueueJob(ctx, m.Job,
 						jobspec.DeletePreviewDomainArgs{
 							CustomDomainID:           trustCenter.PreviewDomainID,
-							TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+							TrustCenterPreviewZoneID: previewZoneID,
 						}, nil,
 					); err != nil {
 						return nil, err
@@ -309,6 +314,13 @@ func HookTrustCenterDelete() ent.Hook {
 
 			// Store the domain IDs before deletion
 			previewDomainID := tc.PreviewDomainID
+			var previewZoneID string
+			if previewDomainID != "" {
+				previewZoneID, err = getTrustCenterPreviewZoneID(ctx, m.Client())
+				if err != nil {
+					return nil, err
+				}
+			}
 
 			// Execute the trust center deletion first
 			retVal, err := next.Mutate(ctx, m)
@@ -320,7 +332,7 @@ func HookTrustCenterDelete() ent.Hook {
 			if previewDomainID != "" {
 				if err := enqueueJob(ctx, m.Job, jobspec.DeletePreviewDomainArgs{
 					CustomDomainID:           previewDomainID,
-					TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+					TrustCenterPreviewZoneID: previewZoneID,
 				}, nil); err != nil {
 					return nil, err
 				}

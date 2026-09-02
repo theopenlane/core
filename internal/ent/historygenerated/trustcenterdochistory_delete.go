@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterdochistory"
 )
 
 // TrustCenterDocHistoryDelete is the builder for deleting a TrustCenterDocHistory entity.
@@ -45,8 +43,6 @@ func (_d *TrustCenterDocHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *TrustCenterDocHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(trustcenterdochistory.Table, sqlgraph.NewFieldSpec(trustcenterdochistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.TrustCenterDocHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

@@ -13,32 +13,31 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // InternalPolicyQuery is the builder for querying InternalPolicy entities.
@@ -148,9 +147,6 @@ func (_q *InternalPolicyQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, internalpolicy.OwnerTable, internalpolicy.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -173,9 +169,6 @@ func (_q *InternalPolicyQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.BlockedGroupsTable, internalpolicy.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -198,9 +191,6 @@ func (_q *InternalPolicyQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.EditorsTable, internalpolicy.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InternalPolicyEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -223,9 +213,6 @@ func (_q *InternalPolicyQuery) QueryApprover() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.ApproverTable, internalpolicy.ApproverColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -248,9 +235,6 @@ func (_q *InternalPolicyQuery) QueryDelegate() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.DelegateTable, internalpolicy.DelegateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -273,9 +257,6 @@ func (_q *InternalPolicyQuery) QueryInternalPolicyKind() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.InternalPolicyKindTable, internalpolicy.InternalPolicyKindColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -298,9 +279,6 @@ func (_q *InternalPolicyQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.EnvironmentTable, internalpolicy.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -323,9 +301,6 @@ func (_q *InternalPolicyQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.ScopeTable, internalpolicy.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -348,9 +323,6 @@ func (_q *InternalPolicyQuery) QueryControlObjectives() *ControlObjectiveQuery {
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.ControlObjectivesTable, internalpolicy.ControlObjectivesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -373,9 +345,6 @@ func (_q *InternalPolicyQuery) QueryControlImplementations() *ControlImplementat
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.ControlImplementationsTable, internalpolicy.ControlImplementationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.ControlImplementation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -398,9 +367,6 @@ func (_q *InternalPolicyQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.ControlsTable, internalpolicy.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.InternalPolicyControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -423,9 +389,6 @@ func (_q *InternalPolicyQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.SubcontrolsTable, internalpolicy.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.InternalPolicySubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -448,9 +411,6 @@ func (_q *InternalPolicyQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.ProceduresTable, internalpolicy.ProceduresPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.InternalPolicyProcedures
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -473,9 +433,6 @@ func (_q *InternalPolicyQuery) QueryNarratives() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.NarrativesTable, internalpolicy.NarrativesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -498,9 +455,6 @@ func (_q *InternalPolicyQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.TasksTable, internalpolicy.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.InternalPolicyTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -523,9 +477,6 @@ func (_q *InternalPolicyQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.RisksTable, internalpolicy.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.InternalPolicyRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -548,9 +499,6 @@ func (_q *InternalPolicyQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.ProgramsTable, internalpolicy.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramInternalPolicies
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -573,9 +521,6 @@ func (_q *InternalPolicyQuery) QueryFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, internalpolicy.FileTable, internalpolicy.FileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -598,9 +543,6 @@ func (_q *InternalPolicyQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.CommentsTable, internalpolicy.CommentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -623,9 +565,6 @@ func (_q *InternalPolicyQuery) QueryDiscussions() *DiscussionQuery {
 			sqlgraph.To(discussion.Table, discussion.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.DiscussionsTable, internalpolicy.DiscussionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Discussion
-		step.Edge.Schema = schemaConfig.Discussion
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -648,9 +587,6 @@ func (_q *InternalPolicyQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, internalpolicy.WorkflowObjectRefsTable, internalpolicy.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -673,9 +609,6 @@ func (_q *InternalPolicyQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.AssetsTable, internalpolicy.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.InternalPolicyAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -698,9 +631,6 @@ func (_q *InternalPolicyQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.EntitiesTable, internalpolicy.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.InternalPolicyEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -723,9 +653,6 @@ func (_q *InternalPolicyQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, internalpolicy.IdentityHoldersTable, internalpolicy.IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.InternalPolicyIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -748,9 +675,6 @@ func (_q *InternalPolicyQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.ReviewsTable, internalpolicy.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewInternalPolicies
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -773,9 +697,6 @@ func (_q *InternalPolicyQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, internalpolicy.IntegrationsTable, internalpolicy.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationInternalPolicies
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1419,8 +1340,6 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.InternalPolicy
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1799,7 +1718,6 @@ func (_q *InternalPolicyQuery) loadBlockedGroups(ctx context.Context, query *Gro
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(internalpolicy.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1861,7 +1779,6 @@ func (_q *InternalPolicyQuery) loadEditors(ctx context.Context, query *GroupQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.EditorsTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(internalpolicy.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2068,7 +1985,6 @@ func (_q *InternalPolicyQuery) loadControlObjectives(ctx context.Context, query 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.ControlObjectivesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyControlObjectives)
 		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(internalpolicy.ControlObjectivesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.ControlObjectivesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2161,7 +2077,6 @@ func (_q *InternalPolicyQuery) loadControls(ctx context.Context, query *ControlQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.ControlsTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(internalpolicy.ControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.ControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2223,7 +2138,6 @@ func (_q *InternalPolicyQuery) loadSubcontrols(ctx context.Context, query *Subco
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicySubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(internalpolicy.SubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.SubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2285,7 +2199,6 @@ func (_q *InternalPolicyQuery) loadProcedures(ctx context.Context, query *Proced
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.ProceduresTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyProcedures)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(internalpolicy.ProceduresPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.ProceduresPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2347,7 +2260,6 @@ func (_q *InternalPolicyQuery) loadNarratives(ctx context.Context, query *Narrat
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.NarrativesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyNarratives)
 		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(internalpolicy.NarrativesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.NarrativesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2409,7 +2321,6 @@ func (_q *InternalPolicyQuery) loadTasks(ctx context.Context, query *TaskQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.TasksTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(internalpolicy.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2471,7 +2382,6 @@ func (_q *InternalPolicyQuery) loadRisks(ctx context.Context, query *RiskQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.RisksTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(internalpolicy.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2533,7 +2443,6 @@ func (_q *InternalPolicyQuery) loadPrograms(ctx context.Context, query *ProgramQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramInternalPolicies)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(internalpolicy.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2720,7 +2629,6 @@ func (_q *InternalPolicyQuery) loadAssets(ctx context.Context, query *AssetQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.AssetsTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(internalpolicy.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2782,7 +2690,6 @@ func (_q *InternalPolicyQuery) loadEntities(ctx context.Context, query *EntityQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(internalpolicy.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2844,7 +2751,6 @@ func (_q *InternalPolicyQuery) loadIdentityHolders(ctx context.Context, query *I
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.IdentityHoldersTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyIdentityHolders)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(internalpolicy.IdentityHoldersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.IdentityHoldersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2906,7 +2812,6 @@ func (_q *InternalPolicyQuery) loadReviews(ctx context.Context, query *ReviewQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewInternalPolicies)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(internalpolicy.ReviewsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.ReviewsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2968,7 +2873,6 @@ func (_q *InternalPolicyQuery) loadIntegrations(ctx context.Context, query *Inte
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(internalpolicy.IntegrationsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationInternalPolicies)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(internalpolicy.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(internalpolicy.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3020,8 +2924,6 @@ func (_q *InternalPolicyQuery) loadIntegrations(ctx context.Context, query *Inte
 
 func (_q *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.InternalPolicy
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -3108,9 +3010,6 @@ func (_q *InternalPolicyQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.InternalPolicy)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

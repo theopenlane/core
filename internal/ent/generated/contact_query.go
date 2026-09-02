@@ -13,17 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ContactQuery is the builder for querying Contact entities.
@@ -98,9 +97,6 @@ func (_q *ContactQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, contact.OwnerTable, contact.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Contact
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -123,9 +119,6 @@ func (_q *ContactQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, contact.EntitiesTable, contact.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntityContacts
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -148,9 +141,6 @@ func (_q *ContactQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, contact.CampaignsTable, contact.CampaignsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.CampaignContacts
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -173,9 +163,6 @@ func (_q *ContactQuery) QueryCampaignTargets() *CampaignTargetQuery {
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, contact.CampaignTargetsTable, contact.CampaignTargetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CampaignTarget
-		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -198,9 +185,6 @@ func (_q *ContactQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, contact.FilesTable, contact.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.ContactFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -223,9 +207,6 @@ func (_q *ContactQuery) QuerySubscribers() *SubscriberQuery {
 			sqlgraph.To(subscriber.Table, subscriber.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, contact.SubscribersTable, contact.SubscribersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -605,8 +586,6 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Contact
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -745,7 +724,6 @@ func (_q *ContactQuery) loadEntities(ctx context.Context, query *EntityQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(contact.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.EntityContacts)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(contact.EntitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(contact.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -807,7 +785,6 @@ func (_q *ContactQuery) loadCampaigns(ctx context.Context, query *CampaignQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(contact.CampaignsTable)
-		joinT.Schema(_q.schemaConfig.CampaignContacts)
 		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(contact.CampaignsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(contact.CampaignsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -899,7 +876,6 @@ func (_q *ContactQuery) loadFiles(ctx context.Context, query *FileQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(contact.FilesTable)
-		joinT.Schema(_q.schemaConfig.ContactFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(contact.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(contact.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -981,8 +957,6 @@ func (_q *ContactQuery) loadSubscribers(ctx context.Context, query *SubscriberQu
 
 func (_q *ContactQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Contact
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1051,9 +1025,6 @@ func (_q *ContactQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Contact)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

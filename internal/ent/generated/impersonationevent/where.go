@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1100,9 +1098,6 @@ func HasUser() predicate.ImpersonationEvent {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1111,9 +1106,6 @@ func HasUser() predicate.ImpersonationEvent {
 func HasUserWith(preds ...predicate.User) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(func(s *sql.Selector) {
 		step := newUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1129,9 +1121,6 @@ func HasTargetUser() predicate.ImpersonationEvent {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, TargetUserTable, TargetUserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1140,9 +1129,6 @@ func HasTargetUser() predicate.ImpersonationEvent {
 func HasTargetUserWith(preds ...predicate.User) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(func(s *sql.Selector) {
 		step := newTargetUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1158,9 +1144,6 @@ func HasOrganization() predicate.ImpersonationEvent {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OrganizationTable, OrganizationColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1169,9 +1152,6 @@ func HasOrganization() predicate.ImpersonationEvent {
 func HasOrganizationWith(preds ...predicate.Organization) predicate.ImpersonationEvent {
 	return predicate.ImpersonationEvent(func(s *sql.Selector) {
 		step := newOrganizationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

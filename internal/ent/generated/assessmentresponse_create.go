@@ -11,15 +11,15 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
 
 // AssessmentResponseCreate is the builder for creating a AssessmentResponse entity.
@@ -712,7 +712,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 		_node = &AssessmentResponse{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(assessmentresponse.Table, sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.AssessmentResponse
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -828,7 +827,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -846,7 +844,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -864,7 +861,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -882,7 +878,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -900,7 +895,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -918,7 +912,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -936,7 +929,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -953,7 +945,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

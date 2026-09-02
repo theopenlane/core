@@ -12,10 +12,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 )
 
 // ProgramMembershipUpdate is the builder for updating ProgramMembership entities.
@@ -206,8 +204,6 @@ func (_u *ProgramMembershipUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ProgramMembership
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -434,8 +430,6 @@ func (_u *ProgramMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Progr
 	if value, ok := _u.mutation.Role(); ok {
 		_spec.SetField(programmembership.FieldRole, field.TypeEnum, value)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ProgramMembership
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &ProgramMembership{config: _u.config}
 	_spec.Assign = _node.assignValues

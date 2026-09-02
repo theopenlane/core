@@ -8,95 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // GroupMembershipHistoryUpdate is the builder for updating GroupMembershipHistory entities.
 type GroupMembershipHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *GroupMembershipHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *GroupMembershipHistoryMutation
 }
 
 // Where appends a list predicates to the GroupMembershipHistoryUpdate builder.
 func (_u *GroupMembershipHistoryUpdate) Where(ps ...predicate.GroupMembershipHistory) *GroupMembershipHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *GroupMembershipHistoryUpdate) SetUpdatedAt(v time.Time) *GroupMembershipHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *GroupMembershipHistoryUpdate) ClearUpdatedAt() *GroupMembershipHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *GroupMembershipHistoryUpdate) SetUpdatedBy(v string) *GroupMembershipHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *GroupMembershipHistoryUpdate) SetNillableUpdatedBy(v *string) *GroupMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *GroupMembershipHistoryUpdate) ClearUpdatedBy() *GroupMembershipHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *GroupMembershipHistoryUpdate) SetUpdatedByImpersonator(v string) *GroupMembershipHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *GroupMembershipHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *GroupMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *GroupMembershipHistoryUpdate) ClearUpdatedByImpersonator() *GroupMembershipHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetRole sets the "role" field.
-func (_u *GroupMembershipHistoryUpdate) SetRole(v enums.Role) *GroupMembershipHistoryUpdate {
-	_u.mutation.SetRole(v)
-	return _u
-}
-
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_u *GroupMembershipHistoryUpdate) SetNillableRole(v *enums.Role) *GroupMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetRole(*v)
-	}
 	return _u
 }
 
@@ -107,9 +36,6 @@ func (_u *GroupMembershipHistoryUpdate) Mutation() *GroupMembershipHistoryMutati
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *GroupMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -135,38 +61,7 @@ func (_u *GroupMembershipHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *GroupMembershipHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if groupmembershiphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized groupmembershiphistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := groupmembershiphistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *GroupMembershipHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Role(); ok {
-		if err := groupmembershiphistory.RoleValidator(v); err != nil {
-			return &ValidationError{Name: "role", err: fmt.Errorf(`historygenerated: validator failed for field "GroupMembershipHistory.role": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *GroupMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(groupmembershiphistory.Table, groupmembershiphistory.Columns, sqlgraph.NewFieldSpec(groupmembershiphistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -181,33 +76,18 @@ func (_u *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.Role(); ok {
-		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.GroupMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{groupmembershiphistory.Label}
@@ -223,76 +103,9 @@ func (_u *GroupMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int,
 // GroupMembershipHistoryUpdateOne is the builder for updating a single GroupMembershipHistory entity.
 type GroupMembershipHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *GroupMembershipHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *GroupMembershipHistoryUpdateOne) SetUpdatedAt(v time.Time) *GroupMembershipHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *GroupMembershipHistoryUpdateOne) ClearUpdatedAt() *GroupMembershipHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *GroupMembershipHistoryUpdateOne) SetUpdatedBy(v string) *GroupMembershipHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *GroupMembershipHistoryUpdateOne) SetNillableUpdatedBy(v *string) *GroupMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *GroupMembershipHistoryUpdateOne) ClearUpdatedBy() *GroupMembershipHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *GroupMembershipHistoryUpdateOne) SetUpdatedByImpersonator(v string) *GroupMembershipHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *GroupMembershipHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *GroupMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *GroupMembershipHistoryUpdateOne) ClearUpdatedByImpersonator() *GroupMembershipHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetRole sets the "role" field.
-func (_u *GroupMembershipHistoryUpdateOne) SetRole(v enums.Role) *GroupMembershipHistoryUpdateOne {
-	_u.mutation.SetRole(v)
-	return _u
-}
-
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_u *GroupMembershipHistoryUpdateOne) SetNillableRole(v *enums.Role) *GroupMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetRole(*v)
-	}
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *GroupMembershipHistoryMutation
 }
 
 // Mutation returns the GroupMembershipHistoryMutation object of the builder.
@@ -315,9 +128,6 @@ func (_u *GroupMembershipHistoryUpdateOne) Select(field string, fields ...string
 
 // Save executes the query and returns the updated GroupMembershipHistory entity.
 func (_u *GroupMembershipHistoryUpdateOne) Save(ctx context.Context) (*GroupMembershipHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -343,38 +153,7 @@ func (_u *GroupMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *GroupMembershipHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if groupmembershiphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized groupmembershiphistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := groupmembershiphistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *GroupMembershipHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Role(); ok {
-		if err := groupmembershiphistory.RoleValidator(v); err != nil {
-			return &ValidationError{Name: "role", err: fmt.Errorf(`historygenerated: validator failed for field "GroupMembershipHistory.role": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *GroupMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupMembershipHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupMembershipHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(groupmembershiphistory.Table, groupmembershiphistory.Columns, sqlgraph.NewFieldSpec(groupmembershiphistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -406,33 +185,18 @@ func (_u *GroupMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(groupmembershiphistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(groupmembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.Role(); ok {
-		_spec.SetField(groupmembershiphistory.FieldRole, field.TypeEnum, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.GroupMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &GroupMembershipHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

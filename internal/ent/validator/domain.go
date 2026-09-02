@@ -5,7 +5,7 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 var (

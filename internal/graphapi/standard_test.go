@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
@@ -13,27 +15,27 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/testutils"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/testutils"
 )
 
 func TestQueryStandard(t *testing.T) {
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	numControls := 20
 	controlIDs := []string{}
 	for range numControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
+		control := (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 		controlIDs = append(controlIDs, control.ID)
 	}
 
-	notPublicStandard := (&StandardBuilder{client: suite.client, IsPublic: false}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	notPublicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: false}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	orgStandardName := "org-owned-standard"
-	orgOwnedStandard := (&StandardBuilder{client: suite.client, Name: orgStandardName}).MustNew(sharedTestUser1.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
+	orgOwnedStandard := (&th.StandardBuilder{Client: suite.Client, Name: orgStandardName}).MustNew(th.SharedTestUser1.UserCtx, t)
+	anonymousContext := th.CreateAnonymousTrustCenterContext(ulids.New().String(), th.SharedTestUser1.OrganizationID)
 
 	// add test cases for querying the Standard
 	testCases := []struct {
@@ -47,81 +49,81 @@ func TestQueryStandard(t *testing.T) {
 		{
 			name:    "happy path, org owned standard",
 			queryID: orgOwnedStandard.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: orgOwnedStandard.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: orgOwnedStandard.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:    "happy path using api token",
 			queryID: orgOwnedStandard.ID,
-			client:  suite.client.apiWithToken,
+			client:  suite.Client.APIWithToken,
 			ctx:     context.Background(),
 		},
 		{
 			name:                 "happy path using api token for public standard",
 			queryID:              publicStandard.ID,
-			client:               suite.client.apiWithToken,
+			client:               suite.Client.APIWithToken,
 			ctx:                  context.Background(),
 			expectedControlCount: int64(numControls),
 		},
 		{
 			name:     "standard not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "standard not found, using not authorized user",
 			queryID:  orgOwnedStandard.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:                 "public standard, other org user",
 			queryID:              publicStandard.ID,
-			client:               suite.client.api,
-			ctx:                  sharedTestUser2.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser2.UserCtx,
 			expectedControlCount: int64(numControls),
 		},
 		{
 			name:                 "public standard, view only user",
 			queryID:              publicStandard.ID,
-			client:               suite.client.api,
-			ctx:                  sharedViewOnlyUser.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedViewOnlyUser.UserCtx,
 			expectedControlCount: int64(numControls),
 		},
 		{
 			name:     "org owned, but not public standard, not found",
 			queryID:  notPublicStandard.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:    "org owned, but not public standard, get by system admin",
 			queryID: notPublicStandard.ID,
-			client:  suite.client.api,
-			ctx:     sharedSystemAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:     "no access, anonymous user",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      anonymousContext,
 			queryID:  orgOwnedStandard.ID,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -150,7 +152,7 @@ func TestQueryStandard(t *testing.T) {
 
 			assert.Check(t, resp.Standard.Framework != nil)
 
-			if tc.ctx == sharedSystemAdminUser.UserCtx {
+			if tc.ctx == th.SharedSystemAdminUser.UserCtx {
 				assert.Check(t, resp.Standard.IsPublic != nil)
 			} else {
 				assert.Check(t, resp.Standard.IsPublic == nil)
@@ -166,9 +168,9 @@ func TestQueryStandard(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(sharedSystemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: orgOwnedStandard.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: controlIDs}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, IDs: []string{publicStandard.ID, notPublicStandard.ID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: orgOwnedStandard.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryStandards(t *testing.T) {
@@ -176,21 +178,21 @@ func TestQueryStandards(t *testing.T) {
 	countOrgOwned := 2
 	orgOwnedStandardIDs := []string{}
 	for range countOrgOwned {
-		standard := (&StandardBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+		standard := (&th.StandardBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 		orgOwnedStandardIDs = append(orgOwnedStandardIDs, standard.ID)
 	}
 
 	countPublic := 4
 	publicStandardIDs := []string{}
 	for range countPublic {
-		standard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
+		standard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 		publicStandardIDs = append(publicStandardIDs, standard.ID)
 	}
 
 	countNotPublic := 1
 	notPublicStandardIDs := []string{}
 	for range countNotPublic {
-		standard := (&StandardBuilder{client: suite.client, IsPublic: false}).MustNew(sharedSystemAdminUser.UserCtx, t)
+		standard := (&th.StandardBuilder{Client: suite.Client, IsPublic: false}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 		notPublicStandardIDs = append(notPublicStandardIDs, standard.ID)
 	}
 
@@ -198,7 +200,7 @@ func TestQueryStandards(t *testing.T) {
 	countPublic = 0
 	countNotPublic = 0
 
-	standards, err := suite.client.api.GetAllStandards(sharedSystemAdminUser.UserCtx)
+	standards, err := suite.Client.API.GetAllStandards(th.SharedSystemAdminUser.UserCtx)
 	assert.NilError(t, err)
 
 	for _, standard := range standards.Standards.Edges {
@@ -218,38 +220,38 @@ func TestQueryStandards(t *testing.T) {
 	}{
 		{
 			name:            "happy path, org using should get all org owned + public standards",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: countOrgOwned + countPublic,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: countOrgOwned + countPublic,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          suite.Client.APIWithToken,
 			ctx:             context.Background(),
 			expectedResults: countOrgOwned + countPublic,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: countOrgOwned + countPublic,
 		},
 		{
 			name:            "another user, only public should be returned",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: countPublic,
 		},
 		{
 			name:            "happy path, system admin user",
-			client:          suite.client.api,
-			ctx:             sharedSystemAdminUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedSystemAdminUser.UserCtx,
 			expectedResults: countNotPublic + countPublic,
 		},
 	}
@@ -270,27 +272,27 @@ func TestQueryStandards(t *testing.T) {
 
 	systemOwnedIDs := append(notPublicStandardIDs, publicStandardIDs...)
 
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: systemOwnedIDs}).MustDelete(sharedSystemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, IDs: systemOwnedIDs}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, IDs: orgOwnedStandardIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryStandardsWithDeletedControls(t *testing.T) {
-	standard1 := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "Standard With Active Controls"}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	standard2 := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "Standard With Deleted Controls"}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	standard3 := (&StandardBuilder{client: suite.client, IsPublic: true, Name: "Standard With No Controls"}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	standard1 := (&th.StandardBuilder{Client: suite.Client, IsPublic: true, Name: "Standard With Active Controls"}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	standard2 := (&th.StandardBuilder{Client: suite.Client, IsPublic: true, Name: "Standard With Deleted Controls"}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	standard3 := (&th.StandardBuilder{Client: suite.Client, IsPublic: true, Name: "Standard With No Controls"}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
-	control1 := (&ControlBuilder{client: suite.client, StandardID: standard1.ID}).MustNew(sharedTestUser1.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, StandardID: standard1.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	control1 := (&th.ControlBuilder{Client: suite.Client, StandardID: standard1.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+	control2 := (&th.ControlBuilder{Client: suite.Client, StandardID: standard1.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	controlToDelete1 := (&ControlBuilder{client: suite.client, StandardID: standard2.ID}).MustNew(sharedTestUser1.UserCtx, t)
-	controlToDelete2 := (&ControlBuilder{client: suite.client, StandardID: standard2.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	controlToDelete1 := (&th.ControlBuilder{Client: suite.Client, StandardID: standard2.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
+	controlToDelete2 := (&th.ControlBuilder{Client: suite.Client, StandardID: standard2.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	whereFilter := &testclient.StandardWhereInput{
 		HasControlsWith: []*testclient.ControlWhereInput{
 			{
 				HasOwnerWith: []*testclient.OrganizationWhereInput{
 					{
-						ID: &sharedTestUser1.OrganizationID,
+						ID: &th.SharedTestUser1.OrganizationID,
 					},
 				},
 			},
@@ -298,7 +300,7 @@ func TestQueryStandardsWithDeletedControls(t *testing.T) {
 	}
 
 	// check to make sure there are 2 standards since we only linked to two standards
-	resp, err := suite.client.api.GetStandards(sharedTestUser1.UserCtx, nil, nil, whereFilter)
+	resp, err := suite.Client.API.GetStandards(th.SharedTestUser1.UserCtx, nil, nil, whereFilter)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 
@@ -306,11 +308,11 @@ func TestQueryStandardsWithDeletedControls(t *testing.T) {
 
 	// delete the controls linked to standard2
 	for _, id := range []string{controlToDelete1.ID, controlToDelete2.ID} {
-		_, err := suite.client.api.DeleteControl(sharedTestUser1.UserCtx, id)
+		_, err := suite.Client.API.DeleteControl(th.SharedTestUser1.UserCtx, id)
 		assert.NilError(t, err)
 	}
 
-	resp, err = suite.client.api.GetStandards(sharedTestUser1.UserCtx, nil, nil, whereFilter)
+	resp, err = suite.Client.API.GetStandards(th.SharedTestUser1.UserCtx, nil, nil, whereFilter)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 
@@ -318,28 +320,28 @@ func TestQueryStandardsWithDeletedControls(t *testing.T) {
 	assert.Check(t, is.Equal(standard1.ID, resp.Standards.Edges[0].Node.ID), "expected standard1 only")
 
 	// cleanup
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: []string{standard1.ID, standard2.ID, standard3.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, IDs: []string{standard1.ID, standard2.ID, standard3.ID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateStandard(t *testing.T) {
-	patClientSystemAdmin := suite.setupPatClient(sharedSystemAdminUser, t)
+	patClientSystemAdmin := suite.SetupPatClient(th.SharedSystemAdminUser, t)
 
 	numControls := 20
 	controlIDs := []string{}
 	for range numControls {
-		control := (&ControlBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+		control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 		controlIDs = append(controlIDs, control.ID)
 	}
 
 	numAdminControls := 32
 	adminControlIDs := []string{}
 	for range numAdminControls {
-		control := (&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+		control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
-	createImageUpload := logoFileFunc(t)
+	createImageUpload := th.LogoFileFunc(t)
 
 	testCases := []struct {
 		name        string
@@ -354,8 +356,8 @@ func TestMutationCreateStandard(t *testing.T) {
 			request: testclient.CreateStandardInput{
 				Name: "Super Awesome Standard",
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, minimal input with logo upload",
@@ -363,8 +365,8 @@ func TestMutationCreateStandard(t *testing.T) {
 				Name: "Super Awesome Standard",
 			},
 			upload: createImageUpload(),
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, system admin - system owned with controls",
@@ -373,8 +375,8 @@ func TestMutationCreateStandard(t *testing.T) {
 				IsPublic:   lo.ToPtr(true),
 				ControlIDs: adminControlIDs,
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, system admin - system owned using pat",
@@ -391,8 +393,8 @@ func TestMutationCreateStandard(t *testing.T) {
 				Name:     "Super Awesome Standard",
 				IsPublic: lo.ToPtr(true),
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, all input by org admin",
@@ -411,8 +413,8 @@ func TestMutationCreateStandard(t *testing.T) {
 				Version:              lo.ToPtr("2025 - ship latest"),
 				Revision:             lo.ToPtr("v1.0.0"),
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
@@ -420,9 +422,9 @@ func TestMutationCreateStandard(t *testing.T) {
 				Name:      "Greatness, Kitties, and Rainbows",
 				Tags:      []string{"uffo", "brax"},
 				Framework: lo.ToPtr("Meows Framework"),
-				OwnerID:   &sharedTestUser1.OrganizationID,
+				OwnerID:   &th.SharedTestUser1.OrganizationID,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -431,7 +433,7 @@ func TestMutationCreateStandard(t *testing.T) {
 				Name:      "Greatness, Kitties, and Sherbet",
 				Tags:      []string{"kc", "eddy"},
 				Framework: lo.ToPtr("Meows Framework")},
-			client: suite.client.apiWithToken,
+			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
 		{
@@ -440,9 +442,9 @@ func TestMutationCreateStandard(t *testing.T) {
 				Name:     "Super Awesome Standard",
 				IsPublic: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: invalidInputErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.InvalidInputErrorMsg,
 		},
 		{
 			name: "user not authorized to make public standard",
@@ -450,9 +452,9 @@ func TestMutationCreateStandard(t *testing.T) {
 				Name:     "Super Awesome Standard",
 				IsPublic: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: invalidInputErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.InvalidInputErrorMsg,
 		},
 		{
 			name: "user not authorized to free to use standard",
@@ -460,24 +462,24 @@ func TestMutationCreateStandard(t *testing.T) {
 				Name:      "Super Awesome Standard",
 				FreeToUse: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: invalidInputErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.InvalidInputErrorMsg,
 		},
 		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateStandardInput{
 				Name: "Oh noes",
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:        "missing required field",
 			request:     testclient.CreateStandardInput{},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -485,7 +487,7 @@ func TestMutationCreateStandard(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.upload != nil {
-				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
+				th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*tc.upload})
 			}
 
 			resp, err := tc.client.CreateStandard(tc.ctx, tc.request, tc.upload, nil)
@@ -514,12 +516,12 @@ func TestMutationCreateStandard(t *testing.T) {
 			assert.Check(t, is.Equal(expectedStatus, *resp.CreateStandard.Standard.Status))
 
 			expectedSystemOwned := false
-			if tc.ctx == sharedSystemAdminUser.UserCtx || tc.client == patClientSystemAdmin {
+			if tc.ctx == th.SharedSystemAdminUser.UserCtx || tc.client == patClientSystemAdmin {
 				expectedSystemOwned = true
 			}
 			assert.Check(t, is.Equal(expectedSystemOwned, *resp.CreateStandard.Standard.SystemOwned))
 
-			if tc.ctx == sharedSystemAdminUser.UserCtx || tc.client == patClientSystemAdmin {
+			if tc.ctx == th.SharedSystemAdminUser.UserCtx || tc.client == patClientSystemAdmin {
 				isPublic := false
 				if tc.request.IsPublic != nil {
 					isPublic = *tc.request.IsPublic
@@ -600,28 +602,28 @@ func TestMutationCreateStandard(t *testing.T) {
 
 			// cleanup the created standard
 			ctx := tc.ctx
-			if tc.ctx != sharedSystemAdminUser.UserCtx && tc.client != suite.client.api {
-				ctx = sharedTestUser1.UserCtx
+			if tc.ctx != th.SharedSystemAdminUser.UserCtx && tc.client != suite.Client.API {
+				ctx = th.SharedTestUser1.UserCtx
 			}
 
 			if tc.client == patClientSystemAdmin {
-				ctx = sharedSystemAdminUser.UserCtx
+				ctx = th.SharedSystemAdminUser.UserCtx
 			}
 
-			(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
+			(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: resp.CreateStandard.Standard.ID}).MustDelete(ctx, t)
 		})
 	}
 }
 
 func TestMutationUpdateStandard(t *testing.T) {
-	standardOrgOwned := (&StandardBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	standardOrgOwned := (&th.StandardBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	standardSystemOwned := (&th.StandardBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	// users should not be able to get the system owned standard because its not public
-	_, err := suite.client.api.GetStandardByID(sharedTestUser1.UserCtx, standardSystemOwned.ID)
-	assert.ErrorContains(t, err, notFoundErrorMsg)
+	_, err := suite.Client.API.GetStandardByID(th.SharedTestUser1.UserCtx, standardSystemOwned.ID)
+	assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
-	createImageUpload := logoFileFunc(t)
+	createImageUpload := th.LogoFileFunc(t)
 
 	testCases := []struct {
 		name        string
@@ -638,7 +640,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				Tags: []string{"new-tag-1", "new-tag-2"},
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -648,7 +650,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 				Tags: []string{"new-tag-1", "new-tag-2"},
 			},
 			upload: createImageUpload(),
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -666,8 +668,8 @@ func TestMutationUpdateStandard(t *testing.T) {
 				AppendDomains:        []string{"availability", "meows"},
 				RevisionBump:         &models.Major,
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, not enough permissions",
@@ -675,9 +677,9 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				ClearTags: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, cannot update public field",
@@ -685,9 +687,9 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				IsPublic: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: invalidInputErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.InvalidInputErrorMsg,
 		},
 		{
 			name: "update not allowed, cannot update public field",
@@ -695,9 +697,9 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				ClearIsPublic: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: invalidInputErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.InvalidInputErrorMsg,
 		},
 		{
 			name: "bad request, invalid link",
@@ -705,8 +707,8 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				Link: lo.ToPtr("not a link"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "invalid or unparsable field: url",
 		},
 		{
@@ -715,9 +717,9 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				ClearTags: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "happy path, update field, system owned standard",
@@ -725,8 +727,8 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				IsPublic: lo.ToPtr(true),
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, update multiple fields, org owned standard",
@@ -738,8 +740,8 @@ func TestMutationUpdateStandard(t *testing.T) {
 				RevisionBump:  &models.Minor,
 				FreeToUse:     lo.ToPtr(true),
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, no permissions",
@@ -747,9 +749,9 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				ClearTags: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "update not allowed, no permissions",
@@ -757,18 +759,18 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				ClearTags: lo.ToPtr(true),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
-			tc.ctx = resetContext(tc.ctx, t)
+			tc.ctx = th.ResetContext(tc.ctx, t)
 
 			if tc.upload != nil {
-				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
+				th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*tc.upload})
 			}
 
 			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request, tc.upload, nil)
@@ -834,7 +836,7 @@ func TestMutationUpdateStandard(t *testing.T) {
 				assert.Check(t, *resp.UpdateStandard.Standard.IsPublic)
 
 				// users should now be be able to get the system owned standard because its not public
-				std, err := suite.client.api.GetStandardByID(sharedTestUser1.UserCtx, standardSystemOwned.ID)
+				std, err := suite.Client.API.GetStandardByID(th.SharedTestUser1.UserCtx, standardSystemOwned.ID)
 				assert.NilError(t, err)
 				assert.Assert(t, std != nil)
 				assert.Equal(t, standardSystemOwned.ID, std.Standard.ID)
@@ -851,38 +853,38 @@ func TestMutationUpdateStandard(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardOrgOwned.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standardSystemOwned.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: standardOrgOwned.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: standardSystemOwned.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationDeleteStandard(t *testing.T) {
 	t.Parallel()
 
-	newAdminUser := suite.systemAdminBuilder(context.Background(), t)
+	newAdminUser := suite.SystemAdminBuilder(context.Background(), t)
 
-	localTestOrg := suite.seedOrgOwner(t)
+	localTestOrg := suite.SeedOrgOwner(t)
 
-	newTestUser1 := localTestOrg.owner
-	apiClient := localTestOrg.apiClient
-	patClient := localTestOrg.patClient
+	newTestUser1 := localTestOrg.Owner
+	apiClient := localTestOrg.APIClient
+	patClient := localTestOrg.PatClient
 
 	// we need to create the standards each time because the cascade delete of the standard
-	standardOrgOwned1 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
-	standardOrgOwned2 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
-	standardOrgOwned3 := (&StandardBuilder{client: suite.client}).MustNew(newTestUser1.UserCtx, t)
+	standardOrgOwned1 := (&th.StandardBuilder{Client: suite.Client}).MustNew(newTestUser1.UserCtx, t)
+	standardOrgOwned2 := (&th.StandardBuilder{Client: suite.Client}).MustNew(newTestUser1.UserCtx, t)
+	standardOrgOwned3 := (&th.StandardBuilder{Client: suite.Client}).MustNew(newTestUser1.UserCtx, t)
 
-	standardSystemOwned := (&StandardBuilder{client: suite.client}).MustNew(newAdminUser.UserCtx, t)
+	standardSystemOwned := (&th.StandardBuilder{Client: suite.Client}).MustNew(newAdminUser.UserCtx, t)
 
 	const numberOfControls = 4
 
 	for range numberOfControls {
-		(&ControlBuilder{client: suite.client, StandardID: standardSystemOwned.ID}).MustNew(newAdminUser.UserCtx, t)
+		(&th.ControlBuilder{Client: suite.Client, StandardID: standardSystemOwned.ID}).MustNew(newAdminUser.UserCtx, t)
 	}
 
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(newAdminUser.UserCtx, t)
+	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(newAdminUser.UserCtx, t)
 
 	for range numberOfControls {
-		(&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(newAdminUser.UserCtx, t)
+		(&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(newAdminUser.UserCtx, t)
 	}
 
 	testCases := []struct {
@@ -895,40 +897,40 @@ func TestMutationDeleteStandard(t *testing.T) {
 		{
 			name:        "not authorized, delete",
 			idToDelete:  standardOrgOwned1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete system owned",
 			idToDelete:  standardSystemOwned.ID,
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         newTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:       "happy path, delete standard",
 			idToDelete: standardOrgOwned1.ID,
-			client:     suite.client.api,
+			client:     suite.Client.API,
 			ctx:        newTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, delete system owned",
 			idToDelete: standardSystemOwned.ID,
-			client:     suite.client.api,
+			client:     suite.Client.API,
 			ctx:        newAdminUser.UserCtx,
 		},
 		{
 			name:        "delete public standard not allowed",
 			idToDelete:  publicStandard.ID,
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         newAdminUser.UserCtx,
 			expectedErr: hooks.ErrPublicStandardCannotBeDeleted.Error(),
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  standardOrgOwned1.ID,
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         newTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
@@ -947,16 +949,16 @@ func TestMutationDeleteStandard(t *testing.T) {
 		{
 			name:        "already deleted system owned, not found",
 			idToDelete:  standardSystemOwned.ID,
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         newAdminUser.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         newTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -976,5 +978,5 @@ func TestMutationDeleteStandard(t *testing.T) {
 	}
 
 	// delete the public standard and the controls linked to it
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: publicStandard.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }

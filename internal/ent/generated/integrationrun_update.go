@@ -12,14 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // IntegrationRunUpdate is the builder for updating IntegrationRun entities.
@@ -703,7 +701,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
@@ -717,7 +714,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -734,7 +730,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RequestFileIDs(); len(nodes) > 0 {
@@ -748,7 +743,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -765,7 +759,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ResponseFileIDs(); len(nodes) > 0 {
@@ -779,7 +772,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -796,7 +788,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EventIDs(); len(nodes) > 0 {
@@ -810,7 +801,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -827,7 +817,6 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
@@ -841,14 +830,11 @@ func (_u *IntegrationRunUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.IntegrationRun
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1568,7 +1554,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
@@ -1582,7 +1567,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1599,7 +1583,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RequestFileIDs(); len(nodes) > 0 {
@@ -1613,7 +1596,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1630,7 +1612,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ResponseFileIDs(); len(nodes) > 0 {
@@ -1644,7 +1625,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1661,7 +1641,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EventIDs(); len(nodes) > 0 {
@@ -1675,7 +1654,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1692,7 +1670,6 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.AssessmentResponseIDs(); len(nodes) > 0 {
@@ -1706,14 +1683,11 @@ func (_u *IntegrationRunUpdateOne) sqlSave(ctx context.Context) (_node *Integrat
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.IntegrationRun
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &IntegrationRun{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -10,12 +10,15 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
+
+// init registers the campaign recurring listeners so gala setup picks them up automatically
+func init() { registerListeners(CampaignRecurringListeners) }
 
 // CampaignRecurringListeners keeps recurring campaign scheduling in sync when activation or recurrence fields change
 func CampaignRecurringListeners() []gala.Registration {

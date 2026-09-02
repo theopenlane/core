@@ -13,24 +13,25 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // EvidenceQuery is the builder for querying Evidence entities.
@@ -47,6 +48,8 @@ type EvidenceQuery struct {
 	withSubcontrols                 *SubcontrolQuery
 	withControlObjectives           *ControlObjectiveQuery
 	withControlImplementations      *ControlImplementationQuery
+	withInternalPolicies            *InternalPolicyQuery
+	withProcedures                  *ProcedureQuery
 	withFiles                       *FileQuery
 	withPrograms                    *ProgramQuery
 	withTasks                       *TaskQuery
@@ -60,6 +63,8 @@ type EvidenceQuery struct {
 	withNamedSubcontrols            map[string]*SubcontrolQuery
 	withNamedControlObjectives      map[string]*ControlObjectiveQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
+	withNamedInternalPolicies       map[string]*InternalPolicyQuery
+	withNamedProcedures             map[string]*ProcedureQuery
 	withNamedFiles                  map[string]*FileQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedTasks                  map[string]*TaskQuery
@@ -119,9 +124,6 @@ func (_q *EvidenceQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, evidence.OwnerTable, evidence.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Evidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -144,9 +146,6 @@ func (_q *EvidenceQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, evidence.EnvironmentTable, evidence.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Evidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -169,9 +168,6 @@ func (_q *EvidenceQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, evidence.ScopeTable, evidence.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Evidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -194,9 +190,6 @@ func (_q *EvidenceQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, evidence.ControlsTable, evidence.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.EvidenceControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -219,9 +212,6 @@ func (_q *EvidenceQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, evidence.SubcontrolsTable, evidence.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.EvidenceSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -244,9 +234,6 @@ func (_q *EvidenceQuery) QueryControlObjectives() *ControlObjectiveQuery {
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, evidence.ControlObjectivesTable, evidence.ControlObjectivesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -269,9 +256,50 @@ func (_q *EvidenceQuery) QueryControlImplementations() *ControlImplementationQue
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ControlImplementationsTable, evidence.ControlImplementationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.ControlImplementation
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *EvidenceQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.InternalPoliciesTable, evidence.InternalPoliciesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProcedures chains the current query on the "procedures" edge.
+func (_q *EvidenceQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ProceduresTable, evidence.ProceduresColumn),
+		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -294,9 +322,6 @@ func (_q *EvidenceQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, evidence.FilesTable, evidence.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.EvidenceFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -319,9 +344,6 @@ func (_q *EvidenceQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, evidence.ProgramsTable, evidence.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramEvidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -344,9 +366,6 @@ func (_q *EvidenceQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, evidence.TasksTable, evidence.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.TaskEvidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -369,9 +388,6 @@ func (_q *EvidenceQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, evidence.PlatformsTable, evidence.PlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformEvidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -394,9 +410,6 @@ func (_q *EvidenceQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, evidence.ScansTable, evidence.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ScanEvidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -419,9 +432,6 @@ func (_q *EvidenceQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, evidence.CommentsTable, evidence.CommentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -444,9 +454,6 @@ func (_q *EvidenceQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, evidence.WorkflowObjectRefsTable, evidence.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -652,6 +659,8 @@ func (_q *EvidenceQuery) Clone() *EvidenceQuery {
 		withSubcontrols:            _q.withSubcontrols.Clone(),
 		withControlObjectives:      _q.withControlObjectives.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
+		withInternalPolicies:       _q.withInternalPolicies.Clone(),
+		withProcedures:             _q.withProcedures.Clone(),
 		withFiles:                  _q.withFiles.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		withTasks:                  _q.withTasks.Clone(),
@@ -740,6 +749,28 @@ func (_q *EvidenceQuery) WithControlImplementations(opts ...func(*ControlImpleme
 		opt(query)
 	}
 	_q.withControlImplementations = query
+	return _q
+}
+
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *EvidenceQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
+	return _q
+}
+
+// WithProcedures tells the query-builder to eager-load the nodes that are connected to
+// the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithProcedures(opts ...func(*ProcedureQuery)) *EvidenceQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withProcedures = query
 	return _q
 }
 
@@ -904,7 +935,7 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 	var (
 		nodes       = []*Evidence{}
 		_spec       = _q.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [16]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -912,6 +943,8 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			_q.withSubcontrols != nil,
 			_q.withControlObjectives != nil,
 			_q.withControlImplementations != nil,
+			_q.withInternalPolicies != nil,
+			_q.withProcedures != nil,
 			_q.withFiles != nil,
 			_q.withPrograms != nil,
 			_q.withTasks != nil,
@@ -930,8 +963,6 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Evidence
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -991,6 +1022,20 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			func(n *Evidence, e *ControlImplementation) {
 				n.Edges.ControlImplementations = append(n.Edges.ControlImplementations, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Evidence) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Evidence, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withProcedures; query != nil {
+		if err := _q.loadProcedures(ctx, query, nodes,
+			func(n *Evidence) { n.Edges.Procedures = []*Procedure{} },
+			func(n *Evidence, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1070,6 +1115,20 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 		if err := _q.loadControlImplementations(ctx, query, nodes,
 			func(n *Evidence) { n.appendNamedControlImplementations(name) },
 			func(n *Evidence, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Evidence) { n.appendNamedInternalPolicies(name) },
+			func(n *Evidence, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedProcedures {
+		if err := _q.loadProcedures(ctx, query, nodes,
+			func(n *Evidence) { n.appendNamedProcedures(name) },
+			func(n *Evidence, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1230,7 +1289,6 @@ func (_q *EvidenceQuery) loadControls(ctx context.Context, query *ControlQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(evidence.ControlsTable)
-		joinT.Schema(_q.schemaConfig.EvidenceControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(evidence.ControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(evidence.ControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1292,7 +1350,6 @@ func (_q *EvidenceQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(evidence.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.EvidenceSubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(evidence.SubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(evidence.SubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1354,7 +1411,6 @@ func (_q *EvidenceQuery) loadControlObjectives(ctx context.Context, query *Contr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(evidence.ControlObjectivesTable)
-		joinT.Schema(_q.schemaConfig.EvidenceControlObjectives)
 		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(evidence.ControlObjectivesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(evidence.ControlObjectivesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1434,6 +1490,68 @@ func (_q *EvidenceQuery) loadControlImplementations(ctx context.Context, query *
 	}
 	return nil
 }
+func (_q *EvidenceQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *InternalPolicy)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Evidence)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.InternalPolicy(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(evidence.InternalPoliciesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.evidence_internal_policies
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "evidence_internal_policies" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "evidence_internal_policies" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EvidenceQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *Procedure)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Evidence)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Procedure(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(evidence.ProceduresColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.evidence_procedures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "evidence_procedures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "evidence_procedures" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *EvidenceQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Evidence)
@@ -1447,7 +1565,6 @@ func (_q *EvidenceQuery) loadFiles(ctx context.Context, query *FileQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(evidence.FilesTable)
-		joinT.Schema(_q.schemaConfig.EvidenceFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(evidence.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(evidence.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1509,7 +1626,6 @@ func (_q *EvidenceQuery) loadPrograms(ctx context.Context, query *ProgramQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(evidence.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramEvidence)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(evidence.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(evidence.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1571,7 +1687,6 @@ func (_q *EvidenceQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(evidence.TasksTable)
-		joinT.Schema(_q.schemaConfig.TaskEvidence)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(evidence.TasksPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(evidence.TasksPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1633,7 +1748,6 @@ func (_q *EvidenceQuery) loadPlatforms(ctx context.Context, query *PlatformQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(evidence.PlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformEvidence)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(evidence.PlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(evidence.PlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1695,7 +1809,6 @@ func (_q *EvidenceQuery) loadScans(ctx context.Context, query *ScanQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(evidence.ScansTable)
-		joinT.Schema(_q.schemaConfig.ScanEvidence)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(evidence.ScansPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(evidence.ScansPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1809,8 +1922,6 @@ func (_q *EvidenceQuery) loadWorkflowObjectRefs(ctx context.Context, query *Work
 
 func (_q *EvidenceQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Evidence
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1885,9 +1996,6 @@ func (_q *EvidenceQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Evidence)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}
@@ -1967,6 +2075,34 @@ func (_q *EvidenceQuery) WithNamedControlImplementations(name string, opts ...fu
 		_q.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
 	}
 	_q.withNamedControlImplementations[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *EvidenceQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
+	return _q
+}
+
+// WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *EvidenceQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedProcedures == nil {
+		_q.withNamedProcedures = make(map[string]*ProcedureQuery)
+	}
+	_q.withNamedProcedures[name] = query
 	return _q
 }
 

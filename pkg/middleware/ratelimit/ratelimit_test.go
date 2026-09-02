@@ -8,7 +8,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
 )
 
 func TestRateLimiterWithConfigBlocksAfterLimit(t *testing.T) {

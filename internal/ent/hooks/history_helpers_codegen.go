@@ -9,7 +9,7 @@ package hooks
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 func purgeOrganizationHistory(_ context.Context, _ string) error {

@@ -8,314 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterdochistory"
 )
 
 // TrustCenterDocHistoryUpdate is the builder for updating TrustCenterDocHistory entities.
 type TrustCenterDocHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *TrustCenterDocHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *TrustCenterDocHistoryMutation
 }
 
 // Where appends a list predicates to the TrustCenterDocHistoryUpdate builder.
 func (_u *TrustCenterDocHistoryUpdate) Where(ps ...predicate.TrustCenterDocHistory) *TrustCenterDocHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterDocHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearUpdatedAt() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterDocHistoryUpdate) SetUpdatedBy(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearUpdatedBy() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterDocHistoryUpdate) SetUpdatedByImpersonator(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearUpdatedByImpersonator() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterDocHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearDeletedAt() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterDocHistoryUpdate) SetDeletedBy(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearDeletedBy() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TrustCenterDocHistoryUpdate) SetTags(v []string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterDocHistoryUpdate) AppendTags(v []string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearTags() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
-func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterDocKindName(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetTrustCenterDocKindName(v)
-	return _u
-}
-
-// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterDocKindName(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterDocKindName clears the value of the "trust_center_doc_kind_name" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterDocKindName() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearTrustCenterDocKindName()
-	return _u
-}
-
-// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
-func (_u *TrustCenterDocHistoryUpdate) SetTrustCenterDocKindID(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetTrustCenterDocKindID(v)
-	return _u
-}
-
-// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterDocKindID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterDocKindID clears the value of the "trust_center_doc_kind_id" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearTrustCenterDocKindID() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearTrustCenterDocKindID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *TrustCenterDocHistoryUpdate) SetTitle(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableTitle(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *TrustCenterDocHistoryUpdate) SetFileID(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableFileID(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearFileID() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetOriginalFileID sets the "original_file_id" field.
-func (_u *TrustCenterDocHistoryUpdate) SetOriginalFileID(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetOriginalFileID(v)
-	return _u
-}
-
-// SetNillableOriginalFileID sets the "original_file_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableOriginalFileID(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetOriginalFileID(*v)
-	}
-	return _u
-}
-
-// ClearOriginalFileID clears the value of the "original_file_id" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearOriginalFileID() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearOriginalFileID()
-	return _u
-}
-
-// SetWatermarkingEnabled sets the "watermarking_enabled" field.
-func (_u *TrustCenterDocHistoryUpdate) SetWatermarkingEnabled(v bool) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetWatermarkingEnabled(v)
-	return _u
-}
-
-// SetNillableWatermarkingEnabled sets the "watermarking_enabled" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableWatermarkingEnabled(v *bool) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetWatermarkingEnabled(*v)
-	}
-	return _u
-}
-
-// ClearWatermarkingEnabled clears the value of the "watermarking_enabled" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearWatermarkingEnabled() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearWatermarkingEnabled()
-	return _u
-}
-
-// SetWatermarkStatus sets the "watermark_status" field.
-func (_u *TrustCenterDocHistoryUpdate) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetWatermarkStatus(v)
-	return _u
-}
-
-// SetNillableWatermarkStatus sets the "watermark_status" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableWatermarkStatus(v *enums.WatermarkStatus) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetWatermarkStatus(*v)
-	}
-	return _u
-}
-
-// ClearWatermarkStatus clears the value of the "watermark_status" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearWatermarkStatus() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearWatermarkStatus()
-	return _u
-}
-
-// SetVisibility sets the "visibility" field.
-func (_u *TrustCenterDocHistoryUpdate) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetVisibility(v)
-	return _u
-}
-
-// SetNillableVisibility sets the "visibility" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableVisibility(v *enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetVisibility(*v)
-	}
-	return _u
-}
-
-// ClearVisibility clears the value of the "visibility" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearVisibility() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearVisibility()
-	return _u
-}
-
-// SetStandardID sets the "standard_id" field.
-func (_u *TrustCenterDocHistoryUpdate) SetStandardID(v string) *TrustCenterDocHistoryUpdate {
-	_u.mutation.SetStandardID(v)
-	return _u
-}
-
-// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdate) SetNillableStandardID(v *string) *TrustCenterDocHistoryUpdate {
-	if v != nil {
-		_u.SetStandardID(*v)
-	}
-	return _u
-}
-
-// ClearStandardID clears the value of the "standard_id" field.
-func (_u *TrustCenterDocHistoryUpdate) ClearStandardID() *TrustCenterDocHistoryUpdate {
-	_u.mutation.ClearStandardID()
 	return _u
 }
 
@@ -326,9 +36,6 @@ func (_u *TrustCenterDocHistoryUpdate) Mutation() *TrustCenterDocHistoryMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TrustCenterDocHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -354,43 +61,7 @@ func (_u *TrustCenterDocHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterDocHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcenterdochistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcenterdochistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcenterdochistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TrustCenterDocHistoryUpdate) check() error {
-	if v, ok := _u.mutation.WatermarkStatus(); ok {
-		if err := trustcenterdochistory.WatermarkStatusValidator(v); err != nil {
-			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterDocHistory.watermark_status": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Visibility(); ok {
-		if err := trustcenterdochistory.VisibilityValidator(v); err != nil {
-			return &ValidationError{Name: "visibility", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterDocHistory.visibility": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterDocHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterDocHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterdochistory.Table, trustcenterdochistory.Columns, sqlgraph.NewFieldSpec(trustcenterdochistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -405,58 +76,29 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcenterdochistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcenterdochistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcenterdochistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcenterdochistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcenterdochistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcenterdochistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TrustCenterDocKindName(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterDocKindNameCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterDocKindID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterDocKindIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString)
@@ -464,48 +106,24 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)
-	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.OriginalFileID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldOriginalFileID, field.TypeString, value)
 	}
 	if _u.mutation.OriginalFileIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldOriginalFileID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
-		_spec.SetField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool, value)
-	}
 	if _u.mutation.WatermarkingEnabledCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool)
-	}
-	if value, ok := _u.mutation.WatermarkStatus(); ok {
-		_spec.SetField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.WatermarkStatusCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Visibility(); ok {
-		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)
-	}
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldVisibility, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.StandardID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldStandardID, field.TypeString, value)
 	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldStandardID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterDocHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcenterdochistory.Label}
@@ -521,294 +139,9 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 // TrustCenterDocHistoryUpdateOne is the builder for updating a single TrustCenterDocHistory entity.
 type TrustCenterDocHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *TrustCenterDocHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearUpdatedAt() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearUpdatedBy() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetUpdatedByImpersonator(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearUpdatedByImpersonator() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearDeletedAt() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearDeletedBy() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetTags(v []string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterDocHistoryUpdateOne) AppendTags(v []string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearTags() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetTrustCenterDocKindName sets the "trust_center_doc_kind_name" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterDocKindName(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetTrustCenterDocKindName(v)
-	return _u
-}
-
-// SetNillableTrustCenterDocKindName sets the "trust_center_doc_kind_name" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterDocKindName(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterDocKindName(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterDocKindName clears the value of the "trust_center_doc_kind_name" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterDocKindName() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterDocKindName()
-	return _u
-}
-
-// SetTrustCenterDocKindID sets the "trust_center_doc_kind_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetTrustCenterDocKindID(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetTrustCenterDocKindID(v)
-	return _u
-}
-
-// SetNillableTrustCenterDocKindID sets the "trust_center_doc_kind_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTrustCenterDocKindID(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterDocKindID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterDocKindID clears the value of the "trust_center_doc_kind_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearTrustCenterDocKindID() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterDocKindID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetTitle(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableTitle(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetFileID(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableFileID(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearFileID() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetOriginalFileID sets the "original_file_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetOriginalFileID(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetOriginalFileID(v)
-	return _u
-}
-
-// SetNillableOriginalFileID sets the "original_file_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableOriginalFileID(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetOriginalFileID(*v)
-	}
-	return _u
-}
-
-// ClearOriginalFileID clears the value of the "original_file_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearOriginalFileID() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearOriginalFileID()
-	return _u
-}
-
-// SetWatermarkingEnabled sets the "watermarking_enabled" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetWatermarkingEnabled(v bool) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetWatermarkingEnabled(v)
-	return _u
-}
-
-// SetNillableWatermarkingEnabled sets the "watermarking_enabled" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableWatermarkingEnabled(v *bool) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetWatermarkingEnabled(*v)
-	}
-	return _u
-}
-
-// ClearWatermarkingEnabled clears the value of the "watermarking_enabled" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearWatermarkingEnabled() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearWatermarkingEnabled()
-	return _u
-}
-
-// SetWatermarkStatus sets the "watermark_status" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetWatermarkStatus(v enums.WatermarkStatus) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetWatermarkStatus(v)
-	return _u
-}
-
-// SetNillableWatermarkStatus sets the "watermark_status" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableWatermarkStatus(v *enums.WatermarkStatus) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetWatermarkStatus(*v)
-	}
-	return _u
-}
-
-// ClearWatermarkStatus clears the value of the "watermark_status" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearWatermarkStatus() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearWatermarkStatus()
-	return _u
-}
-
-// SetVisibility sets the "visibility" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetVisibility(v enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetVisibility(v)
-	return _u
-}
-
-// SetNillableVisibility sets the "visibility" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableVisibility(v *enums.TrustCenterDocumentVisibility) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetVisibility(*v)
-	}
-	return _u
-}
-
-// ClearVisibility clears the value of the "visibility" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearVisibility() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearVisibility()
-	return _u
-}
-
-// SetStandardID sets the "standard_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) SetStandardID(v string) *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.SetStandardID(v)
-	return _u
-}
-
-// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
-func (_u *TrustCenterDocHistoryUpdateOne) SetNillableStandardID(v *string) *TrustCenterDocHistoryUpdateOne {
-	if v != nil {
-		_u.SetStandardID(*v)
-	}
-	return _u
-}
-
-// ClearStandardID clears the value of the "standard_id" field.
-func (_u *TrustCenterDocHistoryUpdateOne) ClearStandardID() *TrustCenterDocHistoryUpdateOne {
-	_u.mutation.ClearStandardID()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *TrustCenterDocHistoryMutation
 }
 
 // Mutation returns the TrustCenterDocHistoryMutation object of the builder.
@@ -831,9 +164,6 @@ func (_u *TrustCenterDocHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated TrustCenterDocHistory entity.
 func (_u *TrustCenterDocHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterDocHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -859,43 +189,7 @@ func (_u *TrustCenterDocHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterDocHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcenterdochistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcenterdochistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcenterdochistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TrustCenterDocHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.WatermarkStatus(); ok {
-		if err := trustcenterdochistory.WatermarkStatusValidator(v); err != nil {
-			return &ValidationError{Name: "watermark_status", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterDocHistory.watermark_status": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Visibility(); ok {
-		if err := trustcenterdochistory.VisibilityValidator(v); err != nil {
-			return &ValidationError{Name: "visibility", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterDocHistory.visibility": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterDocHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterDocHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterDocHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterdochistory.Table, trustcenterdochistory.Columns, sqlgraph.NewFieldSpec(trustcenterdochistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -927,58 +221,29 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcenterdochistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcenterdochistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcenterdochistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcenterdochistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcenterdochistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcenterdochistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TrustCenterDocKindName(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterDocKindNameCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterDocKindID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterDocKindIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterDocKindID, field.TypeString)
@@ -986,48 +251,24 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(trustcenterdochistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldFileID, field.TypeString, value)
-	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.OriginalFileID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldOriginalFileID, field.TypeString, value)
 	}
 	if _u.mutation.OriginalFileIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldOriginalFileID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WatermarkingEnabled(); ok {
-		_spec.SetField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool, value)
-	}
 	if _u.mutation.WatermarkingEnabledCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldWatermarkingEnabled, field.TypeBool)
-	}
-	if value, ok := _u.mutation.WatermarkStatus(); ok {
-		_spec.SetField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.WatermarkStatusCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldWatermarkStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Visibility(); ok {
-		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)
-	}
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldVisibility, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.StandardID(); ok {
-		_spec.SetField(trustcenterdochistory.FieldStandardID, field.TypeString, value)
 	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldStandardID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterDocHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &TrustCenterDocHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

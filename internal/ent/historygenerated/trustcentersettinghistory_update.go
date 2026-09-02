@@ -8,661 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
 )
 
 // TrustCenterSettingHistoryUpdate is the builder for updating TrustCenterSettingHistory entities.
 type TrustCenterSettingHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *TrustCenterSettingHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *TrustCenterSettingHistoryMutation
 }
 
 // Where appends a list predicates to the TrustCenterSettingHistoryUpdate builder.
 func (_u *TrustCenterSettingHistoryUpdate) Where(ps ...predicate.TrustCenterSettingHistory) *TrustCenterSettingHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearUpdatedAt() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetUpdatedBy(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearUpdatedBy() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetUpdatedByImpersonator(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearUpdatedByImpersonator() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearDeletedAt() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetDeletedBy(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearDeletedBy() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetTrustCenterID(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearTrustCenterID() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetTitle(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableTitle(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// ClearTitle clears the value of the "title" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearTitle() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearTitle()
-	return _u
-}
-
-// SetCompanyName sets the "company_name" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetCompanyName(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetCompanyName(v)
-	return _u
-}
-
-// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableCompanyName(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetCompanyName(*v)
-	}
-	return _u
-}
-
-// ClearCompanyName clears the value of the "company_name" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearCompanyName() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearCompanyName()
-	return _u
-}
-
-// SetCompanyDescription sets the "company_description" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetCompanyDescription(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetCompanyDescription(v)
-	return _u
-}
-
-// SetNillableCompanyDescription sets the "company_description" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableCompanyDescription(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetCompanyDescription(*v)
-	}
-	return _u
-}
-
-// ClearCompanyDescription clears the value of the "company_description" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearCompanyDescription() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearCompanyDescription()
-	return _u
-}
-
-// SetOverview sets the "overview" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetOverview(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetOverview(v)
-	return _u
-}
-
-// SetNillableOverview sets the "overview" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableOverview(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetOverview(*v)
-	}
-	return _u
-}
-
-// ClearOverview clears the value of the "overview" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearOverview() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearOverview()
-	return _u
-}
-
-// SetLogoRemoteURL sets the "logo_remote_url" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetLogoRemoteURL(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetLogoRemoteURL(v)
-	return _u
-}
-
-// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableLogoRemoteURL(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetLogoRemoteURL(*v)
-	}
-	return _u
-}
-
-// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearLogoRemoteURL() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearLogoRemoteURL()
-	return _u
-}
-
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetLogoLocalFileID(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetLogoLocalFileID(v)
-	return _u
-}
-
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableLogoLocalFileID(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetLogoLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearLogoLocalFileID() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearLogoLocalFileID()
-	return _u
-}
-
-// SetFaviconRemoteURL sets the "favicon_remote_url" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetFaviconRemoteURL(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetFaviconRemoteURL(v)
-	return _u
-}
-
-// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableFaviconRemoteURL(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetFaviconRemoteURL(*v)
-	}
-	return _u
-}
-
-// ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearFaviconRemoteURL() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearFaviconRemoteURL()
-	return _u
-}
-
-// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetFaviconLocalFileID(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetFaviconLocalFileID(v)
-	return _u
-}
-
-// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableFaviconLocalFileID(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetFaviconLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearFaviconLocalFileID() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearFaviconLocalFileID()
-	return _u
-}
-
-// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetHeroImageLocalFileID(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetHeroImageLocalFileID(v)
-	return _u
-}
-
-// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetHeroImageLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearHeroImageLocalFileID clears the value of the "hero_image_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearHeroImageLocalFileID() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearHeroImageLocalFileID()
-	return _u
-}
-
-// SetThemeMode sets the "theme_mode" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetThemeMode(v)
-	return _u
-}
-
-// SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableThemeMode(v *enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetThemeMode(*v)
-	}
-	return _u
-}
-
-// ClearThemeMode clears the value of the "theme_mode" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearThemeMode() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearThemeMode()
-	return _u
-}
-
-// SetPrimaryColor sets the "primary_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetPrimaryColor(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetPrimaryColor(v)
-	return _u
-}
-
-// SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillablePrimaryColor(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetPrimaryColor(*v)
-	}
-	return _u
-}
-
-// ClearPrimaryColor clears the value of the "primary_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearPrimaryColor() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearPrimaryColor()
-	return _u
-}
-
-// SetFont sets the "font" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetFont(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetFont(v)
-	return _u
-}
-
-// SetNillableFont sets the "font" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableFont(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetFont(*v)
-	}
-	return _u
-}
-
-// ClearFont clears the value of the "font" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearFont() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearFont()
-	return _u
-}
-
-// SetForegroundColor sets the "foreground_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetForegroundColor(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetForegroundColor(v)
-	return _u
-}
-
-// SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableForegroundColor(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetForegroundColor(*v)
-	}
-	return _u
-}
-
-// ClearForegroundColor clears the value of the "foreground_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearForegroundColor() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearForegroundColor()
-	return _u
-}
-
-// SetBackgroundColor sets the "background_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetBackgroundColor(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetBackgroundColor(v)
-	return _u
-}
-
-// SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableBackgroundColor(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetBackgroundColor(*v)
-	}
-	return _u
-}
-
-// ClearBackgroundColor clears the value of the "background_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearBackgroundColor() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearBackgroundColor()
-	return _u
-}
-
-// SetAccentColor sets the "accent_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetAccentColor(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetAccentColor(v)
-	return _u
-}
-
-// SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableAccentColor(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetAccentColor(*v)
-	}
-	return _u
-}
-
-// ClearAccentColor clears the value of the "accent_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearAccentColor() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearAccentColor()
-	return _u
-}
-
-// SetSecondaryBackgroundColor sets the "secondary_background_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetSecondaryBackgroundColor(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetSecondaryBackgroundColor(v)
-	return _u
-}
-
-// SetNillableSecondaryBackgroundColor sets the "secondary_background_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableSecondaryBackgroundColor(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetSecondaryBackgroundColor(*v)
-	}
-	return _u
-}
-
-// ClearSecondaryBackgroundColor clears the value of the "secondary_background_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearSecondaryBackgroundColor() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearSecondaryBackgroundColor()
-	return _u
-}
-
-// SetSecondaryForegroundColor sets the "secondary_foreground_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetSecondaryForegroundColor(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetSecondaryForegroundColor(v)
-	return _u
-}
-
-// SetNillableSecondaryForegroundColor sets the "secondary_foreground_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableSecondaryForegroundColor(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetSecondaryForegroundColor(*v)
-	}
-	return _u
-}
-
-// ClearSecondaryForegroundColor clears the value of the "secondary_foreground_color" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearSecondaryForegroundColor() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearSecondaryForegroundColor()
-	return _u
-}
-
-// SetRemoveBranding sets the "remove_branding" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetRemoveBranding(v bool) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetRemoveBranding(v)
-	return _u
-}
-
-// SetNillableRemoveBranding sets the "remove_branding" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableRemoveBranding(v *bool) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetRemoveBranding(*v)
-	}
-	return _u
-}
-
-// ClearRemoveBranding clears the value of the "remove_branding" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearRemoveBranding() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearRemoveBranding()
-	return _u
-}
-
-// SetCompanyDomain sets the "company_domain" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetCompanyDomain(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetCompanyDomain(v)
-	return _u
-}
-
-// SetNillableCompanyDomain sets the "company_domain" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableCompanyDomain(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetCompanyDomain(*v)
-	}
-	return _u
-}
-
-// ClearCompanyDomain clears the value of the "company_domain" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearCompanyDomain() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearCompanyDomain()
-	return _u
-}
-
-// SetSecurityContact sets the "security_contact" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetSecurityContact(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetSecurityContact(v)
-	return _u
-}
-
-// SetNillableSecurityContact sets the "security_contact" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableSecurityContact(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetSecurityContact(*v)
-	}
-	return _u
-}
-
-// ClearSecurityContact clears the value of the "security_contact" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearSecurityContact() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearSecurityContact()
-	return _u
-}
-
-// SetNdaApprovalRequired sets the "nda_approval_required" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetNdaApprovalRequired(v bool) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetNdaApprovalRequired(v)
-	return _u
-}
-
-// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetNdaApprovalRequired(*v)
-	}
-	return _u
-}
-
-// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearNdaApprovalRequired() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearNdaApprovalRequired()
-	return _u
-}
-
-// SetAllowSubscribers sets the "allow_subscribers" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetAllowSubscribers(v bool) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetAllowSubscribers(v)
-	return _u
-}
-
-// SetNillableAllowSubscribers sets the "allow_subscribers" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableAllowSubscribers(v *bool) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetAllowSubscribers(*v)
-	}
-	return _u
-}
-
-// ClearAllowSubscribers clears the value of the "allow_subscribers" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearAllowSubscribers() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearAllowSubscribers()
-	return _u
-}
-
-// SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetNotifySubscribersOnSubprocessorChange(v)
-	return _u
-}
-
-// SetNillableNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableNotifySubscribersOnSubprocessorChange(v *bool) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetNotifySubscribersOnSubprocessorChange(*v)
-	}
-	return _u
-}
-
-// ClearNotifySubscribersOnSubprocessorChange clears the value of the "notify_subscribers_on_subprocessor_change" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearNotifySubscribersOnSubprocessorChange() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearNotifySubscribersOnSubprocessorChange()
-	return _u
-}
-
-// SetSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetSubprocessorsNotifiedAt(v time.Time) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetSubprocessorsNotifiedAt(v)
-	return _u
-}
-
-// SetNillableSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableSubprocessorsNotifiedAt(v *time.Time) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetSubprocessorsNotifiedAt(*v)
-	}
-	return _u
-}
-
-// ClearSubprocessorsNotifiedAt clears the value of the "subprocessors_notified_at" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearSubprocessorsNotifiedAt() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearSubprocessorsNotifiedAt()
-	return _u
-}
-
-// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetNdaApproverGroupID(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetNdaApproverGroupID(v)
-	return _u
-}
-
-// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetNdaApproverGroupID(*v)
-	}
-	return _u
-}
-
-// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearNdaApproverGroupID() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearNdaApproverGroupID()
-	return _u
-}
-
-// SetStatusPageURL sets the "status_page_url" field.
-func (_u *TrustCenterSettingHistoryUpdate) SetStatusPageURL(v string) *TrustCenterSettingHistoryUpdate {
-	_u.mutation.SetStatusPageURL(v)
-	return _u
-}
-
-// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdate) SetNillableStatusPageURL(v *string) *TrustCenterSettingHistoryUpdate {
-	if v != nil {
-		_u.SetStatusPageURL(*v)
-	}
-	return _u
-}
-
-// ClearStatusPageURL clears the value of the "status_page_url" field.
-func (_u *TrustCenterSettingHistoryUpdate) ClearStatusPageURL() *TrustCenterSettingHistoryUpdate {
-	_u.mutation.ClearStatusPageURL()
 	return _u
 }
 
@@ -673,9 +36,6 @@ func (_u *TrustCenterSettingHistoryUpdate) Mutation() *TrustCenterSettingHistory
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TrustCenterSettingHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -701,38 +61,7 @@ func (_u *TrustCenterSettingHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterSettingHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcentersettinghistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcentersettinghistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcentersettinghistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TrustCenterSettingHistoryUpdate) check() error {
-	if v, ok := _u.mutation.ThemeMode(); ok {
-		if err := trustcentersettinghistory.ThemeModeValidator(v); err != nil {
-			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterSettingHistory.theme_mode": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterSettingHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSettingHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentersettinghistory.Table, trustcentersettinghistory.Columns, sqlgraph.NewFieldSpec(trustcentersettinghistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -747,143 +76,74 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldTrustCenterID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldTitle, field.TypeString, value)
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldTitle, field.TypeString)
 	}
-	if value, ok := _u.mutation.CompanyName(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldCompanyName, field.TypeString, value)
-	}
 	if _u.mutation.CompanyNameCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCompanyName, field.TypeString)
-	}
-	if value, ok := _u.mutation.CompanyDescription(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldCompanyDescription, field.TypeString, value)
 	}
 	if _u.mutation.CompanyDescriptionCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCompanyDescription, field.TypeString)
 	}
-	if value, ok := _u.mutation.Overview(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldOverview, field.TypeString, value)
-	}
 	if _u.mutation.OverviewCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldOverview, field.TypeString)
-	}
-	if value, ok := _u.mutation.LogoRemoteURL(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString, value)
 	}
 	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.LogoLocalFileID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString, value)
-	}
 	if _u.mutation.LogoLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.FaviconRemoteURL(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString, value)
 	}
 	if _u.mutation.FaviconRemoteURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.FaviconLocalFileID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
-	}
 	if _u.mutation.FaviconLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.HeroImageLocalFileID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString, value)
 	}
 	if _u.mutation.HeroImageLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ThemeMode(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
-	}
 	if _u.mutation.ThemeModeCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.PrimaryColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString, value)
 	}
 	if _u.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString)
 	}
-	if value, ok := _u.mutation.Font(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldFont, field.TypeString, value)
-	}
 	if _u.mutation.FontCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFont, field.TypeString)
-	}
-	if value, ok := _u.mutation.ForegroundColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldForegroundColor, field.TypeString, value)
 	}
 	if _u.mutation.ForegroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldForegroundColor, field.TypeString)
 	}
-	if value, ok := _u.mutation.BackgroundColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString, value)
-	}
 	if _u.mutation.BackgroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString)
-	}
-	if value, ok := _u.mutation.AccentColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldAccentColor, field.TypeString, value)
 	}
 	if _u.mutation.AccentColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldAccentColor, field.TypeString)
 	}
-	if value, ok := _u.mutation.SecondaryBackgroundColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString, value)
-	}
 	if _u.mutation.SecondaryBackgroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString)
-	}
-	if value, ok := _u.mutation.SecondaryForegroundColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString, value)
 	}
 	if _u.mutation.SecondaryForegroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString)
@@ -891,63 +151,33 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.EnvironmentCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldEnvironment, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.RemoveBranding(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool, value)
-	}
 	if _u.mutation.RemoveBrandingCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool)
-	}
-	if value, ok := _u.mutation.CompanyDomain(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString, value)
 	}
 	if _u.mutation.CompanyDomainCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString)
 	}
-	if value, ok := _u.mutation.SecurityContact(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldSecurityContact, field.TypeString, value)
-	}
 	if _u.mutation.SecurityContactCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecurityContact, field.TypeString)
-	}
-	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
 	}
-	if value, ok := _u.mutation.AllowSubscribers(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldAllowSubscribers, field.TypeBool, value)
-	}
 	if _u.mutation.AllowSubscribersCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldAllowSubscribers, field.TypeBool)
-	}
-	if value, ok := _u.mutation.NotifySubscribersOnSubprocessorChange(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
 	}
 	if _u.mutation.NotifySubscribersOnSubprocessorChangeCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool)
 	}
-	if value, ok := _u.mutation.SubprocessorsNotifiedAt(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
-	}
 	if _u.mutation.SubprocessorsNotifiedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.NdaApproverGroupID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString, value)
 	}
 	if _u.mutation.NdaApproverGroupIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString)
 	}
-	if value, ok := _u.mutation.StatusPageURL(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString, value)
-	}
 	if _u.mutation.StatusPageURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcentersettinghistory.Label}
@@ -963,642 +193,9 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 // TrustCenterSettingHistoryUpdateOne is the builder for updating a single TrustCenterSettingHistory entity.
 type TrustCenterSettingHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *TrustCenterSettingHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearUpdatedAt() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearUpdatedBy() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetUpdatedByImpersonator(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearUpdatedByImpersonator() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearDeletedAt() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearDeletedBy() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetTrustCenterID(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearTrustCenterID() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetTitle(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableTitle(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// ClearTitle clears the value of the "title" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearTitle() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearTitle()
-	return _u
-}
-
-// SetCompanyName sets the "company_name" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetCompanyName(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetCompanyName(v)
-	return _u
-}
-
-// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableCompanyName(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompanyName(*v)
-	}
-	return _u
-}
-
-// ClearCompanyName clears the value of the "company_name" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearCompanyName() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearCompanyName()
-	return _u
-}
-
-// SetCompanyDescription sets the "company_description" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetCompanyDescription(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetCompanyDescription(v)
-	return _u
-}
-
-// SetNillableCompanyDescription sets the "company_description" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableCompanyDescription(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompanyDescription(*v)
-	}
-	return _u
-}
-
-// ClearCompanyDescription clears the value of the "company_description" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearCompanyDescription() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearCompanyDescription()
-	return _u
-}
-
-// SetOverview sets the "overview" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetOverview(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetOverview(v)
-	return _u
-}
-
-// SetNillableOverview sets the "overview" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableOverview(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetOverview(*v)
-	}
-	return _u
-}
-
-// ClearOverview clears the value of the "overview" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearOverview() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearOverview()
-	return _u
-}
-
-// SetLogoRemoteURL sets the "logo_remote_url" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetLogoRemoteURL(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetLogoRemoteURL(v)
-	return _u
-}
-
-// SetNillableLogoRemoteURL sets the "logo_remote_url" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableLogoRemoteURL(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetLogoRemoteURL(*v)
-	}
-	return _u
-}
-
-// ClearLogoRemoteURL clears the value of the "logo_remote_url" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearLogoRemoteURL() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearLogoRemoteURL()
-	return _u
-}
-
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetLogoLocalFileID(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetLogoLocalFileID(v)
-	return _u
-}
-
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableLogoLocalFileID(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetLogoLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearLogoLocalFileID() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearLogoLocalFileID()
-	return _u
-}
-
-// SetFaviconRemoteURL sets the "favicon_remote_url" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetFaviconRemoteURL(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetFaviconRemoteURL(v)
-	return _u
-}
-
-// SetNillableFaviconRemoteURL sets the "favicon_remote_url" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableFaviconRemoteURL(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetFaviconRemoteURL(*v)
-	}
-	return _u
-}
-
-// ClearFaviconRemoteURL clears the value of the "favicon_remote_url" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearFaviconRemoteURL() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearFaviconRemoteURL()
-	return _u
-}
-
-// SetFaviconLocalFileID sets the "favicon_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetFaviconLocalFileID(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetFaviconLocalFileID(v)
-	return _u
-}
-
-// SetNillableFaviconLocalFileID sets the "favicon_local_file_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableFaviconLocalFileID(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetFaviconLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearFaviconLocalFileID clears the value of the "favicon_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearFaviconLocalFileID() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearFaviconLocalFileID()
-	return _u
-}
-
-// SetHeroImageLocalFileID sets the "hero_image_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetHeroImageLocalFileID(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetHeroImageLocalFileID(v)
-	return _u
-}
-
-// SetNillableHeroImageLocalFileID sets the "hero_image_local_file_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableHeroImageLocalFileID(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetHeroImageLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearHeroImageLocalFileID clears the value of the "hero_image_local_file_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearHeroImageLocalFileID() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearHeroImageLocalFileID()
-	return _u
-}
-
-// SetThemeMode sets the "theme_mode" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetThemeMode(v enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetThemeMode(v)
-	return _u
-}
-
-// SetNillableThemeMode sets the "theme_mode" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableThemeMode(v *enums.TrustCenterThemeMode) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetThemeMode(*v)
-	}
-	return _u
-}
-
-// ClearThemeMode clears the value of the "theme_mode" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearThemeMode() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearThemeMode()
-	return _u
-}
-
-// SetPrimaryColor sets the "primary_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetPrimaryColor(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetPrimaryColor(v)
-	return _u
-}
-
-// SetNillablePrimaryColor sets the "primary_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillablePrimaryColor(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetPrimaryColor(*v)
-	}
-	return _u
-}
-
-// ClearPrimaryColor clears the value of the "primary_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearPrimaryColor() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearPrimaryColor()
-	return _u
-}
-
-// SetFont sets the "font" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetFont(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetFont(v)
-	return _u
-}
-
-// SetNillableFont sets the "font" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableFont(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetFont(*v)
-	}
-	return _u
-}
-
-// ClearFont clears the value of the "font" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearFont() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearFont()
-	return _u
-}
-
-// SetForegroundColor sets the "foreground_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetForegroundColor(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetForegroundColor(v)
-	return _u
-}
-
-// SetNillableForegroundColor sets the "foreground_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableForegroundColor(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetForegroundColor(*v)
-	}
-	return _u
-}
-
-// ClearForegroundColor clears the value of the "foreground_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearForegroundColor() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearForegroundColor()
-	return _u
-}
-
-// SetBackgroundColor sets the "background_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetBackgroundColor(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetBackgroundColor(v)
-	return _u
-}
-
-// SetNillableBackgroundColor sets the "background_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableBackgroundColor(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetBackgroundColor(*v)
-	}
-	return _u
-}
-
-// ClearBackgroundColor clears the value of the "background_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearBackgroundColor() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearBackgroundColor()
-	return _u
-}
-
-// SetAccentColor sets the "accent_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetAccentColor(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetAccentColor(v)
-	return _u
-}
-
-// SetNillableAccentColor sets the "accent_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableAccentColor(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetAccentColor(*v)
-	}
-	return _u
-}
-
-// ClearAccentColor clears the value of the "accent_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearAccentColor() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearAccentColor()
-	return _u
-}
-
-// SetSecondaryBackgroundColor sets the "secondary_background_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetSecondaryBackgroundColor(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetSecondaryBackgroundColor(v)
-	return _u
-}
-
-// SetNillableSecondaryBackgroundColor sets the "secondary_background_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableSecondaryBackgroundColor(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetSecondaryBackgroundColor(*v)
-	}
-	return _u
-}
-
-// ClearSecondaryBackgroundColor clears the value of the "secondary_background_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearSecondaryBackgroundColor() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearSecondaryBackgroundColor()
-	return _u
-}
-
-// SetSecondaryForegroundColor sets the "secondary_foreground_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetSecondaryForegroundColor(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetSecondaryForegroundColor(v)
-	return _u
-}
-
-// SetNillableSecondaryForegroundColor sets the "secondary_foreground_color" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableSecondaryForegroundColor(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetSecondaryForegroundColor(*v)
-	}
-	return _u
-}
-
-// ClearSecondaryForegroundColor clears the value of the "secondary_foreground_color" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearSecondaryForegroundColor() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearSecondaryForegroundColor()
-	return _u
-}
-
-// SetRemoveBranding sets the "remove_branding" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetRemoveBranding(v bool) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetRemoveBranding(v)
-	return _u
-}
-
-// SetNillableRemoveBranding sets the "remove_branding" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableRemoveBranding(v *bool) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetRemoveBranding(*v)
-	}
-	return _u
-}
-
-// ClearRemoveBranding clears the value of the "remove_branding" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearRemoveBranding() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearRemoveBranding()
-	return _u
-}
-
-// SetCompanyDomain sets the "company_domain" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetCompanyDomain(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetCompanyDomain(v)
-	return _u
-}
-
-// SetNillableCompanyDomain sets the "company_domain" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableCompanyDomain(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompanyDomain(*v)
-	}
-	return _u
-}
-
-// ClearCompanyDomain clears the value of the "company_domain" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearCompanyDomain() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearCompanyDomain()
-	return _u
-}
-
-// SetSecurityContact sets the "security_contact" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetSecurityContact(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetSecurityContact(v)
-	return _u
-}
-
-// SetNillableSecurityContact sets the "security_contact" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableSecurityContact(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetSecurityContact(*v)
-	}
-	return _u
-}
-
-// ClearSecurityContact clears the value of the "security_contact" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearSecurityContact() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearSecurityContact()
-	return _u
-}
-
-// SetNdaApprovalRequired sets the "nda_approval_required" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNdaApprovalRequired(v bool) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetNdaApprovalRequired(v)
-	return _u
-}
-
-// SetNillableNdaApprovalRequired sets the "nda_approval_required" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableNdaApprovalRequired(v *bool) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetNdaApprovalRequired(*v)
-	}
-	return _u
-}
-
-// ClearNdaApprovalRequired clears the value of the "nda_approval_required" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearNdaApprovalRequired() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearNdaApprovalRequired()
-	return _u
-}
-
-// SetAllowSubscribers sets the "allow_subscribers" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetAllowSubscribers(v bool) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetAllowSubscribers(v)
-	return _u
-}
-
-// SetNillableAllowSubscribers sets the "allow_subscribers" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableAllowSubscribers(v *bool) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetAllowSubscribers(*v)
-	}
-	return _u
-}
-
-// ClearAllowSubscribers clears the value of the "allow_subscribers" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearAllowSubscribers() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearAllowSubscribers()
-	return _u
-}
-
-// SetNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNotifySubscribersOnSubprocessorChange(v bool) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetNotifySubscribersOnSubprocessorChange(v)
-	return _u
-}
-
-// SetNillableNotifySubscribersOnSubprocessorChange sets the "notify_subscribers_on_subprocessor_change" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableNotifySubscribersOnSubprocessorChange(v *bool) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetNotifySubscribersOnSubprocessorChange(*v)
-	}
-	return _u
-}
-
-// ClearNotifySubscribersOnSubprocessorChange clears the value of the "notify_subscribers_on_subprocessor_change" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearNotifySubscribersOnSubprocessorChange() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearNotifySubscribersOnSubprocessorChange()
-	return _u
-}
-
-// SetSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetSubprocessorsNotifiedAt(v time.Time) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetSubprocessorsNotifiedAt(v)
-	return _u
-}
-
-// SetNillableSubprocessorsNotifiedAt sets the "subprocessors_notified_at" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableSubprocessorsNotifiedAt(v *time.Time) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetSubprocessorsNotifiedAt(*v)
-	}
-	return _u
-}
-
-// ClearSubprocessorsNotifiedAt clears the value of the "subprocessors_notified_at" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearSubprocessorsNotifiedAt() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearSubprocessorsNotifiedAt()
-	return _u
-}
-
-// SetNdaApproverGroupID sets the "nda_approver_group_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNdaApproverGroupID(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetNdaApproverGroupID(v)
-	return _u
-}
-
-// SetNillableNdaApproverGroupID sets the "nda_approver_group_id" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableNdaApproverGroupID(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetNdaApproverGroupID(*v)
-	}
-	return _u
-}
-
-// ClearNdaApproverGroupID clears the value of the "nda_approver_group_id" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearNdaApproverGroupID() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearNdaApproverGroupID()
-	return _u
-}
-
-// SetStatusPageURL sets the "status_page_url" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetStatusPageURL(v string) *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.SetStatusPageURL(v)
-	return _u
-}
-
-// SetNillableStatusPageURL sets the "status_page_url" field if the given value is not nil.
-func (_u *TrustCenterSettingHistoryUpdateOne) SetNillableStatusPageURL(v *string) *TrustCenterSettingHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatusPageURL(*v)
-	}
-	return _u
-}
-
-// ClearStatusPageURL clears the value of the "status_page_url" field.
-func (_u *TrustCenterSettingHistoryUpdateOne) ClearStatusPageURL() *TrustCenterSettingHistoryUpdateOne {
-	_u.mutation.ClearStatusPageURL()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *TrustCenterSettingHistoryMutation
 }
 
 // Mutation returns the TrustCenterSettingHistoryMutation object of the builder.
@@ -1621,9 +218,6 @@ func (_u *TrustCenterSettingHistoryUpdateOne) Select(field string, fields ...str
 
 // Save executes the query and returns the updated TrustCenterSettingHistory entity.
 func (_u *TrustCenterSettingHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterSettingHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1649,38 +243,7 @@ func (_u *TrustCenterSettingHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterSettingHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcentersettinghistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcentersettinghistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcentersettinghistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TrustCenterSettingHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.ThemeMode(); ok {
-		if err := trustcentersettinghistory.ThemeModeValidator(v); err != nil {
-			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterSettingHistory.theme_mode": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterSettingHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterSettingHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterSettingHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(trustcentersettinghistory.Table, trustcentersettinghistory.Columns, sqlgraph.NewFieldSpec(trustcentersettinghistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1712,143 +275,74 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldTrustCenterID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldTitle, field.TypeString, value)
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldTitle, field.TypeString)
 	}
-	if value, ok := _u.mutation.CompanyName(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldCompanyName, field.TypeString, value)
-	}
 	if _u.mutation.CompanyNameCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCompanyName, field.TypeString)
-	}
-	if value, ok := _u.mutation.CompanyDescription(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldCompanyDescription, field.TypeString, value)
 	}
 	if _u.mutation.CompanyDescriptionCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCompanyDescription, field.TypeString)
 	}
-	if value, ok := _u.mutation.Overview(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldOverview, field.TypeString, value)
-	}
 	if _u.mutation.OverviewCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldOverview, field.TypeString)
-	}
-	if value, ok := _u.mutation.LogoRemoteURL(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString, value)
 	}
 	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldLogoRemoteURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.LogoLocalFileID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString, value)
-	}
 	if _u.mutation.LogoLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldLogoLocalFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.FaviconRemoteURL(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString, value)
 	}
 	if _u.mutation.FaviconRemoteURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFaviconRemoteURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.FaviconLocalFileID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString, value)
-	}
 	if _u.mutation.FaviconLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFaviconLocalFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.HeroImageLocalFileID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString, value)
 	}
 	if _u.mutation.HeroImageLocalFileIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldHeroImageLocalFileID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ThemeMode(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum, value)
-	}
 	if _u.mutation.ThemeModeCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldThemeMode, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.PrimaryColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString, value)
 	}
 	if _u.mutation.PrimaryColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldPrimaryColor, field.TypeString)
 	}
-	if value, ok := _u.mutation.Font(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldFont, field.TypeString, value)
-	}
 	if _u.mutation.FontCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldFont, field.TypeString)
-	}
-	if value, ok := _u.mutation.ForegroundColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldForegroundColor, field.TypeString, value)
 	}
 	if _u.mutation.ForegroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldForegroundColor, field.TypeString)
 	}
-	if value, ok := _u.mutation.BackgroundColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString, value)
-	}
 	if _u.mutation.BackgroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldBackgroundColor, field.TypeString)
-	}
-	if value, ok := _u.mutation.AccentColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldAccentColor, field.TypeString, value)
 	}
 	if _u.mutation.AccentColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldAccentColor, field.TypeString)
 	}
-	if value, ok := _u.mutation.SecondaryBackgroundColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString, value)
-	}
 	if _u.mutation.SecondaryBackgroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecondaryBackgroundColor, field.TypeString)
-	}
-	if value, ok := _u.mutation.SecondaryForegroundColor(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString, value)
 	}
 	if _u.mutation.SecondaryForegroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString)
@@ -1856,63 +350,33 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.EnvironmentCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldEnvironment, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.RemoveBranding(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool, value)
-	}
 	if _u.mutation.RemoveBrandingCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldRemoveBranding, field.TypeBool)
-	}
-	if value, ok := _u.mutation.CompanyDomain(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString, value)
 	}
 	if _u.mutation.CompanyDomainCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldCompanyDomain, field.TypeString)
 	}
-	if value, ok := _u.mutation.SecurityContact(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldSecurityContact, field.TypeString, value)
-	}
 	if _u.mutation.SecurityContactCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecurityContact, field.TypeString)
-	}
-	if value, ok := _u.mutation.NdaApprovalRequired(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool, value)
 	}
 	if _u.mutation.NdaApprovalRequiredCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNdaApprovalRequired, field.TypeBool)
 	}
-	if value, ok := _u.mutation.AllowSubscribers(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldAllowSubscribers, field.TypeBool, value)
-	}
 	if _u.mutation.AllowSubscribersCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldAllowSubscribers, field.TypeBool)
-	}
-	if value, ok := _u.mutation.NotifySubscribersOnSubprocessorChange(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool, value)
 	}
 	if _u.mutation.NotifySubscribersOnSubprocessorChangeCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNotifySubscribersOnSubprocessorChange, field.TypeBool)
 	}
-	if value, ok := _u.mutation.SubprocessorsNotifiedAt(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime, value)
-	}
 	if _u.mutation.SubprocessorsNotifiedAtCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSubprocessorsNotifiedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.NdaApproverGroupID(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString, value)
 	}
 	if _u.mutation.NdaApproverGroupIDCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldNdaApproverGroupID, field.TypeString)
 	}
-	if value, ok := _u.mutation.StatusPageURL(); ok {
-		_spec.SetField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString, value)
-	}
 	if _u.mutation.StatusPageURLCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldStatusPageURL, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &TrustCenterSettingHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

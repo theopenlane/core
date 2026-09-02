@@ -13,28 +13,27 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // AssetQuery is the builder for querying Asset entities.
@@ -148,9 +147,6 @@ func (_q *AssetQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, asset.OwnerTable, asset.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -173,9 +169,6 @@ func (_q *AssetQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, asset.BlockedGroupsTable, asset.BlockedGroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -198,9 +191,6 @@ func (_q *AssetQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, asset.EditorsTable, asset.EditorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -223,9 +213,6 @@ func (_q *AssetQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, asset.ViewersTable, asset.ViewersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -248,9 +235,6 @@ func (_q *AssetQuery) QueryInternalOwnerUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerUserTable, asset.InternalOwnerUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -273,9 +257,6 @@ func (_q *AssetQuery) QueryInternalOwnerGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.InternalOwnerGroupTable, asset.InternalOwnerGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -298,9 +279,6 @@ func (_q *AssetQuery) QueryAssetSubtype() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.AssetSubtypeTable, asset.AssetSubtypeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -323,9 +301,6 @@ func (_q *AssetQuery) QueryAssetDataClassification() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.AssetDataClassificationTable, asset.AssetDataClassificationColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -348,9 +323,6 @@ func (_q *AssetQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.EnvironmentTable, asset.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -373,9 +345,6 @@ func (_q *AssetQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.ScopeTable, asset.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -398,9 +367,6 @@ func (_q *AssetQuery) QueryAccessModel() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.AccessModelTable, asset.AccessModelColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -423,9 +389,6 @@ func (_q *AssetQuery) QueryEncryptionStatus() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.EncryptionStatusTable, asset.EncryptionStatusColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -448,9 +411,6 @@ func (_q *AssetQuery) QuerySecurityTier() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.SecurityTierTable, asset.SecurityTierColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -473,9 +433,6 @@ func (_q *AssetQuery) QueryCriticality() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, asset.CriticalityTable, asset.CriticalityColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -498,9 +455,6 @@ func (_q *AssetQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.ScansTable, asset.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ScanAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -523,9 +477,6 @@ func (_q *AssetQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.EntitiesTable, asset.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntityAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -548,9 +499,6 @@ func (_q *AssetQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.PlatformsTable, asset.PlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -573,9 +521,6 @@ func (_q *AssetQuery) QuerySystemDetails() *SystemDetailQuery {
 			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.SystemDetailsTable, asset.SystemDetailsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetailAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -598,9 +543,6 @@ func (_q *AssetQuery) QueryOutOfScopePlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.OutOfScopePlatformsTable, asset.OutOfScopePlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformOutOfScopeAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -623,9 +565,6 @@ func (_q *AssetQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.IdentityHoldersTable, asset.IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.IdentityHolderAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -648,9 +587,6 @@ func (_q *AssetQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.ControlsTable, asset.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -673,9 +609,6 @@ func (_q *AssetQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.SubcontrolsTable, asset.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.SubcontrolAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -698,9 +631,6 @@ func (_q *AssetQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.InternalPoliciesTable, asset.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -723,9 +653,6 @@ func (_q *AssetQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.FindingsTable, asset.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -748,9 +675,6 @@ func (_q *AssetQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.VulnerabilitiesTable, asset.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.VulnerabilityAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -773,9 +697,6 @@ func (_q *AssetQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.ReviewsTable, asset.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -798,9 +719,6 @@ func (_q *AssetQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.RemediationsTable, asset.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -823,9 +741,6 @@ func (_q *AssetQuery) QuerySourcePlatform() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, asset.SourcePlatformTable, asset.SourcePlatformColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -848,9 +763,6 @@ func (_q *AssetQuery) QueryIntegration() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, asset.IntegrationTable, asset.IntegrationColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -873,9 +785,6 @@ func (_q *AssetQuery) QueryConnectedAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, asset.ConnectedAssetsTable, asset.ConnectedAssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.AssetConnectedAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -898,9 +807,6 @@ func (_q *AssetQuery) QueryConnectedFrom() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, asset.ConnectedFromTable, asset.ConnectedFromPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.AssetConnectedAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1609,8 +1515,6 @@ func (_q *AssetQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Asset,
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Asset
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2386,7 +2290,6 @@ func (_q *AssetQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.ScansTable)
-		joinT.Schema(_q.schemaConfig.ScanAssets)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(asset.ScansPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.ScansPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2448,7 +2351,6 @@ func (_q *AssetQuery) loadEntities(ctx context.Context, query *EntityQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.EntityAssets)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(asset.EntitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2510,7 +2412,6 @@ func (_q *AssetQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.PlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformAssets)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(asset.PlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.PlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2572,7 +2473,6 @@ func (_q *AssetQuery) loadSystemDetails(ctx context.Context, query *SystemDetail
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.SystemDetailsTable)
-		joinT.Schema(_q.schemaConfig.SystemDetailAssets)
 		s.Join(joinT).On(s.C(systemdetail.FieldID), joinT.C(asset.SystemDetailsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.SystemDetailsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2634,7 +2534,6 @@ func (_q *AssetQuery) loadOutOfScopePlatforms(ctx context.Context, query *Platfo
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.OutOfScopePlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformOutOfScopeAssets)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(asset.OutOfScopePlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.OutOfScopePlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2696,7 +2595,6 @@ func (_q *AssetQuery) loadIdentityHolders(ctx context.Context, query *IdentityHo
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.IdentityHoldersTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderAssets)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(asset.IdentityHoldersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.IdentityHoldersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2758,7 +2656,6 @@ func (_q *AssetQuery) loadControls(ctx context.Context, query *ControlQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlAssets)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(asset.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2820,7 +2717,6 @@ func (_q *AssetQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolAssets)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(asset.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2882,7 +2778,6 @@ func (_q *AssetQuery) loadInternalPolicies(ctx context.Context, query *InternalP
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyAssets)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(asset.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2944,7 +2839,6 @@ func (_q *AssetQuery) loadFindings(ctx context.Context, query *FindingQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.FindingsTable)
-		joinT.Schema(_q.schemaConfig.FindingAssets)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(asset.FindingsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.FindingsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3006,7 +2900,6 @@ func (_q *AssetQuery) loadVulnerabilities(ctx context.Context, query *Vulnerabil
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.VulnerabilityAssets)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(asset.VulnerabilitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3068,7 +2961,6 @@ func (_q *AssetQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewAssets)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(asset.ReviewsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.ReviewsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3130,7 +3022,6 @@ func (_q *AssetQuery) loadRemediations(ctx context.Context, query *RemediationQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.RemediationAssets)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(asset.RemediationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.RemediationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3250,7 +3141,6 @@ func (_q *AssetQuery) loadConnectedAssets(ctx context.Context, query *AssetQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.ConnectedAssetsTable)
-		joinT.Schema(_q.schemaConfig.AssetConnectedAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(asset.ConnectedAssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(asset.ConnectedAssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3312,7 +3202,6 @@ func (_q *AssetQuery) loadConnectedFrom(ctx context.Context, query *AssetQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(asset.ConnectedFromTable)
-		joinT.Schema(_q.schemaConfig.AssetConnectedAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(asset.ConnectedFromPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(asset.ConnectedFromPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3364,8 +3253,6 @@ func (_q *AssetQuery) loadConnectedFrom(ctx context.Context, query *AssetQuery, 
 
 func (_q *AssetQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Asset
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -3470,9 +3357,6 @@ func (_q *AssetQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Asset)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

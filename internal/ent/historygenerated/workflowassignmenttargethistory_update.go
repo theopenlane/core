@@ -8,228 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenttargethistory"
 )
 
 // WorkflowAssignmentTargetHistoryUpdate is the builder for updating WorkflowAssignmentTargetHistory entities.
 type WorkflowAssignmentTargetHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *WorkflowAssignmentTargetHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *WorkflowAssignmentTargetHistoryMutation
 }
 
 // Where appends a list predicates to the WorkflowAssignmentTargetHistoryUpdate builder.
 func (_u *WorkflowAssignmentTargetHistoryUpdate) Where(ps ...predicate.WorkflowAssignmentTargetHistory) *WorkflowAssignmentTargetHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetUpdatedAt(v time.Time) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearUpdatedAt() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetUpdatedBy(v string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableUpdatedBy(v *string) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearUpdatedBy() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetUpdatedByImpersonator(v string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearUpdatedByImpersonator() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetDeletedAt(v time.Time) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableDeletedAt(v *time.Time) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearDeletedAt() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetDeletedBy(v string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableDeletedBy(v *string) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearDeletedBy() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetTags(v []string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) AppendTags(v []string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearTags() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetWorkflowAssignmentID sets the "workflow_assignment_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetWorkflowAssignmentID(v string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetWorkflowAssignmentID(v)
-	return _u
-}
-
-// SetNillableWorkflowAssignmentID sets the "workflow_assignment_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableWorkflowAssignmentID(v *string) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowAssignmentID(*v)
-	}
-	return _u
-}
-
-// SetTargetType sets the "target_type" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetTargetType(v enums.WorkflowTargetType) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetTargetType(v)
-	return _u
-}
-
-// SetNillableTargetType sets the "target_type" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableTargetType(v *enums.WorkflowTargetType) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetTargetType(*v)
-	}
-	return _u
-}
-
-// SetTargetUserID sets the "target_user_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetTargetUserID(v string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetTargetUserID(v)
-	return _u
-}
-
-// SetNillableTargetUserID sets the "target_user_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableTargetUserID(v *string) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetTargetUserID(*v)
-	}
-	return _u
-}
-
-// ClearTargetUserID clears the value of the "target_user_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearTargetUserID() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearTargetUserID()
-	return _u
-}
-
-// SetTargetGroupID sets the "target_group_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetTargetGroupID(v string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetTargetGroupID(v)
-	return _u
-}
-
-// SetNillableTargetGroupID sets the "target_group_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableTargetGroupID(v *string) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetTargetGroupID(*v)
-	}
-	return _u
-}
-
-// ClearTargetGroupID clears the value of the "target_group_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearTargetGroupID() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearTargetGroupID()
-	return _u
-}
-
-// SetResolverKey sets the "resolver_key" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetResolverKey(v string) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.SetResolverKey(v)
-	return _u
-}
-
-// SetNillableResolverKey sets the "resolver_key" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) SetNillableResolverKey(v *string) *WorkflowAssignmentTargetHistoryUpdate {
-	if v != nil {
-		_u.SetResolverKey(*v)
-	}
-	return _u
-}
-
-// ClearResolverKey clears the value of the "resolver_key" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) ClearResolverKey() *WorkflowAssignmentTargetHistoryUpdate {
-	_u.mutation.ClearResolverKey()
 	return _u
 }
 
@@ -240,9 +36,6 @@ func (_u *WorkflowAssignmentTargetHistoryUpdate) Mutation() *WorkflowAssignmentT
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *WorkflowAssignmentTargetHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -268,38 +61,7 @@ func (_u *WorkflowAssignmentTargetHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if workflowassignmenttargethistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized workflowassignmenttargethistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := workflowassignmenttargethistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) check() error {
-	if v, ok := _u.mutation.TargetType(); ok {
-		if err := workflowassignmenttargethistory.TargetTypeValidator(v); err != nil {
-			return &ValidationError{Name: "target_type", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowAssignmentTargetHistory.target_type": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *WorkflowAssignmentTargetHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WorkflowAssignmentTargetHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *WorkflowAssignmentTargetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(workflowassignmenttargethistory.Table, workflowassignmenttargethistory.Columns, sqlgraph.NewFieldSpec(workflowassignmenttargethistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -314,46 +76,23 @@ func (_u *WorkflowAssignmentTargetHistoryUpdate) sqlSave(ctx context.Context) (_
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowassignmenttargethistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldTags, field.TypeJSON)
@@ -361,33 +100,15 @@ func (_u *WorkflowAssignmentTargetHistoryUpdate) sqlSave(ctx context.Context) (_
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowAssignmentID(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldWorkflowAssignmentID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.TargetType(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldTargetType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.TargetUserID(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldTargetUserID, field.TypeString, value)
-	}
 	if _u.mutation.TargetUserIDCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldTargetUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.TargetGroupID(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldTargetGroupID, field.TypeString, value)
 	}
 	if _u.mutation.TargetGroupIDCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldTargetGroupID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ResolverKey(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldResolverKey, field.TypeString, value)
-	}
 	if _u.mutation.ResolverKeyCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldResolverKey, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowAssignmentTargetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{workflowassignmenttargethistory.Label}
@@ -403,208 +124,9 @@ func (_u *WorkflowAssignmentTargetHistoryUpdate) sqlSave(ctx context.Context) (_
 // WorkflowAssignmentTargetHistoryUpdateOne is the builder for updating a single WorkflowAssignmentTargetHistory entity.
 type WorkflowAssignmentTargetHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *WorkflowAssignmentTargetHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetUpdatedAt(v time.Time) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearUpdatedAt() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetUpdatedBy(v string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableUpdatedBy(v *string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearUpdatedBy() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetUpdatedByImpersonator(v string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearUpdatedByImpersonator() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetDeletedAt(v time.Time) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearDeletedAt() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetDeletedBy(v string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableDeletedBy(v *string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearDeletedBy() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetTags(v []string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) AppendTags(v []string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearTags() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetWorkflowAssignmentID sets the "workflow_assignment_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetWorkflowAssignmentID(v string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetWorkflowAssignmentID(v)
-	return _u
-}
-
-// SetNillableWorkflowAssignmentID sets the "workflow_assignment_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableWorkflowAssignmentID(v *string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowAssignmentID(*v)
-	}
-	return _u
-}
-
-// SetTargetType sets the "target_type" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetTargetType(v enums.WorkflowTargetType) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetTargetType(v)
-	return _u
-}
-
-// SetNillableTargetType sets the "target_type" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableTargetType(v *enums.WorkflowTargetType) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetTargetType(*v)
-	}
-	return _u
-}
-
-// SetTargetUserID sets the "target_user_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetTargetUserID(v string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetTargetUserID(v)
-	return _u
-}
-
-// SetNillableTargetUserID sets the "target_user_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableTargetUserID(v *string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetTargetUserID(*v)
-	}
-	return _u
-}
-
-// ClearTargetUserID clears the value of the "target_user_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearTargetUserID() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearTargetUserID()
-	return _u
-}
-
-// SetTargetGroupID sets the "target_group_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetTargetGroupID(v string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetTargetGroupID(v)
-	return _u
-}
-
-// SetNillableTargetGroupID sets the "target_group_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableTargetGroupID(v *string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetTargetGroupID(*v)
-	}
-	return _u
-}
-
-// ClearTargetGroupID clears the value of the "target_group_id" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearTargetGroupID() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearTargetGroupID()
-	return _u
-}
-
-// SetResolverKey sets the "resolver_key" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetResolverKey(v string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.SetResolverKey(v)
-	return _u
-}
-
-// SetNillableResolverKey sets the "resolver_key" field if the given value is not nil.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) SetNillableResolverKey(v *string) *WorkflowAssignmentTargetHistoryUpdateOne {
-	if v != nil {
-		_u.SetResolverKey(*v)
-	}
-	return _u
-}
-
-// ClearResolverKey clears the value of the "resolver_key" field.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ClearResolverKey() *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.mutation.ClearResolverKey()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *WorkflowAssignmentTargetHistoryMutation
 }
 
 // Mutation returns the WorkflowAssignmentTargetHistoryMutation object of the builder.
@@ -627,9 +149,6 @@ func (_u *WorkflowAssignmentTargetHistoryUpdateOne) Select(field string, fields 
 
 // Save executes the query and returns the updated WorkflowAssignmentTargetHistory entity.
 func (_u *WorkflowAssignmentTargetHistoryUpdateOne) Save(ctx context.Context) (*WorkflowAssignmentTargetHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -655,38 +174,7 @@ func (_u *WorkflowAssignmentTargetHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if workflowassignmenttargethistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized workflowassignmenttargethistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := workflowassignmenttargethistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.TargetType(); ok {
-		if err := workflowassignmenttargethistory.TargetTypeValidator(v); err != nil {
-			return &ValidationError{Name: "target_type", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowAssignmentTargetHistory.target_type": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *WorkflowAssignmentTargetHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WorkflowAssignmentTargetHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *WorkflowAssignmentTargetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *WorkflowAssignmentTargetHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(workflowassignmenttargethistory.Table, workflowassignmenttargethistory.Columns, sqlgraph.NewFieldSpec(workflowassignmenttargethistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -718,46 +206,23 @@ func (_u *WorkflowAssignmentTargetHistoryUpdateOne) sqlSave(ctx context.Context)
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowassignmenttargethistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldTags, field.TypeJSON)
@@ -765,33 +230,15 @@ func (_u *WorkflowAssignmentTargetHistoryUpdateOne) sqlSave(ctx context.Context)
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowAssignmentID(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldWorkflowAssignmentID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.TargetType(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldTargetType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.TargetUserID(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldTargetUserID, field.TypeString, value)
-	}
 	if _u.mutation.TargetUserIDCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldTargetUserID, field.TypeString)
-	}
-	if value, ok := _u.mutation.TargetGroupID(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldTargetGroupID, field.TypeString, value)
 	}
 	if _u.mutation.TargetGroupIDCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldTargetGroupID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ResolverKey(); ok {
-		_spec.SetField(workflowassignmenttargethistory.FieldResolverKey, field.TypeString, value)
-	}
 	if _u.mutation.ResolverKeyCleared() {
 		_spec.ClearField(workflowassignmenttargethistory.FieldResolverKey, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowAssignmentTargetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &WorkflowAssignmentTargetHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

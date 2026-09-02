@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupmembershiphistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -298,7 +298,6 @@ func (_c *GroupMembershipHistoryCreate) createSpec() (*GroupMembershipHistory, *
 		_node = &GroupMembershipHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(groupmembershiphistory.Table, sqlgraph.NewFieldSpec(groupmembershiphistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.GroupMembershipHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

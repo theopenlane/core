@@ -13,9 +13,9 @@ import (
 	"github.com/stretchr/testify/require"
 
 	models "github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {

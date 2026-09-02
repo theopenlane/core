@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
-	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/schema"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 )
@@ -68,6 +68,13 @@ func (ContactHistory) Fields() []ent.Field {
 			// make sure the mixed in fields do not have validators
 			field.Descriptor().Validators = nil
 
+			// history rows are insert only, so no tracked field may be updated
+			field.Descriptor().Immutable = true
+
+			// ent still emits a setter for an immutable field that carries an update
+			// default, and a snapshot column must keep the value it was written with
+			field.Descriptor().UpdateDefault = nil
+
 			// append the mixed in field to the history fields
 			historyFields = append(historyFields, field)
 		}
@@ -80,6 +87,13 @@ func (ContactHistory) Fields() []ent.Field {
 
 		// make sure the mixed in fields do not have validators
 		field.Descriptor().Validators = nil
+
+		// history rows are insert only, so no tracked field may be updated
+		field.Descriptor().Immutable = true
+
+		// ent still emits a setter for an immutable field that carries an update
+		// default, and a snapshot column must keep the value it was written with
+		field.Descriptor().UpdateDefault = nil
 
 		// append the field to the history fields
 		historyFields = append(historyFields, field)

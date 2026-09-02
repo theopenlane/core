@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -11,15 +13,15 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func TestQueryTagDefinition(t *testing.T) {
 
-	// create an tagDef to be queried using sharedTestUser1
-	tagDef := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	systemTagDef := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	// create an tagDef to be queried using th.SharedTestUser1
+	tagDef := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	systemTagDef := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	// add test cases for querying the TagDefinition
 	testCases := []struct {
@@ -32,40 +34,40 @@ func TestQueryTagDefinition(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: tagDef.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path",
 			queryID: systemTagDef.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: tagDef.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: tagDef.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "tag definition not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "tag definition not found, using not authorized user",
 			queryID:  tagDef.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -96,8 +98,8 @@ func TestQueryTagDefinition(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TagDefinitionDeleteOne]{client: suite.client.db.TagDefinition, ID: tagDef.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TagDefinitionDeleteOne]{client: suite.client.db.TagDefinition, ID: systemTagDef.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.TagDefinitionDeleteOne]{Client: suite.Client.DB.TagDefinition, ID: tagDef.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TagDefinitionDeleteOne]{Client: suite.Client.DB.TagDefinition, ID: systemTagDef.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateTagDefinition(t *testing.T) {
@@ -113,8 +115,8 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "mitb",
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all input",
@@ -124,15 +126,15 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 				Description: lo.ToPtr("Use to mark objects as the premium level of quality"),
 				Color:       lo.ToPtr("#08800a"),
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateTagDefinitionInput{
 				Name: "blue-sky",
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -140,7 +142,7 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "sunshine",
 			},
-			client: suite.client.apiWithToken,
+			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
 		{
@@ -148,16 +150,16 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "sames",
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 
 		{
 			name:        "missing required field",
 			request:     testclient.CreateTagDefinitionInput{},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 		{
@@ -166,8 +168,8 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 				Name:  "invalid-color-tag",
 				Color: lo.ToPtr("invalid"),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "field is not a valid hex color code",
 		},
 	}
@@ -204,13 +206,13 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 			}
 
 			// cleanup each TagDefinition created
-			(&Cleanup[*generated.TagDefinitionDeleteOne]{client: suite.client.db.TagDefinition, ID: resp.CreateTagDefinition.TagDefinition.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.TagDefinitionDeleteOne]{Client: suite.Client.DB.TagDefinition, ID: resp.CreateTagDefinition.TagDefinition.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
-	baseTagResp, err := suite.client.api.CreateTagDefinition(sharedTestUser1.UserCtx, testclient.CreateTagDefinitionInput{
+	baseTagResp, err := suite.Client.API.CreateTagDefinition(th.SharedTestUser1.UserCtx, testclient.CreateTagDefinitionInput{
 		Name:        "red",
 		Aliases:     []string{"maroon", "brick", "crimson"},
 		Description: lo.ToPtr("Red color tag with aliases"),
@@ -235,8 +237,8 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "maroon",
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedName:         "red",
 			expectedID:           baseTagID,
 			shouldReturnOriginal: true,
@@ -246,8 +248,8 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "brick",
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedName:         "red",
 			expectedID:           baseTagID,
 			shouldReturnOriginal: true,
@@ -257,8 +259,8 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "crimson",
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedName:         "red",
 			expectedID:           baseTagID,
 			shouldReturnOriginal: true,
@@ -268,8 +270,8 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "MAROON",
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedName:         "red",
 			expectedID:           baseTagID,
 			shouldReturnOriginal: true,
@@ -279,8 +281,8 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "BrIcK",
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedName:         "red",
 			expectedID:           baseTagID,
 			shouldReturnOriginal: true,
@@ -290,8 +292,8 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "red",
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedName:         "red",
 			expectedID:           baseTagID,
 			shouldReturnOriginal: true,
@@ -301,8 +303,8 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "blue",
 			},
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 			expectedName:         "blue",
 			shouldReturnOriginal: false,
 		},
@@ -311,7 +313,7 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 			request: testclient.CreateTagDefinitionInput{
 				Name: "brick",
 			},
-			client:               suite.client.apiWithPAT,
+			client:               suite.Client.APIWithPAT,
 			ctx:                  context.Background(),
 			expectedName:         "red",
 			expectedID:           baseTagID,
@@ -342,17 +344,17 @@ func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
 				// new tag ( new id )
 				assert.Check(t, resp.CreateTagDefinition.TagDefinition.ID != baseTagID)
 
-				(&Cleanup[*generated.TagDefinitionDeleteOne]{client: suite.client.db.TagDefinition, ID: resp.CreateTagDefinition.TagDefinition.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+				(&th.Cleanup[*generated.TagDefinitionDeleteOne]{Client: suite.Client.DB.TagDefinition, ID: resp.CreateTagDefinition.TagDefinition.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 			}
 		})
 	}
 
-	(&Cleanup[*generated.TagDefinitionDeleteOne]{client: suite.client.db.TagDefinition, ID: baseTagID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TagDefinitionDeleteOne]{Client: suite.Client.DB.TagDefinition, ID: baseTagID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateTagDefinition(t *testing.T) {
-	tagDefinition := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	systemTagDefinition := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	tagDefinition := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	systemTagDefinition := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -368,8 +370,8 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 				Color: lo.ToPtr("#abcef0"),
 			},
 			reqID:  tagDefinition.ID,
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "not allowed to update system tag definition",
@@ -377,9 +379,9 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 				Color: lo.ToPtr("#abcef0"),
 			},
 			reqID:       systemTagDefinition.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, update multiple fields",
@@ -389,7 +391,7 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 				Description: lo.ToPtr("tag for something cool, yo"),
 			},
 			reqID:  tagDefinition.ID,
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -399,9 +401,9 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 				AppendAliases: []string{"new-alias"},
 			},
 			reqID:       tagDefinition.ID,
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, clear aliases",
@@ -409,7 +411,7 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 				ClearAliases: lo.ToPtr(true),
 			},
 			reqID:  tagDefinition.ID,
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -418,9 +420,9 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 				Color: lo.ToPtr("#ddce19"),
 			},
 			reqID:       tagDefinition.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -461,15 +463,15 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TagDefinitionDeleteOne]{client: suite.client.db.TagDefinition, ID: tagDefinition.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TagDefinitionDeleteOne]{Client: suite.Client.DB.TagDefinition, ID: tagDefinition.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteTagDefinition(t *testing.T) {
 	// create TagDefinitions to be deleted
-	tagDefinition1 := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	tagDefinition2 := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	tagDefinition3 := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	tagDefinition4 := (&TagDefinitionBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	tagDefinition1 := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	tagDefinition2 := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	tagDefinition3 := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	tagDefinition4 := (&th.TagDefinitionBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -481,54 +483,54 @@ func TestMutationDeleteTagDefinition(t *testing.T) {
 		{
 			name:        "not found, delete",
 			idToDelete:  tagDefinition1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "view only user cannot delete, not authorized",
 			idToDelete:  tagDefinition1.ID,
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete tagDefinition1",
 			idToDelete: tagDefinition1.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  tagDefinition1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete tagDefinition2",
 			idToDelete: tagDefinition2.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: tagDefinition3.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:       "happy path, delete using api token",
 			idToDelete: tagDefinition4.ID,
-			client:     suite.client.apiWithToken,
+			client:     suite.Client.APIWithToken,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -550,14 +552,14 @@ func TestMutationDeleteTagDefinition(t *testing.T) {
 
 func TestMutationDeleteTagDefinitionInUse(t *testing.T) {
 	// create a tag definition
-	tagDef := (&TagDefinitionBuilder{
-		client: suite.client,
+	tagDef := (&th.TagDefinitionBuilder{
+		Client: suite.Client,
 		Name:   "test-tag",
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// create a workflow definition that uses the tag definition
-	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
-	workflowResp, err := suite.client.db.WorkflowDefinition.Create().
+	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	workflowResp, err := suite.Client.DB.WorkflowDefinition.Create().
 		SetName("Test Workflow").
 		SetWorkflowKind(enums.WorkflowKindApproval).
 		SetSchemaType("control").
@@ -568,15 +570,15 @@ func TestMutationDeleteTagDefinitionInUse(t *testing.T) {
 	workflowID := workflowResp.ID
 
 	t.Run("delete tag definition in use by workflow definition", func(t *testing.T) {
-		_, err := suite.client.api.DeleteTagDefinition(sharedTestUser1.UserCtx, tagDef.ID)
+		_, err := suite.Client.API.DeleteTagDefinition(th.SharedTestUser1.UserCtx, tagDef.ID)
 		assert.ErrorContains(t, err, "tag definition is in use")
 	})
 
 	// clean up the workflow definition using the tag
-	(&Cleanup[*generated.WorkflowDefinitionDeleteOne]{client: suite.client.db.WorkflowDefinition, ID: workflowID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.WorkflowDefinitionDeleteOne]{Client: suite.Client.DB.WorkflowDefinition, ID: workflowID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
 	t.Run("tag definition deletion works if no workflow definition using it", func(t *testing.T) {
-		resp, err := suite.client.api.DeleteTagDefinition(sharedTestUser1.UserCtx, tagDef.ID)
+		resp, err := suite.Client.API.DeleteTagDefinition(th.SharedTestUser1.UserCtx, tagDef.ID)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal(tagDef.ID, resp.DeleteTagDefinition.DeletedID))

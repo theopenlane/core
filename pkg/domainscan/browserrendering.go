@@ -14,8 +14,8 @@ import (
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/sync/errgroup"
 
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 const (
@@ -24,7 +24,7 @@ const (
 	browserNavigationTimeout = 45000
 	// browserWaitUntil is the Puppeteer navigation completion strategy: "load" fires once HTML, CSS, and scripts are parsed,
 	// which is more reliable for SPAs than "networkidle2" (some never drop below 2 open connections).
-	browserWaitUntil = "load"
+	browserWaitUntil = browser_rendering.JsonNewParamsGotoOptionsWaitUntilStringLoad
 	// browserWaitForTimeout is an additional delay, in milliseconds, held  after the page load event fires and before extraction runs
 	browserWaitForTimeout = 3000
 	// companyProfileWaitForTimeout is a longer post-load delay used for company profile pages
@@ -364,33 +364,8 @@ func hasCloudflareErrorCode(apiErr *cloudflare.Error, code int64) bool {
 	return false
 }
 
-// gotoOptions controls page navigation behavior in the browser rendering API
-type gotoOptions struct {
-	// WaitUntil controls when navigation is considered complete.
-	// See browserWaitUntil for the selected strategy.
-	WaitUntil string `json:"waitUntil,omitempty"`
-	// Timeout is the navigation timeout in milliseconds; Puppeteer defaults to
-	// 30000, set higher for heavy SPAs that take longer to reach network idle.
-	Timeout int `json:"timeout,omitempty"`
-}
-
-// waitForSelectorOptions tells the browser rendering API to wait for a CSS
-// selector to appear before extraction runs, for content that mounts
-// client-side after the initial page load
-type waitForSelectorOptions struct {
-	// Selector is the CSS selector to wait for
-	Selector string `json:"selector"`
-	// Timeout is how long to wait for the selector, in milliseconds
-	Timeout int `json:"timeout,omitempty"`
-}
-
 // getBrowserRenderingJSONParams gets the params required for the browser rendering JSON request
 func (c *Config) getBrowserRenderingJSONParams(url string, prompt string, kind PromptType) browser_rendering.JsonNewParams {
-	params := browser_rendering.JsonNewParams{
-		AccountID: cloudflare.F(c.AccountID),
-		CacheTTL:  cloudflare.Float(float64(c.CacheTTL)),
-	}
-
 	var schema ResponseFormat
 
 	switch kind {
@@ -407,25 +382,48 @@ func (c *Config) getBrowserRenderingJSONParams(url string, prompt string, kind P
 		waitForTimeout = companyProfileWaitForTimeout
 	}
 
-	body := browser_rendering.JsonNewParamsBody{
+	params := browser_rendering.JsonNewParams{
+		AccountID:      cloudflare.F(c.AccountID),
+		CacheTTL:       cloudflare.Float(float64(c.CacheTTL)),
 		URL:            cloudflare.String(url),
 		Prompt:         cloudflare.String(prompt),
-		ResponseFormat: cloudflare.F[any](schema),
-		GotoOptions:    cloudflare.F[any](gotoOptions{WaitUntil: browserWaitUntil, Timeout: browserNavigationTimeout}),
+		ResponseFormat: cloudflare.F(schema.toParams()),
+		GotoOptions: cloudflare.F(browser_rendering.JsonNewParamsGotoOptions{
+			WaitUntil: cloudflare.F[browser_rendering.JsonNewParamsGotoOptionsWaitUntilUnion](browserWaitUntil),
+			Timeout:   cloudflare.Float(browserNavigationTimeout),
+		}),
 		WaitForTimeout: cloudflare.Float(float64(waitForTimeout)),
 	}
 
 	if kind == promptTrustCenter {
-		body.WaitForSelector = cloudflare.F[any](waitForSelectorOptions{
-			Selector: trustCenterContentSelector,
-			Timeout:  trustCenterWaitForSelectorTimeout,
+		params.WaitForSelector = cloudflare.F(browser_rendering.JsonNewParamsWaitForSelector{
+			Selector: cloudflare.String(trustCenterContentSelector),
+			Timeout:  cloudflare.Float(trustCenterWaitForSelectorTimeout),
 		})
-		body.BestAttempt = cloudflare.Bool(true)
+		params.BestAttempt = cloudflare.Bool(true)
 	}
 
-	params.Body = body
-
 	return params
+}
+
+// toParams converts the locally built schema into the Cloudflare browser rendering response
+// format, whose json_schema field is an untyped map rather than a typed schema struct
+func (r ResponseFormat) toParams() browser_rendering.JsonNewParamsResponseFormat {
+	out := browser_rendering.JsonNewParamsResponseFormat{Type: cloudflare.String(r.Type)}
+
+	data, err := json.Marshal(r.Schema)
+	if err != nil {
+		return out
+	}
+
+	schema := map[string]any{}
+	if err := json.Unmarshal(data, &schema); err != nil {
+		return out
+	}
+
+	out.JsonSchema = cloudflare.F(schema)
+
+	return out
 }
 
 // buildCompanyProfileSchema constructs the JSON schema for company profile extraction

@@ -839,6 +839,7 @@ var (
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE", "BIENNIALLY", "TRIENNIALLY"}, Default: "YEARLY"},
+		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
 	}
 	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
 	EvidenceHistoryTable = &schema.Table{
@@ -894,6 +895,7 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "storage_region", Type: field.TypeString, Nullable: true},
 		{Name: "storage_provider", Type: field.TypeString, Nullable: true},
+		{Name: "backup_state", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_accessed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// FileHistoryTable holds the schema information for the "file_history" table.
@@ -1290,46 +1292,6 @@ var (
 				Name:    "internalpolicyhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{InternalPolicyHistoryColumns[1]},
-			},
-		},
-	}
-	// JobTemplateHistoryColumns holds the columns for the "job_template_history" table.
-	JobTemplateHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
-		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "title", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
-		{Name: "windmill_path", Type: field.TypeString, Nullable: true},
-		{Name: "download_url", Type: field.TypeString},
-		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
-		{Name: "cron", Type: field.TypeString, Nullable: true},
-	}
-	// JobTemplateHistoryTable holds the schema information for the "job_template_history" table.
-	JobTemplateHistoryTable = &schema.Table{
-		Name:       "job_template_history",
-		Columns:    JobTemplateHistoryColumns,
-		PrimaryKey: []*schema.Column{JobTemplateHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "jobtemplatehistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{JobTemplateHistoryColumns[1]},
 			},
 		},
 	}
@@ -2132,40 +2094,6 @@ var (
 				Name:    "sladefinitionhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{SLADefinitionHistoryColumns[1]},
-			},
-		},
-	}
-	// ScheduledJobHistoryColumns holds the columns for the "scheduled_job_history" table.
-	ScheduledJobHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "job_id", Type: field.TypeString},
-		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
-		{Name: "cron", Type: field.TypeString, Nullable: true},
-		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
-	}
-	// ScheduledJobHistoryTable holds the schema information for the "scheduled_job_history" table.
-	ScheduledJobHistoryTable = &schema.Table{
-		Name:       "scheduled_job_history",
-		Columns:    ScheduledJobHistoryColumns,
-		PrimaryKey: []*schema.Column{ScheduledJobHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "scheduledjobhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobHistoryColumns[1]},
 			},
 		},
 	}
@@ -3200,7 +3128,6 @@ var (
 		HushHistoryTable,
 		IdentityHolderHistoryTable,
 		InternalPolicyHistoryTable,
-		JobTemplateHistoryTable,
 		MappableDomainHistoryTable,
 		MappedControlHistoryTable,
 		NarrativeHistoryTable,
@@ -3218,7 +3145,6 @@ var (
 		ReviewHistoryTable,
 		RiskHistoryTable,
 		SLADefinitionHistoryTable,
-		ScheduledJobHistoryTable,
 		StandardHistoryTable,
 		SubcontrolHistoryTable,
 		SubprocessorHistoryTable,
@@ -3324,9 +3250,6 @@ func init() {
 	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
 		Table: "internal_policy_history",
 	}
-	JobTemplateHistoryTable.Annotation = &entsql.Annotation{
-		Table: "job_template_history",
-	}
 	MappableDomainHistoryTable.Annotation = &entsql.Annotation{
 		Table: "mappable_domain_history",
 	}
@@ -3377,9 +3300,6 @@ func init() {
 	}
 	SLADefinitionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "sla_definition_history",
-	}
-	ScheduledJobHistoryTable.Annotation = &entsql.Annotation{
-		Table: "scheduled_job_history",
 	}
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",

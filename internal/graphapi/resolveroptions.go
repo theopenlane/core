@@ -6,12 +6,12 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/mapx"
-	mwauth "github.com/theopenlane/core/pkg/middleware/auth"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	integrationsruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/mapx"
+	mwauth "github.com/theopenlane/core/v2/pkg/middleware/auth"
 )
 
 // WithTrustCenterCnameTarget sets the trust center cname target for the resolver

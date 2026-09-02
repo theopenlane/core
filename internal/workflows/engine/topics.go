@@ -2,7 +2,7 @@ package engine
 
 import (
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // WorkflowCommandTopics is the namespace for workflow command topics

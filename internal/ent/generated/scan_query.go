@@ -13,27 +13,26 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ScanQuery is the builder for querying Scan entities.
@@ -136,9 +135,6 @@ func (_q *ScanQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scan.OwnerTable, scan.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -161,9 +157,6 @@ func (_q *ScanQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.BlockedGroupsTable, scan.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ScanBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -186,9 +179,6 @@ func (_q *ScanQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.EditorsTable, scan.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ScanEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -211,9 +201,6 @@ func (_q *ScanQuery) QueryReviewedByUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.ReviewedByUserTable, scan.ReviewedByUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -236,9 +223,6 @@ func (_q *ScanQuery) QueryReviewedByGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.ReviewedByGroupTable, scan.ReviewedByGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -261,9 +245,6 @@ func (_q *ScanQuery) QueryAssignedToUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToUserTable, scan.AssignedToUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -286,9 +267,6 @@ func (_q *ScanQuery) QueryAssignedToGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToGroupTable, scan.AssignedToGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -311,9 +289,6 @@ func (_q *ScanQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.EnvironmentTable, scan.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -336,9 +311,6 @@ func (_q *ScanQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.ScopeTable, scan.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -361,9 +333,6 @@ func (_q *ScanQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.AssetsTable, scan.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.ScanAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -386,9 +355,6 @@ func (_q *ScanQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.EntitiesTable, scan.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.ScanEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -411,9 +377,6 @@ func (_q *ScanQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.EvidenceTable, scan.EvidencePrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.ScanEvidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -436,9 +399,6 @@ func (_q *ScanQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.FilesTable, scan.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.ScanFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -461,9 +421,6 @@ func (_q *ScanQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.RemediationsTable, scan.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.ScanRemediations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -486,9 +443,6 @@ func (_q *ScanQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.ActionPlansTable, scan.ActionPlansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ScanActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -511,9 +465,6 @@ func (_q *ScanQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scan.TasksTable, scan.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.ScanTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -536,9 +487,6 @@ func (_q *ScanQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, scan.PlatformsTable, scan.PlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -561,9 +509,6 @@ func (_q *ScanQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, scan.VulnerabilitiesTable, scan.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.VulnerabilityScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -586,9 +531,6 @@ func (_q *ScanQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, scan.ControlsTable, scan.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -611,9 +553,6 @@ func (_q *ScanQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, scan.SubcontrolsTable, scan.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.SubcontrolScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -636,9 +575,6 @@ func (_q *ScanQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, scan.FindingsTable, scan.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -661,9 +597,6 @@ func (_q *ScanQuery) QueryGeneratedByPlatform() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scan.GeneratedByPlatformTable, scan.GeneratedByPlatformColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -686,9 +619,6 @@ func (_q *ScanQuery) QueryPerformedByUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.PerformedByUserTable, scan.PerformedByUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -711,9 +641,6 @@ func (_q *ScanQuery) QueryPerformedByGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.PerformedByGroupTable, scan.PerformedByGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1331,8 +1258,6 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Scan
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1651,7 +1576,6 @@ func (_q *ScanQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ScanBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(scan.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1713,7 +1637,6 @@ func (_q *ScanQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.EditorsTable)
-		joinT.Schema(_q.schemaConfig.ScanEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(scan.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1949,7 +1872,6 @@ func (_q *ScanQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.AssetsTable)
-		joinT.Schema(_q.schemaConfig.ScanAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(scan.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2011,7 +1933,6 @@ func (_q *ScanQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.ScanEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(scan.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2073,7 +1994,6 @@ func (_q *ScanQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.EvidenceTable)
-		joinT.Schema(_q.schemaConfig.ScanEvidence)
 		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(scan.EvidencePrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.EvidencePrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2135,7 +2055,6 @@ func (_q *ScanQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*S
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.FilesTable)
-		joinT.Schema(_q.schemaConfig.ScanFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(scan.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2197,7 +2116,6 @@ func (_q *ScanQuery) loadRemediations(ctx context.Context, query *RemediationQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.ScanRemediations)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(scan.RemediationsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.RemediationsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2259,7 +2177,6 @@ func (_q *ScanQuery) loadActionPlans(ctx context.Context, query *ActionPlanQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.ActionPlansTable)
-		joinT.Schema(_q.schemaConfig.ScanActionPlans)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(scan.ActionPlansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2321,7 +2238,6 @@ func (_q *ScanQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*S
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.TasksTable)
-		joinT.Schema(_q.schemaConfig.ScanTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(scan.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scan.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2383,7 +2299,6 @@ func (_q *ScanQuery) loadPlatforms(ctx context.Context, query *PlatformQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.PlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformScans)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(scan.PlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(scan.PlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2445,7 +2360,6 @@ func (_q *ScanQuery) loadVulnerabilities(ctx context.Context, query *Vulnerabili
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.VulnerabilityScans)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(scan.VulnerabilitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(scan.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2507,7 +2421,6 @@ func (_q *ScanQuery) loadControls(ctx context.Context, query *ControlQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlScans)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(scan.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(scan.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2569,7 +2482,6 @@ func (_q *ScanQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolScans)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(scan.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(scan.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2631,7 +2543,6 @@ func (_q *ScanQuery) loadFindings(ctx context.Context, query *FindingQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scan.FindingsTable)
-		joinT.Schema(_q.schemaConfig.FindingScans)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(scan.FindingsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(scan.FindingsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2770,8 +2681,6 @@ func (_q *ScanQuery) loadPerformedByGroup(ctx context.Context, query *GroupQuery
 
 func (_q *ScanQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Scan
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2867,9 +2776,6 @@ func (_q *ScanQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Scan)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

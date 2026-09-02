@@ -10,18 +10,18 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 )
@@ -67,7 +67,6 @@ var selfAccessTypes = map[string]bool{
 	"group":                    true,
 	"identity_holder":          true,
 	"internal_policy":          true,
-	"job_template":             true,
 	"mapped_control":           true,
 	"narrative":                true,
 	"note":                     true,
@@ -3417,154 +3416,6 @@ func (m *InternalPolicyMutation) CheckAccessForDelete(ctx context.Context) error
 	ac := fgax.AccessCheck{
 		Relation:    fgax.CanDelete,
 		ObjectType:  "internal_policy",
-		ObjectID:    objectID,
-		SubjectType: caller.SubjectType(),
-		SubjectID:   caller.SubjectID,
-		Context:     newOrganizationContextKey(caller.SubjectEmail),
-	}
-
-	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
-
-	access, err := m.Authz.CheckAccess(ctx, ac)
-	if err == nil && access {
-		return privacy.Allow
-	}
-
-	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
-
-	// return error if the action is not allowed
-	return ErrPermissionDenied
-}
-
-func (q *JobTemplateQuery) CheckAccess(ctx context.Context) error {
-	gCtx := graphql.GetFieldContext(ctx)
-
-	if gCtx == nil {
-		// Skip to the next privacy rule (equivalent to return nil)
-		// if this is not a graphql request
-		return privacy.Skipf("not a graphql request, no context to check")
-	}
-
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		log.Error().Msg("unable to get caller from context")
-		return privacy.Skipf("unable to get caller from context")
-	}
-
-	var objectID string
-
-	// check id from graphql arg context
-	// when all objects are requested, the interceptor will check object access
-	// check the where input first
-	whereArg := gCtx.Args["where"]
-	if whereArg != nil {
-		where, ok := whereArg.(*JobTemplateWhereInput)
-		if ok && where != nil && where.ID != nil {
-			objectID = *where.ID
-		}
-	}
-
-	// if that doesn't work, check for the id in the request args
-	if objectID == "" {
-		objectID, _ = gCtx.Args["id"].(string)
-	}
-
-	// request is for a list objects, will get filtered in interceptors
-	if objectID == "" {
-		return privacy.Allowf("nil request, bypassing auth check")
-	}
-
-	// check if the user has access to the object requested
-	ac := fgax.AccessCheck{
-		Relation:    fgax.CanView,
-		ObjectType:  "job_template",
-		SubjectType: caller.SubjectType(),
-		SubjectID:   caller.SubjectID,
-		ObjectID:    objectID,
-		Context:     newOrganizationContextKey(caller.SubjectEmail),
-	}
-
-	access, err := q.Authz.CheckAccess(ctx, ac)
-	if err == nil && access {
-		return privacy.Allow
-	}
-
-	// Skip to the next privacy rule (equivalent to return nil)
-	return privacy.Skip
-}
-
-func (m *JobTemplateMutation) CheckAccessForEdit(ctx context.Context) error {
-	var objectID string
-
-	gCtx := graphql.GetFieldContext(ctx)
-	if gCtx == nil {
-		// Skip to the next privacy rule (equivalent to return nil)
-		// if this is not a graphql request
-		return privacy.Skipf("not a graphql request, no context to check")
-	}
-
-	// check the id from the args
-	if objectID == "" {
-		objectID, _ = gCtx.Args["id"].(string)
-	}
-
-	// request is for a list objects, will get filtered in interceptors
-	if objectID == "" {
-		return privacy.Allowf("nil request, bypassing auth check")
-	}
-
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		log.Error().Msg("unable to get caller from context")
-		return privacy.Skipf("unable to get caller from context")
-	}
-
-	ac := fgax.AccessCheck{
-		Relation:    fgax.CanEdit,
-		ObjectType:  "job_template",
-		ObjectID:    objectID,
-		SubjectType: caller.SubjectType(),
-		SubjectID:   caller.SubjectID,
-		Context:     newOrganizationContextKey(caller.SubjectEmail),
-	}
-
-	log.Debug().Interface("access_check", ac).Msg("checking relationship tuples")
-
-	access, err := m.Authz.CheckAccess(ctx, ac)
-	if err == nil && access {
-		return privacy.Allow
-	}
-
-	log.Error().Interface("access_check", ac).Bool("access_result", access).Msg("access denied")
-
-	// return error if the action is not allowed
-	return ErrPermissionDenied
-}
-
-func (m *JobTemplateMutation) CheckAccessForDelete(ctx context.Context) error {
-	gCtx := graphql.GetFieldContext(ctx)
-	if gCtx == nil {
-		// Skip to the next privacy rule (equivalent to return nil)
-		// if this is not a graphql request
-		return privacy.Skipf("not a graphql request, no context to check")
-	}
-
-	objectID, ok := gCtx.Args["id"].(string)
-	if !ok {
-		log.Info().Msg("no id found in args, skipping auth check, will be filtered in hooks")
-
-		return privacy.Allowf("nil request, bypassing auth check")
-	}
-
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		log.Error().Msg("unable to get caller from context")
-		return privacy.Skipf("unable to get caller from context")
-	}
-
-	ac := fgax.AccessCheck{
-		Relation:    fgax.CanDelete,
-		ObjectType:  "job_template",
 		ObjectID:    objectID,
 		SubjectType: caller.SubjectType(),
 		SubjectID:   caller.SubjectID,

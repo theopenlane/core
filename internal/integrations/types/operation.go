@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/gala"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // WorkflowMeta captures workflow linkage for a queued integration execution

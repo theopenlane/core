@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent"
 	"github.com/samber/lo"
 
-	mapx "github.com/theopenlane/core/pkg/mapx"
+	mapx "github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 // ChangeSet is the single mutation-delta contract shared by event payloads, workflow

@@ -13,30 +13,29 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ReviewQuery is the builder for querying Review entities.
@@ -138,9 +137,6 @@ func (_q *ReviewQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, review.OwnerTable, review.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Review
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -163,9 +159,6 @@ func (_q *ReviewQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.BlockedGroupsTable, review.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ReviewBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -188,9 +181,6 @@ func (_q *ReviewQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.EditorsTable, review.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ReviewEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -213,9 +203,6 @@ func (_q *ReviewQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, review.EnvironmentTable, review.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Review
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -238,9 +225,6 @@ func (_q *ReviewQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, review.ScopeTable, review.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Review
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -263,9 +247,6 @@ func (_q *ReviewQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, review.IntegrationsTable, review.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationReviews
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -288,9 +269,6 @@ func (_q *ReviewQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.FindingsTable, review.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.ReviewFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -313,9 +291,6 @@ func (_q *ReviewQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.VulnerabilitiesTable, review.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.ReviewVulnerabilities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -338,9 +313,6 @@ func (_q *ReviewQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.ActionPlansTable, review.ActionPlansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ReviewActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -363,9 +335,6 @@ func (_q *ReviewQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.RemediationsTable, review.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.ReviewRemediations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -388,9 +357,6 @@ func (_q *ReviewQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.ControlsTable, review.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ReviewControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -413,9 +379,6 @@ func (_q *ReviewQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.SubcontrolsTable, review.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.ReviewSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -438,9 +401,6 @@ func (_q *ReviewQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.RisksTable, review.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.ReviewRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -463,9 +423,6 @@ func (_q *ReviewQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.ProgramsTable, review.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ReviewPrograms
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -488,9 +445,6 @@ func (_q *ReviewQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.AssetsTable, review.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.ReviewAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -513,9 +467,6 @@ func (_q *ReviewQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.EntitiesTable, review.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.ReviewEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -538,9 +489,6 @@ func (_q *ReviewQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, review.TasksTable, review.TasksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -563,9 +511,6 @@ func (_q *ReviewQuery) QueryReviewer() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, review.ReviewerTable, review.ReviewerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Review
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -588,9 +533,6 @@ func (_q *ReviewQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, review.CommentsTable, review.CommentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -613,9 +555,6 @@ func (_q *ReviewQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, review.FilesTable, review.FilesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -638,9 +577,6 @@ func (_q *ReviewQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, review.InternalPoliciesTable, review.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.ReviewInternalPolicies
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1215,8 +1151,6 @@ func (_q *ReviewQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Revie
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Review
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1541,7 +1475,6 @@ func (_q *ReviewQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ReviewBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(review.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1603,7 +1536,6 @@ func (_q *ReviewQuery) loadEditors(ctx context.Context, query *GroupQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.EditorsTable)
-		joinT.Schema(_q.schemaConfig.ReviewEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(review.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1723,7 +1655,6 @@ func (_q *ReviewQuery) loadIntegrations(ctx context.Context, query *IntegrationQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.IntegrationsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationReviews)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(review.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(review.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1785,7 +1716,6 @@ func (_q *ReviewQuery) loadFindings(ctx context.Context, query *FindingQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.FindingsTable)
-		joinT.Schema(_q.schemaConfig.ReviewFindings)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(review.FindingsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.FindingsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1847,7 +1777,6 @@ func (_q *ReviewQuery) loadVulnerabilities(ctx context.Context, query *Vulnerabi
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.ReviewVulnerabilities)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(review.VulnerabilitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.VulnerabilitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1909,7 +1838,6 @@ func (_q *ReviewQuery) loadActionPlans(ctx context.Context, query *ActionPlanQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.ActionPlansTable)
-		joinT.Schema(_q.schemaConfig.ReviewActionPlans)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(review.ActionPlansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1971,7 +1899,6 @@ func (_q *ReviewQuery) loadRemediations(ctx context.Context, query *RemediationQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.ReviewRemediations)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(review.RemediationsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.RemediationsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2033,7 +1960,6 @@ func (_q *ReviewQuery) loadControls(ctx context.Context, query *ControlQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ReviewControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(review.ControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.ControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2095,7 +2021,6 @@ func (_q *ReviewQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.ReviewSubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(review.SubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.SubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2157,7 +2082,6 @@ func (_q *ReviewQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.RisksTable)
-		joinT.Schema(_q.schemaConfig.ReviewRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(review.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2219,7 +2143,6 @@ func (_q *ReviewQuery) loadPrograms(ctx context.Context, query *ProgramQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ReviewPrograms)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(review.ProgramsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.ProgramsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2281,7 +2204,6 @@ func (_q *ReviewQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.AssetsTable)
-		joinT.Schema(_q.schemaConfig.ReviewAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(review.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2343,7 +2265,6 @@ func (_q *ReviewQuery) loadEntities(ctx context.Context, query *EntityQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.ReviewEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(review.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2527,7 +2448,6 @@ func (_q *ReviewQuery) loadInternalPolicies(ctx context.Context, query *Internal
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(review.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.ReviewInternalPolicies)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(review.InternalPoliciesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(review.InternalPoliciesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2579,8 +2499,6 @@ func (_q *ReviewQuery) loadInternalPolicies(ctx context.Context, query *Internal
 
 func (_q *ReviewQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Review
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2658,9 +2576,6 @@ func (_q *ReviewQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Review)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

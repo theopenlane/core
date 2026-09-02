@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/customdomainhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -424,7 +424,6 @@ func (_c *CustomDomainHistoryCreate) createSpec() (*CustomDomainHistory, *sqlgra
 		_node = &CustomDomainHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(customdomainhistory.Table, sqlgraph.NewFieldSpec(customdomainhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.CustomDomainHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

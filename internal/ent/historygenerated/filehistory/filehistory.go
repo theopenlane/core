@@ -95,6 +95,8 @@ const (
 	FieldStorageRegion = "storage_region"
 	// FieldStorageProvider holds the string denoting the storage_provider field in the database.
 	FieldStorageProvider = "storage_provider"
+	// FieldBackupState holds the string denoting the backup_state field in the database.
+	FieldBackupState = "backup_state"
 	// FieldLastAccessedAt holds the string denoting the last_accessed_at field in the database.
 	FieldLastAccessedAt = "last_accessed_at"
 	// Table holds the table name of the filehistory in the database.
@@ -142,6 +144,7 @@ var Columns = []string{
 	FieldMetadata,
 	FieldStorageRegion,
 	FieldStorageProvider,
+	FieldBackupState,
 	FieldLastAccessedAt,
 }
 
@@ -159,7 +162,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/theopenlane/core/internal/ent/historygenerated/runtime"
+//	import _ "github.com/theopenlane/core/v2/internal/ent/historygenerated/runtime"
 var (
 	Hooks        [1]ent.Hook
 	Interceptors [1]ent.Interceptor
@@ -170,8 +173,6 @@ var (
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
-	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
-	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.

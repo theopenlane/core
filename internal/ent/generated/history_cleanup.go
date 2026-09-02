@@ -8,145 +8,141 @@ import (
 	"context"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/historygenerated/actionplanhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/filehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/findingcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/grouphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersubprocessorhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vulnerabilityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowdefinitionhistory"
-	"github.com/theopenlane/core/internal/ent/hooks/contextx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlimplementationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlobjectivehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/customdomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/discussionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/emailtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entitytypehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/evidencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/filehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/findingcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/findinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/grouphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/hushhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/identityholderhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/internalpolicyhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappabledomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappedcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/narrativehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/platformhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/procedurehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/standardhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/systemdetailhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/taskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/templatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterdochistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/userhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorscoringconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vulnerabilityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -963,37 +959,6 @@ func PurgeInternalPolicyHistory(ctx context.Context, ps ...predicate.InternalPol
 	return nil
 }
 
-// PurgeJobTemplateHistory removes the history rows belonging to every jobtemplate matching
-// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
-// deletes that should keep their audit trail are unaffected.
-// This has to run before the jobtemplate records themselves are deleted, the rows are matched
-// with a sub-select against the jobtemplate table
-func PurgeJobTemplateHistory(ctx context.Context, ps ...predicate.JobTemplate) error {
-	if !contextx.PurgeHistoryEnabled(ctx) {
-		return nil
-	}
-
-	client := FromContext(ctx)
-	if client == nil || client.HistoryClient == nil {
-		return nil
-	}
-
-	refs := sql.Select(jobtemplate.FieldID).From(sql.Table(jobtemplate.Table))
-	for _, p := range ps {
-		p(refs)
-	}
-
-	if _, err := client.HistoryClient.JobTemplateHistory.Delete().Where(func(s *sql.Selector) {
-		s.Where(sql.In(jobtemplatehistory.FieldRef, refs))
-	}).Exec(history.WithContext(ctx)); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error purging jobtemplate history")
-
-		return err
-	}
-
-	return nil
-}
-
 // PurgeMappableDomainHistory removes the history rows belonging to every mappabledomain matching
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
@@ -1514,37 +1479,6 @@ func PurgeSLADefinitionHistory(ctx context.Context, ps ...predicate.SLADefinitio
 		s.Where(sql.In(sladefinitionhistory.FieldRef, refs))
 	}).Exec(history.WithContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error purging sladefinition history")
-
-		return err
-	}
-
-	return nil
-}
-
-// PurgeScheduledJobHistory removes the history rows belonging to every scheduledjob matching
-// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
-// deletes that should keep their audit trail are unaffected.
-// This has to run before the scheduledjob records themselves are deleted, the rows are matched
-// with a sub-select against the scheduledjob table
-func PurgeScheduledJobHistory(ctx context.Context, ps ...predicate.ScheduledJob) error {
-	if !contextx.PurgeHistoryEnabled(ctx) {
-		return nil
-	}
-
-	client := FromContext(ctx)
-	if client == nil || client.HistoryClient == nil {
-		return nil
-	}
-
-	refs := sql.Select(scheduledjob.FieldID).From(sql.Table(scheduledjob.Table))
-	for _, p := range ps {
-		p(refs)
-	}
-
-	if _, err := client.HistoryClient.ScheduledJobHistory.Delete().Where(func(s *sql.Selector) {
-		s.Where(sql.In(scheduledjobhistory.FieldRef, refs))
-	}).Exec(history.WithContext(ctx)); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error purging scheduledjob history")
 
 		return err
 	}

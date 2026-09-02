@@ -9,7 +9,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 
-	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -64,13 +64,6 @@ func withWorkflowEnumEdges() customEnumOptions {
 func withGlobalEnum() customEnumOptions {
 	return func(c *CustomEnumMixin) {
 		c.GlobalEnum = true
-	}
-}
-
-// withNoEnumAutoCreation disables auto-creation of the enum if it doesn't exist
-func withNoEnumAutoCreation() customEnumOptions { //nolint:unused
-	return func(c *CustomEnumMixin) {
-		c.DisableAutoCreate = true
 	}
 }
 

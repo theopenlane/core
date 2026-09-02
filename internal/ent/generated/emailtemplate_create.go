@@ -11,16 +11,16 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
 )
 
 // EmailTemplateCreate is the builder for creating a EmailTemplate entity.
@@ -722,7 +722,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 		_node = &EmailTemplate{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(emailtemplate.Table, sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.EmailTemplate
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -846,7 +845,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -864,7 +862,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -881,7 +878,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -898,7 +894,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -915,7 +910,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -933,7 +927,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -951,7 +944,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -969,7 +961,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EmailTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -987,7 +978,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Campaign
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1004,7 +994,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1021,7 +1010,6 @@ func (_c *EmailTemplateCreate) createSpec() (*EmailTemplate, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.File
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

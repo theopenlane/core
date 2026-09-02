@@ -12,15 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgprice"
-	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // OrgSubscriptionUpdate is the builder for updating OrgSubscription entities.
@@ -602,7 +600,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -616,7 +613,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -633,7 +629,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
@@ -647,7 +642,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -664,7 +658,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -681,7 +674,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedModulesIDs(); len(nodes) > 0 && !_u.mutation.ModulesCleared() {
@@ -695,7 +687,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -712,7 +703,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -729,7 +719,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProductsIDs(); len(nodes) > 0 && !_u.mutation.ProductsCleared() {
@@ -743,7 +732,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -760,7 +748,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -777,7 +764,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPricesIDs(); len(nodes) > 0 && !_u.mutation.PricesCleared() {
@@ -791,7 +777,6 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -808,14 +793,11 @@ func (_u *OrgSubscriptionUpdate) sqlSave(ctx context.Context) (_node int, err er
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.OrgSubscription
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1433,7 +1415,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -1447,7 +1428,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscription
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1464,7 +1444,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEventsIDs(); len(nodes) > 0 && !_u.mutation.EventsCleared() {
@@ -1478,7 +1457,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1495,7 +1473,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgSubscriptionEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1512,7 +1489,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedModulesIDs(); len(nodes) > 0 && !_u.mutation.ModulesCleared() {
@@ -1526,7 +1502,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1543,7 +1518,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgModule
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1560,7 +1534,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProductsIDs(); len(nodes) > 0 && !_u.mutation.ProductsCleared() {
@@ -1574,7 +1547,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1591,7 +1563,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgProduct
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1608,7 +1579,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPricesIDs(); len(nodes) > 0 && !_u.mutation.PricesCleared() {
@@ -1622,7 +1592,6 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1639,14 +1608,11 @@ func (_u *OrgSubscriptionUpdateOne) sqlSave(ctx context.Context) (_node *OrgSubs
 				IDSpec: sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.OrgSubscription
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &OrgSubscription{config: _u.config}
 	_spec.Assign = _node.assignValues

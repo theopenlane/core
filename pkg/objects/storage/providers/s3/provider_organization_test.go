@@ -9,8 +9,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	s3provider "github.com/theopenlane/core/pkg/objects/storage/providers/s3"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	s3provider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/s3"
 )
 
 // TestS3Provider_OrganizationFolderStructure verifies that files are stored under organization-specific directories

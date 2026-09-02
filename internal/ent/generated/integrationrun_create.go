@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // IntegrationRunCreate is the builder for creating a IntegrationRun entity.
@@ -535,7 +535,6 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 		_node = &IntegrationRun{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(integrationrun.Table, sqlgraph.NewFieldSpec(integrationrun.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.IntegrationRun
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -627,7 +626,6 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -645,7 +643,6 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -663,7 +660,6 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -681,7 +677,6 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -699,7 +694,6 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -717,7 +711,6 @@ func (_c *IntegrationRunCreate) createSpec() (*IntegrationRun, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -12,12 +12,12 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 )
 
 // SystemDetailCreate is the builder for creating a SystemDetail entity.
@@ -446,7 +446,6 @@ func (_c *SystemDetailCreate) createSpec() (*SystemDetail, *sqlgraph.CreateSpec)
 		_node = &SystemDetail{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(systemdetail.Table, sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.SystemDetail
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -530,7 +529,6 @@ func (_c *SystemDetailCreate) createSpec() (*SystemDetail, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SystemDetail
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -548,7 +546,6 @@ func (_c *SystemDetailCreate) createSpec() (*SystemDetail, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramSystemDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -565,7 +562,6 @@ func (_c *SystemDetailCreate) createSpec() (*SystemDetail, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.PlatformSystemDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -582,7 +578,6 @@ func (_c *SystemDetailCreate) createSpec() (*SystemDetail, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EntitySystemDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -599,7 +594,6 @@ func (_c *SystemDetailCreate) createSpec() (*SystemDetail, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SystemDetailAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

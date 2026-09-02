@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -360,7 +360,6 @@ func (_c *EntityTypeHistoryCreate) createSpec() (*EntityTypeHistory, *sqlgraph.C
 		_node = &EntityTypeHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(entitytypehistory.Table, sqlgraph.NewFieldSpec(entitytypehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.EntityTypeHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

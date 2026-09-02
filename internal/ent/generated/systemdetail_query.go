@@ -13,16 +13,15 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // SystemDetailQuery is the builder for querying SystemDetail entities.
@@ -95,9 +94,6 @@ func (_q *SystemDetailQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, systemdetail.OwnerTable, systemdetail.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.SystemDetail
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -120,9 +116,6 @@ func (_q *SystemDetailQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.ProgramsTable, systemdetail.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -145,9 +138,6 @@ func (_q *SystemDetailQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.PlatformsTable, systemdetail.PlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformSystemDetails
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -170,9 +160,6 @@ func (_q *SystemDetailQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, systemdetail.EntitiesTable, systemdetail.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntitySystemDetails
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -195,9 +182,6 @@ func (_q *SystemDetailQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, systemdetail.AssetsTable, systemdetail.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.SystemDetailAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -564,8 +548,6 @@ func (_q *SystemDetailQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.SystemDetail
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -690,7 +672,6 @@ func (_q *SystemDetailQuery) loadPrograms(ctx context.Context, query *ProgramQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(systemdetail.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramSystemDetails)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(systemdetail.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(systemdetail.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -752,7 +733,6 @@ func (_q *SystemDetailQuery) loadPlatforms(ctx context.Context, query *PlatformQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(systemdetail.PlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformSystemDetails)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(systemdetail.PlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(systemdetail.PlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -814,7 +794,6 @@ func (_q *SystemDetailQuery) loadEntities(ctx context.Context, query *EntityQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(systemdetail.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.EntitySystemDetails)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(systemdetail.EntitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(systemdetail.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -876,7 +855,6 @@ func (_q *SystemDetailQuery) loadAssets(ctx context.Context, query *AssetQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(systemdetail.AssetsTable)
-		joinT.Schema(_q.schemaConfig.SystemDetailAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(systemdetail.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(systemdetail.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -928,8 +906,6 @@ func (_q *SystemDetailQuery) loadAssets(ctx context.Context, query *AssetQuery, 
 
 func (_q *SystemDetailQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.SystemDetail
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -998,9 +974,6 @@ func (_q *SystemDetailQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.SystemDetail)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

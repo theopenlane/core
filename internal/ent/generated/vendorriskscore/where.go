@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1425,9 +1423,6 @@ func HasOwner() predicate.VendorRiskScore {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1436,9 +1431,6 @@ func HasOwner() predicate.VendorRiskScore {
 func HasOwnerWith(preds ...predicate.Organization) predicate.VendorRiskScore {
 	return predicate.VendorRiskScore(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1454,9 +1446,6 @@ func HasVendorScoringConfig() predicate.VendorRiskScore {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, VendorScoringConfigTable, VendorScoringConfigColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.VendorScoringConfig
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1465,9 +1454,6 @@ func HasVendorScoringConfig() predicate.VendorRiskScore {
 func HasVendorScoringConfigWith(preds ...predicate.VendorScoringConfig) predicate.VendorRiskScore {
 	return predicate.VendorRiskScore(func(s *sql.Selector) {
 		step := newVendorScoringConfigStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.VendorScoringConfig
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1483,9 +1469,6 @@ func HasEntity() predicate.VendorRiskScore {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, EntityTable, EntityColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1494,9 +1477,6 @@ func HasEntity() predicate.VendorRiskScore {
 func HasEntityWith(preds ...predicate.Entity) predicate.VendorRiskScore {
 	return predicate.VendorRiskScore(func(s *sql.Selector) {
 		step := newEntityStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1512,9 +1492,6 @@ func HasAssessmentResponse() predicate.VendorRiskScore {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, AssessmentResponseTable, AssessmentResponseColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1523,9 +1500,6 @@ func HasAssessmentResponse() predicate.VendorRiskScore {
 func HasAssessmentResponseWith(preds ...predicate.AssessmentResponse) predicate.VendorRiskScore {
 	return predicate.VendorRiskScore(func(s *sql.Selector) {
 		step := newAssessmentResponseStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -12,20 +12,22 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
 
 // EvidenceCreate is the builder for creating a Evidence entity.
@@ -375,6 +377,20 @@ func (_c *EvidenceCreate) SetNillableReviewFrequency(v *enums.Frequency) *Eviden
 	return _c
 }
 
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (_c *EvidenceCreate) SetAuditorReferenceID(v string) *EvidenceCreate {
+	_c.mutation.SetAuditorReferenceID(v)
+	return _c
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableAuditorReferenceID(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetAuditorReferenceID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EvidenceCreate) SetID(v string) *EvidenceCreate {
 	_c.mutation.SetID(v)
@@ -462,6 +478,36 @@ func (_c *EvidenceCreate) AddControlImplementations(v ...*ControlImplementation)
 		ids[i] = v[i].ID
 	}
 	return _c.AddControlImplementationIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_c *EvidenceCreate) AddInternalPolicyIDs(ids ...string) *EvidenceCreate {
+	_c.mutation.AddInternalPolicyIDs(ids...)
+	return _c
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_c *EvidenceCreate) AddInternalPolicies(v ...*InternalPolicy) *EvidenceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (_c *EvidenceCreate) AddProcedureIDs(ids ...string) *EvidenceCreate {
+	_c.mutation.AddProcedureIDs(ids...)
+	return _c
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (_c *EvidenceCreate) AddProcedures(v ...*Procedure) *EvidenceCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddProcedureIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -732,7 +778,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 		_node = &Evidence{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(evidence.Table, sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Evidence
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -829,6 +874,10 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 		_spec.SetField(evidence.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
 	}
+	if value, ok := _c.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(evidence.FieldAuditorReferenceID, field.TypeString, value)
+		_node.AuditorReferenceID = value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -840,7 +889,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -858,7 +906,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -876,7 +923,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -894,7 +940,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -911,7 +956,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -928,7 +972,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -945,7 +988,38 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -962,7 +1036,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -979,7 +1052,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -996,7 +1068,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1013,7 +1084,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.PlatformEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1030,7 +1100,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ScanEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1047,7 +1116,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1064,7 +1132,6 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

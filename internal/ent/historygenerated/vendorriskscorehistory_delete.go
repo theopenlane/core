@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorriskscorehistory"
 )
 
 // VendorRiskScoreHistoryDelete is the builder for deleting a VendorRiskScoreHistory entity.
@@ -45,8 +43,6 @@ func (_d *VendorRiskScoreHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *VendorRiskScoreHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(vendorriskscorehistory.Table, sqlgraph.NewFieldSpec(vendorriskscorehistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.VendorRiskScoreHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

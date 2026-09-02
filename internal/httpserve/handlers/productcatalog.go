@@ -3,8 +3,8 @@ package handlers
 import (
 	commonmodels "github.com/theopenlane/core/common/models"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/catalog/gencatalog"
+	"github.com/theopenlane/core/v2/pkg/catalog"
+	"github.com/theopenlane/core/v2/pkg/catalog/gencatalog"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
 )

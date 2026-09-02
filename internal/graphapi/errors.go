@@ -6,12 +6,12 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	access "github.com/theopenlane/core/internal/ent/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	access "github.com/theopenlane/core/v2/internal/ent/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

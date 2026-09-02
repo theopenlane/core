@@ -3,9 +3,25 @@ package resolver
 import (
 	"fmt"
 
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 )
+
+// builderFor maps a provider type to its builder from the provided set
+func builderFor(builders providerBuilders, provider storage.ProviderType) providerBuilder {
+	switch provider {
+	case storage.S3Provider:
+		return builders.s3
+	case storage.R2Provider:
+		return builders.r2
+	case storage.DiskProvider:
+		return builders.disk
+	case storage.DatabaseProvider:
+		return builders.db
+	default:
+		return nil
+	}
+}
 
 // providerEnabled returns whether a provider can be used based on configuration.
 func (rc *ruleCoordinator) providerEnabled(provider storage.ProviderType) bool {
@@ -62,6 +78,12 @@ func providerOptionsFromConfig(provider storage.ProviderType, config storage.Pro
 		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errUnsupportedProvider, provider)
 	}
 
+	return providerOptionsFromProviderConfig(provider, providerCfg, runtime)
+}
+
+// providerOptionsFromProviderConfig builds provider options and credentials from a standalone
+// ProviderConfigs, used both for top-level providers and for nested backup targets
+func providerOptionsFromProviderConfig(provider storage.ProviderType, providerCfg storage.ProviderConfigs, runtime serviceOptions) (*storage.ProviderOptions, storage.ProviderCredentials, error) {
 	if !providerCfg.Enabled {
 		return nil, storage.ProviderCredentials{}, fmt.Errorf("%w: %s", errProviderDisabled, provider)
 	}

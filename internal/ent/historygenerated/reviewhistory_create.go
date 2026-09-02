@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -667,7 +667,6 @@ func (_c *ReviewHistoryCreate) createSpec() (*ReviewHistory, *sqlgraph.CreateSpe
 		_node = &ReviewHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(reviewhistory.Table, sqlgraph.NewFieldSpec(reviewhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ReviewHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

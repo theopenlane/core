@@ -8,7 +8,7 @@ import (
 	"github.com/theopenlane/echox/middleware"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/pkg/middleware/graphapi"
+	"github.com/theopenlane/core/v2/pkg/middleware/graphapi"
 )
 
 // Config defines configuration for the CSRF middleware wrapper.

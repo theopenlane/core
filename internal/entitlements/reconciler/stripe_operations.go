@@ -9,12 +9,12 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v86"
 
-	"github.com/theopenlane/core/internal/consts"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/v2/internal/consts"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/pkg/catalog"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 const (

@@ -78,16 +78,6 @@ func (ec *executionContext) marshalNAssessmentObjective2githubᚗcomᚋtheopenla
 	return v
 }
 
-func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, v any) (models.DateTime, error) {
-	var res models.DateTime
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v models.DateTime) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) unmarshalNDateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, v any) (*models.DateTime, error) {
 	var res = new(models.DateTime)
 	err := res.UnmarshalGQL(v)
@@ -309,41 +299,6 @@ func (ec *executionContext) marshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋc
 	return v
 }
 
-func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTimeᚄ(ctx context.Context, v any) ([]models.DateTime, error) {
-	if v == nil {
-		return nil, nil
-	}
-	vSlice := graphql.CoerceList(v)
-	var err error
-	res := make([]models.DateTime, len(vSlice))
-	for i := range vSlice {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTimeᚄ(ctx context.Context, sel ast.SelectionSet, v []models.DateTime) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	for i := range v {
-		ret[i] = ec.marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, sel, v[i])
-	}
-
-	for _, e := range ret {
-		if e == graphql.Null {
-			return graphql.Null
-		}
-	}
-
-	return ret
-}
-
 func (ec *executionContext) unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx context.Context, v any) (*models.DateTime, error) {
 	if v == nil {
 		return nil, nil
@@ -463,22 +418,6 @@ func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋthe
 	}
 
 	return ret
-}
-
-func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res models.JobConfiguration
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
 }
 
 func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐReferenceᚄ(ctx context.Context, v any) ([]models.Reference, error) {

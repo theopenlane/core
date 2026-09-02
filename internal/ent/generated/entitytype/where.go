@@ -7,9 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -904,9 +902,6 @@ func HasOwner() predicate.EntityType {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.EntityType
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -915,9 +910,6 @@ func HasOwner() predicate.EntityType {
 func HasOwnerWith(preds ...predicate.Organization) predicate.EntityType {
 	return predicate.EntityType(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.EntityType
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -933,9 +925,6 @@ func HasEntities() predicate.EntityType {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -944,9 +933,6 @@ func HasEntities() predicate.EntityType {
 func HasEntitiesWith(preds ...predicate.Entity) predicate.EntityType {
 	return predicate.EntityType(func(s *sql.Selector) {
 		step := newEntitiesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

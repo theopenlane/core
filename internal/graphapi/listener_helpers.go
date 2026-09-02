@@ -3,7 +3,7 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // ListenerTestSetup tracks temporary listeners on the shared test runtime

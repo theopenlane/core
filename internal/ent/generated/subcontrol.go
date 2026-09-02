@@ -12,12 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
 )
 
 // Subcontrol is the model entity for the Subcontrol schema.
@@ -172,8 +172,6 @@ type SubcontrolEdges struct {
 	Control *Control `json:"control,omitempty"`
 	// the implementation(s) of the subcontrol
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
-	// ScheduledJobs holds the value of the scheduled_jobs edge.
-	ScheduledJobs []*ScheduledJob `json:"scheduled_jobs,omitempty"`
 	// MappedToSubcontrols holds the value of the mapped_to_subcontrols edge.
 	MappedToSubcontrols []*MappedControl `json:"mapped_to_subcontrols,omitempty"`
 	// MappedFromSubcontrols holds the value of the mapped_from_subcontrols edge.
@@ -192,9 +190,9 @@ type SubcontrolEdges struct {
 	Findings []*Finding `json:"findings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [29]bool
+	loadedTypes [28]bool
 	// totalCount holds the count of the edges above.
-	totalCount [27]map[string]int
+	totalCount [26]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -210,7 +208,6 @@ type SubcontrolEdges struct {
 	namedRemediations           map[string][]*Remediation
 	namedScans                  map[string][]*Scan
 	namedControlImplementations map[string][]*ControlImplementation
-	namedScheduledJobs          map[string][]*ScheduledJob
 	namedMappedToSubcontrols    map[string][]*MappedControl
 	namedMappedFromSubcontrols  map[string][]*MappedControl
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
@@ -413,19 +410,10 @@ func (e SubcontrolEdges) ControlImplementationsOrErr() ([]*ControlImplementation
 	return nil, &NotLoadedError{edge: "control_implementations"}
 }
 
-// ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
-// was not loaded in eager-loading.
-func (e SubcontrolEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
-	if e.loadedTypes[20] {
-		return e.ScheduledJobs, nil
-	}
-	return nil, &NotLoadedError{edge: "scheduled_jobs"}
-}
-
 // MappedToSubcontrolsOrErr returns the MappedToSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) MappedToSubcontrolsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[20] {
 		return e.MappedToSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_subcontrols"}
@@ -434,7 +422,7 @@ func (e SubcontrolEdges) MappedToSubcontrolsOrErr() ([]*MappedControl, error) {
 // MappedFromSubcontrolsOrErr returns the MappedFromSubcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) MappedFromSubcontrolsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[21] {
 		return e.MappedFromSubcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_subcontrols"}
@@ -443,7 +431,7 @@ func (e SubcontrolEdges) MappedFromSubcontrolsOrErr() ([]*MappedControl, error) 
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[22] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -452,7 +440,7 @@ func (e SubcontrolEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error)
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[24] {
+	if e.loadedTypes[23] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -461,7 +449,7 @@ func (e SubcontrolEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[24] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -470,7 +458,7 @@ func (e SubcontrolEdges) EntitiesOrErr() ([]*Entity, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[25] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -479,7 +467,7 @@ func (e SubcontrolEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[27] {
+	if e.loadedTypes[26] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -488,7 +476,7 @@ func (e SubcontrolEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubcontrolEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[28] {
+	if e.loadedTypes[27] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -986,11 +974,6 @@ func (_m *Subcontrol) QueryControl() *ControlQuery {
 // QueryControlImplementations queries the "control_implementations" edge of the Subcontrol entity.
 func (_m *Subcontrol) QueryControlImplementations() *ControlImplementationQuery {
 	return NewSubcontrolClient(_m.config).QueryControlImplementations(_m)
-}
-
-// QueryScheduledJobs queries the "scheduled_jobs" edge of the Subcontrol entity.
-func (_m *Subcontrol) QueryScheduledJobs() *ScheduledJobQuery {
-	return NewSubcontrolClient(_m.config).QueryScheduledJobs(_m)
 }
 
 // QueryMappedToSubcontrols queries the "mapped_to_subcontrols" edge of the Subcontrol entity.
@@ -1552,30 +1535,6 @@ func (_m *Subcontrol) appendNamedControlImplementations(name string, edges ...*C
 		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
 	} else {
 		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
-	}
-}
-
-// NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Subcontrol) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
-	if _m.Edges.namedScheduledJobs == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedScheduledJobs[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Subcontrol) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
-	if _m.Edges.namedScheduledJobs == nil {
-		_m.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
-	} else {
-		_m.Edges.namedScheduledJobs[name] = append(_m.Edges.namedScheduledJobs[name], edges...)
 	}
 }
 

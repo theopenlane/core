@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/customdomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // CustomDomainHistoryDelete is the builder for deleting a CustomDomainHistory entity.
@@ -45,8 +43,6 @@ func (_d *CustomDomainHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *CustomDomainHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(customdomainhistory.Table, sqlgraph.NewFieldSpec(customdomainhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.CustomDomainHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

@@ -15,17 +15,17 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/consts"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	internalentitlements "github.com/theopenlane/core/internal/entitlements"
-	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/catalog/gencatalog"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/consts"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	internalentitlements "github.com/theopenlane/core/v2/internal/entitlements"
+	"github.com/theopenlane/core/v2/pkg/catalog"
+	"github.com/theopenlane/core/v2/pkg/catalog/gencatalog"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // Reconciler reconciles organization subscriptions with Stripe
@@ -73,7 +73,6 @@ var (
 	ErrMissingStripeClient   = fmt.Errorf("missing stripe client")
 	ErrMissingDBClient       = fmt.Errorf("missing database client")
 	ErrMissingSubscriptionID = fmt.Errorf("missing organization subscription ID")
-	ErrMultiplePrices        = fmt.Errorf("multiple prices found for customer")
 	ErrMissingPrice          = fmt.Errorf("missing price for customer")
 	ErrMultipleCustomers     = fmt.Errorf("multiple customers found for organization")
 	ErrMissingCustomer       = fmt.Errorf("missing customer for organization")

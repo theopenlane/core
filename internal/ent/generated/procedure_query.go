@@ -13,25 +13,24 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ProcedureQuery is the builder for querying Procedure entities.
@@ -127,9 +126,6 @@ func (_q *ProcedureQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, procedure.OwnerTable, procedure.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -152,9 +148,6 @@ func (_q *ProcedureQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.BlockedGroupsTable, procedure.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ProcedureBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -177,9 +170,6 @@ func (_q *ProcedureQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.EditorsTable, procedure.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ProcedureEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -202,9 +192,6 @@ func (_q *ProcedureQuery) QueryApprover() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ApproverTable, procedure.ApproverColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -227,9 +214,6 @@ func (_q *ProcedureQuery) QueryDelegate() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.DelegateTable, procedure.DelegateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -252,9 +236,6 @@ func (_q *ProcedureQuery) QueryProcedureKind() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ProcedureKindTable, procedure.ProcedureKindColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -277,9 +258,6 @@ func (_q *ProcedureQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.EnvironmentTable, procedure.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -302,9 +280,6 @@ func (_q *ProcedureQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.ScopeTable, procedure.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -327,9 +302,6 @@ func (_q *ProcedureQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ControlsTable, procedure.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlProcedures
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -352,9 +324,6 @@ func (_q *ProcedureQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, procedure.SubcontrolsTable, procedure.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.SubcontrolProcedures
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -377,9 +346,6 @@ func (_q *ProcedureQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, procedure.InternalPoliciesTable, procedure.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyProcedures
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -402,9 +368,6 @@ func (_q *ProcedureQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, procedure.ProgramsTable, procedure.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramProcedures
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -427,9 +390,6 @@ func (_q *ProcedureQuery) QueryNarratives() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.NarrativesTable, procedure.NarrativesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -452,9 +412,6 @@ func (_q *ProcedureQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.RisksTable, procedure.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.ProcedureRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -477,9 +434,6 @@ func (_q *ProcedureQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, procedure.TasksTable, procedure.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.ProcedureTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -502,9 +456,6 @@ func (_q *ProcedureQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, procedure.CommentsTable, procedure.CommentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -527,9 +478,6 @@ func (_q *ProcedureQuery) QueryDiscussions() *DiscussionQuery {
 			sqlgraph.To(discussion.Table, discussion.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, procedure.DiscussionsTable, procedure.DiscussionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Discussion
-		step.Edge.Schema = schemaConfig.Discussion
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -552,9 +500,6 @@ func (_q *ProcedureQuery) QueryFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, procedure.FileTable, procedure.FileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -577,9 +522,6 @@ func (_q *ProcedureQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, procedure.WorkflowObjectRefsTable, procedure.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1132,8 +1074,6 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Procedure
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1408,7 +1348,6 @@ func (_q *ProcedureQuery) loadBlockedGroups(ctx context.Context, query *GroupQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ProcedureBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(procedure.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1470,7 +1409,6 @@ func (_q *ProcedureQuery) loadEditors(ctx context.Context, query *GroupQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.EditorsTable)
-		joinT.Schema(_q.schemaConfig.ProcedureEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(procedure.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1677,7 +1615,6 @@ func (_q *ProcedureQuery) loadControls(ctx context.Context, query *ControlQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlProcedures)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(procedure.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(procedure.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1739,7 +1676,6 @@ func (_q *ProcedureQuery) loadSubcontrols(ctx context.Context, query *Subcontrol
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolProcedures)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(procedure.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(procedure.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1801,7 +1737,6 @@ func (_q *ProcedureQuery) loadInternalPolicies(ctx context.Context, query *Inter
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyProcedures)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(procedure.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(procedure.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1863,7 +1798,6 @@ func (_q *ProcedureQuery) loadPrograms(ctx context.Context, query *ProgramQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramProcedures)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(procedure.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(procedure.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1925,7 +1859,6 @@ func (_q *ProcedureQuery) loadNarratives(ctx context.Context, query *NarrativeQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.NarrativesTable)
-		joinT.Schema(_q.schemaConfig.ProcedureNarratives)
 		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(procedure.NarrativesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.NarrativesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1987,7 +1920,6 @@ func (_q *ProcedureQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.RisksTable)
-		joinT.Schema(_q.schemaConfig.ProcedureRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(procedure.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2049,7 +1981,6 @@ func (_q *ProcedureQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(procedure.TasksTable)
-		joinT.Schema(_q.schemaConfig.ProcedureTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(procedure.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(procedure.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2226,8 +2157,6 @@ func (_q *ProcedureQuery) loadWorkflowObjectRefs(ctx context.Context, query *Wor
 
 func (_q *ProcedureQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Procedure
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2314,9 +2243,6 @@ func (_q *ProcedureQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Procedure)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

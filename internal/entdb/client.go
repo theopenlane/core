@@ -19,16 +19,12 @@ import (
 
 	"github.com/theopenlane/utils/testutils"
 
-	migratedb "github.com/theopenlane/core/db"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/gala"
+	migratedb "github.com/theopenlane/core/v2/db"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
 
 	_ "github.com/jackc/pgx/v5/stdlib" // add pgx driver
 )
@@ -40,7 +36,7 @@ var postgresExtensions = []string{
 
 const (
 	// defaultDBTestImage is the default docker image to use for testing
-	defaultDBTestImage = "docker://postgres:17-alpine"
+	defaultDBTestImage = "docker://postgres:18-alpine"
 )
 
 type client struct {
@@ -56,30 +52,6 @@ type client struct {
 
 // options for creating the ent client
 type Option func(*ent.Client)
-
-// WithWorkflows wires workflow-related hooks and optionally configures the workflow engine.
-func WithWorkflows(workflowConfig *workflows.Config, galaRuntime *gala.Gala) Option {
-	return func(c *ent.Client) {
-		if workflowConfig != nil && workflowConfig.Enabled {
-			wfEngine, err := engine.NewWorkflowEngineWithConfig(c, galaRuntime, workflowConfig)
-			if err != nil {
-				log.Fatal().Err(err).Msg("failed to create workflow engine")
-			}
-
-			c.WorkflowEngine = wfEngine
-		}
-
-		hooks.RegisterGlobalHooks(c)
-	}
-}
-
-// WithIntegrationsRuntime sets the integrations runtime on the ent client so that
-// hooks and mutations can access it via the client config
-func WithIntegrationsRuntime(rt *integrationsruntime.Runtime) Option {
-	return func(c *ent.Client) {
-		c.IntegrationsRuntime = rt
-	}
-}
 
 // WithMetricsHook adds the metrics hook to the ent client
 func WithMetricsHook() Option {
@@ -202,6 +174,9 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, client
 
 	db.Intercept(interceptors.QueryLogger())
 	db.Intercept(BlockInterceptor())
+
+	// register global hooks shared across all clients
+	hooks.RegisterGlobalHooks(db)
 
 	// apply additional client options
 	for _, co := range clientOpts {
@@ -432,7 +407,7 @@ func NewTestFixture() *testutils.TestFixture {
 }
 
 // NewTestClient creates an entdb client that can be used for TEST purposes ONLY.
-// clientOpts allows passing entdb options like WithWorkflows; pass nil if not needed.
+// clientOpts allows passing entdb options like WithModules; pass nil if not needed.
 func NewTestClient(ctx context.Context, ctr *testutils.TestFixture, jobOpts []riverqueue.Option, clientOpts []Option, entOpts []ent.Option) (*ent.Client, error) {
 	dbconf := entx.Config{
 		Debug:           true,

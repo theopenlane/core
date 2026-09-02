@@ -16,74 +16,72 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/errcode"
-	"github.com/theopenlane/core/internal/ent/historygenerated/actionplanhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/filehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/findingcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/grouphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersubprocessorhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vulnerabilityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlimplementationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlobjectivehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/customdomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/discussionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/emailtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entitytypehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/evidencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/filehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/findingcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/findinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/grouphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/hushhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/identityholderhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/internalpolicyhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappabledomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappedcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/narrativehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/platformhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/procedurehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/standardhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/systemdetailhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/taskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/templatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterdochistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/userhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorscoringconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vulnerabilityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowdefinitionhistory"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -12305,374 +12303,6 @@ func (_m *InternalPolicyHistory) ToEdge(order *InternalPolicyHistoryOrder) *Inte
 	}
 }
 
-// JobTemplateHistoryEdge is the edge representation of JobTemplateHistory.
-type JobTemplateHistoryEdge struct {
-	Node   *JobTemplateHistory `json:"node"`
-	Cursor Cursor              `json:"cursor"`
-}
-
-// JobTemplateHistoryConnection is the connection containing edges to JobTemplateHistory.
-type JobTemplateHistoryConnection struct {
-	Edges      []*JobTemplateHistoryEdge `json:"edges"`
-	PageInfo   PageInfo                  `json:"pageInfo"`
-	TotalCount int                       `json:"totalCount"`
-}
-
-func (c *JobTemplateHistoryConnection) build(nodes []*JobTemplateHistory, pager *jobtemplatehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
-	c.PageInfo.HasNextPage = before != nil
-	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) >= *first+1 {
-		c.PageInfo.HasNextPage = true
-		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) >= *last+1 {
-		c.PageInfo.HasPreviousPage = true
-		nodes = nodes[:*last]
-	}
-	var nodeAt func(int) *JobTemplateHistory
-	if last != nil {
-		n := len(nodes) - 1
-		nodeAt = func(i int) *JobTemplateHistory {
-			return nodes[n-i]
-		}
-	} else {
-		nodeAt = func(i int) *JobTemplateHistory {
-			return nodes[i]
-		}
-	}
-	c.Edges = make([]*JobTemplateHistoryEdge, len(nodes))
-	for i := range nodes {
-		node := nodeAt(i)
-		c.Edges[i] = &JobTemplateHistoryEdge{
-			Node:   node,
-			Cursor: pager.toCursor(node),
-		}
-	}
-	if l := len(c.Edges); l > 0 {
-		c.PageInfo.StartCursor = &c.Edges[0].Cursor
-		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
-	}
-	if c.TotalCount == 0 {
-		c.TotalCount = len(nodes)
-	}
-}
-
-// JobTemplateHistoryPaginateOption enables pagination customization.
-type JobTemplateHistoryPaginateOption func(*jobtemplatehistoryPager) error
-
-// WithJobTemplateHistoryOrder configures pagination ordering.
-func WithJobTemplateHistoryOrder(order *JobTemplateHistoryOrder) JobTemplateHistoryPaginateOption {
-	if order == nil {
-		order = DefaultJobTemplateHistoryOrder
-	}
-	o := *order
-	return func(pager *jobtemplatehistoryPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
-		}
-		if o.Field == nil {
-			o.Field = DefaultJobTemplateHistoryOrder.Field
-		}
-		pager.order = &o
-		return nil
-	}
-}
-
-// WithJobTemplateHistoryFilter configures pagination filter.
-func WithJobTemplateHistoryFilter(filter func(*JobTemplateHistoryQuery) (*JobTemplateHistoryQuery, error)) JobTemplateHistoryPaginateOption {
-	return func(pager *jobtemplatehistoryPager) error {
-		if filter == nil {
-			return errors.New("JobTemplateHistoryQuery filter cannot be nil")
-		}
-		pager.filter = filter
-		return nil
-	}
-}
-
-type jobtemplatehistoryPager struct {
-	reverse bool
-	order   *JobTemplateHistoryOrder
-	filter  func(*JobTemplateHistoryQuery) (*JobTemplateHistoryQuery, error)
-}
-
-func newJobTemplateHistoryPager(opts []JobTemplateHistoryPaginateOption, reverse bool) (*jobtemplatehistoryPager, error) {
-	pager := &jobtemplatehistoryPager{reverse: reverse}
-	for _, opt := range opts {
-		if err := opt(pager); err != nil {
-			return nil, err
-		}
-	}
-	if pager.order == nil {
-		pager.order = DefaultJobTemplateHistoryOrder
-	}
-	return pager, nil
-}
-
-func (p *jobtemplatehistoryPager) applyFilter(query *JobTemplateHistoryQuery) (*JobTemplateHistoryQuery, error) {
-	if p.filter != nil {
-		return p.filter(query)
-	}
-	return query, nil
-}
-
-func (p *jobtemplatehistoryPager) toCursor(_m *JobTemplateHistory) Cursor {
-	return p.order.Field.toCursor(_m)
-}
-
-func (p *jobtemplatehistoryPager) applyCursors(query *JobTemplateHistoryQuery, after, before *Cursor) (*JobTemplateHistoryQuery, error) {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultJobTemplateHistoryOrder.Field.column, p.order.Field.column, direction) {
-		query = query.Where(predicate)
-	}
-	return query, nil
-}
-
-func (p *jobtemplatehistoryPager) applyOrder(query *JobTemplateHistoryQuery) *JobTemplateHistoryQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultJobTemplateHistoryOrder.Field {
-		query = query.Order(DefaultJobTemplateHistoryOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
-	}
-	return query
-}
-
-func (p *jobtemplatehistoryPager) orderExpr(query *JobTemplateHistoryQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
-	}
-	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultJobTemplateHistoryOrder.Field {
-			b.Comma().Ident(DefaultJobTemplateHistoryOrder.Field.column).Pad().WriteString(string(direction))
-		}
-	})
-}
-
-// Paginate executes the query and returns a relay based cursor connection to JobTemplateHistory.
-func (_m *JobTemplateHistoryQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...JobTemplateHistoryPaginateOption,
-) (*JobTemplateHistoryConnection, error) {
-	if err := validateFirstLast(first, last); err != nil {
-		return nil, err
-	}
-	pager, err := newJobTemplateHistoryPager(opts, last != nil)
-	if err != nil {
-		return nil, err
-	}
-	if _m, err = pager.applyFilter(_m); err != nil {
-		return nil, err
-	}
-	conn := &JobTemplateHistoryConnection{Edges: []*JobTemplateHistoryEdge{}}
-	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
-		if hasPagination || ignoredEdges {
-			c := _m.Clone()
-			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
-				return nil, err
-			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
-		}
-	}
-	if (first != nil && *first == 0) || (last != nil && *last == 0) {
-		return conn, nil
-	}
-	if _m, err = pager.applyCursors(_m, after, before); err != nil {
-		return nil, err
-	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
-	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
-			return nil, err
-		}
-	}
-	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
-	}
-	conn.build(nodes, pager, after, first, before, last)
-	return conn, nil
-}
-
-var (
-	// JobTemplateHistoryOrderFieldHistoryTime orders JobTemplateHistory by history_time.
-	JobTemplateHistoryOrderFieldHistoryTime = &JobTemplateHistoryOrderField{
-		Value: func(_m *JobTemplateHistory) (ent.Value, error) {
-			return _m.HistoryTime, nil
-		},
-		column: jobtemplatehistory.FieldHistoryTime,
-		toTerm: jobtemplatehistory.ByHistoryTime,
-		toCursor: func(_m *JobTemplateHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.HistoryTime,
-			}
-		},
-	}
-	// JobTemplateHistoryOrderFieldCreatedAt orders JobTemplateHistory by created_at.
-	JobTemplateHistoryOrderFieldCreatedAt = &JobTemplateHistoryOrderField{
-		Value: func(_m *JobTemplateHistory) (ent.Value, error) {
-			return _m.CreatedAt, nil
-		},
-		column: jobtemplatehistory.FieldCreatedAt,
-		toTerm: jobtemplatehistory.ByCreatedAt,
-		toCursor: func(_m *JobTemplateHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.CreatedAt,
-			}
-		},
-	}
-	// JobTemplateHistoryOrderFieldUpdatedAt orders JobTemplateHistory by updated_at.
-	JobTemplateHistoryOrderFieldUpdatedAt = &JobTemplateHistoryOrderField{
-		Value: func(_m *JobTemplateHistory) (ent.Value, error) {
-			return _m.UpdatedAt, nil
-		},
-		column: jobtemplatehistory.FieldUpdatedAt,
-		toTerm: jobtemplatehistory.ByUpdatedAt,
-		toCursor: func(_m *JobTemplateHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.UpdatedAt,
-			}
-		},
-	}
-	// JobTemplateHistoryOrderFieldTitle orders JobTemplateHistory by title.
-	JobTemplateHistoryOrderFieldTitle = &JobTemplateHistoryOrderField{
-		Value: func(_m *JobTemplateHistory) (ent.Value, error) {
-			return _m.Title, nil
-		},
-		column: jobtemplatehistory.FieldTitle,
-		toTerm: jobtemplatehistory.ByTitle,
-		toCursor: func(_m *JobTemplateHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Title,
-			}
-		},
-	}
-	// JobTemplateHistoryOrderFieldPlatform orders JobTemplateHistory by platform.
-	JobTemplateHistoryOrderFieldPlatform = &JobTemplateHistoryOrderField{
-		Value: func(_m *JobTemplateHistory) (ent.Value, error) {
-			return _m.Platform, nil
-		},
-		column: jobtemplatehistory.FieldPlatform,
-		toTerm: jobtemplatehistory.ByPlatform,
-		toCursor: func(_m *JobTemplateHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Platform,
-			}
-		},
-	}
-)
-
-// String implement fmt.Stringer interface.
-func (f JobTemplateHistoryOrderField) String() string {
-	var str string
-	switch f.column {
-	case JobTemplateHistoryOrderFieldHistoryTime.column:
-		str = "history_time"
-	case JobTemplateHistoryOrderFieldCreatedAt.column:
-		str = "created_at"
-	case JobTemplateHistoryOrderFieldUpdatedAt.column:
-		str = "updated_at"
-	case JobTemplateHistoryOrderFieldTitle.column:
-		str = "title"
-	case JobTemplateHistoryOrderFieldPlatform.column:
-		str = "PLATFORM"
-	}
-	return str
-}
-
-// MarshalGQL implements graphql.Marshaler interface.
-func (f JobTemplateHistoryOrderField) MarshalGQL(w io.Writer) {
-	io.WriteString(w, strconv.Quote(f.String()))
-}
-
-// UnmarshalGQL implements graphql.Unmarshaler interface.
-func (f *JobTemplateHistoryOrderField) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("JobTemplateHistoryOrderField %T must be a string", v)
-	}
-	switch str {
-	case "history_time":
-		*f = *JobTemplateHistoryOrderFieldHistoryTime
-	case "created_at":
-		*f = *JobTemplateHistoryOrderFieldCreatedAt
-	case "updated_at":
-		*f = *JobTemplateHistoryOrderFieldUpdatedAt
-	case "title":
-		*f = *JobTemplateHistoryOrderFieldTitle
-	case "PLATFORM":
-		*f = *JobTemplateHistoryOrderFieldPlatform
-	default:
-		return fmt.Errorf("%s is not a valid JobTemplateHistoryOrderField", str)
-	}
-	return nil
-}
-
-// JobTemplateHistoryOrderField defines the ordering field of JobTemplateHistory.
-type JobTemplateHistoryOrderField struct {
-	// Value extracts the ordering value from the given JobTemplateHistory.
-	Value    func(*JobTemplateHistory) (ent.Value, error)
-	column   string // field or computed.
-	toTerm   func(...sql.OrderTermOption) jobtemplatehistory.OrderOption
-	toCursor func(*JobTemplateHistory) Cursor
-}
-
-// JobTemplateHistoryOrder defines the ordering of JobTemplateHistory.
-type JobTemplateHistoryOrder struct {
-	Direction OrderDirection                `json:"direction"`
-	Field     *JobTemplateHistoryOrderField `json:"field"`
-}
-
-// DefaultJobTemplateHistoryOrder is the default ordering of JobTemplateHistory.
-var DefaultJobTemplateHistoryOrder = &JobTemplateHistoryOrder{
-	Direction: entgql.OrderDirectionAsc,
-	Field: &JobTemplateHistoryOrderField{
-		Value: func(_m *JobTemplateHistory) (ent.Value, error) {
-			return _m.ID, nil
-		},
-		column: jobtemplatehistory.FieldID,
-		toTerm: jobtemplatehistory.ByID,
-		toCursor: func(_m *JobTemplateHistory) Cursor {
-			return Cursor{ID: _m.ID}
-		},
-	},
-}
-
-// ToEdge converts JobTemplateHistory into JobTemplateHistoryEdge.
-func (_m *JobTemplateHistory) ToEdge(order *JobTemplateHistoryOrder) *JobTemplateHistoryEdge {
-	if order == nil {
-		order = DefaultJobTemplateHistoryOrder
-	}
-	return &JobTemplateHistoryEdge{
-		Node:   _m,
-		Cursor: order.Field.toCursor(_m),
-	}
-}
-
 // MappableDomainHistoryEdge is the edge representation of MappableDomainHistory.
 type MappableDomainHistoryEdge struct {
 	Node   *MappableDomainHistory `json:"node"`
@@ -19812,338 +19442,6 @@ func (_m *SLADefinitionHistory) ToEdge(order *SLADefinitionHistoryOrder) *SLADef
 		order = DefaultSLADefinitionHistoryOrder
 	}
 	return &SLADefinitionHistoryEdge{
-		Node:   _m,
-		Cursor: order.Field.toCursor(_m),
-	}
-}
-
-// ScheduledJobHistoryEdge is the edge representation of ScheduledJobHistory.
-type ScheduledJobHistoryEdge struct {
-	Node   *ScheduledJobHistory `json:"node"`
-	Cursor Cursor               `json:"cursor"`
-}
-
-// ScheduledJobHistoryConnection is the connection containing edges to ScheduledJobHistory.
-type ScheduledJobHistoryConnection struct {
-	Edges      []*ScheduledJobHistoryEdge `json:"edges"`
-	PageInfo   PageInfo                   `json:"pageInfo"`
-	TotalCount int                        `json:"totalCount"`
-}
-
-func (c *ScheduledJobHistoryConnection) build(nodes []*ScheduledJobHistory, pager *scheduledjobhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
-	c.PageInfo.HasNextPage = before != nil
-	c.PageInfo.HasPreviousPage = after != nil
-	if first != nil && len(nodes) >= *first+1 {
-		c.PageInfo.HasNextPage = true
-		nodes = nodes[:*first]
-	} else if last != nil && len(nodes) >= *last+1 {
-		c.PageInfo.HasPreviousPage = true
-		nodes = nodes[:*last]
-	}
-	var nodeAt func(int) *ScheduledJobHistory
-	if last != nil {
-		n := len(nodes) - 1
-		nodeAt = func(i int) *ScheduledJobHistory {
-			return nodes[n-i]
-		}
-	} else {
-		nodeAt = func(i int) *ScheduledJobHistory {
-			return nodes[i]
-		}
-	}
-	c.Edges = make([]*ScheduledJobHistoryEdge, len(nodes))
-	for i := range nodes {
-		node := nodeAt(i)
-		c.Edges[i] = &ScheduledJobHistoryEdge{
-			Node:   node,
-			Cursor: pager.toCursor(node),
-		}
-	}
-	if l := len(c.Edges); l > 0 {
-		c.PageInfo.StartCursor = &c.Edges[0].Cursor
-		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
-	}
-	if c.TotalCount == 0 {
-		c.TotalCount = len(nodes)
-	}
-}
-
-// ScheduledJobHistoryPaginateOption enables pagination customization.
-type ScheduledJobHistoryPaginateOption func(*scheduledjobhistoryPager) error
-
-// WithScheduledJobHistoryOrder configures pagination ordering.
-func WithScheduledJobHistoryOrder(order *ScheduledJobHistoryOrder) ScheduledJobHistoryPaginateOption {
-	if order == nil {
-		order = DefaultScheduledJobHistoryOrder
-	}
-	o := *order
-	return func(pager *scheduledjobhistoryPager) error {
-		if err := o.Direction.Validate(); err != nil {
-			return err
-		}
-		if o.Field == nil {
-			o.Field = DefaultScheduledJobHistoryOrder.Field
-		}
-		pager.order = &o
-		return nil
-	}
-}
-
-// WithScheduledJobHistoryFilter configures pagination filter.
-func WithScheduledJobHistoryFilter(filter func(*ScheduledJobHistoryQuery) (*ScheduledJobHistoryQuery, error)) ScheduledJobHistoryPaginateOption {
-	return func(pager *scheduledjobhistoryPager) error {
-		if filter == nil {
-			return errors.New("ScheduledJobHistoryQuery filter cannot be nil")
-		}
-		pager.filter = filter
-		return nil
-	}
-}
-
-type scheduledjobhistoryPager struct {
-	reverse bool
-	order   *ScheduledJobHistoryOrder
-	filter  func(*ScheduledJobHistoryQuery) (*ScheduledJobHistoryQuery, error)
-}
-
-func newScheduledJobHistoryPager(opts []ScheduledJobHistoryPaginateOption, reverse bool) (*scheduledjobhistoryPager, error) {
-	pager := &scheduledjobhistoryPager{reverse: reverse}
-	for _, opt := range opts {
-		if err := opt(pager); err != nil {
-			return nil, err
-		}
-	}
-	if pager.order == nil {
-		pager.order = DefaultScheduledJobHistoryOrder
-	}
-	return pager, nil
-}
-
-func (p *scheduledjobhistoryPager) applyFilter(query *ScheduledJobHistoryQuery) (*ScheduledJobHistoryQuery, error) {
-	if p.filter != nil {
-		return p.filter(query)
-	}
-	return query, nil
-}
-
-func (p *scheduledjobhistoryPager) toCursor(_m *ScheduledJobHistory) Cursor {
-	return p.order.Field.toCursor(_m)
-}
-
-func (p *scheduledjobhistoryPager) applyCursors(query *ScheduledJobHistoryQuery, after, before *Cursor) (*ScheduledJobHistoryQuery, error) {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
-	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultScheduledJobHistoryOrder.Field.column, p.order.Field.column, direction) {
-		query = query.Where(predicate)
-	}
-	return query, nil
-}
-
-func (p *scheduledjobhistoryPager) applyOrder(query *ScheduledJobHistoryQuery) *ScheduledJobHistoryQuery {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
-	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
-	if p.order.Field != DefaultScheduledJobHistoryOrder.Field {
-		query = query.Order(DefaultScheduledJobHistoryOrder.Field.toTerm(direction.OrderTermOption()))
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
-	}
-	return query
-}
-
-func (p *scheduledjobhistoryPager) orderExpr(query *ScheduledJobHistoryQuery) sql.Querier {
-	direction := p.order.Direction
-	if p.reverse {
-		direction = direction.Reverse()
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(p.order.Field.column)
-	}
-	return sql.ExprFunc(func(b *sql.Builder) {
-		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
-		if p.order.Field != DefaultScheduledJobHistoryOrder.Field {
-			b.Comma().Ident(DefaultScheduledJobHistoryOrder.Field.column).Pad().WriteString(string(direction))
-		}
-	})
-}
-
-// Paginate executes the query and returns a relay based cursor connection to ScheduledJobHistory.
-func (_m *ScheduledJobHistoryQuery) Paginate(
-	ctx context.Context, after *Cursor, first *int,
-	before *Cursor, last *int, opts ...ScheduledJobHistoryPaginateOption,
-) (*ScheduledJobHistoryConnection, error) {
-	if err := validateFirstLast(first, last); err != nil {
-		return nil, err
-	}
-	pager, err := newScheduledJobHistoryPager(opts, last != nil)
-	if err != nil {
-		return nil, err
-	}
-	if _m, err = pager.applyFilter(_m); err != nil {
-		return nil, err
-	}
-	conn := &ScheduledJobHistoryConnection{Edges: []*ScheduledJobHistoryEdge{}}
-	ignoredEdges := !hasCollectedField(ctx, edgesField)
-	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
-		hasPagination := after != nil || first != nil || before != nil || last != nil
-		if hasPagination || ignoredEdges {
-			c := _m.Clone()
-			c.ctx.Fields = nil
-			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
-				return nil, err
-			}
-			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
-			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
-		}
-	}
-	if (first != nil && *first == 0) || (last != nil && *last == 0) {
-		return conn, nil
-	}
-	if _m, err = pager.applyCursors(_m, after, before); err != nil {
-		return nil, err
-	}
-	limit := paginateLimit(first, last)
-	if limit != 0 {
-		_m.Limit(limit)
-	}
-	if field := collectedField(ctx, edgesField, nodeField); field != nil {
-		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
-			return nil, err
-		}
-	}
-	_m = pager.applyOrder(_m)
-	nodes, err := _m.All(ctx)
-	if err != nil {
-		return nil, err
-	}
-	conn.build(nodes, pager, after, first, before, last)
-	return conn, nil
-}
-
-var (
-	// ScheduledJobHistoryOrderFieldHistoryTime orders ScheduledJobHistory by history_time.
-	ScheduledJobHistoryOrderFieldHistoryTime = &ScheduledJobHistoryOrderField{
-		Value: func(_m *ScheduledJobHistory) (ent.Value, error) {
-			return _m.HistoryTime, nil
-		},
-		column: scheduledjobhistory.FieldHistoryTime,
-		toTerm: scheduledjobhistory.ByHistoryTime,
-		toCursor: func(_m *ScheduledJobHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.HistoryTime,
-			}
-		},
-	}
-	// ScheduledJobHistoryOrderFieldCreatedAt orders ScheduledJobHistory by created_at.
-	ScheduledJobHistoryOrderFieldCreatedAt = &ScheduledJobHistoryOrderField{
-		Value: func(_m *ScheduledJobHistory) (ent.Value, error) {
-			return _m.CreatedAt, nil
-		},
-		column: scheduledjobhistory.FieldCreatedAt,
-		toTerm: scheduledjobhistory.ByCreatedAt,
-		toCursor: func(_m *ScheduledJobHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.CreatedAt,
-			}
-		},
-	}
-	// ScheduledJobHistoryOrderFieldUpdatedAt orders ScheduledJobHistory by updated_at.
-	ScheduledJobHistoryOrderFieldUpdatedAt = &ScheduledJobHistoryOrderField{
-		Value: func(_m *ScheduledJobHistory) (ent.Value, error) {
-			return _m.UpdatedAt, nil
-		},
-		column: scheduledjobhistory.FieldUpdatedAt,
-		toTerm: scheduledjobhistory.ByUpdatedAt,
-		toCursor: func(_m *ScheduledJobHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.UpdatedAt,
-			}
-		},
-	}
-)
-
-// String implement fmt.Stringer interface.
-func (f ScheduledJobHistoryOrderField) String() string {
-	var str string
-	switch f.column {
-	case ScheduledJobHistoryOrderFieldHistoryTime.column:
-		str = "history_time"
-	case ScheduledJobHistoryOrderFieldCreatedAt.column:
-		str = "created_at"
-	case ScheduledJobHistoryOrderFieldUpdatedAt.column:
-		str = "updated_at"
-	}
-	return str
-}
-
-// MarshalGQL implements graphql.Marshaler interface.
-func (f ScheduledJobHistoryOrderField) MarshalGQL(w io.Writer) {
-	io.WriteString(w, strconv.Quote(f.String()))
-}
-
-// UnmarshalGQL implements graphql.Unmarshaler interface.
-func (f *ScheduledJobHistoryOrderField) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("ScheduledJobHistoryOrderField %T must be a string", v)
-	}
-	switch str {
-	case "history_time":
-		*f = *ScheduledJobHistoryOrderFieldHistoryTime
-	case "created_at":
-		*f = *ScheduledJobHistoryOrderFieldCreatedAt
-	case "updated_at":
-		*f = *ScheduledJobHistoryOrderFieldUpdatedAt
-	default:
-		return fmt.Errorf("%s is not a valid ScheduledJobHistoryOrderField", str)
-	}
-	return nil
-}
-
-// ScheduledJobHistoryOrderField defines the ordering field of ScheduledJobHistory.
-type ScheduledJobHistoryOrderField struct {
-	// Value extracts the ordering value from the given ScheduledJobHistory.
-	Value    func(*ScheduledJobHistory) (ent.Value, error)
-	column   string // field or computed.
-	toTerm   func(...sql.OrderTermOption) scheduledjobhistory.OrderOption
-	toCursor func(*ScheduledJobHistory) Cursor
-}
-
-// ScheduledJobHistoryOrder defines the ordering of ScheduledJobHistory.
-type ScheduledJobHistoryOrder struct {
-	Direction OrderDirection                 `json:"direction"`
-	Field     *ScheduledJobHistoryOrderField `json:"field"`
-}
-
-// DefaultScheduledJobHistoryOrder is the default ordering of ScheduledJobHistory.
-var DefaultScheduledJobHistoryOrder = &ScheduledJobHistoryOrder{
-	Direction: entgql.OrderDirectionAsc,
-	Field: &ScheduledJobHistoryOrderField{
-		Value: func(_m *ScheduledJobHistory) (ent.Value, error) {
-			return _m.ID, nil
-		},
-		column: scheduledjobhistory.FieldID,
-		toTerm: scheduledjobhistory.ByID,
-		toCursor: func(_m *ScheduledJobHistory) Cursor {
-			return Cursor{ID: _m.ID}
-		},
-	},
-}
-
-// ToEdge converts ScheduledJobHistory into ScheduledJobHistoryEdge.
-func (_m *ScheduledJobHistory) ToEdge(order *ScheduledJobHistoryOrder) *ScheduledJobHistoryEdge {
-	if order == nil {
-		order = DefaultScheduledJobHistoryOrder
-	}
-	return &ScheduledJobHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

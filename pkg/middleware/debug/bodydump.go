@@ -10,7 +10,7 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
 
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects"
 )
 
 // BodyDump prints out the request body for debugging purpose but attempts to obfuscate sensitive fields within the requests

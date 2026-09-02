@@ -13,13 +13,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -28,7 +28,7 @@ func HookWorkflowProposalInvalidateAssignments() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WorkflowProposalFunc(func(ctx context.Context, m *generated.WorkflowProposalMutation) (generated.Value, error) {
 			client := m.Client()
-			if !workflowEngineEnabled(ctx, client) {
+			if !workflowEngineEnabled() {
 				return next.Mutate(ctx, m)
 			}
 
@@ -238,17 +238,10 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, err
 			}
 
-			// Prefer mutation client (transaction-aware), but ensure WorkflowEngine is available from context.
 			client := m.Client()
-			if ctxClient := generated.FromContext(ctx); ctxClient != nil {
-				if client == nil {
-					client = ctxClient
-				} else if client.WorkflowEngine == nil && ctxClient.WorkflowEngine != nil {
-					client.WorkflowEngine = ctxClient.WorkflowEngine
-				}
-			}
 
-			if !workflowEngineEnabled(ctx, client) {
+			wfEngine := engine.Default()
+			if wfEngine == nil {
 				return value, nil
 			}
 
@@ -288,7 +281,7 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, ErrFailedToLoadWorkflowProposalForTrigger
 			}
 
-			if err := triggerWorkflowForProposal(ctx, client, proposal); err != nil {
+			if err := triggerWorkflowForProposal(ctx, client, wfEngine, proposal); err != nil {
 				log.Ctx(ctx).Error().Err(err).Str("proposal_id", proposal.ID).Msg("failed to trigger workflow for submitted proposal")
 				return value, err
 			}
@@ -299,14 +292,8 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 }
 
 // triggerWorkflowForProposal starts workflows for a submitted proposal
-func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, proposal *generated.WorkflowProposal) error {
+func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, wfEngine *engine.WorkflowEngine, proposal *generated.WorkflowProposal) error {
 	if proposal.State != enums.WorkflowProposalStateSubmitted {
-		return nil
-	}
-
-	// WorkflowEngine is injected on the ent client when workflows are enabled.
-	wfEngine, ok := client.WorkflowEngine.(*engine.WorkflowEngine)
-	if !ok || wfEngine == nil {
 		return nil
 	}
 

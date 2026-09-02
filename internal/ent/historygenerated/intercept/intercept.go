@@ -9,76 +9,74 @@ import (
 	"fmt"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/ent/historygenerated/actionplanhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/filehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/findingcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/grouphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersubprocessorhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vulnerabilityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlimplementationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlobjectivehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/customdomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/discussionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/emailtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entitytypehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/evidencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/filehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/findingcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/findinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/grouphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/hushhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/identityholderhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/internalpolicyhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappabledomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappedcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/narrativehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/platformhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/procedurehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/standardhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/systemdetailhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/taskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/templatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterdochistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/userhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorscoringconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vulnerabilityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowdefinitionhistory"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -839,33 +837,6 @@ func (f TraverseInternalPolicyHistory) Traverse(ctx context.Context, q historyge
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.InternalPolicyHistoryQuery", q)
 }
 
-// The JobTemplateHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type JobTemplateHistoryFunc func(context.Context, *historygenerated.JobTemplateHistoryQuery) (historygenerated.Value, error)
-
-// Query calls f(ctx, q).
-func (f JobTemplateHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
-	if q, ok := q.(*historygenerated.JobTemplateHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.JobTemplateHistoryQuery", q)
-}
-
-// The TraverseJobTemplateHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseJobTemplateHistory func(context.Context, *historygenerated.JobTemplateHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseJobTemplateHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseJobTemplateHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
-	if q, ok := q.(*historygenerated.JobTemplateHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *historygenerated.JobTemplateHistoryQuery", q)
-}
-
 // The MappableDomainHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
 type MappableDomainHistoryFunc func(context.Context, *historygenerated.MappableDomainHistoryQuery) (historygenerated.Value, error)
 
@@ -1323,33 +1294,6 @@ func (f TraverseSLADefinitionHistory) Traverse(ctx context.Context, q historygen
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.SLADefinitionHistoryQuery", q)
-}
-
-// The ScheduledJobHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
-type ScheduledJobHistoryFunc func(context.Context, *historygenerated.ScheduledJobHistoryQuery) (historygenerated.Value, error)
-
-// Query calls f(ctx, q).
-func (f ScheduledJobHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
-	if q, ok := q.(*historygenerated.ScheduledJobHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.ScheduledJobHistoryQuery", q)
-}
-
-// The TraverseScheduledJobHistory type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseScheduledJobHistory func(context.Context, *historygenerated.ScheduledJobHistoryQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseScheduledJobHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseScheduledJobHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
-	if q, ok := q.(*historygenerated.ScheduledJobHistoryQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *historygenerated.ScheduledJobHistoryQuery", q)
 }
 
 // The StandardHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -2028,8 +1972,6 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.IdentityHolderHistoryQuery, predicate.IdentityHolderHistory, identityholderhistory.OrderOption]{typ: historygenerated.TypeIdentityHolderHistory, tq: q}, nil
 	case *historygenerated.InternalPolicyHistoryQuery:
 		return &query[*historygenerated.InternalPolicyHistoryQuery, predicate.InternalPolicyHistory, internalpolicyhistory.OrderOption]{typ: historygenerated.TypeInternalPolicyHistory, tq: q}, nil
-	case *historygenerated.JobTemplateHistoryQuery:
-		return &query[*historygenerated.JobTemplateHistoryQuery, predicate.JobTemplateHistory, jobtemplatehistory.OrderOption]{typ: historygenerated.TypeJobTemplateHistory, tq: q}, nil
 	case *historygenerated.MappableDomainHistoryQuery:
 		return &query[*historygenerated.MappableDomainHistoryQuery, predicate.MappableDomainHistory, mappabledomainhistory.OrderOption]{typ: historygenerated.TypeMappableDomainHistory, tq: q}, nil
 	case *historygenerated.MappedControlHistoryQuery:
@@ -2064,8 +2006,6 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.RiskHistoryQuery, predicate.RiskHistory, riskhistory.OrderOption]{typ: historygenerated.TypeRiskHistory, tq: q}, nil
 	case *historygenerated.SLADefinitionHistoryQuery:
 		return &query[*historygenerated.SLADefinitionHistoryQuery, predicate.SLADefinitionHistory, sladefinitionhistory.OrderOption]{typ: historygenerated.TypeSLADefinitionHistory, tq: q}, nil
-	case *historygenerated.ScheduledJobHistoryQuery:
-		return &query[*historygenerated.ScheduledJobHistoryQuery, predicate.ScheduledJobHistory, scheduledjobhistory.OrderOption]{typ: historygenerated.TypeScheduledJobHistory, tq: q}, nil
 	case *historygenerated.StandardHistoryQuery:
 		return &query[*historygenerated.StandardHistoryQuery, predicate.StandardHistory, standardhistory.OrderOption]{typ: historygenerated.TypeStandardHistory, tq: q}, nil
 	case *historygenerated.SubcontrolHistoryQuery:

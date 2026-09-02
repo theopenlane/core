@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1115,9 +1113,6 @@ func HasOwner() predicate.Invite {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Invite
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1126,9 +1121,6 @@ func HasOwner() predicate.Invite {
 func HasOwnerWith(preds ...predicate.Organization) predicate.Invite {
 	return predicate.Invite(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Invite
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1144,9 +1136,6 @@ func HasEvents() predicate.Invite {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.InviteEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1155,9 +1144,6 @@ func HasEvents() predicate.Invite {
 func HasEventsWith(preds ...predicate.Event) predicate.Invite {
 	return predicate.Invite(func(s *sql.Selector) {
 		step := newEventsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.InviteEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1173,9 +1159,6 @@ func HasGroups() predicate.Invite {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, GroupsTable, GroupsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InviteGroups
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1184,9 +1167,6 @@ func HasGroups() predicate.Invite {
 func HasGroupsWith(preds ...predicate.Group) predicate.Invite {
 	return predicate.Invite(func(s *sql.Selector) {
 		step := newGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.InviteGroups
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

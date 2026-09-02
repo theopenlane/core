@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1975,9 +1973,6 @@ func HasOwner() predicate.NotificationTemplate {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1986,9 +1981,6 @@ func HasOwner() predicate.NotificationTemplate {
 func HasOwnerWith(preds ...predicate.Organization) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2004,9 +1996,6 @@ func HasIntegration() predicate.NotificationTemplate {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2015,9 +2004,6 @@ func HasIntegration() predicate.NotificationTemplate {
 func HasIntegrationWith(preds ...predicate.Integration) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(func(s *sql.Selector) {
 		step := newIntegrationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2033,9 +2019,6 @@ func HasWorkflowDefinition() predicate.NotificationTemplate {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, WorkflowDefinitionTable, WorkflowDefinitionColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowDefinition
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2044,9 +2027,6 @@ func HasWorkflowDefinition() predicate.NotificationTemplate {
 func HasWorkflowDefinitionWith(preds ...predicate.WorkflowDefinition) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(func(s *sql.Selector) {
 		step := newWorkflowDefinitionStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowDefinition
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2062,9 +2042,6 @@ func HasEmailTemplate() predicate.NotificationTemplate {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, EmailTemplateTable, EmailTemplateColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2073,9 +2050,6 @@ func HasEmailTemplate() predicate.NotificationTemplate {
 func HasEmailTemplateWith(preds ...predicate.EmailTemplate) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(func(s *sql.Selector) {
 		step := newEmailTemplateStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2091,9 +2065,6 @@ func HasNotifications() predicate.NotificationTemplate {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, NotificationsTable, NotificationsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Notification
-		step.Edge.Schema = schemaConfig.Notification
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2102,9 +2073,6 @@ func HasNotifications() predicate.NotificationTemplate {
 func HasNotificationsWith(preds ...predicate.Notification) predicate.NotificationTemplate {
 	return predicate.NotificationTemplate(func(s *sql.Selector) {
 		step := newNotificationsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Notification
-		step.Edge.Schema = schemaConfig.Notification
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

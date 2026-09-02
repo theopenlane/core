@@ -8,11 +8,11 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/cloudflare"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 func TestRegisterGalaDomainScanListeners(t *testing.T) {

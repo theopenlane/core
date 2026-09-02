@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/newman"
 	"github.com/theopenlane/newman/providers/mock"
 	"github.com/theopenlane/newman/providers/postmark"

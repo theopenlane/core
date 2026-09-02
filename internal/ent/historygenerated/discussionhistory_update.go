@@ -8,154 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/discussionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // DiscussionHistoryUpdate is the builder for updating DiscussionHistory entities.
 type DiscussionHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *DiscussionHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *DiscussionHistoryMutation
 }
 
 // Where appends a list predicates to the DiscussionHistoryUpdate builder.
 func (_u *DiscussionHistoryUpdate) Where(ps ...predicate.DiscussionHistory) *DiscussionHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *DiscussionHistoryUpdate) SetUpdatedAt(v time.Time) *DiscussionHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *DiscussionHistoryUpdate) ClearUpdatedAt() *DiscussionHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *DiscussionHistoryUpdate) SetUpdatedBy(v string) *DiscussionHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdate) SetNillableUpdatedBy(v *string) *DiscussionHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *DiscussionHistoryUpdate) ClearUpdatedBy() *DiscussionHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *DiscussionHistoryUpdate) SetUpdatedByImpersonator(v string) *DiscussionHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *DiscussionHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *DiscussionHistoryUpdate) ClearUpdatedByImpersonator() *DiscussionHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *DiscussionHistoryUpdate) SetDeletedAt(v time.Time) *DiscussionHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdate) SetNillableDeletedAt(v *time.Time) *DiscussionHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *DiscussionHistoryUpdate) ClearDeletedAt() *DiscussionHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *DiscussionHistoryUpdate) SetDeletedBy(v string) *DiscussionHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdate) SetNillableDeletedBy(v *string) *DiscussionHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *DiscussionHistoryUpdate) ClearDeletedBy() *DiscussionHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *DiscussionHistoryUpdate) SetExternalID(v string) *DiscussionHistoryUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdate) SetNillableExternalID(v *string) *DiscussionHistoryUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *DiscussionHistoryUpdate) ClearExternalID() *DiscussionHistoryUpdate {
-	_u.mutation.ClearExternalID()
-	return _u
-}
-
-// SetIsResolved sets the "is_resolved" field.
-func (_u *DiscussionHistoryUpdate) SetIsResolved(v bool) *DiscussionHistoryUpdate {
-	_u.mutation.SetIsResolved(v)
-	return _u
-}
-
-// SetNillableIsResolved sets the "is_resolved" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdate) SetNillableIsResolved(v *bool) *DiscussionHistoryUpdate {
-	if v != nil {
-		_u.SetIsResolved(*v)
-	}
 	return _u
 }
 
@@ -166,9 +36,6 @@ func (_u *DiscussionHistoryUpdate) Mutation() *DiscussionHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *DiscussionHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -194,24 +61,6 @@ func (_u *DiscussionHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *DiscussionHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if discussionhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized discussionhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := discussionhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *DiscussionHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DiscussionHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *DiscussionHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(discussionhistory.Table, discussionhistory.Columns, sqlgraph.NewFieldSpec(discussionhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -227,35 +76,20 @@ func (_u *DiscussionHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(discussionhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(discussionhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(discussionhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(discussionhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(discussionhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(discussionhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(discussionhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(discussionhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(discussionhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(discussionhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(discussionhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(discussionhistory.FieldDeletedBy, field.TypeString)
@@ -263,18 +97,9 @@ func (_u *DiscussionHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(discussionhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(discussionhistory.FieldExternalID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(discussionhistory.FieldExternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IsResolved(); ok {
-		_spec.SetField(discussionhistory.FieldIsResolved, field.TypeBool, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.DiscussionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{discussionhistory.Label}
@@ -290,136 +115,9 @@ func (_u *DiscussionHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 // DiscussionHistoryUpdateOne is the builder for updating a single DiscussionHistory entity.
 type DiscussionHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *DiscussionHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *DiscussionHistoryUpdateOne) SetUpdatedAt(v time.Time) *DiscussionHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *DiscussionHistoryUpdateOne) ClearUpdatedAt() *DiscussionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *DiscussionHistoryUpdateOne) SetUpdatedBy(v string) *DiscussionHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdateOne) SetNillableUpdatedBy(v *string) *DiscussionHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *DiscussionHistoryUpdateOne) ClearUpdatedBy() *DiscussionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *DiscussionHistoryUpdateOne) SetUpdatedByImpersonator(v string) *DiscussionHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *DiscussionHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *DiscussionHistoryUpdateOne) ClearUpdatedByImpersonator() *DiscussionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *DiscussionHistoryUpdateOne) SetDeletedAt(v time.Time) *DiscussionHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *DiscussionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *DiscussionHistoryUpdateOne) ClearDeletedAt() *DiscussionHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *DiscussionHistoryUpdateOne) SetDeletedBy(v string) *DiscussionHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdateOne) SetNillableDeletedBy(v *string) *DiscussionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *DiscussionHistoryUpdateOne) ClearDeletedBy() *DiscussionHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *DiscussionHistoryUpdateOne) SetExternalID(v string) *DiscussionHistoryUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdateOne) SetNillableExternalID(v *string) *DiscussionHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *DiscussionHistoryUpdateOne) ClearExternalID() *DiscussionHistoryUpdateOne {
-	_u.mutation.ClearExternalID()
-	return _u
-}
-
-// SetIsResolved sets the "is_resolved" field.
-func (_u *DiscussionHistoryUpdateOne) SetIsResolved(v bool) *DiscussionHistoryUpdateOne {
-	_u.mutation.SetIsResolved(v)
-	return _u
-}
-
-// SetNillableIsResolved sets the "is_resolved" field if the given value is not nil.
-func (_u *DiscussionHistoryUpdateOne) SetNillableIsResolved(v *bool) *DiscussionHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsResolved(*v)
-	}
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *DiscussionHistoryMutation
 }
 
 // Mutation returns the DiscussionHistoryMutation object of the builder.
@@ -442,9 +140,6 @@ func (_u *DiscussionHistoryUpdateOne) Select(field string, fields ...string) *Di
 
 // Save executes the query and returns the updated DiscussionHistory entity.
 func (_u *DiscussionHistoryUpdateOne) Save(ctx context.Context) (*DiscussionHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -468,24 +163,6 @@ func (_u *DiscussionHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *DiscussionHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if discussionhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized discussionhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := discussionhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *DiscussionHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DiscussionHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *DiscussionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *DiscussionHistory, err error) {
@@ -520,35 +197,20 @@ func (_u *DiscussionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Discu
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(discussionhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(discussionhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(discussionhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(discussionhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(discussionhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(discussionhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(discussionhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(discussionhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(discussionhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(discussionhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(discussionhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(discussionhistory.FieldDeletedBy, field.TypeString)
@@ -556,18 +218,9 @@ func (_u *DiscussionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Discu
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(discussionhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(discussionhistory.FieldExternalID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(discussionhistory.FieldExternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IsResolved(); ok {
-		_spec.SetField(discussionhistory.FieldIsResolved, field.TypeBool, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.DiscussionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &DiscussionHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

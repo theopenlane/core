@@ -8,281 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappedcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // MappedControlHistoryUpdate is the builder for updating MappedControlHistory entities.
 type MappedControlHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *MappedControlHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *MappedControlHistoryMutation
 }
 
 // Where appends a list predicates to the MappedControlHistoryUpdate builder.
 func (_u *MappedControlHistoryUpdate) Where(ps ...predicate.MappedControlHistory) *MappedControlHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *MappedControlHistoryUpdate) SetUpdatedAt(v time.Time) *MappedControlHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *MappedControlHistoryUpdate) ClearUpdatedAt() *MappedControlHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *MappedControlHistoryUpdate) SetUpdatedBy(v string) *MappedControlHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableUpdatedBy(v *string) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *MappedControlHistoryUpdate) ClearUpdatedBy() *MappedControlHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *MappedControlHistoryUpdate) SetUpdatedByImpersonator(v string) *MappedControlHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *MappedControlHistoryUpdate) ClearUpdatedByImpersonator() *MappedControlHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *MappedControlHistoryUpdate) SetDeletedAt(v time.Time) *MappedControlHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableDeletedAt(v *time.Time) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *MappedControlHistoryUpdate) ClearDeletedAt() *MappedControlHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *MappedControlHistoryUpdate) SetDeletedBy(v string) *MappedControlHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableDeletedBy(v *string) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *MappedControlHistoryUpdate) ClearDeletedBy() *MappedControlHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *MappedControlHistoryUpdate) SetTags(v []string) *MappedControlHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *MappedControlHistoryUpdate) AppendTags(v []string) *MappedControlHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *MappedControlHistoryUpdate) ClearTags() *MappedControlHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *MappedControlHistoryUpdate) SetInternalNotes(v string) *MappedControlHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableInternalNotes(v *string) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *MappedControlHistoryUpdate) ClearInternalNotes() *MappedControlHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *MappedControlHistoryUpdate) SetSystemInternalID(v string) *MappedControlHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableSystemInternalID(v *string) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *MappedControlHistoryUpdate) ClearSystemInternalID() *MappedControlHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *MappedControlHistoryUpdate) SetOwnerID(v string) *MappedControlHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableOwnerID(v *string) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *MappedControlHistoryUpdate) ClearOwnerID() *MappedControlHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetMappingType sets the "mapping_type" field.
-func (_u *MappedControlHistoryUpdate) SetMappingType(v enums.MappingType) *MappedControlHistoryUpdate {
-	_u.mutation.SetMappingType(v)
-	return _u
-}
-
-// SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableMappingType(v *enums.MappingType) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetMappingType(*v)
-	}
-	return _u
-}
-
-// SetRelation sets the "relation" field.
-func (_u *MappedControlHistoryUpdate) SetRelation(v string) *MappedControlHistoryUpdate {
-	_u.mutation.SetRelation(v)
-	return _u
-}
-
-// SetNillableRelation sets the "relation" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableRelation(v *string) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetRelation(*v)
-	}
-	return _u
-}
-
-// ClearRelation clears the value of the "relation" field.
-func (_u *MappedControlHistoryUpdate) ClearRelation() *MappedControlHistoryUpdate {
-	_u.mutation.ClearRelation()
-	return _u
-}
-
-// SetConfidence sets the "confidence" field.
-func (_u *MappedControlHistoryUpdate) SetConfidence(v int) *MappedControlHistoryUpdate {
-	_u.mutation.ResetConfidence()
-	_u.mutation.SetConfidence(v)
-	return _u
-}
-
-// SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableConfidence(v *int) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetConfidence(*v)
-	}
-	return _u
-}
-
-// AddConfidence adds value to the "confidence" field.
-func (_u *MappedControlHistoryUpdate) AddConfidence(v int) *MappedControlHistoryUpdate {
-	_u.mutation.AddConfidence(v)
-	return _u
-}
-
-// ClearConfidence clears the value of the "confidence" field.
-func (_u *MappedControlHistoryUpdate) ClearConfidence() *MappedControlHistoryUpdate {
-	_u.mutation.ClearConfidence()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *MappedControlHistoryUpdate) SetSource(v enums.MappingSource) *MappedControlHistoryUpdate {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdate) SetNillableSource(v *enums.MappingSource) *MappedControlHistoryUpdate {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *MappedControlHistoryUpdate) ClearSource() *MappedControlHistoryUpdate {
-	_u.mutation.ClearSource()
 	return _u
 }
 
@@ -293,9 +36,6 @@ func (_u *MappedControlHistoryUpdate) Mutation() *MappedControlHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *MappedControlHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -321,43 +61,7 @@ func (_u *MappedControlHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *MappedControlHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if mappedcontrolhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized mappedcontrolhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := mappedcontrolhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *MappedControlHistoryUpdate) check() error {
-	if v, ok := _u.mutation.MappingType(); ok {
-		if err := mappedcontrolhistory.MappingTypeValidator(v); err != nil {
-			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`historygenerated: validator failed for field "MappedControlHistory.mapping_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Source(); ok {
-		if err := mappedcontrolhistory.SourceValidator(v); err != nil {
-			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "MappedControlHistory.source": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *MappedControlHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappedControlHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(mappedcontrolhistory.Table, mappedcontrolhistory.Columns, sqlgraph.NewFieldSpec(mappedcontrolhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -372,46 +76,23 @@ func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, mappedcontrolhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldTags, field.TypeJSON)
@@ -419,51 +100,24 @@ func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.MappingType(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Relation(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldRelation, field.TypeString, value)
 	}
 	if _u.mutation.RelationCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldRelation, field.TypeString)
 	}
-	if value, ok := _u.mutation.Confidence(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedConfidence(); ok {
-		_spec.AddField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
-	}
 	if _u.mutation.ConfidenceCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldConfidence, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSource, field.TypeEnum)
 	}
-	_spec.Node.Schema = _u.schemaConfig.MappedControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{mappedcontrolhistory.Label}
@@ -479,261 +133,9 @@ func (_u *MappedControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 // MappedControlHistoryUpdateOne is the builder for updating a single MappedControlHistory entity.
 type MappedControlHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *MappedControlHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *MappedControlHistoryUpdateOne) SetUpdatedAt(v time.Time) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *MappedControlHistoryUpdateOne) ClearUpdatedAt() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *MappedControlHistoryUpdateOne) SetUpdatedBy(v string) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableUpdatedBy(v *string) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *MappedControlHistoryUpdateOne) ClearUpdatedBy() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *MappedControlHistoryUpdateOne) SetUpdatedByImpersonator(v string) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *MappedControlHistoryUpdateOne) ClearUpdatedByImpersonator() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *MappedControlHistoryUpdateOne) SetDeletedAt(v time.Time) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *MappedControlHistoryUpdateOne) ClearDeletedAt() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *MappedControlHistoryUpdateOne) SetDeletedBy(v string) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableDeletedBy(v *string) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *MappedControlHistoryUpdateOne) ClearDeletedBy() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *MappedControlHistoryUpdateOne) SetTags(v []string) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *MappedControlHistoryUpdateOne) AppendTags(v []string) *MappedControlHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *MappedControlHistoryUpdateOne) ClearTags() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *MappedControlHistoryUpdateOne) SetInternalNotes(v string) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableInternalNotes(v *string) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *MappedControlHistoryUpdateOne) ClearInternalNotes() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *MappedControlHistoryUpdateOne) SetSystemInternalID(v string) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableSystemInternalID(v *string) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *MappedControlHistoryUpdateOne) ClearSystemInternalID() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *MappedControlHistoryUpdateOne) SetOwnerID(v string) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableOwnerID(v *string) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *MappedControlHistoryUpdateOne) ClearOwnerID() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetMappingType sets the "mapping_type" field.
-func (_u *MappedControlHistoryUpdateOne) SetMappingType(v enums.MappingType) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetMappingType(v)
-	return _u
-}
-
-// SetNillableMappingType sets the "mapping_type" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableMappingType(v *enums.MappingType) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetMappingType(*v)
-	}
-	return _u
-}
-
-// SetRelation sets the "relation" field.
-func (_u *MappedControlHistoryUpdateOne) SetRelation(v string) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetRelation(v)
-	return _u
-}
-
-// SetNillableRelation sets the "relation" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableRelation(v *string) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetRelation(*v)
-	}
-	return _u
-}
-
-// ClearRelation clears the value of the "relation" field.
-func (_u *MappedControlHistoryUpdateOne) ClearRelation() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearRelation()
-	return _u
-}
-
-// SetConfidence sets the "confidence" field.
-func (_u *MappedControlHistoryUpdateOne) SetConfidence(v int) *MappedControlHistoryUpdateOne {
-	_u.mutation.ResetConfidence()
-	_u.mutation.SetConfidence(v)
-	return _u
-}
-
-// SetNillableConfidence sets the "confidence" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableConfidence(v *int) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetConfidence(*v)
-	}
-	return _u
-}
-
-// AddConfidence adds value to the "confidence" field.
-func (_u *MappedControlHistoryUpdateOne) AddConfidence(v int) *MappedControlHistoryUpdateOne {
-	_u.mutation.AddConfidence(v)
-	return _u
-}
-
-// ClearConfidence clears the value of the "confidence" field.
-func (_u *MappedControlHistoryUpdateOne) ClearConfidence() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearConfidence()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *MappedControlHistoryUpdateOne) SetSource(v enums.MappingSource) *MappedControlHistoryUpdateOne {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *MappedControlHistoryUpdateOne) SetNillableSource(v *enums.MappingSource) *MappedControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *MappedControlHistoryUpdateOne) ClearSource() *MappedControlHistoryUpdateOne {
-	_u.mutation.ClearSource()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *MappedControlHistoryMutation
 }
 
 // Mutation returns the MappedControlHistoryMutation object of the builder.
@@ -756,9 +158,6 @@ func (_u *MappedControlHistoryUpdateOne) Select(field string, fields ...string) 
 
 // Save executes the query and returns the updated MappedControlHistory entity.
 func (_u *MappedControlHistoryUpdateOne) Save(ctx context.Context) (*MappedControlHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -784,43 +183,7 @@ func (_u *MappedControlHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *MappedControlHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if mappedcontrolhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized mappedcontrolhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := mappedcontrolhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *MappedControlHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.MappingType(); ok {
-		if err := mappedcontrolhistory.MappingTypeValidator(v); err != nil {
-			return &ValidationError{Name: "mapping_type", err: fmt.Errorf(`historygenerated: validator failed for field "MappedControlHistory.mapping_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Source(); ok {
-		if err := mappedcontrolhistory.SourceValidator(v); err != nil {
-			return &ValidationError{Name: "source", err: fmt.Errorf(`historygenerated: validator failed for field "MappedControlHistory.source": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *MappedControlHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappedControlHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *MappedControlHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(mappedcontrolhistory.Table, mappedcontrolhistory.Columns, sqlgraph.NewFieldSpec(mappedcontrolhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -852,46 +215,23 @@ func (_u *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ma
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, mappedcontrolhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldTags, field.TypeJSON)
@@ -899,51 +239,24 @@ func (_u *MappedControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Ma
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.MappingType(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldMappingType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Relation(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldRelation, field.TypeString, value)
 	}
 	if _u.mutation.RelationCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldRelation, field.TypeString)
 	}
-	if value, ok := _u.mutation.Confidence(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedConfidence(); ok {
-		_spec.AddField(mappedcontrolhistory.FieldConfidence, field.TypeInt, value)
-	}
 	if _u.mutation.ConfidenceCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldConfidence, field.TypeInt)
-	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(mappedcontrolhistory.FieldSource, field.TypeEnum, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(mappedcontrolhistory.FieldSource, field.TypeEnum)
 	}
-	_spec.Node.Schema = _u.schemaConfig.MappedControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &MappedControlHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -219,7 +219,7 @@ var (
 	errUserHasAlreadySignedNDA = errors.New("user has already signed the NDA")
 	// errValidationFailed is returned when validation of an NDA submission fails for any reason not covered by the other specific errors
 	errValidationFailed = errors.New("validation failed")
-	// errMustBeAnonymousUser is returned when an NDA submission is attempted by an authenticated user, as only anonymous users should be submitting ANDAs for signing
+	// errMustBeAnonymousUser is returned when an NDA submission is attempted by an authenticated user, as only anonymous users should be submitting NDAs for signing
 	errMustBeAnonymousUser = errors.New("must be an anonymous user")
 	// errMissingResponse is returned when the document data mutation does not include the response field, which is required for NDA submissions
 	errMissingResponse = errors.New("missing response")
@@ -259,6 +259,8 @@ var (
 	ErrExpressionNotList = errors.New("entityops: expression did not evaluate to a list")
 	// ErrQuestionnaireTransformInvalid is returned when a questionnaire transform configuration or submission cannot map to its target
 	ErrQuestionnaireTransformInvalid = errors.New("questionnaire transform invalid")
+	// ErrClientResolveFailed indicates the ent client could not be resolved from the context
+	ErrClientResolveFailed = errors.New("client resolve failed")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

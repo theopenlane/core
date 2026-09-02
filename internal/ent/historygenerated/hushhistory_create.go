@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -455,7 +455,6 @@ func (_c *HushHistoryCreate) createSpec() (*HushHistory, *sqlgraph.CreateSpec) {
 		_node = &HushHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(hushhistory.Table, sqlgraph.NewFieldSpec(hushhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.HushHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

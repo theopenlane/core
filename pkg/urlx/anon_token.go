@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 
-	"github.com/theopenlane/core/pkg/shortlinks"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
 	"github.com/theopenlane/iam/tokens"
 )
 

@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/notification"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
 )
 
 // NotificationTemplateCreate is the builder for creating a NotificationTemplate entity.
@@ -658,7 +658,6 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 		_node = &NotificationTemplate{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(notificationtemplate.Table, sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.NotificationTemplate
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -794,7 +793,6 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -812,7 +810,6 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -830,7 +827,6 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -848,7 +844,6 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -866,7 +861,6 @@ func (_c *NotificationTemplateCreate) createSpec() (*NotificationTemplate, *sqlg
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

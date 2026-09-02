@@ -9,12 +9,12 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/csvgenerated"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -164,6 +164,10 @@ func (r *createDiscussionInputResolver) AddComment(ctx context.Context, obj *gen
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	if err := setParentObjectIDInInput(ctx, data); err != nil {
+		return err
 	}
 
 	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)

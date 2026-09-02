@@ -10,9 +10,9 @@ import (
 
 	"github.com/vektah/gqlparser/v2/formatter"
 
-	"github.com/theopenlane/core/internal/genhelpers"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
+	"github.com/theopenlane/core/v2/internal/genhelpers"
+	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
+	gqlhistorygenerated "github.com/theopenlane/core/v2/internal/graphapi/historygenerated"
 )
 
 const (

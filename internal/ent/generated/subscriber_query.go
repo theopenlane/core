@@ -13,17 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // SubscriberQuery is the builder for querying Subscriber entities.
@@ -95,9 +94,6 @@ func (_q *SubscriberQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.OwnerTable, subscriber.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -120,9 +116,6 @@ func (_q *SubscriberQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subscriber.EventsTable, subscriber.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.SubscriberEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -145,9 +138,6 @@ func (_q *SubscriberQuery) QueryTrustCenter() *TrustCenterQuery {
 			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.TrustCenterTable, subscriber.TrustCenterColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -170,9 +160,6 @@ func (_q *SubscriberQuery) QueryCampaignTargets() *CampaignTargetQuery {
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, subscriber.CampaignTargetsTable, subscriber.CampaignTargetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CampaignTarget
-		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -195,9 +182,6 @@ func (_q *SubscriberQuery) QueryContact() *ContactQuery {
 			sqlgraph.To(contact.Table, contact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.ContactTable, subscriber.ContactColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Contact
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -220,9 +204,6 @@ func (_q *SubscriberQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, subscriber.UserTable, subscriber.UserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -602,8 +583,6 @@ func (_q *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Subscriber
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -718,7 +697,6 @@ func (_q *SubscriberQuery) loadEvents(ctx context.Context, query *EventQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subscriber.EventsTable)
-		joinT.Schema(_q.schemaConfig.SubscriberEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(subscriber.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(subscriber.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -890,8 +868,6 @@ func (_q *SubscriberQuery) loadUser(ctx context.Context, query *UserQuery, nodes
 
 func (_q *SubscriberQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Subscriber
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -969,9 +945,6 @@ func (_q *SubscriberQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Subscriber)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

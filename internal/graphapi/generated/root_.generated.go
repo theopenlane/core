@@ -11,8 +11,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -901,7 +901,6 @@ type ComplexityRoot struct {
 		Reviews                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Scope                      func(childComplexity int) int
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
@@ -2178,6 +2177,7 @@ type ComplexityRoot struct {
 
 	Evidence struct {
 		ActiveWorkflowInstances func(childComplexity int) int
+		AuditorReferenceID      func(childComplexity int) int
 		CollectionProcedure     func(childComplexity int) int
 		Comments                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -2196,11 +2196,13 @@ type ComplexityRoot struct {
 		HasPendingWorkflow      func(childComplexity int) int
 		HasWorkflowHistory      func(childComplexity int) int
 		ID                      func(childComplexity int) int
+		InternalPolicies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		IsAutomated             func(childComplexity int) int
 		Name                    func(childComplexity int) int
 		Owner                   func(childComplexity int) int
 		OwnerID                 func(childComplexity int) int
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Procedures              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RenewalDate             func(childComplexity int) int
 		ReviewFrequency         func(childComplexity int) int
@@ -3273,241 +3275,6 @@ type ComplexityRoot struct {
 		Invite func(childComplexity int) int
 	}
 
-	JobResult struct {
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		ExitCode              func(childComplexity int) int
-		File                  func(childComplexity int) int
-		FileID                func(childComplexity int) int
-		FinishedAt            func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Log                   func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		ScheduledJob          func(childComplexity int) int
-		ScheduledJobID        func(childComplexity int) int
-		StartedAt             func(childComplexity int) int
-		Status                func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-	}
-
-	JobResultConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	JobResultCreatePayload struct {
-		JobResult func(childComplexity int) int
-	}
-
-	JobResultDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	JobResultEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	JobResultUpdatePayload struct {
-		JobResult func(childComplexity int) int
-	}
-
-	JobRunner struct {
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		IPAddress             func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		JobRunnerTokens       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
-		LastSeen              func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		Os                    func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Status                func(childComplexity int) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-		Version               func(childComplexity int) int
-	}
-
-	JobRunnerConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	JobRunnerCreatePayload struct {
-		JobRunner func(childComplexity int) int
-	}
-
-	JobRunnerDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	JobRunnerEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	JobRunnerRegistrationToken struct {
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		ExpiresAt             func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		JobRunner             func(childComplexity int) int
-		JobRunnerID           func(childComplexity int) int
-		LastUsedAt            func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		Token                 func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-	}
-
-	JobRunnerRegistrationTokenBulkCreatePayload struct {
-		JobRunnerRegistrationTokens func(childComplexity int) int
-	}
-
-	JobRunnerRegistrationTokenConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	JobRunnerRegistrationTokenCreatePayload struct {
-		JobRunnerRegistrationToken func(childComplexity int) int
-	}
-
-	JobRunnerRegistrationTokenDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	JobRunnerRegistrationTokenEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	JobRunnerToken struct {
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		ExpiresAt             func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		IsActive              func(childComplexity int) int
-		JobRunners            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
-		LastUsedAt            func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		RevokedAt             func(childComplexity int) int
-		RevokedBy             func(childComplexity int) int
-		RevokedReason         func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		Token                 func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-	}
-
-	JobRunnerTokenConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	JobRunnerTokenCreatePayload struct {
-		JobRunnerToken func(childComplexity int) int
-	}
-
-	JobRunnerTokenDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	JobRunnerTokenEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	JobRunnerTokenUpdatePayload struct {
-		JobRunnerToken func(childComplexity int) int
-	}
-
-	JobRunnerUpdatePayload struct {
-		JobRunner func(childComplexity int) int
-	}
-
-	JobTemplate struct {
-		Configuration         func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Cron                  func(childComplexity int) int
-		Description           func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		DownloadURL           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		InternalNotes         func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Platform              func(childComplexity int) int
-		ScheduledJobs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
-		SystemInternalID      func(childComplexity int) int
-		SystemOwned           func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		Title                 func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-	}
-
-	JobTemplateBulkCreatePayload struct {
-		JobTemplates func(childComplexity int) int
-	}
-
-	JobTemplateBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	JobTemplateBulkUpdatePayload struct {
-		Error         func(childComplexity int) int
-		JobTemplates  func(childComplexity int) int
-		NotUpdatedIDs func(childComplexity int) int
-		UpdatedIDs    func(childComplexity int) int
-	}
-
-	JobTemplateConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	JobTemplateCreatePayload struct {
-		JobTemplate func(childComplexity int) int
-	}
-
-	JobTemplateDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	JobTemplateEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	JobTemplateUpdatePayload struct {
-		JobTemplate func(childComplexity int) int
-	}
-
 	MappableDomain struct {
 		CreatedAt             func(childComplexity int) int
 		CreatedBy             func(childComplexity int) int
@@ -3676,7 +3443,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVIdentityHolder          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
@@ -3693,7 +3459,6 @@ type ComplexityRoot struct {
 		CreateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSLADefinition           func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
 		CreateBulkCSVSubscriber              func(childComplexity int, input graphql.Upload) int
@@ -3742,7 +3507,6 @@ type ComplexityRoot struct {
 		CreateBulkIdentityHolder             func(childComplexity int, input []*generated.CreateIdentityHolderInput) int
 		CreateBulkInternalPolicy             func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
 		CreateBulkInvite                     func(childComplexity int, input []*generated.CreateInviteInput) int
-		CreateBulkJobTemplate                func(childComplexity int, input []*generated.CreateJobTemplateInput) int
 		CreateBulkMappableDomain             func(childComplexity int, input []*generated.CreateMappableDomainInput) int
 		CreateBulkMappedControl              func(childComplexity int, input []*generated.CreateMappedControlInput) int
 		CreateBulkNarrative                  func(childComplexity int, input []*generated.CreateNarrativeInput) int
@@ -3759,7 +3523,6 @@ type ComplexityRoot struct {
 		CreateBulkRisk                       func(childComplexity int, input []*generated.CreateRiskInput) int
 		CreateBulkSLADefinition              func(childComplexity int, input []*generated.CreateSLADefinitionInput) int
 		CreateBulkScan                       func(childComplexity int, input []*generated.CreateScanInput) int
-		CreateBulkScheduledJob               func(childComplexity int, input []*generated.CreateScheduledJobInput) int
 		CreateBulkSubcontrol                 func(childComplexity int, input []*generated.CreateSubcontrolInput) int
 		CreateBulkSubprocessor               func(childComplexity int, input []*generated.CreateSubprocessorInput) int
 		CreateBulkSubscriber                 func(childComplexity int, input []*generated.CreateSubscriberInput) int
@@ -3816,11 +3579,6 @@ type ComplexityRoot struct {
 		CreateIdentityHolder                 func(childComplexity int, input generated.CreateIdentityHolderInput, identityHolderFiles []*graphql.Upload, identityHolderFilesMetadata []*model.FileMetadataInput) int
 		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
 		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
-		CreateJobResult                      func(childComplexity int, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload, jobResultFilesMetadata []*model.FileMetadataInput) int
-		CreateJobRunner                      func(childComplexity int, input generated.CreateJobRunnerInput) int
-		CreateJobRunnerRegistrationToken     func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
-		CreateJobRunnerToken                 func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
-		CreateJobTemplate                    func(childComplexity int, input generated.CreateJobTemplateInput) int
 		CreateMappableDomain                 func(childComplexity int, input generated.CreateMappableDomainInput) int
 		CreateMappedControl                  func(childComplexity int, input generated.CreateMappedControlInput) int
 		CreateNarrative                      func(childComplexity int, input generated.CreateNarrativeInput) int
@@ -3843,8 +3601,6 @@ type ComplexityRoot struct {
 		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
 		CreateSLADefinition                  func(childComplexity int, input generated.CreateSLADefinitionInput) int
 		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
-		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
-		CreateScheduledJobRun                func(childComplexity int, input generated.CreateScheduledJobRunInput) int
 		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
@@ -3906,7 +3662,6 @@ type ComplexityRoot struct {
 		DeleteBulkIdentityHolder             func(childComplexity int, ids []string) int
 		DeleteBulkInternalPolicy             func(childComplexity int, ids []string) int
 		DeleteBulkInvite                     func(childComplexity int, ids []string) int
-		DeleteBulkJobTemplate                func(childComplexity int, ids []string) int
 		DeleteBulkMappableDomain             func(childComplexity int, ids []string) int
 		DeleteBulkMappedControl              func(childComplexity int, ids []string) int
 		DeleteBulkNarrative                  func(childComplexity int, ids []string) int
@@ -3922,7 +3677,6 @@ type ComplexityRoot struct {
 		DeleteBulkRisk                       func(childComplexity int, ids []string) int
 		DeleteBulkSLADefinition              func(childComplexity int, ids []string) int
 		DeleteBulkScan                       func(childComplexity int, ids []string) int
-		DeleteBulkScheduledJob               func(childComplexity int, ids []string) int
 		DeleteBulkSubcontrol                 func(childComplexity int, ids []string) int
 		DeleteBulkSubprocessor               func(childComplexity int, ids []string) int
 		DeleteBulkSystemDetail               func(childComplexity int, ids []string) int
@@ -3970,11 +3724,6 @@ type ComplexityRoot struct {
 		DeleteIntegration                    func(childComplexity int, id string) int
 		DeleteInternalPolicy                 func(childComplexity int, id string) int
 		DeleteInvite                         func(childComplexity int, id string) int
-		DeleteJobResult                      func(childComplexity int, id string) int
-		DeleteJobRunner                      func(childComplexity int, id string) int
-		DeleteJobRunnerRegistrationToken     func(childComplexity int, id string) int
-		DeleteJobRunnerToken                 func(childComplexity int, id string) int
-		DeleteJobTemplate                    func(childComplexity int, id string) int
 		DeleteMappableDomain                 func(childComplexity int, id string) int
 		DeleteMappedControl                  func(childComplexity int, id string) int
 		DeleteNarrative                      func(childComplexity int, id string) int
@@ -3994,8 +3743,6 @@ type ComplexityRoot struct {
 		DeleteRisk                           func(childComplexity int, id string) int
 		DeleteSLADefinition                  func(childComplexity int, id string) int
 		DeleteScan                           func(childComplexity int, id string) int
-		DeleteScheduledJob                   func(childComplexity int, id string) int
-		DeleteScheduledJobRun                func(childComplexity int, id string) int
 		DeleteStandard                       func(childComplexity int, id string) int
 		DeleteSubcontrol                     func(childComplexity int, id string) int
 		DeleteSubprocessor                   func(childComplexity int, id string) int
@@ -4067,7 +3814,6 @@ type ComplexityRoot struct {
 		UpdateBulkCSVIdentityHolder          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
@@ -4083,7 +3829,6 @@ type ComplexityRoot struct {
 		UpdateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVSLADefinition           func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
-		UpdateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
 		UpdateBulkCSVSystemDetail            func(childComplexity int, input graphql.Upload) int
@@ -4118,7 +3863,6 @@ type ComplexityRoot struct {
 		UpdateBulkIdentityHolder             func(childComplexity int, ids []string, input generated.UpdateIdentityHolderInput) int
 		UpdateBulkInternalPolicy             func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
 		UpdateBulkInvite                     func(childComplexity int, ids []string, input generated.UpdateInviteInput) int
-		UpdateBulkJobTemplate                func(childComplexity int, ids []string, input generated.UpdateJobTemplateInput) int
 		UpdateBulkMappableDomain             func(childComplexity int, ids []string, input generated.UpdateMappableDomainInput) int
 		UpdateBulkMappedControl              func(childComplexity int, ids []string, input generated.UpdateMappedControlInput) int
 		UpdateBulkNarrative                  func(childComplexity int, ids []string, input generated.UpdateNarrativeInput) int
@@ -4134,7 +3878,6 @@ type ComplexityRoot struct {
 		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkSLADefinition              func(childComplexity int, ids []string, input generated.UpdateSLADefinitionInput) int
 		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
-		UpdateBulkScheduledJob               func(childComplexity int, ids []string, input generated.UpdateScheduledJobInput) int
 		UpdateBulkSubcontrol                 func(childComplexity int, ids []string, input generated.UpdateSubcontrolInput) int
 		UpdateBulkSubprocessor               func(childComplexity int, ids []string, input generated.UpdateSubprocessorInput) int
 		UpdateBulkSystemDetail               func(childComplexity int, ids []string, input generated.UpdateSystemDetailInput) int
@@ -4182,9 +3925,6 @@ type ComplexityRoot struct {
 		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload, internalPolicyFileMetadata *model.FileMetadataInput) int
 		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
-		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload, jobResultFilesMetadata []*model.FileMetadataInput) int
-		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
-		UpdateJobTemplate                    func(childComplexity int, id string, input generated.UpdateJobTemplateInput) int
 		UpdateMappableDomain                 func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
 		UpdateMappedControl                  func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
 		UpdateNarrative                      func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
@@ -4207,8 +3947,6 @@ type ComplexityRoot struct {
 		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
 		UpdateSLADefinition                  func(childComplexity int, id string, input generated.UpdateSLADefinitionInput) int
 		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
-		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
-		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
 		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload, logoFileMetadata *model.FileMetadataInput) int
 		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload, noteFilesMetadata []*model.FileMetadataInput) int
@@ -4747,15 +4485,6 @@ type ComplexityRoot struct {
 		InternalPolicyCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		InviteCreators                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Invites                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
-		JobResults                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
-		JobRunnerCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		JobRunnerRegistrationTokenCreators func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		JobRunnerRegistrationTokens        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
-		JobRunnerTokenCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		JobRunnerTokens                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
-		JobRunners                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
-		JobTemplateCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		JobTemplates                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) int
 		MappedControlCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		MappedControls                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
 		Members                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
@@ -4792,10 +4521,6 @@ type ComplexityRoot struct {
 		SLADefinitions                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SLADefinitionOrder, where *generated.SLADefinitionWhereInput) int
 		ScanCreators                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Scans                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		ScheduledJobCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ScheduledJobRunCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ScheduledJobRuns                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
-		ScheduledJobs                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Secrets                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
 		Setting                            func(childComplexity int) int
 		SlugName                           func(childComplexity int) int
@@ -5528,18 +5253,6 @@ type ComplexityRoot struct {
 		Invite                          func(childComplexity int, id string) int
 		InviteSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Invites                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
-		JobResult                       func(childComplexity int, id string) int
-		JobResults                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
-		JobRunner                       func(childComplexity int, id string) int
-		JobRunnerRegistrationToken      func(childComplexity int, id string) int
-		JobRunnerRegistrationTokens     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
-		JobRunnerSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		JobRunnerToken                  func(childComplexity int, id string) int
-		JobRunnerTokens                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
-		JobRunners                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
-		JobTemplate                     func(childComplexity int, id string) int
-		JobTemplateSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		JobTemplates                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) int
 		MappableDomain                  func(childComplexity int, id string) int
 		MappableDomains                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappableDomainOrder, where *generated.MappableDomainWhereInput) int
 		MappedControl                   func(childComplexity int, id string) int
@@ -5594,10 +5307,6 @@ type ComplexityRoot struct {
 		Scan                            func(childComplexity int, id string) int
 		ScanSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Scans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		ScheduledJob                    func(childComplexity int, id string) int
-		ScheduledJobRun                 func(childComplexity int, id string) int
-		ScheduledJobRuns                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
-		ScheduledJobs                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Search                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Self                            func(childComplexity int) int
 		Standard                        func(childComplexity int, id string) int
@@ -6173,108 +5882,6 @@ type ComplexityRoot struct {
 		Scan func(childComplexity int) int
 	}
 
-	ScheduledJob struct {
-		Active                func(childComplexity int) int
-		Configuration         func(childComplexity int) int
-		Controls              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Cron                  func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		JobID                 func(childComplexity int) int
-		JobRunner             func(childComplexity int) int
-		JobRunnerID           func(childComplexity int) int
-		JobTemplate           func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		Subcontrols           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-	}
-
-	ScheduledJobBulkCreatePayload struct {
-		ScheduledJobs func(childComplexity int) int
-	}
-
-	ScheduledJobBulkDeletePayload struct {
-		DeletedIDs    func(childComplexity int) int
-		Error         func(childComplexity int) int
-		NotDeletedIDs func(childComplexity int) int
-	}
-
-	ScheduledJobBulkUpdatePayload struct {
-		Error         func(childComplexity int) int
-		NotUpdatedIDs func(childComplexity int) int
-		ScheduledJobs func(childComplexity int) int
-		UpdatedIDs    func(childComplexity int) int
-	}
-
-	ScheduledJobConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	ScheduledJobCreatePayload struct {
-		ScheduledJob func(childComplexity int) int
-	}
-
-	ScheduledJobDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	ScheduledJobEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	ScheduledJobRun struct {
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		ExpectedExecutionTime func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		JobRunner             func(childComplexity int) int
-		JobRunnerID           func(childComplexity int) int
-		Owner                 func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		ScheduledJob          func(childComplexity int) int
-		ScheduledJobID        func(childComplexity int) int
-		Script                func(childComplexity int) int
-		Status                func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
-	}
-
-	ScheduledJobRunConnection struct {
-		Edges      func(childComplexity int) int
-		PageInfo   func(childComplexity int) int
-		TotalCount func(childComplexity int) int
-	}
-
-	ScheduledJobRunCreatePayload struct {
-		ScheduledJobRun func(childComplexity int) int
-	}
-
-	ScheduledJobRunDeletePayload struct {
-		DeletedID func(childComplexity int) int
-	}
-
-	ScheduledJobRunEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
-	}
-
-	ScheduledJobRunUpdatePayload struct {
-		ScheduledJobRun func(childComplexity int) int
-	}
-
-	ScheduledJobUpdatePayload struct {
-		ScheduledJob func(childComplexity int) int
-	}
-
 	SearchContext struct {
 		EntityID      func(childComplexity int) int
 		EntityType    func(childComplexity int) int
@@ -6302,8 +5909,6 @@ type ComplexityRoot struct {
 		Integrations          func(childComplexity int) int
 		InternalPolicies      func(childComplexity int) int
 		Invites               func(childComplexity int) int
-		JobRunners            func(childComplexity int) int
-		JobTemplates          func(childComplexity int) int
 		Narratives            func(childComplexity int) int
 		NotificationTemplates func(childComplexity int) int
 		Organizations         func(childComplexity int) int
@@ -6455,7 +6060,6 @@ type ComplexityRoot struct {
 		Reviews                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
 		Risks                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
 		Scans                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		ScheduledJobs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
 		Source                     func(childComplexity int) int
 		SourceName                 func(childComplexity int) int
 		Status                     func(childComplexity int) int
@@ -12426,17 +12030,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Control.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
-	case "Control.scheduledJobs":
-		if e.ComplexityRoot.Control.ScheduledJobs == nil {
-			break
-		}
-
-		args, err := ec.field_Control_scheduledJobs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Control.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 	case "Control.scope":
 		if e.ComplexityRoot.Control.Scope == nil {
 			break
@@ -18001,6 +17594,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.ActiveWorkflowInstances(childComplexity), true
+	case "Evidence.auditorReferenceID":
+		if e.ComplexityRoot.Evidence.AuditorReferenceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.AuditorReferenceID(childComplexity), true
 	case "Evidence.collectionProcedure":
 		if e.ComplexityRoot.Evidence.CollectionProcedure == nil {
 			break
@@ -18134,6 +17733,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.ID(childComplexity), true
+	case "Evidence.internalPolicies":
+		if e.ComplexityRoot.Evidence.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Evidence.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
 	case "Evidence.isAutomated":
 		if e.ComplexityRoot.Evidence.IsAutomated == nil {
 			break
@@ -18169,6 +17779,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+	case "Evidence.procedures":
+		if e.ComplexityRoot.Evidence.Procedures == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_procedures_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Evidence.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 	case "Evidence.programs":
 		if e.ComplexityRoot.Evidence.Programs == nil {
 			break
@@ -23502,870 +23123,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.InviteUpdatePayload.Invite(childComplexity), true
 
-	case "JobResult.createdAt":
-		if e.ComplexityRoot.JobResult.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.CreatedAt(childComplexity), true
-	case "JobResult.createdBy":
-		if e.ComplexityRoot.JobResult.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.CreatedBy(childComplexity), true
-	case "JobResult.exitCode":
-		if e.ComplexityRoot.JobResult.ExitCode == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.ExitCode(childComplexity), true
-	case "JobResult.file":
-		if e.ComplexityRoot.JobResult.File == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.File(childComplexity), true
-	case "JobResult.fileID":
-		if e.ComplexityRoot.JobResult.FileID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.FileID(childComplexity), true
-	case "JobResult.finishedAt":
-		if e.ComplexityRoot.JobResult.FinishedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.FinishedAt(childComplexity), true
-	case "JobResult.id":
-		if e.ComplexityRoot.JobResult.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.ID(childComplexity), true
-	case "JobResult.log":
-		if e.ComplexityRoot.JobResult.Log == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.Log(childComplexity), true
-	case "JobResult.owner":
-		if e.ComplexityRoot.JobResult.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.Owner(childComplexity), true
-	case "JobResult.ownerID":
-		if e.ComplexityRoot.JobResult.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.OwnerID(childComplexity), true
-	case "JobResult.scheduledJob":
-		if e.ComplexityRoot.JobResult.ScheduledJob == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.ScheduledJob(childComplexity), true
-	case "JobResult.scheduledJobID":
-		if e.ComplexityRoot.JobResult.ScheduledJobID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.ScheduledJobID(childComplexity), true
-	case "JobResult.startedAt":
-		if e.ComplexityRoot.JobResult.StartedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.StartedAt(childComplexity), true
-	case "JobResult.status":
-		if e.ComplexityRoot.JobResult.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.Status(childComplexity), true
-	case "JobResult.updatedAt":
-		if e.ComplexityRoot.JobResult.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.UpdatedAt(childComplexity), true
-	case "JobResult.updatedBy":
-		if e.ComplexityRoot.JobResult.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.UpdatedBy(childComplexity), true
-	case "JobResult.updatedByImpersonator":
-		if e.ComplexityRoot.JobResult.UpdatedByImpersonator == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResult.UpdatedByImpersonator(childComplexity), true
-
-	case "JobResultConnection.edges":
-		if e.ComplexityRoot.JobResultConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResultConnection.Edges(childComplexity), true
-	case "JobResultConnection.pageInfo":
-		if e.ComplexityRoot.JobResultConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResultConnection.PageInfo(childComplexity), true
-	case "JobResultConnection.totalCount":
-		if e.ComplexityRoot.JobResultConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResultConnection.TotalCount(childComplexity), true
-
-	case "JobResultCreatePayload.jobResult":
-		if e.ComplexityRoot.JobResultCreatePayload.JobResult == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResultCreatePayload.JobResult(childComplexity), true
-
-	case "JobResultDeletePayload.deletedID":
-		if e.ComplexityRoot.JobResultDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResultDeletePayload.DeletedID(childComplexity), true
-
-	case "JobResultEdge.cursor":
-		if e.ComplexityRoot.JobResultEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResultEdge.Cursor(childComplexity), true
-	case "JobResultEdge.node":
-		if e.ComplexityRoot.JobResultEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResultEdge.Node(childComplexity), true
-
-	case "JobResultUpdatePayload.jobResult":
-		if e.ComplexityRoot.JobResultUpdatePayload.JobResult == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobResultUpdatePayload.JobResult(childComplexity), true
-
-	case "JobRunner.createdAt":
-		if e.ComplexityRoot.JobRunner.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.CreatedAt(childComplexity), true
-	case "JobRunner.createdBy":
-		if e.ComplexityRoot.JobRunner.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.CreatedBy(childComplexity), true
-	case "JobRunner.displayID":
-		if e.ComplexityRoot.JobRunner.DisplayID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.DisplayID(childComplexity), true
-	case "JobRunner.id":
-		if e.ComplexityRoot.JobRunner.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.ID(childComplexity), true
-	case "JobRunner.ipAddress":
-		if e.ComplexityRoot.JobRunner.IPAddress == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.IPAddress(childComplexity), true
-	case "JobRunner.internalNotes":
-		if e.ComplexityRoot.JobRunner.InternalNotes == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.InternalNotes(childComplexity), true
-	case "JobRunner.jobRunnerTokens":
-		if e.ComplexityRoot.JobRunner.JobRunnerTokens == nil {
-			break
-		}
-
-		args, err := ec.field_JobRunner_jobRunnerTokens_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.JobRunner.JobRunnerTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerTokenOrder), args["where"].(*generated.JobRunnerTokenWhereInput)), true
-	case "JobRunner.lastSeen":
-		if e.ComplexityRoot.JobRunner.LastSeen == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.LastSeen(childComplexity), true
-	case "JobRunner.name":
-		if e.ComplexityRoot.JobRunner.Name == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.Name(childComplexity), true
-	case "JobRunner.os":
-		if e.ComplexityRoot.JobRunner.Os == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.Os(childComplexity), true
-	case "JobRunner.owner":
-		if e.ComplexityRoot.JobRunner.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.Owner(childComplexity), true
-	case "JobRunner.ownerID":
-		if e.ComplexityRoot.JobRunner.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.OwnerID(childComplexity), true
-	case "JobRunner.status":
-		if e.ComplexityRoot.JobRunner.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.Status(childComplexity), true
-	case "JobRunner.systemInternalID":
-		if e.ComplexityRoot.JobRunner.SystemInternalID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.SystemInternalID(childComplexity), true
-	case "JobRunner.systemOwned":
-		if e.ComplexityRoot.JobRunner.SystemOwned == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.SystemOwned(childComplexity), true
-	case "JobRunner.tags":
-		if e.ComplexityRoot.JobRunner.Tags == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.Tags(childComplexity), true
-	case "JobRunner.updatedAt":
-		if e.ComplexityRoot.JobRunner.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.UpdatedAt(childComplexity), true
-	case "JobRunner.updatedBy":
-		if e.ComplexityRoot.JobRunner.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.UpdatedBy(childComplexity), true
-	case "JobRunner.updatedByImpersonator":
-		if e.ComplexityRoot.JobRunner.UpdatedByImpersonator == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.UpdatedByImpersonator(childComplexity), true
-	case "JobRunner.version":
-		if e.ComplexityRoot.JobRunner.Version == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunner.Version(childComplexity), true
-
-	case "JobRunnerConnection.edges":
-		if e.ComplexityRoot.JobRunnerConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerConnection.Edges(childComplexity), true
-	case "JobRunnerConnection.pageInfo":
-		if e.ComplexityRoot.JobRunnerConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerConnection.PageInfo(childComplexity), true
-	case "JobRunnerConnection.totalCount":
-		if e.ComplexityRoot.JobRunnerConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerConnection.TotalCount(childComplexity), true
-
-	case "JobRunnerCreatePayload.jobRunner":
-		if e.ComplexityRoot.JobRunnerCreatePayload.JobRunner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerCreatePayload.JobRunner(childComplexity), true
-
-	case "JobRunnerDeletePayload.deletedID":
-		if e.ComplexityRoot.JobRunnerDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerDeletePayload.DeletedID(childComplexity), true
-
-	case "JobRunnerEdge.cursor":
-		if e.ComplexityRoot.JobRunnerEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerEdge.Cursor(childComplexity), true
-	case "JobRunnerEdge.node":
-		if e.ComplexityRoot.JobRunnerEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerEdge.Node(childComplexity), true
-
-	case "JobRunnerRegistrationToken.createdAt":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.CreatedAt(childComplexity), true
-	case "JobRunnerRegistrationToken.createdBy":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.CreatedBy(childComplexity), true
-	case "JobRunnerRegistrationToken.expiresAt":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.ExpiresAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.ExpiresAt(childComplexity), true
-	case "JobRunnerRegistrationToken.id":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.ID(childComplexity), true
-	case "JobRunnerRegistrationToken.jobRunner":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.JobRunner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.JobRunner(childComplexity), true
-	case "JobRunnerRegistrationToken.jobRunnerID":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.JobRunnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.JobRunnerID(childComplexity), true
-	case "JobRunnerRegistrationToken.lastUsedAt":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.LastUsedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.LastUsedAt(childComplexity), true
-	case "JobRunnerRegistrationToken.owner":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.Owner(childComplexity), true
-	case "JobRunnerRegistrationToken.ownerID":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.OwnerID(childComplexity), true
-	case "JobRunnerRegistrationToken.tags":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.Tags == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.Tags(childComplexity), true
-	case "JobRunnerRegistrationToken.token":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.Token == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.Token(childComplexity), true
-	case "JobRunnerRegistrationToken.updatedAt":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.UpdatedAt(childComplexity), true
-	case "JobRunnerRegistrationToken.updatedBy":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.UpdatedBy(childComplexity), true
-	case "JobRunnerRegistrationToken.updatedByImpersonator":
-		if e.ComplexityRoot.JobRunnerRegistrationToken.UpdatedByImpersonator == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationToken.UpdatedByImpersonator(childComplexity), true
-
-	case "JobRunnerRegistrationTokenBulkCreatePayload.jobRunnerRegistrationTokens":
-		if e.ComplexityRoot.JobRunnerRegistrationTokenBulkCreatePayload.JobRunnerRegistrationTokens == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationTokenBulkCreatePayload.JobRunnerRegistrationTokens(childComplexity), true
-
-	case "JobRunnerRegistrationTokenConnection.edges":
-		if e.ComplexityRoot.JobRunnerRegistrationTokenConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationTokenConnection.Edges(childComplexity), true
-	case "JobRunnerRegistrationTokenConnection.pageInfo":
-		if e.ComplexityRoot.JobRunnerRegistrationTokenConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationTokenConnection.PageInfo(childComplexity), true
-	case "JobRunnerRegistrationTokenConnection.totalCount":
-		if e.ComplexityRoot.JobRunnerRegistrationTokenConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationTokenConnection.TotalCount(childComplexity), true
-
-	case "JobRunnerRegistrationTokenCreatePayload.jobRunnerRegistrationToken":
-		if e.ComplexityRoot.JobRunnerRegistrationTokenCreatePayload.JobRunnerRegistrationToken == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationTokenCreatePayload.JobRunnerRegistrationToken(childComplexity), true
-
-	case "JobRunnerRegistrationTokenDeletePayload.deletedID":
-		if e.ComplexityRoot.JobRunnerRegistrationTokenDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationTokenDeletePayload.DeletedID(childComplexity), true
-
-	case "JobRunnerRegistrationTokenEdge.cursor":
-		if e.ComplexityRoot.JobRunnerRegistrationTokenEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationTokenEdge.Cursor(childComplexity), true
-	case "JobRunnerRegistrationTokenEdge.node":
-		if e.ComplexityRoot.JobRunnerRegistrationTokenEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerRegistrationTokenEdge.Node(childComplexity), true
-
-	case "JobRunnerToken.createdAt":
-		if e.ComplexityRoot.JobRunnerToken.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.CreatedAt(childComplexity), true
-	case "JobRunnerToken.createdBy":
-		if e.ComplexityRoot.JobRunnerToken.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.CreatedBy(childComplexity), true
-	case "JobRunnerToken.expiresAt":
-		if e.ComplexityRoot.JobRunnerToken.ExpiresAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.ExpiresAt(childComplexity), true
-	case "JobRunnerToken.id":
-		if e.ComplexityRoot.JobRunnerToken.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.ID(childComplexity), true
-	case "JobRunnerToken.isActive":
-		if e.ComplexityRoot.JobRunnerToken.IsActive == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.IsActive(childComplexity), true
-	case "JobRunnerToken.jobRunners":
-		if e.ComplexityRoot.JobRunnerToken.JobRunners == nil {
-			break
-		}
-
-		args, err := ec.field_JobRunnerToken_jobRunners_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
-	case "JobRunnerToken.lastUsedAt":
-		if e.ComplexityRoot.JobRunnerToken.LastUsedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.LastUsedAt(childComplexity), true
-	case "JobRunnerToken.owner":
-		if e.ComplexityRoot.JobRunnerToken.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.Owner(childComplexity), true
-	case "JobRunnerToken.ownerID":
-		if e.ComplexityRoot.JobRunnerToken.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.OwnerID(childComplexity), true
-	case "JobRunnerToken.revokedAt":
-		if e.ComplexityRoot.JobRunnerToken.RevokedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.RevokedAt(childComplexity), true
-	case "JobRunnerToken.revokedBy":
-		if e.ComplexityRoot.JobRunnerToken.RevokedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.RevokedBy(childComplexity), true
-	case "JobRunnerToken.revokedReason":
-		if e.ComplexityRoot.JobRunnerToken.RevokedReason == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.RevokedReason(childComplexity), true
-	case "JobRunnerToken.tags":
-		if e.ComplexityRoot.JobRunnerToken.Tags == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.Tags(childComplexity), true
-	case "JobRunnerToken.token":
-		if e.ComplexityRoot.JobRunnerToken.Token == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.Token(childComplexity), true
-	case "JobRunnerToken.updatedAt":
-		if e.ComplexityRoot.JobRunnerToken.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.UpdatedAt(childComplexity), true
-	case "JobRunnerToken.updatedBy":
-		if e.ComplexityRoot.JobRunnerToken.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.UpdatedBy(childComplexity), true
-	case "JobRunnerToken.updatedByImpersonator":
-		if e.ComplexityRoot.JobRunnerToken.UpdatedByImpersonator == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerToken.UpdatedByImpersonator(childComplexity), true
-
-	case "JobRunnerTokenConnection.edges":
-		if e.ComplexityRoot.JobRunnerTokenConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerTokenConnection.Edges(childComplexity), true
-	case "JobRunnerTokenConnection.pageInfo":
-		if e.ComplexityRoot.JobRunnerTokenConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerTokenConnection.PageInfo(childComplexity), true
-	case "JobRunnerTokenConnection.totalCount":
-		if e.ComplexityRoot.JobRunnerTokenConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerTokenConnection.TotalCount(childComplexity), true
-
-	case "JobRunnerTokenCreatePayload.jobRunnerToken":
-		if e.ComplexityRoot.JobRunnerTokenCreatePayload.JobRunnerToken == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerTokenCreatePayload.JobRunnerToken(childComplexity), true
-
-	case "JobRunnerTokenDeletePayload.deletedID":
-		if e.ComplexityRoot.JobRunnerTokenDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerTokenDeletePayload.DeletedID(childComplexity), true
-
-	case "JobRunnerTokenEdge.cursor":
-		if e.ComplexityRoot.JobRunnerTokenEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerTokenEdge.Cursor(childComplexity), true
-	case "JobRunnerTokenEdge.node":
-		if e.ComplexityRoot.JobRunnerTokenEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerTokenEdge.Node(childComplexity), true
-
-	case "JobRunnerTokenUpdatePayload.jobRunnerToken":
-		if e.ComplexityRoot.JobRunnerTokenUpdatePayload.JobRunnerToken == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerTokenUpdatePayload.JobRunnerToken(childComplexity), true
-
-	case "JobRunnerUpdatePayload.jobRunner":
-		if e.ComplexityRoot.JobRunnerUpdatePayload.JobRunner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobRunnerUpdatePayload.JobRunner(childComplexity), true
-
-	case "JobTemplate.configuration":
-		if e.ComplexityRoot.JobTemplate.Configuration == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.Configuration(childComplexity), true
-	case "JobTemplate.createdAt":
-		if e.ComplexityRoot.JobTemplate.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.CreatedAt(childComplexity), true
-	case "JobTemplate.createdBy":
-		if e.ComplexityRoot.JobTemplate.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.CreatedBy(childComplexity), true
-	case "JobTemplate.cron":
-		if e.ComplexityRoot.JobTemplate.Cron == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.Cron(childComplexity), true
-	case "JobTemplate.description":
-		if e.ComplexityRoot.JobTemplate.Description == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.Description(childComplexity), true
-	case "JobTemplate.displayID":
-		if e.ComplexityRoot.JobTemplate.DisplayID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.DisplayID(childComplexity), true
-	case "JobTemplate.downloadURL":
-		if e.ComplexityRoot.JobTemplate.DownloadURL == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.DownloadURL(childComplexity), true
-	case "JobTemplate.id":
-		if e.ComplexityRoot.JobTemplate.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.ID(childComplexity), true
-	case "JobTemplate.internalNotes":
-		if e.ComplexityRoot.JobTemplate.InternalNotes == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.InternalNotes(childComplexity), true
-	case "JobTemplate.owner":
-		if e.ComplexityRoot.JobTemplate.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.Owner(childComplexity), true
-	case "JobTemplate.ownerID":
-		if e.ComplexityRoot.JobTemplate.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.OwnerID(childComplexity), true
-	case "JobTemplate.platform":
-		if e.ComplexityRoot.JobTemplate.Platform == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.Platform(childComplexity), true
-	case "JobTemplate.scheduledJobs":
-		if e.ComplexityRoot.JobTemplate.ScheduledJobs == nil {
-			break
-		}
-
-		args, err := ec.field_JobTemplate_scheduledJobs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.JobTemplate.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
-	case "JobTemplate.systemInternalID":
-		if e.ComplexityRoot.JobTemplate.SystemInternalID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.SystemInternalID(childComplexity), true
-	case "JobTemplate.systemOwned":
-		if e.ComplexityRoot.JobTemplate.SystemOwned == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.SystemOwned(childComplexity), true
-	case "JobTemplate.tags":
-		if e.ComplexityRoot.JobTemplate.Tags == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.Tags(childComplexity), true
-	case "JobTemplate.title":
-		if e.ComplexityRoot.JobTemplate.Title == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.Title(childComplexity), true
-	case "JobTemplate.updatedAt":
-		if e.ComplexityRoot.JobTemplate.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.UpdatedAt(childComplexity), true
-	case "JobTemplate.updatedBy":
-		if e.ComplexityRoot.JobTemplate.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.UpdatedBy(childComplexity), true
-	case "JobTemplate.updatedByImpersonator":
-		if e.ComplexityRoot.JobTemplate.UpdatedByImpersonator == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplate.UpdatedByImpersonator(childComplexity), true
-
-	case "JobTemplateBulkCreatePayload.jobTemplates":
-		if e.ComplexityRoot.JobTemplateBulkCreatePayload.JobTemplates == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateBulkCreatePayload.JobTemplates(childComplexity), true
-
-	case "JobTemplateBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.JobTemplateBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "JobTemplateBulkDeletePayload.error":
-		if e.ComplexityRoot.JobTemplateBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateBulkDeletePayload.Error(childComplexity), true
-	case "JobTemplateBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.JobTemplateBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "JobTemplateBulkUpdatePayload.error":
-		if e.ComplexityRoot.JobTemplateBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateBulkUpdatePayload.Error(childComplexity), true
-	case "JobTemplateBulkUpdatePayload.jobTemplates":
-		if e.ComplexityRoot.JobTemplateBulkUpdatePayload.JobTemplates == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateBulkUpdatePayload.JobTemplates(childComplexity), true
-	case "JobTemplateBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.JobTemplateBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "JobTemplateBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.JobTemplateBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
-	case "JobTemplateConnection.edges":
-		if e.ComplexityRoot.JobTemplateConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateConnection.Edges(childComplexity), true
-	case "JobTemplateConnection.pageInfo":
-		if e.ComplexityRoot.JobTemplateConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateConnection.PageInfo(childComplexity), true
-	case "JobTemplateConnection.totalCount":
-		if e.ComplexityRoot.JobTemplateConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateConnection.TotalCount(childComplexity), true
-
-	case "JobTemplateCreatePayload.jobTemplate":
-		if e.ComplexityRoot.JobTemplateCreatePayload.JobTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateCreatePayload.JobTemplate(childComplexity), true
-
-	case "JobTemplateDeletePayload.deletedID":
-		if e.ComplexityRoot.JobTemplateDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateDeletePayload.DeletedID(childComplexity), true
-
-	case "JobTemplateEdge.cursor":
-		if e.ComplexityRoot.JobTemplateEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateEdge.Cursor(childComplexity), true
-	case "JobTemplateEdge.node":
-		if e.ComplexityRoot.JobTemplateEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateEdge.Node(childComplexity), true
-
-	case "JobTemplateUpdatePayload.jobTemplate":
-		if e.ComplexityRoot.JobTemplateUpdatePayload.JobTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.JobTemplateUpdatePayload.JobTemplate(childComplexity), true
-
 	case "MappableDomain.createdAt":
 		if e.ComplexityRoot.MappableDomain.CreatedAt == nil {
 			break
@@ -25342,17 +24099,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVInvite(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.createBulkCSVJobTemplate":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVJobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVJobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVJobTemplate(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVMappableDomain":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVMappableDomain == nil {
 			break
@@ -25529,17 +24275,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkCSVScan(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.createBulkCSVScheduledJob":
-		if e.ComplexityRoot.Mutation.CreateBulkCSVScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkCSVScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkCSVScheduledJob(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.createBulkCSVSubcontrol":
 		if e.ComplexityRoot.Mutation.CreateBulkCSVSubcontrol == nil {
 			break
@@ -26068,17 +24803,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkInvite(childComplexity, args["input"].([]*generated.CreateInviteInput)), true
-	case "Mutation.createBulkJobTemplate":
-		if e.ComplexityRoot.Mutation.CreateBulkJobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkJobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkJobTemplate(childComplexity, args["input"].([]*generated.CreateJobTemplateInput)), true
 	case "Mutation.createBulkMappableDomain":
 		if e.ComplexityRoot.Mutation.CreateBulkMappableDomain == nil {
 			break
@@ -26255,17 +24979,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateBulkScan(childComplexity, args["input"].([]*generated.CreateScanInput)), true
-	case "Mutation.createBulkScheduledJob":
-		if e.ComplexityRoot.Mutation.CreateBulkScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createBulkScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateBulkScheduledJob(childComplexity, args["input"].([]*generated.CreateScheduledJobInput)), true
 	case "Mutation.createBulkSubcontrol":
 		if e.ComplexityRoot.Mutation.CreateBulkSubcontrol == nil {
 			break
@@ -26882,61 +25595,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateInvite(childComplexity, args["input"].(generated.CreateInviteInput)), true
-	case "Mutation.createJobResult":
-		if e.ComplexityRoot.Mutation.CreateJobResult == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createJobResult_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateJobResult(childComplexity, args["input"].(generated.CreateJobResultInput), args["jobResultFiles"].([]*graphql.Upload), args["jobResultFilesMetadata"].([]*model.FileMetadataInput)), true
-	case "Mutation.createJobRunner":
-		if e.ComplexityRoot.Mutation.CreateJobRunner == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createJobRunner_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateJobRunner(childComplexity, args["input"].(generated.CreateJobRunnerInput)), true
-	case "Mutation.createJobRunnerRegistrationToken":
-		if e.ComplexityRoot.Mutation.CreateJobRunnerRegistrationToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createJobRunnerRegistrationToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateJobRunnerRegistrationToken(childComplexity, args["input"].(generated.CreateJobRunnerRegistrationTokenInput)), true
-	case "Mutation.createJobRunnerToken":
-		if e.ComplexityRoot.Mutation.CreateJobRunnerToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createJobRunnerToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateJobRunnerToken(childComplexity, args["input"].(generated.CreateJobRunnerTokenInput)), true
-	case "Mutation.createJobTemplate":
-		if e.ComplexityRoot.Mutation.CreateJobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createJobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateJobTemplate(childComplexity, args["input"].(generated.CreateJobTemplateInput)), true
 	case "Mutation.createMappableDomain":
 		if e.ComplexityRoot.Mutation.CreateMappableDomain == nil {
 			break
@@ -27179,28 +25837,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateScan(childComplexity, args["input"].(generated.CreateScanInput)), true
-	case "Mutation.createScheduledJob":
-		if e.ComplexityRoot.Mutation.CreateScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateScheduledJob(childComplexity, args["input"].(generated.CreateScheduledJobInput)), true
-	case "Mutation.createScheduledJobRun":
-		if e.ComplexityRoot.Mutation.CreateScheduledJobRun == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createScheduledJobRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.CreateScheduledJobRun(childComplexity, args["input"].(generated.CreateScheduledJobRunInput)), true
 	case "Mutation.createStandard":
 		if e.ComplexityRoot.Mutation.CreateStandard == nil {
 			break
@@ -27872,17 +26508,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkInvite(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkJobTemplate":
-		if e.ComplexityRoot.Mutation.DeleteBulkJobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkJobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkJobTemplate(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkMappableDomain":
 		if e.ComplexityRoot.Mutation.DeleteBulkMappableDomain == nil {
 			break
@@ -28048,17 +26673,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteBulkScan(childComplexity, args["ids"].([]string)), true
-	case "Mutation.deleteBulkScheduledJob":
-		if e.ComplexityRoot.Mutation.DeleteBulkScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteBulkScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteBulkScheduledJob(childComplexity, args["ids"].([]string)), true
 	case "Mutation.deleteBulkSubcontrol":
 		if e.ComplexityRoot.Mutation.DeleteBulkSubcontrol == nil {
 			break
@@ -28576,61 +27190,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteInvite(childComplexity, args["id"].(string)), true
-	case "Mutation.deleteJobResult":
-		if e.ComplexityRoot.Mutation.DeleteJobResult == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteJobResult_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteJobResult(childComplexity, args["id"].(string)), true
-	case "Mutation.deleteJobRunner":
-		if e.ComplexityRoot.Mutation.DeleteJobRunner == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteJobRunner_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteJobRunner(childComplexity, args["id"].(string)), true
-	case "Mutation.deleteJobRunnerRegistrationToken":
-		if e.ComplexityRoot.Mutation.DeleteJobRunnerRegistrationToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteJobRunnerRegistrationToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteJobRunnerRegistrationToken(childComplexity, args["id"].(string)), true
-	case "Mutation.deleteJobRunnerToken":
-		if e.ComplexityRoot.Mutation.DeleteJobRunnerToken == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteJobRunnerToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteJobRunnerToken(childComplexity, args["id"].(string)), true
-	case "Mutation.deleteJobTemplate":
-		if e.ComplexityRoot.Mutation.DeleteJobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteJobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteJobTemplate(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteMappableDomain":
 		if e.ComplexityRoot.Mutation.DeleteMappableDomain == nil {
 			break
@@ -28840,28 +27399,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteScan(childComplexity, args["id"].(string)), true
-	case "Mutation.deleteScheduledJob":
-		if e.ComplexityRoot.Mutation.DeleteScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteScheduledJob(childComplexity, args["id"].(string)), true
-	case "Mutation.deleteScheduledJobRun":
-		if e.ComplexityRoot.Mutation.DeleteScheduledJobRun == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_deleteScheduledJobRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.DeleteScheduledJobRun(childComplexity, args["id"].(string)), true
 	case "Mutation.deleteStandard":
 		if e.ComplexityRoot.Mutation.DeleteStandard == nil {
 			break
@@ -29638,17 +28175,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVInvite(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVJobTemplate":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVJobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVJobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVJobTemplate(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVMappableDomain":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVMappableDomain == nil {
 			break
@@ -29814,17 +28340,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkCSVScan(childComplexity, args["input"].(graphql.Upload)), true
-	case "Mutation.updateBulkCSVScheduledJob":
-		if e.ComplexityRoot.Mutation.UpdateBulkCSVScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkCSVScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkCSVScheduledJob(childComplexity, args["input"].(graphql.Upload)), true
 	case "Mutation.updateBulkCSVSubcontrol":
 		if e.ComplexityRoot.Mutation.UpdateBulkCSVSubcontrol == nil {
 			break
@@ -30199,17 +28714,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkInvite(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateInviteInput)), true
-	case "Mutation.updateBulkJobTemplate":
-		if e.ComplexityRoot.Mutation.UpdateBulkJobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkJobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkJobTemplate(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateJobTemplateInput)), true
 	case "Mutation.updateBulkMappableDomain":
 		if e.ComplexityRoot.Mutation.UpdateBulkMappableDomain == nil {
 			break
@@ -30375,17 +28879,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateBulkScan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateScanInput)), true
-	case "Mutation.updateBulkScheduledJob":
-		if e.ComplexityRoot.Mutation.UpdateBulkScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateBulkScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateBulkScheduledJob(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateScheduledJobInput)), true
 	case "Mutation.updateBulkSubcontrol":
 		if e.ComplexityRoot.Mutation.UpdateBulkSubcontrol == nil {
 			break
@@ -30903,39 +29396,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateInvite(childComplexity, args["id"].(string), args["input"].(generated.UpdateInviteInput)), true
-	case "Mutation.updateJobResult":
-		if e.ComplexityRoot.Mutation.UpdateJobResult == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateJobResult_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateJobResult(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobResultInput), args["jobResultFiles"].([]*graphql.Upload), args["jobResultFilesMetadata"].([]*model.FileMetadataInput)), true
-	case "Mutation.updateJobRunner":
-		if e.ComplexityRoot.Mutation.UpdateJobRunner == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateJobRunner_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateJobRunner(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobRunnerInput)), true
-	case "Mutation.updateJobTemplate":
-		if e.ComplexityRoot.Mutation.UpdateJobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateJobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateJobTemplate(childComplexity, args["id"].(string), args["input"].(generated.UpdateJobTemplateInput)), true
 	case "Mutation.updateMappableDomain":
 		if e.ComplexityRoot.Mutation.UpdateMappableDomain == nil {
 			break
@@ -31178,28 +29638,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateScan(childComplexity, args["id"].(string), args["input"].(generated.UpdateScanInput)), true
-	case "Mutation.updateScheduledJob":
-		if e.ComplexityRoot.Mutation.UpdateScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateScheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateScheduledJob(childComplexity, args["id"].(string), args["input"].(generated.UpdateScheduledJobInput)), true
-	case "Mutation.updateScheduledJobRun":
-		if e.ComplexityRoot.Mutation.UpdateScheduledJobRun == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateScheduledJobRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.UpdateScheduledJobRun(childComplexity, args["id"].(string), args["input"].(generated.UpdateScheduledJobRunInput)), true
 	case "Mutation.updateStandard":
 		if e.ComplexityRoot.Mutation.UpdateStandard == nil {
 			break
@@ -34141,105 +32579,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InviteOrder), args["where"].(*generated.InviteWhereInput)), true
-	case "Organization.jobResults":
-		if e.ComplexityRoot.Organization.JobResults == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobResults_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobResults(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobResultOrder), args["where"].(*generated.JobResultWhereInput)), true
-	case "Organization.jobRunnerCreators":
-		if e.ComplexityRoot.Organization.JobRunnerCreators == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobRunnerCreators_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobRunnerCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.jobRunnerRegistrationTokenCreators":
-		if e.ComplexityRoot.Organization.JobRunnerRegistrationTokenCreators == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobRunnerRegistrationTokenCreators_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobRunnerRegistrationTokenCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.jobRunnerRegistrationTokens":
-		if e.ComplexityRoot.Organization.JobRunnerRegistrationTokens == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobRunnerRegistrationTokens_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobRunnerRegistrationTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerRegistrationTokenOrder), args["where"].(*generated.JobRunnerRegistrationTokenWhereInput)), true
-	case "Organization.jobRunnerTokenCreators":
-		if e.ComplexityRoot.Organization.JobRunnerTokenCreators == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobRunnerTokenCreators_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobRunnerTokenCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.jobRunnerTokens":
-		if e.ComplexityRoot.Organization.JobRunnerTokens == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobRunnerTokens_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobRunnerTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerTokenOrder), args["where"].(*generated.JobRunnerTokenWhereInput)), true
-	case "Organization.jobRunners":
-		if e.ComplexityRoot.Organization.JobRunners == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobRunners_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
-	case "Organization.jobTemplateCreators":
-		if e.ComplexityRoot.Organization.JobTemplateCreators == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobTemplateCreators_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobTemplateCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.jobTemplates":
-		if e.ComplexityRoot.Organization.JobTemplates == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_jobTemplates_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.JobTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobTemplateOrder), args["where"].(*generated.JobTemplateWhereInput)), true
 	case "Organization.mappedControlCreators":
 		if e.ComplexityRoot.Organization.MappedControlCreators == nil {
 			break
@@ -34616,50 +32955,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
-	case "Organization.scheduledJobCreators":
-		if e.ComplexityRoot.Organization.ScheduledJobCreators == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_scheduledJobCreators_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.ScheduledJobCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.scheduledJobRunCreators":
-		if e.ComplexityRoot.Organization.ScheduledJobRunCreators == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_scheduledJobRunCreators_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.ScheduledJobRunCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-	case "Organization.scheduledJobRuns":
-		if e.ComplexityRoot.Organization.ScheduledJobRuns == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_scheduledJobRuns_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.ScheduledJobRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobRunOrder), args["where"].(*generated.ScheduledJobRunWhereInput)), true
-	case "Organization.scheduledJobs":
-		if e.ComplexityRoot.Organization.ScheduledJobs == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_scheduledJobs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Organization.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 	case "Organization.secrets":
 		if e.ComplexityRoot.Organization.Secrets == nil {
 			break
@@ -39093,138 +37388,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Invites(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InviteOrder), args["where"].(*generated.InviteWhereInput)), true
-	case "Query.jobResult":
-		if e.ComplexityRoot.Query.JobResult == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobResult_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobResult(childComplexity, args["id"].(string)), true
-	case "Query.jobResults":
-		if e.ComplexityRoot.Query.JobResults == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobResults_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobResults(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobResultOrder), args["where"].(*generated.JobResultWhereInput)), true
-	case "Query.jobRunner":
-		if e.ComplexityRoot.Query.JobRunner == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunner_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobRunner(childComplexity, args["id"].(string)), true
-	case "Query.jobRunnerRegistrationToken":
-		if e.ComplexityRoot.Query.JobRunnerRegistrationToken == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunnerRegistrationToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobRunnerRegistrationToken(childComplexity, args["id"].(string)), true
-	case "Query.jobRunnerRegistrationTokens":
-		if e.ComplexityRoot.Query.JobRunnerRegistrationTokens == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunnerRegistrationTokens_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobRunnerRegistrationTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerRegistrationTokenOrder), args["where"].(*generated.JobRunnerRegistrationTokenWhereInput)), true
-	case "Query.jobRunnerSearch":
-		if e.ComplexityRoot.Query.JobRunnerSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunnerSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobRunnerSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-	case "Query.jobRunnerToken":
-		if e.ComplexityRoot.Query.JobRunnerToken == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunnerToken_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobRunnerToken(childComplexity, args["id"].(string)), true
-	case "Query.jobRunnerTokens":
-		if e.ComplexityRoot.Query.JobRunnerTokens == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunnerTokens_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobRunnerTokens(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerTokenOrder), args["where"].(*generated.JobRunnerTokenWhereInput)), true
-	case "Query.jobRunners":
-		if e.ComplexityRoot.Query.JobRunners == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunners_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobRunners(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobRunnerOrder), args["where"].(*generated.JobRunnerWhereInput)), true
-	case "Query.jobTemplate":
-		if e.ComplexityRoot.Query.JobTemplate == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobTemplate_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobTemplate(childComplexity, args["id"].(string)), true
-	case "Query.jobTemplateSearch":
-		if e.ComplexityRoot.Query.JobTemplateSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobTemplateSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobTemplateSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-	case "Query.jobTemplates":
-		if e.ComplexityRoot.Query.JobTemplates == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobTemplates_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.JobTemplates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.JobTemplateOrder), args["where"].(*generated.JobTemplateWhereInput)), true
 	case "Query.mappableDomain":
 		if e.ComplexityRoot.Query.MappableDomain == nil {
 			break
@@ -39819,50 +37982,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
-	case "Query.scheduledJob":
-		if e.ComplexityRoot.Query.ScheduledJob == nil {
-			break
-		}
-
-		args, err := ec.field_Query_scheduledJob_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.ScheduledJob(childComplexity, args["id"].(string)), true
-	case "Query.scheduledJobRun":
-		if e.ComplexityRoot.Query.ScheduledJobRun == nil {
-			break
-		}
-
-		args, err := ec.field_Query_scheduledJobRun_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.ScheduledJobRun(childComplexity, args["id"].(string)), true
-	case "Query.scheduledJobRuns":
-		if e.ComplexityRoot.Query.ScheduledJobRuns == nil {
-			break
-		}
-
-		args, err := ec.field_Query_scheduledJobRuns_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.ScheduledJobRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobRunOrder), args["where"].(*generated.ScheduledJobRunWhereInput)), true
-	case "Query.scheduledJobs":
-		if e.ComplexityRoot.Query.ScheduledJobs == nil {
-			break
-		}
-
-		args, err := ec.field_Query_scheduledJobs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Query.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 	case "Query.search":
 		if e.ComplexityRoot.Query.Search == nil {
 			break
@@ -43209,373 +41328,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ScanUpdatePayload.Scan(childComplexity), true
 
-	case "ScheduledJob.active":
-		if e.ComplexityRoot.ScheduledJob.Active == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.Active(childComplexity), true
-	case "ScheduledJob.configuration":
-		if e.ComplexityRoot.ScheduledJob.Configuration == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.Configuration(childComplexity), true
-	case "ScheduledJob.controls":
-		if e.ComplexityRoot.ScheduledJob.Controls == nil {
-			break
-		}
-
-		args, err := ec.field_ScheduledJob_controls_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.ScheduledJob.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
-	case "ScheduledJob.createdAt":
-		if e.ComplexityRoot.ScheduledJob.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.CreatedAt(childComplexity), true
-	case "ScheduledJob.createdBy":
-		if e.ComplexityRoot.ScheduledJob.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.CreatedBy(childComplexity), true
-	case "ScheduledJob.cron":
-		if e.ComplexityRoot.ScheduledJob.Cron == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.Cron(childComplexity), true
-	case "ScheduledJob.displayID":
-		if e.ComplexityRoot.ScheduledJob.DisplayID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.DisplayID(childComplexity), true
-	case "ScheduledJob.id":
-		if e.ComplexityRoot.ScheduledJob.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.ID(childComplexity), true
-	case "ScheduledJob.jobID":
-		if e.ComplexityRoot.ScheduledJob.JobID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.JobID(childComplexity), true
-	case "ScheduledJob.jobRunner":
-		if e.ComplexityRoot.ScheduledJob.JobRunner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.JobRunner(childComplexity), true
-	case "ScheduledJob.jobRunnerID":
-		if e.ComplexityRoot.ScheduledJob.JobRunnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.JobRunnerID(childComplexity), true
-	case "ScheduledJob.jobTemplate":
-		if e.ComplexityRoot.ScheduledJob.JobTemplate == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.JobTemplate(childComplexity), true
-	case "ScheduledJob.owner":
-		if e.ComplexityRoot.ScheduledJob.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.Owner(childComplexity), true
-	case "ScheduledJob.ownerID":
-		if e.ComplexityRoot.ScheduledJob.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.OwnerID(childComplexity), true
-	case "ScheduledJob.subcontrols":
-		if e.ComplexityRoot.ScheduledJob.Subcontrols == nil {
-			break
-		}
-
-		args, err := ec.field_ScheduledJob_subcontrols_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.ScheduledJob.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
-	case "ScheduledJob.updatedAt":
-		if e.ComplexityRoot.ScheduledJob.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.UpdatedAt(childComplexity), true
-	case "ScheduledJob.updatedBy":
-		if e.ComplexityRoot.ScheduledJob.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.UpdatedBy(childComplexity), true
-	case "ScheduledJob.updatedByImpersonator":
-		if e.ComplexityRoot.ScheduledJob.UpdatedByImpersonator == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJob.UpdatedByImpersonator(childComplexity), true
-
-	case "ScheduledJobBulkCreatePayload.scheduledJobs":
-		if e.ComplexityRoot.ScheduledJobBulkCreatePayload.ScheduledJobs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobBulkCreatePayload.ScheduledJobs(childComplexity), true
-
-	case "ScheduledJobBulkDeletePayload.deletedIDs":
-		if e.ComplexityRoot.ScheduledJobBulkDeletePayload.DeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobBulkDeletePayload.DeletedIDs(childComplexity), true
-	case "ScheduledJobBulkDeletePayload.error":
-		if e.ComplexityRoot.ScheduledJobBulkDeletePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobBulkDeletePayload.Error(childComplexity), true
-	case "ScheduledJobBulkDeletePayload.notDeletedIDs":
-		if e.ComplexityRoot.ScheduledJobBulkDeletePayload.NotDeletedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobBulkDeletePayload.NotDeletedIDs(childComplexity), true
-
-	case "ScheduledJobBulkUpdatePayload.error":
-		if e.ComplexityRoot.ScheduledJobBulkUpdatePayload.Error == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobBulkUpdatePayload.Error(childComplexity), true
-	case "ScheduledJobBulkUpdatePayload.notUpdatedIDs":
-		if e.ComplexityRoot.ScheduledJobBulkUpdatePayload.NotUpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
-	case "ScheduledJobBulkUpdatePayload.scheduledJobs":
-		if e.ComplexityRoot.ScheduledJobBulkUpdatePayload.ScheduledJobs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobBulkUpdatePayload.ScheduledJobs(childComplexity), true
-	case "ScheduledJobBulkUpdatePayload.updatedIDs":
-		if e.ComplexityRoot.ScheduledJobBulkUpdatePayload.UpdatedIDs == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobBulkUpdatePayload.UpdatedIDs(childComplexity), true
-
-	case "ScheduledJobConnection.edges":
-		if e.ComplexityRoot.ScheduledJobConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobConnection.Edges(childComplexity), true
-	case "ScheduledJobConnection.pageInfo":
-		if e.ComplexityRoot.ScheduledJobConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobConnection.PageInfo(childComplexity), true
-	case "ScheduledJobConnection.totalCount":
-		if e.ComplexityRoot.ScheduledJobConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobConnection.TotalCount(childComplexity), true
-
-	case "ScheduledJobCreatePayload.scheduledJob":
-		if e.ComplexityRoot.ScheduledJobCreatePayload.ScheduledJob == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobCreatePayload.ScheduledJob(childComplexity), true
-
-	case "ScheduledJobDeletePayload.deletedID":
-		if e.ComplexityRoot.ScheduledJobDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobDeletePayload.DeletedID(childComplexity), true
-
-	case "ScheduledJobEdge.cursor":
-		if e.ComplexityRoot.ScheduledJobEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobEdge.Cursor(childComplexity), true
-	case "ScheduledJobEdge.node":
-		if e.ComplexityRoot.ScheduledJobEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobEdge.Node(childComplexity), true
-
-	case "ScheduledJobRun.createdAt":
-		if e.ComplexityRoot.ScheduledJobRun.CreatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.CreatedAt(childComplexity), true
-	case "ScheduledJobRun.createdBy":
-		if e.ComplexityRoot.ScheduledJobRun.CreatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.CreatedBy(childComplexity), true
-	case "ScheduledJobRun.expectedExecutionTime":
-		if e.ComplexityRoot.ScheduledJobRun.ExpectedExecutionTime == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.ExpectedExecutionTime(childComplexity), true
-	case "ScheduledJobRun.id":
-		if e.ComplexityRoot.ScheduledJobRun.ID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.ID(childComplexity), true
-	case "ScheduledJobRun.jobRunner":
-		if e.ComplexityRoot.ScheduledJobRun.JobRunner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.JobRunner(childComplexity), true
-	case "ScheduledJobRun.jobRunnerID":
-		if e.ComplexityRoot.ScheduledJobRun.JobRunnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.JobRunnerID(childComplexity), true
-	case "ScheduledJobRun.owner":
-		if e.ComplexityRoot.ScheduledJobRun.Owner == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.Owner(childComplexity), true
-	case "ScheduledJobRun.ownerID":
-		if e.ComplexityRoot.ScheduledJobRun.OwnerID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.OwnerID(childComplexity), true
-	case "ScheduledJobRun.scheduledJob":
-		if e.ComplexityRoot.ScheduledJobRun.ScheduledJob == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.ScheduledJob(childComplexity), true
-	case "ScheduledJobRun.scheduledJobID":
-		if e.ComplexityRoot.ScheduledJobRun.ScheduledJobID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.ScheduledJobID(childComplexity), true
-	case "ScheduledJobRun.script":
-		if e.ComplexityRoot.ScheduledJobRun.Script == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.Script(childComplexity), true
-	case "ScheduledJobRun.status":
-		if e.ComplexityRoot.ScheduledJobRun.Status == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.Status(childComplexity), true
-	case "ScheduledJobRun.updatedAt":
-		if e.ComplexityRoot.ScheduledJobRun.UpdatedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.UpdatedAt(childComplexity), true
-	case "ScheduledJobRun.updatedBy":
-		if e.ComplexityRoot.ScheduledJobRun.UpdatedBy == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.UpdatedBy(childComplexity), true
-	case "ScheduledJobRun.updatedByImpersonator":
-		if e.ComplexityRoot.ScheduledJobRun.UpdatedByImpersonator == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRun.UpdatedByImpersonator(childComplexity), true
-
-	case "ScheduledJobRunConnection.edges":
-		if e.ComplexityRoot.ScheduledJobRunConnection.Edges == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRunConnection.Edges(childComplexity), true
-	case "ScheduledJobRunConnection.pageInfo":
-		if e.ComplexityRoot.ScheduledJobRunConnection.PageInfo == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRunConnection.PageInfo(childComplexity), true
-	case "ScheduledJobRunConnection.totalCount":
-		if e.ComplexityRoot.ScheduledJobRunConnection.TotalCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRunConnection.TotalCount(childComplexity), true
-
-	case "ScheduledJobRunCreatePayload.scheduledJobRun":
-		if e.ComplexityRoot.ScheduledJobRunCreatePayload.ScheduledJobRun == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRunCreatePayload.ScheduledJobRun(childComplexity), true
-
-	case "ScheduledJobRunDeletePayload.deletedID":
-		if e.ComplexityRoot.ScheduledJobRunDeletePayload.DeletedID == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRunDeletePayload.DeletedID(childComplexity), true
-
-	case "ScheduledJobRunEdge.cursor":
-		if e.ComplexityRoot.ScheduledJobRunEdge.Cursor == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRunEdge.Cursor(childComplexity), true
-	case "ScheduledJobRunEdge.node":
-		if e.ComplexityRoot.ScheduledJobRunEdge.Node == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRunEdge.Node(childComplexity), true
-
-	case "ScheduledJobRunUpdatePayload.scheduledJobRun":
-		if e.ComplexityRoot.ScheduledJobRunUpdatePayload.ScheduledJobRun == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobRunUpdatePayload.ScheduledJobRun(childComplexity), true
-
-	case "ScheduledJobUpdatePayload.scheduledJob":
-		if e.ComplexityRoot.ScheduledJobUpdatePayload.ScheduledJob == nil {
-			break
-		}
-
-		return e.ComplexityRoot.ScheduledJobUpdatePayload.ScheduledJob(childComplexity), true
-
 	case "SearchContext.entityID":
 		if e.ComplexityRoot.SearchContext.EntityID == nil {
 			break
@@ -43715,18 +41467,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.SearchResults.Invites(childComplexity), true
-	case "SearchResults.jobRunners":
-		if e.ComplexityRoot.SearchResults.JobRunners == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SearchResults.JobRunners(childComplexity), true
-	case "SearchResults.jobTemplates":
-		if e.ComplexityRoot.SearchResults.JobTemplates == nil {
-			break
-		}
-
-		return e.ComplexityRoot.SearchResults.JobTemplates(childComplexity), true
 	case "SearchResults.narratives":
 		if e.ComplexityRoot.SearchResults.Narratives == nil {
 			break
@@ -44585,17 +42325,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Subcontrol.Scans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScanOrder), args["where"].(*generated.ScanWhereInput)), true
-	case "Subcontrol.scheduledJobs":
-		if e.ComplexityRoot.Subcontrol.ScheduledJobs == nil {
-			break
-		}
-
-		args, err := ec.field_Subcontrol_scheduledJobs_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Subcontrol.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
 	case "Subcontrol.source":
 		if e.ComplexityRoot.Subcontrol.Source == nil {
 			break
@@ -52945,11 +50674,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateIdentityHolderInput,
 		ec.unmarshalInputCreateInternalPolicyInput,
 		ec.unmarshalInputCreateInviteInput,
-		ec.unmarshalInputCreateJobResultInput,
-		ec.unmarshalInputCreateJobRunnerInput,
-		ec.unmarshalInputCreateJobRunnerRegistrationTokenInput,
-		ec.unmarshalInputCreateJobRunnerTokenInput,
-		ec.unmarshalInputCreateJobTemplateInput,
 		ec.unmarshalInputCreateMappableDomainInput,
 		ec.unmarshalInputCreateMappedControlInput,
 		ec.unmarshalInputCreateMemberWithProgramInput,
@@ -52973,8 +50697,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateRiskInput,
 		ec.unmarshalInputCreateSLADefinitionInput,
 		ec.unmarshalInputCreateScanInput,
-		ec.unmarshalInputCreateScheduledJobInput,
-		ec.unmarshalInputCreateScheduledJobRunInput,
 		ec.unmarshalInputCreateStandardInput,
 		ec.unmarshalInputCreateSubcontrolInput,
 		ec.unmarshalInputCreateSubprocessorInput,
@@ -53064,16 +50786,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputInternalPolicyWhereInput,
 		ec.unmarshalInputInviteOrder,
 		ec.unmarshalInputInviteWhereInput,
-		ec.unmarshalInputJobResultOrder,
-		ec.unmarshalInputJobResultWhereInput,
-		ec.unmarshalInputJobRunnerOrder,
-		ec.unmarshalInputJobRunnerRegistrationTokenOrder,
-		ec.unmarshalInputJobRunnerRegistrationTokenWhereInput,
-		ec.unmarshalInputJobRunnerTokenOrder,
-		ec.unmarshalInputJobRunnerTokenWhereInput,
-		ec.unmarshalInputJobRunnerWhereInput,
-		ec.unmarshalInputJobTemplateOrder,
-		ec.unmarshalInputJobTemplateWhereInput,
 		ec.unmarshalInputLaunchCampaignInput,
 		ec.unmarshalInputMappableDomainOrder,
 		ec.unmarshalInputMappableDomainWhereInput,
@@ -53121,10 +50833,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputSLADefinitionWhereInput,
 		ec.unmarshalInputScanOrder,
 		ec.unmarshalInputScanWhereInput,
-		ec.unmarshalInputScheduledJobOrder,
-		ec.unmarshalInputScheduledJobRunOrder,
-		ec.unmarshalInputScheduledJobRunWhereInput,
-		ec.unmarshalInputScheduledJobWhereInput,
 		ec.unmarshalInputSendCampaignTestEmailInput,
 		ec.unmarshalInputStandardOrder,
 		ec.unmarshalInputStandardWhereInput,
@@ -53200,11 +50908,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateIdentityHolderInput,
 		ec.unmarshalInputUpdateInternalPolicyInput,
 		ec.unmarshalInputUpdateInviteInput,
-		ec.unmarshalInputUpdateJobResultInput,
-		ec.unmarshalInputUpdateJobRunnerInput,
-		ec.unmarshalInputUpdateJobRunnerRegistrationTokenInput,
-		ec.unmarshalInputUpdateJobRunnerTokenInput,
-		ec.unmarshalInputUpdateJobTemplateInput,
 		ec.unmarshalInputUpdateMappableDomainInput,
 		ec.unmarshalInputUpdateMappedControlInput,
 		ec.unmarshalInputUpdateNarrativeInput,
@@ -53225,8 +50928,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateRiskInput,
 		ec.unmarshalInputUpdateSLADefinitionInput,
 		ec.unmarshalInputUpdateScanInput,
-		ec.unmarshalInputUpdateScheduledJobInput,
-		ec.unmarshalInputUpdateScheduledJobRunInput,
 		ec.unmarshalInputUpdateStandardInput,
 		ec.unmarshalInputUpdateSubcontrolInput,
 		ec.unmarshalInputUpdateSubprocessorInput,
@@ -58146,19 +55847,12 @@ input APITokenWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -58169,9 +55863,6 @@ input APITokenWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -58185,10 +55876,6 @@ input APITokenWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -58203,10 +55890,6 @@ input APITokenWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -58221,10 +55904,6 @@ input APITokenWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -58239,10 +55918,6 @@ input APITokenWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -58257,10 +55932,6 @@ input APITokenWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -58270,9 +55941,6 @@ input APITokenWhereInput {
   expires_at field predicates
   """
   expiresAt: Time
-  expiresAtNEQ: Time
-  expiresAtIn: [Time!]
-  expiresAtNotIn: [Time!]
   expiresAtGT: Time
   expiresAtGTE: Time
   expiresAtLT: Time
@@ -58283,9 +55951,6 @@ input APITokenWhereInput {
   last_used_at field predicates
   """
   lastUsedAt: Time
-  lastUsedAtNEQ: Time
-  lastUsedAtIn: [Time!]
-  lastUsedAtNotIn: [Time!]
   lastUsedAtGT: Time
   lastUsedAtGTE: Time
   lastUsedAtLT: Time
@@ -58306,10 +55971,6 @@ input APITokenWhereInput {
   revokedReasonNEQ: String
   revokedReasonIn: [String!]
   revokedReasonNotIn: [String!]
-  revokedReasonGT: String
-  revokedReasonGTE: String
-  revokedReasonLT: String
-  revokedReasonLTE: String
   revokedReasonContains: String
   revokedReasonHasPrefix: String
   revokedReasonHasSuffix: String
@@ -58324,10 +55985,6 @@ input APITokenWhereInput {
   revokedByNEQ: String
   revokedByIn: [String!]
   revokedByNotIn: [String!]
-  revokedByGT: String
-  revokedByGTE: String
-  revokedByLT: String
-  revokedByLTE: String
   revokedByContains: String
   revokedByHasPrefix: String
   revokedByHasSuffix: String
@@ -58339,9 +55996,6 @@ input APITokenWhereInput {
   revoked_at field predicates
   """
   revokedAt: Time
-  revokedAtNEQ: Time
-  revokedAtIn: [Time!]
-  revokedAtNotIn: [Time!]
   revokedAtGT: Time
   revokedAtGTE: Time
   revokedAtLT: Time
@@ -59094,19 +56748,12 @@ input ActionPlanWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -59117,9 +56764,6 @@ input ActionPlanWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -59133,10 +56777,6 @@ input ActionPlanWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -59151,10 +56791,6 @@ input ActionPlanWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -59169,10 +56805,6 @@ input ActionPlanWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -59187,10 +56819,6 @@ input ActionPlanWhereInput {
   revisionNEQ: String
   revisionIn: [String!]
   revisionNotIn: [String!]
-  revisionGT: String
-  revisionGTE: String
-  revisionLT: String
-  revisionLTE: String
   revisionContains: String
   revisionHasPrefix: String
   revisionHasSuffix: String
@@ -59205,10 +56833,6 @@ input ActionPlanWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -59239,10 +56863,6 @@ input ActionPlanWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -59261,9 +56881,6 @@ input ActionPlanWhereInput {
   review_due field predicates
   """
   reviewDue: Time
-  reviewDueNEQ: Time
-  reviewDueIn: [Time!]
-  reviewDueNotIn: [Time!]
   reviewDueGT: Time
   reviewDueGTE: Time
   reviewDueLT: Time
@@ -59286,10 +56903,6 @@ input ActionPlanWhereInput {
   approverIDNEQ: ID
   approverIDIn: [ID!]
   approverIDNotIn: [ID!]
-  approverIDGT: ID
-  approverIDGTE: ID
-  approverIDLT: ID
-  approverIDLTE: ID
   approverIDContains: ID
   approverIDHasPrefix: ID
   approverIDHasSuffix: ID
@@ -59304,10 +56917,6 @@ input ActionPlanWhereInput {
   delegateIDNEQ: ID
   delegateIDIn: [ID!]
   delegateIDNotIn: [ID!]
-  delegateIDGT: ID
-  delegateIDGTE: ID
-  delegateIDLT: ID
-  delegateIDLTE: ID
   delegateIDContains: ID
   delegateIDHasPrefix: ID
   delegateIDHasSuffix: ID
@@ -59322,10 +56931,6 @@ input ActionPlanWhereInput {
   urlNEQ: String
   urlIn: [String!]
   urlNotIn: [String!]
-  urlGT: String
-  urlGTE: String
-  urlLT: String
-  urlLTE: String
   urlContains: String
   urlHasPrefix: String
   urlHasSuffix: String
@@ -59340,10 +56945,6 @@ input ActionPlanWhereInput {
   fileIDNEQ: ID
   fileIDIn: [ID!]
   fileIDNotIn: [ID!]
-  fileIDGT: ID
-  fileIDGTE: ID
-  fileIDLT: ID
-  fileIDLTE: ID
   fileIDContains: ID
   fileIDHasPrefix: ID
   fileIDHasSuffix: ID
@@ -59358,10 +56959,6 @@ input ActionPlanWhereInput {
   externalFileIDNEQ: String
   externalFileIDIn: [String!]
   externalFileIDNotIn: [String!]
-  externalFileIDGT: String
-  externalFileIDGTE: String
-  externalFileIDLT: String
-  externalFileIDLTE: String
   externalFileIDContains: String
   externalFileIDHasPrefix: String
   externalFileIDHasSuffix: String
@@ -59376,10 +56973,6 @@ input ActionPlanWhereInput {
   externalContentsNEQ: String
   externalContentsIn: [String!]
   externalContentsNotIn: [String!]
-  externalContentsGT: String
-  externalContentsGTE: String
-  externalContentsLT: String
-  externalContentsLTE: String
   externalContentsContains: String
   externalContentsHasPrefix: String
   externalContentsHasSuffix: String
@@ -59394,10 +56987,6 @@ input ActionPlanWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -59419,10 +57008,6 @@ input ActionPlanWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -59437,10 +57022,6 @@ input ActionPlanWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -59455,10 +57036,6 @@ input ActionPlanWhereInput {
   actionPlanKindNameNEQ: String
   actionPlanKindNameIn: [String!]
   actionPlanKindNameNotIn: [String!]
-  actionPlanKindNameGT: String
-  actionPlanKindNameGTE: String
-  actionPlanKindNameLT: String
-  actionPlanKindNameLTE: String
   actionPlanKindNameContains: String
   actionPlanKindNameHasPrefix: String
   actionPlanKindNameHasSuffix: String
@@ -59473,10 +57050,6 @@ input ActionPlanWhereInput {
   actionPlanKindIDNEQ: ID
   actionPlanKindIDIn: [ID!]
   actionPlanKindIDNotIn: [ID!]
-  actionPlanKindIDGT: ID
-  actionPlanKindIDGTE: ID
-  actionPlanKindIDLT: ID
-  actionPlanKindIDLTE: ID
   actionPlanKindIDContains: ID
   actionPlanKindIDHasPrefix: ID
   actionPlanKindIDHasSuffix: ID
@@ -59498,10 +57071,6 @@ input ActionPlanWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -59514,10 +57083,6 @@ input ActionPlanWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -59529,9 +57094,6 @@ input ActionPlanWhereInput {
   due_date field predicates
   """
   dueDate: Time
-  dueDateNEQ: Time
-  dueDateIn: [Time!]
-  dueDateNotIn: [Time!]
   dueDateGT: Time
   dueDateGTE: Time
   dueDateLT: Time
@@ -59542,9 +57104,6 @@ input ActionPlanWhereInput {
   completed_at field predicates
   """
   completedAt: Time
-  completedAtNEQ: Time
-  completedAtIn: [Time!]
-  completedAtNotIn: [Time!]
   completedAtGT: Time
   completedAtGTE: Time
   completedAtLT: Time
@@ -59577,10 +57136,6 @@ input ActionPlanWhereInput {
   blockerReasonNEQ: String
   blockerReasonIn: [String!]
   blockerReasonNotIn: [String!]
-  blockerReasonGT: String
-  blockerReasonGTE: String
-  blockerReasonLT: String
-  blockerReasonLTE: String
   blockerReasonContains: String
   blockerReasonHasPrefix: String
   blockerReasonHasSuffix: String
@@ -59595,10 +57150,6 @@ input ActionPlanWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -60361,19 +57912,12 @@ input AssessmentResponseWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -60384,9 +57928,6 @@ input AssessmentResponseWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -60400,10 +57941,6 @@ input AssessmentResponseWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -60418,10 +57955,6 @@ input AssessmentResponseWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -60436,10 +57969,6 @@ input AssessmentResponseWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -60454,10 +57983,6 @@ input AssessmentResponseWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -60479,10 +58004,6 @@ input AssessmentResponseWhereInput {
   assessmentIDNEQ: ID
   assessmentIDIn: [ID!]
   assessmentIDNotIn: [ID!]
-  assessmentIDGT: ID
-  assessmentIDGTE: ID
-  assessmentIDLT: ID
-  assessmentIDLTE: ID
   assessmentIDContains: ID
   assessmentIDHasPrefix: ID
   assessmentIDHasSuffix: ID
@@ -60500,10 +58021,6 @@ input AssessmentResponseWhereInput {
   campaignIDNEQ: ID
   campaignIDIn: [ID!]
   campaignIDNotIn: [ID!]
-  campaignIDGT: ID
-  campaignIDGTE: ID
-  campaignIDLT: ID
-  campaignIDLTE: ID
   campaignIDContains: ID
   campaignIDHasPrefix: ID
   campaignIDHasSuffix: ID
@@ -60518,10 +58035,6 @@ input AssessmentResponseWhereInput {
   identityHolderIDNEQ: ID
   identityHolderIDIn: [ID!]
   identityHolderIDNotIn: [ID!]
-  identityHolderIDGT: ID
-  identityHolderIDGTE: ID
-  identityHolderIDLT: ID
-  identityHolderIDLTE: ID
   identityHolderIDContains: ID
   identityHolderIDHasPrefix: ID
   identityHolderIDHasSuffix: ID
@@ -60536,10 +58049,6 @@ input AssessmentResponseWhereInput {
   entityIDNEQ: ID
   entityIDIn: [ID!]
   entityIDNotIn: [ID!]
-  entityIDGT: ID
-  entityIDGTE: ID
-  entityIDLT: ID
-  entityIDLTE: ID
   entityIDContains: ID
   entityIDHasPrefix: ID
   entityIDHasSuffix: ID
@@ -60554,10 +58063,6 @@ input AssessmentResponseWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -60572,10 +58077,6 @@ input AssessmentResponseWhereInput {
   emailNEQ: String
   emailIn: [String!]
   emailNotIn: [String!]
-  emailGT: String
-  emailGTE: String
-  emailLT: String
-  emailLTE: String
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
@@ -60588,8 +58089,6 @@ input AssessmentResponseWhereInput {
   """
   sendAttempts: Int
   sendAttemptsNEQ: Int
-  sendAttemptsIn: [Int!]
-  sendAttemptsNotIn: [Int!]
   sendAttemptsGT: Int
   sendAttemptsGTE: Int
   sendAttemptsLT: Int
@@ -60598,9 +58097,6 @@ input AssessmentResponseWhereInput {
   email_delivered_at field predicates
   """
   emailDeliveredAt: Time
-  emailDeliveredAtNEQ: Time
-  emailDeliveredAtIn: [Time!]
-  emailDeliveredAtNotIn: [Time!]
   emailDeliveredAtGT: Time
   emailDeliveredAtGTE: Time
   emailDeliveredAtLT: Time
@@ -60611,9 +58107,6 @@ input AssessmentResponseWhereInput {
   email_opened_at field predicates
   """
   emailOpenedAt: Time
-  emailOpenedAtNEQ: Time
-  emailOpenedAtIn: [Time!]
-  emailOpenedAtNotIn: [Time!]
   emailOpenedAtGT: Time
   emailOpenedAtGTE: Time
   emailOpenedAtLT: Time
@@ -60624,9 +58117,6 @@ input AssessmentResponseWhereInput {
   email_clicked_at field predicates
   """
   emailClickedAt: Time
-  emailClickedAtNEQ: Time
-  emailClickedAtIn: [Time!]
-  emailClickedAtNotIn: [Time!]
   emailClickedAtGT: Time
   emailClickedAtGTE: Time
   emailClickedAtLT: Time
@@ -60638,8 +58128,6 @@ input AssessmentResponseWhereInput {
   """
   emailOpenCount: Int
   emailOpenCountNEQ: Int
-  emailOpenCountIn: [Int!]
-  emailOpenCountNotIn: [Int!]
   emailOpenCountGT: Int
   emailOpenCountGTE: Int
   emailOpenCountLT: Int
@@ -60651,8 +58139,6 @@ input AssessmentResponseWhereInput {
   """
   emailClickCount: Int
   emailClickCountNEQ: Int
-  emailClickCountIn: [Int!]
-  emailClickCountNotIn: [Int!]
   emailClickCountGT: Int
   emailClickCountGTE: Int
   emailClickCountLT: Int
@@ -60663,9 +58149,6 @@ input AssessmentResponseWhereInput {
   last_email_event_at field predicates
   """
   lastEmailEventAt: Time
-  lastEmailEventAtNEQ: Time
-  lastEmailEventAtIn: [Time!]
-  lastEmailEventAtNotIn: [Time!]
   lastEmailEventAtGT: Time
   lastEmailEventAtGTE: Time
   lastEmailEventAtLT: Time
@@ -60683,9 +58166,6 @@ input AssessmentResponseWhereInput {
   assigned_at field predicates
   """
   assignedAt: Time
-  assignedAtNEQ: Time
-  assignedAtIn: [Time!]
-  assignedAtNotIn: [Time!]
   assignedAtGT: Time
   assignedAtGTE: Time
   assignedAtLT: Time
@@ -60694,9 +58174,6 @@ input AssessmentResponseWhereInput {
   started_at field predicates
   """
   startedAt: Time
-  startedAtNEQ: Time
-  startedAtIn: [Time!]
-  startedAtNotIn: [Time!]
   startedAtGT: Time
   startedAtGTE: Time
   startedAtLT: Time
@@ -60705,9 +58182,6 @@ input AssessmentResponseWhereInput {
   completed_at field predicates
   """
   completedAt: Time
-  completedAtNEQ: Time
-  completedAtIn: [Time!]
-  completedAtNotIn: [Time!]
   completedAtGT: Time
   completedAtGTE: Time
   completedAtLT: Time
@@ -60718,9 +58192,6 @@ input AssessmentResponseWhereInput {
   due_date field predicates
   """
   dueDate: Time
-  dueDateNEQ: Time
-  dueDateIn: [Time!]
-  dueDateNotIn: [Time!]
   dueDateGT: Time
   dueDateGTE: Time
   dueDateLT: Time
@@ -60788,19 +58259,12 @@ input AssessmentWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -60811,9 +58275,6 @@ input AssessmentWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -60827,10 +58288,6 @@ input AssessmentWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -60845,10 +58302,6 @@ input AssessmentWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -60863,10 +58316,6 @@ input AssessmentWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -60881,10 +58330,6 @@ input AssessmentWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -60906,10 +58351,6 @@ input AssessmentWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -60924,10 +58365,6 @@ input AssessmentWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -60949,10 +58386,6 @@ input AssessmentWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -60972,10 +58405,6 @@ input AssessmentWhereInput {
   templateIDNEQ: ID
   templateIDIn: [ID!]
   templateIDNotIn: [ID!]
-  templateIDGT: ID
-  templateIDGTE: ID
-  templateIDLT: ID
-  templateIDLTE: ID
   templateIDContains: ID
   templateIDHasPrefix: ID
   templateIDHasSuffix: ID
@@ -60988,8 +58417,6 @@ input AssessmentWhereInput {
   """
   responseDueDuration: Int
   responseDueDurationNEQ: Int
-  responseDueDurationIn: [Int!]
-  responseDueDurationNotIn: [Int!]
   responseDueDurationGT: Int
   responseDueDurationGTE: Int
   responseDueDurationLT: Int
@@ -61902,19 +59329,12 @@ input AssetWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -61925,9 +59345,6 @@ input AssetWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -61941,10 +59358,6 @@ input AssetWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -61959,10 +59372,6 @@ input AssetWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -61977,10 +59386,6 @@ input AssetWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -61995,10 +59400,6 @@ input AssetWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -62013,10 +59414,6 @@ input AssetWhereInput {
   internalOwnerNEQ: String
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
-  internalOwnerGT: String
-  internalOwnerGTE: String
-  internalOwnerLT: String
-  internalOwnerLTE: String
   internalOwnerContains: String
   internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
@@ -62031,10 +59428,6 @@ input AssetWhereInput {
   internalOwnerUserIDNEQ: ID
   internalOwnerUserIDIn: [ID!]
   internalOwnerUserIDNotIn: [ID!]
-  internalOwnerUserIDGT: ID
-  internalOwnerUserIDGTE: ID
-  internalOwnerUserIDLT: ID
-  internalOwnerUserIDLTE: ID
   internalOwnerUserIDContains: ID
   internalOwnerUserIDHasPrefix: ID
   internalOwnerUserIDHasSuffix: ID
@@ -62049,10 +59442,6 @@ input AssetWhereInput {
   internalOwnerGroupIDNEQ: ID
   internalOwnerGroupIDIn: [ID!]
   internalOwnerGroupIDNotIn: [ID!]
-  internalOwnerGroupIDGT: ID
-  internalOwnerGroupIDGTE: ID
-  internalOwnerGroupIDLT: ID
-  internalOwnerGroupIDLTE: ID
   internalOwnerGroupIDContains: ID
   internalOwnerGroupIDHasPrefix: ID
   internalOwnerGroupIDHasSuffix: ID
@@ -62067,10 +59456,6 @@ input AssetWhereInput {
   assetSubtypeNameNEQ: String
   assetSubtypeNameIn: [String!]
   assetSubtypeNameNotIn: [String!]
-  assetSubtypeNameGT: String
-  assetSubtypeNameGTE: String
-  assetSubtypeNameLT: String
-  assetSubtypeNameLTE: String
   assetSubtypeNameContains: String
   assetSubtypeNameHasPrefix: String
   assetSubtypeNameHasSuffix: String
@@ -62085,10 +59470,6 @@ input AssetWhereInput {
   assetSubtypeIDNEQ: ID
   assetSubtypeIDIn: [ID!]
   assetSubtypeIDNotIn: [ID!]
-  assetSubtypeIDGT: ID
-  assetSubtypeIDGTE: ID
-  assetSubtypeIDLT: ID
-  assetSubtypeIDLTE: ID
   assetSubtypeIDContains: ID
   assetSubtypeIDHasPrefix: ID
   assetSubtypeIDHasSuffix: ID
@@ -62103,10 +59484,6 @@ input AssetWhereInput {
   assetDataClassificationNameNEQ: String
   assetDataClassificationNameIn: [String!]
   assetDataClassificationNameNotIn: [String!]
-  assetDataClassificationNameGT: String
-  assetDataClassificationNameGTE: String
-  assetDataClassificationNameLT: String
-  assetDataClassificationNameLTE: String
   assetDataClassificationNameContains: String
   assetDataClassificationNameHasPrefix: String
   assetDataClassificationNameHasSuffix: String
@@ -62121,10 +59498,6 @@ input AssetWhereInput {
   assetDataClassificationIDNEQ: ID
   assetDataClassificationIDIn: [ID!]
   assetDataClassificationIDNotIn: [ID!]
-  assetDataClassificationIDGT: ID
-  assetDataClassificationIDGTE: ID
-  assetDataClassificationIDLT: ID
-  assetDataClassificationIDLTE: ID
   assetDataClassificationIDContains: ID
   assetDataClassificationIDHasPrefix: ID
   assetDataClassificationIDHasSuffix: ID
@@ -62139,10 +59512,6 @@ input AssetWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -62157,10 +59526,6 @@ input AssetWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -62175,10 +59540,6 @@ input AssetWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -62193,10 +59554,6 @@ input AssetWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -62211,10 +59568,6 @@ input AssetWhereInput {
   accessModelNameNEQ: String
   accessModelNameIn: [String!]
   accessModelNameNotIn: [String!]
-  accessModelNameGT: String
-  accessModelNameGTE: String
-  accessModelNameLT: String
-  accessModelNameLTE: String
   accessModelNameContains: String
   accessModelNameHasPrefix: String
   accessModelNameHasSuffix: String
@@ -62229,10 +59582,6 @@ input AssetWhereInput {
   accessModelIDNEQ: ID
   accessModelIDIn: [ID!]
   accessModelIDNotIn: [ID!]
-  accessModelIDGT: ID
-  accessModelIDGTE: ID
-  accessModelIDLT: ID
-  accessModelIDLTE: ID
   accessModelIDContains: ID
   accessModelIDHasPrefix: ID
   accessModelIDHasSuffix: ID
@@ -62247,10 +59596,6 @@ input AssetWhereInput {
   encryptionStatusNameNEQ: String
   encryptionStatusNameIn: [String!]
   encryptionStatusNameNotIn: [String!]
-  encryptionStatusNameGT: String
-  encryptionStatusNameGTE: String
-  encryptionStatusNameLT: String
-  encryptionStatusNameLTE: String
   encryptionStatusNameContains: String
   encryptionStatusNameHasPrefix: String
   encryptionStatusNameHasSuffix: String
@@ -62265,10 +59610,6 @@ input AssetWhereInput {
   encryptionStatusIDNEQ: ID
   encryptionStatusIDIn: [ID!]
   encryptionStatusIDNotIn: [ID!]
-  encryptionStatusIDGT: ID
-  encryptionStatusIDGTE: ID
-  encryptionStatusIDLT: ID
-  encryptionStatusIDLTE: ID
   encryptionStatusIDContains: ID
   encryptionStatusIDHasPrefix: ID
   encryptionStatusIDHasSuffix: ID
@@ -62283,10 +59624,6 @@ input AssetWhereInput {
   securityTierNameNEQ: String
   securityTierNameIn: [String!]
   securityTierNameNotIn: [String!]
-  securityTierNameGT: String
-  securityTierNameGTE: String
-  securityTierNameLT: String
-  securityTierNameLTE: String
   securityTierNameContains: String
   securityTierNameHasPrefix: String
   securityTierNameHasSuffix: String
@@ -62301,10 +59638,6 @@ input AssetWhereInput {
   securityTierIDNEQ: ID
   securityTierIDIn: [ID!]
   securityTierIDNotIn: [ID!]
-  securityTierIDGT: ID
-  securityTierIDGTE: ID
-  securityTierIDLT: ID
-  securityTierIDLTE: ID
   securityTierIDContains: ID
   securityTierIDHasPrefix: ID
   securityTierIDHasSuffix: ID
@@ -62319,10 +59652,6 @@ input AssetWhereInput {
   criticalityNameNEQ: String
   criticalityNameIn: [String!]
   criticalityNameNotIn: [String!]
-  criticalityNameGT: String
-  criticalityNameGTE: String
-  criticalityNameLT: String
-  criticalityNameLTE: String
   criticalityNameContains: String
   criticalityNameHasPrefix: String
   criticalityNameHasSuffix: String
@@ -62337,10 +59666,6 @@ input AssetWhereInput {
   criticalityIDNEQ: ID
   criticalityIDIn: [ID!]
   criticalityIDNotIn: [ID!]
-  criticalityIDGT: ID
-  criticalityIDGTE: ID
-  criticalityIDLT: ID
-  criticalityIDLTE: ID
   criticalityIDContains: ID
   criticalityIDHasPrefix: ID
   criticalityIDHasSuffix: ID
@@ -62362,10 +59687,6 @@ input AssetWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -62380,10 +59701,6 @@ input AssetWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -62405,10 +59722,6 @@ input AssetWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -62421,10 +59734,6 @@ input AssetWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -62439,10 +59748,6 @@ input AssetWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -62457,10 +59762,6 @@ input AssetWhereInput {
   identifierNEQ: String
   identifierIn: [String!]
   identifierNotIn: [String!]
-  identifierGT: String
-  identifierGTE: String
-  identifierLT: String
-  identifierLTE: String
   identifierContains: String
   identifierHasPrefix: String
   identifierHasSuffix: String
@@ -62475,10 +59776,6 @@ input AssetWhereInput {
   websiteNEQ: String
   websiteIn: [String!]
   websiteNotIn: [String!]
-  websiteGT: String
-  websiteGTE: String
-  websiteLT: String
-  websiteLTE: String
   websiteContains: String
   websiteHasPrefix: String
   websiteHasSuffix: String
@@ -62493,10 +59790,6 @@ input AssetWhereInput {
   physicalLocationNEQ: String
   physicalLocationIn: [String!]
   physicalLocationNotIn: [String!]
-  physicalLocationGT: String
-  physicalLocationGTE: String
-  physicalLocationLT: String
-  physicalLocationLTE: String
   physicalLocationContains: String
   physicalLocationHasPrefix: String
   physicalLocationHasSuffix: String
@@ -62511,10 +59804,6 @@ input AssetWhereInput {
   regionNEQ: String
   regionIn: [String!]
   regionNotIn: [String!]
-  regionGT: String
-  regionGTE: String
-  regionLT: String
-  regionLTE: String
   regionContains: String
   regionHasPrefix: String
   regionHasSuffix: String
@@ -62543,10 +59832,6 @@ input AssetWhereInput {
   sourcePlatformIDNEQ: ID
   sourcePlatformIDIn: [ID!]
   sourcePlatformIDNotIn: [ID!]
-  sourcePlatformIDGT: ID
-  sourcePlatformIDGTE: ID
-  sourcePlatformIDLT: ID
-  sourcePlatformIDLTE: ID
   sourcePlatformIDContains: ID
   sourcePlatformIDHasPrefix: ID
   sourcePlatformIDHasSuffix: ID
@@ -62561,10 +59846,6 @@ input AssetWhereInput {
   sourceIdentifierNEQ: String
   sourceIdentifierIn: [String!]
   sourceIdentifierNotIn: [String!]
-  sourceIdentifierGT: String
-  sourceIdentifierGTE: String
-  sourceIdentifierLT: String
-  sourceIdentifierLTE: String
   sourceIdentifierContains: String
   sourceIdentifierHasPrefix: String
   sourceIdentifierHasSuffix: String
@@ -62579,10 +59860,6 @@ input AssetWhereInput {
   costCenterNEQ: String
   costCenterIn: [String!]
   costCenterNotIn: [String!]
-  costCenterGT: String
-  costCenterGTE: String
-  costCenterLT: String
-  costCenterLTE: String
   costCenterContains: String
   costCenterHasPrefix: String
   costCenterHasSuffix: String
@@ -62607,9 +59884,6 @@ input AssetWhereInput {
   purchase_date field predicates
   """
   purchaseDate: DateTime
-  purchaseDateNEQ: DateTime
-  purchaseDateIn: [DateTime!]
-  purchaseDateNotIn: [DateTime!]
   purchaseDateGT: DateTime
   purchaseDateGTE: DateTime
   purchaseDateLT: DateTime
@@ -62623,10 +59897,6 @@ input AssetWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -62638,9 +59908,6 @@ input AssetWhereInput {
   observed_at field predicates
   """
   observedAt: DateTime
-  observedAtNEQ: DateTime
-  observedAtIn: [DateTime!]
-  observedAtNotIn: [DateTime!]
   observedAtGT: DateTime
   observedAtGTE: DateTime
   observedAtLT: DateTime
@@ -63594,19 +60861,12 @@ input CampaignTargetWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -63617,9 +60877,6 @@ input CampaignTargetWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -63633,10 +60890,6 @@ input CampaignTargetWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -63651,10 +60904,6 @@ input CampaignTargetWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -63669,10 +60918,6 @@ input CampaignTargetWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -63687,10 +60932,6 @@ input CampaignTargetWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -63712,10 +60953,6 @@ input CampaignTargetWhereInput {
   campaignIDNEQ: ID
   campaignIDIn: [ID!]
   campaignIDNotIn: [ID!]
-  campaignIDGT: ID
-  campaignIDGTE: ID
-  campaignIDLT: ID
-  campaignIDLTE: ID
   campaignIDContains: ID
   campaignIDHasPrefix: ID
   campaignIDHasSuffix: ID
@@ -63730,10 +60967,6 @@ input CampaignTargetWhereInput {
   contactIDNEQ: ID
   contactIDIn: [ID!]
   contactIDNotIn: [ID!]
-  contactIDGT: ID
-  contactIDGTE: ID
-  contactIDLT: ID
-  contactIDLTE: ID
   contactIDContains: ID
   contactIDHasPrefix: ID
   contactIDHasSuffix: ID
@@ -63748,10 +60981,6 @@ input CampaignTargetWhereInput {
   userIDNEQ: ID
   userIDIn: [ID!]
   userIDNotIn: [ID!]
-  userIDGT: ID
-  userIDGTE: ID
-  userIDLT: ID
-  userIDLTE: ID
   userIDContains: ID
   userIDHasPrefix: ID
   userIDHasSuffix: ID
@@ -63766,10 +60995,6 @@ input CampaignTargetWhereInput {
   groupIDNEQ: ID
   groupIDIn: [ID!]
   groupIDNotIn: [ID!]
-  groupIDGT: ID
-  groupIDGTE: ID
-  groupIDLT: ID
-  groupIDLTE: ID
   groupIDContains: ID
   groupIDHasPrefix: ID
   groupIDHasSuffix: ID
@@ -63784,10 +61009,6 @@ input CampaignTargetWhereInput {
   subscriberIDNEQ: ID
   subscriberIDIn: [ID!]
   subscriberIDNotIn: [ID!]
-  subscriberIDGT: ID
-  subscriberIDGTE: ID
-  subscriberIDLT: ID
-  subscriberIDLTE: ID
   subscriberIDContains: ID
   subscriberIDHasPrefix: ID
   subscriberIDHasSuffix: ID
@@ -63802,10 +61023,6 @@ input CampaignTargetWhereInput {
   emailNEQ: String
   emailIn: [String!]
   emailNotIn: [String!]
-  emailGT: String
-  emailGTE: String
-  emailLT: String
-  emailLTE: String
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
@@ -63818,10 +61035,6 @@ input CampaignTargetWhereInput {
   fullNameNEQ: String
   fullNameIn: [String!]
   fullNameNotIn: [String!]
-  fullNameGT: String
-  fullNameGTE: String
-  fullNameLT: String
-  fullNameLTE: String
   fullNameContains: String
   fullNameHasPrefix: String
   fullNameHasSuffix: String
@@ -63840,9 +61053,6 @@ input CampaignTargetWhereInput {
   sent_at field predicates
   """
   sentAt: DateTime
-  sentAtNEQ: DateTime
-  sentAtIn: [DateTime!]
-  sentAtNotIn: [DateTime!]
   sentAtGT: DateTime
   sentAtGTE: DateTime
   sentAtLT: DateTime
@@ -63853,9 +61063,6 @@ input CampaignTargetWhereInput {
   completed_at field predicates
   """
   completedAt: DateTime
-  completedAtNEQ: DateTime
-  completedAtIn: [DateTime!]
-  completedAtNotIn: [DateTime!]
   completedAtGT: DateTime
   completedAtGTE: DateTime
   completedAtLT: DateTime
@@ -63913,19 +61120,12 @@ input CampaignWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -63936,9 +61136,6 @@ input CampaignWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -63952,10 +61149,6 @@ input CampaignWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -63970,10 +61163,6 @@ input CampaignWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -63988,10 +61177,6 @@ input CampaignWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -64006,10 +61191,6 @@ input CampaignWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -64022,10 +61203,6 @@ input CampaignWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -64040,10 +61217,6 @@ input CampaignWhereInput {
   internalOwnerNEQ: String
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
-  internalOwnerGT: String
-  internalOwnerGTE: String
-  internalOwnerLT: String
-  internalOwnerLTE: String
   internalOwnerContains: String
   internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
@@ -64058,10 +61231,6 @@ input CampaignWhereInput {
   internalOwnerUserIDNEQ: ID
   internalOwnerUserIDIn: [ID!]
   internalOwnerUserIDNotIn: [ID!]
-  internalOwnerUserIDGT: ID
-  internalOwnerUserIDGTE: ID
-  internalOwnerUserIDLT: ID
-  internalOwnerUserIDLTE: ID
   internalOwnerUserIDContains: ID
   internalOwnerUserIDHasPrefix: ID
   internalOwnerUserIDHasSuffix: ID
@@ -64076,10 +61245,6 @@ input CampaignWhereInput {
   internalOwnerGroupIDNEQ: ID
   internalOwnerGroupIDIn: [ID!]
   internalOwnerGroupIDNotIn: [ID!]
-  internalOwnerGroupIDGT: ID
-  internalOwnerGroupIDGTE: ID
-  internalOwnerGroupIDLT: ID
-  internalOwnerGroupIDLTE: ID
   internalOwnerGroupIDContains: ID
   internalOwnerGroupIDHasPrefix: ID
   internalOwnerGroupIDHasSuffix: ID
@@ -64101,10 +61266,6 @@ input CampaignWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -64117,10 +61278,6 @@ input CampaignWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -64151,9 +61308,6 @@ input CampaignWhereInput {
   scheduled_at field predicates
   """
   scheduledAt: DateTime
-  scheduledAtNEQ: DateTime
-  scheduledAtIn: [DateTime!]
-  scheduledAtNotIn: [DateTime!]
   scheduledAtGT: DateTime
   scheduledAtGTE: DateTime
   scheduledAtLT: DateTime
@@ -64164,9 +61318,6 @@ input CampaignWhereInput {
   launched_at field predicates
   """
   launchedAt: DateTime
-  launchedAtNEQ: DateTime
-  launchedAtIn: [DateTime!]
-  launchedAtNotIn: [DateTime!]
   launchedAtGT: DateTime
   launchedAtGTE: DateTime
   launchedAtLT: DateTime
@@ -64177,9 +61328,6 @@ input CampaignWhereInput {
   completed_at field predicates
   """
   completedAt: DateTime
-  completedAtNEQ: DateTime
-  completedAtIn: [DateTime!]
-  completedAtNotIn: [DateTime!]
   completedAtGT: DateTime
   completedAtGTE: DateTime
   completedAtLT: DateTime
@@ -64190,9 +61338,6 @@ input CampaignWhereInput {
   due_date field predicates
   """
   dueDate: DateTime
-  dueDateNEQ: DateTime
-  dueDateIn: [DateTime!]
-  dueDateNotIn: [DateTime!]
   dueDateGT: DateTime
   dueDateGTE: DateTime
   dueDateLT: DateTime
@@ -64218,8 +61363,6 @@ input CampaignWhereInput {
   """
   recurrenceInterval: Int
   recurrenceIntervalNEQ: Int
-  recurrenceIntervalIn: [Int!]
-  recurrenceIntervalNotIn: [Int!]
   recurrenceIntervalGT: Int
   recurrenceIntervalGTE: Int
   recurrenceIntervalLT: Int
@@ -64233,10 +61376,6 @@ input CampaignWhereInput {
   recurrenceTimezoneNEQ: String
   recurrenceTimezoneIn: [String!]
   recurrenceTimezoneNotIn: [String!]
-  recurrenceTimezoneGT: String
-  recurrenceTimezoneGTE: String
-  recurrenceTimezoneLT: String
-  recurrenceTimezoneLTE: String
   recurrenceTimezoneContains: String
   recurrenceTimezoneHasPrefix: String
   recurrenceTimezoneHasSuffix: String
@@ -64248,9 +61387,6 @@ input CampaignWhereInput {
   last_run_at field predicates
   """
   lastRunAt: DateTime
-  lastRunAtNEQ: DateTime
-  lastRunAtIn: [DateTime!]
-  lastRunAtNotIn: [DateTime!]
   lastRunAtGT: DateTime
   lastRunAtGTE: DateTime
   lastRunAtLT: DateTime
@@ -64261,9 +61397,6 @@ input CampaignWhereInput {
   next_run_at field predicates
   """
   nextRunAt: DateTime
-  nextRunAtNEQ: DateTime
-  nextRunAtIn: [DateTime!]
-  nextRunAtNotIn: [DateTime!]
   nextRunAtGT: DateTime
   nextRunAtGTE: DateTime
   nextRunAtLT: DateTime
@@ -64274,9 +61407,6 @@ input CampaignWhereInput {
   recurrence_end_at field predicates
   """
   recurrenceEndAt: DateTime
-  recurrenceEndAtNEQ: DateTime
-  recurrenceEndAtIn: [DateTime!]
-  recurrenceEndAtNotIn: [DateTime!]
   recurrenceEndAtGT: DateTime
   recurrenceEndAtGTE: DateTime
   recurrenceEndAtLT: DateTime
@@ -64288,8 +61418,6 @@ input CampaignWhereInput {
   """
   recipientCount: Int
   recipientCountNEQ: Int
-  recipientCountIn: [Int!]
-  recipientCountNotIn: [Int!]
   recipientCountGT: Int
   recipientCountGTE: Int
   recipientCountLT: Int
@@ -64301,8 +61429,6 @@ input CampaignWhereInput {
   """
   resendCount: Int
   resendCountNEQ: Int
-  resendCountIn: [Int!]
-  resendCountNotIn: [Int!]
   resendCountGT: Int
   resendCountGTE: Int
   resendCountLT: Int
@@ -64313,9 +61439,6 @@ input CampaignWhereInput {
   last_resent_at field predicates
   """
   lastResentAt: DateTime
-  lastResentAtNEQ: DateTime
-  lastResentAtIn: [DateTime!]
-  lastResentAtNotIn: [DateTime!]
   lastResentAtGT: DateTime
   lastResentAtGTE: DateTime
   lastResentAtLT: DateTime
@@ -64329,10 +61452,6 @@ input CampaignWhereInput {
   entityIDNEQ: ID
   entityIDIn: [ID!]
   entityIDNotIn: [ID!]
-  entityIDGT: ID
-  entityIDGTE: ID
-  entityIDLT: ID
-  entityIDLTE: ID
   entityIDContains: ID
   entityIDHasPrefix: ID
   entityIDHasSuffix: ID
@@ -64347,10 +61466,6 @@ input CampaignWhereInput {
   templateIDNEQ: ID
   templateIDIn: [ID!]
   templateIDNotIn: [ID!]
-  templateIDGT: ID
-  templateIDGTE: ID
-  templateIDLT: ID
-  templateIDLTE: ID
   templateIDContains: ID
   templateIDHasPrefix: ID
   templateIDHasSuffix: ID
@@ -64365,10 +61480,6 @@ input CampaignWhereInput {
   assessmentIDNEQ: ID
   assessmentIDIn: [ID!]
   assessmentIDNotIn: [ID!]
-  assessmentIDGT: ID
-  assessmentIDGTE: ID
-  assessmentIDLT: ID
-  assessmentIDLTE: ID
   assessmentIDContains: ID
   assessmentIDHasPrefix: ID
   assessmentIDHasSuffix: ID
@@ -64383,10 +61494,6 @@ input CampaignWhereInput {
   emailTemplateIDNEQ: ID
   emailTemplateIDIn: [ID!]
   emailTemplateIDNotIn: [ID!]
-  emailTemplateIDGT: ID
-  emailTemplateIDGTE: ID
-  emailTemplateIDLT: ID
-  emailTemplateIDLTE: ID
   emailTemplateIDContains: ID
   emailTemplateIDHasPrefix: ID
   emailTemplateIDHasSuffix: ID
@@ -64401,10 +61508,6 @@ input CampaignWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -64419,10 +61522,6 @@ input CampaignWhereInput {
   emailBrandingIDNEQ: String
   emailBrandingIDIn: [String!]
   emailBrandingIDNotIn: [String!]
-  emailBrandingIDGT: String
-  emailBrandingIDGTE: String
-  emailBrandingIDLT: String
-  emailBrandingIDLTE: String
   emailBrandingIDContains: String
   emailBrandingIDHasPrefix: String
   emailBrandingIDHasSuffix: String
@@ -64437,10 +61536,6 @@ input CampaignWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -64831,19 +61926,12 @@ input CheckResultWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -64854,9 +61942,6 @@ input CheckResultWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -64870,10 +61955,6 @@ input CheckResultWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -64888,10 +61969,6 @@ input CheckResultWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -64906,10 +61983,6 @@ input CheckResultWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -64931,10 +62004,6 @@ input CheckResultWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -64944,9 +62013,6 @@ input CheckResultWhereInput {
   last_observed_at field predicates
   """
   lastObservedAt: DateTime
-  lastObservedAtNEQ: DateTime
-  lastObservedAtIn: [DateTime!]
-  lastObservedAtNotIn: [DateTime!]
   lastObservedAtGT: DateTime
   lastObservedAtGTE: DateTime
   lastObservedAtLT: DateTime
@@ -64960,10 +62026,6 @@ input CheckResultWhereInput {
   externalURINEQ: String
   externalURIIn: [String!]
   externalURINotIn: [String!]
-  externalURIGT: String
-  externalURIGTE: String
-  externalURILT: String
-  externalURILTE: String
   externalURIContains: String
   externalURIHasPrefix: String
   externalURIHasSuffix: String
@@ -64978,10 +62040,6 @@ input CheckResultWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -64996,10 +62054,6 @@ input CheckResultWhereInput {
   parentExternalIDNEQ: String
   parentExternalIDIn: [String!]
   parentExternalIDNotIn: [String!]
-  parentExternalIDGT: String
-  parentExternalIDGTE: String
-  parentExternalIDLT: String
-  parentExternalIDLTE: String
   parentExternalIDContains: String
   parentExternalIDHasPrefix: String
   parentExternalIDHasSuffix: String
@@ -65014,10 +62068,6 @@ input CheckResultWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -65358,19 +62408,12 @@ input ContactWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -65381,9 +62424,6 @@ input ContactWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -65397,10 +62437,6 @@ input ContactWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -65415,10 +62451,6 @@ input ContactWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -65433,10 +62465,6 @@ input ContactWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -65451,10 +62479,6 @@ input ContactWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -65469,10 +62493,6 @@ input ContactWhereInput {
   fullNameNEQ: String
   fullNameIn: [String!]
   fullNameNotIn: [String!]
-  fullNameGT: String
-  fullNameGTE: String
-  fullNameLT: String
-  fullNameLTE: String
   fullNameContains: String
   fullNameHasPrefix: String
   fullNameHasSuffix: String
@@ -65487,10 +62507,6 @@ input ContactWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -65505,10 +62521,6 @@ input ContactWhereInput {
   companyNEQ: String
   companyIn: [String!]
   companyNotIn: [String!]
-  companyGT: String
-  companyGTE: String
-  companyLT: String
-  companyLTE: String
   companyContains: String
   companyHasPrefix: String
   companyHasSuffix: String
@@ -65523,10 +62535,6 @@ input ContactWhereInput {
   emailNEQ: String
   emailIn: [String!]
   emailNotIn: [String!]
-  emailGT: String
-  emailGTE: String
-  emailLT: String
-  emailLTE: String
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
@@ -65541,10 +62549,6 @@ input ContactWhereInput {
   phoneNumberNEQ: String
   phoneNumberIn: [String!]
   phoneNumberNotIn: [String!]
-  phoneNumberGT: String
-  phoneNumberGTE: String
-  phoneNumberLT: String
-  phoneNumberLTE: String
   phoneNumberContains: String
   phoneNumberHasPrefix: String
   phoneNumberHasSuffix: String
@@ -65559,10 +62563,6 @@ input ContactWhereInput {
   addressNEQ: String
   addressIn: [String!]
   addressNotIn: [String!]
-  addressGT: String
-  addressGTE: String
-  addressLT: String
-  addressLTE: String
   addressContains: String
   addressHasPrefix: String
   addressHasSuffix: String
@@ -65584,10 +62584,6 @@ input ContactWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -65602,10 +62598,6 @@ input ContactWhereInput {
   integrationIDNEQ: String
   integrationIDIn: [String!]
   integrationIDNotIn: [String!]
-  integrationIDGT: String
-  integrationIDGTE: String
-  integrationIDLT: String
-  integrationIDLTE: String
   integrationIDContains: String
   integrationIDHasPrefix: String
   integrationIDHasSuffix: String
@@ -65617,9 +62609,6 @@ input ContactWhereInput {
   observed_at field predicates
   """
   observedAt: DateTime
-  observedAtNEQ: DateTime
-  observedAtIn: [DateTime!]
-  observedAtNotIn: [DateTime!]
   observedAtGT: DateTime
   observedAtGTE: DateTime
   observedAtLT: DateTime
@@ -66682,37 +63671,6 @@ type Control implements Node @modules(names: ["compliance_module","trust_center_
     """
     where: SubcontrolWhereInput
   ): SubcontrolConnection!
-  scheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ScheduledJobs returned from the connection.
-    """
-    orderBy: [ScheduledJobOrder!]
-
-    """
-    Filtering options for ScheduledJobs returned from the connection.
-    """
-    where: ScheduledJobWhereInput
-  ): ScheduledJobConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -67160,19 +64118,12 @@ input ControlImplementationWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -67183,9 +64134,6 @@ input ControlImplementationWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -67199,10 +64147,6 @@ input ControlImplementationWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -67217,10 +64161,6 @@ input ControlImplementationWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -67235,10 +64175,6 @@ input ControlImplementationWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -67253,10 +64189,6 @@ input ControlImplementationWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -67278,10 +64210,6 @@ input ControlImplementationWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -67296,10 +64224,6 @@ input ControlImplementationWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -67320,9 +64244,6 @@ input ControlImplementationWhereInput {
   implementation_date field predicates
   """
   implementationDate: Time
-  implementationDateNEQ: Time
-  implementationDateIn: [Time!]
-  implementationDateNotIn: [Time!]
   implementationDateGT: Time
   implementationDateGTE: Time
   implementationDateLT: Time
@@ -67340,9 +64261,6 @@ input ControlImplementationWhereInput {
   verification_date field predicates
   """
   verificationDate: Time
-  verificationDateNEQ: Time
-  verificationDateIn: [Time!]
-  verificationDateNotIn: [Time!]
   verificationDateGT: Time
   verificationDateGTE: Time
   verificationDateLT: Time
@@ -67356,10 +64274,6 @@ input ControlImplementationWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -67940,19 +64854,12 @@ input ControlObjectiveWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -67963,9 +64870,6 @@ input ControlObjectiveWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -67979,10 +64883,6 @@ input ControlObjectiveWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -67997,10 +64897,6 @@ input ControlObjectiveWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -68015,10 +64911,6 @@ input ControlObjectiveWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -68033,10 +64925,6 @@ input ControlObjectiveWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -68049,10 +64937,6 @@ input ControlObjectiveWhereInput {
   revisionNEQ: String
   revisionIn: [String!]
   revisionNotIn: [String!]
-  revisionGT: String
-  revisionGTE: String
-  revisionLT: String
-  revisionLTE: String
   revisionContains: String
   revisionHasPrefix: String
   revisionHasSuffix: String
@@ -68067,10 +64951,6 @@ input ControlObjectiveWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -68092,10 +64972,6 @@ input ControlObjectiveWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -68110,10 +64986,6 @@ input ControlObjectiveWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -68128,10 +65000,6 @@ input ControlObjectiveWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -68144,10 +65012,6 @@ input ControlObjectiveWhereInput {
   desiredOutcomeNEQ: String
   desiredOutcomeIn: [String!]
   desiredOutcomeNotIn: [String!]
-  desiredOutcomeGT: String
-  desiredOutcomeGTE: String
-  desiredOutcomeLT: String
-  desiredOutcomeLTE: String
   desiredOutcomeContains: String
   desiredOutcomeHasPrefix: String
   desiredOutcomeHasSuffix: String
@@ -68180,10 +65044,6 @@ input ControlObjectiveWhereInput {
   controlObjectiveTypeNEQ: String
   controlObjectiveTypeIn: [String!]
   controlObjectiveTypeNotIn: [String!]
-  controlObjectiveTypeGT: String
-  controlObjectiveTypeGTE: String
-  controlObjectiveTypeLT: String
-  controlObjectiveTypeLTE: String
   controlObjectiveTypeContains: String
   controlObjectiveTypeHasPrefix: String
   controlObjectiveTypeHasSuffix: String
@@ -68198,10 +65058,6 @@ input ControlObjectiveWhereInput {
   categoryNEQ: String
   categoryIn: [String!]
   categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
   categoryContains: String
   categoryHasPrefix: String
   categoryHasSuffix: String
@@ -68216,10 +65072,6 @@ input ControlObjectiveWhereInput {
   subcategoryNEQ: String
   subcategoryIn: [String!]
   subcategoryNotIn: [String!]
-  subcategoryGT: String
-  subcategoryGTE: String
-  subcategoryLT: String
-  subcategoryLTE: String
   subcategoryContains: String
   subcategoryHasPrefix: String
   subcategoryHasSuffix: String
@@ -68349,19 +65201,12 @@ input ControlWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -68372,9 +65217,6 @@ input ControlWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -68388,10 +65230,6 @@ input ControlWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -68406,10 +65244,6 @@ input ControlWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -68424,10 +65258,6 @@ input ControlWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -68442,10 +65272,6 @@ input ControlWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -68458,10 +65284,6 @@ input ControlWhereInput {
   externalUUIDNEQ: String
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
-  externalUUIDGT: String
-  externalUUIDGTE: String
-  externalUUIDLT: String
-  externalUUIDLTE: String
   externalUUIDContains: String
   externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
@@ -68476,10 +65298,6 @@ input ControlWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -68494,10 +65312,6 @@ input ControlWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -68512,10 +65326,6 @@ input ControlWhereInput {
   referenceIDNEQ: String
   referenceIDIn: [String!]
   referenceIDNotIn: [String!]
-  referenceIDGT: String
-  referenceIDGTE: String
-  referenceIDLT: String
-  referenceIDLTE: String
   referenceIDContains: String
   referenceIDHasPrefix: String
   referenceIDHasSuffix: String
@@ -68530,10 +65340,6 @@ input ControlWhereInput {
   auditorReferenceIDNEQ: String
   auditorReferenceIDIn: [String!]
   auditorReferenceIDNotIn: [String!]
-  auditorReferenceIDGT: String
-  auditorReferenceIDGTE: String
-  auditorReferenceIDLT: String
-  auditorReferenceIDLTE: String
   auditorReferenceIDContains: String
   auditorReferenceIDHasPrefix: String
   auditorReferenceIDHasSuffix: String
@@ -68548,10 +65354,6 @@ input ControlWhereInput {
   responsiblePartyIDNEQ: ID
   responsiblePartyIDIn: [ID!]
   responsiblePartyIDNotIn: [ID!]
-  responsiblePartyIDGT: ID
-  responsiblePartyIDGTE: ID
-  responsiblePartyIDLT: ID
-  responsiblePartyIDLTE: ID
   responsiblePartyIDContains: ID
   responsiblePartyIDHasPrefix: ID
   responsiblePartyIDHasSuffix: ID
@@ -68584,10 +65386,6 @@ input ControlWhereInput {
   implementationDescriptionNEQ: String
   implementationDescriptionIn: [String!]
   implementationDescriptionNotIn: [String!]
-  implementationDescriptionGT: String
-  implementationDescriptionGTE: String
-  implementationDescriptionLT: String
-  implementationDescriptionLTE: String
   implementationDescriptionContains: String
   implementationDescriptionHasPrefix: String
   implementationDescriptionHasSuffix: String
@@ -68602,10 +65400,6 @@ input ControlWhereInput {
   publicRepresentationNEQ: String
   publicRepresentationIn: [String!]
   publicRepresentationNotIn: [String!]
-  publicRepresentationGT: String
-  publicRepresentationGTE: String
-  publicRepresentationLT: String
-  publicRepresentationLTE: String
   publicRepresentationContains: String
   publicRepresentationHasPrefix: String
   publicRepresentationHasSuffix: String
@@ -68629,10 +65423,6 @@ input ControlWhereInput {
   sourceNameNEQ: String
   sourceNameIn: [String!]
   sourceNameNotIn: [String!]
-  sourceNameGT: String
-  sourceNameGTE: String
-  sourceNameLT: String
-  sourceNameLTE: String
   sourceNameContains: String
   sourceNameHasPrefix: String
   sourceNameHasSuffix: String
@@ -68647,10 +65437,6 @@ input ControlWhereInput {
   referenceFrameworkNEQ: String
   referenceFrameworkIn: [String!]
   referenceFrameworkNotIn: [String!]
-  referenceFrameworkGT: String
-  referenceFrameworkGTE: String
-  referenceFrameworkLT: String
-  referenceFrameworkLTE: String
   referenceFrameworkContains: String
   referenceFrameworkHasPrefix: String
   referenceFrameworkHasSuffix: String
@@ -68665,10 +65451,6 @@ input ControlWhereInput {
   referenceFrameworkRevisionNEQ: String
   referenceFrameworkRevisionIn: [String!]
   referenceFrameworkRevisionNotIn: [String!]
-  referenceFrameworkRevisionGT: String
-  referenceFrameworkRevisionGTE: String
-  referenceFrameworkRevisionLT: String
-  referenceFrameworkRevisionLTE: String
   referenceFrameworkRevisionContains: String
   referenceFrameworkRevisionHasPrefix: String
   referenceFrameworkRevisionHasSuffix: String
@@ -68683,10 +65465,6 @@ input ControlWhereInput {
   categoryNEQ: String
   categoryIn: [String!]
   categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
   categoryContains: String
   categoryHasPrefix: String
   categoryHasSuffix: String
@@ -68701,10 +65479,6 @@ input ControlWhereInput {
   categoryIDNEQ: String
   categoryIDIn: [String!]
   categoryIDNotIn: [String!]
-  categoryIDGT: String
-  categoryIDGTE: String
-  categoryIDLT: String
-  categoryIDLTE: String
   categoryIDContains: String
   categoryIDHasPrefix: String
   categoryIDHasSuffix: String
@@ -68719,10 +65493,6 @@ input ControlWhereInput {
   subcategoryNEQ: String
   subcategoryIn: [String!]
   subcategoryNotIn: [String!]
-  subcategoryGT: String
-  subcategoryGTE: String
-  subcategoryLT: String
-  subcategoryLTE: String
   subcategoryContains: String
   subcategoryHasPrefix: String
   subcategoryHasSuffix: String
@@ -68737,10 +65507,6 @@ input ControlWhereInput {
   controlOwnerIDNEQ: ID
   controlOwnerIDIn: [ID!]
   controlOwnerIDNotIn: [ID!]
-  controlOwnerIDGT: ID
-  controlOwnerIDGTE: ID
-  controlOwnerIDLT: ID
-  controlOwnerIDLTE: ID
   controlOwnerIDContains: ID
   controlOwnerIDHasPrefix: ID
   controlOwnerIDHasSuffix: ID
@@ -68755,10 +65521,6 @@ input ControlWhereInput {
   delegateIDNEQ: ID
   delegateIDIn: [ID!]
   delegateIDNotIn: [ID!]
-  delegateIDGT: ID
-  delegateIDGTE: ID
-  delegateIDLT: ID
-  delegateIDLTE: ID
   delegateIDContains: ID
   delegateIDHasPrefix: ID
   delegateIDHasSuffix: ID
@@ -68773,10 +65535,6 @@ input ControlWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -68798,10 +65556,6 @@ input ControlWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -68816,10 +65570,6 @@ input ControlWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -68834,10 +65584,6 @@ input ControlWhereInput {
   controlKindNameNEQ: String
   controlKindNameIn: [String!]
   controlKindNameNotIn: [String!]
-  controlKindNameGT: String
-  controlKindNameGTE: String
-  controlKindNameLT: String
-  controlKindNameLTE: String
   controlKindNameContains: String
   controlKindNameHasPrefix: String
   controlKindNameHasSuffix: String
@@ -68852,10 +65598,6 @@ input ControlWhereInput {
   controlKindIDNEQ: ID
   controlKindIDIn: [ID!]
   controlKindIDNotIn: [ID!]
-  controlKindIDGT: ID
-  controlKindIDGTE: ID
-  controlKindIDLT: ID
-  controlKindIDLTE: ID
   controlKindIDContains: ID
   controlKindIDHasPrefix: ID
   controlKindIDHasSuffix: ID
@@ -68870,10 +65612,6 @@ input ControlWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -68888,10 +65626,6 @@ input ControlWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -68906,10 +65640,6 @@ input ControlWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -68924,10 +65654,6 @@ input ControlWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -68949,10 +65675,6 @@ input ControlWhereInput {
   refCodeNEQ: String
   refCodeIn: [String!]
   refCodeNotIn: [String!]
-  refCodeGT: String
-  refCodeGTE: String
-  refCodeLT: String
-  refCodeLTE: String
   refCodeContains: String
   refCodeHasPrefix: String
   refCodeHasSuffix: String
@@ -68965,10 +65687,6 @@ input ControlWhereInput {
   standardIDNEQ: ID
   standardIDIn: [ID!]
   standardIDNotIn: [ID!]
-  standardIDGT: ID
-  standardIDGTE: ID
-  standardIDLT: ID
-  standardIDLTE: ID
   standardIDContains: ID
   standardIDHasPrefix: ID
   standardIDHasSuffix: ID
@@ -69162,11 +65880,6 @@ input ControlWhereInput {
   """
   hasSubcontrols: Boolean
   hasSubcontrolsWith: [SubcontrolWhereInput!]
-  """
-  scheduled_jobs edge predicates
-  """
-  hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ScheduledJobWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -70147,7 +66860,6 @@ input CreateControlInput {
   campaignIDs: [ID!]
   controlImplementationIDs: [ID!]
   subcontrolIDs: [ID!]
-  scheduledJobIDs: [ID!]
   workflowObjectRefIDs: [ID!]
 }
 """
@@ -71201,6 +67913,10 @@ input CreateEvidenceInput {
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceFrequency
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -71208,6 +67924,8 @@ input CreateEvidenceInput {
   subcontrolIDs: [ID!]
   controlObjectiveIDs: [ID!]
   controlImplementationIDs: [ID!]
+  internalPolicyIDs: [ID!]
+  procedureIDs: [ID!]
   fileIDs: [ID!]
   programIDs: [ID!]
   taskIDs: [ID!]
@@ -72102,164 +68820,6 @@ input CreateInviteInput {
   groupIDs: [ID!]
 }
 """
-CreateJobResultInput is used for create JobResult object.
-Input was generated by ent.
-"""
-input CreateJobResultInput {
-  """
-  the status of this job. did it fail? did it succeed?
-  """
-  status: JobResultJobExecutionStatus!
-  """
-  the exit code from the script that was executed
-  """
-  exitCode: Int!
-  """
-  The time the job finished it's execution. This is different from the db insertion time
-  """
-  finishedAt: Time
-  """
-  The time the job started it's execution. This is different from the db insertion time
-  """
-  startedAt: Time
-  """
-  the log output from the job
-  """
-  log: String
-  ownerID: ID
-  scheduledJobID: ID!
-  fileID: ID!
-}
-"""
-CreateJobRunnerInput is used for create JobRunner object.
-Input was generated by ent.
-"""
-input CreateJobRunnerInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @readOnly
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @readOnly
-  """
-  the name of the runner
-  """
-  name: String!
-  """
-  the IP address of this runner
-  """
-  ipAddress: String
-  """
-  the last time this runner was seen
-  """
-  lastSeen: Time
-  """
-  the version of the runner
-  """
-  version: String
-  """
-  the operating system of the runner
-  """
-  os: String
-  ownerID: ID
-  jobRunnerTokenIDs: [ID!]
-}
-"""
-CreateJobRunnerRegistrationTokenInput is used for create JobRunnerRegistrationToken object.
-Input was generated by ent.
-"""
-input CreateJobRunnerRegistrationTokenInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  lastUsedAt: Time
-  ownerID: ID
-  jobRunnerID: ID
-}
-"""
-CreateJobRunnerTokenInput is used for create JobRunnerToken object.
-Input was generated by ent.
-"""
-input CreateJobRunnerTokenInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  when the token expires
-  """
-  expiresAt: Time
-  lastUsedAt: Time
-  """
-  whether the token is active
-  """
-  isActive: Boolean
-  """
-  the reason the token was revoked
-  """
-  revokedReason: String
-  """
-  the user who revoked the token
-  """
-  revokedBy: String
-  """
-  when the token was revoked
-  """
-  revokedAt: Time
-  ownerID: ID
-  jobRunnerIDs: [ID!]
-}
-"""
-CreateJobTemplateInput is used for create JobTemplate object.
-Input was generated by ent.
-"""
-input CreateJobTemplateInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @readOnly
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @readOnly
-  """
-  the title of the job
-  """
-  title: String!
-  """
-  the short description of the job and what it does
-  """
-  description: String
-  """
-  the platform to use to execute this job, e.g. golang, typescript, python, etc.
-  """
-  platform: JobTemplateJobPlatformType!
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String!
-  """
-  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
-  """
-  configuration: JobConfiguration
-  """
-  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  cron: String
-  ownerID: ID
-}
-"""
 CreateMappableDomainInput is used for create MappableDomain object.
 Input was generated by ent.
 """
@@ -72744,10 +69304,6 @@ input CreateOrganizationInput {
   identityHolderCreatorIDs: [ID!]
   internalPolicyCreatorIDs: [ID!]
   inviteCreatorIDs: [ID!]
-  jobRunnerCreatorIDs: [ID!]
-  jobRunnerRegistrationTokenCreatorIDs: [ID!]
-  jobRunnerTokenCreatorIDs: [ID!]
-  jobTemplateCreatorIDs: [ID!]
   mappedControlCreatorIDs: [ID!]
   narrativeCreatorIDs: [ID!]
   noteCreatorIDs: [ID!]
@@ -72761,8 +69317,6 @@ input CreateOrganizationInput {
   reviewCreatorIDs: [ID!]
   riskCreatorIDs: [ID!]
   scanCreatorIDs: [ID!]
-  scheduledJobCreatorIDs: [ID!]
-  scheduledJobRunCreatorIDs: [ID!]
   slaDefinitionCreatorIDs: [ID!]
   standardCreatorIDs: [ID!]
   subcontrolCreatorIDs: [ID!]
@@ -72834,14 +69388,7 @@ input CreateOrganizationInput {
   standardIDs: [ID!]
   actionPlanIDs: [ID!]
   customDomainIDs: [ID!]
-  jobRunnerIDs: [ID!]
-  jobRunnerTokenIDs: [ID!]
-  jobRunnerRegistrationTokenIDs: [ID!]
   dnsVerificationIDs: [ID!]
-  jobTemplateIDs: [ID!]
-  scheduledJobIDs: [ID!]
-  jobResultIDs: [ID!]
-  scheduledJobRunIDs: [ID!]
   trustCenterIDs: [ID!]
   assetIDs: [ID!]
   scanIDs: [ID!]
@@ -73945,52 +70492,6 @@ input CreateScanInput {
   performedByGroupID: ID
 }
 """
-CreateScheduledJobInput is used for create ScheduledJob object.
-Input was generated by ent.
-"""
-input CreateScheduledJobInput {
-  """
-  whether the scheduled job is active
-  """
-  active: Boolean
-  """
-  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
-  """
-  configuration: JobConfiguration
-  """
-  cron 6-field syntax, defaults to the job template's cron if not provided
-  """
-  cron: String
-  ownerID: ID
-  jobTemplateID: ID!
-  controlIDs: [ID!]
-  subcontrolIDs: [ID!]
-  jobRunnerID: ID
-}
-"""
-CreateScheduledJobRunInput is used for create ScheduledJobRun object.
-Input was generated by ent.
-"""
-input CreateScheduledJobRunInput {
-  """
-  The status of the job to be executed. By default will be pending but when
-  			scheduled on a runner, this will change to acquired.
-  """
-  status: ScheduledJobRunScheduledJobRunStatus
-  """
-  When should this job execute on the agent. Since we might potentially schedule a few minutes before
-  """
-  expectedExecutionTime: Time!
-  """
-  the script that will be executed by the agent.
-  This script will be templated with the values from the configuration on the job
-  """
-  script: String!
-  ownerID: ID
-  scheduledJobID: ID!
-  jobRunnerID: ID!
-}
-"""
 CreateStandardInput is used for create Standard object.
 Input was generated by ent.
 """
@@ -74227,7 +70728,6 @@ input CreateSubcontrolInput {
   subcontrolKindID: ID
   controlID: ID!
   controlImplementationIDs: [ID!]
-  scheduledJobIDs: [ID!]
   workflowObjectRefIDs: [ID!]
   assetIDs: [ID!]
   entityIDs: [ID!]
@@ -75557,19 +72057,12 @@ input CustomDomainWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -75580,9 +72073,6 @@ input CustomDomainWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -75596,10 +72086,6 @@ input CustomDomainWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -75614,10 +72100,6 @@ input CustomDomainWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -75632,10 +72114,6 @@ input CustomDomainWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -75650,10 +72128,6 @@ input CustomDomainWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -75675,10 +72149,6 @@ input CustomDomainWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -75693,10 +72163,6 @@ input CustomDomainWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -75711,10 +72177,6 @@ input CustomDomainWhereInput {
   cnameRecordNEQ: String
   cnameRecordIn: [String!]
   cnameRecordNotIn: [String!]
-  cnameRecordGT: String
-  cnameRecordGTE: String
-  cnameRecordLT: String
-  cnameRecordLTE: String
   cnameRecordContains: String
   cnameRecordHasPrefix: String
   cnameRecordHasSuffix: String
@@ -75727,10 +72189,6 @@ input CustomDomainWhereInput {
   mappableDomainIDNEQ: ID
   mappableDomainIDIn: [ID!]
   mappableDomainIDNotIn: [ID!]
-  mappableDomainIDGT: ID
-  mappableDomainIDGTE: ID
-  mappableDomainIDLT: ID
-  mappableDomainIDLTE: ID
   mappableDomainIDContains: ID
   mappableDomainIDHasPrefix: ID
   mappableDomainIDHasSuffix: ID
@@ -75743,10 +72201,6 @@ input CustomDomainWhereInput {
   dnsVerificationIDNEQ: ID
   dnsVerificationIDIn: [ID!]
   dnsVerificationIDNotIn: [ID!]
-  dnsVerificationIDGT: ID
-  dnsVerificationIDGTE: ID
-  dnsVerificationIDLT: ID
-  dnsVerificationIDLTE: ID
   dnsVerificationIDContains: ID
   dnsVerificationIDHasPrefix: ID
   dnsVerificationIDHasSuffix: ID
@@ -75761,10 +72215,6 @@ input CustomDomainWhereInput {
   trustCenterIDNEQ: String
   trustCenterIDIn: [String!]
   trustCenterIDNotIn: [String!]
-  trustCenterIDGT: String
-  trustCenterIDGTE: String
-  trustCenterIDLT: String
-  trustCenterIDLTE: String
   trustCenterIDContains: String
   trustCenterIDHasPrefix: String
   trustCenterIDHasSuffix: String
@@ -76229,19 +72679,12 @@ input CustomTypeEnumWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -76252,9 +72695,6 @@ input CustomTypeEnumWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -76268,10 +72708,6 @@ input CustomTypeEnumWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -76286,10 +72722,6 @@ input CustomTypeEnumWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -76304,10 +72736,6 @@ input CustomTypeEnumWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -76322,10 +72750,6 @@ input CustomTypeEnumWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -76347,10 +72771,6 @@ input CustomTypeEnumWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -76365,10 +72785,6 @@ input CustomTypeEnumWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -76383,10 +72799,6 @@ input CustomTypeEnumWhereInput {
   objectTypeNEQ: String
   objectTypeIn: [String!]
   objectTypeNotIn: [String!]
-  objectTypeGT: String
-  objectTypeGTE: String
-  objectTypeLT: String
-  objectTypeLTE: String
   objectTypeContains: String
   objectTypeHasPrefix: String
   objectTypeHasSuffix: String
@@ -76399,10 +72811,6 @@ input CustomTypeEnumWhereInput {
   fieldNEQ: String
   fieldIn: [String!]
   fieldNotIn: [String!]
-  fieldGT: String
-  fieldGTE: String
-  fieldLT: String
-  fieldLTE: String
   fieldContains: String
   fieldHasPrefix: String
   fieldHasSuffix: String
@@ -76415,10 +72823,6 @@ input CustomTypeEnumWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -76431,10 +72835,6 @@ input CustomTypeEnumWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -76449,10 +72849,6 @@ input CustomTypeEnumWhereInput {
   colorNEQ: String
   colorIn: [String!]
   colorNotIn: [String!]
-  colorGT: String
-  colorGTE: String
-  colorLT: String
-  colorLTE: String
   colorContains: String
   colorHasPrefix: String
   colorHasSuffix: String
@@ -76467,10 +72863,6 @@ input CustomTypeEnumWhereInput {
   iconNEQ: String
   iconIn: [String!]
   iconNotIn: [String!]
-  iconGT: String
-  iconGTE: String
-  iconLT: String
-  iconLTE: String
   iconContains: String
   iconHasPrefix: String
   iconHasSuffix: String
@@ -76733,19 +73125,12 @@ input DNSVerificationWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -76756,9 +73141,6 @@ input DNSVerificationWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -76772,10 +73154,6 @@ input DNSVerificationWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -76790,10 +73168,6 @@ input DNSVerificationWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -76808,10 +73182,6 @@ input DNSVerificationWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -76826,10 +73196,6 @@ input DNSVerificationWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -76844,10 +73210,6 @@ input DNSVerificationWhereInput {
   cloudflareHostnameIDNEQ: String
   cloudflareHostnameIDIn: [String!]
   cloudflareHostnameIDNotIn: [String!]
-  cloudflareHostnameIDGT: String
-  cloudflareHostnameIDGTE: String
-  cloudflareHostnameIDLT: String
-  cloudflareHostnameIDLTE: String
   cloudflareHostnameIDContains: String
   cloudflareHostnameIDHasPrefix: String
   cloudflareHostnameIDHasSuffix: String
@@ -76860,10 +73222,6 @@ input DNSVerificationWhereInput {
   dnsTxtRecordNEQ: String
   dnsTxtRecordIn: [String!]
   dnsTxtRecordNotIn: [String!]
-  dnsTxtRecordGT: String
-  dnsTxtRecordGTE: String
-  dnsTxtRecordLT: String
-  dnsTxtRecordLTE: String
   dnsTxtRecordContains: String
   dnsTxtRecordHasPrefix: String
   dnsTxtRecordHasSuffix: String
@@ -76876,10 +73234,6 @@ input DNSVerificationWhereInput {
   dnsTxtValueNEQ: String
   dnsTxtValueIn: [String!]
   dnsTxtValueNotIn: [String!]
-  dnsTxtValueGT: String
-  dnsTxtValueGTE: String
-  dnsTxtValueLT: String
-  dnsTxtValueLTE: String
   dnsTxtValueContains: String
   dnsTxtValueHasPrefix: String
   dnsTxtValueHasSuffix: String
@@ -76899,10 +73253,6 @@ input DNSVerificationWhereInput {
   dnsVerificationStatusReasonNEQ: String
   dnsVerificationStatusReasonIn: [String!]
   dnsVerificationStatusReasonNotIn: [String!]
-  dnsVerificationStatusReasonGT: String
-  dnsVerificationStatusReasonGTE: String
-  dnsVerificationStatusReasonLT: String
-  dnsVerificationStatusReasonLTE: String
   dnsVerificationStatusReasonContains: String
   dnsVerificationStatusReasonHasPrefix: String
   dnsVerificationStatusReasonHasSuffix: String
@@ -76917,10 +73267,6 @@ input DNSVerificationWhereInput {
   acmeChallengePathNEQ: String
   acmeChallengePathIn: [String!]
   acmeChallengePathNotIn: [String!]
-  acmeChallengePathGT: String
-  acmeChallengePathGTE: String
-  acmeChallengePathLT: String
-  acmeChallengePathLTE: String
   acmeChallengePathContains: String
   acmeChallengePathHasPrefix: String
   acmeChallengePathHasSuffix: String
@@ -76935,10 +73281,6 @@ input DNSVerificationWhereInput {
   expectedAcmeChallengeValueNEQ: String
   expectedAcmeChallengeValueIn: [String!]
   expectedAcmeChallengeValueNotIn: [String!]
-  expectedAcmeChallengeValueGT: String
-  expectedAcmeChallengeValueGTE: String
-  expectedAcmeChallengeValueLT: String
-  expectedAcmeChallengeValueLTE: String
   expectedAcmeChallengeValueContains: String
   expectedAcmeChallengeValueHasPrefix: String
   expectedAcmeChallengeValueHasSuffix: String
@@ -76960,10 +73302,6 @@ input DNSVerificationWhereInput {
   acmeChallengeStatusReasonNEQ: String
   acmeChallengeStatusReasonIn: [String!]
   acmeChallengeStatusReasonNotIn: [String!]
-  acmeChallengeStatusReasonGT: String
-  acmeChallengeStatusReasonGTE: String
-  acmeChallengeStatusReasonLT: String
-  acmeChallengeStatusReasonLTE: String
   acmeChallengeStatusReasonContains: String
   acmeChallengeStatusReasonHasPrefix: String
   acmeChallengeStatusReasonHasSuffix: String
@@ -77413,19 +73751,12 @@ input DirectoryAccountWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -77436,9 +73767,6 @@ input DirectoryAccountWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -77452,10 +73780,6 @@ input DirectoryAccountWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -77470,10 +73794,6 @@ input DirectoryAccountWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -77488,10 +73808,6 @@ input DirectoryAccountWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -77506,10 +73822,6 @@ input DirectoryAccountWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -77522,10 +73834,6 @@ input DirectoryAccountWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -77540,10 +73848,6 @@ input DirectoryAccountWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -77558,10 +73862,6 @@ input DirectoryAccountWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -77576,10 +73876,6 @@ input DirectoryAccountWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -77594,10 +73890,6 @@ input DirectoryAccountWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -77612,10 +73904,6 @@ input DirectoryAccountWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -77630,10 +73918,6 @@ input DirectoryAccountWhereInput {
   directorySyncRunIDNEQ: ID
   directorySyncRunIDIn: [ID!]
   directorySyncRunIDNotIn: [ID!]
-  directorySyncRunIDGT: ID
-  directorySyncRunIDGTE: ID
-  directorySyncRunIDLT: ID
-  directorySyncRunIDLTE: ID
   directorySyncRunIDContains: ID
   directorySyncRunIDHasPrefix: ID
   directorySyncRunIDHasSuffix: ID
@@ -77648,10 +73932,6 @@ input DirectoryAccountWhereInput {
   platformIDNEQ: ID
   platformIDIn: [ID!]
   platformIDNotIn: [ID!]
-  platformIDGT: ID
-  platformIDGTE: ID
-  platformIDLT: ID
-  platformIDLTE: ID
   platformIDContains: ID
   platformIDHasPrefix: ID
   platformIDHasSuffix: ID
@@ -77666,10 +73946,6 @@ input DirectoryAccountWhereInput {
   directoryInstanceIDNEQ: String
   directoryInstanceIDIn: [String!]
   directoryInstanceIDNotIn: [String!]
-  directoryInstanceIDGT: String
-  directoryInstanceIDGTE: String
-  directoryInstanceIDLT: String
-  directoryInstanceIDLTE: String
   directoryInstanceIDContains: String
   directoryInstanceIDHasPrefix: String
   directoryInstanceIDHasSuffix: String
@@ -77684,10 +73960,6 @@ input DirectoryAccountWhereInput {
   identityHolderIDNEQ: ID
   identityHolderIDIn: [ID!]
   identityHolderIDNotIn: [ID!]
-  identityHolderIDGT: ID
-  identityHolderIDGTE: ID
-  identityHolderIDLT: ID
-  identityHolderIDLTE: ID
   identityHolderIDContains: ID
   identityHolderIDHasPrefix: ID
   identityHolderIDHasSuffix: ID
@@ -77702,10 +73974,6 @@ input DirectoryAccountWhereInput {
   directoryNameNEQ: String
   directoryNameIn: [String!]
   directoryNameNotIn: [String!]
-  directoryNameGT: String
-  directoryNameGTE: String
-  directoryNameLT: String
-  directoryNameLTE: String
   directoryNameContains: String
   directoryNameHasPrefix: String
   directoryNameHasSuffix: String
@@ -77720,10 +73988,6 @@ input DirectoryAccountWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -77736,10 +74000,6 @@ input DirectoryAccountWhereInput {
   secondaryKeyNEQ: String
   secondaryKeyIn: [String!]
   secondaryKeyNotIn: [String!]
-  secondaryKeyGT: String
-  secondaryKeyGTE: String
-  secondaryKeyLT: String
-  secondaryKeyLTE: String
   secondaryKeyContains: String
   secondaryKeyHasPrefix: String
   secondaryKeyHasSuffix: String
@@ -77754,10 +74014,6 @@ input DirectoryAccountWhereInput {
   canonicalEmailNEQ: String
   canonicalEmailIn: [String!]
   canonicalEmailNotIn: [String!]
-  canonicalEmailGT: String
-  canonicalEmailGTE: String
-  canonicalEmailLT: String
-  canonicalEmailLTE: String
   canonicalEmailContains: String
   canonicalEmailHasPrefix: String
   canonicalEmailHasSuffix: String
@@ -77772,10 +74028,6 @@ input DirectoryAccountWhereInput {
   phoneNumberNEQ: String
   phoneNumberIn: [String!]
   phoneNumberNotIn: [String!]
-  phoneNumberGT: String
-  phoneNumberGTE: String
-  phoneNumberLT: String
-  phoneNumberLTE: String
   phoneNumberContains: String
   phoneNumberHasPrefix: String
   phoneNumberHasSuffix: String
@@ -77790,10 +74042,6 @@ input DirectoryAccountWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -77808,10 +74056,6 @@ input DirectoryAccountWhereInput {
   avatarRemoteURLNEQ: String
   avatarRemoteURLIn: [String!]
   avatarRemoteURLNotIn: [String!]
-  avatarRemoteURLGT: String
-  avatarRemoteURLGTE: String
-  avatarRemoteURLLT: String
-  avatarRemoteURLLTE: String
   avatarRemoteURLContains: String
   avatarRemoteURLHasPrefix: String
   avatarRemoteURLHasSuffix: String
@@ -77826,10 +74070,6 @@ input DirectoryAccountWhereInput {
   avatarLocalFileIDNEQ: ID
   avatarLocalFileIDIn: [ID!]
   avatarLocalFileIDNotIn: [ID!]
-  avatarLocalFileIDGT: ID
-  avatarLocalFileIDGTE: ID
-  avatarLocalFileIDLT: ID
-  avatarLocalFileIDLTE: ID
   avatarLocalFileIDContains: ID
   avatarLocalFileIDHasPrefix: ID
   avatarLocalFileIDHasSuffix: ID
@@ -77841,9 +74081,6 @@ input DirectoryAccountWhereInput {
   avatar_updated_at field predicates
   """
   avatarUpdatedAt: Time
-  avatarUpdatedAtNEQ: Time
-  avatarUpdatedAtIn: [Time!]
-  avatarUpdatedAtNotIn: [Time!]
   avatarUpdatedAtGT: Time
   avatarUpdatedAtGTE: Time
   avatarUpdatedAtLT: Time
@@ -77857,10 +74094,6 @@ input DirectoryAccountWhereInput {
   givenNameNEQ: String
   givenNameIn: [String!]
   givenNameNotIn: [String!]
-  givenNameGT: String
-  givenNameGTE: String
-  givenNameLT: String
-  givenNameLTE: String
   givenNameContains: String
   givenNameHasPrefix: String
   givenNameHasSuffix: String
@@ -77875,10 +74108,6 @@ input DirectoryAccountWhereInput {
   familyNameNEQ: String
   familyNameIn: [String!]
   familyNameNotIn: [String!]
-  familyNameGT: String
-  familyNameGTE: String
-  familyNameLT: String
-  familyNameLTE: String
   familyNameContains: String
   familyNameHasPrefix: String
   familyNameHasSuffix: String
@@ -77893,10 +74122,6 @@ input DirectoryAccountWhereInput {
   jobTitleNEQ: String
   jobTitleIn: [String!]
   jobTitleNotIn: [String!]
-  jobTitleGT: String
-  jobTitleGTE: String
-  jobTitleLT: String
-  jobTitleLTE: String
   jobTitleContains: String
   jobTitleHasPrefix: String
   jobTitleHasSuffix: String
@@ -77911,10 +74136,6 @@ input DirectoryAccountWhereInput {
   departmentNEQ: String
   departmentIn: [String!]
   departmentNotIn: [String!]
-  departmentGT: String
-  departmentGTE: String
-  departmentLT: String
-  departmentLTE: String
   departmentContains: String
   departmentHasPrefix: String
   departmentHasSuffix: String
@@ -77929,10 +74150,6 @@ input DirectoryAccountWhereInput {
   organizationUnitNEQ: String
   organizationUnitIn: [String!]
   organizationUnitNotIn: [String!]
-  organizationUnitGT: String
-  organizationUnitGTE: String
-  organizationUnitLT: String
-  organizationUnitLTE: String
   organizationUnitContains: String
   organizationUnitHasPrefix: String
   organizationUnitHasSuffix: String
@@ -77970,10 +74187,6 @@ input DirectoryAccountWhereInput {
   lastSeenIPNEQ: String
   lastSeenIPIn: [String!]
   lastSeenIPNotIn: [String!]
-  lastSeenIPGT: String
-  lastSeenIPGTE: String
-  lastSeenIPLT: String
-  lastSeenIPLTE: String
   lastSeenIPContains: String
   lastSeenIPHasPrefix: String
   lastSeenIPHasSuffix: String
@@ -77985,9 +74198,6 @@ input DirectoryAccountWhereInput {
   last_login_at field predicates
   """
   lastLoginAt: Time
-  lastLoginAtNEQ: Time
-  lastLoginAtIn: [Time!]
-  lastLoginAtNotIn: [Time!]
   lastLoginAtGT: Time
   lastLoginAtGTE: Time
   lastLoginAtLT: Time
@@ -77998,9 +74208,6 @@ input DirectoryAccountWhereInput {
   first_seen_at field predicates
   """
   firstSeenAt: Time
-  firstSeenAtNEQ: Time
-  firstSeenAtIn: [Time!]
-  firstSeenAtNotIn: [Time!]
   firstSeenAtGT: Time
   firstSeenAtGTE: Time
   firstSeenAtLT: Time
@@ -78011,9 +74218,6 @@ input DirectoryAccountWhereInput {
   last_seen_at field predicates
   """
   lastSeenAt: Time
-  lastSeenAtNEQ: Time
-  lastSeenAtIn: [Time!]
-  lastSeenAtNotIn: [Time!]
   lastSeenAtGT: Time
   lastSeenAtGTE: Time
   lastSeenAtLT: Time
@@ -78024,9 +74228,6 @@ input DirectoryAccountWhereInput {
   added_at field predicates
   """
   addedAt: Time
-  addedAtNEQ: Time
-  addedAtIn: [Time!]
-  addedAtNotIn: [Time!]
   addedAtGT: Time
   addedAtGTE: Time
   addedAtLT: Time
@@ -78037,9 +74238,6 @@ input DirectoryAccountWhereInput {
   removed_at field predicates
   """
   removedAt: Time
-  removedAtNEQ: Time
-  removedAtIn: [Time!]
-  removedAtNotIn: [Time!]
   removedAtGT: Time
   removedAtGTE: Time
   removedAtLT: Time
@@ -78050,9 +74248,6 @@ input DirectoryAccountWhereInput {
   observed_at field predicates
   """
   observedAt: Time
-  observedAtNEQ: Time
-  observedAtIn: [Time!]
-  observedAtNotIn: [Time!]
   observedAtGT: Time
   observedAtGTE: Time
   observedAtLT: Time
@@ -78064,10 +74259,6 @@ input DirectoryAccountWhereInput {
   profileHashNEQ: String
   profileHashIn: [String!]
   profileHashNotIn: [String!]
-  profileHashGT: String
-  profileHashGTE: String
-  profileHashLT: String
-  profileHashLTE: String
   profileHashContains: String
   profileHashHasPrefix: String
   profileHashHasSuffix: String
@@ -78080,10 +74271,6 @@ input DirectoryAccountWhereInput {
   sourceVersionNEQ: String
   sourceVersionIn: [String!]
   sourceVersionNotIn: [String!]
-  sourceVersionGT: String
-  sourceVersionGTE: String
-  sourceVersionLT: String
-  sourceVersionLTE: String
   sourceVersionContains: String
   sourceVersionHasPrefix: String
   sourceVersionHasSuffix: String
@@ -78491,19 +74678,12 @@ input DirectoryGroupWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -78514,9 +74694,6 @@ input DirectoryGroupWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -78530,10 +74707,6 @@ input DirectoryGroupWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -78548,10 +74721,6 @@ input DirectoryGroupWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -78566,10 +74735,6 @@ input DirectoryGroupWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -78584,10 +74749,6 @@ input DirectoryGroupWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -78600,10 +74761,6 @@ input DirectoryGroupWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -78618,10 +74775,6 @@ input DirectoryGroupWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -78636,10 +74789,6 @@ input DirectoryGroupWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -78654,10 +74803,6 @@ input DirectoryGroupWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -78672,10 +74817,6 @@ input DirectoryGroupWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -78690,10 +74831,6 @@ input DirectoryGroupWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -78706,10 +74843,6 @@ input DirectoryGroupWhereInput {
   platformIDNEQ: ID
   platformIDIn: [ID!]
   platformIDNotIn: [ID!]
-  platformIDGT: ID
-  platformIDGTE: ID
-  platformIDLT: ID
-  platformIDLTE: ID
   platformIDContains: ID
   platformIDHasPrefix: ID
   platformIDHasSuffix: ID
@@ -78724,10 +74857,6 @@ input DirectoryGroupWhereInput {
   directoryInstanceIDNEQ: String
   directoryInstanceIDIn: [String!]
   directoryInstanceIDNotIn: [String!]
-  directoryInstanceIDGT: String
-  directoryInstanceIDGTE: String
-  directoryInstanceIDLT: String
-  directoryInstanceIDLTE: String
   directoryInstanceIDContains: String
   directoryInstanceIDHasPrefix: String
   directoryInstanceIDHasSuffix: String
@@ -78742,10 +74871,6 @@ input DirectoryGroupWhereInput {
   directorySyncRunIDNEQ: ID
   directorySyncRunIDIn: [ID!]
   directorySyncRunIDNotIn: [ID!]
-  directorySyncRunIDGT: ID
-  directorySyncRunIDGTE: ID
-  directorySyncRunIDLT: ID
-  directorySyncRunIDLTE: ID
   directorySyncRunIDContains: ID
   directorySyncRunIDHasPrefix: ID
   directorySyncRunIDHasSuffix: ID
@@ -78758,10 +74883,6 @@ input DirectoryGroupWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -78774,10 +74895,6 @@ input DirectoryGroupWhereInput {
   emailNEQ: String
   emailIn: [String!]
   emailNotIn: [String!]
-  emailGT: String
-  emailGTE: String
-  emailLT: String
-  emailLTE: String
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
@@ -78792,10 +74909,6 @@ input DirectoryGroupWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -78829,8 +74942,6 @@ input DirectoryGroupWhereInput {
   """
   memberCount: Int
   memberCountNEQ: Int
-  memberCountIn: [Int!]
-  memberCountNotIn: [Int!]
   memberCountGT: Int
   memberCountGTE: Int
   memberCountLT: Int
@@ -78841,9 +74952,6 @@ input DirectoryGroupWhereInput {
   first_seen_at field predicates
   """
   firstSeenAt: Time
-  firstSeenAtNEQ: Time
-  firstSeenAtIn: [Time!]
-  firstSeenAtNotIn: [Time!]
   firstSeenAtGT: Time
   firstSeenAtGTE: Time
   firstSeenAtLT: Time
@@ -78854,9 +74962,6 @@ input DirectoryGroupWhereInput {
   last_seen_at field predicates
   """
   lastSeenAt: Time
-  lastSeenAtNEQ: Time
-  lastSeenAtIn: [Time!]
-  lastSeenAtNotIn: [Time!]
   lastSeenAtGT: Time
   lastSeenAtGTE: Time
   lastSeenAtLT: Time
@@ -78867,9 +74972,6 @@ input DirectoryGroupWhereInput {
   added_at field predicates
   """
   addedAt: Time
-  addedAtNEQ: Time
-  addedAtIn: [Time!]
-  addedAtNotIn: [Time!]
   addedAtGT: Time
   addedAtGTE: Time
   addedAtLT: Time
@@ -78880,9 +74982,6 @@ input DirectoryGroupWhereInput {
   removed_at field predicates
   """
   removedAt: Time
-  removedAtNEQ: Time
-  removedAtIn: [Time!]
-  removedAtNotIn: [Time!]
   removedAtGT: Time
   removedAtGTE: Time
   removedAtLT: Time
@@ -78893,9 +74992,6 @@ input DirectoryGroupWhereInput {
   observed_at field predicates
   """
   observedAt: Time
-  observedAtNEQ: Time
-  observedAtIn: [Time!]
-  observedAtNotIn: [Time!]
   observedAtGT: Time
   observedAtGTE: Time
   observedAtLT: Time
@@ -78907,10 +75003,6 @@ input DirectoryGroupWhereInput {
   profileHashNEQ: String
   profileHashIn: [String!]
   profileHashNotIn: [String!]
-  profileHashGT: String
-  profileHashGTE: String
-  profileHashLT: String
-  profileHashLTE: String
   profileHashContains: String
   profileHashHasPrefix: String
   profileHashHasSuffix: String
@@ -78923,10 +75015,6 @@ input DirectoryGroupWhereInput {
   sourceVersionNEQ: String
   sourceVersionIn: [String!]
   sourceVersionNotIn: [String!]
-  sourceVersionGT: String
-  sourceVersionGTE: String
-  sourceVersionLT: String
-  sourceVersionLTE: String
   sourceVersionContains: String
   sourceVersionHasPrefix: String
   sourceVersionHasSuffix: String
@@ -78941,10 +75029,6 @@ input DirectoryGroupWhereInput {
   directoryNameNEQ: String
   directoryNameIn: [String!]
   directoryNameNotIn: [String!]
-  directoryNameGT: String
-  directoryNameGTE: String
-  directoryNameLT: String
-  directoryNameLTE: String
   directoryNameContains: String
   directoryNameHasPrefix: String
   directoryNameHasSuffix: String
@@ -79255,19 +75339,12 @@ input DirectoryMembershipWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -79278,9 +75355,6 @@ input DirectoryMembershipWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -79294,10 +75368,6 @@ input DirectoryMembershipWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -79312,10 +75382,6 @@ input DirectoryMembershipWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -79330,10 +75396,6 @@ input DirectoryMembershipWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -79348,10 +75410,6 @@ input DirectoryMembershipWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -79364,10 +75422,6 @@ input DirectoryMembershipWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -79382,10 +75436,6 @@ input DirectoryMembershipWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -79400,10 +75450,6 @@ input DirectoryMembershipWhereInput {
   directoryInstanceIDNEQ: String
   directoryInstanceIDIn: [String!]
   directoryInstanceIDNotIn: [String!]
-  directoryInstanceIDGT: String
-  directoryInstanceIDGTE: String
-  directoryInstanceIDLT: String
-  directoryInstanceIDLTE: String
   directoryInstanceIDContains: String
   directoryInstanceIDHasPrefix: String
   directoryInstanceIDHasSuffix: String
@@ -79427,10 +75473,6 @@ input DirectoryMembershipWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -79445,10 +75487,6 @@ input DirectoryMembershipWhereInput {
   directoryNameNEQ: String
   directoryNameIn: [String!]
   directoryNameNotIn: [String!]
-  directoryNameGT: String
-  directoryNameGTE: String
-  directoryNameLT: String
-  directoryNameLTE: String
   directoryNameContains: String
   directoryNameHasPrefix: String
   directoryNameHasSuffix: String
@@ -79460,9 +75498,6 @@ input DirectoryMembershipWhereInput {
   first_seen_at field predicates
   """
   firstSeenAt: Time
-  firstSeenAtNEQ: Time
-  firstSeenAtIn: [Time!]
-  firstSeenAtNotIn: [Time!]
   firstSeenAtGT: Time
   firstSeenAtGTE: Time
   firstSeenAtLT: Time
@@ -79473,9 +75508,6 @@ input DirectoryMembershipWhereInput {
   last_seen_at field predicates
   """
   lastSeenAt: Time
-  lastSeenAtNEQ: Time
-  lastSeenAtIn: [Time!]
-  lastSeenAtNotIn: [Time!]
   lastSeenAtGT: Time
   lastSeenAtGTE: Time
   lastSeenAtLT: Time
@@ -79486,9 +75518,6 @@ input DirectoryMembershipWhereInput {
   added_at field predicates
   """
   addedAt: Time
-  addedAtNEQ: Time
-  addedAtIn: [Time!]
-  addedAtNotIn: [Time!]
   addedAtGT: Time
   addedAtGTE: Time
   addedAtLT: Time
@@ -79499,9 +75528,6 @@ input DirectoryMembershipWhereInput {
   removed_at field predicates
   """
   removedAt: Time
-  removedAtNEQ: Time
-  removedAtIn: [Time!]
-  removedAtNotIn: [Time!]
   removedAtGT: Time
   removedAtGTE: Time
   removedAtLT: Time
@@ -79512,9 +75538,6 @@ input DirectoryMembershipWhereInput {
   observed_at field predicates
   """
   observedAt: Time
-  observedAtNEQ: Time
-  observedAtIn: [Time!]
-  observedAtNotIn: [Time!]
   observedAtGT: Time
   observedAtGTE: Time
   observedAtLT: Time
@@ -79526,10 +75549,6 @@ input DirectoryMembershipWhereInput {
   lastConfirmedRunIDNEQ: String
   lastConfirmedRunIDIn: [String!]
   lastConfirmedRunIDNotIn: [String!]
-  lastConfirmedRunIDGT: String
-  lastConfirmedRunIDGTE: String
-  lastConfirmedRunIDLT: String
-  lastConfirmedRunIDLTE: String
   lastConfirmedRunIDContains: String
   lastConfirmedRunIDHasPrefix: String
   lastConfirmedRunIDHasSuffix: String
@@ -79800,19 +75819,12 @@ input DirectorySyncRunWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -79823,9 +75835,6 @@ input DirectorySyncRunWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -79839,10 +75848,6 @@ input DirectorySyncRunWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -79857,10 +75862,6 @@ input DirectorySyncRunWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -79875,10 +75876,6 @@ input DirectorySyncRunWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -79893,10 +75890,6 @@ input DirectorySyncRunWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -79909,10 +75902,6 @@ input DirectorySyncRunWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -79927,10 +75916,6 @@ input DirectorySyncRunWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -79945,10 +75930,6 @@ input DirectorySyncRunWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -79963,10 +75944,6 @@ input DirectorySyncRunWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -79981,10 +75958,6 @@ input DirectorySyncRunWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -79999,10 +75972,6 @@ input DirectorySyncRunWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -80015,10 +75984,6 @@ input DirectorySyncRunWhereInput {
   platformIDNEQ: ID
   platformIDIn: [ID!]
   platformIDNotIn: [ID!]
-  platformIDGT: ID
-  platformIDGTE: ID
-  platformIDLT: ID
-  platformIDLTE: ID
   platformIDContains: ID
   platformIDHasPrefix: ID
   platformIDHasSuffix: ID
@@ -80033,10 +75998,6 @@ input DirectorySyncRunWhereInput {
   directoryInstanceIDNEQ: String
   directoryInstanceIDIn: [String!]
   directoryInstanceIDNotIn: [String!]
-  directoryInstanceIDGT: String
-  directoryInstanceIDGTE: String
-  directoryInstanceIDLT: String
-  directoryInstanceIDLTE: String
   directoryInstanceIDContains: String
   directoryInstanceIDHasPrefix: String
   directoryInstanceIDHasSuffix: String
@@ -80055,9 +76016,6 @@ input DirectorySyncRunWhereInput {
   started_at field predicates
   """
   startedAt: Time
-  startedAtNEQ: Time
-  startedAtIn: [Time!]
-  startedAtNotIn: [Time!]
   startedAtGT: Time
   startedAtGTE: Time
   startedAtLT: Time
@@ -80066,9 +76024,6 @@ input DirectorySyncRunWhereInput {
   completed_at field predicates
   """
   completedAt: Time
-  completedAtNEQ: Time
-  completedAtIn: [Time!]
-  completedAtNotIn: [Time!]
   completedAtGT: Time
   completedAtGTE: Time
   completedAtLT: Time
@@ -80082,10 +76037,6 @@ input DirectorySyncRunWhereInput {
   sourceCursorNEQ: String
   sourceCursorIn: [String!]
   sourceCursorNotIn: [String!]
-  sourceCursorGT: String
-  sourceCursorGTE: String
-  sourceCursorLT: String
-  sourceCursorLTE: String
   sourceCursorContains: String
   sourceCursorHasPrefix: String
   sourceCursorHasSuffix: String
@@ -80098,8 +76049,6 @@ input DirectorySyncRunWhereInput {
   """
   fullCount: Int
   fullCountNEQ: Int
-  fullCountIn: [Int!]
-  fullCountNotIn: [Int!]
   fullCountGT: Int
   fullCountGTE: Int
   fullCountLT: Int
@@ -80109,8 +76058,6 @@ input DirectorySyncRunWhereInput {
   """
   deltaCount: Int
   deltaCountNEQ: Int
-  deltaCountIn: [Int!]
-  deltaCountNotIn: [Int!]
   deltaCountGT: Int
   deltaCountGTE: Int
   deltaCountLT: Int
@@ -80122,10 +76069,6 @@ input DirectorySyncRunWhereInput {
   errorNEQ: String
   errorIn: [String!]
   errorNotIn: [String!]
-  errorGT: String
-  errorGTE: String
-  errorLT: String
-  errorLTE: String
   errorContains: String
   errorHasPrefix: String
   errorHasSuffix: String
@@ -80140,10 +76083,6 @@ input DirectorySyncRunWhereInput {
   rawManifestFileIDNEQ: String
   rawManifestFileIDIn: [String!]
   rawManifestFileIDNotIn: [String!]
-  rawManifestFileIDGT: String
-  rawManifestFileIDGTE: String
-  rawManifestFileIDLT: String
-  rawManifestFileIDLTE: String
   rawManifestFileIDContains: String
   rawManifestFileIDHasPrefix: String
   rawManifestFileIDHasSuffix: String
@@ -80317,19 +76256,12 @@ input DiscussionWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -80340,9 +76272,6 @@ input DiscussionWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -80356,10 +76285,6 @@ input DiscussionWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -80374,10 +76299,6 @@ input DiscussionWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -80392,10 +76313,6 @@ input DiscussionWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -80410,10 +76327,6 @@ input DiscussionWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -80428,10 +76341,6 @@ input DiscussionWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -80654,19 +76563,12 @@ input DocumentDataWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -80677,9 +76579,6 @@ input DocumentDataWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -80693,10 +76592,6 @@ input DocumentDataWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -80711,10 +76606,6 @@ input DocumentDataWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -80729,10 +76620,6 @@ input DocumentDataWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -80747,10 +76634,6 @@ input DocumentDataWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -80765,10 +76648,6 @@ input DocumentDataWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -80783,10 +76662,6 @@ input DocumentDataWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -80801,10 +76676,6 @@ input DocumentDataWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -80819,10 +76690,6 @@ input DocumentDataWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -80837,10 +76704,6 @@ input DocumentDataWhereInput {
   templateIDNEQ: ID
   templateIDIn: [ID!]
   templateIDNotIn: [ID!]
-  templateIDGT: ID
-  templateIDGTE: ID
-  templateIDLT: ID
-  templateIDLTE: ID
   templateIDContains: ID
   templateIDHasPrefix: ID
   templateIDHasSuffix: ID
@@ -81251,19 +77114,12 @@ input EmailTemplateWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -81274,9 +77130,6 @@ input EmailTemplateWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -81290,10 +77143,6 @@ input EmailTemplateWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -81308,10 +77157,6 @@ input EmailTemplateWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -81326,10 +77171,6 @@ input EmailTemplateWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -81344,10 +77185,6 @@ input EmailTemplateWhereInput {
   revisionNEQ: String
   revisionIn: [String!]
   revisionNotIn: [String!]
-  revisionGT: String
-  revisionGTE: String
-  revisionLT: String
-  revisionLTE: String
   revisionContains: String
   revisionHasPrefix: String
   revisionHasSuffix: String
@@ -81362,10 +77199,6 @@ input EmailTemplateWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -81387,10 +77220,6 @@ input EmailTemplateWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -81405,10 +77234,6 @@ input EmailTemplateWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -81423,10 +77248,6 @@ input EmailTemplateWhereInput {
   keyNEQ: String
   keyIn: [String!]
   keyNotIn: [String!]
-  keyGT: String
-  keyGTE: String
-  keyLT: String
-  keyLTE: String
   keyContains: String
   keyHasPrefix: String
   keyHasSuffix: String
@@ -81439,10 +77260,6 @@ input EmailTemplateWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -81455,10 +77272,6 @@ input EmailTemplateWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -81482,10 +77295,6 @@ input EmailTemplateWhereInput {
   localeNEQ: String
   localeIn: [String!]
   localeNotIn: [String!]
-  localeGT: String
-  localeGTE: String
-  localeLT: String
-  localeLTE: String
   localeContains: String
   localeHasPrefix: String
   localeHasSuffix: String
@@ -81498,10 +77307,6 @@ input EmailTemplateWhereInput {
   subjectTemplateNEQ: String
   subjectTemplateIn: [String!]
   subjectTemplateNotIn: [String!]
-  subjectTemplateGT: String
-  subjectTemplateGTE: String
-  subjectTemplateLT: String
-  subjectTemplateLTE: String
   subjectTemplateContains: String
   subjectTemplateHasPrefix: String
   subjectTemplateHasSuffix: String
@@ -81516,10 +77321,6 @@ input EmailTemplateWhereInput {
   preheaderTemplateNEQ: String
   preheaderTemplateIn: [String!]
   preheaderTemplateNotIn: [String!]
-  preheaderTemplateGT: String
-  preheaderTemplateGTE: String
-  preheaderTemplateLT: String
-  preheaderTemplateLTE: String
   preheaderTemplateContains: String
   preheaderTemplateHasPrefix: String
   preheaderTemplateHasSuffix: String
@@ -81534,10 +77335,6 @@ input EmailTemplateWhereInput {
   bodyTemplateNEQ: String
   bodyTemplateIn: [String!]
   bodyTemplateNotIn: [String!]
-  bodyTemplateGT: String
-  bodyTemplateGTE: String
-  bodyTemplateLT: String
-  bodyTemplateLTE: String
   bodyTemplateContains: String
   bodyTemplateHasPrefix: String
   bodyTemplateHasSuffix: String
@@ -81552,10 +77349,6 @@ input EmailTemplateWhereInput {
   textTemplateNEQ: String
   textTemplateIn: [String!]
   textTemplateNotIn: [String!]
-  textTemplateGT: String
-  textTemplateGTE: String
-  textTemplateLT: String
-  textTemplateLTE: String
   textTemplateContains: String
   textTemplateHasPrefix: String
   textTemplateHasSuffix: String
@@ -81573,8 +77366,6 @@ input EmailTemplateWhereInput {
   """
   version: Int
   versionNEQ: Int
-  versionIn: [Int!]
-  versionNotIn: [Int!]
   versionGT: Int
   versionGTE: Int
   versionLT: Int
@@ -81595,10 +77386,6 @@ input EmailTemplateWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -81613,10 +77400,6 @@ input EmailTemplateWhereInput {
   workflowDefinitionIDNEQ: ID
   workflowDefinitionIDIn: [ID!]
   workflowDefinitionIDNotIn: [ID!]
-  workflowDefinitionIDGT: ID
-  workflowDefinitionIDGTE: ID
-  workflowDefinitionIDLT: ID
-  workflowDefinitionIDLTE: ID
   workflowDefinitionIDContains: ID
   workflowDefinitionIDHasPrefix: ID
   workflowDefinitionIDHasSuffix: ID
@@ -81631,10 +77414,6 @@ input EmailTemplateWhereInput {
   workflowInstanceIDNEQ: ID
   workflowInstanceIDIn: [ID!]
   workflowInstanceIDNotIn: [ID!]
-  workflowInstanceIDGT: ID
-  workflowInstanceIDGTE: ID
-  workflowInstanceIDLT: ID
-  workflowInstanceIDLTE: ID
   workflowInstanceIDContains: ID
   workflowInstanceIDHasPrefix: ID
   workflowInstanceIDHasSuffix: ID
@@ -81649,10 +77428,6 @@ input EmailTemplateWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -83051,19 +78826,12 @@ input EntityTypeWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -83074,9 +78842,6 @@ input EntityTypeWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -83090,10 +78855,6 @@ input EntityTypeWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -83108,10 +78869,6 @@ input EntityTypeWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -83126,10 +78883,6 @@ input EntityTypeWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -83144,10 +78897,6 @@ input EntityTypeWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -83169,10 +78918,6 @@ input EntityTypeWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -83187,10 +78932,6 @@ input EntityTypeWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -83205,10 +78946,6 @@ input EntityTypeWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -83253,19 +78990,12 @@ input EntityWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -83276,9 +79006,6 @@ input EntityWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -83292,10 +79019,6 @@ input EntityWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -83310,10 +79033,6 @@ input EntityWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -83328,10 +79047,6 @@ input EntityWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -83346,10 +79061,6 @@ input EntityWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -83364,10 +79075,6 @@ input EntityWhereInput {
   internalOwnerNEQ: String
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
-  internalOwnerGT: String
-  internalOwnerGTE: String
-  internalOwnerLT: String
-  internalOwnerLTE: String
   internalOwnerContains: String
   internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
@@ -83382,10 +79089,6 @@ input EntityWhereInput {
   internalOwnerUserIDNEQ: ID
   internalOwnerUserIDIn: [ID!]
   internalOwnerUserIDNotIn: [ID!]
-  internalOwnerUserIDGT: ID
-  internalOwnerUserIDGTE: ID
-  internalOwnerUserIDLT: ID
-  internalOwnerUserIDLTE: ID
   internalOwnerUserIDContains: ID
   internalOwnerUserIDHasPrefix: ID
   internalOwnerUserIDHasSuffix: ID
@@ -83400,10 +79103,6 @@ input EntityWhereInput {
   internalOwnerGroupIDNEQ: ID
   internalOwnerGroupIDIn: [ID!]
   internalOwnerGroupIDNotIn: [ID!]
-  internalOwnerGroupIDGT: ID
-  internalOwnerGroupIDGTE: ID
-  internalOwnerGroupIDLT: ID
-  internalOwnerGroupIDLTE: ID
   internalOwnerGroupIDContains: ID
   internalOwnerGroupIDHasPrefix: ID
   internalOwnerGroupIDHasSuffix: ID
@@ -83418,10 +79117,6 @@ input EntityWhereInput {
   reviewedByNEQ: String
   reviewedByIn: [String!]
   reviewedByNotIn: [String!]
-  reviewedByGT: String
-  reviewedByGTE: String
-  reviewedByLT: String
-  reviewedByLTE: String
   reviewedByContains: String
   reviewedByHasPrefix: String
   reviewedByHasSuffix: String
@@ -83436,10 +79131,6 @@ input EntityWhereInput {
   reviewedByUserIDNEQ: ID
   reviewedByUserIDIn: [ID!]
   reviewedByUserIDNotIn: [ID!]
-  reviewedByUserIDGT: ID
-  reviewedByUserIDGTE: ID
-  reviewedByUserIDLT: ID
-  reviewedByUserIDLTE: ID
   reviewedByUserIDContains: ID
   reviewedByUserIDHasPrefix: ID
   reviewedByUserIDHasSuffix: ID
@@ -83454,10 +79145,6 @@ input EntityWhereInput {
   reviewedByGroupIDNEQ: ID
   reviewedByGroupIDIn: [ID!]
   reviewedByGroupIDNotIn: [ID!]
-  reviewedByGroupIDGT: ID
-  reviewedByGroupIDGTE: ID
-  reviewedByGroupIDLT: ID
-  reviewedByGroupIDLTE: ID
   reviewedByGroupIDContains: ID
   reviewedByGroupIDHasPrefix: ID
   reviewedByGroupIDHasSuffix: ID
@@ -83469,9 +79156,6 @@ input EntityWhereInput {
   last_reviewed_at field predicates
   """
   lastReviewedAt: DateTime
-  lastReviewedAtNEQ: DateTime
-  lastReviewedAtIn: [DateTime!]
-  lastReviewedAtNotIn: [DateTime!]
   lastReviewedAtGT: DateTime
   lastReviewedAtGTE: DateTime
   lastReviewedAtLT: DateTime
@@ -83492,10 +79176,6 @@ input EntityWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -83510,10 +79190,6 @@ input EntityWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -83528,10 +79204,6 @@ input EntityWhereInput {
   entityRelationshipStateNameNEQ: String
   entityRelationshipStateNameIn: [String!]
   entityRelationshipStateNameNotIn: [String!]
-  entityRelationshipStateNameGT: String
-  entityRelationshipStateNameGTE: String
-  entityRelationshipStateNameLT: String
-  entityRelationshipStateNameLTE: String
   entityRelationshipStateNameContains: String
   entityRelationshipStateNameHasPrefix: String
   entityRelationshipStateNameHasSuffix: String
@@ -83546,10 +79218,6 @@ input EntityWhereInput {
   entityRelationshipStateIDNEQ: ID
   entityRelationshipStateIDIn: [ID!]
   entityRelationshipStateIDNotIn: [ID!]
-  entityRelationshipStateIDGT: ID
-  entityRelationshipStateIDGTE: ID
-  entityRelationshipStateIDLT: ID
-  entityRelationshipStateIDLTE: ID
   entityRelationshipStateIDContains: ID
   entityRelationshipStateIDHasPrefix: ID
   entityRelationshipStateIDHasSuffix: ID
@@ -83564,10 +79232,6 @@ input EntityWhereInput {
   entitySecurityQuestionnaireStatusNameNEQ: String
   entitySecurityQuestionnaireStatusNameIn: [String!]
   entitySecurityQuestionnaireStatusNameNotIn: [String!]
-  entitySecurityQuestionnaireStatusNameGT: String
-  entitySecurityQuestionnaireStatusNameGTE: String
-  entitySecurityQuestionnaireStatusNameLT: String
-  entitySecurityQuestionnaireStatusNameLTE: String
   entitySecurityQuestionnaireStatusNameContains: String
   entitySecurityQuestionnaireStatusNameHasPrefix: String
   entitySecurityQuestionnaireStatusNameHasSuffix: String
@@ -83582,10 +79246,6 @@ input EntityWhereInput {
   entitySecurityQuestionnaireStatusIDNEQ: ID
   entitySecurityQuestionnaireStatusIDIn: [ID!]
   entitySecurityQuestionnaireStatusIDNotIn: [ID!]
-  entitySecurityQuestionnaireStatusIDGT: ID
-  entitySecurityQuestionnaireStatusIDGTE: ID
-  entitySecurityQuestionnaireStatusIDLT: ID
-  entitySecurityQuestionnaireStatusIDLTE: ID
   entitySecurityQuestionnaireStatusIDContains: ID
   entitySecurityQuestionnaireStatusIDHasPrefix: ID
   entitySecurityQuestionnaireStatusIDHasSuffix: ID
@@ -83600,10 +79260,6 @@ input EntityWhereInput {
   entitySourceTypeNameNEQ: String
   entitySourceTypeNameIn: [String!]
   entitySourceTypeNameNotIn: [String!]
-  entitySourceTypeNameGT: String
-  entitySourceTypeNameGTE: String
-  entitySourceTypeNameLT: String
-  entitySourceTypeNameLTE: String
   entitySourceTypeNameContains: String
   entitySourceTypeNameHasPrefix: String
   entitySourceTypeNameHasSuffix: String
@@ -83618,10 +79274,6 @@ input EntityWhereInput {
   entitySourceTypeIDNEQ: ID
   entitySourceTypeIDIn: [ID!]
   entitySourceTypeIDNotIn: [ID!]
-  entitySourceTypeIDGT: ID
-  entitySourceTypeIDGTE: ID
-  entitySourceTypeIDLT: ID
-  entitySourceTypeIDLTE: ID
   entitySourceTypeIDContains: ID
   entitySourceTypeIDHasPrefix: ID
   entitySourceTypeIDHasSuffix: ID
@@ -83636,10 +79288,6 @@ input EntityWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -83654,10 +79302,6 @@ input EntityWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -83672,10 +79316,6 @@ input EntityWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -83690,10 +79330,6 @@ input EntityWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -83708,10 +79344,6 @@ input EntityWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -83726,10 +79358,6 @@ input EntityWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -83744,10 +79372,6 @@ input EntityWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -83762,10 +79386,6 @@ input EntityWhereInput {
   entityTypeIDNEQ: ID
   entityTypeIDIn: [ID!]
   entityTypeIDNotIn: [ID!]
-  entityTypeIDGT: ID
-  entityTypeIDGTE: ID
-  entityTypeIDLT: ID
-  entityTypeIDLTE: ID
   entityTypeIDContains: ID
   entityTypeIDHasPrefix: ID
   entityTypeIDHasSuffix: ID
@@ -83800,9 +79420,6 @@ input EntityWhereInput {
   soc2_period_end field predicates
   """
   soc2PeriodEnd: DateTime
-  soc2PeriodEndNEQ: DateTime
-  soc2PeriodEndIn: [DateTime!]
-  soc2PeriodEndNotIn: [DateTime!]
   soc2PeriodEndGT: DateTime
   soc2PeriodEndGTE: DateTime
   soc2PeriodEndLT: DateTime
@@ -83813,9 +79430,6 @@ input EntityWhereInput {
   contract_start_date field predicates
   """
   contractStartDate: DateTime
-  contractStartDateNEQ: DateTime
-  contractStartDateIn: [DateTime!]
-  contractStartDateNotIn: [DateTime!]
   contractStartDateGT: DateTime
   contractStartDateGTE: DateTime
   contractStartDateLT: DateTime
@@ -83826,9 +79440,6 @@ input EntityWhereInput {
   contract_end_date field predicates
   """
   contractEndDate: DateTime
-  contractEndDateNEQ: DateTime
-  contractEndDateIn: [DateTime!]
-  contractEndDateNotIn: [DateTime!]
   contractEndDateGT: DateTime
   contractEndDateGTE: DateTime
   contractEndDateLT: DateTime
@@ -83847,8 +79458,6 @@ input EntityWhereInput {
   """
   terminationNoticeDays: Int
   terminationNoticeDaysNEQ: Int
-  terminationNoticeDaysIn: [Int!]
-  terminationNoticeDaysNotIn: [Int!]
   terminationNoticeDaysGT: Int
   terminationNoticeDaysGTE: Int
   terminationNoticeDaysLT: Int
@@ -83875,10 +79484,6 @@ input EntityWhereInput {
   spendCurrencyNEQ: String
   spendCurrencyIn: [String!]
   spendCurrencyNotIn: [String!]
-  spendCurrencyGT: String
-  spendCurrencyGTE: String
-  spendCurrencyLT: String
-  spendCurrencyLTE: String
   spendCurrencyContains: String
   spendCurrencyHasPrefix: String
   spendCurrencyHasSuffix: String
@@ -83893,10 +79498,6 @@ input EntityWhereInput {
   billingModelNEQ: String
   billingModelIn: [String!]
   billingModelNotIn: [String!]
-  billingModelGT: String
-  billingModelGTE: String
-  billingModelLT: String
-  billingModelLTE: String
   billingModelContains: String
   billingModelHasPrefix: String
   billingModelHasSuffix: String
@@ -83911,10 +79512,6 @@ input EntityWhereInput {
   renewalRiskNEQ: String
   renewalRiskIn: [String!]
   renewalRiskNotIn: [String!]
-  renewalRiskGT: String
-  renewalRiskGTE: String
-  renewalRiskLT: String
-  renewalRiskLTE: String
   renewalRiskContains: String
   renewalRiskHasPrefix: String
   renewalRiskHasSuffix: String
@@ -83950,10 +79547,6 @@ input EntityWhereInput {
   statusPageURLNEQ: String
   statusPageURLIn: [String!]
   statusPageURLNotIn: [String!]
-  statusPageURLGT: String
-  statusPageURLGTE: String
-  statusPageURLLT: String
-  statusPageURLLTE: String
   statusPageURLContains: String
   statusPageURLHasPrefix: String
   statusPageURLHasSuffix: String
@@ -83968,10 +79561,6 @@ input EntityWhereInput {
   riskRatingNEQ: String
   riskRatingIn: [String!]
   riskRatingNotIn: [String!]
-  riskRatingGT: String
-  riskRatingGTE: String
-  riskRatingLT: String
-  riskRatingLTE: String
   riskRatingContains: String
   riskRatingHasPrefix: String
   riskRatingHasSuffix: String
@@ -83984,8 +79573,6 @@ input EntityWhereInput {
   """
   riskScore: Int
   riskScoreNEQ: Int
-  riskScoreIn: [Int!]
-  riskScoreNotIn: [Int!]
   riskScoreGT: Int
   riskScoreGTE: Int
   riskScoreLT: Int
@@ -83997,8 +79584,6 @@ input EntityWhereInput {
   """
   riskScoreCoverage: Int
   riskScoreCoverageNEQ: Int
-  riskScoreCoverageIn: [Int!]
-  riskScoreCoverageNotIn: [Int!]
   riskScoreCoverageGT: Int
   riskScoreCoverageGTE: Int
   riskScoreCoverageLT: Int
@@ -84027,9 +79612,6 @@ input EntityWhereInput {
   next_review_at field predicates
   """
   nextReviewAt: DateTime
-  nextReviewAtNEQ: DateTime
-  nextReviewAtIn: [DateTime!]
-  nextReviewAtNotIn: [DateTime!]
   nextReviewAtGT: DateTime
   nextReviewAtGTE: DateTime
   nextReviewAtLT: DateTime
@@ -84040,9 +79622,6 @@ input EntityWhereInput {
   contract_renewal_at field predicates
   """
   contractRenewalAt: DateTime
-  contractRenewalAtNEQ: DateTime
-  contractRenewalAtIn: [DateTime!]
-  contractRenewalAtNotIn: [DateTime!]
   contractRenewalAtGT: DateTime
   contractRenewalAtGTE: DateTime
   contractRenewalAtLT: DateTime
@@ -84056,10 +79635,6 @@ input EntityWhereInput {
   logoRemoteURLNEQ: String
   logoRemoteURLIn: [String!]
   logoRemoteURLNotIn: [String!]
-  logoRemoteURLGT: String
-  logoRemoteURLGTE: String
-  logoRemoteURLLT: String
-  logoRemoteURLLTE: String
   logoRemoteURLContains: String
   logoRemoteURLHasPrefix: String
   logoRemoteURLHasSuffix: String
@@ -84074,10 +79649,6 @@ input EntityWhereInput {
   logoFileIDNEQ: ID
   logoFileIDIn: [ID!]
   logoFileIDNotIn: [ID!]
-  logoFileIDGT: ID
-  logoFileIDGTE: ID
-  logoFileIDLT: ID
-  logoFileIDLTE: ID
   logoFileIDContains: ID
   logoFileIDHasPrefix: ID
   logoFileIDHasSuffix: ID
@@ -84092,10 +79663,6 @@ input EntityWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -84107,9 +79674,6 @@ input EntityWhereInput {
   observed_at field predicates
   """
   observedAt: DateTime
-  observedAtNEQ: DateTime
-  observedAtIn: [DateTime!]
-  observedAtNotIn: [DateTime!]
   observedAtGT: DateTime
   observedAtGTE: DateTime
   observedAtLT: DateTime
@@ -84788,19 +80352,12 @@ input EventWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -84811,9 +80368,6 @@ input EventWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -84827,10 +80381,6 @@ input EventWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -84845,10 +80395,6 @@ input EventWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -84863,10 +80409,6 @@ input EventWhereInput {
   eventIDNEQ: String
   eventIDIn: [String!]
   eventIDNotIn: [String!]
-  eventIDGT: String
-  eventIDGTE: String
-  eventIDLT: String
-  eventIDLTE: String
   eventIDContains: String
   eventIDHasPrefix: String
   eventIDHasSuffix: String
@@ -84881,10 +80423,6 @@ input EventWhereInput {
   correlationIDNEQ: String
   correlationIDIn: [String!]
   correlationIDNotIn: [String!]
-  correlationIDGT: String
-  correlationIDGTE: String
-  correlationIDLT: String
-  correlationIDLTE: String
   correlationIDContains: String
   correlationIDHasPrefix: String
   correlationIDHasSuffix: String
@@ -84899,10 +80437,6 @@ input EventWhereInput {
   eventTypeNEQ: String
   eventTypeIn: [String!]
   eventTypeNotIn: [String!]
-  eventTypeGT: String
-  eventTypeGTE: String
-  eventTypeLT: String
-  eventTypeLTE: String
   eventTypeContains: String
   eventTypeHasPrefix: String
   eventTypeHasSuffix: String
@@ -85059,6 +80593,10 @@ type Evidence implements Node @modules(names: ["compliance_module","policy_manag
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceFrequency
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -85186,6 +80724,68 @@ type Evidence implements Node @modules(names: ["compliance_module","policy_manag
     """
     where: ControlImplementationWhereInput
   ): ControlImplementationConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Procedures returned from the connection.
+    """
+    orderBy: [ProcedureOrder!]
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -85500,19 +81100,12 @@ input EvidenceWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -85523,9 +81116,6 @@ input EvidenceWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -85539,10 +81129,6 @@ input EvidenceWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -85557,10 +81143,6 @@ input EvidenceWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -85575,10 +81157,6 @@ input EvidenceWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -85593,10 +81171,6 @@ input EvidenceWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -85609,10 +81183,6 @@ input EvidenceWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -85627,10 +81197,6 @@ input EvidenceWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -85645,10 +81211,6 @@ input EvidenceWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -85663,10 +81225,6 @@ input EvidenceWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -85681,10 +81239,6 @@ input EvidenceWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -85706,10 +81260,6 @@ input EvidenceWhereInput {
   externalUUIDNEQ: String
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
-  externalUUIDGT: String
-  externalUUIDGTE: String
-  externalUUIDLT: String
-  externalUUIDLTE: String
   externalUUIDContains: String
   externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
@@ -85724,10 +81274,6 @@ input EvidenceWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -85740,10 +81286,6 @@ input EvidenceWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -85758,10 +81300,6 @@ input EvidenceWhereInput {
   collectionProcedureNEQ: String
   collectionProcedureIn: [String!]
   collectionProcedureNotIn: [String!]
-  collectionProcedureGT: String
-  collectionProcedureGTE: String
-  collectionProcedureLT: String
-  collectionProcedureLTE: String
   collectionProcedureContains: String
   collectionProcedureHasPrefix: String
   collectionProcedureHasSuffix: String
@@ -85773,9 +81311,6 @@ input EvidenceWhereInput {
   creation_date field predicates
   """
   creationDate: DateTime
-  creationDateNEQ: DateTime
-  creationDateIn: [DateTime!]
-  creationDateNotIn: [DateTime!]
   creationDateGT: DateTime
   creationDateGTE: DateTime
   creationDateLT: DateTime
@@ -85784,9 +81319,6 @@ input EvidenceWhereInput {
   renewal_date field predicates
   """
   renewalDate: DateTime
-  renewalDateNEQ: DateTime
-  renewalDateIn: [DateTime!]
-  renewalDateNotIn: [DateTime!]
   renewalDateGT: DateTime
   renewalDateGTE: DateTime
   renewalDateLT: DateTime
@@ -85800,10 +81332,6 @@ input EvidenceWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -85825,10 +81353,6 @@ input EvidenceWhereInput {
   urlNEQ: String
   urlIn: [String!]
   urlNotIn: [String!]
-  urlGT: String
-  urlGTE: String
-  urlLT: String
-  urlLTE: String
   urlContains: String
   urlHasPrefix: String
   urlHasSuffix: String
@@ -85854,6 +81378,20 @@ input EvidenceWhereInput {
   reviewFrequencyNotIn: [EvidenceFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  auditor_reference_id field predicates
+  """
+  auditorReferenceID: String
+  auditorReferenceIDNEQ: String
+  auditorReferenceIDIn: [String!]
+  auditorReferenceIDNotIn: [String!]
+  auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
+  auditorReferenceIDHasSuffix: String
+  auditorReferenceIDIsNil: Boolean
+  auditorReferenceIDNotNil: Boolean
+  auditorReferenceIDEqualFold: String
+  auditorReferenceIDContainsFold: String
   """
   owner edge predicates
   """
@@ -85889,6 +81427,16 @@ input EvidenceWhereInput {
   """
   hasControlImplementations: Boolean
   hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  """
+  procedures edge predicates
+  """
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
   """
   files edge predicates
   """
@@ -86167,19 +81715,12 @@ input ExportWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -86190,9 +81731,6 @@ input ExportWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -86206,10 +81744,6 @@ input ExportWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -86224,10 +81758,6 @@ input ExportWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -86242,10 +81772,6 @@ input ExportWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -86260,10 +81786,6 @@ input ExportWhereInput {
   requestorIDNEQ: String
   requestorIDIn: [String!]
   requestorIDNotIn: [String!]
-  requestorIDGT: String
-  requestorIDGTE: String
-  requestorIDLT: String
-  requestorIDLTE: String
   requestorIDContains: String
   requestorIDHasPrefix: String
   requestorIDHasSuffix: String
@@ -86278,10 +81800,6 @@ input ExportWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -86317,10 +81835,6 @@ input ExportWhereInput {
   filtersNEQ: String
   filtersIn: [String!]
   filtersNotIn: [String!]
-  filtersGT: String
-  filtersGTE: String
-  filtersLT: String
-  filtersLTE: String
   filtersContains: String
   filtersHasPrefix: String
   filtersHasSuffix: String
@@ -86335,10 +81849,6 @@ input ExportWhereInput {
   errorMessageNEQ: String
   errorMessageIn: [String!]
   errorMessageNotIn: [String!]
-  errorMessageGT: String
-  errorMessageGTE: String
-  errorMessageLT: String
-  errorMessageLTE: String
   errorMessageContains: String
   errorMessageHasPrefix: String
   errorMessageHasSuffix: String
@@ -86727,19 +82237,12 @@ input FileWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -86750,9 +82253,6 @@ input FileWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -86766,10 +82266,6 @@ input FileWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -86784,10 +82280,6 @@ input FileWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -86802,10 +82294,6 @@ input FileWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -86827,10 +82315,6 @@ input FileWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -86845,10 +82329,6 @@ input FileWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -86863,10 +82343,6 @@ input FileWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -86881,10 +82357,6 @@ input FileWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -86899,10 +82371,6 @@ input FileWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -86917,10 +82385,6 @@ input FileWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -86935,10 +82399,6 @@ input FileWhereInput {
   categoryNameNEQ: String
   categoryNameIn: [String!]
   categoryNameNotIn: [String!]
-  categoryNameGT: String
-  categoryNameGTE: String
-  categoryNameLT: String
-  categoryNameLTE: String
   categoryNameContains: String
   categoryNameHasPrefix: String
   categoryNameHasSuffix: String
@@ -86953,10 +82413,6 @@ input FileWhereInput {
   categoryIDNEQ: ID
   categoryIDIn: [ID!]
   categoryIDNotIn: [ID!]
-  categoryIDGT: ID
-  categoryIDGTE: ID
-  categoryIDLT: ID
-  categoryIDLTE: ID
   categoryIDContains: ID
   categoryIDHasPrefix: ID
   categoryIDHasSuffix: ID
@@ -86971,10 +82427,6 @@ input FileWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -86989,10 +82441,6 @@ input FileWhereInput {
   providedFileNameNEQ: String
   providedFileNameIn: [String!]
   providedFileNameNotIn: [String!]
-  providedFileNameGT: String
-  providedFileNameGTE: String
-  providedFileNameLT: String
-  providedFileNameLTE: String
   providedFileNameContains: String
   providedFileNameHasPrefix: String
   providedFileNameHasSuffix: String
@@ -87005,10 +82453,6 @@ input FileWhereInput {
   providedFileExtensionNEQ: String
   providedFileExtensionIn: [String!]
   providedFileExtensionNotIn: [String!]
-  providedFileExtensionGT: String
-  providedFileExtensionGTE: String
-  providedFileExtensionLT: String
-  providedFileExtensionLTE: String
   providedFileExtensionContains: String
   providedFileExtensionHasPrefix: String
   providedFileExtensionHasSuffix: String
@@ -87019,8 +82463,6 @@ input FileWhereInput {
   """
   providedFileSize: Int
   providedFileSizeNEQ: Int
-  providedFileSizeIn: [Int!]
-  providedFileSizeNotIn: [Int!]
   providedFileSizeGT: Int
   providedFileSizeGTE: Int
   providedFileSizeLT: Int
@@ -87032,8 +82474,6 @@ input FileWhereInput {
   """
   persistedFileSize: Int
   persistedFileSizeNEQ: Int
-  persistedFileSizeIn: [Int!]
-  persistedFileSizeNotIn: [Int!]
   persistedFileSizeGT: Int
   persistedFileSizeGTE: Int
   persistedFileSizeLT: Int
@@ -87047,10 +82487,6 @@ input FileWhereInput {
   detectedMimeTypeNEQ: String
   detectedMimeTypeIn: [String!]
   detectedMimeTypeNotIn: [String!]
-  detectedMimeTypeGT: String
-  detectedMimeTypeGTE: String
-  detectedMimeTypeLT: String
-  detectedMimeTypeLTE: String
   detectedMimeTypeContains: String
   detectedMimeTypeHasPrefix: String
   detectedMimeTypeHasSuffix: String
@@ -87065,10 +82501,6 @@ input FileWhereInput {
   md5HashNEQ: String
   md5HashIn: [String!]
   md5HashNotIn: [String!]
-  md5HashGT: String
-  md5HashGTE: String
-  md5HashLT: String
-  md5HashLTE: String
   md5HashContains: String
   md5HashHasPrefix: String
   md5HashHasSuffix: String
@@ -87083,10 +82515,6 @@ input FileWhereInput {
   detectedContentTypeNEQ: String
   detectedContentTypeIn: [String!]
   detectedContentTypeNotIn: [String!]
-  detectedContentTypeGT: String
-  detectedContentTypeGTE: String
-  detectedContentTypeLT: String
-  detectedContentTypeLTE: String
   detectedContentTypeContains: String
   detectedContentTypeHasPrefix: String
   detectedContentTypeHasSuffix: String
@@ -87099,10 +82527,6 @@ input FileWhereInput {
   storeKeyNEQ: String
   storeKeyIn: [String!]
   storeKeyNotIn: [String!]
-  storeKeyGT: String
-  storeKeyGTE: String
-  storeKeyLT: String
-  storeKeyLTE: String
   storeKeyContains: String
   storeKeyHasPrefix: String
   storeKeyHasSuffix: String
@@ -87117,10 +82541,6 @@ input FileWhereInput {
   categoryTypeNEQ: String
   categoryTypeIn: [String!]
   categoryTypeNotIn: [String!]
-  categoryTypeGT: String
-  categoryTypeGTE: String
-  categoryTypeLT: String
-  categoryTypeLTE: String
   categoryTypeContains: String
   categoryTypeHasPrefix: String
   categoryTypeHasSuffix: String
@@ -87135,10 +82555,6 @@ input FileWhereInput {
   uriNEQ: String
   uriIn: [String!]
   uriNotIn: [String!]
-  uriGT: String
-  uriGTE: String
-  uriLT: String
-  uriLTE: String
   uriContains: String
   uriHasPrefix: String
   uriHasSuffix: String
@@ -87153,10 +82569,6 @@ input FileWhereInput {
   storageSchemeNEQ: String
   storageSchemeIn: [String!]
   storageSchemeNotIn: [String!]
-  storageSchemeGT: String
-  storageSchemeGTE: String
-  storageSchemeLT: String
-  storageSchemeLTE: String
   storageSchemeContains: String
   storageSchemeHasPrefix: String
   storageSchemeHasSuffix: String
@@ -87171,10 +82583,6 @@ input FileWhereInput {
   storageVolumeNEQ: String
   storageVolumeIn: [String!]
   storageVolumeNotIn: [String!]
-  storageVolumeGT: String
-  storageVolumeGTE: String
-  storageVolumeLT: String
-  storageVolumeLTE: String
   storageVolumeContains: String
   storageVolumeHasPrefix: String
   storageVolumeHasSuffix: String
@@ -87189,10 +82597,6 @@ input FileWhereInput {
   storagePathNEQ: String
   storagePathIn: [String!]
   storagePathNotIn: [String!]
-  storagePathGT: String
-  storagePathGTE: String
-  storagePathLT: String
-  storagePathLTE: String
   storagePathContains: String
   storagePathHasPrefix: String
   storagePathHasSuffix: String
@@ -87207,10 +82611,6 @@ input FileWhereInput {
   storageRegionNEQ: String
   storageRegionIn: [String!]
   storageRegionNotIn: [String!]
-  storageRegionGT: String
-  storageRegionGTE: String
-  storageRegionLT: String
-  storageRegionLTE: String
   storageRegionContains: String
   storageRegionHasPrefix: String
   storageRegionHasSuffix: String
@@ -87225,10 +82625,6 @@ input FileWhereInput {
   storageProviderNEQ: String
   storageProviderIn: [String!]
   storageProviderNotIn: [String!]
-  storageProviderGT: String
-  storageProviderGTE: String
-  storageProviderLT: String
-  storageProviderLTE: String
   storageProviderContains: String
   storageProviderHasPrefix: String
   storageProviderHasSuffix: String
@@ -87240,9 +82636,6 @@ input FileWhereInput {
   last_accessed_at field predicates
   """
   lastAccessedAt: Time
-  lastAccessedAtNEQ: Time
-  lastAccessedAtIn: [Time!]
-  lastAccessedAtNotIn: [Time!]
   lastAccessedAtGT: Time
   lastAccessedAtGTE: Time
   lastAccessedAtLT: Time
@@ -88421,19 +83814,12 @@ input FindingControlWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -88444,9 +83830,6 @@ input FindingControlWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -88460,10 +83843,6 @@ input FindingControlWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -88478,10 +83857,6 @@ input FindingControlWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -88496,10 +83871,6 @@ input FindingControlWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -88514,10 +83885,6 @@ input FindingControlWhereInput {
   externalStandardNEQ: String
   externalStandardIn: [String!]
   externalStandardNotIn: [String!]
-  externalStandardGT: String
-  externalStandardGTE: String
-  externalStandardLT: String
-  externalStandardLTE: String
   externalStandardContains: String
   externalStandardHasPrefix: String
   externalStandardHasSuffix: String
@@ -88532,10 +83899,6 @@ input FindingControlWhereInput {
   externalStandardVersionNEQ: String
   externalStandardVersionIn: [String!]
   externalStandardVersionNotIn: [String!]
-  externalStandardVersionGT: String
-  externalStandardVersionGTE: String
-  externalStandardVersionLT: String
-  externalStandardVersionLTE: String
   externalStandardVersionContains: String
   externalStandardVersionHasPrefix: String
   externalStandardVersionHasSuffix: String
@@ -88550,10 +83913,6 @@ input FindingControlWhereInput {
   externalControlIDNEQ: String
   externalControlIDIn: [String!]
   externalControlIDNotIn: [String!]
-  externalControlIDGT: String
-  externalControlIDGTE: String
-  externalControlIDLT: String
-  externalControlIDLTE: String
   externalControlIDContains: String
   externalControlIDHasPrefix: String
   externalControlIDHasSuffix: String
@@ -88568,10 +83927,6 @@ input FindingControlWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -88583,9 +83938,6 @@ input FindingControlWhereInput {
   discovered_at field predicates
   """
   discoveredAt: DateTime
-  discoveredAtNEQ: DateTime
-  discoveredAtIn: [DateTime!]
-  discoveredAtNotIn: [DateTime!]
   discoveredAtGT: DateTime
   discoveredAtGTE: DateTime
   discoveredAtLT: DateTime
@@ -88658,19 +84010,12 @@ input FindingWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -88681,9 +84026,6 @@ input FindingWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -88697,10 +84039,6 @@ input FindingWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -88715,10 +84053,6 @@ input FindingWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -88733,10 +84067,6 @@ input FindingWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -88751,10 +84081,6 @@ input FindingWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -88767,10 +84093,6 @@ input FindingWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -88785,10 +84107,6 @@ input FindingWhereInput {
   reviewedByNEQ: String
   reviewedByIn: [String!]
   reviewedByNotIn: [String!]
-  reviewedByGT: String
-  reviewedByGTE: String
-  reviewedByLT: String
-  reviewedByLTE: String
   reviewedByContains: String
   reviewedByHasPrefix: String
   reviewedByHasSuffix: String
@@ -88803,10 +84121,6 @@ input FindingWhereInput {
   reviewedByUserIDNEQ: ID
   reviewedByUserIDIn: [ID!]
   reviewedByUserIDNotIn: [ID!]
-  reviewedByUserIDGT: ID
-  reviewedByUserIDGTE: ID
-  reviewedByUserIDLT: ID
-  reviewedByUserIDLTE: ID
   reviewedByUserIDContains: ID
   reviewedByUserIDHasPrefix: ID
   reviewedByUserIDHasSuffix: ID
@@ -88821,10 +84135,6 @@ input FindingWhereInput {
   reviewedByGroupIDNEQ: ID
   reviewedByGroupIDIn: [ID!]
   reviewedByGroupIDNotIn: [ID!]
-  reviewedByGroupIDGT: ID
-  reviewedByGroupIDGTE: ID
-  reviewedByGroupIDLT: ID
-  reviewedByGroupIDLTE: ID
   reviewedByGroupIDContains: ID
   reviewedByGroupIDHasPrefix: ID
   reviewedByGroupIDHasSuffix: ID
@@ -88839,10 +84149,6 @@ input FindingWhereInput {
   assignedToNEQ: String
   assignedToIn: [String!]
   assignedToNotIn: [String!]
-  assignedToGT: String
-  assignedToGTE: String
-  assignedToLT: String
-  assignedToLTE: String
   assignedToContains: String
   assignedToHasPrefix: String
   assignedToHasSuffix: String
@@ -88857,10 +84163,6 @@ input FindingWhereInput {
   assignedToUserIDNEQ: ID
   assignedToUserIDIn: [ID!]
   assignedToUserIDNotIn: [ID!]
-  assignedToUserIDGT: ID
-  assignedToUserIDGTE: ID
-  assignedToUserIDLT: ID
-  assignedToUserIDLTE: ID
   assignedToUserIDContains: ID
   assignedToUserIDHasPrefix: ID
   assignedToUserIDHasSuffix: ID
@@ -88875,10 +84177,6 @@ input FindingWhereInput {
   assignedToGroupIDNEQ: ID
   assignedToGroupIDIn: [ID!]
   assignedToGroupIDNotIn: [ID!]
-  assignedToGroupIDGT: ID
-  assignedToGroupIDGTE: ID
-  assignedToGroupIDLT: ID
-  assignedToGroupIDLTE: ID
   assignedToGroupIDContains: ID
   assignedToGroupIDHasPrefix: ID
   assignedToGroupIDHasSuffix: ID
@@ -88900,10 +84198,6 @@ input FindingWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -88918,10 +84212,6 @@ input FindingWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -88936,10 +84226,6 @@ input FindingWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -88954,10 +84240,6 @@ input FindingWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -88972,10 +84254,6 @@ input FindingWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -88990,10 +84268,6 @@ input FindingWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -89008,10 +84282,6 @@ input FindingWhereInput {
   findingStatusNameNEQ: String
   findingStatusNameIn: [String!]
   findingStatusNameNotIn: [String!]
-  findingStatusNameGT: String
-  findingStatusNameGTE: String
-  findingStatusNameLT: String
-  findingStatusNameLTE: String
   findingStatusNameContains: String
   findingStatusNameHasPrefix: String
   findingStatusNameHasSuffix: String
@@ -89026,10 +84296,6 @@ input FindingWhereInput {
   findingStatusIDNEQ: ID
   findingStatusIDIn: [ID!]
   findingStatusIDNotIn: [ID!]
-  findingStatusIDGT: ID
-  findingStatusIDGTE: ID
-  findingStatusIDLT: ID
-  findingStatusIDLTE: ID
   findingStatusIDContains: ID
   findingStatusIDHasPrefix: ID
   findingStatusIDHasSuffix: ID
@@ -89051,10 +84317,6 @@ input FindingWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -89078,10 +84340,6 @@ input FindingWhereInput {
   externalOwnerIDNEQ: String
   externalOwnerIDIn: [String!]
   externalOwnerIDNotIn: [String!]
-  externalOwnerIDGT: String
-  externalOwnerIDGTE: String
-  externalOwnerIDLT: String
-  externalOwnerIDLTE: String
   externalOwnerIDContains: String
   externalOwnerIDHasPrefix: String
   externalOwnerIDHasSuffix: String
@@ -89096,10 +84354,6 @@ input FindingWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -89114,10 +84368,6 @@ input FindingWhereInput {
   resourceNameNEQ: String
   resourceNameIn: [String!]
   resourceNameNotIn: [String!]
-  resourceNameGT: String
-  resourceNameGTE: String
-  resourceNameLT: String
-  resourceNameLTE: String
   resourceNameContains: String
   resourceNameHasPrefix: String
   resourceNameHasSuffix: String
@@ -89132,10 +84382,6 @@ input FindingWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -89150,10 +84396,6 @@ input FindingWhereInput {
   stateNEQ: String
   stateIn: [String!]
   stateNotIn: [String!]
-  stateGT: String
-  stateGTE: String
-  stateLT: String
-  stateLTE: String
   stateContains: String
   stateHasPrefix: String
   stateHasSuffix: String
@@ -89168,10 +84410,6 @@ input FindingWhereInput {
   categoryNEQ: String
   categoryIn: [String!]
   categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
   categoryContains: String
   categoryHasPrefix: String
   categoryHasSuffix: String
@@ -89186,10 +84424,6 @@ input FindingWhereInput {
   findingClassNEQ: String
   findingClassIn: [String!]
   findingClassNotIn: [String!]
-  findingClassGT: String
-  findingClassGTE: String
-  findingClassLT: String
-  findingClassLTE: String
   findingClassContains: String
   findingClassHasPrefix: String
   findingClassHasSuffix: String
@@ -89204,10 +84438,6 @@ input FindingWhereInput {
   severityNEQ: String
   severityIn: [String!]
   severityNotIn: [String!]
-  severityGT: String
-  severityGTE: String
-  severityLT: String
-  severityLTE: String
   severityContains: String
   severityHasPrefix: String
   severityHasSuffix: String
@@ -89274,10 +84504,6 @@ input FindingWhereInput {
   priorityNEQ: String
   priorityIn: [String!]
   priorityNotIn: [String!]
-  priorityGT: String
-  priorityGTE: String
-  priorityLT: String
-  priorityLTE: String
   priorityContains: String
   priorityHasPrefix: String
   priorityHasSuffix: String
@@ -89327,10 +84553,6 @@ input FindingWhereInput {
   assessmentIDNEQ: String
   assessmentIDIn: [String!]
   assessmentIDNotIn: [String!]
-  assessmentIDGT: String
-  assessmentIDGTE: String
-  assessmentIDLT: String
-  assessmentIDLTE: String
   assessmentIDContains: String
   assessmentIDHasPrefix: String
   assessmentIDHasSuffix: String
@@ -89345,10 +84567,6 @@ input FindingWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -89363,10 +84581,6 @@ input FindingWhereInput {
   recommendationNEQ: String
   recommendationIn: [String!]
   recommendationNotIn: [String!]
-  recommendationGT: String
-  recommendationGTE: String
-  recommendationLT: String
-  recommendationLTE: String
   recommendationContains: String
   recommendationHasPrefix: String
   recommendationHasSuffix: String
@@ -89381,10 +84595,6 @@ input FindingWhereInput {
   recommendedActionsNEQ: String
   recommendedActionsIn: [String!]
   recommendedActionsNotIn: [String!]
-  recommendedActionsGT: String
-  recommendedActionsGTE: String
-  recommendedActionsLT: String
-  recommendedActionsLTE: String
   recommendedActionsContains: String
   recommendedActionsHasPrefix: String
   recommendedActionsHasSuffix: String
@@ -89399,10 +84609,6 @@ input FindingWhereInput {
   vectorNEQ: String
   vectorIn: [String!]
   vectorNotIn: [String!]
-  vectorGT: String
-  vectorGTE: String
-  vectorLT: String
-  vectorLTE: String
   vectorContains: String
   vectorHasPrefix: String
   vectorHasSuffix: String
@@ -89415,8 +84621,6 @@ input FindingWhereInput {
   """
   remediationSLA: Int
   remediationSLANEQ: Int
-  remediationSLAIn: [Int!]
-  remediationSLANotIn: [Int!]
   remediationSLAGT: Int
   remediationSLAGTE: Int
   remediationSLALT: Int
@@ -89427,9 +84631,6 @@ input FindingWhereInput {
   event_time field predicates
   """
   eventTime: DateTime
-  eventTimeNEQ: DateTime
-  eventTimeIn: [DateTime!]
-  eventTimeNotIn: [DateTime!]
   eventTimeGT: DateTime
   eventTimeGTE: DateTime
   eventTimeLT: DateTime
@@ -89440,9 +84641,6 @@ input FindingWhereInput {
   reported_at field predicates
   """
   reportedAt: DateTime
-  reportedAtNEQ: DateTime
-  reportedAtIn: [DateTime!]
-  reportedAtNotIn: [DateTime!]
   reportedAtGT: DateTime
   reportedAtGTE: DateTime
   reportedAtLT: DateTime
@@ -89453,9 +84651,6 @@ input FindingWhereInput {
   source_updated_at field predicates
   """
   sourceUpdatedAt: DateTime
-  sourceUpdatedAtNEQ: DateTime
-  sourceUpdatedAtIn: [DateTime!]
-  sourceUpdatedAtNotIn: [DateTime!]
   sourceUpdatedAtGT: DateTime
   sourceUpdatedAtGTE: DateTime
   sourceUpdatedAtLT: DateTime
@@ -89469,10 +84664,6 @@ input FindingWhereInput {
   externalURINEQ: String
   externalURIIn: [String!]
   externalURINotIn: [String!]
-  externalURIGT: String
-  externalURIGTE: String
-  externalURILT: String
-  externalURILTE: String
   externalURIContains: String
   externalURIHasPrefix: String
   externalURIHasSuffix: String
@@ -91433,19 +86624,12 @@ input GroupMembershipWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -91456,9 +86640,6 @@ input GroupMembershipWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -91472,10 +86653,6 @@ input GroupMembershipWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -91490,10 +86667,6 @@ input GroupMembershipWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -91508,10 +86681,6 @@ input GroupMembershipWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -91662,19 +86831,12 @@ input GroupSettingWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -91685,9 +86847,6 @@ input GroupSettingWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -91701,10 +86860,6 @@ input GroupSettingWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -91719,10 +86874,6 @@ input GroupSettingWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -91737,10 +86888,6 @@ input GroupSettingWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -91783,10 +86930,6 @@ input GroupSettingWhereInput {
   groupIDNEQ: ID
   groupIDIn: [ID!]
   groupIDNotIn: [ID!]
-  groupIDGT: ID
-  groupIDGTE: ID
-  groupIDLT: ID
-  groupIDLTE: ID
   groupIDContains: ID
   groupIDHasPrefix: ID
   groupIDHasSuffix: ID
@@ -91815,19 +86958,12 @@ input GroupWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -91838,9 +86974,6 @@ input GroupWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -91854,10 +86987,6 @@ input GroupWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -91872,10 +87001,6 @@ input GroupWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -91890,10 +87015,6 @@ input GroupWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -91908,10 +87029,6 @@ input GroupWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -91924,10 +87041,6 @@ input GroupWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -91942,10 +87055,6 @@ input GroupWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -91965,10 +87074,6 @@ input GroupWhereInput {
   avatarLocalFileIDNEQ: ID
   avatarLocalFileIDIn: [ID!]
   avatarLocalFileIDNotIn: [ID!]
-  avatarLocalFileIDGT: ID
-  avatarLocalFileIDGTE: ID
-  avatarLocalFileIDLT: ID
-  avatarLocalFileIDLTE: ID
   avatarLocalFileIDContains: ID
   avatarLocalFileIDHasPrefix: ID
   avatarLocalFileIDHasSuffix: ID
@@ -91983,10 +87088,6 @@ input GroupWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -91999,10 +87100,6 @@ input GroupWhereInput {
   oscalRoleNEQ: String
   oscalRoleIn: [String!]
   oscalRoleNotIn: [String!]
-  oscalRoleGT: String
-  oscalRoleGTE: String
-  oscalRoleLT: String
-  oscalRoleLTE: String
   oscalRoleContains: String
   oscalRoleHasPrefix: String
   oscalRoleHasSuffix: String
@@ -92017,10 +87114,6 @@ input GroupWhereInput {
   oscalPartyUUIDNEQ: String
   oscalPartyUUIDIn: [String!]
   oscalPartyUUIDNotIn: [String!]
-  oscalPartyUUIDGT: String
-  oscalPartyUUIDGTE: String
-  oscalPartyUUIDLT: String
-  oscalPartyUUIDLTE: String
   oscalPartyUUIDContains: String
   oscalPartyUUIDHasPrefix: String
   oscalPartyUUIDHasSuffix: String
@@ -92035,10 +87128,6 @@ input GroupWhereInput {
   scimExternalIDNEQ: String
   scimExternalIDIn: [String!]
   scimExternalIDNotIn: [String!]
-  scimExternalIDGT: String
-  scimExternalIDGTE: String
-  scimExternalIDLT: String
-  scimExternalIDLTE: String
   scimExternalIDContains: String
   scimExternalIDHasPrefix: String
   scimExternalIDHasSuffix: String
@@ -92053,10 +87142,6 @@ input GroupWhereInput {
   scimDisplayNameNEQ: String
   scimDisplayNameIn: [String!]
   scimDisplayNameNotIn: [String!]
-  scimDisplayNameGT: String
-  scimDisplayNameGTE: String
-  scimDisplayNameLT: String
-  scimDisplayNameLTE: String
   scimDisplayNameContains: String
   scimDisplayNameHasPrefix: String
   scimDisplayNameHasSuffix: String
@@ -92078,10 +87163,6 @@ input GroupWhereInput {
   scimGroupMailingNEQ: String
   scimGroupMailingIn: [String!]
   scimGroupMailingNotIn: [String!]
-  scimGroupMailingGT: String
-  scimGroupMailingGTE: String
-  scimGroupMailingLT: String
-  scimGroupMailingLTE: String
   scimGroupMailingContains: String
   scimGroupMailingHasPrefix: String
   scimGroupMailingHasSuffix: String
@@ -92582,19 +87663,12 @@ input HushWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -92605,9 +87679,6 @@ input HushWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -92621,10 +87692,6 @@ input HushWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -92639,10 +87706,6 @@ input HushWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -92657,10 +87720,6 @@ input HushWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -92675,10 +87734,6 @@ input HushWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -92700,10 +87755,6 @@ input HushWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -92718,10 +87769,6 @@ input HushWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -92736,10 +87783,6 @@ input HushWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -92752,10 +87795,6 @@ input HushWhereInput {
   kindNEQ: String
   kindIn: [String!]
   kindNotIn: [String!]
-  kindGT: String
-  kindGTE: String
-  kindLT: String
-  kindLTE: String
   kindContains: String
   kindHasPrefix: String
   kindHasSuffix: String
@@ -92770,10 +87809,6 @@ input HushWhereInput {
   secretNameNEQ: String
   secretNameIn: [String!]
   secretNameNotIn: [String!]
-  secretNameGT: String
-  secretNameGTE: String
-  secretNameLT: String
-  secretNameLTE: String
   secretNameContains: String
   secretNameHasPrefix: String
   secretNameHasSuffix: String
@@ -92785,9 +87820,6 @@ input HushWhereInput {
   last_used_at field predicates
   """
   lastUsedAt: Time
-  lastUsedAtNEQ: Time
-  lastUsedAtIn: [Time!]
-  lastUsedAtNotIn: [Time!]
   lastUsedAtGT: Time
   lastUsedAtGTE: Time
   lastUsedAtLT: Time
@@ -92798,9 +87830,6 @@ input HushWhereInput {
   expires_at field predicates
   """
   expiresAt: Time
-  expiresAtNEQ: Time
-  expiresAtIn: [Time!]
-  expiresAtNotIn: [Time!]
   expiresAtGT: Time
   expiresAtGTE: Time
   expiresAtLT: Time
@@ -93666,19 +88695,12 @@ input IdentityHolderWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -93689,9 +88711,6 @@ input IdentityHolderWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -93705,10 +88724,6 @@ input IdentityHolderWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -93723,10 +88738,6 @@ input IdentityHolderWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -93741,10 +88752,6 @@ input IdentityHolderWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -93759,10 +88766,6 @@ input IdentityHolderWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -93775,10 +88778,6 @@ input IdentityHolderWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -93793,10 +88792,6 @@ input IdentityHolderWhereInput {
   internalOwnerNEQ: String
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
-  internalOwnerGT: String
-  internalOwnerGTE: String
-  internalOwnerLT: String
-  internalOwnerLTE: String
   internalOwnerContains: String
   internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
@@ -93811,10 +88806,6 @@ input IdentityHolderWhereInput {
   internalOwnerUserIDNEQ: ID
   internalOwnerUserIDIn: [ID!]
   internalOwnerUserIDNotIn: [ID!]
-  internalOwnerUserIDGT: ID
-  internalOwnerUserIDGTE: ID
-  internalOwnerUserIDLT: ID
-  internalOwnerUserIDLTE: ID
   internalOwnerUserIDContains: ID
   internalOwnerUserIDHasPrefix: ID
   internalOwnerUserIDHasSuffix: ID
@@ -93829,10 +88820,6 @@ input IdentityHolderWhereInput {
   internalOwnerGroupIDNEQ: ID
   internalOwnerGroupIDIn: [ID!]
   internalOwnerGroupIDNotIn: [ID!]
-  internalOwnerGroupIDGT: ID
-  internalOwnerGroupIDGTE: ID
-  internalOwnerGroupIDLT: ID
-  internalOwnerGroupIDLTE: ID
   internalOwnerGroupIDContains: ID
   internalOwnerGroupIDHasPrefix: ID
   internalOwnerGroupIDHasSuffix: ID
@@ -93847,10 +88834,6 @@ input IdentityHolderWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -93865,10 +88848,6 @@ input IdentityHolderWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -93883,10 +88862,6 @@ input IdentityHolderWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -93901,10 +88876,6 @@ input IdentityHolderWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -93926,10 +88897,6 @@ input IdentityHolderWhereInput {
   fullNameNEQ: String
   fullNameIn: [String!]
   fullNameNotIn: [String!]
-  fullNameGT: String
-  fullNameGTE: String
-  fullNameLT: String
-  fullNameLTE: String
   fullNameContains: String
   fullNameHasPrefix: String
   fullNameHasSuffix: String
@@ -93942,10 +88909,6 @@ input IdentityHolderWhereInput {
   emailNEQ: String
   emailIn: [String!]
   emailNotIn: [String!]
-  emailGT: String
-  emailGTE: String
-  emailLT: String
-  emailLTE: String
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
@@ -93958,10 +88921,6 @@ input IdentityHolderWhereInput {
   alternateEmailNEQ: String
   alternateEmailIn: [String!]
   alternateEmailNotIn: [String!]
-  alternateEmailGT: String
-  alternateEmailGTE: String
-  alternateEmailLT: String
-  alternateEmailLTE: String
   alternateEmailContains: String
   alternateEmailHasPrefix: String
   alternateEmailHasSuffix: String
@@ -93976,10 +88935,6 @@ input IdentityHolderWhereInput {
   phoneNumberNEQ: String
   phoneNumberIn: [String!]
   phoneNumberNotIn: [String!]
-  phoneNumberGT: String
-  phoneNumberGTE: String
-  phoneNumberLT: String
-  phoneNumberLTE: String
   phoneNumberContains: String
   phoneNumberHasPrefix: String
   phoneNumberHasSuffix: String
@@ -94001,10 +88956,6 @@ input IdentityHolderWhereInput {
   userIDNEQ: ID
   userIDIn: [ID!]
   userIDNotIn: [ID!]
-  userIDGT: ID
-  userIDGTE: ID
-  userIDLT: ID
-  userIDLTE: ID
   userIDContains: ID
   userIDHasPrefix: ID
   userIDHasSuffix: ID
@@ -94038,10 +88989,6 @@ input IdentityHolderWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -94056,10 +89003,6 @@ input IdentityHolderWhereInput {
   departmentNEQ: String
   departmentIn: [String!]
   departmentNotIn: [String!]
-  departmentGT: String
-  departmentGTE: String
-  departmentLT: String
-  departmentLTE: String
   departmentContains: String
   departmentHasPrefix: String
   departmentHasSuffix: String
@@ -94074,10 +89017,6 @@ input IdentityHolderWhereInput {
   teamNEQ: String
   teamIn: [String!]
   teamNotIn: [String!]
-  teamGT: String
-  teamGTE: String
-  teamLT: String
-  teamLTE: String
   teamContains: String
   teamHasPrefix: String
   teamHasSuffix: String
@@ -94092,10 +89031,6 @@ input IdentityHolderWhereInput {
   locationNEQ: String
   locationIn: [String!]
   locationNotIn: [String!]
-  locationGT: String
-  locationGTE: String
-  locationLT: String
-  locationLTE: String
   locationContains: String
   locationHasPrefix: String
   locationHasSuffix: String
@@ -94107,9 +89042,6 @@ input IdentityHolderWhereInput {
   start_date field predicates
   """
   startDate: DateTime
-  startDateNEQ: DateTime
-  startDateIn: [DateTime!]
-  startDateNotIn: [DateTime!]
   startDateGT: DateTime
   startDateGTE: DateTime
   startDateLT: DateTime
@@ -94120,9 +89052,6 @@ input IdentityHolderWhereInput {
   end_date field predicates
   """
   endDate: DateTime
-  endDateNEQ: DateTime
-  endDateIn: [DateTime!]
-  endDateNotIn: [DateTime!]
   endDateGT: DateTime
   endDateGTE: DateTime
   endDateLT: DateTime
@@ -94136,10 +89065,6 @@ input IdentityHolderWhereInput {
   employerEntityIDNEQ: ID
   employerEntityIDIn: [ID!]
   employerEntityIDNotIn: [ID!]
-  employerEntityIDGT: ID
-  employerEntityIDGTE: ID
-  employerEntityIDLT: ID
-  employerEntityIDLTE: ID
   employerEntityIDContains: ID
   employerEntityIDHasPrefix: ID
   employerEntityIDHasSuffix: ID
@@ -94154,10 +89079,6 @@ input IdentityHolderWhereInput {
   externalUserIDNEQ: String
   externalUserIDIn: [String!]
   externalUserIDNotIn: [String!]
-  externalUserIDGT: String
-  externalUserIDGTE: String
-  externalUserIDLT: String
-  externalUserIDLTE: String
   externalUserIDContains: String
   externalUserIDHasPrefix: String
   externalUserIDHasSuffix: String
@@ -94172,10 +89093,6 @@ input IdentityHolderWhereInput {
   externalReferenceIDNEQ: String
   externalReferenceIDIn: [String!]
   externalReferenceIDNotIn: [String!]
-  externalReferenceIDGT: String
-  externalReferenceIDGTE: String
-  externalReferenceIDLT: String
-  externalReferenceIDLTE: String
   externalReferenceIDContains: String
   externalReferenceIDHasPrefix: String
   externalReferenceIDHasSuffix: String
@@ -94190,10 +89107,6 @@ input IdentityHolderWhereInput {
   avatarRemoteURLNEQ: String
   avatarRemoteURLIn: [String!]
   avatarRemoteURLNotIn: [String!]
-  avatarRemoteURLGT: String
-  avatarRemoteURLGTE: String
-  avatarRemoteURLLT: String
-  avatarRemoteURLLTE: String
   avatarRemoteURLContains: String
   avatarRemoteURLHasPrefix: String
   avatarRemoteURLHasSuffix: String
@@ -95153,19 +90066,12 @@ input IntegrationWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -95176,9 +90082,6 @@ input IntegrationWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -95192,10 +90095,6 @@ input IntegrationWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -95210,10 +90109,6 @@ input IntegrationWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -95228,10 +90123,6 @@ input IntegrationWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -95246,10 +90137,6 @@ input IntegrationWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -95271,10 +90158,6 @@ input IntegrationWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -95289,10 +90172,6 @@ input IntegrationWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -95307,10 +90186,6 @@ input IntegrationWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -95325,10 +90200,6 @@ input IntegrationWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -95343,10 +90214,6 @@ input IntegrationWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -95361,10 +90228,6 @@ input IntegrationWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -95379,10 +90242,6 @@ input IntegrationWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -95395,10 +90254,6 @@ input IntegrationWhereInput {
   kindNEQ: String
   kindIn: [String!]
   kindNotIn: [String!]
-  kindGT: String
-  kindGTE: String
-  kindLT: String
-  kindLTE: String
   kindContains: String
   kindHasPrefix: String
   kindHasSuffix: String
@@ -95413,10 +90268,6 @@ input IntegrationWhereInput {
   integrationTypeNEQ: String
   integrationTypeIn: [String!]
   integrationTypeNotIn: [String!]
-  integrationTypeGT: String
-  integrationTypeGTE: String
-  integrationTypeLT: String
-  integrationTypeLTE: String
   integrationTypeContains: String
   integrationTypeHasPrefix: String
   integrationTypeHasSuffix: String
@@ -95431,10 +90282,6 @@ input IntegrationWhereInput {
   platformIDNEQ: ID
   platformIDIn: [ID!]
   platformIDNotIn: [ID!]
-  platformIDGT: ID
-  platformIDGTE: ID
-  platformIDLT: ID
-  platformIDLTE: ID
   platformIDContains: ID
   platformIDHasPrefix: ID
   platformIDHasSuffix: ID
@@ -95449,10 +90296,6 @@ input IntegrationWhereInput {
   definitionIDNEQ: String
   definitionIDIn: [String!]
   definitionIDNotIn: [String!]
-  definitionIDGT: String
-  definitionIDGTE: String
-  definitionIDLT: String
-  definitionIDLTE: String
   definitionIDContains: String
   definitionIDHasPrefix: String
   definitionIDHasSuffix: String
@@ -95467,10 +90310,6 @@ input IntegrationWhereInput {
   definitionVersionNEQ: String
   definitionVersionIn: [String!]
   definitionVersionNotIn: [String!]
-  definitionVersionGT: String
-  definitionVersionGTE: String
-  definitionVersionLT: String
-  definitionVersionLTE: String
   definitionVersionContains: String
   definitionVersionHasPrefix: String
   definitionVersionHasSuffix: String
@@ -95485,10 +90324,6 @@ input IntegrationWhereInput {
   definitionSlugNEQ: String
   definitionSlugIn: [String!]
   definitionSlugNotIn: [String!]
-  definitionSlugGT: String
-  definitionSlugGTE: String
-  definitionSlugLT: String
-  definitionSlugLTE: String
   definitionSlugContains: String
   definitionSlugHasPrefix: String
   definitionSlugHasSuffix: String
@@ -95503,10 +90338,6 @@ input IntegrationWhereInput {
   familyNEQ: String
   familyIn: [String!]
   familyNotIn: [String!]
-  familyGT: String
-  familyGTE: String
-  familyLT: String
-  familyLTE: String
   familyContains: String
   familyHasPrefix: String
   familyHasSuffix: String
@@ -96512,19 +91343,12 @@ input InternalPolicyWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -96535,9 +91359,6 @@ input InternalPolicyWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -96551,10 +91372,6 @@ input InternalPolicyWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -96569,10 +91386,6 @@ input InternalPolicyWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -96587,10 +91400,6 @@ input InternalPolicyWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -96605,10 +91414,6 @@ input InternalPolicyWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -96621,10 +91426,6 @@ input InternalPolicyWhereInput {
   revisionNEQ: String
   revisionIn: [String!]
   revisionNotIn: [String!]
-  revisionGT: String
-  revisionGTE: String
-  revisionLT: String
-  revisionLTE: String
   revisionContains: String
   revisionHasPrefix: String
   revisionHasSuffix: String
@@ -96639,10 +91440,6 @@ input InternalPolicyWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -96664,10 +91461,6 @@ input InternalPolicyWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -96682,10 +91475,6 @@ input InternalPolicyWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -96700,10 +91489,6 @@ input InternalPolicyWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -96734,10 +91519,6 @@ input InternalPolicyWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -96756,9 +91537,6 @@ input InternalPolicyWhereInput {
   review_due field predicates
   """
   reviewDue: Time
-  reviewDueNEQ: Time
-  reviewDueIn: [Time!]
-  reviewDueNotIn: [Time!]
   reviewDueGT: Time
   reviewDueGTE: Time
   reviewDueLT: Time
@@ -96781,10 +91559,6 @@ input InternalPolicyWhereInput {
   approverIDNEQ: ID
   approverIDIn: [ID!]
   approverIDNotIn: [ID!]
-  approverIDGT: ID
-  approverIDGTE: ID
-  approverIDLT: ID
-  approverIDLTE: ID
   approverIDContains: ID
   approverIDHasPrefix: ID
   approverIDHasSuffix: ID
@@ -96799,10 +91573,6 @@ input InternalPolicyWhereInput {
   delegateIDNEQ: ID
   delegateIDIn: [ID!]
   delegateIDNotIn: [ID!]
-  delegateIDGT: ID
-  delegateIDGTE: ID
-  delegateIDLT: ID
-  delegateIDLTE: ID
   delegateIDContains: ID
   delegateIDHasPrefix: ID
   delegateIDHasSuffix: ID
@@ -96817,10 +91587,6 @@ input InternalPolicyWhereInput {
   urlNEQ: String
   urlIn: [String!]
   urlNotIn: [String!]
-  urlGT: String
-  urlGTE: String
-  urlLT: String
-  urlLTE: String
   urlContains: String
   urlHasPrefix: String
   urlHasSuffix: String
@@ -96835,10 +91601,6 @@ input InternalPolicyWhereInput {
   fileIDNEQ: ID
   fileIDIn: [ID!]
   fileIDNotIn: [ID!]
-  fileIDGT: ID
-  fileIDGTE: ID
-  fileIDLT: ID
-  fileIDLTE: ID
   fileIDContains: ID
   fileIDHasPrefix: ID
   fileIDHasSuffix: ID
@@ -96853,10 +91615,6 @@ input InternalPolicyWhereInput {
   externalFileIDNEQ: String
   externalFileIDIn: [String!]
   externalFileIDNotIn: [String!]
-  externalFileIDGT: String
-  externalFileIDGTE: String
-  externalFileIDLT: String
-  externalFileIDLTE: String
   externalFileIDContains: String
   externalFileIDHasPrefix: String
   externalFileIDHasSuffix: String
@@ -96871,10 +91629,6 @@ input InternalPolicyWhereInput {
   externalContentsNEQ: String
   externalContentsIn: [String!]
   externalContentsNotIn: [String!]
-  externalContentsGT: String
-  externalContentsGTE: String
-  externalContentsLT: String
-  externalContentsLTE: String
   externalContentsContains: String
   externalContentsHasPrefix: String
   externalContentsHasSuffix: String
@@ -96889,10 +91643,6 @@ input InternalPolicyWhereInput {
   internalPolicyKindNameNEQ: String
   internalPolicyKindNameIn: [String!]
   internalPolicyKindNameNotIn: [String!]
-  internalPolicyKindNameGT: String
-  internalPolicyKindNameGTE: String
-  internalPolicyKindNameLT: String
-  internalPolicyKindNameLTE: String
   internalPolicyKindNameContains: String
   internalPolicyKindNameHasPrefix: String
   internalPolicyKindNameHasSuffix: String
@@ -96907,10 +91657,6 @@ input InternalPolicyWhereInput {
   internalPolicyKindIDNEQ: ID
   internalPolicyKindIDIn: [ID!]
   internalPolicyKindIDNotIn: [ID!]
-  internalPolicyKindIDGT: ID
-  internalPolicyKindIDGTE: ID
-  internalPolicyKindIDLT: ID
-  internalPolicyKindIDLTE: ID
   internalPolicyKindIDContains: ID
   internalPolicyKindIDHasPrefix: ID
   internalPolicyKindIDHasSuffix: ID
@@ -96925,10 +91671,6 @@ input InternalPolicyWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -96943,10 +91685,6 @@ input InternalPolicyWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -96961,10 +91699,6 @@ input InternalPolicyWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -96979,10 +91713,6 @@ input InternalPolicyWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -97004,10 +91734,6 @@ input InternalPolicyWhereInput {
   externalUUIDNEQ: String
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
-  externalUUIDGT: String
-  externalUUIDGTE: String
-  externalUUIDLT: String
-  externalUUIDLTE: String
   externalUUIDContains: String
   externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
@@ -97368,19 +92094,12 @@ input InviteWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -97391,9 +92110,6 @@ input InviteWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -97407,10 +92123,6 @@ input InviteWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -97425,10 +92137,6 @@ input InviteWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -97443,10 +92151,6 @@ input InviteWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -97461,10 +92165,6 @@ input InviteWhereInput {
   requestorIDNEQ: String
   requestorIDIn: [String!]
   requestorIDNotIn: [String!]
-  requestorIDGT: String
-  requestorIDGTE: String
-  requestorIDLT: String
-  requestorIDLTE: String
   requestorIDContains: String
   requestorIDHasPrefix: String
   requestorIDHasSuffix: String
@@ -97479,10 +92179,6 @@ input InviteWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -97494,9 +92190,6 @@ input InviteWhereInput {
   expires field predicates
   """
   expires: Time
-  expiresNEQ: Time
-  expiresIn: [Time!]
-  expiresNotIn: [Time!]
   expiresGT: Time
   expiresGTE: Time
   expiresLT: Time
@@ -97510,10 +92203,6 @@ input InviteWhereInput {
   recipientNEQ: String
   recipientIn: [String!]
   recipientNotIn: [String!]
-  recipientGT: String
-  recipientGTE: String
-  recipientLT: String
-  recipientLTE: String
   recipientContains: String
   recipientHasPrefix: String
   recipientHasSuffix: String
@@ -97538,8 +92227,6 @@ input InviteWhereInput {
   """
   sendAttempts: Int
   sendAttemptsNEQ: Int
-  sendAttemptsIn: [Int!]
-  sendAttemptsNotIn: [Int!]
   sendAttemptsGT: Int
   sendAttemptsGTE: Int
   sendAttemptsLT: Int
@@ -97578,1741 +92265,6 @@ input InviteWhereInput {
 A valid JSON string.
 """
 scalar JSON
-type JobResult implements Node @modules(names: ["compliance_module"]) {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the real user acting through an impersonation session when the record was last mutated, if any
-  """
-  updatedByImpersonator: String
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  """
-  the job this result belongs to
-  """
-  scheduledJobID: ID!
-  """
-  the status of this job. did it fail? did it succeed?
-  """
-  status: JobResultJobExecutionStatus!
-  """
-  the exit code from the script that was executed
-  """
-  exitCode: Int!
-  """
-  The time the job finished it's execution. This is different from the db insertion time
-  """
-  finishedAt: Time!
-  """
-  The time the job started it's execution. This is different from the db insertion time
-  """
-  startedAt: Time!
-  fileID: ID!
-  """
-  the log output from the job
-  """
-  log: String
-  owner: Organization
-  scheduledJob: ScheduledJob!
-  file: File!
-}
-"""
-A connection to a list of items.
-"""
-type JobResultConnection {
-  """
-  A list of edges.
-  """
-  edges: [JobResultEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type JobResultEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: JobResult
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-JobResultJobExecutionStatus is enum for the field status
-"""
-enum JobResultJobExecutionStatus @goModel(model: "github.com/theopenlane/core/common/enums.JobExecutionStatus") {
-  CANCELED
-  SUCCESS
-  PENDING
-  FAILED
-}
-"""
-Ordering options for JobResult connections
-"""
-input JobResultOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order JobResults.
-  """
-  field: JobResultOrderField!
-}
-"""
-Properties by which JobResult connections can be ordered.
-"""
-enum JobResultOrderField {
-  created_at
-  updated_at
-  STATUS
-  exit_code
-  finished_at
-  started_at
-}
-"""
-JobResultWhereInput is used for filtering JobResult objects.
-Input was generated by ent.
-"""
-input JobResultWhereInput {
-  not: JobResultWhereInput
-  and: [JobResultWhereInput!]
-  or: [JobResultWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  updated_by_impersonator field predicates
-  """
-  updatedByImpersonator: String
-  updatedByImpersonatorNEQ: String
-  updatedByImpersonatorIn: [String!]
-  updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
-  updatedByImpersonatorContains: String
-  updatedByImpersonatorHasPrefix: String
-  updatedByImpersonatorHasSuffix: String
-  updatedByImpersonatorIsNil: Boolean
-  updatedByImpersonatorNotNil: Boolean
-  updatedByImpersonatorEqualFold: String
-  updatedByImpersonatorContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  scheduled_job_id field predicates
-  """
-  scheduledJobID: ID
-  scheduledJobIDNEQ: ID
-  scheduledJobIDIn: [ID!]
-  scheduledJobIDNotIn: [ID!]
-  scheduledJobIDGT: ID
-  scheduledJobIDGTE: ID
-  scheduledJobIDLT: ID
-  scheduledJobIDLTE: ID
-  scheduledJobIDContains: ID
-  scheduledJobIDHasPrefix: ID
-  scheduledJobIDHasSuffix: ID
-  scheduledJobIDEqualFold: ID
-  scheduledJobIDContainsFold: ID
-  """
-  status field predicates
-  """
-  status: JobResultJobExecutionStatus
-  statusNEQ: JobResultJobExecutionStatus
-  statusIn: [JobResultJobExecutionStatus!]
-  statusNotIn: [JobResultJobExecutionStatus!]
-  """
-  exit_code field predicates
-  """
-  exitCode: Int
-  exitCodeNEQ: Int
-  exitCodeIn: [Int!]
-  exitCodeNotIn: [Int!]
-  exitCodeGT: Int
-  exitCodeGTE: Int
-  exitCodeLT: Int
-  exitCodeLTE: Int
-  """
-  finished_at field predicates
-  """
-  finishedAt: Time
-  finishedAtNEQ: Time
-  finishedAtIn: [Time!]
-  finishedAtNotIn: [Time!]
-  finishedAtGT: Time
-  finishedAtGTE: Time
-  finishedAtLT: Time
-  finishedAtLTE: Time
-  """
-  started_at field predicates
-  """
-  startedAt: Time
-  startedAtNEQ: Time
-  startedAtIn: [Time!]
-  startedAtNotIn: [Time!]
-  startedAtGT: Time
-  startedAtGTE: Time
-  startedAtLT: Time
-  startedAtLTE: Time
-  """
-  file_id field predicates
-  """
-  fileID: ID
-  fileIDNEQ: ID
-  fileIDIn: [ID!]
-  fileIDNotIn: [ID!]
-  fileIDGT: ID
-  fileIDGTE: ID
-  fileIDLT: ID
-  fileIDLTE: ID
-  fileIDContains: ID
-  fileIDHasPrefix: ID
-  fileIDHasSuffix: ID
-  fileIDEqualFold: ID
-  fileIDContainsFold: ID
-  """
-  log field predicates
-  """
-  log: String
-  logNEQ: String
-  logIn: [String!]
-  logNotIn: [String!]
-  logGT: String
-  logGTE: String
-  logLT: String
-  logLTE: String
-  logContains: String
-  logHasPrefix: String
-  logHasSuffix: String
-  logIsNil: Boolean
-  logNotNil: Boolean
-  logEqualFold: String
-  logContainsFold: String
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  scheduled_job edge predicates
-  """
-  hasScheduledJob: Boolean
-  hasScheduledJobWith: [ScheduledJobWhereInput!]
-  """
-  file edge predicates
-  """
-  hasFile: Boolean
-  hasFileWith: [FileWhereInput!]
-}
-type JobRunner implements Node @modules(names: ["compliance_module"]) {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the real user acting through an impersonation session when the record was last mutated, if any
-  """
-  updatedByImpersonator: String
-  """
-  a shortened prefixed id field to use as a human readable identifier
-  """
-  displayID: String!
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  """
-  indicates if the record is owned by the the openlane system and not by an organization
-  """
-  systemOwned: Boolean
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @hidden(if: true)
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @hidden(if: true)
-  """
-  the name of the runner
-  """
-  name: String!
-  """
-  the status of this runner
-  """
-  status: JobRunnerJobRunnerStatus!
-  """
-  the IP address of this runner
-  """
-  ipAddress: String
-  """
-  the last time this runner was seen
-  """
-  lastSeen: Time
-  """
-  the version of the runner
-  """
-  version: String
-  """
-  the operating system of the runner
-  """
-  os: String
-  owner: Organization
-  jobRunnerTokens(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunnerTokens returned from the connection.
-    """
-    orderBy: [JobRunnerTokenOrder!]
-
-    """
-    Filtering options for JobRunnerTokens returned from the connection.
-    """
-    where: JobRunnerTokenWhereInput
-  ): JobRunnerTokenConnection!
-}
-"""
-A connection to a list of items.
-"""
-type JobRunnerConnection {
-  """
-  A list of edges.
-  """
-  edges: [JobRunnerEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type JobRunnerEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: JobRunner
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-JobRunnerJobRunnerStatus is enum for the field status
-"""
-enum JobRunnerJobRunnerStatus @goModel(model: "github.com/theopenlane/core/common/enums.JobRunnerStatus") {
-  ONLINE
-  OFFLINE
-}
-"""
-Ordering options for JobRunner connections
-"""
-input JobRunnerOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order JobRunners.
-  """
-  field: JobRunnerOrderField!
-}
-"""
-Properties by which JobRunner connections can be ordered.
-"""
-enum JobRunnerOrderField {
-  created_at
-  updated_at
-  name
-}
-type JobRunnerRegistrationToken implements Node @modules(names: ["compliance_module"]) {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the real user acting through an impersonation session when the record was last mutated, if any
-  """
-  updatedByImpersonator: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  token: String!
-  """
-  when the token expires
-  """
-  expiresAt: Time!
-  lastUsedAt: Time
-  """
-  the ID of the runner this token was used to register
-  """
-  jobRunnerID: ID
-  owner: Organization
-  jobRunner: JobRunner
-}
-"""
-A connection to a list of items.
-"""
-type JobRunnerRegistrationTokenConnection {
-  """
-  A list of edges.
-  """
-  edges: [JobRunnerRegistrationTokenEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type JobRunnerRegistrationTokenEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: JobRunnerRegistrationToken
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-Ordering options for JobRunnerRegistrationToken connections
-"""
-input JobRunnerRegistrationTokenOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order JobRunnerRegistrationTokens.
-  """
-  field: JobRunnerRegistrationTokenOrderField!
-}
-"""
-Properties by which JobRunnerRegistrationToken connections can be ordered.
-"""
-enum JobRunnerRegistrationTokenOrderField {
-  created_at
-  updated_at
-  last_used_at
-}
-"""
-JobRunnerRegistrationTokenWhereInput is used for filtering JobRunnerRegistrationToken objects.
-Input was generated by ent.
-"""
-input JobRunnerRegistrationTokenWhereInput {
-  not: JobRunnerRegistrationTokenWhereInput
-  and: [JobRunnerRegistrationTokenWhereInput!]
-  or: [JobRunnerRegistrationTokenWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  updated_by_impersonator field predicates
-  """
-  updatedByImpersonator: String
-  updatedByImpersonatorNEQ: String
-  updatedByImpersonatorIn: [String!]
-  updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
-  updatedByImpersonatorContains: String
-  updatedByImpersonatorHasPrefix: String
-  updatedByImpersonatorHasSuffix: String
-  updatedByImpersonatorIsNil: Boolean
-  updatedByImpersonatorNotNil: Boolean
-  updatedByImpersonatorEqualFold: String
-  updatedByImpersonatorContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  last_used_at field predicates
-  """
-  lastUsedAt: Time
-  lastUsedAtNEQ: Time
-  lastUsedAtIn: [Time!]
-  lastUsedAtNotIn: [Time!]
-  lastUsedAtGT: Time
-  lastUsedAtGTE: Time
-  lastUsedAtLT: Time
-  lastUsedAtLTE: Time
-  lastUsedAtIsNil: Boolean
-  lastUsedAtNotNil: Boolean
-  """
-  job_runner_id field predicates
-  """
-  jobRunnerID: ID
-  jobRunnerIDNEQ: ID
-  jobRunnerIDIn: [ID!]
-  jobRunnerIDNotIn: [ID!]
-  jobRunnerIDGT: ID
-  jobRunnerIDGTE: ID
-  jobRunnerIDLT: ID
-  jobRunnerIDLTE: ID
-  jobRunnerIDContains: ID
-  jobRunnerIDHasPrefix: ID
-  jobRunnerIDHasSuffix: ID
-  jobRunnerIDIsNil: Boolean
-  jobRunnerIDNotNil: Boolean
-  jobRunnerIDEqualFold: ID
-  jobRunnerIDContainsFold: ID
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  job_runner edge predicates
-  """
-  hasJobRunner: Boolean
-  hasJobRunnerWith: [JobRunnerWhereInput!]
-  """
-  Filter for tagsHas to contain a specific value
-  """
-  tagsHas: String
-}
-type JobRunnerToken implements Node @modules(names: ["compliance_module"]) {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the real user acting through an impersonation session when the record was last mutated, if any
-  """
-  updatedByImpersonator: String
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  token: String!
-  """
-  when the token expires
-  """
-  expiresAt: Time
-  lastUsedAt: Time
-  """
-  whether the token is active
-  """
-  isActive: Boolean
-  """
-  the reason the token was revoked
-  """
-  revokedReason: String
-  """
-  the user who revoked the token
-  """
-  revokedBy: String
-  """
-  when the token was revoked
-  """
-  revokedAt: Time
-  owner: Organization
-  jobRunners(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunners returned from the connection.
-    """
-    orderBy: [JobRunnerOrder!]
-
-    """
-    Filtering options for JobRunners returned from the connection.
-    """
-    where: JobRunnerWhereInput
-  ): JobRunnerConnection!
-}
-"""
-A connection to a list of items.
-"""
-type JobRunnerTokenConnection {
-  """
-  A list of edges.
-  """
-  edges: [JobRunnerTokenEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type JobRunnerTokenEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: JobRunnerToken
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-Ordering options for JobRunnerToken connections
-"""
-input JobRunnerTokenOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order JobRunnerTokens.
-  """
-  field: JobRunnerTokenOrderField!
-}
-"""
-Properties by which JobRunnerToken connections can be ordered.
-"""
-enum JobRunnerTokenOrderField {
-  created_at
-  updated_at
-  expires_at
-  last_used_at
-}
-"""
-JobRunnerTokenWhereInput is used for filtering JobRunnerToken objects.
-Input was generated by ent.
-"""
-input JobRunnerTokenWhereInput {
-  not: JobRunnerTokenWhereInput
-  and: [JobRunnerTokenWhereInput!]
-  or: [JobRunnerTokenWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  updated_by_impersonator field predicates
-  """
-  updatedByImpersonator: String
-  updatedByImpersonatorNEQ: String
-  updatedByImpersonatorIn: [String!]
-  updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
-  updatedByImpersonatorContains: String
-  updatedByImpersonatorHasPrefix: String
-  updatedByImpersonatorHasSuffix: String
-  updatedByImpersonatorIsNil: Boolean
-  updatedByImpersonatorNotNil: Boolean
-  updatedByImpersonatorEqualFold: String
-  updatedByImpersonatorContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  expires_at field predicates
-  """
-  expiresAt: Time
-  expiresAtNEQ: Time
-  expiresAtIn: [Time!]
-  expiresAtNotIn: [Time!]
-  expiresAtGT: Time
-  expiresAtGTE: Time
-  expiresAtLT: Time
-  expiresAtLTE: Time
-  expiresAtIsNil: Boolean
-  expiresAtNotNil: Boolean
-  """
-  last_used_at field predicates
-  """
-  lastUsedAt: Time
-  lastUsedAtNEQ: Time
-  lastUsedAtIn: [Time!]
-  lastUsedAtNotIn: [Time!]
-  lastUsedAtGT: Time
-  lastUsedAtGTE: Time
-  lastUsedAtLT: Time
-  lastUsedAtLTE: Time
-  lastUsedAtIsNil: Boolean
-  lastUsedAtNotNil: Boolean
-  """
-  is_active field predicates
-  """
-  isActive: Boolean
-  isActiveNEQ: Boolean
-  isActiveIsNil: Boolean
-  isActiveNotNil: Boolean
-  """
-  revoked_reason field predicates
-  """
-  revokedReason: String
-  revokedReasonNEQ: String
-  revokedReasonIn: [String!]
-  revokedReasonNotIn: [String!]
-  revokedReasonGT: String
-  revokedReasonGTE: String
-  revokedReasonLT: String
-  revokedReasonLTE: String
-  revokedReasonContains: String
-  revokedReasonHasPrefix: String
-  revokedReasonHasSuffix: String
-  revokedReasonIsNil: Boolean
-  revokedReasonNotNil: Boolean
-  revokedReasonEqualFold: String
-  revokedReasonContainsFold: String
-  """
-  revoked_by field predicates
-  """
-  revokedBy: String
-  revokedByNEQ: String
-  revokedByIn: [String!]
-  revokedByNotIn: [String!]
-  revokedByGT: String
-  revokedByGTE: String
-  revokedByLT: String
-  revokedByLTE: String
-  revokedByContains: String
-  revokedByHasPrefix: String
-  revokedByHasSuffix: String
-  revokedByIsNil: Boolean
-  revokedByNotNil: Boolean
-  revokedByEqualFold: String
-  revokedByContainsFold: String
-  """
-  revoked_at field predicates
-  """
-  revokedAt: Time
-  revokedAtNEQ: Time
-  revokedAtIn: [Time!]
-  revokedAtNotIn: [Time!]
-  revokedAtGT: Time
-  revokedAtGTE: Time
-  revokedAtLT: Time
-  revokedAtLTE: Time
-  revokedAtIsNil: Boolean
-  revokedAtNotNil: Boolean
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  job_runners edge predicates
-  """
-  hasJobRunners: Boolean
-  hasJobRunnersWith: [JobRunnerWhereInput!]
-  """
-  Filter for tagsHas to contain a specific value
-  """
-  tagsHas: String
-}
-"""
-JobRunnerWhereInput is used for filtering JobRunner objects.
-Input was generated by ent.
-"""
-input JobRunnerWhereInput {
-  not: JobRunnerWhereInput
-  and: [JobRunnerWhereInput!]
-  or: [JobRunnerWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  updated_by_impersonator field predicates
-  """
-  updatedByImpersonator: String
-  updatedByImpersonatorNEQ: String
-  updatedByImpersonatorIn: [String!]
-  updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
-  updatedByImpersonatorContains: String
-  updatedByImpersonatorHasPrefix: String
-  updatedByImpersonatorHasSuffix: String
-  updatedByImpersonatorIsNil: Boolean
-  updatedByImpersonatorNotNil: Boolean
-  updatedByImpersonatorEqualFold: String
-  updatedByImpersonatorContainsFold: String
-  """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  name field predicates
-  """
-  name: String
-  nameNEQ: String
-  nameIn: [String!]
-  nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
-  nameContains: String
-  nameHasPrefix: String
-  nameHasSuffix: String
-  nameEqualFold: String
-  nameContainsFold: String
-  """
-  status field predicates
-  """
-  status: JobRunnerJobRunnerStatus
-  statusNEQ: JobRunnerJobRunnerStatus
-  statusIn: [JobRunnerJobRunnerStatus!]
-  statusNotIn: [JobRunnerJobRunnerStatus!]
-  """
-  ip_address field predicates
-  """
-  ipAddress: String
-  ipAddressNEQ: String
-  ipAddressIn: [String!]
-  ipAddressNotIn: [String!]
-  ipAddressGT: String
-  ipAddressGTE: String
-  ipAddressLT: String
-  ipAddressLTE: String
-  ipAddressContains: String
-  ipAddressHasPrefix: String
-  ipAddressHasSuffix: String
-  ipAddressIsNil: Boolean
-  ipAddressNotNil: Boolean
-  ipAddressEqualFold: String
-  ipAddressContainsFold: String
-  """
-  last_seen field predicates
-  """
-  lastSeen: Time
-  lastSeenNEQ: Time
-  lastSeenIn: [Time!]
-  lastSeenNotIn: [Time!]
-  lastSeenGT: Time
-  lastSeenGTE: Time
-  lastSeenLT: Time
-  lastSeenLTE: Time
-  lastSeenIsNil: Boolean
-  lastSeenNotNil: Boolean
-  """
-  version field predicates
-  """
-  version: String
-  versionNEQ: String
-  versionIn: [String!]
-  versionNotIn: [String!]
-  versionGT: String
-  versionGTE: String
-  versionLT: String
-  versionLTE: String
-  versionContains: String
-  versionHasPrefix: String
-  versionHasSuffix: String
-  versionIsNil: Boolean
-  versionNotNil: Boolean
-  versionEqualFold: String
-  versionContainsFold: String
-  """
-  os field predicates
-  """
-  os: String
-  osNEQ: String
-  osIn: [String!]
-  osNotIn: [String!]
-  osGT: String
-  osGTE: String
-  osLT: String
-  osLTE: String
-  osContains: String
-  osHasPrefix: String
-  osHasSuffix: String
-  osIsNil: Boolean
-  osNotNil: Boolean
-  osEqualFold: String
-  osContainsFold: String
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  job_runner_tokens edge predicates
-  """
-  hasJobRunnerTokens: Boolean
-  hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
-  """
-  Filter for tagsHas to contain a specific value
-  """
-  tagsHas: String
-}
-type JobTemplate implements Node @modules(names: ["compliance_module"]) {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the real user acting through an impersonation session when the record was last mutated, if any
-  """
-  updatedByImpersonator: String
-  """
-  a shortened prefixed id field to use as a human readable identifier
-  """
-  displayID: String!
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  """
-  indicates if the record is owned by the the openlane system and not by an organization
-  """
-  systemOwned: Boolean
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @hidden(if: true)
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @hidden(if: true)
-  """
-  the title of the job
-  """
-  title: String!
-  """
-  the short description of the job and what it does
-  """
-  description: String
-  """
-  the platform to use to execute this job, e.g. golang, typescript, python, etc.
-  """
-  platform: JobTemplateJobPlatformType!
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String!
-  """
-  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
-  """
-  configuration: JobConfiguration
-  """
-  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  cron: String
-  owner: Organization
-  scheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ScheduledJobs returned from the connection.
-    """
-    orderBy: [ScheduledJobOrder!]
-
-    """
-    Filtering options for ScheduledJobs returned from the connection.
-    """
-    where: ScheduledJobWhereInput
-  ): ScheduledJobConnection!
-}
-"""
-A connection to a list of items.
-"""
-type JobTemplateConnection {
-  """
-  A list of edges.
-  """
-  edges: [JobTemplateEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type JobTemplateEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: JobTemplate
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-JobTemplateJobPlatformType is enum for the field platform
-"""
-enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/core/common/enums.JobPlatformType") {
-  GO
-  TS
-}
-"""
-Ordering options for JobTemplate connections
-"""
-input JobTemplateOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order JobTemplates.
-  """
-  field: JobTemplateOrderField!
-}
-"""
-Properties by which JobTemplate connections can be ordered.
-"""
-enum JobTemplateOrderField {
-  created_at
-  updated_at
-  title
-  PLATFORM
-}
-"""
-JobTemplateWhereInput is used for filtering JobTemplate objects.
-Input was generated by ent.
-"""
-input JobTemplateWhereInput {
-  not: JobTemplateWhereInput
-  and: [JobTemplateWhereInput!]
-  or: [JobTemplateWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  updated_by_impersonator field predicates
-  """
-  updatedByImpersonator: String
-  updatedByImpersonatorNEQ: String
-  updatedByImpersonatorIn: [String!]
-  updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
-  updatedByImpersonatorContains: String
-  updatedByImpersonatorHasPrefix: String
-  updatedByImpersonatorHasSuffix: String
-  updatedByImpersonatorIsNil: Boolean
-  updatedByImpersonatorNotNil: Boolean
-  updatedByImpersonatorEqualFold: String
-  updatedByImpersonatorContainsFold: String
-  """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  system_owned field predicates
-  """
-  systemOwned: Boolean
-  systemOwnedNEQ: Boolean
-  systemOwnedIsNil: Boolean
-  systemOwnedNotNil: Boolean
-  """
-  internal_notes field predicates
-  """
-  internalNotes: String
-  internalNotesNEQ: String
-  internalNotesIn: [String!]
-  internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
-  internalNotesContains: String
-  internalNotesHasPrefix: String
-  internalNotesHasSuffix: String
-  internalNotesIsNil: Boolean
-  internalNotesNotNil: Boolean
-  internalNotesEqualFold: String
-  internalNotesContainsFold: String
-  """
-  system_internal_id field predicates
-  """
-  systemInternalID: String
-  systemInternalIDNEQ: String
-  systemInternalIDIn: [String!]
-  systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
-  systemInternalIDContains: String
-  systemInternalIDHasPrefix: String
-  systemInternalIDHasSuffix: String
-  systemInternalIDIsNil: Boolean
-  systemInternalIDNotNil: Boolean
-  systemInternalIDEqualFold: String
-  systemInternalIDContainsFold: String
-  """
-  title field predicates
-  """
-  title: String
-  titleNEQ: String
-  titleIn: [String!]
-  titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
-  titleContains: String
-  titleHasPrefix: String
-  titleHasSuffix: String
-  titleEqualFold: String
-  titleContainsFold: String
-  """
-  description field predicates
-  """
-  description: String
-  descriptionNEQ: String
-  descriptionIn: [String!]
-  descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
-  descriptionContains: String
-  descriptionHasPrefix: String
-  descriptionHasSuffix: String
-  descriptionIsNil: Boolean
-  descriptionNotNil: Boolean
-  descriptionEqualFold: String
-  descriptionContainsFold: String
-  """
-  platform field predicates
-  """
-  platform: JobTemplateJobPlatformType
-  platformNEQ: JobTemplateJobPlatformType
-  platformIn: [JobTemplateJobPlatformType!]
-  platformNotIn: [JobTemplateJobPlatformType!]
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  scheduled_jobs edge predicates
-  """
-  hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ScheduledJobWhereInput!]
-  """
-  Filter for tagsHas to contain a specific value
-  """
-  tagsHas: String
-}
 """
 The builtin Map type
 """
@@ -99437,19 +92389,12 @@ input MappableDomainWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -99460,9 +92405,6 @@ input MappableDomainWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -99476,10 +92418,6 @@ input MappableDomainWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -99494,10 +92432,6 @@ input MappableDomainWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -99512,10 +92446,6 @@ input MappableDomainWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -99530,10 +92460,6 @@ input MappableDomainWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -99546,10 +92472,6 @@ input MappableDomainWhereInput {
   zoneIDNEQ: String
   zoneIDIn: [String!]
   zoneIDNotIn: [String!]
-  zoneIDGT: String
-  zoneIDGTE: String
-  zoneIDLT: String
-  zoneIDLTE: String
   zoneIDContains: String
   zoneIDHasPrefix: String
   zoneIDHasSuffix: String
@@ -99884,19 +92806,12 @@ input MappedControlWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -99907,9 +92822,6 @@ input MappedControlWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -99923,10 +92835,6 @@ input MappedControlWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -99941,10 +92849,6 @@ input MappedControlWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -99959,10 +92863,6 @@ input MappedControlWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -99984,10 +92884,6 @@ input MappedControlWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -100002,10 +92898,6 @@ input MappedControlWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -100020,10 +92912,6 @@ input MappedControlWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -100045,10 +92933,6 @@ input MappedControlWhereInput {
   relationNEQ: String
   relationIn: [String!]
   relationNotIn: [String!]
-  relationGT: String
-  relationGTE: String
-  relationLT: String
-  relationLTE: String
   relationContains: String
   relationHasPrefix: String
   relationHasSuffix: String
@@ -100061,8 +92945,6 @@ input MappedControlWhereInput {
   """
   confidence: Int
   confidenceNEQ: Int
-  confidenceIn: [Int!]
-  confidenceNotIn: [Int!]
   confidenceGT: Int
   confidenceGTE: Int
   confidenceLT: Int
@@ -100449,19 +93331,12 @@ input NarrativeWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -100472,9 +93347,6 @@ input NarrativeWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -100488,10 +93360,6 @@ input NarrativeWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -100506,10 +93374,6 @@ input NarrativeWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -100524,10 +93388,6 @@ input NarrativeWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -100542,10 +93402,6 @@ input NarrativeWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -100558,10 +93414,6 @@ input NarrativeWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -100583,10 +93435,6 @@ input NarrativeWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -100601,10 +93449,6 @@ input NarrativeWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -100619,10 +93463,6 @@ input NarrativeWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -100635,10 +93475,6 @@ input NarrativeWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -100653,10 +93489,6 @@ input NarrativeWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -100713,7 +93545,7 @@ input NarrativeWhereInput {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/theopenlane/core/internal/ent/generated.Noder") {
+interface Node @goModel(model: "github.com/theopenlane/core/v2/internal/ent/generated.Noder") {
   """
   The id of the object.
   """
@@ -100912,19 +93744,12 @@ input NoteWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -100935,9 +93760,6 @@ input NoteWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -100951,10 +93773,6 @@ input NoteWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -100969,10 +93787,6 @@ input NoteWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -100987,10 +93801,6 @@ input NoteWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -101005,10 +93815,6 @@ input NoteWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -101021,10 +93827,6 @@ input NoteWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -101039,10 +93841,6 @@ input NoteWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -101057,10 +93855,6 @@ input NoteWhereInput {
   textNEQ: String
   textIn: [String!]
   textNotIn: [String!]
-  textGT: String
-  textGTE: String
-  textLT: String
-  textLTE: String
   textContains: String
   textHasPrefix: String
   textHasSuffix: String
@@ -101073,10 +93867,6 @@ input NoteWhereInput {
   noteRefNEQ: String
   noteRefIn: [String!]
   noteRefNotIn: [String!]
-  noteRefGT: String
-  noteRefGTE: String
-  noteRefLT: String
-  noteRefLTE: String
   noteRefContains: String
   noteRefHasPrefix: String
   noteRefHasSuffix: String
@@ -101091,10 +93881,6 @@ input NoteWhereInput {
   discussionIDNEQ: ID
   discussionIDIn: [ID!]
   discussionIDNotIn: [ID!]
-  discussionIDGT: ID
-  discussionIDGTE: ID
-  discussionIDLT: ID
-  discussionIDLTE: ID
   discussionIDContains: ID
   discussionIDHasPrefix: ID
   discussionIDHasSuffix: ID
@@ -101114,10 +93900,6 @@ input NoteWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -101136,9 +93918,6 @@ input NoteWhereInput {
   notified_at field predicates
   """
   notifiedAt: Time
-  notifiedAtNEQ: Time
-  notifiedAtIn: [Time!]
-  notifiedAtNotIn: [Time!]
   notifiedAtGT: Time
   notifiedAtGTE: Time
   notifiedAtLT: Time
@@ -101551,19 +94330,12 @@ input NotificationPreferenceWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -101574,9 +94346,6 @@ input NotificationPreferenceWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -101590,10 +94359,6 @@ input NotificationPreferenceWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -101608,10 +94373,6 @@ input NotificationPreferenceWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -101626,10 +94387,6 @@ input NotificationPreferenceWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -101644,10 +94401,6 @@ input NotificationPreferenceWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -101662,10 +94415,6 @@ input NotificationPreferenceWhereInput {
   userIDNEQ: ID
   userIDIn: [ID!]
   userIDNotIn: [ID!]
-  userIDGT: ID
-  userIDGTE: ID
-  userIDLT: ID
-  userIDLTE: ID
   userIDContains: ID
   userIDHasPrefix: ID
   userIDHasSuffix: ID
@@ -101692,10 +94441,6 @@ input NotificationPreferenceWhereInput {
   providerNEQ: String
   providerIn: [String!]
   providerNotIn: [String!]
-  providerGT: String
-  providerGTE: String
-  providerLT: String
-  providerLTE: String
   providerContains: String
   providerHasPrefix: String
   providerHasSuffix: String
@@ -101710,10 +94455,6 @@ input NotificationPreferenceWhereInput {
   destinationNEQ: String
   destinationIn: [String!]
   destinationNotIn: [String!]
-  destinationGT: String
-  destinationGTE: String
-  destinationLT: String
-  destinationLTE: String
   destinationContains: String
   destinationHasPrefix: String
   destinationHasSuffix: String
@@ -101749,10 +94490,6 @@ input NotificationPreferenceWhereInput {
   templateIDNEQ: ID
   templateIDIn: [ID!]
   templateIDNotIn: [ID!]
-  templateIDGT: ID
-  templateIDGTE: ID
-  templateIDLT: ID
-  templateIDLTE: ID
   templateIDContains: ID
   templateIDHasPrefix: ID
   templateIDHasSuffix: ID
@@ -101764,9 +94501,6 @@ input NotificationPreferenceWhereInput {
   mute_until field predicates
   """
   muteUntil: Time
-  muteUntilNEQ: Time
-  muteUntilIn: [Time!]
-  muteUntilNotIn: [Time!]
   muteUntilGT: Time
   muteUntilGTE: Time
   muteUntilLT: Time
@@ -101780,10 +94514,6 @@ input NotificationPreferenceWhereInput {
   quietHoursStartNEQ: String
   quietHoursStartIn: [String!]
   quietHoursStartNotIn: [String!]
-  quietHoursStartGT: String
-  quietHoursStartGTE: String
-  quietHoursStartLT: String
-  quietHoursStartLTE: String
   quietHoursStartContains: String
   quietHoursStartHasPrefix: String
   quietHoursStartHasSuffix: String
@@ -101798,10 +94528,6 @@ input NotificationPreferenceWhereInput {
   quietHoursEndNEQ: String
   quietHoursEndIn: [String!]
   quietHoursEndNotIn: [String!]
-  quietHoursEndGT: String
-  quietHoursEndGTE: String
-  quietHoursEndLT: String
-  quietHoursEndLTE: String
   quietHoursEndContains: String
   quietHoursEndHasPrefix: String
   quietHoursEndHasSuffix: String
@@ -101816,10 +94542,6 @@ input NotificationPreferenceWhereInput {
   timezoneNEQ: String
   timezoneIn: [String!]
   timezoneNotIn: [String!]
-  timezoneGT: String
-  timezoneGTE: String
-  timezoneLT: String
-  timezoneLTE: String
   timezoneContains: String
   timezoneHasPrefix: String
   timezoneHasSuffix: String
@@ -101836,9 +94558,6 @@ input NotificationPreferenceWhereInput {
   verified_at field predicates
   """
   verifiedAt: Time
-  verifiedAtNEQ: Time
-  verifiedAtIn: [Time!]
-  verifiedAtNotIn: [Time!]
   verifiedAtGT: Time
   verifiedAtGTE: Time
   verifiedAtLT: Time
@@ -101849,9 +94568,6 @@ input NotificationPreferenceWhereInput {
   last_used_at field predicates
   """
   lastUsedAt: Time
-  lastUsedAtNEQ: Time
-  lastUsedAtIn: [Time!]
-  lastUsedAtNotIn: [Time!]
   lastUsedAtGT: Time
   lastUsedAtGTE: Time
   lastUsedAtLT: Time
@@ -101865,10 +94581,6 @@ input NotificationPreferenceWhereInput {
   lastErrorNEQ: String
   lastErrorIn: [String!]
   lastErrorNotIn: [String!]
-  lastErrorGT: String
-  lastErrorGTE: String
-  lastErrorLT: String
-  lastErrorLTE: String
   lastErrorContains: String
   lastErrorHasPrefix: String
   lastErrorHasSuffix: String
@@ -102146,19 +94858,12 @@ input NotificationTemplateWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -102169,9 +94874,6 @@ input NotificationTemplateWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -102185,10 +94887,6 @@ input NotificationTemplateWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -102203,10 +94901,6 @@ input NotificationTemplateWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -102221,10 +94915,6 @@ input NotificationTemplateWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -102239,10 +94929,6 @@ input NotificationTemplateWhereInput {
   revisionNEQ: String
   revisionIn: [String!]
   revisionNotIn: [String!]
-  revisionGT: String
-  revisionGTE: String
-  revisionLT: String
-  revisionLTE: String
   revisionContains: String
   revisionHasPrefix: String
   revisionHasSuffix: String
@@ -102257,10 +94943,6 @@ input NotificationTemplateWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -102282,10 +94964,6 @@ input NotificationTemplateWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -102300,10 +94978,6 @@ input NotificationTemplateWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -102318,10 +94992,6 @@ input NotificationTemplateWhereInput {
   keyNEQ: String
   keyIn: [String!]
   keyNotIn: [String!]
-  keyGT: String
-  keyGTE: String
-  keyLT: String
-  keyLTE: String
   keyContains: String
   keyHasPrefix: String
   keyHasSuffix: String
@@ -102334,10 +95004,6 @@ input NotificationTemplateWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -102350,10 +95016,6 @@ input NotificationTemplateWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -102384,10 +95046,6 @@ input NotificationTemplateWhereInput {
   localeNEQ: String
   localeIn: [String!]
   localeNotIn: [String!]
-  localeGT: String
-  localeGTE: String
-  localeLT: String
-  localeLTE: String
   localeContains: String
   localeHasPrefix: String
   localeHasSuffix: String
@@ -102400,10 +95058,6 @@ input NotificationTemplateWhereInput {
   topicPatternNEQ: String
   topicPatternIn: [String!]
   topicPatternNotIn: [String!]
-  topicPatternGT: String
-  topicPatternGTE: String
-  topicPatternLT: String
-  topicPatternLTE: String
   topicPatternContains: String
   topicPatternHasPrefix: String
   topicPatternHasSuffix: String
@@ -102416,10 +95070,6 @@ input NotificationTemplateWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -102434,10 +95084,6 @@ input NotificationTemplateWhereInput {
   workflowDefinitionIDNEQ: ID
   workflowDefinitionIDIn: [ID!]
   workflowDefinitionIDNotIn: [ID!]
-  workflowDefinitionIDGT: ID
-  workflowDefinitionIDGTE: ID
-  workflowDefinitionIDLT: ID
-  workflowDefinitionIDLTE: ID
   workflowDefinitionIDContains: ID
   workflowDefinitionIDHasPrefix: ID
   workflowDefinitionIDHasSuffix: ID
@@ -102452,10 +95098,6 @@ input NotificationTemplateWhereInput {
   emailTemplateIDNEQ: ID
   emailTemplateIDIn: [ID!]
   emailTemplateIDNotIn: [ID!]
-  emailTemplateIDGT: ID
-  emailTemplateIDGTE: ID
-  emailTemplateIDLT: ID
-  emailTemplateIDLTE: ID
   emailTemplateIDContains: ID
   emailTemplateIDHasPrefix: ID
   emailTemplateIDHasSuffix: ID
@@ -102470,10 +95112,6 @@ input NotificationTemplateWhereInput {
   titleTemplateNEQ: String
   titleTemplateIn: [String!]
   titleTemplateNotIn: [String!]
-  titleTemplateGT: String
-  titleTemplateGTE: String
-  titleTemplateLT: String
-  titleTemplateLTE: String
   titleTemplateContains: String
   titleTemplateHasPrefix: String
   titleTemplateHasSuffix: String
@@ -102488,10 +95126,6 @@ input NotificationTemplateWhereInput {
   subjectTemplateNEQ: String
   subjectTemplateIn: [String!]
   subjectTemplateNotIn: [String!]
-  subjectTemplateGT: String
-  subjectTemplateGTE: String
-  subjectTemplateLT: String
-  subjectTemplateLTE: String
   subjectTemplateContains: String
   subjectTemplateHasPrefix: String
   subjectTemplateHasSuffix: String
@@ -102506,10 +95140,6 @@ input NotificationTemplateWhereInput {
   bodyTemplateNEQ: String
   bodyTemplateIn: [String!]
   bodyTemplateNotIn: [String!]
-  bodyTemplateGT: String
-  bodyTemplateGTE: String
-  bodyTemplateLT: String
-  bodyTemplateLTE: String
   bodyTemplateContains: String
   bodyTemplateHasPrefix: String
   bodyTemplateHasSuffix: String
@@ -102527,8 +95157,6 @@ input NotificationTemplateWhereInput {
   """
   version: Int
   versionNEQ: Int
-  versionIn: [Int!]
-  versionNotIn: [Int!]
   versionGT: Int
   versionGTE: Int
   versionLT: Int
@@ -102604,10 +95232,6 @@ input OnboardingWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
@@ -102617,10 +95241,6 @@ input OnboardingWhereInput {
   organizationIDNEQ: ID
   organizationIDIn: [ID!]
   organizationIDNotIn: [ID!]
-  organizationIDGT: ID
-  organizationIDGTE: ID
-  organizationIDLT: ID
-  organizationIDLTE: ID
   organizationIDContains: ID
   organizationIDHasPrefix: ID
   organizationIDHasSuffix: ID
@@ -102635,10 +95255,6 @@ input OnboardingWhereInput {
   companyNameNEQ: String
   companyNameIn: [String!]
   companyNameNotIn: [String!]
-  companyNameGT: String
-  companyNameGTE: String
-  companyNameLT: String
-  companyNameLTE: String
   companyNameContains: String
   companyNameHasPrefix: String
   companyNameHasSuffix: String
@@ -102829,19 +95445,12 @@ input OrgMembershipWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -102852,9 +95461,6 @@ input OrgMembershipWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -102868,10 +95474,6 @@ input OrgMembershipWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -102886,10 +95488,6 @@ input OrgMembershipWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -102904,10 +95502,6 @@ input OrgMembershipWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -102936,10 +95530,6 @@ input OrgMembershipWhereInput {
   ssoExemptReasonNEQ: String
   ssoExemptReasonIn: [String!]
   ssoExemptReasonNotIn: [String!]
-  ssoExemptReasonGT: String
-  ssoExemptReasonGTE: String
-  ssoExemptReasonLT: String
-  ssoExemptReasonLTE: String
   ssoExemptReasonContains: String
   ssoExemptReasonHasPrefix: String
   ssoExemptReasonHasSuffix: String
@@ -102954,10 +95544,6 @@ input OrgMembershipWhereInput {
   ssoExemptGrantedByNEQ: String
   ssoExemptGrantedByIn: [String!]
   ssoExemptGrantedByNotIn: [String!]
-  ssoExemptGrantedByGT: String
-  ssoExemptGrantedByGTE: String
-  ssoExemptGrantedByLT: String
-  ssoExemptGrantedByLTE: String
   ssoExemptGrantedByContains: String
   ssoExemptGrantedByHasPrefix: String
   ssoExemptGrantedByHasSuffix: String
@@ -102969,9 +95555,6 @@ input OrgMembershipWhereInput {
   sso_exempt_granted_at field predicates
   """
   ssoExemptGrantedAt: DateTime
-  ssoExemptGrantedAtNEQ: DateTime
-  ssoExemptGrantedAtIn: [DateTime!]
-  ssoExemptGrantedAtNotIn: [DateTime!]
   ssoExemptGrantedAtGT: DateTime
   ssoExemptGrantedAtGTE: DateTime
   ssoExemptGrantedAtLT: DateTime
@@ -102992,10 +95575,6 @@ input OrgMembershipWhereInput {
   tfaEnforcedReasonNEQ: String
   tfaEnforcedReasonIn: [String!]
   tfaEnforcedReasonNotIn: [String!]
-  tfaEnforcedReasonGT: String
-  tfaEnforcedReasonGTE: String
-  tfaEnforcedReasonLT: String
-  tfaEnforcedReasonLTE: String
   tfaEnforcedReasonContains: String
   tfaEnforcedReasonHasPrefix: String
   tfaEnforcedReasonHasSuffix: String
@@ -103010,10 +95589,6 @@ input OrgMembershipWhereInput {
   tfaEnforcedByNEQ: String
   tfaEnforcedByIn: [String!]
   tfaEnforcedByNotIn: [String!]
-  tfaEnforcedByGT: String
-  tfaEnforcedByGTE: String
-  tfaEnforcedByLT: String
-  tfaEnforcedByLTE: String
   tfaEnforcedByContains: String
   tfaEnforcedByHasPrefix: String
   tfaEnforcedByHasSuffix: String
@@ -103025,9 +95600,6 @@ input OrgMembershipWhereInput {
   tfa_enforced_at field predicates
   """
   tfaEnforcedAt: DateTime
-  tfaEnforcedAtNEQ: DateTime
-  tfaEnforcedAtIn: [DateTime!]
-  tfaEnforcedAtNotIn: [DateTime!]
   tfaEnforcedAtGT: DateTime
   tfaEnforcedAtGTE: DateTime
   tfaEnforcedAtLT: DateTime
@@ -103180,19 +95752,12 @@ input OrgSubscriptionWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -103203,9 +95768,6 @@ input OrgSubscriptionWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -103219,10 +95781,6 @@ input OrgSubscriptionWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -103237,10 +95795,6 @@ input OrgSubscriptionWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -103255,10 +95809,6 @@ input OrgSubscriptionWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -103273,10 +95823,6 @@ input OrgSubscriptionWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -103291,10 +95837,6 @@ input OrgSubscriptionWhereInput {
   stripeSubscriptionIDNEQ: String
   stripeSubscriptionIDIn: [String!]
   stripeSubscriptionIDNotIn: [String!]
-  stripeSubscriptionIDGT: String
-  stripeSubscriptionIDGTE: String
-  stripeSubscriptionIDLT: String
-  stripeSubscriptionIDLTE: String
   stripeSubscriptionIDContains: String
   stripeSubscriptionIDHasPrefix: String
   stripeSubscriptionIDHasSuffix: String
@@ -103309,10 +95851,6 @@ input OrgSubscriptionWhereInput {
   stripeSubscriptionStatusNEQ: String
   stripeSubscriptionStatusIn: [String!]
   stripeSubscriptionStatusNotIn: [String!]
-  stripeSubscriptionStatusGT: String
-  stripeSubscriptionStatusGTE: String
-  stripeSubscriptionStatusLT: String
-  stripeSubscriptionStatusLTE: String
   stripeSubscriptionStatusContains: String
   stripeSubscriptionStatusHasPrefix: String
   stripeSubscriptionStatusHasSuffix: String
@@ -103329,9 +95867,6 @@ input OrgSubscriptionWhereInput {
   expires_at field predicates
   """
   expiresAt: Time
-  expiresAtNEQ: Time
-  expiresAtIn: [Time!]
-  expiresAtNotIn: [Time!]
   expiresAtGT: Time
   expiresAtGTE: Time
   expiresAtLT: Time
@@ -103342,9 +95877,6 @@ input OrgSubscriptionWhereInput {
   trial_expires_at field predicates
   """
   trialExpiresAt: Time
-  trialExpiresAtNEQ: Time
-  trialExpiresAtIn: [Time!]
-  trialExpiresAtNotIn: [Time!]
   trialExpiresAtGT: Time
   trialExpiresAtGTE: Time
   trialExpiresAtLT: Time
@@ -103358,10 +95890,6 @@ input OrgSubscriptionWhereInput {
   daysUntilDueNEQ: String
   daysUntilDueIn: [String!]
   daysUntilDueNotIn: [String!]
-  daysUntilDueGT: String
-  daysUntilDueGTE: String
-  daysUntilDueLT: String
-  daysUntilDueLTE: String
   daysUntilDueContains: String
   daysUntilDueHasPrefix: String
   daysUntilDueHasSuffix: String
@@ -104457,130 +96985,6 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  jobRunnerCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  jobRunnerRegistrationTokenCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  jobRunnerTokenCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  jobTemplateCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   mappedControlCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -104954,68 +97358,6 @@ type Organization implements Node {
     where: GroupWhereInput
   ): GroupConnection!
   scanCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  scheduledJobCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  scheduledJobRunCreators(
     """
     Returns the elements in the list that come after the specified cursor.
     """
@@ -107189,99 +99531,6 @@ type Organization implements Node {
     """
     where: CustomDomainWhereInput
   ): CustomDomainConnection!
-  jobRunners(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunners returned from the connection.
-    """
-    orderBy: [JobRunnerOrder!]
-
-    """
-    Filtering options for JobRunners returned from the connection.
-    """
-    where: JobRunnerWhereInput
-  ): JobRunnerConnection!
-  jobRunnerTokens(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunnerTokens returned from the connection.
-    """
-    orderBy: [JobRunnerTokenOrder!]
-
-    """
-    Filtering options for JobRunnerTokens returned from the connection.
-    """
-    where: JobRunnerTokenWhereInput
-  ): JobRunnerTokenConnection!
-  jobRunnerRegistrationTokens(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunnerRegistrationTokens returned from the connection.
-    """
-    orderBy: [JobRunnerRegistrationTokenOrder!]
-
-    """
-    Filtering options for JobRunnerRegistrationTokens returned from the connection.
-    """
-    where: JobRunnerRegistrationTokenWhereInput
-  ): JobRunnerRegistrationTokenConnection!
   dnsVerifications(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -107313,130 +99562,6 @@ type Organization implements Node {
     """
     where: DNSVerificationWhereInput
   ): DNSVerificationConnection!
-  jobTemplates(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobTemplates returned from the connection.
-    """
-    orderBy: [JobTemplateOrder!]
-
-    """
-    Filtering options for JobTemplates returned from the connection.
-    """
-    where: JobTemplateWhereInput
-  ): JobTemplateConnection!
-  scheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ScheduledJobs returned from the connection.
-    """
-    orderBy: [ScheduledJobOrder!]
-
-    """
-    Filtering options for ScheduledJobs returned from the connection.
-    """
-    where: ScheduledJobWhereInput
-  ): ScheduledJobConnection!
-  jobResults(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobResults returned from the connection.
-    """
-    orderBy: [JobResultOrder!]
-
-    """
-    Filtering options for JobResults returned from the connection.
-    """
-    where: JobResultWhereInput
-  ): JobResultConnection!
-  scheduledJobRuns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ScheduledJobRuns returned from the connection.
-    """
-    orderBy: [ScheduledJobRunOrder!]
-
-    """
-    Filtering options for ScheduledJobRuns returned from the connection.
-    """
-    where: ScheduledJobRunWhereInput
-  ): ScheduledJobRunConnection!
   trustCenters(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -108673,19 +100798,12 @@ input OrganizationSettingWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -108696,9 +100814,6 @@ input OrganizationSettingWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -108712,10 +100827,6 @@ input OrganizationSettingWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -108730,10 +100841,6 @@ input OrganizationSettingWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -108748,10 +100855,6 @@ input OrganizationSettingWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -108766,10 +100869,6 @@ input OrganizationSettingWhereInput {
   billingContactNEQ: String
   billingContactIn: [String!]
   billingContactNotIn: [String!]
-  billingContactGT: String
-  billingContactGTE: String
-  billingContactLT: String
-  billingContactLTE: String
   billingContactContains: String
   billingContactHasPrefix: String
   billingContactHasSuffix: String
@@ -108784,10 +100883,6 @@ input OrganizationSettingWhereInput {
   billingEmailNEQ: String
   billingEmailIn: [String!]
   billingEmailNotIn: [String!]
-  billingEmailGT: String
-  billingEmailGTE: String
-  billingEmailLT: String
-  billingEmailLTE: String
   billingEmailContains: String
   billingEmailHasPrefix: String
   billingEmailHasSuffix: String
@@ -108802,10 +100897,6 @@ input OrganizationSettingWhereInput {
   billingPhoneNEQ: String
   billingPhoneIn: [String!]
   billingPhoneNotIn: [String!]
-  billingPhoneGT: String
-  billingPhoneGTE: String
-  billingPhoneLT: String
-  billingPhoneLTE: String
   billingPhoneContains: String
   billingPhoneHasPrefix: String
   billingPhoneHasSuffix: String
@@ -108820,10 +100911,6 @@ input OrganizationSettingWhereInput {
   taxIdentifierNEQ: String
   taxIdentifierIn: [String!]
   taxIdentifierNotIn: [String!]
-  taxIdentifierGT: String
-  taxIdentifierGTE: String
-  taxIdentifierLT: String
-  taxIdentifierLTE: String
   taxIdentifierContains: String
   taxIdentifierHasPrefix: String
   taxIdentifierHasSuffix: String
@@ -108847,10 +100934,6 @@ input OrganizationSettingWhereInput {
   organizationIDNEQ: ID
   organizationIDIn: [ID!]
   organizationIDNotIn: [ID!]
-  organizationIDGT: ID
-  organizationIDGTE: ID
-  organizationIDLT: ID
-  organizationIDLTE: ID
   organizationIDContains: ID
   organizationIDHasPrefix: ID
   organizationIDHasSuffix: ID
@@ -108886,10 +100969,6 @@ input OrganizationSettingWhereInput {
   identityProviderClientIDNEQ: String
   identityProviderClientIDIn: [String!]
   identityProviderClientIDNotIn: [String!]
-  identityProviderClientIDGT: String
-  identityProviderClientIDGTE: String
-  identityProviderClientIDLT: String
-  identityProviderClientIDLTE: String
   identityProviderClientIDContains: String
   identityProviderClientIDHasPrefix: String
   identityProviderClientIDHasSuffix: String
@@ -108904,10 +100983,6 @@ input OrganizationSettingWhereInput {
   identityProviderClientSecretNEQ: String
   identityProviderClientSecretIn: [String!]
   identityProviderClientSecretNotIn: [String!]
-  identityProviderClientSecretGT: String
-  identityProviderClientSecretGTE: String
-  identityProviderClientSecretLT: String
-  identityProviderClientSecretLTE: String
   identityProviderClientSecretContains: String
   identityProviderClientSecretHasPrefix: String
   identityProviderClientSecretHasSuffix: String
@@ -108922,10 +100997,6 @@ input OrganizationSettingWhereInput {
   identityProviderMetadataEndpointNEQ: String
   identityProviderMetadataEndpointIn: [String!]
   identityProviderMetadataEndpointNotIn: [String!]
-  identityProviderMetadataEndpointGT: String
-  identityProviderMetadataEndpointGTE: String
-  identityProviderMetadataEndpointLT: String
-  identityProviderMetadataEndpointLTE: String
   identityProviderMetadataEndpointContains: String
   identityProviderMetadataEndpointHasPrefix: String
   identityProviderMetadataEndpointHasSuffix: String
@@ -108945,10 +101016,6 @@ input OrganizationSettingWhereInput {
   identityProviderEntityIDNEQ: String
   identityProviderEntityIDIn: [String!]
   identityProviderEntityIDNotIn: [String!]
-  identityProviderEntityIDGT: String
-  identityProviderEntityIDGTE: String
-  identityProviderEntityIDLT: String
-  identityProviderEntityIDLTE: String
   identityProviderEntityIDContains: String
   identityProviderEntityIDHasPrefix: String
   identityProviderEntityIDHasSuffix: String
@@ -108963,10 +101030,6 @@ input OrganizationSettingWhereInput {
   oidcDiscoveryEndpointNEQ: String
   oidcDiscoveryEndpointIn: [String!]
   oidcDiscoveryEndpointNotIn: [String!]
-  oidcDiscoveryEndpointGT: String
-  oidcDiscoveryEndpointGTE: String
-  oidcDiscoveryEndpointLT: String
-  oidcDiscoveryEndpointLTE: String
   oidcDiscoveryEndpointContains: String
   oidcDiscoveryEndpointHasPrefix: String
   oidcDiscoveryEndpointHasSuffix: String
@@ -108981,10 +101044,6 @@ input OrganizationSettingWhereInput {
   samlSigninURLNEQ: String
   samlSigninURLIn: [String!]
   samlSigninURLNotIn: [String!]
-  samlSigninURLGT: String
-  samlSigninURLGTE: String
-  samlSigninURLLT: String
-  samlSigninURLLTE: String
   samlSigninURLContains: String
   samlSigninURLHasPrefix: String
   samlSigninURLHasSuffix: String
@@ -108999,10 +101058,6 @@ input OrganizationSettingWhereInput {
   samlIssuerNEQ: String
   samlIssuerIn: [String!]
   samlIssuerNotIn: [String!]
-  samlIssuerGT: String
-  samlIssuerGTE: String
-  samlIssuerLT: String
-  samlIssuerLTE: String
   samlIssuerContains: String
   samlIssuerHasPrefix: String
   samlIssuerHasSuffix: String
@@ -109017,10 +101072,6 @@ input OrganizationSettingWhereInput {
   samlCertNEQ: String
   samlCertIn: [String!]
   samlCertNotIn: [String!]
-  samlCertGT: String
-  samlCertGTE: String
-  samlCertLT: String
-  samlCertLTE: String
   samlCertContains: String
   samlCertHasPrefix: String
   samlCertHasSuffix: String
@@ -109059,10 +101110,6 @@ input OrganizationSettingWhereInput {
   complianceWebhookTokenNEQ: String
   complianceWebhookTokenIn: [String!]
   complianceWebhookTokenNotIn: [String!]
-  complianceWebhookTokenGT: String
-  complianceWebhookTokenGTE: String
-  complianceWebhookTokenLT: String
-  complianceWebhookTokenLTE: String
   complianceWebhookTokenContains: String
   complianceWebhookTokenHasPrefix: String
   complianceWebhookTokenHasSuffix: String
@@ -109079,9 +101126,6 @@ input OrganizationSettingWhereInput {
   pending_deletion_at field predicates
   """
   pendingDeletionAt: DateTime
-  pendingDeletionAtNEQ: DateTime
-  pendingDeletionAtIn: [DateTime!]
-  pendingDeletionAtNotIn: [DateTime!]
   pendingDeletionAtGT: DateTime
   pendingDeletionAtGTE: DateTime
   pendingDeletionAtLT: DateTime
@@ -109134,19 +101178,12 @@ input OrganizationWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -109157,9 +101194,6 @@ input OrganizationWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -109173,10 +101207,6 @@ input OrganizationWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -109191,10 +101221,6 @@ input OrganizationWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -109209,10 +101235,6 @@ input OrganizationWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -109227,10 +101249,6 @@ input OrganizationWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -109243,10 +101261,6 @@ input OrganizationWhereInput {
   parentOrganizationIDNEQ: ID
   parentOrganizationIDIn: [ID!]
   parentOrganizationIDNotIn: [ID!]
-  parentOrganizationIDGT: ID
-  parentOrganizationIDGTE: ID
-  parentOrganizationIDLT: ID
-  parentOrganizationIDLTE: ID
   parentOrganizationIDContains: ID
   parentOrganizationIDHasPrefix: ID
   parentOrganizationIDHasSuffix: ID
@@ -109268,10 +101282,6 @@ input OrganizationWhereInput {
   avatarRemoteURLNEQ: String
   avatarRemoteURLIn: [String!]
   avatarRemoteURLNotIn: [String!]
-  avatarRemoteURLGT: String
-  avatarRemoteURLGTE: String
-  avatarRemoteURLLT: String
-  avatarRemoteURLLTE: String
   avatarRemoteURLContains: String
   avatarRemoteURLHasPrefix: String
   avatarRemoteURLHasSuffix: String
@@ -109286,10 +101296,6 @@ input OrganizationWhereInput {
   avatarLocalFileIDNEQ: ID
   avatarLocalFileIDIn: [ID!]
   avatarLocalFileIDNotIn: [ID!]
-  avatarLocalFileIDGT: ID
-  avatarLocalFileIDGTE: ID
-  avatarLocalFileIDLT: ID
-  avatarLocalFileIDLTE: ID
   avatarLocalFileIDContains: ID
   avatarLocalFileIDHasPrefix: ID
   avatarLocalFileIDHasSuffix: ID
@@ -109301,9 +101307,6 @@ input OrganizationWhereInput {
   avatar_updated_at field predicates
   """
   avatarUpdatedAt: Time
-  avatarUpdatedAtNEQ: Time
-  avatarUpdatedAtIn: [Time!]
-  avatarUpdatedAtNotIn: [Time!]
   avatarUpdatedAtGT: Time
   avatarUpdatedAtGTE: Time
   avatarUpdatedAtLT: Time
@@ -109317,10 +101320,6 @@ input OrganizationWhereInput {
   slugNameNEQ: String
   slugNameIn: [String!]
   slugNameNotIn: [String!]
-  slugNameGT: String
-  slugNameGTE: String
-  slugNameLT: String
-  slugNameLTE: String
   slugNameContains: String
   slugNameHasPrefix: String
   slugNameHasSuffix: String
@@ -109494,26 +101493,6 @@ input OrganizationWhereInput {
   hasInviteCreators: Boolean
   hasInviteCreatorsWith: [GroupWhereInput!]
   """
-  job_runner_creators edge predicates
-  """
-  hasJobRunnerCreators: Boolean
-  hasJobRunnerCreatorsWith: [GroupWhereInput!]
-  """
-  job_runner_registration_token_creators edge predicates
-  """
-  hasJobRunnerRegistrationTokenCreators: Boolean
-  hasJobRunnerRegistrationTokenCreatorsWith: [GroupWhereInput!]
-  """
-  job_runner_token_creators edge predicates
-  """
-  hasJobRunnerTokenCreators: Boolean
-  hasJobRunnerTokenCreatorsWith: [GroupWhereInput!]
-  """
-  job_template_creators edge predicates
-  """
-  hasJobTemplateCreators: Boolean
-  hasJobTemplateCreatorsWith: [GroupWhereInput!]
-  """
   mapped_control_creators edge predicates
   """
   hasMappedControlCreators: Boolean
@@ -109578,16 +101557,6 @@ input OrganizationWhereInput {
   """
   hasScanCreators: Boolean
   hasScanCreatorsWith: [GroupWhereInput!]
-  """
-  scheduled_job_creators edge predicates
-  """
-  hasScheduledJobCreators: Boolean
-  hasScheduledJobCreatorsWith: [GroupWhereInput!]
-  """
-  scheduled_job_run_creators edge predicates
-  """
-  hasScheduledJobRunCreators: Boolean
-  hasScheduledJobRunCreatorsWith: [GroupWhereInput!]
   """
   sla_definition_creators edge predicates
   """
@@ -109954,45 +101923,10 @@ input OrganizationWhereInput {
   hasCustomDomains: Boolean
   hasCustomDomainsWith: [CustomDomainWhereInput!]
   """
-  job_runners edge predicates
-  """
-  hasJobRunners: Boolean
-  hasJobRunnersWith: [JobRunnerWhereInput!]
-  """
-  job_runner_tokens edge predicates
-  """
-  hasJobRunnerTokens: Boolean
-  hasJobRunnerTokensWith: [JobRunnerTokenWhereInput!]
-  """
-  job_runner_registration_tokens edge predicates
-  """
-  hasJobRunnerRegistrationTokens: Boolean
-  hasJobRunnerRegistrationTokensWith: [JobRunnerRegistrationTokenWhereInput!]
-  """
   dns_verifications edge predicates
   """
   hasDNSVerifications: Boolean
   hasDNSVerificationsWith: [DNSVerificationWhereInput!]
-  """
-  job_templates edge predicates
-  """
-  hasJobTemplates: Boolean
-  hasJobTemplatesWith: [JobTemplateWhereInput!]
-  """
-  scheduled_jobs edge predicates
-  """
-  hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ScheduledJobWhereInput!]
-  """
-  job_results edge predicates
-  """
-  hasJobResults: Boolean
-  hasJobResultsWith: [JobResultWhereInput!]
-  """
-  scheduled_job_runs edge predicates
-  """
-  hasScheduledJobRuns: Boolean
-  hasScheduledJobRunsWith: [ScheduledJobRunWhereInput!]
   """
   trust_centers edge predicates
   """
@@ -110352,19 +102286,12 @@ input PersonalAccessTokenWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -110375,9 +102302,6 @@ input PersonalAccessTokenWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -110391,10 +102315,6 @@ input PersonalAccessTokenWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -110409,10 +102329,6 @@ input PersonalAccessTokenWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -110427,10 +102343,6 @@ input PersonalAccessTokenWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -110445,10 +102357,6 @@ input PersonalAccessTokenWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -110458,9 +102366,6 @@ input PersonalAccessTokenWhereInput {
   expires_at field predicates
   """
   expiresAt: Time
-  expiresAtNEQ: Time
-  expiresAtIn: [Time!]
-  expiresAtNotIn: [Time!]
   expiresAtGT: Time
   expiresAtGTE: Time
   expiresAtLT: Time
@@ -110471,9 +102376,6 @@ input PersonalAccessTokenWhereInput {
   last_used_at field predicates
   """
   lastUsedAt: Time
-  lastUsedAtNEQ: Time
-  lastUsedAtIn: [Time!]
-  lastUsedAtNotIn: [Time!]
   lastUsedAtGT: Time
   lastUsedAtGTE: Time
   lastUsedAtLT: Time
@@ -110494,10 +102396,6 @@ input PersonalAccessTokenWhereInput {
   revokedReasonNEQ: String
   revokedReasonIn: [String!]
   revokedReasonNotIn: [String!]
-  revokedReasonGT: String
-  revokedReasonGTE: String
-  revokedReasonLT: String
-  revokedReasonLTE: String
   revokedReasonContains: String
   revokedReasonHasPrefix: String
   revokedReasonHasSuffix: String
@@ -110512,10 +102410,6 @@ input PersonalAccessTokenWhereInput {
   revokedByNEQ: String
   revokedByIn: [String!]
   revokedByNotIn: [String!]
-  revokedByGT: String
-  revokedByGTE: String
-  revokedByLT: String
-  revokedByLTE: String
   revokedByContains: String
   revokedByHasPrefix: String
   revokedByHasSuffix: String
@@ -110527,9 +102421,6 @@ input PersonalAccessTokenWhereInput {
   revoked_at field predicates
   """
   revokedAt: Time
-  revokedAtNEQ: Time
-  revokedAtIn: [Time!]
-  revokedAtNotIn: [Time!]
   revokedAtGT: Time
   revokedAtGTE: Time
   revokedAtLT: Time
@@ -111790,19 +103681,12 @@ input PlatformWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -111813,9 +103697,6 @@ input PlatformWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -111829,10 +103710,6 @@ input PlatformWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -111847,10 +103724,6 @@ input PlatformWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -111865,10 +103738,6 @@ input PlatformWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -111883,10 +103752,6 @@ input PlatformWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -111899,10 +103764,6 @@ input PlatformWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -111917,10 +103778,6 @@ input PlatformWhereInput {
   internalOwnerNEQ: String
   internalOwnerIn: [String!]
   internalOwnerNotIn: [String!]
-  internalOwnerGT: String
-  internalOwnerGTE: String
-  internalOwnerLT: String
-  internalOwnerLTE: String
   internalOwnerContains: String
   internalOwnerHasPrefix: String
   internalOwnerHasSuffix: String
@@ -111935,10 +103792,6 @@ input PlatformWhereInput {
   internalOwnerUserIDNEQ: ID
   internalOwnerUserIDIn: [ID!]
   internalOwnerUserIDNotIn: [ID!]
-  internalOwnerUserIDGT: ID
-  internalOwnerUserIDGTE: ID
-  internalOwnerUserIDLT: ID
-  internalOwnerUserIDLTE: ID
   internalOwnerUserIDContains: ID
   internalOwnerUserIDHasPrefix: ID
   internalOwnerUserIDHasSuffix: ID
@@ -111953,10 +103806,6 @@ input PlatformWhereInput {
   internalOwnerGroupIDNEQ: ID
   internalOwnerGroupIDIn: [ID!]
   internalOwnerGroupIDNotIn: [ID!]
-  internalOwnerGroupIDGT: ID
-  internalOwnerGroupIDGTE: ID
-  internalOwnerGroupIDLT: ID
-  internalOwnerGroupIDLTE: ID
   internalOwnerGroupIDContains: ID
   internalOwnerGroupIDHasPrefix: ID
   internalOwnerGroupIDHasSuffix: ID
@@ -111971,10 +103820,6 @@ input PlatformWhereInput {
   businessOwnerNEQ: String
   businessOwnerIn: [String!]
   businessOwnerNotIn: [String!]
-  businessOwnerGT: String
-  businessOwnerGTE: String
-  businessOwnerLT: String
-  businessOwnerLTE: String
   businessOwnerContains: String
   businessOwnerHasPrefix: String
   businessOwnerHasSuffix: String
@@ -111989,10 +103834,6 @@ input PlatformWhereInput {
   businessOwnerUserIDNEQ: ID
   businessOwnerUserIDIn: [ID!]
   businessOwnerUserIDNotIn: [ID!]
-  businessOwnerUserIDGT: ID
-  businessOwnerUserIDGTE: ID
-  businessOwnerUserIDLT: ID
-  businessOwnerUserIDLTE: ID
   businessOwnerUserIDContains: ID
   businessOwnerUserIDHasPrefix: ID
   businessOwnerUserIDHasSuffix: ID
@@ -112007,10 +103848,6 @@ input PlatformWhereInput {
   businessOwnerGroupIDNEQ: ID
   businessOwnerGroupIDIn: [ID!]
   businessOwnerGroupIDNotIn: [ID!]
-  businessOwnerGroupIDGT: ID
-  businessOwnerGroupIDGTE: ID
-  businessOwnerGroupIDLT: ID
-  businessOwnerGroupIDLTE: ID
   businessOwnerGroupIDContains: ID
   businessOwnerGroupIDHasPrefix: ID
   businessOwnerGroupIDHasSuffix: ID
@@ -112025,10 +103862,6 @@ input PlatformWhereInput {
   technicalOwnerNEQ: String
   technicalOwnerIn: [String!]
   technicalOwnerNotIn: [String!]
-  technicalOwnerGT: String
-  technicalOwnerGTE: String
-  technicalOwnerLT: String
-  technicalOwnerLTE: String
   technicalOwnerContains: String
   technicalOwnerHasPrefix: String
   technicalOwnerHasSuffix: String
@@ -112043,10 +103876,6 @@ input PlatformWhereInput {
   technicalOwnerUserIDNEQ: ID
   technicalOwnerUserIDIn: [ID!]
   technicalOwnerUserIDNotIn: [ID!]
-  technicalOwnerUserIDGT: ID
-  technicalOwnerUserIDGTE: ID
-  technicalOwnerUserIDLT: ID
-  technicalOwnerUserIDLTE: ID
   technicalOwnerUserIDContains: ID
   technicalOwnerUserIDHasPrefix: ID
   technicalOwnerUserIDHasSuffix: ID
@@ -112061,10 +103890,6 @@ input PlatformWhereInput {
   technicalOwnerGroupIDNEQ: ID
   technicalOwnerGroupIDIn: [ID!]
   technicalOwnerGroupIDNotIn: [ID!]
-  technicalOwnerGroupIDGT: ID
-  technicalOwnerGroupIDGTE: ID
-  technicalOwnerGroupIDLT: ID
-  technicalOwnerGroupIDLTE: ID
   technicalOwnerGroupIDContains: ID
   technicalOwnerGroupIDHasPrefix: ID
   technicalOwnerGroupIDHasSuffix: ID
@@ -112079,10 +103904,6 @@ input PlatformWhereInput {
   securityOwnerNEQ: String
   securityOwnerIn: [String!]
   securityOwnerNotIn: [String!]
-  securityOwnerGT: String
-  securityOwnerGTE: String
-  securityOwnerLT: String
-  securityOwnerLTE: String
   securityOwnerContains: String
   securityOwnerHasPrefix: String
   securityOwnerHasSuffix: String
@@ -112097,10 +103918,6 @@ input PlatformWhereInput {
   securityOwnerUserIDNEQ: ID
   securityOwnerUserIDIn: [ID!]
   securityOwnerUserIDNotIn: [ID!]
-  securityOwnerUserIDGT: ID
-  securityOwnerUserIDGTE: ID
-  securityOwnerUserIDLT: ID
-  securityOwnerUserIDLTE: ID
   securityOwnerUserIDContains: ID
   securityOwnerUserIDHasPrefix: ID
   securityOwnerUserIDHasSuffix: ID
@@ -112115,10 +103932,6 @@ input PlatformWhereInput {
   securityOwnerGroupIDNEQ: ID
   securityOwnerGroupIDIn: [ID!]
   securityOwnerGroupIDNotIn: [ID!]
-  securityOwnerGroupIDGT: ID
-  securityOwnerGroupIDGTE: ID
-  securityOwnerGroupIDLT: ID
-  securityOwnerGroupIDLTE: ID
   securityOwnerGroupIDContains: ID
   securityOwnerGroupIDHasPrefix: ID
   securityOwnerGroupIDHasSuffix: ID
@@ -112133,10 +103946,6 @@ input PlatformWhereInput {
   platformKindNameNEQ: String
   platformKindNameIn: [String!]
   platformKindNameNotIn: [String!]
-  platformKindNameGT: String
-  platformKindNameGTE: String
-  platformKindNameLT: String
-  platformKindNameLTE: String
   platformKindNameContains: String
   platformKindNameHasPrefix: String
   platformKindNameHasSuffix: String
@@ -112151,10 +103960,6 @@ input PlatformWhereInput {
   platformKindIDNEQ: ID
   platformKindIDIn: [ID!]
   platformKindIDNotIn: [ID!]
-  platformKindIDGT: ID
-  platformKindIDGTE: ID
-  platformKindIDLT: ID
-  platformKindIDLTE: ID
   platformKindIDContains: ID
   platformKindIDHasPrefix: ID
   platformKindIDHasSuffix: ID
@@ -112169,10 +103974,6 @@ input PlatformWhereInput {
   platformDataClassificationNameNEQ: String
   platformDataClassificationNameIn: [String!]
   platformDataClassificationNameNotIn: [String!]
-  platformDataClassificationNameGT: String
-  platformDataClassificationNameGTE: String
-  platformDataClassificationNameLT: String
-  platformDataClassificationNameLTE: String
   platformDataClassificationNameContains: String
   platformDataClassificationNameHasPrefix: String
   platformDataClassificationNameHasSuffix: String
@@ -112187,10 +103988,6 @@ input PlatformWhereInput {
   platformDataClassificationIDNEQ: ID
   platformDataClassificationIDIn: [ID!]
   platformDataClassificationIDNotIn: [ID!]
-  platformDataClassificationIDGT: ID
-  platformDataClassificationIDGTE: ID
-  platformDataClassificationIDLT: ID
-  platformDataClassificationIDLTE: ID
   platformDataClassificationIDContains: ID
   platformDataClassificationIDHasPrefix: ID
   platformDataClassificationIDHasSuffix: ID
@@ -112205,10 +104002,6 @@ input PlatformWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -112223,10 +104016,6 @@ input PlatformWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -112241,10 +104030,6 @@ input PlatformWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -112259,10 +104044,6 @@ input PlatformWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -112277,10 +104058,6 @@ input PlatformWhereInput {
   accessModelNameNEQ: String
   accessModelNameIn: [String!]
   accessModelNameNotIn: [String!]
-  accessModelNameGT: String
-  accessModelNameGTE: String
-  accessModelNameLT: String
-  accessModelNameLTE: String
   accessModelNameContains: String
   accessModelNameHasPrefix: String
   accessModelNameHasSuffix: String
@@ -112295,10 +104072,6 @@ input PlatformWhereInput {
   accessModelIDNEQ: ID
   accessModelIDIn: [ID!]
   accessModelIDNotIn: [ID!]
-  accessModelIDGT: ID
-  accessModelIDGTE: ID
-  accessModelIDLT: ID
-  accessModelIDLTE: ID
   accessModelIDContains: ID
   accessModelIDHasPrefix: ID
   accessModelIDHasSuffix: ID
@@ -112313,10 +104086,6 @@ input PlatformWhereInput {
   encryptionStatusNameNEQ: String
   encryptionStatusNameIn: [String!]
   encryptionStatusNameNotIn: [String!]
-  encryptionStatusNameGT: String
-  encryptionStatusNameGTE: String
-  encryptionStatusNameLT: String
-  encryptionStatusNameLTE: String
   encryptionStatusNameContains: String
   encryptionStatusNameHasPrefix: String
   encryptionStatusNameHasSuffix: String
@@ -112331,10 +104100,6 @@ input PlatformWhereInput {
   encryptionStatusIDNEQ: ID
   encryptionStatusIDIn: [ID!]
   encryptionStatusIDNotIn: [ID!]
-  encryptionStatusIDGT: ID
-  encryptionStatusIDGTE: ID
-  encryptionStatusIDLT: ID
-  encryptionStatusIDLTE: ID
   encryptionStatusIDContains: ID
   encryptionStatusIDHasPrefix: ID
   encryptionStatusIDHasSuffix: ID
@@ -112349,10 +104114,6 @@ input PlatformWhereInput {
   securityTierNameNEQ: String
   securityTierNameIn: [String!]
   securityTierNameNotIn: [String!]
-  securityTierNameGT: String
-  securityTierNameGTE: String
-  securityTierNameLT: String
-  securityTierNameLTE: String
   securityTierNameContains: String
   securityTierNameHasPrefix: String
   securityTierNameHasSuffix: String
@@ -112367,10 +104128,6 @@ input PlatformWhereInput {
   securityTierIDNEQ: ID
   securityTierIDIn: [ID!]
   securityTierIDNotIn: [ID!]
-  securityTierIDGT: ID
-  securityTierIDGTE: ID
-  securityTierIDLT: ID
-  securityTierIDLTE: ID
   securityTierIDContains: ID
   securityTierIDHasPrefix: ID
   securityTierIDHasSuffix: ID
@@ -112385,10 +104142,6 @@ input PlatformWhereInput {
   criticalityNameNEQ: String
   criticalityNameIn: [String!]
   criticalityNameNotIn: [String!]
-  criticalityNameGT: String
-  criticalityNameGTE: String
-  criticalityNameLT: String
-  criticalityNameLTE: String
   criticalityNameContains: String
   criticalityNameHasPrefix: String
   criticalityNameHasSuffix: String
@@ -112403,10 +104156,6 @@ input PlatformWhereInput {
   criticalityIDNEQ: ID
   criticalityIDIn: [ID!]
   criticalityIDNotIn: [ID!]
-  criticalityIDGT: ID
-  criticalityIDGTE: ID
-  criticalityIDLT: ID
-  criticalityIDLTE: ID
   criticalityIDContains: ID
   criticalityIDHasPrefix: ID
   criticalityIDHasSuffix: ID
@@ -112428,10 +104177,6 @@ input PlatformWhereInput {
   externalUUIDNEQ: String
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
-  externalUUIDGT: String
-  externalUUIDGTE: String
-  externalUUIDLT: String
-  externalUUIDLTE: String
   externalUUIDContains: String
   externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
@@ -112446,10 +104191,6 @@ input PlatformWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -112462,10 +104203,6 @@ input PlatformWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -112480,10 +104217,6 @@ input PlatformWhereInput {
   businessPurposeNEQ: String
   businessPurposeIn: [String!]
   businessPurposeNotIn: [String!]
-  businessPurposeGT: String
-  businessPurposeGTE: String
-  businessPurposeLT: String
-  businessPurposeLTE: String
   businessPurposeContains: String
   businessPurposeHasPrefix: String
   businessPurposeHasSuffix: String
@@ -112505,10 +104238,6 @@ input PlatformWhereInput {
   physicalLocationNEQ: String
   physicalLocationIn: [String!]
   physicalLocationNotIn: [String!]
-  physicalLocationGT: String
-  physicalLocationGTE: String
-  physicalLocationLT: String
-  physicalLocationLTE: String
   physicalLocationContains: String
   physicalLocationHasPrefix: String
   physicalLocationHasSuffix: String
@@ -112523,10 +104252,6 @@ input PlatformWhereInput {
   regionNEQ: String
   regionIn: [String!]
   regionNotIn: [String!]
-  regionGT: String
-  regionGTE: String
-  regionLT: String
-  regionLTE: String
   regionContains: String
   regionHasPrefix: String
   regionHasSuffix: String
@@ -112555,10 +104280,6 @@ input PlatformWhereInput {
   sourceIdentifierNEQ: String
   sourceIdentifierIn: [String!]
   sourceIdentifierNotIn: [String!]
-  sourceIdentifierGT: String
-  sourceIdentifierGTE: String
-  sourceIdentifierLT: String
-  sourceIdentifierLTE: String
   sourceIdentifierContains: String
   sourceIdentifierHasPrefix: String
   sourceIdentifierHasSuffix: String
@@ -112573,10 +104294,6 @@ input PlatformWhereInput {
   costCenterNEQ: String
   costCenterIn: [String!]
   costCenterNotIn: [String!]
-  costCenterGT: String
-  costCenterGTE: String
-  costCenterLT: String
-  costCenterLTE: String
   costCenterContains: String
   costCenterHasPrefix: String
   costCenterHasSuffix: String
@@ -112601,9 +104318,6 @@ input PlatformWhereInput {
   purchase_date field predicates
   """
   purchaseDate: DateTime
-  purchaseDateNEQ: DateTime
-  purchaseDateIn: [DateTime!]
-  purchaseDateNotIn: [DateTime!]
   purchaseDateGT: DateTime
   purchaseDateGTE: DateTime
   purchaseDateLT: DateTime
@@ -112617,10 +104331,6 @@ input PlatformWhereInput {
   platformOwnerIDNEQ: ID
   platformOwnerIDIn: [ID!]
   platformOwnerIDNotIn: [ID!]
-  platformOwnerIDGT: ID
-  platformOwnerIDGTE: ID
-  platformOwnerIDLT: ID
-  platformOwnerIDLTE: ID
   platformOwnerIDContains: ID
   platformOwnerIDHasPrefix: ID
   platformOwnerIDHasSuffix: ID
@@ -112635,10 +104345,6 @@ input PlatformWhereInput {
   externalReferenceIDNEQ: String
   externalReferenceIDIn: [String!]
   externalReferenceIDNotIn: [String!]
-  externalReferenceIDGT: String
-  externalReferenceIDGTE: String
-  externalReferenceIDLT: String
-  externalReferenceIDLTE: String
   externalReferenceIDContains: String
   externalReferenceIDHasPrefix: String
   externalReferenceIDHasSuffix: String
@@ -113521,19 +105227,12 @@ input ProcedureWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -113544,9 +105243,6 @@ input ProcedureWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -113560,10 +105256,6 @@ input ProcedureWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -113578,10 +105270,6 @@ input ProcedureWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -113596,10 +105284,6 @@ input ProcedureWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -113614,10 +105298,6 @@ input ProcedureWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -113630,10 +105310,6 @@ input ProcedureWhereInput {
   revisionNEQ: String
   revisionIn: [String!]
   revisionNotIn: [String!]
-  revisionGT: String
-  revisionGTE: String
-  revisionLT: String
-  revisionLTE: String
   revisionContains: String
   revisionHasPrefix: String
   revisionHasSuffix: String
@@ -113648,10 +105324,6 @@ input ProcedureWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -113666,10 +105338,6 @@ input ProcedureWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -113700,10 +105368,6 @@ input ProcedureWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -113722,9 +105386,6 @@ input ProcedureWhereInput {
   review_due field predicates
   """
   reviewDue: Time
-  reviewDueNEQ: Time
-  reviewDueIn: [Time!]
-  reviewDueNotIn: [Time!]
   reviewDueGT: Time
   reviewDueGTE: Time
   reviewDueLT: Time
@@ -113747,10 +105408,6 @@ input ProcedureWhereInput {
   approverIDNEQ: ID
   approverIDIn: [ID!]
   approverIDNotIn: [ID!]
-  approverIDGT: ID
-  approverIDGTE: ID
-  approverIDLT: ID
-  approverIDLTE: ID
   approverIDContains: ID
   approverIDHasPrefix: ID
   approverIDHasSuffix: ID
@@ -113765,10 +105422,6 @@ input ProcedureWhereInput {
   delegateIDNEQ: ID
   delegateIDIn: [ID!]
   delegateIDNotIn: [ID!]
-  delegateIDGT: ID
-  delegateIDGTE: ID
-  delegateIDLT: ID
-  delegateIDLTE: ID
   delegateIDContains: ID
   delegateIDHasPrefix: ID
   delegateIDHasSuffix: ID
@@ -113783,10 +105436,6 @@ input ProcedureWhereInput {
   urlNEQ: String
   urlIn: [String!]
   urlNotIn: [String!]
-  urlGT: String
-  urlGTE: String
-  urlLT: String
-  urlLTE: String
   urlContains: String
   urlHasPrefix: String
   urlHasSuffix: String
@@ -113801,10 +105450,6 @@ input ProcedureWhereInput {
   fileIDNEQ: ID
   fileIDIn: [ID!]
   fileIDNotIn: [ID!]
-  fileIDGT: ID
-  fileIDGTE: ID
-  fileIDLT: ID
-  fileIDLTE: ID
   fileIDContains: ID
   fileIDHasPrefix: ID
   fileIDHasSuffix: ID
@@ -113819,10 +105464,6 @@ input ProcedureWhereInput {
   externalFileIDNEQ: String
   externalFileIDIn: [String!]
   externalFileIDNotIn: [String!]
-  externalFileIDGT: String
-  externalFileIDGTE: String
-  externalFileIDLT: String
-  externalFileIDLTE: String
   externalFileIDContains: String
   externalFileIDHasPrefix: String
   externalFileIDHasSuffix: String
@@ -113837,10 +105478,6 @@ input ProcedureWhereInput {
   externalContentsNEQ: String
   externalContentsIn: [String!]
   externalContentsNotIn: [String!]
-  externalContentsGT: String
-  externalContentsGTE: String
-  externalContentsLT: String
-  externalContentsLTE: String
   externalContentsContains: String
   externalContentsHasPrefix: String
   externalContentsHasSuffix: String
@@ -113862,10 +105499,6 @@ input ProcedureWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -113880,10 +105513,6 @@ input ProcedureWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -113898,10 +105527,6 @@ input ProcedureWhereInput {
   procedureKindNameNEQ: String
   procedureKindNameIn: [String!]
   procedureKindNameNotIn: [String!]
-  procedureKindNameGT: String
-  procedureKindNameGTE: String
-  procedureKindNameLT: String
-  procedureKindNameLTE: String
   procedureKindNameContains: String
   procedureKindNameHasPrefix: String
   procedureKindNameHasSuffix: String
@@ -113916,10 +105541,6 @@ input ProcedureWhereInput {
   procedureKindIDNEQ: ID
   procedureKindIDIn: [ID!]
   procedureKindIDNotIn: [ID!]
-  procedureKindIDGT: ID
-  procedureKindIDGTE: ID
-  procedureKindIDLT: ID
-  procedureKindIDLTE: ID
   procedureKindIDContains: ID
   procedureKindIDHasPrefix: ID
   procedureKindIDHasSuffix: ID
@@ -113934,10 +105555,6 @@ input ProcedureWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -113952,10 +105569,6 @@ input ProcedureWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -113970,10 +105583,6 @@ input ProcedureWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -113988,10 +105597,6 @@ input ProcedureWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -115038,19 +106643,12 @@ input ProgramMembershipWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -115061,9 +106659,6 @@ input ProgramMembershipWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -115077,10 +106672,6 @@ input ProgramMembershipWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -115095,10 +106686,6 @@ input ProgramMembershipWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -115113,10 +106700,6 @@ input ProgramMembershipWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -115187,19 +106770,12 @@ input ProgramWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -115210,9 +106786,6 @@ input ProgramWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -115226,10 +106799,6 @@ input ProgramWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -115244,10 +106813,6 @@ input ProgramWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -115262,10 +106827,6 @@ input ProgramWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -115280,10 +106841,6 @@ input ProgramWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -115296,10 +106853,6 @@ input ProgramWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -115314,10 +106867,6 @@ input ProgramWhereInput {
   programKindNameNEQ: String
   programKindNameIn: [String!]
   programKindNameNotIn: [String!]
-  programKindNameGT: String
-  programKindNameGTE: String
-  programKindNameLT: String
-  programKindNameLTE: String
   programKindNameContains: String
   programKindNameHasPrefix: String
   programKindNameHasSuffix: String
@@ -115332,10 +106881,6 @@ input ProgramWhereInput {
   programKindIDNEQ: ID
   programKindIDIn: [ID!]
   programKindIDNotIn: [ID!]
-  programKindIDGT: ID
-  programKindIDGTE: ID
-  programKindIDLT: ID
-  programKindIDLTE: ID
   programKindIDContains: ID
   programKindIDHasPrefix: ID
   programKindIDHasSuffix: ID
@@ -115350,10 +106895,6 @@ input ProgramWhereInput {
   externalUUIDNEQ: String
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
-  externalUUIDGT: String
-  externalUUIDGTE: String
-  externalUUIDLT: String
-  externalUUIDLTE: String
   externalUUIDContains: String
   externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
@@ -115368,10 +106909,6 @@ input ProgramWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -115384,10 +106921,6 @@ input ProgramWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -115409,10 +106942,6 @@ input ProgramWhereInput {
   frameworkNameNEQ: String
   frameworkNameIn: [String!]
   frameworkNameNotIn: [String!]
-  frameworkNameGT: String
-  frameworkNameGTE: String
-  frameworkNameLT: String
-  frameworkNameLTE: String
   frameworkNameContains: String
   frameworkNameHasPrefix: String
   frameworkNameHasSuffix: String
@@ -115424,9 +106953,6 @@ input ProgramWhereInput {
   start_date field predicates
   """
   startDate: Time
-  startDateNEQ: Time
-  startDateIn: [Time!]
-  startDateNotIn: [Time!]
   startDateGT: Time
   startDateGTE: Time
   startDateLT: Time
@@ -115437,9 +106963,6 @@ input ProgramWhereInput {
   end_date field predicates
   """
   endDate: Time
-  endDateNEQ: Time
-  endDateIn: [Time!]
-  endDateNotIn: [Time!]
   endDateGT: Time
   endDateGTE: Time
   endDateLT: Time
@@ -115450,9 +106973,6 @@ input ProgramWhereInput {
   observation_period_start_date field predicates
   """
   observationPeriodStartDate: Time
-  observationPeriodStartDateNEQ: Time
-  observationPeriodStartDateIn: [Time!]
-  observationPeriodStartDateNotIn: [Time!]
   observationPeriodStartDateGT: Time
   observationPeriodStartDateGTE: Time
   observationPeriodStartDateLT: Time
@@ -115463,9 +106983,6 @@ input ProgramWhereInput {
   observation_period_end_date field predicates
   """
   observationPeriodEndDate: Time
-  observationPeriodEndDateNEQ: Time
-  observationPeriodEndDateIn: [Time!]
-  observationPeriodEndDateNotIn: [Time!]
   observationPeriodEndDateGT: Time
   observationPeriodEndDateGTE: Time
   observationPeriodEndDateLT: Time
@@ -115476,9 +106993,6 @@ input ProgramWhereInput {
   fieldwork_start_date field predicates
   """
   fieldworkStartDate: Time
-  fieldworkStartDateNEQ: Time
-  fieldworkStartDateIn: [Time!]
-  fieldworkStartDateNotIn: [Time!]
   fieldworkStartDateGT: Time
   fieldworkStartDateGTE: Time
   fieldworkStartDateLT: Time
@@ -115489,9 +107003,6 @@ input ProgramWhereInput {
   fieldwork_end_date field predicates
   """
   fieldworkEndDate: Time
-  fieldworkEndDateNEQ: Time
-  fieldworkEndDateIn: [Time!]
-  fieldworkEndDateNotIn: [Time!]
   fieldworkEndDateGT: Time
   fieldworkEndDateGTE: Time
   fieldworkEndDateLT: Time
@@ -115520,10 +107031,6 @@ input ProgramWhereInput {
   auditFirmNEQ: String
   auditFirmIn: [String!]
   auditFirmNotIn: [String!]
-  auditFirmGT: String
-  auditFirmGTE: String
-  auditFirmLT: String
-  auditFirmLTE: String
   auditFirmContains: String
   auditFirmHasPrefix: String
   auditFirmHasSuffix: String
@@ -115538,10 +107045,6 @@ input ProgramWhereInput {
   auditorNEQ: String
   auditorIn: [String!]
   auditorNotIn: [String!]
-  auditorGT: String
-  auditorGTE: String
-  auditorLT: String
-  auditorLTE: String
   auditorContains: String
   auditorHasPrefix: String
   auditorHasSuffix: String
@@ -115556,10 +107059,6 @@ input ProgramWhereInput {
   auditorEmailNEQ: String
   auditorEmailIn: [String!]
   auditorEmailNotIn: [String!]
-  auditorEmailGT: String
-  auditorEmailGTE: String
-  auditorEmailLT: String
-  auditorEmailLTE: String
   auditorEmailContains: String
   auditorEmailHasPrefix: String
   auditorEmailHasSuffix: String
@@ -115574,10 +107073,6 @@ input ProgramWhereInput {
   programOwnerIDNEQ: ID
   programOwnerIDIn: [ID!]
   programOwnerIDNotIn: [ID!]
-  programOwnerIDGT: ID
-  programOwnerIDGTE: ID
-  programOwnerIDLT: ID
-  programOwnerIDLTE: ID
   programOwnerIDContains: ID
   programOwnerIDHasPrefix: ID
   programOwnerIDHasSuffix: ID
@@ -116912,161 +108407,6 @@ type Query {
     """
     where: InviteWhereInput
   ): InviteConnection!
-  jobResults(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobResults returned from the connection.
-    """
-    orderBy: [JobResultOrder!]
-
-    """
-    Filtering options for JobResults returned from the connection.
-    """
-    where: JobResultWhereInput
-  ): JobResultConnection!
-  jobRunners(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunners returned from the connection.
-    """
-    orderBy: [JobRunnerOrder!]
-
-    """
-    Filtering options for JobRunners returned from the connection.
-    """
-    where: JobRunnerWhereInput
-  ): JobRunnerConnection!
-  jobRunnerRegistrationTokens(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunnerRegistrationTokens returned from the connection.
-    """
-    orderBy: [JobRunnerRegistrationTokenOrder!]
-
-    """
-    Filtering options for JobRunnerRegistrationTokens returned from the connection.
-    """
-    where: JobRunnerRegistrationTokenWhereInput
-  ): JobRunnerRegistrationTokenConnection!
-  jobRunnerTokens(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobRunnerTokens returned from the connection.
-    """
-    orderBy: [JobRunnerTokenOrder!]
-
-    """
-    Filtering options for JobRunnerTokens returned from the connection.
-    """
-    where: JobRunnerTokenWhereInput
-  ): JobRunnerTokenConnection!
-  jobTemplates(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for JobTemplates returned from the connection.
-    """
-    orderBy: [JobTemplateOrder!]
-
-    """
-    Filtering options for JobTemplates returned from the connection.
-    """
-    where: JobTemplateWhereInput
-  ): JobTemplateConnection!
   mappableDomains(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -117687,68 +109027,6 @@ type Query {
     """
     where: ScanWhereInput
   ): ScanConnection!
-  scheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ScheduledJobs returned from the connection.
-    """
-    orderBy: [ScheduledJobOrder!]
-
-    """
-    Filtering options for ScheduledJobs returned from the connection.
-    """
-    where: ScheduledJobWhereInput
-  ): ScheduledJobConnection!
-  scheduledJobRuns(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ScheduledJobRuns returned from the connection.
-    """
-    orderBy: [ScheduledJobRunOrder!]
-
-    """
-    Filtering options for ScheduledJobRuns returned from the connection.
-    """
-    where: ScheduledJobRunWhereInput
-  ): ScheduledJobRunConnection!
   standards(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -119456,19 +110734,12 @@ input RemediationWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -119479,9 +110750,6 @@ input RemediationWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -119495,10 +110763,6 @@ input RemediationWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -119513,10 +110777,6 @@ input RemediationWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -119531,10 +110791,6 @@ input RemediationWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -119549,10 +110805,6 @@ input RemediationWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -119565,10 +110817,6 @@ input RemediationWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -119590,10 +110838,6 @@ input RemediationWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -119608,10 +110852,6 @@ input RemediationWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -119626,10 +110866,6 @@ input RemediationWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -119644,10 +110880,6 @@ input RemediationWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -119662,10 +110894,6 @@ input RemediationWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -119680,10 +110908,6 @@ input RemediationWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -119705,10 +110929,6 @@ input RemediationWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -119723,10 +110943,6 @@ input RemediationWhereInput {
   externalOwnerIDNEQ: String
   externalOwnerIDIn: [String!]
   externalOwnerIDNotIn: [String!]
-  externalOwnerIDGT: String
-  externalOwnerIDGTE: String
-  externalOwnerIDLT: String
-  externalOwnerIDLTE: String
   externalOwnerIDContains: String
   externalOwnerIDHasPrefix: String
   externalOwnerIDHasSuffix: String
@@ -119741,10 +110957,6 @@ input RemediationWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -119768,10 +110980,6 @@ input RemediationWhereInput {
   stateNEQ: String
   stateIn: [String!]
   stateNotIn: [String!]
-  stateGT: String
-  stateGTE: String
-  stateLT: String
-  stateLTE: String
   stateContains: String
   stateHasPrefix: String
   stateHasSuffix: String
@@ -119786,10 +110994,6 @@ input RemediationWhereInput {
   intentNEQ: String
   intentIn: [String!]
   intentNotIn: [String!]
-  intentGT: String
-  intentGTE: String
-  intentLT: String
-  intentLTE: String
   intentContains: String
   intentHasPrefix: String
   intentHasSuffix: String
@@ -119804,10 +111008,6 @@ input RemediationWhereInput {
   summaryNEQ: String
   summaryIn: [String!]
   summaryNotIn: [String!]
-  summaryGT: String
-  summaryGTE: String
-  summaryLT: String
-  summaryLTE: String
   summaryContains: String
   summaryHasPrefix: String
   summaryHasSuffix: String
@@ -119822,10 +111022,6 @@ input RemediationWhereInput {
   explanationNEQ: String
   explanationIn: [String!]
   explanationNotIn: [String!]
-  explanationGT: String
-  explanationGTE: String
-  explanationLT: String
-  explanationLTE: String
   explanationContains: String
   explanationHasPrefix: String
   explanationHasSuffix: String
@@ -119840,10 +111036,6 @@ input RemediationWhereInput {
   instructionsNEQ: String
   instructionsIn: [String!]
   instructionsNotIn: [String!]
-  instructionsGT: String
-  instructionsGTE: String
-  instructionsLT: String
-  instructionsLTE: String
   instructionsContains: String
   instructionsHasPrefix: String
   instructionsHasSuffix: String
@@ -119858,10 +111050,6 @@ input RemediationWhereInput {
   ownerReferenceNEQ: String
   ownerReferenceIn: [String!]
   ownerReferenceNotIn: [String!]
-  ownerReferenceGT: String
-  ownerReferenceGTE: String
-  ownerReferenceLT: String
-  ownerReferenceLTE: String
   ownerReferenceContains: String
   ownerReferenceHasPrefix: String
   ownerReferenceHasSuffix: String
@@ -119876,10 +111064,6 @@ input RemediationWhereInput {
   repositoryURINEQ: String
   repositoryURIIn: [String!]
   repositoryURINotIn: [String!]
-  repositoryURIGT: String
-  repositoryURIGTE: String
-  repositoryURILT: String
-  repositoryURILTE: String
   repositoryURIContains: String
   repositoryURIHasPrefix: String
   repositoryURIHasSuffix: String
@@ -119894,10 +111078,6 @@ input RemediationWhereInput {
   pullRequestURINEQ: String
   pullRequestURIIn: [String!]
   pullRequestURINotIn: [String!]
-  pullRequestURIGT: String
-  pullRequestURIGTE: String
-  pullRequestURILT: String
-  pullRequestURILTE: String
   pullRequestURIContains: String
   pullRequestURIHasPrefix: String
   pullRequestURIHasSuffix: String
@@ -119912,10 +111092,6 @@ input RemediationWhereInput {
   ticketReferenceNEQ: String
   ticketReferenceIn: [String!]
   ticketReferenceNotIn: [String!]
-  ticketReferenceGT: String
-  ticketReferenceGTE: String
-  ticketReferenceLT: String
-  ticketReferenceLTE: String
   ticketReferenceContains: String
   ticketReferenceHasPrefix: String
   ticketReferenceHasSuffix: String
@@ -119927,9 +111103,6 @@ input RemediationWhereInput {
   due_at field predicates
   """
   dueAt: DateTime
-  dueAtNEQ: DateTime
-  dueAtIn: [DateTime!]
-  dueAtNotIn: [DateTime!]
   dueAtGT: DateTime
   dueAtGTE: DateTime
   dueAtLT: DateTime
@@ -119940,9 +111113,6 @@ input RemediationWhereInput {
   completed_at field predicates
   """
   completedAt: DateTime
-  completedAtNEQ: DateTime
-  completedAtIn: [DateTime!]
-  completedAtNotIn: [DateTime!]
   completedAtGT: DateTime
   completedAtGTE: DateTime
   completedAtLT: DateTime
@@ -119953,9 +111123,6 @@ input RemediationWhereInput {
   pr_generated_at field predicates
   """
   prGeneratedAt: DateTime
-  prGeneratedAtNEQ: DateTime
-  prGeneratedAtIn: [DateTime!]
-  prGeneratedAtNotIn: [DateTime!]
   prGeneratedAtGT: DateTime
   prGeneratedAtGTE: DateTime
   prGeneratedAtLT: DateTime
@@ -119969,10 +111136,6 @@ input RemediationWhereInput {
   errorNEQ: String
   errorIn: [String!]
   errorNotIn: [String!]
-  errorGT: String
-  errorGTE: String
-  errorLT: String
-  errorLTE: String
   errorContains: String
   errorHasPrefix: String
   errorHasSuffix: String
@@ -119987,10 +111150,6 @@ input RemediationWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -120005,10 +111164,6 @@ input RemediationWhereInput {
   externalURINEQ: String
   externalURIIn: [String!]
   externalURINotIn: [String!]
-  externalURIGT: String
-  externalURIGTE: String
-  externalURILT: String
-  externalURILTE: String
   externalURIContains: String
   externalURIHasPrefix: String
   externalURIHasSuffix: String
@@ -120862,19 +112017,12 @@ input ReviewWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -120885,9 +112033,6 @@ input ReviewWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -120901,10 +112046,6 @@ input ReviewWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -120919,10 +112060,6 @@ input ReviewWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -120937,10 +112074,6 @@ input ReviewWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -120955,10 +112088,6 @@ input ReviewWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -120980,10 +112109,6 @@ input ReviewWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -120998,10 +112123,6 @@ input ReviewWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -121016,10 +112137,6 @@ input ReviewWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -121034,10 +112151,6 @@ input ReviewWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -121052,10 +112165,6 @@ input ReviewWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -121070,10 +112179,6 @@ input ReviewWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -121088,10 +112193,6 @@ input ReviewWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -121106,10 +112207,6 @@ input ReviewWhereInput {
   externalOwnerIDNEQ: String
   externalOwnerIDIn: [String!]
   externalOwnerIDNotIn: [String!]
-  externalOwnerIDGT: String
-  externalOwnerIDGTE: String
-  externalOwnerIDLT: String
-  externalOwnerIDLTE: String
   externalOwnerIDContains: String
   externalOwnerIDHasPrefix: String
   externalOwnerIDHasSuffix: String
@@ -121124,10 +112221,6 @@ input ReviewWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -121140,10 +112233,6 @@ input ReviewWhereInput {
   stateNEQ: String
   stateIn: [String!]
   stateNotIn: [String!]
-  stateGT: String
-  stateGTE: String
-  stateLT: String
-  stateLTE: String
   stateContains: String
   stateHasPrefix: String
   stateHasSuffix: String
@@ -121167,10 +112256,6 @@ input ReviewWhereInput {
   categoryNEQ: String
   categoryIn: [String!]
   categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
   categoryContains: String
   categoryHasPrefix: String
   categoryHasSuffix: String
@@ -121185,10 +112270,6 @@ input ReviewWhereInput {
   classificationNEQ: String
   classificationIn: [String!]
   classificationNotIn: [String!]
-  classificationGT: String
-  classificationGTE: String
-  classificationLT: String
-  classificationLTE: String
   classificationContains: String
   classificationHasPrefix: String
   classificationHasSuffix: String
@@ -121203,10 +112284,6 @@ input ReviewWhereInput {
   summaryNEQ: String
   summaryIn: [String!]
   summaryNotIn: [String!]
-  summaryGT: String
-  summaryGTE: String
-  summaryLT: String
-  summaryLTE: String
   summaryContains: String
   summaryHasPrefix: String
   summaryHasSuffix: String
@@ -121221,10 +112298,6 @@ input ReviewWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -121239,10 +112312,6 @@ input ReviewWhereInput {
   reporterNEQ: String
   reporterIn: [String!]
   reporterNotIn: [String!]
-  reporterGT: String
-  reporterGTE: String
-  reporterLT: String
-  reporterLTE: String
   reporterContains: String
   reporterHasPrefix: String
   reporterHasSuffix: String
@@ -121261,9 +112330,6 @@ input ReviewWhereInput {
   reviewed_at field predicates
   """
   reviewedAt: DateTime
-  reviewedAtNEQ: DateTime
-  reviewedAtIn: [DateTime!]
-  reviewedAtNotIn: [DateTime!]
   reviewedAtGT: DateTime
   reviewedAtGTE: DateTime
   reviewedAtLT: DateTime
@@ -121274,9 +112340,6 @@ input ReviewWhereInput {
   reported_at field predicates
   """
   reportedAt: DateTime
-  reportedAtNEQ: DateTime
-  reportedAtIn: [DateTime!]
-  reportedAtNotIn: [DateTime!]
   reportedAtGT: DateTime
   reportedAtGTE: DateTime
   reportedAtLT: DateTime
@@ -121287,9 +112350,6 @@ input ReviewWhereInput {
   approved_at field predicates
   """
   approvedAt: DateTime
-  approvedAtNEQ: DateTime
-  approvedAtIn: [DateTime!]
-  approvedAtNotIn: [DateTime!]
   approvedAtGT: DateTime
   approvedAtGTE: DateTime
   approvedAtLT: DateTime
@@ -121303,10 +112363,6 @@ input ReviewWhereInput {
   reviewerIDNEQ: ID
   reviewerIDIn: [ID!]
   reviewerIDNotIn: [ID!]
-  reviewerIDGT: ID
-  reviewerIDGTE: ID
-  reviewerIDLT: ID
-  reviewerIDLTE: ID
   reviewerIDContains: ID
   reviewerIDHasPrefix: ID
   reviewerIDHasSuffix: ID
@@ -121321,10 +112377,6 @@ input ReviewWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -121339,10 +112391,6 @@ input ReviewWhereInput {
   externalURINEQ: String
   externalURIIn: [String!]
   externalURINotIn: [String!]
-  externalURIGT: String
-  externalURIGTE: String
-  externalURILT: String
-  externalURILTE: String
   externalURIContains: String
   externalURIHasPrefix: String
   externalURIHasSuffix: String
@@ -122414,19 +113462,12 @@ input RiskWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -122437,9 +113478,6 @@ input RiskWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -122453,10 +113491,6 @@ input RiskWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -122471,10 +113505,6 @@ input RiskWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -122489,10 +113519,6 @@ input RiskWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -122507,10 +113533,6 @@ input RiskWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -122523,10 +113545,6 @@ input RiskWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -122541,10 +113559,6 @@ input RiskWhereInput {
   riskKindNameNEQ: String
   riskKindNameIn: [String!]
   riskKindNameNotIn: [String!]
-  riskKindNameGT: String
-  riskKindNameGTE: String
-  riskKindNameLT: String
-  riskKindNameLTE: String
   riskKindNameContains: String
   riskKindNameHasPrefix: String
   riskKindNameHasSuffix: String
@@ -122559,10 +113573,6 @@ input RiskWhereInput {
   riskKindIDNEQ: ID
   riskKindIDIn: [ID!]
   riskKindIDNotIn: [ID!]
-  riskKindIDGT: ID
-  riskKindIDGTE: ID
-  riskKindIDLT: ID
-  riskKindIDLTE: ID
   riskKindIDContains: ID
   riskKindIDHasPrefix: ID
   riskKindIDHasSuffix: ID
@@ -122577,10 +113587,6 @@ input RiskWhereInput {
   riskCategoryNameNEQ: String
   riskCategoryNameIn: [String!]
   riskCategoryNameNotIn: [String!]
-  riskCategoryNameGT: String
-  riskCategoryNameGTE: String
-  riskCategoryNameLT: String
-  riskCategoryNameLTE: String
   riskCategoryNameContains: String
   riskCategoryNameHasPrefix: String
   riskCategoryNameHasSuffix: String
@@ -122595,10 +113601,6 @@ input RiskWhereInput {
   riskCategoryIDNEQ: ID
   riskCategoryIDIn: [ID!]
   riskCategoryIDNotIn: [ID!]
-  riskCategoryIDGT: ID
-  riskCategoryIDGTE: ID
-  riskCategoryIDLT: ID
-  riskCategoryIDLTE: ID
   riskCategoryIDContains: ID
   riskCategoryIDHasPrefix: ID
   riskCategoryIDHasSuffix: ID
@@ -122613,10 +113615,6 @@ input RiskWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -122631,10 +113629,6 @@ input RiskWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -122649,10 +113643,6 @@ input RiskWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -122667,10 +113657,6 @@ input RiskWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -122692,10 +113678,6 @@ input RiskWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -122710,10 +113692,6 @@ input RiskWhereInput {
   integrationIDNEQ: String
   integrationIDIn: [String!]
   integrationIDNotIn: [String!]
-  integrationIDGT: String
-  integrationIDGTE: String
-  integrationIDLT: String
-  integrationIDLTE: String
   integrationIDContains: String
   integrationIDHasPrefix: String
   integrationIDHasSuffix: String
@@ -122725,9 +113703,6 @@ input RiskWhereInput {
   observed_at field predicates
   """
   observedAt: DateTime
-  observedAtNEQ: DateTime
-  observedAtIn: [DateTime!]
-  observedAtNotIn: [DateTime!]
   observedAtGT: DateTime
   observedAtGTE: DateTime
   observedAtLT: DateTime
@@ -122741,10 +113716,6 @@ input RiskWhereInput {
   externalUUIDNEQ: String
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
-  externalUUIDGT: String
-  externalUUIDGTE: String
-  externalUUIDLT: String
-  externalUUIDLTE: String
   externalUUIDContains: String
   externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
@@ -122759,10 +113730,6 @@ input RiskWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -122800,8 +113767,6 @@ input RiskWhereInput {
   """
   score: Int
   scoreNEQ: Int
-  scoreIn: [Int!]
-  scoreNotIn: [Int!]
   scoreGT: Int
   scoreGTE: Int
   scoreLT: Int
@@ -122815,10 +113780,6 @@ input RiskWhereInput {
   mitigationNEQ: String
   mitigationIn: [String!]
   mitigationNotIn: [String!]
-  mitigationGT: String
-  mitigationGTE: String
-  mitigationLT: String
-  mitigationLTE: String
   mitigationContains: String
   mitigationHasPrefix: String
   mitigationHasSuffix: String
@@ -122833,10 +113794,6 @@ input RiskWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -122851,10 +113808,6 @@ input RiskWhereInput {
   businessCostsNEQ: String
   businessCostsIn: [String!]
   businessCostsNotIn: [String!]
-  businessCostsGT: String
-  businessCostsGTE: String
-  businessCostsLT: String
-  businessCostsLTE: String
   businessCostsContains: String
   businessCostsHasPrefix: String
   businessCostsHasSuffix: String
@@ -122869,10 +113822,6 @@ input RiskWhereInput {
   stakeholderIDNEQ: ID
   stakeholderIDIn: [ID!]
   stakeholderIDNotIn: [ID!]
-  stakeholderIDGT: ID
-  stakeholderIDGTE: ID
-  stakeholderIDLT: ID
-  stakeholderIDLTE: ID
   stakeholderIDContains: ID
   stakeholderIDHasPrefix: ID
   stakeholderIDHasSuffix: ID
@@ -122887,10 +113836,6 @@ input RiskWhereInput {
   delegateIDNEQ: ID
   delegateIDIn: [ID!]
   delegateIDNotIn: [ID!]
-  delegateIDGT: ID
-  delegateIDGTE: ID
-  delegateIDLT: ID
-  delegateIDLTE: ID
   delegateIDContains: ID
   delegateIDHasPrefix: ID
   delegateIDHasSuffix: ID
@@ -122902,9 +113847,6 @@ input RiskWhereInput {
   mitigated_at field predicates
   """
   mitigatedAt: DateTime
-  mitigatedAtNEQ: DateTime
-  mitigatedAtIn: [DateTime!]
-  mitigatedAtNotIn: [DateTime!]
   mitigatedAtGT: DateTime
   mitigatedAtGTE: DateTime
   mitigatedAtLT: DateTime
@@ -122922,9 +113864,6 @@ input RiskWhereInput {
   last_reviewed_at field predicates
   """
   lastReviewedAt: DateTime
-  lastReviewedAtNEQ: DateTime
-  lastReviewedAtIn: [DateTime!]
-  lastReviewedAtNotIn: [DateTime!]
   lastReviewedAtGT: DateTime
   lastReviewedAtGTE: DateTime
   lastReviewedAtLT: DateTime
@@ -122944,9 +113883,6 @@ input RiskWhereInput {
   due_date field predicates
   """
   dueDate: DateTime
-  dueDateNEQ: DateTime
-  dueDateIn: [DateTime!]
-  dueDateNotIn: [DateTime!]
   dueDateGT: DateTime
   dueDateGTE: DateTime
   dueDateLT: DateTime
@@ -122957,9 +113893,6 @@ input RiskWhereInput {
   next_review_due_at field predicates
   """
   nextReviewDueAt: DateTime
-  nextReviewDueAtNEQ: DateTime
-  nextReviewDueAtIn: [DateTime!]
-  nextReviewDueAtNotIn: [DateTime!]
   nextReviewDueAtGT: DateTime
   nextReviewDueAtGTE: DateTime
   nextReviewDueAtLT: DateTime
@@ -122971,8 +113904,6 @@ input RiskWhereInput {
   """
   residualScore: Int
   residualScoreNEQ: Int
-  residualScoreIn: [Int!]
-  residualScoreNotIn: [Int!]
   residualScoreGT: Int
   residualScoreGTE: Int
   residualScoreLT: Int
@@ -123304,19 +114235,12 @@ input SLADefinitionWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -123327,9 +114251,6 @@ input SLADefinitionWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -123343,10 +114264,6 @@ input SLADefinitionWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -123361,10 +114278,6 @@ input SLADefinitionWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -123379,10 +114292,6 @@ input SLADefinitionWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -123397,10 +114306,6 @@ input SLADefinitionWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -123413,10 +114318,6 @@ input SLADefinitionWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -123429,8 +114330,6 @@ input SLADefinitionWhereInput {
   """
   slaDays: Int
   slaDaysNEQ: Int
-  slaDaysIn: [Int!]
-  slaDaysNotIn: [Int!]
   slaDaysGT: Int
   slaDaysGTE: Int
   slaDaysLT: Int
@@ -124112,19 +115011,12 @@ input ScanWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -124135,9 +115027,6 @@ input ScanWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -124151,10 +115040,6 @@ input ScanWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -124169,10 +115054,6 @@ input ScanWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -124187,10 +115068,6 @@ input ScanWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -124205,10 +115082,6 @@ input ScanWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -124230,10 +115103,6 @@ input ScanWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -124248,10 +115117,6 @@ input ScanWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -124266,10 +115131,6 @@ input ScanWhereInput {
   reviewedByNEQ: String
   reviewedByIn: [String!]
   reviewedByNotIn: [String!]
-  reviewedByGT: String
-  reviewedByGTE: String
-  reviewedByLT: String
-  reviewedByLTE: String
   reviewedByContains: String
   reviewedByHasPrefix: String
   reviewedByHasSuffix: String
@@ -124284,10 +115145,6 @@ input ScanWhereInput {
   reviewedByUserIDNEQ: ID
   reviewedByUserIDIn: [ID!]
   reviewedByUserIDNotIn: [ID!]
-  reviewedByUserIDGT: ID
-  reviewedByUserIDGTE: ID
-  reviewedByUserIDLT: ID
-  reviewedByUserIDLTE: ID
   reviewedByUserIDContains: ID
   reviewedByUserIDHasPrefix: ID
   reviewedByUserIDHasSuffix: ID
@@ -124302,10 +115159,6 @@ input ScanWhereInput {
   reviewedByGroupIDNEQ: ID
   reviewedByGroupIDIn: [ID!]
   reviewedByGroupIDNotIn: [ID!]
-  reviewedByGroupIDGT: ID
-  reviewedByGroupIDGTE: ID
-  reviewedByGroupIDLT: ID
-  reviewedByGroupIDLTE: ID
   reviewedByGroupIDContains: ID
   reviewedByGroupIDHasPrefix: ID
   reviewedByGroupIDHasSuffix: ID
@@ -124320,10 +115173,6 @@ input ScanWhereInput {
   assignedToNEQ: String
   assignedToIn: [String!]
   assignedToNotIn: [String!]
-  assignedToGT: String
-  assignedToGTE: String
-  assignedToLT: String
-  assignedToLTE: String
   assignedToContains: String
   assignedToHasPrefix: String
   assignedToHasSuffix: String
@@ -124338,10 +115187,6 @@ input ScanWhereInput {
   assignedToUserIDNEQ: ID
   assignedToUserIDIn: [ID!]
   assignedToUserIDNotIn: [ID!]
-  assignedToUserIDGT: ID
-  assignedToUserIDGTE: ID
-  assignedToUserIDLT: ID
-  assignedToUserIDLTE: ID
   assignedToUserIDContains: ID
   assignedToUserIDHasPrefix: ID
   assignedToUserIDHasSuffix: ID
@@ -124356,10 +115201,6 @@ input ScanWhereInput {
   assignedToGroupIDNEQ: ID
   assignedToGroupIDIn: [ID!]
   assignedToGroupIDNotIn: [ID!]
-  assignedToGroupIDGT: ID
-  assignedToGroupIDGTE: ID
-  assignedToGroupIDLT: ID
-  assignedToGroupIDLTE: ID
   assignedToGroupIDContains: ID
   assignedToGroupIDHasPrefix: ID
   assignedToGroupIDHasSuffix: ID
@@ -124374,10 +115215,6 @@ input ScanWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -124392,10 +115229,6 @@ input ScanWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -124410,10 +115243,6 @@ input ScanWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -124428,10 +115257,6 @@ input ScanWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -124446,10 +115271,6 @@ input ScanWhereInput {
   targetNEQ: String
   targetIn: [String!]
   targetNotIn: [String!]
-  targetGT: String
-  targetGTE: String
-  targetLT: String
-  targetLTE: String
   targetContains: String
   targetHasPrefix: String
   targetHasSuffix: String
@@ -124466,9 +115287,6 @@ input ScanWhereInput {
   scan_date field predicates
   """
   scanDate: DateTime
-  scanDateNEQ: DateTime
-  scanDateIn: [DateTime!]
-  scanDateNotIn: [DateTime!]
   scanDateGT: DateTime
   scanDateGTE: DateTime
   scanDateLT: DateTime
@@ -124479,9 +115297,6 @@ input ScanWhereInput {
   next_scan_run_at field predicates
   """
   nextScanRunAt: DateTime
-  nextScanRunAtNEQ: DateTime
-  nextScanRunAtIn: [DateTime!]
-  nextScanRunAtNotIn: [DateTime!]
   nextScanRunAtGT: DateTime
   nextScanRunAtGTE: DateTime
   nextScanRunAtLT: DateTime
@@ -124495,10 +115310,6 @@ input ScanWhereInput {
   performedByNEQ: String
   performedByIn: [String!]
   performedByNotIn: [String!]
-  performedByGT: String
-  performedByGTE: String
-  performedByLT: String
-  performedByLTE: String
   performedByContains: String
   performedByHasPrefix: String
   performedByHasSuffix: String
@@ -124513,10 +115324,6 @@ input ScanWhereInput {
   performedByUserIDNEQ: ID
   performedByUserIDIn: [ID!]
   performedByUserIDNotIn: [ID!]
-  performedByUserIDGT: ID
-  performedByUserIDGTE: ID
-  performedByUserIDLT: ID
-  performedByUserIDLTE: ID
   performedByUserIDContains: ID
   performedByUserIDHasPrefix: ID
   performedByUserIDHasSuffix: ID
@@ -124531,10 +115338,6 @@ input ScanWhereInput {
   performedByGroupIDNEQ: ID
   performedByGroupIDIn: [ID!]
   performedByGroupIDNotIn: [ID!]
-  performedByGroupIDGT: ID
-  performedByGroupIDGTE: ID
-  performedByGroupIDLT: ID
-  performedByGroupIDLTE: ID
   performedByGroupIDContains: ID
   performedByGroupIDHasPrefix: ID
   performedByGroupIDHasSuffix: ID
@@ -124549,10 +115352,6 @@ input ScanWhereInput {
   generatedByPlatformIDNEQ: ID
   generatedByPlatformIDIn: [ID!]
   generatedByPlatformIDNotIn: [ID!]
-  generatedByPlatformIDGT: ID
-  generatedByPlatformIDGTE: ID
-  generatedByPlatformIDLT: ID
-  generatedByPlatformIDLTE: ID
   generatedByPlatformIDContains: ID
   generatedByPlatformIDHasPrefix: ID
   generatedByPlatformIDHasSuffix: ID
@@ -124695,658 +115494,6 @@ input ScanWhereInput {
   Filter for discoveredVulnerabilityIdsHas to contain a specific value
   """
   discoveredVulnerabilityIdsHas: String
-}
-type ScheduledJob implements Node @modules(names: ["compliance_module"]) {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the real user acting through an impersonation session when the record was last mutated, if any
-  """
-  updatedByImpersonator: String
-  """
-  a shortened prefixed id field to use as a human readable identifier
-  """
-  displayID: String!
-  """
-  the ID of the organization owner of the object
-  """
-  ownerID: ID
-  """
-  the scheduled_job id to take the script to run from
-  """
-  jobID: ID!
-  """
-  whether the scheduled job is active
-  """
-  active: Boolean!
-  """
-  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
-  """
-  configuration: JobConfiguration
-  """
-  cron 6-field syntax, defaults to the job template's cron if not provided
-  """
-  cron: String
-  """
-  the runner that this job will run on. If not set, it will scheduled on a general runner instead
-  """
-  jobRunnerID: ID
-  owner: Organization
-  jobTemplate: JobTemplate!
-  controls(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Controls returned from the connection.
-    """
-    orderBy: [ControlOrder!]
-
-    """
-    Filtering options for Controls returned from the connection.
-    """
-    where: ControlWhereInput
-  ): ControlConnection!
-  subcontrols(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Subcontrols returned from the connection.
-    """
-    orderBy: [SubcontrolOrder!]
-
-    """
-    Filtering options for Subcontrols returned from the connection.
-    """
-    where: SubcontrolWhereInput
-  ): SubcontrolConnection!
-  jobRunner: JobRunner
-}
-"""
-A connection to a list of items.
-"""
-type ScheduledJobConnection {
-  """
-  A list of edges.
-  """
-  edges: [ScheduledJobEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type ScheduledJobEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: ScheduledJob
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-Ordering options for ScheduledJob connections
-"""
-input ScheduledJobOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order ScheduledJobs.
-  """
-  field: ScheduledJobOrderField!
-}
-"""
-Properties by which ScheduledJob connections can be ordered.
-"""
-enum ScheduledJobOrderField {
-  created_at
-  updated_at
-}
-type ScheduledJobRun implements Node @modules(names: ["compliance_module"]) {
-  id: ID!
-  createdAt: Time
-  updatedAt: Time
-  createdBy: String
-  updatedBy: String
-  """
-  the real user acting through an impersonation session when the record was last mutated, if any
-  """
-  updatedByImpersonator: String
-  """
-  the organization id that owns the object
-  """
-  ownerID: ID
-  """
-  The runner that this job will be executed on. Useful to know because of self hosted runners
-  """
-  jobRunnerID: ID!
-  """
-  The status of the job to be executed. By default will be pending but when
-  			scheduled on a runner, this will change to acquired.
-  """
-  status: ScheduledJobRunScheduledJobRunStatus!
-  """
-  the parent job for this run
-  """
-  scheduledJobID: ID!
-  """
-  When should this job execute on the agent. Since we might potentially schedule a few minutes before
-  """
-  expectedExecutionTime: Time!
-  """
-  the script that will be executed by the agent.
-  This script will be templated with the values from the configuration on the job
-  """
-  script: String!
-  owner: Organization
-  scheduledJob: ScheduledJob!
-  jobRunner: JobRunner!
-}
-"""
-A connection to a list of items.
-"""
-type ScheduledJobRunConnection {
-  """
-  A list of edges.
-  """
-  edges: [ScheduledJobRunEdge]
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: PageInfo!
-  """
-  Identifies the total count of items in the connection.
-  """
-  totalCount: Int!
-}
-"""
-An edge in a connection.
-"""
-type ScheduledJobRunEdge {
-  """
-  The item at the end of the edge.
-  """
-  node: ScheduledJobRun
-  """
-  A cursor for use in pagination.
-  """
-  cursor: Cursor!
-}
-"""
-Ordering options for ScheduledJobRun connections
-"""
-input ScheduledJobRunOrder {
-  """
-  The ordering direction.
-  """
-  direction: OrderDirection! = ASC
-  """
-  The field by which to order ScheduledJobRuns.
-  """
-  field: ScheduledJobRunOrderField!
-}
-"""
-Properties by which ScheduledJobRun connections can be ordered.
-"""
-enum ScheduledJobRunOrderField {
-  created_at
-  updated_at
-}
-"""
-ScheduledJobRunScheduledJobRunStatus is enum for the field status
-"""
-enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/core/common/enums.ScheduledJobRunStatus") {
-  PENDING
-  ACQUIRED
-}
-"""
-ScheduledJobRunWhereInput is used for filtering ScheduledJobRun objects.
-Input was generated by ent.
-"""
-input ScheduledJobRunWhereInput {
-  not: ScheduledJobRunWhereInput
-  and: [ScheduledJobRunWhereInput!]
-  or: [ScheduledJobRunWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  updated_by_impersonator field predicates
-  """
-  updatedByImpersonator: String
-  updatedByImpersonatorNEQ: String
-  updatedByImpersonatorIn: [String!]
-  updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
-  updatedByImpersonatorContains: String
-  updatedByImpersonatorHasPrefix: String
-  updatedByImpersonatorHasSuffix: String
-  updatedByImpersonatorIsNil: Boolean
-  updatedByImpersonatorNotNil: Boolean
-  updatedByImpersonatorEqualFold: String
-  updatedByImpersonatorContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  job_runner_id field predicates
-  """
-  jobRunnerID: ID
-  jobRunnerIDNEQ: ID
-  jobRunnerIDIn: [ID!]
-  jobRunnerIDNotIn: [ID!]
-  jobRunnerIDGT: ID
-  jobRunnerIDGTE: ID
-  jobRunnerIDLT: ID
-  jobRunnerIDLTE: ID
-  jobRunnerIDContains: ID
-  jobRunnerIDHasPrefix: ID
-  jobRunnerIDHasSuffix: ID
-  jobRunnerIDEqualFold: ID
-  jobRunnerIDContainsFold: ID
-  """
-  status field predicates
-  """
-  status: ScheduledJobRunScheduledJobRunStatus
-  statusNEQ: ScheduledJobRunScheduledJobRunStatus
-  statusIn: [ScheduledJobRunScheduledJobRunStatus!]
-  statusNotIn: [ScheduledJobRunScheduledJobRunStatus!]
-  """
-  scheduled_job_id field predicates
-  """
-  scheduledJobID: ID
-  scheduledJobIDNEQ: ID
-  scheduledJobIDIn: [ID!]
-  scheduledJobIDNotIn: [ID!]
-  scheduledJobIDGT: ID
-  scheduledJobIDGTE: ID
-  scheduledJobIDLT: ID
-  scheduledJobIDLTE: ID
-  scheduledJobIDContains: ID
-  scheduledJobIDHasPrefix: ID
-  scheduledJobIDHasSuffix: ID
-  scheduledJobIDEqualFold: ID
-  scheduledJobIDContainsFold: ID
-  """
-  expected_execution_time field predicates
-  """
-  expectedExecutionTime: Time
-  expectedExecutionTimeNEQ: Time
-  expectedExecutionTimeIn: [Time!]
-  expectedExecutionTimeNotIn: [Time!]
-  expectedExecutionTimeGT: Time
-  expectedExecutionTimeGTE: Time
-  expectedExecutionTimeLT: Time
-  expectedExecutionTimeLTE: Time
-  """
-  script field predicates
-  """
-  script: String
-  scriptNEQ: String
-  scriptIn: [String!]
-  scriptNotIn: [String!]
-  scriptGT: String
-  scriptGTE: String
-  scriptLT: String
-  scriptLTE: String
-  scriptContains: String
-  scriptHasPrefix: String
-  scriptHasSuffix: String
-  scriptEqualFold: String
-  scriptContainsFold: String
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  scheduled_job edge predicates
-  """
-  hasScheduledJob: Boolean
-  hasScheduledJobWith: [ScheduledJobWhereInput!]
-  """
-  job_runner edge predicates
-  """
-  hasJobRunner: Boolean
-  hasJobRunnerWith: [JobRunnerWhereInput!]
-}
-"""
-ScheduledJobWhereInput is used for filtering ScheduledJob objects.
-Input was generated by ent.
-"""
-input ScheduledJobWhereInput {
-  not: ScheduledJobWhereInput
-  and: [ScheduledJobWhereInput!]
-  or: [ScheduledJobWhereInput!]
-  """
-  id field predicates
-  """
-  id: ID
-  idNEQ: ID
-  idIn: [ID!]
-  idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
-  idEqualFold: ID
-  idContainsFold: ID
-  """
-  created_at field predicates
-  """
-  createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
-  createdAtGT: Time
-  createdAtGTE: Time
-  createdAtLT: Time
-  createdAtLTE: Time
-  createdAtIsNil: Boolean
-  createdAtNotNil: Boolean
-  """
-  updated_at field predicates
-  """
-  updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
-  updatedAtGT: Time
-  updatedAtGTE: Time
-  updatedAtLT: Time
-  updatedAtLTE: Time
-  updatedAtIsNil: Boolean
-  updatedAtNotNil: Boolean
-  """
-  created_by field predicates
-  """
-  createdBy: String
-  createdByNEQ: String
-  createdByIn: [String!]
-  createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
-  createdByContains: String
-  createdByHasPrefix: String
-  createdByHasSuffix: String
-  createdByIsNil: Boolean
-  createdByNotNil: Boolean
-  createdByEqualFold: String
-  createdByContainsFold: String
-  """
-  updated_by field predicates
-  """
-  updatedBy: String
-  updatedByNEQ: String
-  updatedByIn: [String!]
-  updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
-  updatedByContains: String
-  updatedByHasPrefix: String
-  updatedByHasSuffix: String
-  updatedByIsNil: Boolean
-  updatedByNotNil: Boolean
-  updatedByEqualFold: String
-  updatedByContainsFold: String
-  """
-  updated_by_impersonator field predicates
-  """
-  updatedByImpersonator: String
-  updatedByImpersonatorNEQ: String
-  updatedByImpersonatorIn: [String!]
-  updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
-  updatedByImpersonatorContains: String
-  updatedByImpersonatorHasPrefix: String
-  updatedByImpersonatorHasSuffix: String
-  updatedByImpersonatorIsNil: Boolean
-  updatedByImpersonatorNotNil: Boolean
-  updatedByImpersonatorEqualFold: String
-  updatedByImpersonatorContainsFold: String
-  """
-  display_id field predicates
-  """
-  displayID: String
-  displayIDNEQ: String
-  displayIDIn: [String!]
-  displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
-  displayIDContains: String
-  displayIDHasPrefix: String
-  displayIDHasSuffix: String
-  displayIDEqualFold: String
-  displayIDContainsFold: String
-  """
-  owner_id field predicates
-  """
-  ownerID: ID
-  ownerIDNEQ: ID
-  ownerIDIn: [ID!]
-  ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
-  ownerIDContains: ID
-  ownerIDHasPrefix: ID
-  ownerIDHasSuffix: ID
-  ownerIDIsNil: Boolean
-  ownerIDNotNil: Boolean
-  ownerIDEqualFold: ID
-  ownerIDContainsFold: ID
-  """
-  job_id field predicates
-  """
-  jobID: ID
-  jobIDNEQ: ID
-  jobIDIn: [ID!]
-  jobIDNotIn: [ID!]
-  jobIDGT: ID
-  jobIDGTE: ID
-  jobIDLT: ID
-  jobIDLTE: ID
-  jobIDContains: ID
-  jobIDHasPrefix: ID
-  jobIDHasSuffix: ID
-  jobIDEqualFold: ID
-  jobIDContainsFold: ID
-  """
-  active field predicates
-  """
-  active: Boolean
-  activeNEQ: Boolean
-  """
-  job_runner_id field predicates
-  """
-  jobRunnerID: ID
-  jobRunnerIDNEQ: ID
-  jobRunnerIDIn: [ID!]
-  jobRunnerIDNotIn: [ID!]
-  jobRunnerIDGT: ID
-  jobRunnerIDGTE: ID
-  jobRunnerIDLT: ID
-  jobRunnerIDLTE: ID
-  jobRunnerIDContains: ID
-  jobRunnerIDHasPrefix: ID
-  jobRunnerIDHasSuffix: ID
-  jobRunnerIDIsNil: Boolean
-  jobRunnerIDNotNil: Boolean
-  jobRunnerIDEqualFold: ID
-  jobRunnerIDContainsFold: ID
-  """
-  owner edge predicates
-  """
-  hasOwner: Boolean
-  hasOwnerWith: [OrganizationWhereInput!]
-  """
-  job_template edge predicates
-  """
-  hasJobTemplate: Boolean
-  hasJobTemplateWith: [JobTemplateWhereInput!]
-  """
-  controls edge predicates
-  """
-  hasControls: Boolean
-  hasControlsWith: [ControlWhereInput!]
-  """
-  subcontrols edge predicates
-  """
-  hasSubcontrols: Boolean
-  hasSubcontrolsWith: [SubcontrolWhereInput!]
-  """
-  job_runner edge predicates
-  """
-  hasJobRunner: Boolean
-  hasJobRunnerWith: [JobRunnerWhereInput!]
 }
 type Standard implements Node @modules(names: ["compliance_module","policy_management_addon","risk_management_addon","entity_management_module","trust_center_module"]) {
   id: ID!
@@ -125645,19 +115792,12 @@ input StandardWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -125668,9 +115808,6 @@ input StandardWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -125684,10 +115821,6 @@ input StandardWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -125702,10 +115835,6 @@ input StandardWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -125720,10 +115849,6 @@ input StandardWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -125738,10 +115863,6 @@ input StandardWhereInput {
   revisionNEQ: String
   revisionIn: [String!]
   revisionNotIn: [String!]
-  revisionGT: String
-  revisionGTE: String
-  revisionLT: String
-  revisionLTE: String
   revisionContains: String
   revisionHasPrefix: String
   revisionHasSuffix: String
@@ -125756,10 +115877,6 @@ input StandardWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -125781,10 +115898,6 @@ input StandardWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -125799,10 +115912,6 @@ input StandardWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -125817,10 +115926,6 @@ input StandardWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -125833,10 +115938,6 @@ input StandardWhereInput {
   shortNameNEQ: String
   shortNameIn: [String!]
   shortNameNotIn: [String!]
-  shortNameGT: String
-  shortNameGTE: String
-  shortNameLT: String
-  shortNameLTE: String
   shortNameContains: String
   shortNameHasPrefix: String
   shortNameHasSuffix: String
@@ -125851,10 +115952,6 @@ input StandardWhereInput {
   frameworkNEQ: String
   frameworkIn: [String!]
   frameworkNotIn: [String!]
-  frameworkGT: String
-  frameworkGTE: String
-  frameworkLT: String
-  frameworkLTE: String
   frameworkContains: String
   frameworkHasPrefix: String
   frameworkHasSuffix: String
@@ -125869,10 +115966,6 @@ input StandardWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -125887,10 +115980,6 @@ input StandardWhereInput {
   governingBodyLogoURLNEQ: String
   governingBodyLogoURLIn: [String!]
   governingBodyLogoURLNotIn: [String!]
-  governingBodyLogoURLGT: String
-  governingBodyLogoURLGTE: String
-  governingBodyLogoURLLT: String
-  governingBodyLogoURLLTE: String
   governingBodyLogoURLContains: String
   governingBodyLogoURLHasPrefix: String
   governingBodyLogoURLHasSuffix: String
@@ -125905,10 +115994,6 @@ input StandardWhereInput {
   governingBodyNEQ: String
   governingBodyIn: [String!]
   governingBodyNotIn: [String!]
-  governingBodyGT: String
-  governingBodyGTE: String
-  governingBodyLT: String
-  governingBodyLTE: String
   governingBodyContains: String
   governingBodyHasPrefix: String
   governingBodyHasSuffix: String
@@ -125923,10 +116008,6 @@ input StandardWhereInput {
   linkNEQ: String
   linkIn: [String!]
   linkNotIn: [String!]
-  linkGT: String
-  linkGTE: String
-  linkLT: String
-  linkLTE: String
   linkContains: String
   linkHasPrefix: String
   linkHasSuffix: String
@@ -125964,10 +116045,6 @@ input StandardWhereInput {
   standardTypeNEQ: String
   standardTypeIn: [String!]
   standardTypeNotIn: [String!]
-  standardTypeGT: String
-  standardTypeGTE: String
-  standardTypeLT: String
-  standardTypeLTE: String
   standardTypeContains: String
   standardTypeHasPrefix: String
   standardTypeHasSuffix: String
@@ -125982,10 +116059,6 @@ input StandardWhereInput {
   versionNEQ: String
   versionIn: [String!]
   versionNotIn: [String!]
-  versionGT: String
-  versionGTE: String
-  versionLT: String
-  versionLTE: String
   versionContains: String
   versionHasPrefix: String
   versionHasSuffix: String
@@ -126000,10 +116073,6 @@ input StandardWhereInput {
   logoFileIDNEQ: ID
   logoFileIDIn: [ID!]
   logoFileIDNotIn: [ID!]
-  logoFileIDGT: ID
-  logoFileIDGTE: ID
-  logoFileIDLT: ID
-  logoFileIDLTE: ID
   logoFileIDContains: ID
   logoFileIDHasPrefix: ID
   logoFileIDHasSuffix: ID
@@ -126673,37 +116742,6 @@ type Subcontrol implements Node @modules(names: ["compliance_module"]) {
     """
     where: ControlImplementationWhereInput
   ): ControlImplementationConnection!
-  scheduledJobs(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for ScheduledJobs returned from the connection.
-    """
-    orderBy: [ScheduledJobOrder!]
-
-    """
-    Filtering options for ScheduledJobs returned from the connection.
-    """
-    where: ScheduledJobWhereInput
-  ): ScheduledJobConnection!
   workflowObjectRefs(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -126998,19 +117036,12 @@ input SubcontrolWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -127021,9 +117052,6 @@ input SubcontrolWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -127037,10 +117065,6 @@ input SubcontrolWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -127055,10 +117079,6 @@ input SubcontrolWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -127073,10 +117093,6 @@ input SubcontrolWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -127091,10 +117107,6 @@ input SubcontrolWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -127107,10 +117119,6 @@ input SubcontrolWhereInput {
   externalUUIDNEQ: String
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
-  externalUUIDGT: String
-  externalUUIDGTE: String
-  externalUUIDLT: String
-  externalUUIDLTE: String
   externalUUIDContains: String
   externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
@@ -127125,10 +117133,6 @@ input SubcontrolWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -127143,10 +117147,6 @@ input SubcontrolWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -127161,10 +117161,6 @@ input SubcontrolWhereInput {
   referenceIDNEQ: String
   referenceIDIn: [String!]
   referenceIDNotIn: [String!]
-  referenceIDGT: String
-  referenceIDGTE: String
-  referenceIDLT: String
-  referenceIDLTE: String
   referenceIDContains: String
   referenceIDHasPrefix: String
   referenceIDHasSuffix: String
@@ -127179,10 +117175,6 @@ input SubcontrolWhereInput {
   auditorReferenceIDNEQ: String
   auditorReferenceIDIn: [String!]
   auditorReferenceIDNotIn: [String!]
-  auditorReferenceIDGT: String
-  auditorReferenceIDGTE: String
-  auditorReferenceIDLT: String
-  auditorReferenceIDLTE: String
   auditorReferenceIDContains: String
   auditorReferenceIDHasPrefix: String
   auditorReferenceIDHasSuffix: String
@@ -127197,10 +117189,6 @@ input SubcontrolWhereInput {
   responsiblePartyIDNEQ: ID
   responsiblePartyIDIn: [ID!]
   responsiblePartyIDNotIn: [ID!]
-  responsiblePartyIDGT: ID
-  responsiblePartyIDGTE: ID
-  responsiblePartyIDLT: ID
-  responsiblePartyIDLTE: ID
   responsiblePartyIDContains: ID
   responsiblePartyIDHasPrefix: ID
   responsiblePartyIDHasSuffix: ID
@@ -127233,10 +117221,6 @@ input SubcontrolWhereInput {
   implementationDescriptionNEQ: String
   implementationDescriptionIn: [String!]
   implementationDescriptionNotIn: [String!]
-  implementationDescriptionGT: String
-  implementationDescriptionGTE: String
-  implementationDescriptionLT: String
-  implementationDescriptionLTE: String
   implementationDescriptionContains: String
   implementationDescriptionHasPrefix: String
   implementationDescriptionHasSuffix: String
@@ -127251,10 +117235,6 @@ input SubcontrolWhereInput {
   publicRepresentationNEQ: String
   publicRepresentationIn: [String!]
   publicRepresentationNotIn: [String!]
-  publicRepresentationGT: String
-  publicRepresentationGTE: String
-  publicRepresentationLT: String
-  publicRepresentationLTE: String
   publicRepresentationContains: String
   publicRepresentationHasPrefix: String
   publicRepresentationHasSuffix: String
@@ -127278,10 +117258,6 @@ input SubcontrolWhereInput {
   sourceNameNEQ: String
   sourceNameIn: [String!]
   sourceNameNotIn: [String!]
-  sourceNameGT: String
-  sourceNameGTE: String
-  sourceNameLT: String
-  sourceNameLTE: String
   sourceNameContains: String
   sourceNameHasPrefix: String
   sourceNameHasSuffix: String
@@ -127296,10 +117272,6 @@ input SubcontrolWhereInput {
   referenceFrameworkNEQ: String
   referenceFrameworkIn: [String!]
   referenceFrameworkNotIn: [String!]
-  referenceFrameworkGT: String
-  referenceFrameworkGTE: String
-  referenceFrameworkLT: String
-  referenceFrameworkLTE: String
   referenceFrameworkContains: String
   referenceFrameworkHasPrefix: String
   referenceFrameworkHasSuffix: String
@@ -127314,10 +117286,6 @@ input SubcontrolWhereInput {
   referenceFrameworkRevisionNEQ: String
   referenceFrameworkRevisionIn: [String!]
   referenceFrameworkRevisionNotIn: [String!]
-  referenceFrameworkRevisionGT: String
-  referenceFrameworkRevisionGTE: String
-  referenceFrameworkRevisionLT: String
-  referenceFrameworkRevisionLTE: String
   referenceFrameworkRevisionContains: String
   referenceFrameworkRevisionHasPrefix: String
   referenceFrameworkRevisionHasSuffix: String
@@ -127332,10 +117300,6 @@ input SubcontrolWhereInput {
   categoryNEQ: String
   categoryIn: [String!]
   categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
   categoryContains: String
   categoryHasPrefix: String
   categoryHasSuffix: String
@@ -127350,10 +117314,6 @@ input SubcontrolWhereInput {
   categoryIDNEQ: String
   categoryIDIn: [String!]
   categoryIDNotIn: [String!]
-  categoryIDGT: String
-  categoryIDGTE: String
-  categoryIDLT: String
-  categoryIDLTE: String
   categoryIDContains: String
   categoryIDHasPrefix: String
   categoryIDHasSuffix: String
@@ -127368,10 +117328,6 @@ input SubcontrolWhereInput {
   subcategoryNEQ: String
   subcategoryIn: [String!]
   subcategoryNotIn: [String!]
-  subcategoryGT: String
-  subcategoryGTE: String
-  subcategoryLT: String
-  subcategoryLTE: String
   subcategoryContains: String
   subcategoryHasPrefix: String
   subcategoryHasSuffix: String
@@ -127386,10 +117342,6 @@ input SubcontrolWhereInput {
   controlOwnerIDNEQ: ID
   controlOwnerIDIn: [ID!]
   controlOwnerIDNotIn: [ID!]
-  controlOwnerIDGT: ID
-  controlOwnerIDGTE: ID
-  controlOwnerIDLT: ID
-  controlOwnerIDLTE: ID
   controlOwnerIDContains: ID
   controlOwnerIDHasPrefix: ID
   controlOwnerIDHasSuffix: ID
@@ -127404,10 +117356,6 @@ input SubcontrolWhereInput {
   delegateIDNEQ: ID
   delegateIDIn: [ID!]
   delegateIDNotIn: [ID!]
-  delegateIDGT: ID
-  delegateIDGTE: ID
-  delegateIDLT: ID
-  delegateIDLTE: ID
   delegateIDContains: ID
   delegateIDHasPrefix: ID
   delegateIDHasSuffix: ID
@@ -127422,10 +117370,6 @@ input SubcontrolWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -127447,10 +117391,6 @@ input SubcontrolWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -127465,10 +117405,6 @@ input SubcontrolWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -127483,10 +117419,6 @@ input SubcontrolWhereInput {
   subcontrolKindNameNEQ: String
   subcontrolKindNameIn: [String!]
   subcontrolKindNameNotIn: [String!]
-  subcontrolKindNameGT: String
-  subcontrolKindNameGTE: String
-  subcontrolKindNameLT: String
-  subcontrolKindNameLTE: String
   subcontrolKindNameContains: String
   subcontrolKindNameHasPrefix: String
   subcontrolKindNameHasSuffix: String
@@ -127501,10 +117433,6 @@ input SubcontrolWhereInput {
   subcontrolKindIDNEQ: ID
   subcontrolKindIDIn: [ID!]
   subcontrolKindIDNotIn: [ID!]
-  subcontrolKindIDGT: ID
-  subcontrolKindIDGTE: ID
-  subcontrolKindIDLT: ID
-  subcontrolKindIDLTE: ID
   subcontrolKindIDContains: ID
   subcontrolKindIDHasPrefix: ID
   subcontrolKindIDHasSuffix: ID
@@ -127526,10 +117454,6 @@ input SubcontrolWhereInput {
   refCodeNEQ: String
   refCodeIn: [String!]
   refCodeNotIn: [String!]
-  refCodeGT: String
-  refCodeGTE: String
-  refCodeLT: String
-  refCodeLTE: String
   refCodeContains: String
   refCodeHasPrefix: String
   refCodeHasSuffix: String
@@ -127542,10 +117466,6 @@ input SubcontrolWhereInput {
   controlIDNEQ: ID
   controlIDIn: [ID!]
   controlIDNotIn: [ID!]
-  controlIDGT: ID
-  controlIDGTE: ID
-  controlIDLT: ID
-  controlIDLTE: ID
   controlIDContains: ID
   controlIDHasPrefix: ID
   controlIDHasSuffix: ID
@@ -127651,11 +117571,6 @@ input SubcontrolWhereInput {
   """
   hasControlImplementations: Boolean
   hasControlImplementationsWith: [ControlImplementationWhereInput!]
-  """
-  scheduled_jobs edge predicates
-  """
-  hasScheduledJobs: Boolean
-  hasScheduledJobsWith: [ScheduledJobWhereInput!]
   """
   workflow_object_refs edge predicates
   """
@@ -127880,19 +117795,12 @@ input SubprocessorWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -127903,9 +117811,6 @@ input SubprocessorWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -127919,10 +117824,6 @@ input SubprocessorWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -127937,10 +117838,6 @@ input SubprocessorWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -127955,10 +117852,6 @@ input SubprocessorWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -127973,10 +117866,6 @@ input SubprocessorWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -127998,10 +117887,6 @@ input SubprocessorWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -128016,10 +117901,6 @@ input SubprocessorWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -128034,10 +117915,6 @@ input SubprocessorWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -128050,10 +117927,6 @@ input SubprocessorWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -128068,10 +117941,6 @@ input SubprocessorWhereInput {
   logoRemoteURLNEQ: String
   logoRemoteURLIn: [String!]
   logoRemoteURLNotIn: [String!]
-  logoRemoteURLGT: String
-  logoRemoteURLGTE: String
-  logoRemoteURLLT: String
-  logoRemoteURLLTE: String
   logoRemoteURLContains: String
   logoRemoteURLHasPrefix: String
   logoRemoteURLHasSuffix: String
@@ -128086,10 +117955,6 @@ input SubprocessorWhereInput {
   logoFileIDNEQ: ID
   logoFileIDIn: [ID!]
   logoFileIDNotIn: [ID!]
-  logoFileIDGT: ID
-  logoFileIDGTE: ID
-  logoFileIDLT: ID
-  logoFileIDLTE: ID
   logoFileIDContains: ID
   logoFileIDHasPrefix: ID
   logoFileIDHasSuffix: ID
@@ -128316,19 +118181,12 @@ input SubscriberWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -128339,9 +118197,6 @@ input SubscriberWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -128355,10 +118210,6 @@ input SubscriberWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -128373,10 +118224,6 @@ input SubscriberWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -128391,10 +118238,6 @@ input SubscriberWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -128409,10 +118252,6 @@ input SubscriberWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -128427,10 +118266,6 @@ input SubscriberWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -128445,10 +118280,6 @@ input SubscriberWhereInput {
   emailNEQ: String
   emailIn: [String!]
   emailNotIn: [String!]
-  emailGT: String
-  emailGTE: String
-  emailLT: String
-  emailLTE: String
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
@@ -128461,10 +118292,6 @@ input SubscriberWhereInput {
   phoneNumberNEQ: String
   phoneNumberIn: [String!]
   phoneNumberNotIn: [String!]
-  phoneNumberGT: String
-  phoneNumberGTE: String
-  phoneNumberLT: String
-  phoneNumberLTE: String
   phoneNumberContains: String
   phoneNumberHasPrefix: String
   phoneNumberHasSuffix: String
@@ -128497,8 +118324,6 @@ input SubscriberWhereInput {
   """
   sendAttempts: Int
   sendAttemptsNEQ: Int
-  sendAttemptsIn: [Int!]
-  sendAttemptsNotIn: [Int!]
   sendAttemptsGT: Int
   sendAttemptsGTE: Int
   sendAttemptsLT: Int
@@ -128510,10 +118335,6 @@ input SubscriberWhereInput {
   contactIDNEQ: ID
   contactIDIn: [ID!]
   contactIDNotIn: [ID!]
-  contactIDGT: ID
-  contactIDGTE: ID
-  contactIDLT: ID
-  contactIDLTE: ID
   contactIDContains: ID
   contactIDHasPrefix: ID
   contactIDHasSuffix: ID
@@ -128528,10 +118349,6 @@ input SubscriberWhereInput {
   userIDNEQ: ID
   userIDIn: [ID!]
   userIDNotIn: [ID!]
-  userIDGT: ID
-  userIDGTE: ID
-  userIDLT: ID
-  userIDLTE: ID
   userIDContains: ID
   userIDHasPrefix: ID
   userIDHasSuffix: ID
@@ -128829,19 +118646,12 @@ input SystemDetailWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -128852,9 +118662,6 @@ input SystemDetailWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -128868,10 +118675,6 @@ input SystemDetailWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -128886,10 +118689,6 @@ input SystemDetailWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -128904,10 +118703,6 @@ input SystemDetailWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -128922,10 +118717,6 @@ input SystemDetailWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -128938,10 +118729,6 @@ input SystemDetailWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -128956,10 +118743,6 @@ input SystemDetailWhereInput {
   systemNameNEQ: String
   systemNameIn: [String!]
   systemNameNotIn: [String!]
-  systemNameGT: String
-  systemNameGTE: String
-  systemNameLT: String
-  systemNameLTE: String
   systemNameContains: String
   systemNameHasPrefix: String
   systemNameHasSuffix: String
@@ -128972,10 +118755,6 @@ input SystemDetailWhereInput {
   versionNEQ: String
   versionIn: [String!]
   versionNotIn: [String!]
-  versionGT: String
-  versionGTE: String
-  versionLT: String
-  versionLTE: String
   versionContains: String
   versionHasPrefix: String
   versionHasSuffix: String
@@ -128990,10 +118769,6 @@ input SystemDetailWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -129008,10 +118783,6 @@ input SystemDetailWhereInput {
   authorizationBoundaryNEQ: String
   authorizationBoundaryIn: [String!]
   authorizationBoundaryNotIn: [String!]
-  authorizationBoundaryGT: String
-  authorizationBoundaryGTE: String
-  authorizationBoundaryLT: String
-  authorizationBoundaryLTE: String
   authorizationBoundaryContains: String
   authorizationBoundaryHasPrefix: String
   authorizationBoundaryHasSuffix: String
@@ -129032,9 +118803,6 @@ input SystemDetailWhereInput {
   last_reviewed field predicates
   """
   lastReviewed: DateTime
-  lastReviewedNEQ: DateTime
-  lastReviewedIn: [DateTime!]
-  lastReviewedNotIn: [DateTime!]
   lastReviewedGT: DateTime
   lastReviewedGTE: DateTime
   lastReviewedLT: DateTime
@@ -129156,19 +118924,12 @@ input TFASettingWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -129179,9 +118940,6 @@ input TFASettingWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -129195,10 +118953,6 @@ input TFASettingWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -129213,10 +118967,6 @@ input TFASettingWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -129231,10 +118981,6 @@ input TFASettingWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -129375,19 +119121,12 @@ input TagDefinitionWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -129398,9 +119137,6 @@ input TagDefinitionWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -129414,10 +119150,6 @@ input TagDefinitionWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -129432,10 +119164,6 @@ input TagDefinitionWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -129450,10 +119178,6 @@ input TagDefinitionWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -129468,10 +119192,6 @@ input TagDefinitionWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -129493,10 +119213,6 @@ input TagDefinitionWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -129511,10 +119227,6 @@ input TagDefinitionWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -129529,10 +119241,6 @@ input TagDefinitionWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -129545,10 +119253,6 @@ input TagDefinitionWhereInput {
   slugNEQ: String
   slugIn: [String!]
   slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
   slugContains: String
   slugHasPrefix: String
   slugHasSuffix: String
@@ -129563,10 +119267,6 @@ input TagDefinitionWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -129581,10 +119281,6 @@ input TagDefinitionWhereInput {
   colorNEQ: String
   colorIn: [String!]
   colorNotIn: [String!]
-  colorGT: String
-  colorGTE: String
-  colorLT: String
-  colorLTE: String
   colorContains: String
   colorHasPrefix: String
   colorHasSuffix: String
@@ -130377,19 +120073,12 @@ input TaskWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -130400,9 +120089,6 @@ input TaskWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -130416,10 +120102,6 @@ input TaskWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -130434,10 +120116,6 @@ input TaskWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -130452,10 +120130,6 @@ input TaskWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -130470,10 +120144,6 @@ input TaskWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -130486,10 +120156,6 @@ input TaskWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -130504,10 +120170,6 @@ input TaskWhereInput {
   taskKindNameNEQ: String
   taskKindNameIn: [String!]
   taskKindNameNotIn: [String!]
-  taskKindNameGT: String
-  taskKindNameGTE: String
-  taskKindNameLT: String
-  taskKindNameLTE: String
   taskKindNameContains: String
   taskKindNameHasPrefix: String
   taskKindNameHasSuffix: String
@@ -130522,10 +120184,6 @@ input TaskWhereInput {
   taskKindIDNEQ: ID
   taskKindIDIn: [ID!]
   taskKindIDNotIn: [ID!]
-  taskKindIDGT: ID
-  taskKindIDGTE: ID
-  taskKindIDLT: ID
-  taskKindIDLTE: ID
   taskKindIDContains: ID
   taskKindIDHasPrefix: ID
   taskKindIDHasSuffix: ID
@@ -130540,10 +120198,6 @@ input TaskWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -130558,10 +120212,6 @@ input TaskWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -130576,10 +120226,6 @@ input TaskWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -130594,10 +120240,6 @@ input TaskWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -130619,10 +120261,6 @@ input TaskWhereInput {
   externalUUIDNEQ: String
   externalUUIDIn: [String!]
   externalUUIDNotIn: [String!]
-  externalUUIDGT: String
-  externalUUIDGTE: String
-  externalUUIDLT: String
-  externalUUIDLTE: String
   externalUUIDContains: String
   externalUUIDHasPrefix: String
   externalUUIDHasSuffix: String
@@ -130637,10 +120275,6 @@ input TaskWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -130653,10 +120287,6 @@ input TaskWhereInput {
   detailsNEQ: String
   detailsIn: [String!]
   detailsNotIn: [String!]
-  detailsGT: String
-  detailsGTE: String
-  detailsLT: String
-  detailsLTE: String
   detailsContains: String
   detailsHasPrefix: String
   detailsHasSuffix: String
@@ -130675,9 +120305,6 @@ input TaskWhereInput {
   due field predicates
   """
   due: DateTime
-  dueNEQ: DateTime
-  dueIn: [DateTime!]
-  dueNotIn: [DateTime!]
   dueGT: DateTime
   dueGTE: DateTime
   dueLT: DateTime
@@ -130688,9 +120315,6 @@ input TaskWhereInput {
   completed field predicates
   """
   completed: DateTime
-  completedNEQ: DateTime
-  completedIn: [DateTime!]
-  completedNotIn: [DateTime!]
   completedGT: DateTime
   completedGTE: DateTime
   completedLT: DateTime
@@ -130704,10 +120328,6 @@ input TaskWhereInput {
   assigneeIDNEQ: ID
   assigneeIDIn: [ID!]
   assigneeIDNotIn: [ID!]
-  assigneeIDGT: ID
-  assigneeIDGTE: ID
-  assigneeIDLT: ID
-  assigneeIDLTE: ID
   assigneeIDContains: ID
   assigneeIDHasPrefix: ID
   assigneeIDHasSuffix: ID
@@ -130722,10 +120342,6 @@ input TaskWhereInput {
   assignerIDNEQ: ID
   assignerIDIn: [ID!]
   assignerIDNotIn: [ID!]
-  assignerIDGT: ID
-  assignerIDGTE: ID
-  assignerIDLT: ID
-  assignerIDLTE: ID
   assignerIDContains: ID
   assignerIDHasPrefix: ID
   assignerIDHasSuffix: ID
@@ -130753,8 +120369,6 @@ input TaskWhereInput {
   """
   priority: Int
   priorityNEQ: Int
-  priorityIn: [Int!]
-  priorityNotIn: [Int!]
   priorityGT: Int
   priorityGTE: Int
   priorityLT: Int
@@ -130766,10 +120380,6 @@ input TaskWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -130784,10 +120394,6 @@ input TaskWhereInput {
   sourceKeyNEQ: String
   sourceKeyIn: [String!]
   sourceKeyNotIn: [String!]
-  sourceKeyGT: String
-  sourceKeyGTE: String
-  sourceKeyLT: String
-  sourceKeyLTE: String
   sourceKeyContains: String
   sourceKeyHasPrefix: String
   sourceKeyHasSuffix: String
@@ -130802,10 +120408,6 @@ input TaskWhereInput {
   idempotencyKeyNEQ: String
   idempotencyKeyIn: [String!]
   idempotencyKeyNotIn: [String!]
-  idempotencyKeyGT: String
-  idempotencyKeyGTE: String
-  idempotencyKeyLT: String
-  idempotencyKeyLTE: String
   idempotencyKeyContains: String
   idempotencyKeyHasPrefix: String
   idempotencyKeyHasSuffix: String
@@ -130820,10 +120422,6 @@ input TaskWhereInput {
   parentTaskIDNEQ: ID
   parentTaskIDIn: [ID!]
   parentTaskIDNotIn: [ID!]
-  parentTaskIDGT: ID
-  parentTaskIDGTE: ID
-  parentTaskIDLT: ID
-  parentTaskIDLTE: ID
   parentTaskIDContains: ID
   parentTaskIDHasPrefix: ID
   parentTaskIDHasSuffix: ID
@@ -131291,19 +120889,12 @@ input TemplateWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -131314,9 +120905,6 @@ input TemplateWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -131330,10 +120918,6 @@ input TemplateWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -131348,10 +120932,6 @@ input TemplateWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -131366,10 +120946,6 @@ input TemplateWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -131384,10 +120960,6 @@ input TemplateWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -131409,10 +120981,6 @@ input TemplateWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -131427,10 +120995,6 @@ input TemplateWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -131445,10 +121009,6 @@ input TemplateWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -131463,10 +121023,6 @@ input TemplateWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -131481,10 +121037,6 @@ input TemplateWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -131499,10 +121051,6 @@ input TemplateWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -131517,10 +121065,6 @@ input TemplateWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -131540,10 +121084,6 @@ input TemplateWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -131567,10 +121107,6 @@ input TemplateWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -132244,19 +121780,12 @@ input TrustCenterComplianceWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -132267,9 +121796,6 @@ input TrustCenterComplianceWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -132283,10 +121809,6 @@ input TrustCenterComplianceWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -132301,10 +121823,6 @@ input TrustCenterComplianceWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -132319,10 +121837,6 @@ input TrustCenterComplianceWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -132337,10 +121851,6 @@ input TrustCenterComplianceWhereInput {
   standardIDNEQ: ID
   standardIDIn: [ID!]
   standardIDNotIn: [ID!]
-  standardIDGT: ID
-  standardIDGTE: ID
-  standardIDLT: ID
-  standardIDLTE: ID
   standardIDContains: ID
   standardIDHasPrefix: ID
   standardIDHasSuffix: ID
@@ -132353,10 +121863,6 @@ input TrustCenterComplianceWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -132617,19 +122123,12 @@ input TrustCenterDocWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -132640,9 +122139,6 @@ input TrustCenterDocWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -132656,10 +122152,6 @@ input TrustCenterDocWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -132674,10 +122166,6 @@ input TrustCenterDocWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -132692,10 +122180,6 @@ input TrustCenterDocWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -132710,10 +122194,6 @@ input TrustCenterDocWhereInput {
   trustCenterDocKindNameNEQ: String
   trustCenterDocKindNameIn: [String!]
   trustCenterDocKindNameNotIn: [String!]
-  trustCenterDocKindNameGT: String
-  trustCenterDocKindNameGTE: String
-  trustCenterDocKindNameLT: String
-  trustCenterDocKindNameLTE: String
   trustCenterDocKindNameContains: String
   trustCenterDocKindNameHasPrefix: String
   trustCenterDocKindNameHasSuffix: String
@@ -132728,10 +122208,6 @@ input TrustCenterDocWhereInput {
   trustCenterDocKindIDNEQ: ID
   trustCenterDocKindIDIn: [ID!]
   trustCenterDocKindIDNotIn: [ID!]
-  trustCenterDocKindIDGT: ID
-  trustCenterDocKindIDGTE: ID
-  trustCenterDocKindIDLT: ID
-  trustCenterDocKindIDLTE: ID
   trustCenterDocKindIDContains: ID
   trustCenterDocKindIDHasPrefix: ID
   trustCenterDocKindIDHasSuffix: ID
@@ -132746,10 +122222,6 @@ input TrustCenterDocWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -132764,10 +122236,6 @@ input TrustCenterDocWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -132780,10 +122248,6 @@ input TrustCenterDocWhereInput {
   fileIDNEQ: ID
   fileIDIn: [ID!]
   fileIDNotIn: [ID!]
-  fileIDGT: ID
-  fileIDGTE: ID
-  fileIDLT: ID
-  fileIDLTE: ID
   fileIDContains: ID
   fileIDHasPrefix: ID
   fileIDHasSuffix: ID
@@ -132798,10 +122262,6 @@ input TrustCenterDocWhereInput {
   originalFileIDNEQ: ID
   originalFileIDIn: [ID!]
   originalFileIDNotIn: [ID!]
-  originalFileIDGT: ID
-  originalFileIDGTE: ID
-  originalFileIDLT: ID
-  originalFileIDLTE: ID
   originalFileIDContains: ID
   originalFileIDHasPrefix: ID
   originalFileIDHasSuffix: ID
@@ -132841,10 +122301,6 @@ input TrustCenterDocWhereInput {
   standardIDNEQ: ID
   standardIDIn: [ID!]
   standardIDNotIn: [ID!]
-  standardIDGT: ID
-  standardIDGTE: ID
-  standardIDLT: ID
-  standardIDLTE: ID
   standardIDContains: ID
   standardIDHasPrefix: ID
   standardIDHasSuffix: ID
@@ -133067,19 +122523,12 @@ input TrustCenterEntityWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -133090,9 +122539,6 @@ input TrustCenterEntityWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -133106,10 +122552,6 @@ input TrustCenterEntityWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -133124,10 +122566,6 @@ input TrustCenterEntityWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -133142,10 +122580,6 @@ input TrustCenterEntityWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -133160,10 +122594,6 @@ input TrustCenterEntityWhereInput {
   logoFileIDNEQ: ID
   logoFileIDIn: [ID!]
   logoFileIDNotIn: [ID!]
-  logoFileIDGT: ID
-  logoFileIDGTE: ID
-  logoFileIDLT: ID
-  logoFileIDLTE: ID
   logoFileIDContains: ID
   logoFileIDHasPrefix: ID
   logoFileIDHasSuffix: ID
@@ -133178,10 +122608,6 @@ input TrustCenterEntityWhereInput {
   urlNEQ: String
   urlIn: [String!]
   urlNotIn: [String!]
-  urlGT: String
-  urlGTE: String
-  urlLT: String
-  urlLTE: String
   urlContains: String
   urlHasPrefix: String
   urlHasSuffix: String
@@ -133196,10 +122622,6 @@ input TrustCenterEntityWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -133214,10 +122636,6 @@ input TrustCenterEntityWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -133415,19 +122833,12 @@ input TrustCenterFAQWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -133438,9 +122849,6 @@ input TrustCenterFAQWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -133454,10 +122862,6 @@ input TrustCenterFAQWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -133472,10 +122876,6 @@ input TrustCenterFAQWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -133490,10 +122890,6 @@ input TrustCenterFAQWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -133508,10 +122904,6 @@ input TrustCenterFAQWhereInput {
   trustCenterFaqKindNameNEQ: String
   trustCenterFaqKindNameIn: [String!]
   trustCenterFaqKindNameNotIn: [String!]
-  trustCenterFaqKindNameGT: String
-  trustCenterFaqKindNameGTE: String
-  trustCenterFaqKindNameLT: String
-  trustCenterFaqKindNameLTE: String
   trustCenterFaqKindNameContains: String
   trustCenterFaqKindNameHasPrefix: String
   trustCenterFaqKindNameHasSuffix: String
@@ -133526,10 +122918,6 @@ input TrustCenterFAQWhereInput {
   trustCenterFaqKindIDNEQ: ID
   trustCenterFaqKindIDIn: [ID!]
   trustCenterFaqKindIDNotIn: [ID!]
-  trustCenterFaqKindIDGT: ID
-  trustCenterFaqKindIDGTE: ID
-  trustCenterFaqKindIDLT: ID
-  trustCenterFaqKindIDLTE: ID
   trustCenterFaqKindIDContains: ID
   trustCenterFaqKindIDHasPrefix: ID
   trustCenterFaqKindIDHasSuffix: ID
@@ -133544,10 +122932,6 @@ input TrustCenterFAQWhereInput {
   noteIDNEQ: ID
   noteIDIn: [ID!]
   noteIDNotIn: [ID!]
-  noteIDGT: ID
-  noteIDGTE: ID
-  noteIDLT: ID
-  noteIDLTE: ID
   noteIDContains: ID
   noteIDHasPrefix: ID
   noteIDHasSuffix: ID
@@ -133560,10 +122944,6 @@ input TrustCenterFAQWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -133578,10 +122958,6 @@ input TrustCenterFAQWhereInput {
   referenceLinkNEQ: String
   referenceLinkIn: [String!]
   referenceLinkNotIn: [String!]
-  referenceLinkGT: String
-  referenceLinkGTE: String
-  referenceLinkLT: String
-  referenceLinkLTE: String
   referenceLinkContains: String
   referenceLinkHasPrefix: String
   referenceLinkHasSuffix: String
@@ -133594,8 +122970,6 @@ input TrustCenterFAQWhereInput {
   """
   displayOrder: Int
   displayOrderNEQ: Int
-  displayOrderIn: [Int!]
-  displayOrderNotIn: [Int!]
   displayOrderGT: Int
   displayOrderGTE: Int
   displayOrderLT: Int
@@ -133880,19 +123254,12 @@ input TrustCenterNDARequestWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -133903,9 +123270,6 @@ input TrustCenterNDARequestWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -133919,10 +123283,6 @@ input TrustCenterNDARequestWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -133937,10 +123297,6 @@ input TrustCenterNDARequestWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -133955,10 +123311,6 @@ input TrustCenterNDARequestWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -133973,10 +123325,6 @@ input TrustCenterNDARequestWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -133991,10 +123339,6 @@ input TrustCenterNDARequestWhereInput {
   firstNameNEQ: String
   firstNameIn: [String!]
   firstNameNotIn: [String!]
-  firstNameGT: String
-  firstNameGTE: String
-  firstNameLT: String
-  firstNameLTE: String
   firstNameContains: String
   firstNameHasPrefix: String
   firstNameHasSuffix: String
@@ -134007,10 +123351,6 @@ input TrustCenterNDARequestWhereInput {
   lastNameNEQ: String
   lastNameIn: [String!]
   lastNameNotIn: [String!]
-  lastNameGT: String
-  lastNameGTE: String
-  lastNameLT: String
-  lastNameLTE: String
   lastNameContains: String
   lastNameHasPrefix: String
   lastNameHasSuffix: String
@@ -134023,10 +123363,6 @@ input TrustCenterNDARequestWhereInput {
   emailNEQ: String
   emailIn: [String!]
   emailNotIn: [String!]
-  emailGT: String
-  emailGTE: String
-  emailLT: String
-  emailLTE: String
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
@@ -134039,10 +123375,6 @@ input TrustCenterNDARequestWhereInput {
   companyNameNEQ: String
   companyNameIn: [String!]
   companyNameNotIn: [String!]
-  companyNameGT: String
-  companyNameGTE: String
-  companyNameLT: String
-  companyNameLTE: String
   companyNameContains: String
   companyNameHasPrefix: String
   companyNameHasSuffix: String
@@ -134057,10 +123389,6 @@ input TrustCenterNDARequestWhereInput {
   reasonNEQ: String
   reasonIn: [String!]
   reasonNotIn: [String!]
-  reasonGT: String
-  reasonGTE: String
-  reasonLT: String
-  reasonLTE: String
   reasonContains: String
   reasonHasPrefix: String
   reasonHasSuffix: String
@@ -134090,9 +123418,6 @@ input TrustCenterNDARequestWhereInput {
   approved_at field predicates
   """
   approvedAt: DateTime
-  approvedAtNEQ: DateTime
-  approvedAtIn: [DateTime!]
-  approvedAtNotIn: [DateTime!]
   approvedAtGT: DateTime
   approvedAtGTE: DateTime
   approvedAtLT: DateTime
@@ -134106,10 +123431,6 @@ input TrustCenterNDARequestWhereInput {
   approvedByUserIDNEQ: ID
   approvedByUserIDIn: [ID!]
   approvedByUserIDNotIn: [ID!]
-  approvedByUserIDGT: ID
-  approvedByUserIDGTE: ID
-  approvedByUserIDLT: ID
-  approvedByUserIDLTE: ID
   approvedByUserIDContains: ID
   approvedByUserIDHasPrefix: ID
   approvedByUserIDHasSuffix: ID
@@ -134121,9 +123442,6 @@ input TrustCenterNDARequestWhereInput {
   signed_at field predicates
   """
   signedAt: DateTime
-  signedAtNEQ: DateTime
-  signedAtIn: [DateTime!]
-  signedAtNotIn: [DateTime!]
   signedAtGT: DateTime
   signedAtGTE: DateTime
   signedAtLT: DateTime
@@ -134137,10 +123455,6 @@ input TrustCenterNDARequestWhereInput {
   documentDataIDNEQ: ID
   documentDataIDIn: [ID!]
   documentDataIDNotIn: [ID!]
-  documentDataIDGT: ID
-  documentDataIDGTE: ID
-  documentDataIDLT: ID
-  documentDataIDLTE: ID
   documentDataIDContains: ID
   documentDataIDHasPrefix: ID
   documentDataIDHasSuffix: ID
@@ -134155,10 +123469,6 @@ input TrustCenterNDARequestWhereInput {
   fileIDNEQ: ID
   fileIDIn: [ID!]
   fileIDNotIn: [ID!]
-  fileIDGT: ID
-  fileIDGTE: ID
-  fileIDLT: ID
-  fileIDLTE: ID
   fileIDContains: ID
   fileIDHasPrefix: ID
   fileIDHasSuffix: ID
@@ -134494,19 +123804,12 @@ input TrustCenterSettingWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -134517,9 +123820,6 @@ input TrustCenterSettingWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -134533,10 +123833,6 @@ input TrustCenterSettingWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -134551,10 +123847,6 @@ input TrustCenterSettingWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -134569,10 +123861,6 @@ input TrustCenterSettingWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -134587,10 +123875,6 @@ input TrustCenterSettingWhereInput {
   trustCenterIDNEQ: String
   trustCenterIDIn: [String!]
   trustCenterIDNotIn: [String!]
-  trustCenterIDGT: String
-  trustCenterIDGTE: String
-  trustCenterIDLT: String
-  trustCenterIDLTE: String
   trustCenterIDContains: String
   trustCenterIDHasPrefix: String
   trustCenterIDHasSuffix: String
@@ -134605,10 +123889,6 @@ input TrustCenterSettingWhereInput {
   titleNEQ: String
   titleIn: [String!]
   titleNotIn: [String!]
-  titleGT: String
-  titleGTE: String
-  titleLT: String
-  titleLTE: String
   titleContains: String
   titleHasPrefix: String
   titleHasSuffix: String
@@ -134623,10 +123903,6 @@ input TrustCenterSettingWhereInput {
   companyNameNEQ: String
   companyNameIn: [String!]
   companyNameNotIn: [String!]
-  companyNameGT: String
-  companyNameGTE: String
-  companyNameLT: String
-  companyNameLTE: String
   companyNameContains: String
   companyNameHasPrefix: String
   companyNameHasSuffix: String
@@ -134641,10 +123917,6 @@ input TrustCenterSettingWhereInput {
   companyDescriptionNEQ: String
   companyDescriptionIn: [String!]
   companyDescriptionNotIn: [String!]
-  companyDescriptionGT: String
-  companyDescriptionGTE: String
-  companyDescriptionLT: String
-  companyDescriptionLTE: String
   companyDescriptionContains: String
   companyDescriptionHasPrefix: String
   companyDescriptionHasSuffix: String
@@ -134659,10 +123931,6 @@ input TrustCenterSettingWhereInput {
   overviewNEQ: String
   overviewIn: [String!]
   overviewNotIn: [String!]
-  overviewGT: String
-  overviewGTE: String
-  overviewLT: String
-  overviewLTE: String
   overviewContains: String
   overviewHasPrefix: String
   overviewHasSuffix: String
@@ -134677,10 +123945,6 @@ input TrustCenterSettingWhereInput {
   logoRemoteURLNEQ: String
   logoRemoteURLIn: [String!]
   logoRemoteURLNotIn: [String!]
-  logoRemoteURLGT: String
-  logoRemoteURLGTE: String
-  logoRemoteURLLT: String
-  logoRemoteURLLTE: String
   logoRemoteURLContains: String
   logoRemoteURLHasPrefix: String
   logoRemoteURLHasSuffix: String
@@ -134695,10 +123959,6 @@ input TrustCenterSettingWhereInput {
   logoLocalFileIDNEQ: ID
   logoLocalFileIDIn: [ID!]
   logoLocalFileIDNotIn: [ID!]
-  logoLocalFileIDGT: ID
-  logoLocalFileIDGTE: ID
-  logoLocalFileIDLT: ID
-  logoLocalFileIDLTE: ID
   logoLocalFileIDContains: ID
   logoLocalFileIDHasPrefix: ID
   logoLocalFileIDHasSuffix: ID
@@ -134713,10 +123973,6 @@ input TrustCenterSettingWhereInput {
   faviconRemoteURLNEQ: String
   faviconRemoteURLIn: [String!]
   faviconRemoteURLNotIn: [String!]
-  faviconRemoteURLGT: String
-  faviconRemoteURLGTE: String
-  faviconRemoteURLLT: String
-  faviconRemoteURLLTE: String
   faviconRemoteURLContains: String
   faviconRemoteURLHasPrefix: String
   faviconRemoteURLHasSuffix: String
@@ -134731,10 +123987,6 @@ input TrustCenterSettingWhereInput {
   faviconLocalFileIDNEQ: ID
   faviconLocalFileIDIn: [ID!]
   faviconLocalFileIDNotIn: [ID!]
-  faviconLocalFileIDGT: ID
-  faviconLocalFileIDGTE: ID
-  faviconLocalFileIDLT: ID
-  faviconLocalFileIDLTE: ID
   faviconLocalFileIDContains: ID
   faviconLocalFileIDHasPrefix: ID
   faviconLocalFileIDHasSuffix: ID
@@ -134749,10 +124001,6 @@ input TrustCenterSettingWhereInput {
   heroImageLocalFileIDNEQ: ID
   heroImageLocalFileIDIn: [ID!]
   heroImageLocalFileIDNotIn: [ID!]
-  heroImageLocalFileIDGT: ID
-  heroImageLocalFileIDGTE: ID
-  heroImageLocalFileIDLT: ID
-  heroImageLocalFileIDLTE: ID
   heroImageLocalFileIDContains: ID
   heroImageLocalFileIDHasPrefix: ID
   heroImageLocalFileIDHasSuffix: ID
@@ -134776,10 +124024,6 @@ input TrustCenterSettingWhereInput {
   primaryColorNEQ: String
   primaryColorIn: [String!]
   primaryColorNotIn: [String!]
-  primaryColorGT: String
-  primaryColorGTE: String
-  primaryColorLT: String
-  primaryColorLTE: String
   primaryColorContains: String
   primaryColorHasPrefix: String
   primaryColorHasSuffix: String
@@ -134794,10 +124038,6 @@ input TrustCenterSettingWhereInput {
   fontNEQ: String
   fontIn: [String!]
   fontNotIn: [String!]
-  fontGT: String
-  fontGTE: String
-  fontLT: String
-  fontLTE: String
   fontContains: String
   fontHasPrefix: String
   fontHasSuffix: String
@@ -134812,10 +124052,6 @@ input TrustCenterSettingWhereInput {
   foregroundColorNEQ: String
   foregroundColorIn: [String!]
   foregroundColorNotIn: [String!]
-  foregroundColorGT: String
-  foregroundColorGTE: String
-  foregroundColorLT: String
-  foregroundColorLTE: String
   foregroundColorContains: String
   foregroundColorHasPrefix: String
   foregroundColorHasSuffix: String
@@ -134830,10 +124066,6 @@ input TrustCenterSettingWhereInput {
   backgroundColorNEQ: String
   backgroundColorIn: [String!]
   backgroundColorNotIn: [String!]
-  backgroundColorGT: String
-  backgroundColorGTE: String
-  backgroundColorLT: String
-  backgroundColorLTE: String
   backgroundColorContains: String
   backgroundColorHasPrefix: String
   backgroundColorHasSuffix: String
@@ -134848,10 +124080,6 @@ input TrustCenterSettingWhereInput {
   accentColorNEQ: String
   accentColorIn: [String!]
   accentColorNotIn: [String!]
-  accentColorGT: String
-  accentColorGTE: String
-  accentColorLT: String
-  accentColorLTE: String
   accentColorContains: String
   accentColorHasPrefix: String
   accentColorHasSuffix: String
@@ -134866,10 +124094,6 @@ input TrustCenterSettingWhereInput {
   secondaryBackgroundColorNEQ: String
   secondaryBackgroundColorIn: [String!]
   secondaryBackgroundColorNotIn: [String!]
-  secondaryBackgroundColorGT: String
-  secondaryBackgroundColorGTE: String
-  secondaryBackgroundColorLT: String
-  secondaryBackgroundColorLTE: String
   secondaryBackgroundColorContains: String
   secondaryBackgroundColorHasPrefix: String
   secondaryBackgroundColorHasSuffix: String
@@ -134884,10 +124108,6 @@ input TrustCenterSettingWhereInput {
   secondaryForegroundColorNEQ: String
   secondaryForegroundColorIn: [String!]
   secondaryForegroundColorNotIn: [String!]
-  secondaryForegroundColorGT: String
-  secondaryForegroundColorGTE: String
-  secondaryForegroundColorLT: String
-  secondaryForegroundColorLTE: String
   secondaryForegroundColorContains: String
   secondaryForegroundColorHasPrefix: String
   secondaryForegroundColorHasSuffix: String
@@ -134918,10 +124138,6 @@ input TrustCenterSettingWhereInput {
   companyDomainNEQ: String
   companyDomainIn: [String!]
   companyDomainNotIn: [String!]
-  companyDomainGT: String
-  companyDomainGTE: String
-  companyDomainLT: String
-  companyDomainLTE: String
   companyDomainContains: String
   companyDomainHasPrefix: String
   companyDomainHasSuffix: String
@@ -134936,10 +124152,6 @@ input TrustCenterSettingWhereInput {
   securityContactNEQ: String
   securityContactIn: [String!]
   securityContactNotIn: [String!]
-  securityContactGT: String
-  securityContactGTE: String
-  securityContactLT: String
-  securityContactLTE: String
   securityContactContains: String
   securityContactHasPrefix: String
   securityContactHasSuffix: String
@@ -134972,9 +124184,6 @@ input TrustCenterSettingWhereInput {
   subprocessors_notified_at field predicates
   """
   subprocessorsNotifiedAt: Time
-  subprocessorsNotifiedAtNEQ: Time
-  subprocessorsNotifiedAtIn: [Time!]
-  subprocessorsNotifiedAtNotIn: [Time!]
   subprocessorsNotifiedAtGT: Time
   subprocessorsNotifiedAtGTE: Time
   subprocessorsNotifiedAtLT: Time
@@ -134988,10 +124197,6 @@ input TrustCenterSettingWhereInput {
   ndaApproverGroupIDNEQ: ID
   ndaApproverGroupIDIn: [ID!]
   ndaApproverGroupIDNotIn: [ID!]
-  ndaApproverGroupIDGT: ID
-  ndaApproverGroupIDGTE: ID
-  ndaApproverGroupIDLT: ID
-  ndaApproverGroupIDLTE: ID
   ndaApproverGroupIDContains: ID
   ndaApproverGroupIDHasPrefix: ID
   ndaApproverGroupIDHasSuffix: ID
@@ -135006,10 +124211,6 @@ input TrustCenterSettingWhereInput {
   statusPageURLNEQ: String
   statusPageURLIn: [String!]
   statusPageURLNotIn: [String!]
-  statusPageURLGT: String
-  statusPageURLGTE: String
-  statusPageURLLT: String
-  statusPageURLLTE: String
   statusPageURLContains: String
   statusPageURLHasPrefix: String
   statusPageURLHasSuffix: String
@@ -135209,19 +124410,12 @@ input TrustCenterSubprocessorWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -135232,9 +124426,6 @@ input TrustCenterSubprocessorWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -135248,10 +124439,6 @@ input TrustCenterSubprocessorWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -135266,10 +124453,6 @@ input TrustCenterSubprocessorWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -135284,10 +124467,6 @@ input TrustCenterSubprocessorWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -135302,10 +124481,6 @@ input TrustCenterSubprocessorWhereInput {
   trustCenterSubprocessorKindNameNEQ: String
   trustCenterSubprocessorKindNameIn: [String!]
   trustCenterSubprocessorKindNameNotIn: [String!]
-  trustCenterSubprocessorKindNameGT: String
-  trustCenterSubprocessorKindNameGTE: String
-  trustCenterSubprocessorKindNameLT: String
-  trustCenterSubprocessorKindNameLTE: String
   trustCenterSubprocessorKindNameContains: String
   trustCenterSubprocessorKindNameHasPrefix: String
   trustCenterSubprocessorKindNameHasSuffix: String
@@ -135320,10 +124495,6 @@ input TrustCenterSubprocessorWhereInput {
   trustCenterSubprocessorKindIDNEQ: ID
   trustCenterSubprocessorKindIDIn: [ID!]
   trustCenterSubprocessorKindIDNotIn: [ID!]
-  trustCenterSubprocessorKindIDGT: ID
-  trustCenterSubprocessorKindIDGTE: ID
-  trustCenterSubprocessorKindIDLT: ID
-  trustCenterSubprocessorKindIDLTE: ID
   trustCenterSubprocessorKindIDContains: ID
   trustCenterSubprocessorKindIDHasPrefix: ID
   trustCenterSubprocessorKindIDHasSuffix: ID
@@ -135338,10 +124509,6 @@ input TrustCenterSubprocessorWhereInput {
   subprocessorIDNEQ: ID
   subprocessorIDIn: [ID!]
   subprocessorIDNotIn: [ID!]
-  subprocessorIDGT: ID
-  subprocessorIDGTE: ID
-  subprocessorIDLT: ID
-  subprocessorIDLTE: ID
   subprocessorIDContains: ID
   subprocessorIDHasPrefix: ID
   subprocessorIDHasSuffix: ID
@@ -135354,10 +124521,6 @@ input TrustCenterSubprocessorWhereInput {
   trustCenterIDNEQ: ID
   trustCenterIDIn: [ID!]
   trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
   trustCenterIDContains: ID
   trustCenterIDHasPrefix: ID
   trustCenterIDHasSuffix: ID
@@ -135607,19 +124770,12 @@ input TrustCenterWatermarkConfigWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -135630,9 +124786,6 @@ input TrustCenterWatermarkConfigWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -135646,10 +124799,6 @@ input TrustCenterWatermarkConfigWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -135664,10 +124813,6 @@ input TrustCenterWatermarkConfigWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -135682,10 +124827,6 @@ input TrustCenterWatermarkConfigWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -135700,10 +124841,6 @@ input TrustCenterWatermarkConfigWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -135718,10 +124855,6 @@ input TrustCenterWatermarkConfigWhereInput {
   trustCenterIDNEQ: String
   trustCenterIDIn: [String!]
   trustCenterIDNotIn: [String!]
-  trustCenterIDGT: String
-  trustCenterIDGTE: String
-  trustCenterIDLT: String
-  trustCenterIDLTE: String
   trustCenterIDContains: String
   trustCenterIDHasPrefix: String
   trustCenterIDHasSuffix: String
@@ -135743,10 +124876,6 @@ input TrustCenterWatermarkConfigWhereInput {
   logoIDNEQ: ID
   logoIDIn: [ID!]
   logoIDNotIn: [ID!]
-  logoIDGT: ID
-  logoIDGTE: ID
-  logoIDLT: ID
-  logoIDLTE: ID
   logoIDContains: ID
   logoIDHasPrefix: ID
   logoIDHasSuffix: ID
@@ -135761,10 +124890,6 @@ input TrustCenterWatermarkConfigWhereInput {
   textNEQ: String
   textIn: [String!]
   textNotIn: [String!]
-  textGT: String
-  textGTE: String
-  textLT: String
-  textLTE: String
   textContains: String
   textHasPrefix: String
   textHasSuffix: String
@@ -135818,10 +124943,6 @@ input TrustCenterWatermarkConfigWhereInput {
   colorNEQ: String
   colorIn: [String!]
   colorNotIn: [String!]
-  colorGT: String
-  colorGTE: String
-  colorLT: String
-  colorLTE: String
   colorContains: String
   colorHasPrefix: String
   colorHasSuffix: String
@@ -135879,19 +125000,12 @@ input TrustCenterWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -135902,9 +125016,6 @@ input TrustCenterWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -135918,10 +125029,6 @@ input TrustCenterWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -135936,10 +125043,6 @@ input TrustCenterWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -135954,10 +125057,6 @@ input TrustCenterWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -135972,10 +125071,6 @@ input TrustCenterWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -135990,10 +125085,6 @@ input TrustCenterWhereInput {
   slugNEQ: String
   slugIn: [String!]
   slugNotIn: [String!]
-  slugGT: String
-  slugGTE: String
-  slugLT: String
-  slugLTE: String
   slugContains: String
   slugHasPrefix: String
   slugHasSuffix: String
@@ -136008,10 +125099,6 @@ input TrustCenterWhereInput {
   customDomainIDNEQ: ID
   customDomainIDIn: [ID!]
   customDomainIDNotIn: [ID!]
-  customDomainIDGT: ID
-  customDomainIDGTE: ID
-  customDomainIDLT: ID
-  customDomainIDLTE: ID
   customDomainIDContains: ID
   customDomainIDHasPrefix: ID
   customDomainIDHasSuffix: ID
@@ -136026,10 +125113,6 @@ input TrustCenterWhereInput {
   previewDomainIDNEQ: ID
   previewDomainIDIn: [ID!]
   previewDomainIDNotIn: [ID!]
-  previewDomainIDGT: ID
-  previewDomainIDGTE: ID
-  previewDomainIDLT: ID
-  previewDomainIDLTE: ID
   previewDomainIDContains: ID
   previewDomainIDHasPrefix: ID
   previewDomainIDHasSuffix: ID
@@ -136044,10 +125127,6 @@ input TrustCenterWhereInput {
   pirschDomainIDNEQ: String
   pirschDomainIDIn: [String!]
   pirschDomainIDNotIn: [String!]
-  pirschDomainIDGT: String
-  pirschDomainIDGTE: String
-  pirschDomainIDLT: String
-  pirschDomainIDLTE: String
   pirschDomainIDContains: String
   pirschDomainIDHasPrefix: String
   pirschDomainIDHasSuffix: String
@@ -136062,10 +125141,6 @@ input TrustCenterWhereInput {
   pirschIdentificationCodeNEQ: String
   pirschIdentificationCodeIn: [String!]
   pirschIdentificationCodeNotIn: [String!]
-  pirschIdentificationCodeGT: String
-  pirschIdentificationCodeGTE: String
-  pirschIdentificationCodeLT: String
-  pirschIdentificationCodeLTE: String
   pirschIdentificationCodeContains: String
   pirschIdentificationCodeHasPrefix: String
   pirschIdentificationCodeHasSuffix: String
@@ -136080,10 +125155,6 @@ input TrustCenterWhereInput {
   pirschAccessLinkNEQ: String
   pirschAccessLinkIn: [String!]
   pirschAccessLinkNotIn: [String!]
-  pirschAccessLinkGT: String
-  pirschAccessLinkGTE: String
-  pirschAccessLinkLT: String
-  pirschAccessLinkLTE: String
   pirschAccessLinkContains: String
   pirschAccessLinkHasPrefix: String
   pirschAccessLinkHasSuffix: String
@@ -136107,10 +125178,6 @@ input TrustCenterWhereInput {
   subprocessorURLNEQ: String
   subprocessorURLIn: [String!]
   subprocessorURLNotIn: [String!]
-  subprocessorURLGT: String
-  subprocessorURLGTE: String
-  subprocessorURLLT: String
-  subprocessorURLLTE: String
   subprocessorURLContains: String
   subprocessorURLHasPrefix: String
   subprocessorURLHasSuffix: String
@@ -137507,9 +126574,6 @@ input UpdateControlInput {
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
-  addScheduledJobIDs: [ID!]
-  removeScheduledJobIDs: [ID!]
-  clearScheduledJobs: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
@@ -138889,6 +127953,11 @@ input UpdateEvidenceInput {
   """
   reviewFrequency: EvidenceFrequency
   clearReviewFrequency: Boolean
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
+  clearAuditorReferenceID: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -138905,6 +127974,12 @@ input UpdateEvidenceInput {
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
   clearControlImplementations: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -140236,184 +129311,6 @@ input UpdateInviteInput {
   clearGroups: Boolean
 }
 """
-UpdateJobResultInput is used for update JobResult object.
-Input was generated by ent.
-"""
-input UpdateJobResultInput {
-  """
-  the status of this job. did it fail? did it succeed?
-  """
-  status: JobResultJobExecutionStatus
-  """
-  the log output from the job
-  """
-  log: String
-  clearLog: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  scheduledJobID: ID
-  fileID: ID
-}
-"""
-UpdateJobRunnerInput is used for update JobRunner object.
-Input was generated by ent.
-"""
-input UpdateJobRunnerInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @readOnly
-  clearInternalNotes: Boolean @readOnly
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
-  """
-  the name of the runner
-  """
-  name: String
-  """
-  the IP address of this runner
-  """
-  ipAddress: String
-  clearIPAddress: Boolean
-  """
-  the last time this runner was seen
-  """
-  lastSeen: Time
-  clearLastSeen: Boolean
-  """
-  the version of the runner
-  """
-  version: String
-  clearVersion: Boolean
-  """
-  the operating system of the runner
-  """
-  os: String
-  clearOs: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  addJobRunnerTokenIDs: [ID!]
-  removeJobRunnerTokenIDs: [ID!]
-  clearJobRunnerTokens: Boolean
-}
-"""
-UpdateJobRunnerRegistrationTokenInput is used for update JobRunnerRegistrationToken object.
-Input was generated by ent.
-"""
-input UpdateJobRunnerRegistrationTokenInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  lastUsedAt: Time
-  clearLastUsedAt: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  jobRunnerID: ID
-  clearJobRunner: Boolean
-}
-"""
-UpdateJobRunnerTokenInput is used for update JobRunnerToken object.
-Input was generated by ent.
-"""
-input UpdateJobRunnerTokenInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  lastUsedAt: Time
-  clearLastUsedAt: Boolean
-  """
-  whether the token is active
-  """
-  isActive: Boolean
-  clearIsActive: Boolean
-  """
-  the reason the token was revoked
-  """
-  revokedReason: String
-  clearRevokedReason: Boolean
-  """
-  the user who revoked the token
-  """
-  revokedBy: String
-  clearRevokedBy: Boolean
-  """
-  when the token was revoked
-  """
-  revokedAt: Time
-  clearRevokedAt: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  addJobRunnerIDs: [ID!]
-  removeJobRunnerIDs: [ID!]
-  clearJobRunners: Boolean
-}
-"""
-UpdateJobTemplateInput is used for update JobTemplate object.
-Input was generated by ent.
-"""
-input UpdateJobTemplateInput {
-  """
-  tags associated with the object
-  """
-  tags: [String!]
-  appendTags: [String!]
-  clearTags: Boolean
-  """
-  internal notes about the object creation, this field is only available to system admins
-  """
-  internalNotes: String @readOnly
-  clearInternalNotes: Boolean @readOnly
-  """
-  an internal identifier for the mapping, this field is only available to system admins
-  """
-  systemInternalID: String @readOnly
-  clearSystemInternalID: Boolean
-  """
-  the title of the job
-  """
-  title: String
-  """
-  the short description of the job and what it does
-  """
-  description: String
-  clearDescription: Boolean
-  """
-  the url from where to download the script from
-  """
-  downloadURL: String
-  """
-  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
-  """
-  configuration: JobConfiguration
-  appendConfiguration: JobConfiguration
-  clearConfiguration: Boolean
-  """
-  cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
-  """
-  cron: String
-  clearCron: Boolean
-  ownerID: ID
-  clearOwner: Boolean
-  addScheduledJobIDs: [ID!]
-  removeScheduledJobIDs: [ID!]
-  clearScheduledJobs: Boolean
-}
-"""
 UpdateMappableDomainInput is used for update MappableDomain object.
 Input was generated by ent.
 """
@@ -141000,18 +129897,6 @@ input UpdateOrganizationInput {
   addInviteCreatorIDs: [ID!]
   removeInviteCreatorIDs: [ID!]
   clearInviteCreators: Boolean
-  addJobRunnerCreatorIDs: [ID!]
-  removeJobRunnerCreatorIDs: [ID!]
-  clearJobRunnerCreators: Boolean
-  addJobRunnerRegistrationTokenCreatorIDs: [ID!]
-  removeJobRunnerRegistrationTokenCreatorIDs: [ID!]
-  clearJobRunnerRegistrationTokenCreators: Boolean
-  addJobRunnerTokenCreatorIDs: [ID!]
-  removeJobRunnerTokenCreatorIDs: [ID!]
-  clearJobRunnerTokenCreators: Boolean
-  addJobTemplateCreatorIDs: [ID!]
-  removeJobTemplateCreatorIDs: [ID!]
-  clearJobTemplateCreators: Boolean
   addMappedControlCreatorIDs: [ID!]
   removeMappedControlCreatorIDs: [ID!]
   clearMappedControlCreators: Boolean
@@ -141051,12 +129936,6 @@ input UpdateOrganizationInput {
   addScanCreatorIDs: [ID!]
   removeScanCreatorIDs: [ID!]
   clearScanCreators: Boolean
-  addScheduledJobCreatorIDs: [ID!]
-  removeScheduledJobCreatorIDs: [ID!]
-  clearScheduledJobCreators: Boolean
-  addScheduledJobRunCreatorIDs: [ID!]
-  removeScheduledJobRunCreatorIDs: [ID!]
-  clearScheduledJobRunCreators: Boolean
   addSLADefinitionCreatorIDs: [ID!]
   removeSLADefinitionCreatorIDs: [ID!]
   clearSLADefinitionCreators: Boolean
@@ -141265,30 +130144,9 @@ input UpdateOrganizationInput {
   addCustomDomainIDs: [ID!]
   removeCustomDomainIDs: [ID!]
   clearCustomDomains: Boolean
-  addJobRunnerIDs: [ID!]
-  removeJobRunnerIDs: [ID!]
-  clearJobRunners: Boolean
-  addJobRunnerTokenIDs: [ID!]
-  removeJobRunnerTokenIDs: [ID!]
-  clearJobRunnerTokens: Boolean
-  addJobRunnerRegistrationTokenIDs: [ID!]
-  removeJobRunnerRegistrationTokenIDs: [ID!]
-  clearJobRunnerRegistrationTokens: Boolean
   addDNSVerificationIDs: [ID!]
   removeDNSVerificationIDs: [ID!]
   clearDNSVerifications: Boolean
-  addJobTemplateIDs: [ID!]
-  removeJobTemplateIDs: [ID!]
-  clearJobTemplates: Boolean
-  addScheduledJobIDs: [ID!]
-  removeScheduledJobIDs: [ID!]
-  clearScheduledJobs: Boolean
-  addJobResultIDs: [ID!]
-  removeJobResultIDs: [ID!]
-  clearJobResults: Boolean
-  addScheduledJobRunIDs: [ID!]
-  removeScheduledJobRunIDs: [ID!]
-  clearScheduledJobRuns: Boolean
   addTrustCenterIDs: [ID!]
   removeTrustCenterIDs: [ID!]
   clearTrustCenters: Boolean
@@ -142978,51 +131836,6 @@ input UpdateScanInput {
   clearPerformedByGroup: Boolean
 }
 """
-UpdateScheduledJobInput is used for update ScheduledJob object.
-Input was generated by ent.
-"""
-input UpdateScheduledJobInput {
-  """
-  whether the scheduled job is active
-  """
-  active: Boolean
-  """
-  the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
-  """
-  configuration: JobConfiguration
-  appendConfiguration: JobConfiguration
-  clearConfiguration: Boolean
-  """
-  cron 6-field syntax, defaults to the job template's cron if not provided
-  """
-  cron: String
-  clearCron: Boolean
-  jobTemplateID: ID
-  addControlIDs: [ID!]
-  removeControlIDs: [ID!]
-  clearControls: Boolean
-  addSubcontrolIDs: [ID!]
-  removeSubcontrolIDs: [ID!]
-  clearSubcontrols: Boolean
-  jobRunnerID: ID
-  clearJobRunner: Boolean
-}
-"""
-UpdateScheduledJobRunInput is used for update ScheduledJobRun object.
-Input was generated by ent.
-"""
-input UpdateScheduledJobRunInput {
-  """
-  The status of the job to be executed. By default will be pending but when
-  			scheduled on a runner, this will change to acquired.
-  """
-  status: ScheduledJobRunScheduledJobRunStatus
-  ownerID: ID
-  clearOwner: Boolean
-  scheduledJobID: ID
-  jobRunnerID: ID
-}
-"""
 UpdateStandardInput is used for update Standard object.
 Input was generated by ent.
 """
@@ -143357,9 +132170,6 @@ input UpdateSubcontrolInput {
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
   clearControlImplementations: Boolean
-  addScheduledJobIDs: [ID!]
-  removeScheduledJobIDs: [ID!]
-  clearScheduledJobs: Boolean
   addWorkflowObjectRefIDs: [ID!]
   removeWorkflowObjectRefIDs: [ID!]
   clearWorkflowObjectRefs: Boolean
@@ -145920,19 +134730,12 @@ input UserSettingWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -145943,9 +134746,6 @@ input UserSettingWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -145959,10 +134759,6 @@ input UserSettingWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -145977,10 +134773,6 @@ input UserSettingWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -145995,10 +134787,6 @@ input UserSettingWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -146013,10 +134801,6 @@ input UserSettingWhereInput {
   userIDNEQ: ID
   userIDIn: [ID!]
   userIDNotIn: [ID!]
-  userIDGT: ID
-  userIDGTE: ID
-  userIDLT: ID
-  userIDLTE: ID
   userIDContains: ID
   userIDHasPrefix: ID
   userIDHasSuffix: ID
@@ -146031,10 +134815,6 @@ input UserSettingWhereInput {
   delegateUserIDNEQ: String
   delegateUserIDIn: [String!]
   delegateUserIDNotIn: [String!]
-  delegateUserIDGT: String
-  delegateUserIDGTE: String
-  delegateUserIDLT: String
-  delegateUserIDLTE: String
   delegateUserIDContains: String
   delegateUserIDHasPrefix: String
   delegateUserIDHasSuffix: String
@@ -146046,9 +134826,6 @@ input UserSettingWhereInput {
   delegate_start_at field predicates
   """
   delegateStartAt: Time
-  delegateStartAtNEQ: Time
-  delegateStartAtIn: [Time!]
-  delegateStartAtNotIn: [Time!]
   delegateStartAtGT: Time
   delegateStartAtGTE: Time
   delegateStartAtLT: Time
@@ -146059,9 +134836,6 @@ input UserSettingWhereInput {
   delegate_end_at field predicates
   """
   delegateEndAt: Time
-  delegateEndAtNEQ: Time
-  delegateEndAtIn: [Time!]
-  delegateEndAtNotIn: [Time!]
   delegateEndAtGT: Time
   delegateEndAtGTE: Time
   delegateEndAtLT: Time
@@ -146077,9 +134851,6 @@ input UserSettingWhereInput {
   silenced_at field predicates
   """
   silencedAt: Time
-  silencedAtNEQ: Time
-  silencedAtIn: [Time!]
-  silencedAtNotIn: [Time!]
   silencedAtGT: Time
   silencedAtGTE: Time
   silencedAtLT: Time
@@ -146090,9 +134861,6 @@ input UserSettingWhereInput {
   suspended_at field predicates
   """
   suspendedAt: Time
-  suspendedAtNEQ: Time
-  suspendedAtIn: [Time!]
-  suspendedAtNotIn: [Time!]
   suspendedAtGT: Time
   suspendedAtGTE: Time
   suspendedAtLT: Time
@@ -146148,19 +134916,12 @@ input UserWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -146171,9 +134932,6 @@ input UserWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -146187,10 +134945,6 @@ input UserWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -146205,10 +134959,6 @@ input UserWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -146223,10 +134973,6 @@ input UserWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -146239,10 +134985,6 @@ input UserWhereInput {
   emailNEQ: String
   emailIn: [String!]
   emailNotIn: [String!]
-  emailGT: String
-  emailGTE: String
-  emailLT: String
-  emailLTE: String
   emailContains: String
   emailHasPrefix: String
   emailHasSuffix: String
@@ -146255,10 +134997,6 @@ input UserWhereInput {
   firstNameNEQ: String
   firstNameIn: [String!]
   firstNameNotIn: [String!]
-  firstNameGT: String
-  firstNameGTE: String
-  firstNameLT: String
-  firstNameLTE: String
   firstNameContains: String
   firstNameHasPrefix: String
   firstNameHasSuffix: String
@@ -146273,10 +135011,6 @@ input UserWhereInput {
   lastNameNEQ: String
   lastNameIn: [String!]
   lastNameNotIn: [String!]
-  lastNameGT: String
-  lastNameGTE: String
-  lastNameLT: String
-  lastNameLTE: String
   lastNameContains: String
   lastNameHasPrefix: String
   lastNameHasSuffix: String
@@ -146291,10 +135025,6 @@ input UserWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -146307,10 +135037,6 @@ input UserWhereInput {
   avatarRemoteURLNEQ: String
   avatarRemoteURLIn: [String!]
   avatarRemoteURLNotIn: [String!]
-  avatarRemoteURLGT: String
-  avatarRemoteURLGTE: String
-  avatarRemoteURLLT: String
-  avatarRemoteURLLTE: String
   avatarRemoteURLContains: String
   avatarRemoteURLHasPrefix: String
   avatarRemoteURLHasSuffix: String
@@ -146325,10 +135051,6 @@ input UserWhereInput {
   avatarLocalFileIDNEQ: ID
   avatarLocalFileIDIn: [ID!]
   avatarLocalFileIDNotIn: [ID!]
-  avatarLocalFileIDGT: ID
-  avatarLocalFileIDGTE: ID
-  avatarLocalFileIDLT: ID
-  avatarLocalFileIDLTE: ID
   avatarLocalFileIDContains: ID
   avatarLocalFileIDHasPrefix: ID
   avatarLocalFileIDHasSuffix: ID
@@ -146340,9 +135062,6 @@ input UserWhereInput {
   avatar_updated_at field predicates
   """
   avatarUpdatedAt: Time
-  avatarUpdatedAtNEQ: Time
-  avatarUpdatedAtIn: [Time!]
-  avatarUpdatedAtNotIn: [Time!]
   avatarUpdatedAtGT: Time
   avatarUpdatedAtGTE: Time
   avatarUpdatedAtLT: Time
@@ -146353,9 +135072,6 @@ input UserWhereInput {
   last_seen field predicates
   """
   lastSeen: Time
-  lastSeenNEQ: Time
-  lastSeenIn: [Time!]
-  lastSeenNotIn: [Time!]
   lastSeenGT: Time
   lastSeenGTE: Time
   lastSeenLT: Time
@@ -146378,10 +135094,6 @@ input UserWhereInput {
   subNEQ: String
   subIn: [String!]
   subNotIn: [String!]
-  subGT: String
-  subGTE: String
-  subLT: String
-  subLTE: String
   subContains: String
   subHasPrefix: String
   subHasSuffix: String
@@ -146412,10 +135124,6 @@ input UserWhereInput {
   scimExternalIDNEQ: String
   scimExternalIDIn: [String!]
   scimExternalIDNotIn: [String!]
-  scimExternalIDGT: String
-  scimExternalIDGTE: String
-  scimExternalIDLT: String
-  scimExternalIDLTE: String
   scimExternalIDContains: String
   scimExternalIDHasPrefix: String
   scimExternalIDHasSuffix: String
@@ -146430,10 +135138,6 @@ input UserWhereInput {
   scimUsernameNEQ: String
   scimUsernameIn: [String!]
   scimUsernameNotIn: [String!]
-  scimUsernameGT: String
-  scimUsernameGTE: String
-  scimUsernameLT: String
-  scimUsernameLTE: String
   scimUsernameContains: String
   scimUsernameHasPrefix: String
   scimUsernameHasSuffix: String
@@ -146455,10 +135159,6 @@ input UserWhereInput {
   scimPreferredLanguageNEQ: String
   scimPreferredLanguageIn: [String!]
   scimPreferredLanguageNotIn: [String!]
-  scimPreferredLanguageGT: String
-  scimPreferredLanguageGTE: String
-  scimPreferredLanguageLT: String
-  scimPreferredLanguageLTE: String
   scimPreferredLanguageContains: String
   scimPreferredLanguageHasPrefix: String
   scimPreferredLanguageHasSuffix: String
@@ -146473,10 +135173,6 @@ input UserWhereInput {
   scimLocaleNEQ: String
   scimLocaleIn: [String!]
   scimLocaleNotIn: [String!]
-  scimLocaleGT: String
-  scimLocaleGTE: String
-  scimLocaleLT: String
-  scimLocaleLTE: String
   scimLocaleContains: String
   scimLocaleHasPrefix: String
   scimLocaleHasSuffix: String
@@ -146787,19 +135483,12 @@ input VendorRiskScoreWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -146810,9 +135499,6 @@ input VendorRiskScoreWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -146826,10 +135512,6 @@ input VendorRiskScoreWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -146844,10 +135526,6 @@ input VendorRiskScoreWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -146862,10 +135540,6 @@ input VendorRiskScoreWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -146880,10 +135554,6 @@ input VendorRiskScoreWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -146898,10 +135568,6 @@ input VendorRiskScoreWhereInput {
   questionKeyNEQ: String
   questionKeyIn: [String!]
   questionKeyNotIn: [String!]
-  questionKeyGT: String
-  questionKeyGTE: String
-  questionKeyLT: String
-  questionKeyLTE: String
   questionKeyContains: String
   questionKeyHasPrefix: String
   questionKeyHasSuffix: String
@@ -146914,10 +135580,6 @@ input VendorRiskScoreWhereInput {
   questionNameNEQ: String
   questionNameIn: [String!]
   questionNameNotIn: [String!]
-  questionNameGT: String
-  questionNameGTE: String
-  questionNameLT: String
-  questionNameLTE: String
   questionNameContains: String
   questionNameHasPrefix: String
   questionNameHasSuffix: String
@@ -146930,10 +135592,6 @@ input VendorRiskScoreWhereInput {
   questionDescriptionNEQ: String
   questionDescriptionIn: [String!]
   questionDescriptionNotIn: [String!]
-  questionDescriptionGT: String
-  questionDescriptionGTE: String
-  questionDescriptionLT: String
-  questionDescriptionLTE: String
   questionDescriptionContains: String
   questionDescriptionHasPrefix: String
   questionDescriptionHasSuffix: String
@@ -146987,10 +135645,6 @@ input VendorRiskScoreWhereInput {
   answerNEQ: String
   answerIn: [String!]
   answerNotIn: [String!]
-  answerGT: String
-  answerGTE: String
-  answerLT: String
-  answerLTE: String
   answerContains: String
   answerHasPrefix: String
   answerHasSuffix: String
@@ -147005,10 +135659,6 @@ input VendorRiskScoreWhereInput {
   notesNEQ: String
   notesIn: [String!]
   notesNotIn: [String!]
-  notesGT: String
-  notesGTE: String
-  notesLT: String
-  notesLTE: String
   notesContains: String
   notesHasPrefix: String
   notesHasSuffix: String
@@ -147023,10 +135673,6 @@ input VendorRiskScoreWhereInput {
   vendorScoringConfigIDNEQ: ID
   vendorScoringConfigIDIn: [ID!]
   vendorScoringConfigIDNotIn: [ID!]
-  vendorScoringConfigIDGT: ID
-  vendorScoringConfigIDGTE: ID
-  vendorScoringConfigIDLT: ID
-  vendorScoringConfigIDLTE: ID
   vendorScoringConfigIDContains: ID
   vendorScoringConfigIDHasPrefix: ID
   vendorScoringConfigIDHasSuffix: ID
@@ -147041,10 +135687,6 @@ input VendorRiskScoreWhereInput {
   entityIDNEQ: ID
   entityIDIn: [ID!]
   entityIDNotIn: [ID!]
-  entityIDGT: ID
-  entityIDGTE: ID
-  entityIDLT: ID
-  entityIDLTE: ID
   entityIDContains: ID
   entityIDHasPrefix: ID
   entityIDHasSuffix: ID
@@ -147057,10 +135699,6 @@ input VendorRiskScoreWhereInput {
   assessmentResponseIDNEQ: ID
   assessmentResponseIDIn: [ID!]
   assessmentResponseIDNotIn: [ID!]
-  assessmentResponseIDGT: ID
-  assessmentResponseIDGTE: ID
-  assessmentResponseIDLT: ID
-  assessmentResponseIDLTE: ID
   assessmentResponseIDContains: ID
   assessmentResponseIDHasPrefix: ID
   assessmentResponseIDHasSuffix: ID
@@ -147230,19 +135868,12 @@ input VendorScoringConfigWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -147253,9 +135884,6 @@ input VendorScoringConfigWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -147269,10 +135897,6 @@ input VendorScoringConfigWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -147287,10 +135911,6 @@ input VendorScoringConfigWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -147305,10 +135925,6 @@ input VendorScoringConfigWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -147323,10 +135939,6 @@ input VendorScoringConfigWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -148290,19 +136902,12 @@ input VulnerabilityWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -148313,9 +136918,6 @@ input VulnerabilityWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -148329,10 +136931,6 @@ input VulnerabilityWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -148347,10 +136945,6 @@ input VulnerabilityWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -148365,10 +136959,6 @@ input VulnerabilityWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -148383,10 +136973,6 @@ input VulnerabilityWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -148399,10 +136985,6 @@ input VulnerabilityWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -148417,10 +136999,6 @@ input VulnerabilityWhereInput {
   reviewedByNEQ: String
   reviewedByIn: [String!]
   reviewedByNotIn: [String!]
-  reviewedByGT: String
-  reviewedByGTE: String
-  reviewedByLT: String
-  reviewedByLTE: String
   reviewedByContains: String
   reviewedByHasPrefix: String
   reviewedByHasSuffix: String
@@ -148435,10 +137013,6 @@ input VulnerabilityWhereInput {
   reviewedByUserIDNEQ: ID
   reviewedByUserIDIn: [ID!]
   reviewedByUserIDNotIn: [ID!]
-  reviewedByUserIDGT: ID
-  reviewedByUserIDGTE: ID
-  reviewedByUserIDLT: ID
-  reviewedByUserIDLTE: ID
   reviewedByUserIDContains: ID
   reviewedByUserIDHasPrefix: ID
   reviewedByUserIDHasSuffix: ID
@@ -148453,10 +137027,6 @@ input VulnerabilityWhereInput {
   reviewedByGroupIDNEQ: ID
   reviewedByGroupIDIn: [ID!]
   reviewedByGroupIDNotIn: [ID!]
-  reviewedByGroupIDGT: ID
-  reviewedByGroupIDGTE: ID
-  reviewedByGroupIDLT: ID
-  reviewedByGroupIDLTE: ID
   reviewedByGroupIDContains: ID
   reviewedByGroupIDHasPrefix: ID
   reviewedByGroupIDHasSuffix: ID
@@ -148471,10 +137041,6 @@ input VulnerabilityWhereInput {
   assignedToNEQ: String
   assignedToIn: [String!]
   assignedToNotIn: [String!]
-  assignedToGT: String
-  assignedToGTE: String
-  assignedToLT: String
-  assignedToLTE: String
   assignedToContains: String
   assignedToHasPrefix: String
   assignedToHasSuffix: String
@@ -148489,10 +137055,6 @@ input VulnerabilityWhereInput {
   assignedToUserIDNEQ: ID
   assignedToUserIDIn: [ID!]
   assignedToUserIDNotIn: [ID!]
-  assignedToUserIDGT: ID
-  assignedToUserIDGTE: ID
-  assignedToUserIDLT: ID
-  assignedToUserIDLTE: ID
   assignedToUserIDContains: ID
   assignedToUserIDHasPrefix: ID
   assignedToUserIDHasSuffix: ID
@@ -148507,10 +137069,6 @@ input VulnerabilityWhereInput {
   assignedToGroupIDNEQ: ID
   assignedToGroupIDIn: [ID!]
   assignedToGroupIDNotIn: [ID!]
-  assignedToGroupIDGT: ID
-  assignedToGroupIDGTE: ID
-  assignedToGroupIDLT: ID
-  assignedToGroupIDLTE: ID
   assignedToGroupIDContains: ID
   assignedToGroupIDHasPrefix: ID
   assignedToGroupIDHasSuffix: ID
@@ -148532,10 +137090,6 @@ input VulnerabilityWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -148550,10 +137104,6 @@ input VulnerabilityWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -148568,10 +137118,6 @@ input VulnerabilityWhereInput {
   environmentNameNEQ: String
   environmentNameIn: [String!]
   environmentNameNotIn: [String!]
-  environmentNameGT: String
-  environmentNameGTE: String
-  environmentNameLT: String
-  environmentNameLTE: String
   environmentNameContains: String
   environmentNameHasPrefix: String
   environmentNameHasSuffix: String
@@ -148586,10 +137132,6 @@ input VulnerabilityWhereInput {
   environmentIDNEQ: ID
   environmentIDIn: [ID!]
   environmentIDNotIn: [ID!]
-  environmentIDGT: ID
-  environmentIDGTE: ID
-  environmentIDLT: ID
-  environmentIDLTE: ID
   environmentIDContains: ID
   environmentIDHasPrefix: ID
   environmentIDHasSuffix: ID
@@ -148604,10 +137146,6 @@ input VulnerabilityWhereInput {
   scopeNameNEQ: String
   scopeNameIn: [String!]
   scopeNameNotIn: [String!]
-  scopeNameGT: String
-  scopeNameGTE: String
-  scopeNameLT: String
-  scopeNameLTE: String
   scopeNameContains: String
   scopeNameHasPrefix: String
   scopeNameHasSuffix: String
@@ -148622,10 +137160,6 @@ input VulnerabilityWhereInput {
   scopeIDNEQ: ID
   scopeIDIn: [ID!]
   scopeIDNotIn: [ID!]
-  scopeIDGT: ID
-  scopeIDGTE: ID
-  scopeIDLT: ID
-  scopeIDLTE: ID
   scopeIDContains: ID
   scopeIDHasPrefix: ID
   scopeIDHasSuffix: ID
@@ -148640,10 +137174,6 @@ input VulnerabilityWhereInput {
   vulnerabilityStatusNameNEQ: String
   vulnerabilityStatusNameIn: [String!]
   vulnerabilityStatusNameNotIn: [String!]
-  vulnerabilityStatusNameGT: String
-  vulnerabilityStatusNameGTE: String
-  vulnerabilityStatusNameLT: String
-  vulnerabilityStatusNameLTE: String
   vulnerabilityStatusNameContains: String
   vulnerabilityStatusNameHasPrefix: String
   vulnerabilityStatusNameHasSuffix: String
@@ -148658,10 +137188,6 @@ input VulnerabilityWhereInput {
   vulnerabilityStatusIDNEQ: ID
   vulnerabilityStatusIDIn: [ID!]
   vulnerabilityStatusIDNotIn: [ID!]
-  vulnerabilityStatusIDGT: ID
-  vulnerabilityStatusIDGTE: ID
-  vulnerabilityStatusIDLT: ID
-  vulnerabilityStatusIDLTE: ID
   vulnerabilityStatusIDContains: ID
   vulnerabilityStatusIDHasPrefix: ID
   vulnerabilityStatusIDHasSuffix: ID
@@ -148683,10 +137209,6 @@ input VulnerabilityWhereInput {
   externalOwnerIDNEQ: String
   externalOwnerIDIn: [String!]
   externalOwnerIDNotIn: [String!]
-  externalOwnerIDGT: String
-  externalOwnerIDGTE: String
-  externalOwnerIDLT: String
-  externalOwnerIDLTE: String
   externalOwnerIDContains: String
   externalOwnerIDHasPrefix: String
   externalOwnerIDHasSuffix: String
@@ -148710,10 +137232,6 @@ input VulnerabilityWhereInput {
   externalIDNEQ: String
   externalIDIn: [String!]
   externalIDNotIn: [String!]
-  externalIDGT: String
-  externalIDGTE: String
-  externalIDLT: String
-  externalIDLTE: String
   externalIDContains: String
   externalIDHasPrefix: String
   externalIDHasSuffix: String
@@ -148726,10 +137244,6 @@ input VulnerabilityWhereInput {
   cveIDNEQ: String
   cveIDIn: [String!]
   cveIDNotIn: [String!]
-  cveIDGT: String
-  cveIDGTE: String
-  cveIDLT: String
-  cveIDLTE: String
   cveIDContains: String
   cveIDHasPrefix: String
   cveIDHasSuffix: String
@@ -148744,10 +137258,6 @@ input VulnerabilityWhereInput {
   sourceNEQ: String
   sourceIn: [String!]
   sourceNotIn: [String!]
-  sourceGT: String
-  sourceGTE: String
-  sourceLT: String
-  sourceLTE: String
   sourceContains: String
   sourceHasPrefix: String
   sourceHasSuffix: String
@@ -148762,10 +137272,6 @@ input VulnerabilityWhereInput {
   displayNameNEQ: String
   displayNameIn: [String!]
   displayNameNotIn: [String!]
-  displayNameGT: String
-  displayNameGTE: String
-  displayNameLT: String
-  displayNameLTE: String
   displayNameContains: String
   displayNameHasPrefix: String
   displayNameHasSuffix: String
@@ -148780,10 +137286,6 @@ input VulnerabilityWhereInput {
   categoryNEQ: String
   categoryIn: [String!]
   categoryNotIn: [String!]
-  categoryGT: String
-  categoryGTE: String
-  categoryLT: String
-  categoryLTE: String
   categoryContains: String
   categoryHasPrefix: String
   categoryHasSuffix: String
@@ -148798,10 +137300,6 @@ input VulnerabilityWhereInput {
   severityNEQ: String
   severityIn: [String!]
   severityNotIn: [String!]
-  severityGT: String
-  severityGTE: String
-  severityLT: String
-  severityLTE: String
   severityContains: String
   severityHasPrefix: String
   severityHasSuffix: String
@@ -148855,10 +137353,6 @@ input VulnerabilityWhereInput {
   priorityNEQ: String
   priorityIn: [String!]
   priorityNotIn: [String!]
-  priorityGT: String
-  priorityGTE: String
-  priorityLT: String
-  priorityLTE: String
   priorityContains: String
   priorityHasPrefix: String
   priorityHasSuffix: String
@@ -148873,10 +137367,6 @@ input VulnerabilityWhereInput {
   summaryNEQ: String
   summaryIn: [String!]
   summaryNotIn: [String!]
-  summaryGT: String
-  summaryGTE: String
-  summaryLT: String
-  summaryLTE: String
   summaryContains: String
   summaryHasPrefix: String
   summaryHasSuffix: String
@@ -148891,10 +137381,6 @@ input VulnerabilityWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -148909,10 +137395,6 @@ input VulnerabilityWhereInput {
   vectorNEQ: String
   vectorIn: [String!]
   vectorNotIn: [String!]
-  vectorGT: String
-  vectorGTE: String
-  vectorLT: String
-  vectorLTE: String
   vectorContains: String
   vectorHasPrefix: String
   vectorHasSuffix: String
@@ -148925,8 +137407,6 @@ input VulnerabilityWhereInput {
   """
   remediationSLA: Int
   remediationSLANEQ: Int
-  remediationSLAIn: [Int!]
-  remediationSLANotIn: [Int!]
   remediationSLAGT: Int
   remediationSLAGTE: Int
   remediationSLALT: Int
@@ -148975,10 +137455,6 @@ input VulnerabilityWhereInput {
   vulnerableVersionRangeNEQ: String
   vulnerableVersionRangeIn: [String!]
   vulnerableVersionRangeNotIn: [String!]
-  vulnerableVersionRangeGT: String
-  vulnerableVersionRangeGTE: String
-  vulnerableVersionRangeLT: String
-  vulnerableVersionRangeLTE: String
   vulnerableVersionRangeContains: String
   vulnerableVersionRangeHasPrefix: String
   vulnerableVersionRangeHasSuffix: String
@@ -148993,10 +137469,6 @@ input VulnerabilityWhereInput {
   firstPatchedVersionNEQ: String
   firstPatchedVersionIn: [String!]
   firstPatchedVersionNotIn: [String!]
-  firstPatchedVersionGT: String
-  firstPatchedVersionGTE: String
-  firstPatchedVersionLT: String
-  firstPatchedVersionLTE: String
   firstPatchedVersionContains: String
   firstPatchedVersionHasPrefix: String
   firstPatchedVersionHasSuffix: String
@@ -149018,10 +137490,6 @@ input VulnerabilityWhereInput {
   packageNameNEQ: String
   packageNameIn: [String!]
   packageNameNotIn: [String!]
-  packageNameGT: String
-  packageNameGTE: String
-  packageNameLT: String
-  packageNameLTE: String
   packageNameContains: String
   packageNameHasPrefix: String
   packageNameHasSuffix: String
@@ -149036,10 +137504,6 @@ input VulnerabilityWhereInput {
   packageEcosystemNEQ: String
   packageEcosystemIn: [String!]
   packageEcosystemNotIn: [String!]
-  packageEcosystemGT: String
-  packageEcosystemGTE: String
-  packageEcosystemLT: String
-  packageEcosystemLTE: String
   packageEcosystemContains: String
   packageEcosystemHasPrefix: String
   packageEcosystemHasSuffix: String
@@ -149054,10 +137518,6 @@ input VulnerabilityWhereInput {
   manifestPathNEQ: String
   manifestPathIn: [String!]
   manifestPathNotIn: [String!]
-  manifestPathGT: String
-  manifestPathGTE: String
-  manifestPathLT: String
-  manifestPathLTE: String
   manifestPathContains: String
   manifestPathHasPrefix: String
   manifestPathHasSuffix: String
@@ -149072,10 +137532,6 @@ input VulnerabilityWhereInput {
   dependencyScopeNEQ: String
   dependencyScopeIn: [String!]
   dependencyScopeNotIn: [String!]
-  dependencyScopeGT: String
-  dependencyScopeGTE: String
-  dependencyScopeLT: String
-  dependencyScopeLTE: String
   dependencyScopeContains: String
   dependencyScopeHasPrefix: String
   dependencyScopeHasSuffix: String
@@ -149087,9 +137543,6 @@ input VulnerabilityWhereInput {
   published_at field predicates
   """
   publishedAt: DateTime
-  publishedAtNEQ: DateTime
-  publishedAtIn: [DateTime!]
-  publishedAtNotIn: [DateTime!]
   publishedAtGT: DateTime
   publishedAtGTE: DateTime
   publishedAtLT: DateTime
@@ -149100,9 +137553,6 @@ input VulnerabilityWhereInput {
   discovered_at field predicates
   """
   discoveredAt: DateTime
-  discoveredAtNEQ: DateTime
-  discoveredAtIn: [DateTime!]
-  discoveredAtNotIn: [DateTime!]
   discoveredAtGT: DateTime
   discoveredAtGTE: DateTime
   discoveredAtLT: DateTime
@@ -149113,9 +137563,6 @@ input VulnerabilityWhereInput {
   source_updated_at field predicates
   """
   sourceUpdatedAt: DateTime
-  sourceUpdatedAtNEQ: DateTime
-  sourceUpdatedAtIn: [DateTime!]
-  sourceUpdatedAtNotIn: [DateTime!]
   sourceUpdatedAtGT: DateTime
   sourceUpdatedAtGTE: DateTime
   sourceUpdatedAtLT: DateTime
@@ -149126,9 +137573,6 @@ input VulnerabilityWhereInput {
   dismissed_at field predicates
   """
   dismissedAt: DateTime
-  dismissedAtNEQ: DateTime
-  dismissedAtIn: [DateTime!]
-  dismissedAtNotIn: [DateTime!]
   dismissedAtGT: DateTime
   dismissedAtGTE: DateTime
   dismissedAtLT: DateTime
@@ -149142,10 +137586,6 @@ input VulnerabilityWhereInput {
   dismissedReasonNEQ: String
   dismissedReasonIn: [String!]
   dismissedReasonNotIn: [String!]
-  dismissedReasonGT: String
-  dismissedReasonGTE: String
-  dismissedReasonLT: String
-  dismissedReasonLTE: String
   dismissedReasonContains: String
   dismissedReasonHasPrefix: String
   dismissedReasonHasSuffix: String
@@ -149160,10 +137600,6 @@ input VulnerabilityWhereInput {
   dismissedCommentNEQ: String
   dismissedCommentIn: [String!]
   dismissedCommentNotIn: [String!]
-  dismissedCommentGT: String
-  dismissedCommentGTE: String
-  dismissedCommentLT: String
-  dismissedCommentLTE: String
   dismissedCommentContains: String
   dismissedCommentHasPrefix: String
   dismissedCommentHasSuffix: String
@@ -149175,9 +137611,6 @@ input VulnerabilityWhereInput {
   fixed_at field predicates
   """
   fixedAt: DateTime
-  fixedAtNEQ: DateTime
-  fixedAtIn: [DateTime!]
-  fixedAtNotIn: [DateTime!]
   fixedAtGT: DateTime
   fixedAtGTE: DateTime
   fixedAtLT: DateTime
@@ -149188,9 +137621,6 @@ input VulnerabilityWhereInput {
   auto_dismissed_at field predicates
   """
   autoDismissedAt: DateTime
-  autoDismissedAtNEQ: DateTime
-  autoDismissedAtIn: [DateTime!]
-  autoDismissedAtNotIn: [DateTime!]
   autoDismissedAtGT: DateTime
   autoDismissedAtGTE: DateTime
   autoDismissedAtLT: DateTime
@@ -149204,10 +137634,6 @@ input VulnerabilityWhereInput {
   externalURINEQ: String
   externalURIIn: [String!]
   externalURINotIn: [String!]
-  externalURIGT: String
-  externalURIGTE: String
-  externalURILT: String
-  externalURILTE: String
   externalURIContains: String
   externalURIHasPrefix: String
   externalURIHasSuffix: String
@@ -149456,19 +137882,12 @@ input WebauthnWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -149479,9 +137898,6 @@ input WebauthnWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -149495,10 +137911,6 @@ input WebauthnWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -149513,10 +137925,6 @@ input WebauthnWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -149836,19 +138244,12 @@ input WorkflowAssignmentTargetWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -149859,9 +138260,6 @@ input WorkflowAssignmentTargetWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -149875,10 +138273,6 @@ input WorkflowAssignmentTargetWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -149893,10 +138287,6 @@ input WorkflowAssignmentTargetWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -149911,10 +138301,6 @@ input WorkflowAssignmentTargetWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -149929,10 +138315,6 @@ input WorkflowAssignmentTargetWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -149945,10 +138327,6 @@ input WorkflowAssignmentTargetWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -149963,10 +138341,6 @@ input WorkflowAssignmentTargetWhereInput {
   workflowAssignmentIDNEQ: ID
   workflowAssignmentIDIn: [ID!]
   workflowAssignmentIDNotIn: [ID!]
-  workflowAssignmentIDGT: ID
-  workflowAssignmentIDGTE: ID
-  workflowAssignmentIDLT: ID
-  workflowAssignmentIDLTE: ID
   workflowAssignmentIDContains: ID
   workflowAssignmentIDHasPrefix: ID
   workflowAssignmentIDHasSuffix: ID
@@ -149986,10 +138360,6 @@ input WorkflowAssignmentTargetWhereInput {
   targetUserIDNEQ: ID
   targetUserIDIn: [ID!]
   targetUserIDNotIn: [ID!]
-  targetUserIDGT: ID
-  targetUserIDGTE: ID
-  targetUserIDLT: ID
-  targetUserIDLTE: ID
   targetUserIDContains: ID
   targetUserIDHasPrefix: ID
   targetUserIDHasSuffix: ID
@@ -150004,10 +138374,6 @@ input WorkflowAssignmentTargetWhereInput {
   targetGroupIDNEQ: ID
   targetGroupIDIn: [ID!]
   targetGroupIDNotIn: [ID!]
-  targetGroupIDGT: ID
-  targetGroupIDGTE: ID
-  targetGroupIDLT: ID
-  targetGroupIDLTE: ID
   targetGroupIDContains: ID
   targetGroupIDHasPrefix: ID
   targetGroupIDHasSuffix: ID
@@ -150022,10 +138388,6 @@ input WorkflowAssignmentTargetWhereInput {
   resolverKeyNEQ: String
   resolverKeyIn: [String!]
   resolverKeyNotIn: [String!]
-  resolverKeyGT: String
-  resolverKeyGTE: String
-  resolverKeyLT: String
-  resolverKeyLTE: String
   resolverKeyContains: String
   resolverKeyHasPrefix: String
   resolverKeyHasSuffix: String
@@ -150083,19 +138445,12 @@ input WorkflowAssignmentWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -150106,9 +138461,6 @@ input WorkflowAssignmentWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -150122,10 +138474,6 @@ input WorkflowAssignmentWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -150140,10 +138488,6 @@ input WorkflowAssignmentWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -150158,10 +138502,6 @@ input WorkflowAssignmentWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -150176,10 +138516,6 @@ input WorkflowAssignmentWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -150192,10 +138528,6 @@ input WorkflowAssignmentWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -150210,10 +138542,6 @@ input WorkflowAssignmentWhereInput {
   workflowInstanceIDNEQ: ID
   workflowInstanceIDIn: [ID!]
   workflowInstanceIDNotIn: [ID!]
-  workflowInstanceIDGT: ID
-  workflowInstanceIDGTE: ID
-  workflowInstanceIDLT: ID
-  workflowInstanceIDLTE: ID
   workflowInstanceIDContains: ID
   workflowInstanceIDHasPrefix: ID
   workflowInstanceIDHasSuffix: ID
@@ -150226,10 +138554,6 @@ input WorkflowAssignmentWhereInput {
   assignmentKeyNEQ: String
   assignmentKeyIn: [String!]
   assignmentKeyNotIn: [String!]
-  assignmentKeyGT: String
-  assignmentKeyGTE: String
-  assignmentKeyLT: String
-  assignmentKeyLTE: String
   assignmentKeyContains: String
   assignmentKeyHasPrefix: String
   assignmentKeyHasSuffix: String
@@ -150242,10 +138566,6 @@ input WorkflowAssignmentWhereInput {
   roleNEQ: String
   roleIn: [String!]
   roleNotIn: [String!]
-  roleGT: String
-  roleGTE: String
-  roleLT: String
-  roleLTE: String
   roleContains: String
   roleHasPrefix: String
   roleHasSuffix: String
@@ -150258,10 +138578,6 @@ input WorkflowAssignmentWhereInput {
   labelNEQ: String
   labelIn: [String!]
   labelNotIn: [String!]
-  labelGT: String
-  labelGTE: String
-  labelLT: String
-  labelLTE: String
   labelContains: String
   labelHasPrefix: String
   labelHasSuffix: String
@@ -150285,9 +138601,6 @@ input WorkflowAssignmentWhereInput {
   decided_at field predicates
   """
   decidedAt: Time
-  decidedAtNEQ: Time
-  decidedAtIn: [Time!]
-  decidedAtNotIn: [Time!]
   decidedAtGT: Time
   decidedAtGTE: Time
   decidedAtLT: Time
@@ -150301,10 +138614,6 @@ input WorkflowAssignmentWhereInput {
   actorUserIDNEQ: ID
   actorUserIDIn: [ID!]
   actorUserIDNotIn: [ID!]
-  actorUserIDGT: ID
-  actorUserIDGTE: ID
-  actorUserIDLT: ID
-  actorUserIDLTE: ID
   actorUserIDContains: ID
   actorUserIDHasPrefix: ID
   actorUserIDHasSuffix: ID
@@ -150319,10 +138628,6 @@ input WorkflowAssignmentWhereInput {
   actorGroupIDNEQ: ID
   actorGroupIDIn: [ID!]
   actorGroupIDNotIn: [ID!]
-  actorGroupIDGT: ID
-  actorGroupIDGTE: ID
-  actorGroupIDLT: ID
-  actorGroupIDLTE: ID
   actorGroupIDContains: ID
   actorGroupIDHasPrefix: ID
   actorGroupIDHasSuffix: ID
@@ -150337,10 +138642,6 @@ input WorkflowAssignmentWhereInput {
   notesNEQ: String
   notesIn: [String!]
   notesNotIn: [String!]
-  notesGT: String
-  notesGTE: String
-  notesLT: String
-  notesLTE: String
   notesContains: String
   notesHasPrefix: String
   notesHasSuffix: String
@@ -150352,9 +138653,6 @@ input WorkflowAssignmentWhereInput {
   due_at field predicates
   """
   dueAt: Time
-  dueAtNEQ: Time
-  dueAtIn: [Time!]
-  dueAtNotIn: [Time!]
   dueAtGT: Time
   dueAtGTE: Time
   dueAtLT: Time
@@ -150766,19 +139064,12 @@ input WorkflowDefinitionWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -150789,9 +139080,6 @@ input WorkflowDefinitionWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -150805,10 +139093,6 @@ input WorkflowDefinitionWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -150823,10 +139107,6 @@ input WorkflowDefinitionWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -150841,10 +139121,6 @@ input WorkflowDefinitionWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -150859,10 +139135,6 @@ input WorkflowDefinitionWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -150875,10 +139147,6 @@ input WorkflowDefinitionWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -150900,10 +139168,6 @@ input WorkflowDefinitionWhereInput {
   internalNotesNEQ: String
   internalNotesIn: [String!]
   internalNotesNotIn: [String!]
-  internalNotesGT: String
-  internalNotesGTE: String
-  internalNotesLT: String
-  internalNotesLTE: String
   internalNotesContains: String
   internalNotesHasPrefix: String
   internalNotesHasSuffix: String
@@ -150918,10 +139182,6 @@ input WorkflowDefinitionWhereInput {
   systemInternalIDNEQ: String
   systemInternalIDIn: [String!]
   systemInternalIDNotIn: [String!]
-  systemInternalIDGT: String
-  systemInternalIDGTE: String
-  systemInternalIDLT: String
-  systemInternalIDLTE: String
   systemInternalIDContains: String
   systemInternalIDHasPrefix: String
   systemInternalIDHasSuffix: String
@@ -150936,10 +139196,6 @@ input WorkflowDefinitionWhereInput {
   nameNEQ: String
   nameIn: [String!]
   nameNotIn: [String!]
-  nameGT: String
-  nameGTE: String
-  nameLT: String
-  nameLTE: String
   nameContains: String
   nameHasPrefix: String
   nameHasSuffix: String
@@ -150952,10 +139208,6 @@ input WorkflowDefinitionWhereInput {
   descriptionNEQ: String
   descriptionIn: [String!]
   descriptionNotIn: [String!]
-  descriptionGT: String
-  descriptionGTE: String
-  descriptionLT: String
-  descriptionLTE: String
   descriptionContains: String
   descriptionHasPrefix: String
   descriptionHasSuffix: String
@@ -150977,10 +139229,6 @@ input WorkflowDefinitionWhereInput {
   schemaTypeNEQ: String
   schemaTypeIn: [String!]
   schemaTypeNotIn: [String!]
-  schemaTypeGT: String
-  schemaTypeGTE: String
-  schemaTypeLT: String
-  schemaTypeLTE: String
   schemaTypeContains: String
   schemaTypeHasPrefix: String
   schemaTypeHasSuffix: String
@@ -150991,8 +139239,6 @@ input WorkflowDefinitionWhereInput {
   """
   revision: Int
   revisionNEQ: Int
-  revisionIn: [Int!]
-  revisionNotIn: [Int!]
   revisionGT: Int
   revisionGTE: Int
   revisionLT: Int
@@ -151006,9 +139252,6 @@ input WorkflowDefinitionWhereInput {
   published_at field predicates
   """
   publishedAt: Time
-  publishedAtNEQ: Time
-  publishedAtIn: [Time!]
-  publishedAtNotIn: [Time!]
   publishedAtGT: Time
   publishedAtGTE: Time
   publishedAtLT: Time
@@ -151020,8 +139263,6 @@ input WorkflowDefinitionWhereInput {
   """
   cooldownSeconds: Int
   cooldownSecondsNEQ: Int
-  cooldownSecondsIn: [Int!]
-  cooldownSecondsNotIn: [Int!]
   cooldownSecondsGT: Int
   cooldownSecondsGTE: Int
   cooldownSecondsLT: Int
@@ -151195,19 +139436,12 @@ input WorkflowEventWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -151218,9 +139452,6 @@ input WorkflowEventWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -151234,10 +139465,6 @@ input WorkflowEventWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -151252,10 +139479,6 @@ input WorkflowEventWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -151270,10 +139493,6 @@ input WorkflowEventWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -151288,10 +139507,6 @@ input WorkflowEventWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -151304,10 +139519,6 @@ input WorkflowEventWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -151322,10 +139533,6 @@ input WorkflowEventWhereInput {
   workflowInstanceIDNEQ: ID
   workflowInstanceIDIn: [ID!]
   workflowInstanceIDNotIn: [ID!]
-  workflowInstanceIDGT: ID
-  workflowInstanceIDGTE: ID
-  workflowInstanceIDLT: ID
-  workflowInstanceIDLTE: ID
   workflowInstanceIDContains: ID
   workflowInstanceIDHasPrefix: ID
   workflowInstanceIDHasSuffix: ID
@@ -151765,19 +139972,12 @@ input WorkflowInstanceWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -151788,9 +139988,6 @@ input WorkflowInstanceWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -151804,10 +140001,6 @@ input WorkflowInstanceWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -151822,10 +140015,6 @@ input WorkflowInstanceWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -151840,10 +140029,6 @@ input WorkflowInstanceWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -151858,10 +140043,6 @@ input WorkflowInstanceWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -151874,10 +140055,6 @@ input WorkflowInstanceWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -151892,10 +140069,6 @@ input WorkflowInstanceWhereInput {
   workflowDefinitionIDNEQ: ID
   workflowDefinitionIDIn: [ID!]
   workflowDefinitionIDNotIn: [ID!]
-  workflowDefinitionIDGT: ID
-  workflowDefinitionIDGTE: ID
-  workflowDefinitionIDLT: ID
-  workflowDefinitionIDLTE: ID
   workflowDefinitionIDContains: ID
   workflowDefinitionIDHasPrefix: ID
   workflowDefinitionIDHasSuffix: ID
@@ -151908,10 +140081,6 @@ input WorkflowInstanceWhereInput {
   workflowProposalIDNEQ: ID
   workflowProposalIDIn: [ID!]
   workflowProposalIDNotIn: [ID!]
-  workflowProposalIDGT: ID
-  workflowProposalIDGTE: ID
-  workflowProposalIDLT: ID
-  workflowProposalIDLTE: ID
   workflowProposalIDContains: ID
   workflowProposalIDHasPrefix: ID
   workflowProposalIDHasSuffix: ID
@@ -151930,9 +140099,6 @@ input WorkflowInstanceWhereInput {
   last_evaluated_at field predicates
   """
   lastEvaluatedAt: Time
-  lastEvaluatedAtNEQ: Time
-  lastEvaluatedAtIn: [Time!]
-  lastEvaluatedAtNotIn: [Time!]
   lastEvaluatedAtGT: Time
   lastEvaluatedAtGTE: Time
   lastEvaluatedAtLT: Time
@@ -151944,8 +140110,6 @@ input WorkflowInstanceWhereInput {
   """
   currentActionIndex: Int
   currentActionIndexNEQ: Int
-  currentActionIndexIn: [Int!]
-  currentActionIndexNotIn: [Int!]
   currentActionIndexGT: Int
   currentActionIndexGTE: Int
   currentActionIndexLT: Int
@@ -151957,10 +140121,6 @@ input WorkflowInstanceWhereInput {
   controlIDNEQ: ID
   controlIDIn: [ID!]
   controlIDNotIn: [ID!]
-  controlIDGT: ID
-  controlIDGTE: ID
-  controlIDLT: ID
-  controlIDLTE: ID
   controlIDContains: ID
   controlIDHasPrefix: ID
   controlIDHasSuffix: ID
@@ -151975,10 +140135,6 @@ input WorkflowInstanceWhereInput {
   internalPolicyIDNEQ: ID
   internalPolicyIDIn: [ID!]
   internalPolicyIDNotIn: [ID!]
-  internalPolicyIDGT: ID
-  internalPolicyIDGTE: ID
-  internalPolicyIDLT: ID
-  internalPolicyIDLTE: ID
   internalPolicyIDContains: ID
   internalPolicyIDHasPrefix: ID
   internalPolicyIDHasSuffix: ID
@@ -151993,10 +140149,6 @@ input WorkflowInstanceWhereInput {
   evidenceIDNEQ: ID
   evidenceIDIn: [ID!]
   evidenceIDNotIn: [ID!]
-  evidenceIDGT: ID
-  evidenceIDGTE: ID
-  evidenceIDLT: ID
-  evidenceIDLTE: ID
   evidenceIDContains: ID
   evidenceIDHasPrefix: ID
   evidenceIDHasSuffix: ID
@@ -152011,10 +140163,6 @@ input WorkflowInstanceWhereInput {
   subcontrolIDNEQ: ID
   subcontrolIDIn: [ID!]
   subcontrolIDNotIn: [ID!]
-  subcontrolIDGT: ID
-  subcontrolIDGTE: ID
-  subcontrolIDLT: ID
-  subcontrolIDLTE: ID
   subcontrolIDContains: ID
   subcontrolIDHasPrefix: ID
   subcontrolIDHasSuffix: ID
@@ -152029,10 +140177,6 @@ input WorkflowInstanceWhereInput {
   actionPlanIDNEQ: ID
   actionPlanIDIn: [ID!]
   actionPlanIDNotIn: [ID!]
-  actionPlanIDGT: ID
-  actionPlanIDGTE: ID
-  actionPlanIDLT: ID
-  actionPlanIDLTE: ID
   actionPlanIDContains: ID
   actionPlanIDHasPrefix: ID
   actionPlanIDHasSuffix: ID
@@ -152047,10 +140191,6 @@ input WorkflowInstanceWhereInput {
   procedureIDNEQ: ID
   procedureIDIn: [ID!]
   procedureIDNotIn: [ID!]
-  procedureIDGT: ID
-  procedureIDGTE: ID
-  procedureIDLT: ID
-  procedureIDLTE: ID
   procedureIDContains: ID
   procedureIDHasPrefix: ID
   procedureIDHasSuffix: ID
@@ -152065,10 +140205,6 @@ input WorkflowInstanceWhereInput {
   campaignIDNEQ: ID
   campaignIDIn: [ID!]
   campaignIDNotIn: [ID!]
-  campaignIDGT: ID
-  campaignIDGTE: ID
-  campaignIDLT: ID
-  campaignIDLTE: ID
   campaignIDContains: ID
   campaignIDHasPrefix: ID
   campaignIDHasSuffix: ID
@@ -152083,10 +140219,6 @@ input WorkflowInstanceWhereInput {
   campaignTargetIDNEQ: ID
   campaignTargetIDIn: [ID!]
   campaignTargetIDNotIn: [ID!]
-  campaignTargetIDGT: ID
-  campaignTargetIDGTE: ID
-  campaignTargetIDLT: ID
-  campaignTargetIDLTE: ID
   campaignTargetIDContains: ID
   campaignTargetIDHasPrefix: ID
   campaignTargetIDHasSuffix: ID
@@ -152101,10 +140233,6 @@ input WorkflowInstanceWhereInput {
   identityHolderIDNEQ: ID
   identityHolderIDIn: [ID!]
   identityHolderIDNotIn: [ID!]
-  identityHolderIDGT: ID
-  identityHolderIDGTE: ID
-  identityHolderIDLT: ID
-  identityHolderIDLTE: ID
   identityHolderIDContains: ID
   identityHolderIDHasPrefix: ID
   identityHolderIDHasSuffix: ID
@@ -152119,10 +140247,6 @@ input WorkflowInstanceWhereInput {
   platformIDNEQ: ID
   platformIDIn: [ID!]
   platformIDNotIn: [ID!]
-  platformIDGT: ID
-  platformIDGTE: ID
-  platformIDLT: ID
-  platformIDLTE: ID
   platformIDContains: ID
   platformIDHasPrefix: ID
   platformIDHasSuffix: ID
@@ -152137,10 +140261,6 @@ input WorkflowInstanceWhereInput {
   assessmentIDNEQ: ID
   assessmentIDIn: [ID!]
   assessmentIDNotIn: [ID!]
-  assessmentIDGT: ID
-  assessmentIDGTE: ID
-  assessmentIDLT: ID
-  assessmentIDLTE: ID
   assessmentIDContains: ID
   assessmentIDHasPrefix: ID
   assessmentIDHasSuffix: ID
@@ -152155,10 +140275,6 @@ input WorkflowInstanceWhereInput {
   assessmentResponseIDNEQ: ID
   assessmentResponseIDIn: [ID!]
   assessmentResponseIDNotIn: [ID!]
-  assessmentResponseIDGT: ID
-  assessmentResponseIDGTE: ID
-  assessmentResponseIDLT: ID
-  assessmentResponseIDLTE: ID
   assessmentResponseIDContains: ID
   assessmentResponseIDHasPrefix: ID
   assessmentResponseIDHasSuffix: ID
@@ -152173,10 +140289,6 @@ input WorkflowInstanceWhereInput {
   findingIDNEQ: ID
   findingIDIn: [ID!]
   findingIDNotIn: [ID!]
-  findingIDGT: ID
-  findingIDGTE: ID
-  findingIDLT: ID
-  findingIDLTE: ID
   findingIDContains: ID
   findingIDHasPrefix: ID
   findingIDHasSuffix: ID
@@ -152191,10 +140303,6 @@ input WorkflowInstanceWhereInput {
   integrationIDNEQ: ID
   integrationIDIn: [ID!]
   integrationIDNotIn: [ID!]
-  integrationIDGT: ID
-  integrationIDGTE: ID
-  integrationIDLT: ID
-  integrationIDLTE: ID
   integrationIDContains: ID
   integrationIDHasPrefix: ID
   integrationIDHasSuffix: ID
@@ -152209,10 +140317,6 @@ input WorkflowInstanceWhereInput {
   remediationIDNEQ: ID
   remediationIDIn: [ID!]
   remediationIDNotIn: [ID!]
-  remediationIDGT: ID
-  remediationIDGTE: ID
-  remediationIDLT: ID
-  remediationIDLTE: ID
   remediationIDContains: ID
   remediationIDHasPrefix: ID
   remediationIDHasSuffix: ID
@@ -152227,10 +140331,6 @@ input WorkflowInstanceWhereInput {
   riskIDNEQ: ID
   riskIDIn: [ID!]
   riskIDNotIn: [ID!]
-  riskIDGT: ID
-  riskIDGTE: ID
-  riskIDLT: ID
-  riskIDLTE: ID
   riskIDContains: ID
   riskIDHasPrefix: ID
   riskIDHasSuffix: ID
@@ -152245,10 +140345,6 @@ input WorkflowInstanceWhereInput {
   taskIDNEQ: ID
   taskIDIn: [ID!]
   taskIDNotIn: [ID!]
-  taskIDGT: ID
-  taskIDGTE: ID
-  taskIDLT: ID
-  taskIDLTE: ID
   taskIDContains: ID
   taskIDHasPrefix: ID
   taskIDHasSuffix: ID
@@ -152263,10 +140359,6 @@ input WorkflowInstanceWhereInput {
   vulnerabilityIDNEQ: ID
   vulnerabilityIDIn: [ID!]
   vulnerabilityIDNotIn: [ID!]
-  vulnerabilityIDGT: ID
-  vulnerabilityIDGTE: ID
-  vulnerabilityIDLT: ID
-  vulnerabilityIDLTE: ID
   vulnerabilityIDContains: ID
   vulnerabilityIDHasPrefix: ID
   vulnerabilityIDHasSuffix: ID
@@ -152661,19 +140753,12 @@ input WorkflowObjectRefWhereInput {
   idNEQ: ID
   idIn: [ID!]
   idNotIn: [ID!]
-  idGT: ID
-  idGTE: ID
-  idLT: ID
-  idLTE: ID
   idEqualFold: ID
   idContainsFold: ID
   """
   created_at field predicates
   """
   createdAt: Time
-  createdAtNEQ: Time
-  createdAtIn: [Time!]
-  createdAtNotIn: [Time!]
   createdAtGT: Time
   createdAtGTE: Time
   createdAtLT: Time
@@ -152684,9 +140769,6 @@ input WorkflowObjectRefWhereInput {
   updated_at field predicates
   """
   updatedAt: Time
-  updatedAtNEQ: Time
-  updatedAtIn: [Time!]
-  updatedAtNotIn: [Time!]
   updatedAtGT: Time
   updatedAtGTE: Time
   updatedAtLT: Time
@@ -152700,10 +140782,6 @@ input WorkflowObjectRefWhereInput {
   createdByNEQ: String
   createdByIn: [String!]
   createdByNotIn: [String!]
-  createdByGT: String
-  createdByGTE: String
-  createdByLT: String
-  createdByLTE: String
   createdByContains: String
   createdByHasPrefix: String
   createdByHasSuffix: String
@@ -152718,10 +140796,6 @@ input WorkflowObjectRefWhereInput {
   updatedByNEQ: String
   updatedByIn: [String!]
   updatedByNotIn: [String!]
-  updatedByGT: String
-  updatedByGTE: String
-  updatedByLT: String
-  updatedByLTE: String
   updatedByContains: String
   updatedByHasPrefix: String
   updatedByHasSuffix: String
@@ -152736,10 +140810,6 @@ input WorkflowObjectRefWhereInput {
   updatedByImpersonatorNEQ: String
   updatedByImpersonatorIn: [String!]
   updatedByImpersonatorNotIn: [String!]
-  updatedByImpersonatorGT: String
-  updatedByImpersonatorGTE: String
-  updatedByImpersonatorLT: String
-  updatedByImpersonatorLTE: String
   updatedByImpersonatorContains: String
   updatedByImpersonatorHasPrefix: String
   updatedByImpersonatorHasSuffix: String
@@ -152754,10 +140824,6 @@ input WorkflowObjectRefWhereInput {
   displayIDNEQ: String
   displayIDIn: [String!]
   displayIDNotIn: [String!]
-  displayIDGT: String
-  displayIDGTE: String
-  displayIDLT: String
-  displayIDLTE: String
   displayIDContains: String
   displayIDHasPrefix: String
   displayIDHasSuffix: String
@@ -152770,10 +140836,6 @@ input WorkflowObjectRefWhereInput {
   ownerIDNEQ: ID
   ownerIDIn: [ID!]
   ownerIDNotIn: [ID!]
-  ownerIDGT: ID
-  ownerIDGTE: ID
-  ownerIDLT: ID
-  ownerIDLTE: ID
   ownerIDContains: ID
   ownerIDHasPrefix: ID
   ownerIDHasSuffix: ID
@@ -152788,10 +140850,6 @@ input WorkflowObjectRefWhereInput {
   workflowInstanceIDNEQ: ID
   workflowInstanceIDIn: [ID!]
   workflowInstanceIDNotIn: [ID!]
-  workflowInstanceIDGT: ID
-  workflowInstanceIDGTE: ID
-  workflowInstanceIDLT: ID
-  workflowInstanceIDLTE: ID
   workflowInstanceIDContains: ID
   workflowInstanceIDHasPrefix: ID
   workflowInstanceIDHasSuffix: ID
@@ -152804,10 +140862,6 @@ input WorkflowObjectRefWhereInput {
   controlIDNEQ: ID
   controlIDIn: [ID!]
   controlIDNotIn: [ID!]
-  controlIDGT: ID
-  controlIDGTE: ID
-  controlIDLT: ID
-  controlIDLTE: ID
   controlIDContains: ID
   controlIDHasPrefix: ID
   controlIDHasSuffix: ID
@@ -152822,10 +140876,6 @@ input WorkflowObjectRefWhereInput {
   taskIDNEQ: ID
   taskIDIn: [ID!]
   taskIDNotIn: [ID!]
-  taskIDGT: ID
-  taskIDGTE: ID
-  taskIDLT: ID
-  taskIDLTE: ID
   taskIDContains: ID
   taskIDHasPrefix: ID
   taskIDHasSuffix: ID
@@ -152840,10 +140890,6 @@ input WorkflowObjectRefWhereInput {
   internalPolicyIDNEQ: ID
   internalPolicyIDIn: [ID!]
   internalPolicyIDNotIn: [ID!]
-  internalPolicyIDGT: ID
-  internalPolicyIDGTE: ID
-  internalPolicyIDLT: ID
-  internalPolicyIDLTE: ID
   internalPolicyIDContains: ID
   internalPolicyIDHasPrefix: ID
   internalPolicyIDHasSuffix: ID
@@ -152858,10 +140904,6 @@ input WorkflowObjectRefWhereInput {
   findingIDNEQ: ID
   findingIDIn: [ID!]
   findingIDNotIn: [ID!]
-  findingIDGT: ID
-  findingIDGTE: ID
-  findingIDLT: ID
-  findingIDLTE: ID
   findingIDContains: ID
   findingIDHasPrefix: ID
   findingIDHasSuffix: ID
@@ -152876,10 +140918,6 @@ input WorkflowObjectRefWhereInput {
   directoryAccountIDNEQ: ID
   directoryAccountIDIn: [ID!]
   directoryAccountIDNotIn: [ID!]
-  directoryAccountIDGT: ID
-  directoryAccountIDGTE: ID
-  directoryAccountIDLT: ID
-  directoryAccountIDLTE: ID
   directoryAccountIDContains: ID
   directoryAccountIDHasPrefix: ID
   directoryAccountIDHasSuffix: ID
@@ -152894,10 +140932,6 @@ input WorkflowObjectRefWhereInput {
   directoryGroupIDNEQ: ID
   directoryGroupIDIn: [ID!]
   directoryGroupIDNotIn: [ID!]
-  directoryGroupIDGT: ID
-  directoryGroupIDGTE: ID
-  directoryGroupIDLT: ID
-  directoryGroupIDLTE: ID
   directoryGroupIDContains: ID
   directoryGroupIDHasPrefix: ID
   directoryGroupIDHasSuffix: ID
@@ -152912,10 +140946,6 @@ input WorkflowObjectRefWhereInput {
   directoryMembershipIDNEQ: ID
   directoryMembershipIDIn: [ID!]
   directoryMembershipIDNotIn: [ID!]
-  directoryMembershipIDGT: ID
-  directoryMembershipIDGTE: ID
-  directoryMembershipIDLT: ID
-  directoryMembershipIDLTE: ID
   directoryMembershipIDContains: ID
   directoryMembershipIDHasPrefix: ID
   directoryMembershipIDHasSuffix: ID
@@ -152930,10 +140960,6 @@ input WorkflowObjectRefWhereInput {
   evidenceIDNEQ: ID
   evidenceIDIn: [ID!]
   evidenceIDNotIn: [ID!]
-  evidenceIDGT: ID
-  evidenceIDGTE: ID
-  evidenceIDLT: ID
-  evidenceIDLTE: ID
   evidenceIDContains: ID
   evidenceIDHasPrefix: ID
   evidenceIDHasSuffix: ID
@@ -152948,10 +140974,6 @@ input WorkflowObjectRefWhereInput {
   subcontrolIDNEQ: ID
   subcontrolIDIn: [ID!]
   subcontrolIDNotIn: [ID!]
-  subcontrolIDGT: ID
-  subcontrolIDGTE: ID
-  subcontrolIDLT: ID
-  subcontrolIDLTE: ID
   subcontrolIDContains: ID
   subcontrolIDHasPrefix: ID
   subcontrolIDHasSuffix: ID
@@ -152966,10 +140988,6 @@ input WorkflowObjectRefWhereInput {
   actionPlanIDNEQ: ID
   actionPlanIDIn: [ID!]
   actionPlanIDNotIn: [ID!]
-  actionPlanIDGT: ID
-  actionPlanIDGTE: ID
-  actionPlanIDLT: ID
-  actionPlanIDLTE: ID
   actionPlanIDContains: ID
   actionPlanIDHasPrefix: ID
   actionPlanIDHasSuffix: ID
@@ -152984,10 +141002,6 @@ input WorkflowObjectRefWhereInput {
   procedureIDNEQ: ID
   procedureIDIn: [ID!]
   procedureIDNotIn: [ID!]
-  procedureIDGT: ID
-  procedureIDGTE: ID
-  procedureIDLT: ID
-  procedureIDLTE: ID
   procedureIDContains: ID
   procedureIDHasPrefix: ID
   procedureIDHasSuffix: ID
@@ -153002,10 +141016,6 @@ input WorkflowObjectRefWhereInput {
   campaignIDNEQ: ID
   campaignIDIn: [ID!]
   campaignIDNotIn: [ID!]
-  campaignIDGT: ID
-  campaignIDGTE: ID
-  campaignIDLT: ID
-  campaignIDLTE: ID
   campaignIDContains: ID
   campaignIDHasPrefix: ID
   campaignIDHasSuffix: ID
@@ -153020,10 +141030,6 @@ input WorkflowObjectRefWhereInput {
   campaignTargetIDNEQ: ID
   campaignTargetIDIn: [ID!]
   campaignTargetIDNotIn: [ID!]
-  campaignTargetIDGT: ID
-  campaignTargetIDGTE: ID
-  campaignTargetIDLT: ID
-  campaignTargetIDLTE: ID
   campaignTargetIDContains: ID
   campaignTargetIDHasPrefix: ID
   campaignTargetIDHasSuffix: ID
@@ -153038,10 +141044,6 @@ input WorkflowObjectRefWhereInput {
   identityHolderIDNEQ: ID
   identityHolderIDIn: [ID!]
   identityHolderIDNotIn: [ID!]
-  identityHolderIDGT: ID
-  identityHolderIDGTE: ID
-  identityHolderIDLT: ID
-  identityHolderIDLTE: ID
   identityHolderIDContains: ID
   identityHolderIDHasPrefix: ID
   identityHolderIDHasSuffix: ID
@@ -153056,10 +141058,6 @@ input WorkflowObjectRefWhereInput {
   platformIDNEQ: ID
   platformIDIn: [ID!]
   platformIDNotIn: [ID!]
-  platformIDGT: ID
-  platformIDGTE: ID
-  platformIDLT: ID
-  platformIDLTE: ID
   platformIDContains: ID
   platformIDHasPrefix: ID
   platformIDHasSuffix: ID
@@ -153074,10 +141072,6 @@ input WorkflowObjectRefWhereInput {
   vulnerabilityIDNEQ: ID
   vulnerabilityIDIn: [ID!]
   vulnerabilityIDNotIn: [ID!]
-  vulnerabilityIDGT: ID
-  vulnerabilityIDGTE: ID
-  vulnerabilityIDLT: ID
-  vulnerabilityIDLTE: ID
   vulnerabilityIDContains: ID
   vulnerabilityIDHasPrefix: ID
   vulnerabilityIDHasSuffix: ID
@@ -153092,10 +141086,6 @@ input WorkflowObjectRefWhereInput {
   riskIDNEQ: ID
   riskIDIn: [ID!]
   riskIDNotIn: [ID!]
-  riskIDGT: ID
-  riskIDGTE: ID
-  riskIDLT: ID
-  riskIDLTE: ID
   riskIDContains: ID
   riskIDHasPrefix: ID
   riskIDHasSuffix: ID
@@ -153110,10 +141100,6 @@ input WorkflowObjectRefWhereInput {
   assessmentIDNEQ: ID
   assessmentIDIn: [ID!]
   assessmentIDNotIn: [ID!]
-  assessmentIDGT: ID
-  assessmentIDGTE: ID
-  assessmentIDLT: ID
-  assessmentIDLTE: ID
   assessmentIDContains: ID
   assessmentIDHasPrefix: ID
   assessmentIDHasSuffix: ID
@@ -153128,10 +141114,6 @@ input WorkflowObjectRefWhereInput {
   assessmentResponseIDNEQ: ID
   assessmentResponseIDIn: [ID!]
   assessmentResponseIDNotIn: [ID!]
-  assessmentResponseIDGT: ID
-  assessmentResponseIDGTE: ID
-  assessmentResponseIDLT: ID
-  assessmentResponseIDLTE: ID
   assessmentResponseIDContains: ID
   assessmentResponseIDHasPrefix: ID
   assessmentResponseIDHasSuffix: ID
@@ -153146,10 +141128,6 @@ input WorkflowObjectRefWhereInput {
   remediationIDNEQ: ID
   remediationIDIn: [ID!]
   remediationIDNotIn: [ID!]
-  remediationIDGT: ID
-  remediationIDGTE: ID
-  remediationIDLT: ID
-  remediationIDLTE: ID
   remediationIDContains: ID
   remediationIDHasPrefix: ID
   remediationIDHasSuffix: ID
@@ -156211,471 +144189,6 @@ type InviteBulkUpdatePayload {
     invites: [Invite!]
     """
     IDs of the updated invites
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
-`, BuiltIn: false},
-	{Name: "../schema/jobresult.graphql", Input: `extend type Query {
-    """
-    Look up jobResult by ID
-    """
-     jobResult(
-        """
-        ID of the jobResult
-        """
-        id: ID!
-    ):  JobResult!
-}
-
-extend type Mutation{
-    """
-    Create a new jobResult
-    """
-    createJobResult(
-        """
-        values of the jobResult
-        """
-        input: CreateJobResultInput!
-        """
-        files to upload as jobResult attachments
-        """
-        jobResultFiles: [Upload!]
-        jobResultFilesMetadata: [FileMetadataInput!]
-    ): JobResultCreatePayload!
-    """
-    Update an existing jobResult
-    """
-    updateJobResult(
-        """
-        ID of the jobResult
-        """
-        id: ID!
-        """
-        New values for the jobResult
-        """
-        input: UpdateJobResultInput!
-        """
-        files to upload as jobResult attachments
-        """
-        jobResultFiles: [Upload!]
-        jobResultFilesMetadata: [FileMetadataInput!]
-    ): JobResultUpdatePayload!
-    """
-    Delete an existing jobResult
-    """
-    deleteJobResult(
-        """
-        ID of the jobResult
-        """
-        id: ID!
-    ): JobResultDeletePayload!
-}
-
-"""
-Return response for createJobResult mutation
-"""
-type JobResultCreatePayload {
-    """
-    Created jobResult
-    """
-    jobResult: JobResult!
-}
-
-"""
-Return response for updateJobResult mutation
-"""
-type JobResultUpdatePayload {
-    """
-    Updated jobResult
-    """
-    jobResult: JobResult!
-}
-
-"""
-Return response for deleteJobResult mutation
-"""
-type JobResultDeletePayload {
-    """
-    Deleted jobResult ID
-    """
-    deletedID: ID!
-}
-`, BuiltIn: false},
-	{Name: "../schema/jobrunner.graphql", Input: `extend type Query {
-    """
-    Look up jobRunner by ID
-    """
-     jobRunner(
-        """
-        ID of the jobRunner
-        """
-        id: ID!
-    ):  JobRunner!
-}
-
-extend type Mutation{
-    """
-    Create a new invite
-    """
-    createJobRunner(
-        """
-        values of the invite
-        """
-        input: CreateJobRunnerInput!
-    ): JobRunnerCreatePayload!
-
-    """
-    Update an existing jobRunner
-    """
-    updateJobRunner(
-        """
-        ID of the jobRunner
-        """
-        id: ID!
-        """
-        New values for the jobRunner
-        """
-        input: UpdateJobRunnerInput!
-    ): JobRunnerUpdatePayload!
-    """
-    Delete an existing jobRunner
-    """
-    deleteJobRunner(
-        """
-        ID of the jobRunner
-        """
-        id: ID!
-    ): JobRunnerDeletePayload!
-}
-
-
-"""
-Return response for updateJobRunner mutation
-"""
-type JobRunnerUpdatePayload {
-    """
-    Updated jobRunner
-    """
-    jobRunner: JobRunner!
-}
-
-"""
-Return response for deleteJobRunner mutation
-"""
-type JobRunnerDeletePayload {
-    """
-    Deleted jobRunner ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createJobRunner mutation
-"""
-type JobRunnerCreatePayload {
-    """
-    Created jobRunner
-    """
-    jobRunner: JobRunner!
-}
-`, BuiltIn: false},
-	{Name: "../schema/jobrunnerregistrationtoken.graphql", Input: `extend type Query {
-    """
-    Look up jobRunnerRegistrationToken by ID
-    """
-     jobRunnerRegistrationToken(
-        """
-        ID of the jobRunnerRegistrationToken
-        """
-        id: ID!
-    ):  JobRunnerRegistrationToken!
-}
-
-extend type Mutation{
-    """
-    Create a new jobRunnerRegistrationToken
-    """
-    createJobRunnerRegistrationToken(
-        """
-        values of the jobRunnerRegistrationToken
-        """
-        input: CreateJobRunnerRegistrationTokenInput!
-    ): JobRunnerRegistrationTokenCreatePayload!
-    """
-    Delete an existing jobRunnerRegistrationToken
-    """
-    deleteJobRunnerRegistrationToken(
-        """
-        ID of the jobRunnerRegistrationToken
-        """
-        id: ID!
-    ): JobRunnerRegistrationTokenDeletePayload!
-}
-
-"""
-Return response for createJobRunnerRegistrationToken mutation
-"""
-type JobRunnerRegistrationTokenCreatePayload {
-    """
-    Created jobRunnerRegistrationToken
-    """
-    jobRunnerRegistrationToken: JobRunnerRegistrationToken!
-}
-
-"""
-Return response for deleteJobRunnerRegistrationToken mutation
-"""
-type JobRunnerRegistrationTokenDeletePayload {
-    """
-    Deleted jobRunnerRegistrationToken ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkJobRunnerRegistrationToken mutation
-"""
-type JobRunnerRegistrationTokenBulkCreatePayload {
-    """
-    Created jobRunnerRegistrationTokens
-    """
-    jobRunnerRegistrationTokens: [JobRunnerRegistrationToken!]
-}
-`, BuiltIn: false},
-	{Name: "../schema/jobrunnertoken.graphql", Input: `extend type Query {
-    """
-    Look up jobRunnerToken by ID
-    """
-     jobRunnerToken(
-        """
-        ID of the jobRunnerToken
-        """
-        id: ID!
-    ):  JobRunnerToken!
-}
-
-extend type Mutation{
-    """
-    Create a new jobRunnerToken
-    """
-    createJobRunnerToken(
-        """
-        values of the jobRunnerToken
-        """
-        input: CreateJobRunnerTokenInput!
-    ): JobRunnerTokenCreatePayload!
-    """
-    Delete an existing jobRunnerToken
-    """
-    deleteJobRunnerToken(
-        """
-        ID of the jobRunnerToken
-        """
-        id: ID!
-    ): JobRunnerTokenDeletePayload!
-}
-
-"""
-Return response for createJobRunnerToken mutation
-"""
-type JobRunnerTokenCreatePayload {
-    """
-    Created jobRunnerToken
-    """
-    jobRunnerToken: JobRunnerToken!
-}
-
-"""
-Return response for updateJobRunnerToken mutation
-"""
-type JobRunnerTokenUpdatePayload {
-    """
-    Updated jobRunnerToken
-    """
-    jobRunnerToken: JobRunnerToken!
-}
-
-"""
-Return response for deleteJobRunnerToken mutation
-"""
-type JobRunnerTokenDeletePayload {
-    """
-    Deleted jobRunnerToken ID
-    """
-    deletedID: ID!
-}
-`, BuiltIn: false},
-	{Name: "../schema/jobtemplate.graphql", Input: `extend type Query {
-    """
-    Look up jobTemplate by ID
-    """
-     jobTemplate(
-        """
-        ID of the jobTemplate
-        """
-        id: ID!
-    ):  JobTemplate!
-}
-
-extend type Mutation{
-    """
-    Create a new jobTemplate
-    """
-    createJobTemplate(
-        """
-        values of the jobTemplate
-        """
-        input: CreateJobTemplateInput!
-    ): JobTemplateCreatePayload!
-    """
-    Create multiple new jobTemplates
-    """
-    createBulkJobTemplate(
-        """
-        values of the jobTemplate
-        """
-        input: [CreateJobTemplateInput!]
-    ): JobTemplateBulkCreatePayload!
-    """
-    Create multiple new jobTemplates via file upload
-    """
-    createBulkCSVJobTemplate(
-        """
-        csv file containing values of the jobTemplate
-        """
-        input: Upload!
-    ): JobTemplateBulkCreatePayload!
-    """
-    Update an existing jobTemplate
-    """
-    updateJobTemplate(
-        """
-        ID of the jobTemplate
-        """
-        id: ID!
-        """
-        New values for the jobTemplate
-        """
-        input: UpdateJobTemplateInput!
-    ): JobTemplateUpdatePayload!
-    """
-    Delete an existing jobTemplate
-    """
-    deleteJobTemplate(
-        """
-        ID of the jobTemplate
-        """
-        id: ID!
-    ): JobTemplateDeletePayload!
-    """
-    Delete multiple jobTemplates
-    """
-    deleteBulkJobTemplate(
-        """
-        IDs of the jobTemplates to delete
-        """
-        ids: [ID!]!
-    ): JobTemplateBulkDeletePayload!
-    """
-    Update multiple existing jobTemplates
-    """
-    updateBulkJobTemplate(
-        """
-        IDs of the jobTemplates to update
-        """
-        ids: [ID!]!
-        """
-        values to update the jobTemplates with
-        """
-        input: UpdateJobTemplateInput!
-    ): JobTemplateBulkUpdatePayload!
-    """
-    Update multiple existing jobTemplates via file upload
-    """
-    updateBulkCSVJobTemplate(
-        """
-        csv file containing values of the jobTemplate, must include ID column
-        """
-        input: Upload!
-    ): JobTemplateBulkUpdatePayload!
-}
-
-"""
-Return response for createJobTemplate mutation
-"""
-type JobTemplateCreatePayload {
-    """
-    Created jobTemplate
-    """
-    jobTemplate: JobTemplate!
-}
-
-"""
-Return response for updateJobTemplate mutation
-"""
-type JobTemplateUpdatePayload {
-    """
-    Updated jobTemplate
-    """
-    jobTemplate: JobTemplate!
-}
-
-"""
-Return response for deleteJobTemplate mutation
-"""
-type JobTemplateDeletePayload {
-    """
-    Deleted jobTemplate ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkJobTemplate mutation
-"""
-type JobTemplateBulkCreatePayload {
-    """
-    Created jobTemplates
-    """
-    jobTemplates: [JobTemplate!]
-}
-
-"""
-Return response for deleteBulkJobTemplate mutation
-"""
-type JobTemplateBulkDeletePayload {
-    """
-    Deleted jobTemplate IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkJobTemplate mutation
-"""
-type JobTemplateBulkUpdatePayload {
-    """
-    Updated jobTemplates
-    """
-    jobTemplates: [JobTemplate!]
-    """
-    IDs of the updated jobTemplates
     """
     updatedIDs: [ID!]
     """
@@ -160195,257 +147708,6 @@ type ScanBulkDeletePayload {
     """
     error: String
 }`, BuiltIn: false},
-	{Name: "../schema/scheduledjob.graphql", Input: `extend type Query {
-    """
-    Look up scheduledJob by ID
-    """
-     scheduledJob(
-        """
-        ID of the scheduledJob
-        """
-        id: ID!
-    ):  ScheduledJob!
-}
-
-extend type Mutation{
-    """
-    Create a new scheduledJob
-    """
-    createScheduledJob(
-        """
-        values of the scheduledJob
-        """
-        input: CreateScheduledJobInput!
-    ): ScheduledJobCreatePayload!
-    """
-    Create multiple new scheduledJobs
-    """
-    createBulkScheduledJob(
-        """
-        values of the scheduledJob
-        """
-        input: [CreateScheduledJobInput!]
-    ): ScheduledJobBulkCreatePayload!
-    """
-    Create multiple new scheduledJobs via file upload
-    """
-    createBulkCSVScheduledJob(
-        """
-        csv file containing values of the scheduledJob
-        """
-        input: Upload!
-    ): ScheduledJobBulkCreatePayload!
-    """
-    Update an existing scheduledJob
-    """
-    updateScheduledJob(
-        """
-        ID of the scheduledJob
-        """
-        id: ID!
-        """
-        New values for the scheduledJob
-        """
-        input: UpdateScheduledJobInput!
-    ): ScheduledJobUpdatePayload!
-    """
-    Delete an existing scheduledJob
-    """
-    deleteScheduledJob(
-        """
-        ID of the scheduledJob
-        """
-        id: ID!
-    ): ScheduledJobDeletePayload!
-    """
-    Delete multiple scheduledJobs
-    """
-    deleteBulkScheduledJob(
-        """
-        IDs of the scheduledJobs to delete
-        """
-        ids: [ID!]!
-    ): ScheduledJobBulkDeletePayload!
-    """
-    Update multiple existing scheduledJobs
-    """
-    updateBulkScheduledJob(
-        """
-        IDs of the scheduledJobs to update
-        """
-        ids: [ID!]!
-        """
-        values to update the scheduledJobs with
-        """
-        input: UpdateScheduledJobInput!
-    ): ScheduledJobBulkUpdatePayload!
-    """
-    Update multiple existing scheduledJobs via file upload
-    """
-    updateBulkCSVScheduledJob(
-        """
-        csv file containing values of the scheduledJob, must include ID column
-        """
-        input: Upload!
-    ): ScheduledJobBulkUpdatePayload!
-}
-
-"""
-Return response for createScheduledJob mutation
-"""
-type ScheduledJobCreatePayload {
-    """
-    Created scheduledJob
-    """
-    scheduledJob: ScheduledJob!
-}
-
-"""
-Return response for updateScheduledJob mutation
-"""
-type ScheduledJobUpdatePayload {
-    """
-    Updated scheduledJob
-    """
-    scheduledJob: ScheduledJob!
-}
-
-"""
-Return response for deleteScheduledJob mutation
-"""
-type ScheduledJobDeletePayload {
-    """
-    Deleted scheduledJob ID
-    """
-    deletedID: ID!
-}
-
-"""
-Return response for createBulkScheduledJob mutation
-"""
-type ScheduledJobBulkCreatePayload {
-    """
-    Created scheduledJobs
-    """
-    scheduledJobs: [ScheduledJob!]
-}
-
-"""
-Return response for deleteBulkScheduledJob mutation
-"""
-type ScheduledJobBulkDeletePayload {
-    """
-    Deleted scheduledJob IDs
-    """
-    deletedIDs: [ID!]!
-    """
-    IDs that were not deleted
-    """
-    notDeletedIDs: [ID!]!
-    """
-    Error message when the bulk delete did not apply to every requested ID
-    """
-    error: String
-}
-
-"""
-Return response for updateBulkScheduledJob mutation
-"""
-type ScheduledJobBulkUpdatePayload {
-    """
-    Updated scheduledJobs
-    """
-    scheduledJobs: [ScheduledJob!]
-    """
-    IDs of the updated scheduledJobs
-    """
-    updatedIDs: [ID!]
-    """
-    IDs that were not updated
-    """
-    notUpdatedIDs: [ID!]!
-    """
-    Error message when the bulk update did not apply to every requested ID
-    """
-    error: String
-}
-`, BuiltIn: false},
-	{Name: "../schema/scheduledjobrun.graphql", Input: `extend type Query {
-    """
-    Look up scheduledJobRun by ID
-    """
-     scheduledJobRun(
-        """
-        ID of the scheduledJobRun
-        """
-        id: ID!
-    ):  ScheduledJobRun!
-}
-
-extend type Mutation{
-    """
-    Create a new scheduledJobRun
-    """
-    createScheduledJobRun(
-        """
-        values of the scheduledJobRun
-        """
-        input: CreateScheduledJobRunInput!
-    ): ScheduledJobRunCreatePayload!
-    """
-    Update an existing scheduledJobRun
-    """
-    updateScheduledJobRun(
-        """
-        ID of the scheduledJobRun
-        """
-        id: ID!
-        """
-        New values for the scheduledJobRun
-        """
-        input: UpdateScheduledJobRunInput!
-    ): ScheduledJobRunUpdatePayload!
-    """
-    Delete an existing scheduledJobRun
-    """
-    deleteScheduledJobRun(
-        """
-        ID of the scheduledJobRun
-        """
-        id: ID!
-    ): ScheduledJobRunDeletePayload!
-}
-
-"""
-Return response for createScheduledJobRun mutation
-"""
-type ScheduledJobRunCreatePayload {
-    """
-    Created scheduledJobRun
-    """
-    scheduledJobRun: ScheduledJobRun!
-}
-
-"""
-Return response for updateScheduledJobRun mutation
-"""
-type ScheduledJobRunUpdatePayload {
-    """
-    Updated scheduledJobRun
-    """
-    scheduledJobRun: ScheduledJobRun!
-}
-
-"""
-Return response for deleteScheduledJobRun mutation
-"""
-type ScheduledJobRunDeletePayload {
-    """
-    Deleted scheduledJobRun ID
-    """
-    deletedID: ID!
-}
-`, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
     Search across ActionPlan objects
@@ -160922,56 +148184,6 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): InviteConnection
-    """
-    Search across JobRunner objects
-    """
-    jobRunnerSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobRunnerConnection
-    """
-    Search across JobTemplate objects
-    """
-    jobTemplateSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobTemplateConnection
     """
     Search across Narrative objects
     """
@@ -161501,8 +148713,6 @@ type SearchResults{
   integrations: IntegrationConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
-  jobRunners: JobRunnerConnection
-  jobTemplates: JobTemplateConnection
   narratives: NarrativeConnection
   notificationTemplates: NotificationTemplateConnection
   organizations: OrganizationConnection
@@ -163617,11 +150827,16 @@ input CreateTrustCenterDomainInput {
 	the name of the custom domain
 	"""
 	cnameRecord: String!
+	"""
+	the type of the custom domain
+	"""
+	domainType: CustomDomainCustomDomainType
     """
     trust center ID
     """
     trustCenterID: ID!
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/trustcenterentity.graphql", Input: `extend type Query {
     """
     Look up trustCenterEntity by ID
@@ -167935,8 +155150,6 @@ func (ec *executionContext) childFields_Control(ctx context.Context, field graph
 		return ec.fieldContext_Control_controlImplementations(ctx, field)
 	case "subcontrols":
 		return ec.fieldContext_Control_subcontrols(ctx, field)
-	case "scheduledJobs":
-		return ec.fieldContext_Control_scheduledJobs(ctx, field)
 	case "workflowObjectRefs":
 		return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 	case "controlMappings":
@@ -170491,6 +157704,8 @@ func (ec *executionContext) childFields_Evidence(ctx context.Context, field grap
 		return ec.fieldContext_Evidence_status(ctx, field)
 	case "reviewFrequency":
 		return ec.fieldContext_Evidence_reviewFrequency(ctx, field)
+	case "auditorReferenceID":
+		return ec.fieldContext_Evidence_auditorReferenceID(ctx, field)
 	case "owner":
 		return ec.fieldContext_Evidence_owner(ctx, field)
 	case "environment":
@@ -170505,6 +157720,10 @@ func (ec *executionContext) childFields_Evidence(ctx context.Context, field grap
 		return ec.fieldContext_Evidence_controlObjectives(ctx, field)
 	case "controlImplementations":
 		return ec.fieldContext_Evidence_controlImplementations(ctx, field)
+	case "internalPolicies":
+		return ec.fieldContext_Evidence_internalPolicies(ctx, field)
+	case "procedures":
+		return ec.fieldContext_Evidence_procedures(ctx, field)
 	case "files":
 		return ec.fieldContext_Evidence_files(ctx, field)
 	case "programs":
@@ -172625,460 +159844,6 @@ func (ec *executionContext) childFields_InviteUpdatePayload(ctx context.Context,
 	return nil, fmt.Errorf("no field named %q was found under type InviteUpdatePayload", field.Name)
 }
 
-func (ec *executionContext) childFields_JobResult(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_JobResult_id(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_JobResult_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_JobResult_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_JobResult_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_JobResult_updatedBy(ctx, field)
-	case "updatedByImpersonator":
-		return ec.fieldContext_JobResult_updatedByImpersonator(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_JobResult_ownerID(ctx, field)
-	case "scheduledJobID":
-		return ec.fieldContext_JobResult_scheduledJobID(ctx, field)
-	case "status":
-		return ec.fieldContext_JobResult_status(ctx, field)
-	case "exitCode":
-		return ec.fieldContext_JobResult_exitCode(ctx, field)
-	case "finishedAt":
-		return ec.fieldContext_JobResult_finishedAt(ctx, field)
-	case "startedAt":
-		return ec.fieldContext_JobResult_startedAt(ctx, field)
-	case "fileID":
-		return ec.fieldContext_JobResult_fileID(ctx, field)
-	case "log":
-		return ec.fieldContext_JobResult_log(ctx, field)
-	case "owner":
-		return ec.fieldContext_JobResult_owner(ctx, field)
-	case "scheduledJob":
-		return ec.fieldContext_JobResult_scheduledJob(ctx, field)
-	case "file":
-		return ec.fieldContext_JobResult_file(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobResult", field.Name)
-}
-
-func (ec *executionContext) childFields_JobResultConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_JobResultConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_JobResultConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_JobResultConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobResultConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_JobResultCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobResult":
-		return ec.fieldContext_JobResultCreatePayload_jobResult(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobResultCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobResultDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedID":
-		return ec.fieldContext_JobResultDeletePayload_deletedID(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobResultDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobResultEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_JobResultEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_JobResultEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobResultEdge", field.Name)
-}
-
-func (ec *executionContext) childFields_JobResultUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobResult":
-		return ec.fieldContext_JobResultUpdatePayload_jobResult(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobResultUpdatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunner(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_JobRunner_id(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_JobRunner_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_JobRunner_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_JobRunner_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_JobRunner_updatedBy(ctx, field)
-	case "updatedByImpersonator":
-		return ec.fieldContext_JobRunner_updatedByImpersonator(ctx, field)
-	case "displayID":
-		return ec.fieldContext_JobRunner_displayID(ctx, field)
-	case "tags":
-		return ec.fieldContext_JobRunner_tags(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_JobRunner_ownerID(ctx, field)
-	case "systemOwned":
-		return ec.fieldContext_JobRunner_systemOwned(ctx, field)
-	case "internalNotes":
-		return ec.fieldContext_JobRunner_internalNotes(ctx, field)
-	case "systemInternalID":
-		return ec.fieldContext_JobRunner_systemInternalID(ctx, field)
-	case "name":
-		return ec.fieldContext_JobRunner_name(ctx, field)
-	case "status":
-		return ec.fieldContext_JobRunner_status(ctx, field)
-	case "ipAddress":
-		return ec.fieldContext_JobRunner_ipAddress(ctx, field)
-	case "lastSeen":
-		return ec.fieldContext_JobRunner_lastSeen(ctx, field)
-	case "version":
-		return ec.fieldContext_JobRunner_version(ctx, field)
-	case "os":
-		return ec.fieldContext_JobRunner_os(ctx, field)
-	case "owner":
-		return ec.fieldContext_JobRunner_owner(ctx, field)
-	case "jobRunnerTokens":
-		return ec.fieldContext_JobRunner_jobRunnerTokens(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunner", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_JobRunnerConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_JobRunnerConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_JobRunnerConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobRunner":
-		return ec.fieldContext_JobRunnerCreatePayload_jobRunner(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedID":
-		return ec.fieldContext_JobRunnerDeletePayload_deletedID(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_JobRunnerEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_JobRunnerEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerEdge", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerRegistrationToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_JobRunnerRegistrationToken_id(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_JobRunnerRegistrationToken_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_JobRunnerRegistrationToken_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_JobRunnerRegistrationToken_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_JobRunnerRegistrationToken_updatedBy(ctx, field)
-	case "updatedByImpersonator":
-		return ec.fieldContext_JobRunnerRegistrationToken_updatedByImpersonator(ctx, field)
-	case "tags":
-		return ec.fieldContext_JobRunnerRegistrationToken_tags(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_JobRunnerRegistrationToken_ownerID(ctx, field)
-	case "token":
-		return ec.fieldContext_JobRunnerRegistrationToken_token(ctx, field)
-	case "expiresAt":
-		return ec.fieldContext_JobRunnerRegistrationToken_expiresAt(ctx, field)
-	case "lastUsedAt":
-		return ec.fieldContext_JobRunnerRegistrationToken_lastUsedAt(ctx, field)
-	case "jobRunnerID":
-		return ec.fieldContext_JobRunnerRegistrationToken_jobRunnerID(ctx, field)
-	case "owner":
-		return ec.fieldContext_JobRunnerRegistrationToken_owner(ctx, field)
-	case "jobRunner":
-		return ec.fieldContext_JobRunnerRegistrationToken_jobRunner(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerRegistrationToken", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerRegistrationTokenConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_JobRunnerRegistrationTokenConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_JobRunnerRegistrationTokenConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_JobRunnerRegistrationTokenConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerRegistrationTokenConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerRegistrationTokenCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobRunnerRegistrationToken":
-		return ec.fieldContext_JobRunnerRegistrationTokenCreatePayload_jobRunnerRegistrationToken(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerRegistrationTokenCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerRegistrationTokenDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedID":
-		return ec.fieldContext_JobRunnerRegistrationTokenDeletePayload_deletedID(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerRegistrationTokenDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerRegistrationTokenEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_JobRunnerRegistrationTokenEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_JobRunnerRegistrationTokenEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerRegistrationTokenEdge", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_JobRunnerToken_id(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_JobRunnerToken_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_JobRunnerToken_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_JobRunnerToken_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_JobRunnerToken_updatedBy(ctx, field)
-	case "updatedByImpersonator":
-		return ec.fieldContext_JobRunnerToken_updatedByImpersonator(ctx, field)
-	case "tags":
-		return ec.fieldContext_JobRunnerToken_tags(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_JobRunnerToken_ownerID(ctx, field)
-	case "token":
-		return ec.fieldContext_JobRunnerToken_token(ctx, field)
-	case "expiresAt":
-		return ec.fieldContext_JobRunnerToken_expiresAt(ctx, field)
-	case "lastUsedAt":
-		return ec.fieldContext_JobRunnerToken_lastUsedAt(ctx, field)
-	case "isActive":
-		return ec.fieldContext_JobRunnerToken_isActive(ctx, field)
-	case "revokedReason":
-		return ec.fieldContext_JobRunnerToken_revokedReason(ctx, field)
-	case "revokedBy":
-		return ec.fieldContext_JobRunnerToken_revokedBy(ctx, field)
-	case "revokedAt":
-		return ec.fieldContext_JobRunnerToken_revokedAt(ctx, field)
-	case "owner":
-		return ec.fieldContext_JobRunnerToken_owner(ctx, field)
-	case "jobRunners":
-		return ec.fieldContext_JobRunnerToken_jobRunners(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerToken", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerTokenConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_JobRunnerTokenConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_JobRunnerTokenConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_JobRunnerTokenConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerTokenConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerTokenCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobRunnerToken":
-		return ec.fieldContext_JobRunnerTokenCreatePayload_jobRunnerToken(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerTokenCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerTokenDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedID":
-		return ec.fieldContext_JobRunnerTokenDeletePayload_deletedID(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerTokenDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerTokenEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_JobRunnerTokenEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_JobRunnerTokenEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerTokenEdge", field.Name)
-}
-
-func (ec *executionContext) childFields_JobRunnerUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobRunner":
-		return ec.fieldContext_JobRunnerUpdatePayload_jobRunner(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobRunnerUpdatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplate(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_JobTemplate_id(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_JobTemplate_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_JobTemplate_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_JobTemplate_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_JobTemplate_updatedBy(ctx, field)
-	case "updatedByImpersonator":
-		return ec.fieldContext_JobTemplate_updatedByImpersonator(ctx, field)
-	case "displayID":
-		return ec.fieldContext_JobTemplate_displayID(ctx, field)
-	case "tags":
-		return ec.fieldContext_JobTemplate_tags(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_JobTemplate_ownerID(ctx, field)
-	case "systemOwned":
-		return ec.fieldContext_JobTemplate_systemOwned(ctx, field)
-	case "internalNotes":
-		return ec.fieldContext_JobTemplate_internalNotes(ctx, field)
-	case "systemInternalID":
-		return ec.fieldContext_JobTemplate_systemInternalID(ctx, field)
-	case "title":
-		return ec.fieldContext_JobTemplate_title(ctx, field)
-	case "description":
-		return ec.fieldContext_JobTemplate_description(ctx, field)
-	case "platform":
-		return ec.fieldContext_JobTemplate_platform(ctx, field)
-	case "downloadURL":
-		return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
-	case "configuration":
-		return ec.fieldContext_JobTemplate_configuration(ctx, field)
-	case "cron":
-		return ec.fieldContext_JobTemplate_cron(ctx, field)
-	case "owner":
-		return ec.fieldContext_JobTemplate_owner(ctx, field)
-	case "scheduledJobs":
-		return ec.fieldContext_JobTemplate_scheduledJobs(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplate", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplateBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobTemplates":
-		return ec.fieldContext_JobTemplateBulkCreatePayload_jobTemplates(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplateBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplateBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_JobTemplateBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_JobTemplateBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_JobTemplateBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplateBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplateBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobTemplates":
-		return ec.fieldContext_JobTemplateBulkUpdatePayload_jobTemplates(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_JobTemplateBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_JobTemplateBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_JobTemplateBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplateBulkUpdatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplateConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_JobTemplateConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_JobTemplateConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_JobTemplateConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplateConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplateCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobTemplate":
-		return ec.fieldContext_JobTemplateCreatePayload_jobTemplate(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplateCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplateDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedID":
-		return ec.fieldContext_JobTemplateDeletePayload_deletedID(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplateDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplateEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_JobTemplateEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_JobTemplateEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplateEdge", field.Name)
-}
-
-func (ec *executionContext) childFields_JobTemplateUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "jobTemplate":
-		return ec.fieldContext_JobTemplateUpdatePayload_jobTemplate(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type JobTemplateUpdatePayload", field.Name)
-}
-
 func (ec *executionContext) childFields_MappableDomain(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -174259,14 +161024,6 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_internalPolicyCreators(ctx, field)
 	case "inviteCreators":
 		return ec.fieldContext_Organization_inviteCreators(ctx, field)
-	case "jobRunnerCreators":
-		return ec.fieldContext_Organization_jobRunnerCreators(ctx, field)
-	case "jobRunnerRegistrationTokenCreators":
-		return ec.fieldContext_Organization_jobRunnerRegistrationTokenCreators(ctx, field)
-	case "jobRunnerTokenCreators":
-		return ec.fieldContext_Organization_jobRunnerTokenCreators(ctx, field)
-	case "jobTemplateCreators":
-		return ec.fieldContext_Organization_jobTemplateCreators(ctx, field)
 	case "mappedControlCreators":
 		return ec.fieldContext_Organization_mappedControlCreators(ctx, field)
 	case "narrativeCreators":
@@ -174293,10 +161050,6 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_riskCreators(ctx, field)
 	case "scanCreators":
 		return ec.fieldContext_Organization_scanCreators(ctx, field)
-	case "scheduledJobCreators":
-		return ec.fieldContext_Organization_scheduledJobCreators(ctx, field)
-	case "scheduledJobRunCreators":
-		return ec.fieldContext_Organization_scheduledJobRunCreators(ctx, field)
 	case "slaDefinitionCreators":
 		return ec.fieldContext_Organization_slaDefinitionCreators(ctx, field)
 	case "standardCreators":
@@ -174443,22 +161196,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_actionPlans(ctx, field)
 	case "customDomains":
 		return ec.fieldContext_Organization_customDomains(ctx, field)
-	case "jobRunners":
-		return ec.fieldContext_Organization_jobRunners(ctx, field)
-	case "jobRunnerTokens":
-		return ec.fieldContext_Organization_jobRunnerTokens(ctx, field)
-	case "jobRunnerRegistrationTokens":
-		return ec.fieldContext_Organization_jobRunnerRegistrationTokens(ctx, field)
 	case "dnsVerifications":
 		return ec.fieldContext_Organization_dnsVerifications(ctx, field)
-	case "jobTemplates":
-		return ec.fieldContext_Organization_jobTemplates(ctx, field)
-	case "scheduledJobs":
-		return ec.fieldContext_Organization_scheduledJobs(ctx, field)
-	case "jobResults":
-		return ec.fieldContext_Organization_jobResults(ctx, field)
-	case "scheduledJobRuns":
-		return ec.fieldContext_Organization_scheduledJobRuns(ctx, field)
 	case "trustCenters":
 		return ec.fieldContext_Organization_trustCenters(ctx, field)
 	case "assets":
@@ -176629,210 +163368,6 @@ func (ec *executionContext) childFields_ScanUpdatePayload(ctx context.Context, f
 	return nil, fmt.Errorf("no field named %q was found under type ScanUpdatePayload", field.Name)
 }
 
-func (ec *executionContext) childFields_ScheduledJob(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_ScheduledJob_id(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_ScheduledJob_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_ScheduledJob_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_ScheduledJob_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_ScheduledJob_updatedBy(ctx, field)
-	case "updatedByImpersonator":
-		return ec.fieldContext_ScheduledJob_updatedByImpersonator(ctx, field)
-	case "displayID":
-		return ec.fieldContext_ScheduledJob_displayID(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_ScheduledJob_ownerID(ctx, field)
-	case "jobID":
-		return ec.fieldContext_ScheduledJob_jobID(ctx, field)
-	case "active":
-		return ec.fieldContext_ScheduledJob_active(ctx, field)
-	case "configuration":
-		return ec.fieldContext_ScheduledJob_configuration(ctx, field)
-	case "cron":
-		return ec.fieldContext_ScheduledJob_cron(ctx, field)
-	case "jobRunnerID":
-		return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
-	case "owner":
-		return ec.fieldContext_ScheduledJob_owner(ctx, field)
-	case "jobTemplate":
-		return ec.fieldContext_ScheduledJob_jobTemplate(ctx, field)
-	case "controls":
-		return ec.fieldContext_ScheduledJob_controls(ctx, field)
-	case "subcontrols":
-		return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
-	case "jobRunner":
-		return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJob", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobBulkCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "scheduledJobs":
-		return ec.fieldContext_ScheduledJobBulkCreatePayload_scheduledJobs(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobBulkCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobBulkDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedIDs":
-		return ec.fieldContext_ScheduledJobBulkDeletePayload_deletedIDs(ctx, field)
-	case "notDeletedIDs":
-		return ec.fieldContext_ScheduledJobBulkDeletePayload_notDeletedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ScheduledJobBulkDeletePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobBulkDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobBulkUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "scheduledJobs":
-		return ec.fieldContext_ScheduledJobBulkUpdatePayload_scheduledJobs(ctx, field)
-	case "updatedIDs":
-		return ec.fieldContext_ScheduledJobBulkUpdatePayload_updatedIDs(ctx, field)
-	case "notUpdatedIDs":
-		return ec.fieldContext_ScheduledJobBulkUpdatePayload_notUpdatedIDs(ctx, field)
-	case "error":
-		return ec.fieldContext_ScheduledJobBulkUpdatePayload_error(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobBulkUpdatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_ScheduledJobConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_ScheduledJobConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_ScheduledJobConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "scheduledJob":
-		return ec.fieldContext_ScheduledJobCreatePayload_scheduledJob(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedID":
-		return ec.fieldContext_ScheduledJobDeletePayload_deletedID(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_ScheduledJobEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_ScheduledJobEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobEdge", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobRun(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "id":
-		return ec.fieldContext_ScheduledJobRun_id(ctx, field)
-	case "createdAt":
-		return ec.fieldContext_ScheduledJobRun_createdAt(ctx, field)
-	case "updatedAt":
-		return ec.fieldContext_ScheduledJobRun_updatedAt(ctx, field)
-	case "createdBy":
-		return ec.fieldContext_ScheduledJobRun_createdBy(ctx, field)
-	case "updatedBy":
-		return ec.fieldContext_ScheduledJobRun_updatedBy(ctx, field)
-	case "updatedByImpersonator":
-		return ec.fieldContext_ScheduledJobRun_updatedByImpersonator(ctx, field)
-	case "ownerID":
-		return ec.fieldContext_ScheduledJobRun_ownerID(ctx, field)
-	case "jobRunnerID":
-		return ec.fieldContext_ScheduledJobRun_jobRunnerID(ctx, field)
-	case "status":
-		return ec.fieldContext_ScheduledJobRun_status(ctx, field)
-	case "scheduledJobID":
-		return ec.fieldContext_ScheduledJobRun_scheduledJobID(ctx, field)
-	case "expectedExecutionTime":
-		return ec.fieldContext_ScheduledJobRun_expectedExecutionTime(ctx, field)
-	case "script":
-		return ec.fieldContext_ScheduledJobRun_script(ctx, field)
-	case "owner":
-		return ec.fieldContext_ScheduledJobRun_owner(ctx, field)
-	case "scheduledJob":
-		return ec.fieldContext_ScheduledJobRun_scheduledJob(ctx, field)
-	case "jobRunner":
-		return ec.fieldContext_ScheduledJobRun_jobRunner(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobRun", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobRunConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "edges":
-		return ec.fieldContext_ScheduledJobRunConnection_edges(ctx, field)
-	case "pageInfo":
-		return ec.fieldContext_ScheduledJobRunConnection_pageInfo(ctx, field)
-	case "totalCount":
-		return ec.fieldContext_ScheduledJobRunConnection_totalCount(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobRunConnection", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobRunCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "scheduledJobRun":
-		return ec.fieldContext_ScheduledJobRunCreatePayload_scheduledJobRun(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobRunCreatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobRunDeletePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "deletedID":
-		return ec.fieldContext_ScheduledJobRunDeletePayload_deletedID(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobRunDeletePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobRunEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "node":
-		return ec.fieldContext_ScheduledJobRunEdge_node(ctx, field)
-	case "cursor":
-		return ec.fieldContext_ScheduledJobRunEdge_cursor(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobRunEdge", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobRunUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "scheduledJobRun":
-		return ec.fieldContext_ScheduledJobRunUpdatePayload_scheduledJobRun(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobRunUpdatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_ScheduledJobUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "scheduledJob":
-		return ec.fieldContext_ScheduledJobUpdatePayload_scheduledJob(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobUpdatePayload", field.Name)
-}
-
 func (ec *executionContext) childFields_SearchContext(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "entityID":
@@ -176891,10 +163426,6 @@ func (ec *executionContext) childFields_SearchResults(ctx context.Context, field
 		return ec.fieldContext_SearchResults_internalPolicies(ctx, field)
 	case "invites":
 		return ec.fieldContext_SearchResults_invites(ctx, field)
-	case "jobRunners":
-		return ec.fieldContext_SearchResults_jobRunners(ctx, field)
-	case "jobTemplates":
-		return ec.fieldContext_SearchResults_jobTemplates(ctx, field)
 	case "narratives":
 		return ec.fieldContext_SearchResults_narratives(ctx, field)
 	case "notificationTemplates":
@@ -177203,8 +163734,6 @@ func (ec *executionContext) childFields_Subcontrol(ctx context.Context, field gr
 		return ec.fieldContext_Subcontrol_control(ctx, field)
 	case "controlImplementations":
 		return ec.fieldContext_Subcontrol_controlImplementations(ctx, field)
-	case "scheduledJobs":
-		return ec.fieldContext_Subcontrol_scheduledJobs(ctx, field)
 	case "workflowObjectRefs":
 		return ec.fieldContext_Subcontrol_workflowObjectRefs(ctx, field)
 	case "assets":

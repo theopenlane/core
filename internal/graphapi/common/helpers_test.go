@@ -15,9 +15,9 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/objects"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/objects"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )

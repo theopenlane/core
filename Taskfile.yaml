@@ -28,8 +28,8 @@ includes:
 
 
 env:
-  ATLAS_POSTGRES_DB_URI: "postgres:17-alpine"
-  TEST_DB_URL: "docker://postgres:17-alpine"
+  ATLAS_POSTGRES_DB_URI: "postgres:18-alpine"
+  TEST_DB_URL: "docker://postgres:18-alpine"
   TEST_DB_CONTAINER_EXPIRY: "20" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
@@ -56,6 +56,20 @@ tasks:
     cmds:
       - go generate ./...
       - task: tidy
+
+  drop:schema:
+    desc: "remove ent schemas end to end: task drop:schema -- ScheduledJob JobRunner"
+    cmds:
+      - go run ./internal/ent/generate/entdrop --phase pre --migration drop_{{.CLI_ARGS | replace " " "_" | lower}} {{.CLI_ARGS}}
+      - task: regenerate
+      - go run ./internal/ent/generate/entdrop --phase post {{.CLI_ARGS}}
+
+  drop:field:
+    desc: "remove ent fields end to end: task drop:field -- Control.ref_code"
+    cmds:
+      - go run ./internal/ent/generate/entdrop --field --phase pre {{.CLI_ARGS}}
+      - task: regenerate
+      - go run ./internal/ent/generate/entdrop --field --phase post {{.CLI_ARGS}}
 
   regenerate:
     desc: regenerate all codegen artifacts from scratch, removing checksums to force regeneration
@@ -300,7 +314,7 @@ tasks:
     silent: true
     desc: runs golangci-lint only on the graphapi package for CI, excluding generated code
     cmds:
-      - golangci-lint run --config=.golangci.yaml --verbose $(go list ./... | grep internal/graphapi | grep -v generated | sed 's|github.com/theopenlane/core[^/]*/||' | sed 's|^|./|')
+      - golangci-lint run --config=.golangci.yaml --verbose $(go list ./... | grep internal/graphapi | grep -v generated | sed -E 's|^github.com/theopenlane/core(/v[0-9]+)?/||' | sed 's|^|./|')
 
   go:lint:ci:handlers:
     silent: true
@@ -318,8 +332,8 @@ tasks:
           | grep -v /internal/graphapi \
           | grep -v /internal/httpserve/handlers \
           | grep -v generated \
-          | grep -v '^github.com/theopenlane/core$' \
-          | sed 's|github.com/theopenlane/core[^/]*/||' \
+          | grep -vE '^github.com/theopenlane/core(/v[0-9]+)?$' \
+          | sed -E 's|^github.com/theopenlane/core(/v[0-9]+)?/||' \
           | sed 's|^|./|'
         )
 
@@ -327,7 +341,7 @@ tasks:
     desc: runs and outputs results of created go tests
     aliases: ["go:test:psql", "test:psql"]
     env:
-      TEST_DB_URL: "docker://postgres:17-alpine"
+      TEST_DB_URL: "docker://postgres:18-alpine"
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go test -v ./... -tags test
@@ -392,7 +406,16 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:graph']
     cmds:
-      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-graph.out -tags test
+      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-graph.out -tags test
+
+  go:testsum:ci:events:
+    desc: runs only the event driven (listener + integrations) graphapi tests using gotestsum for CI
+    silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    aliases: ['testsum:ci:events']
+    cmds:
+      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-events.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-events.out -tags test
 
   go:testsum:ci:handlers:
     desc: runs tests only graph tests using gotestsum for CI
@@ -401,7 +424,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: ['testsum:ci:handlers']
     cmds:
-      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-handlers.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-handlers.out -tags test
+      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-handlers.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-handlers.out -tags test
 
   go:testsum:ci:no-api:
     desc: runs tests using gotestsum for CI
@@ -443,7 +466,7 @@ tasks:
     silent: true
     aliases: ['testsum:graph']
     cmds:
-      - gotestsum --packages "github.com/theopenlane/core/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+      - gotestsum --packages "github.com/theopenlane/core/v2/internal/graphapi" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
 
   go:testsum:handlers:
     desc: runs only the httpserve handlers tests using gotestsum
@@ -452,7 +475,16 @@ tasks:
     silent: true
     aliases: ['testsum:graph']
     cmds:
-      - gotestsum --packages "github.com/theopenlane/core/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+      - gotestsum --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+
+  go:testsum:events:
+    desc: runs only the event driven (listener + integrations) graphapi tests using gotestsum
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    silent: true
+    aliases: ['testsum:events']
+    cmds:
+      - gotestsum --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
 
   go:fmt:
     desc: format all go code
@@ -477,18 +509,24 @@ tasks:
 
   go:build:ci:
     desc: Runs go build for the core server for PR/branch CI, favors build speed over binary size
+    vars:
+      VERSION:
+        sh: echo "${IMAGE_TAG:-dev-$(git rev-parse --short HEAD)}"
     cmds:
       # -gcflags=all=-l disables inlining, which is faster to compile and gives more
       # accurate stack traces, at the cost of a larger, unstripped binary
       # these binaries are not published so the larger size is ok here
-      - CGO_ENABLED=0 go build -mod=readonly -gcflags=all=-l -o bin/core
+      - CGO_ENABLED=0 go build -mod=readonly -gcflags=all=-l -ldflags="-X github.com/theopenlane/core/v2/pkg/version.Version={{ .VERSION }}" -o bin/core
 
   go:build:ci:release:
     desc: Runs go build for the core server for tagged releases, favors binary size over build speed
+    vars:
+      VERSION:
+        sh: echo "${IMAGE_TAG:-dev-$(git rev-parse --short HEAD)}"
     cmds:
       # -s -w strip the symbol table and DWARF debug info (biggest size win)
       # -trimpath removes local build paths from the binary
-      - CGO_ENABLED=0 go build -mod=readonly -trimpath -ldflags="-s -w" -o bin/core
+      - CGO_ENABLED=0 go build -mod=readonly -trimpath -ldflags="-s -w -X github.com/theopenlane/core/v2/pkg/version.Version={{ .VERSION }}" -o bin/core
 
   go:build-cli:
     aliases: [buildcli]

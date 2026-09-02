@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -2640,6 +2640,16 @@ func StorageProviderEqualFold(v string) predicate.FileHistory {
 // StorageProviderContainsFold applies the ContainsFold predicate on the "storage_provider" field.
 func StorageProviderContainsFold(v string) predicate.FileHistory {
 	return predicate.FileHistory(sql.FieldContainsFold(FieldStorageProvider, v))
+}
+
+// BackupStateIsNil applies the IsNil predicate on the "backup_state" field.
+func BackupStateIsNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldIsNull(FieldBackupState))
+}
+
+// BackupStateNotNil applies the NotNil predicate on the "backup_state" field.
+func BackupStateNotNil() predicate.FileHistory {
+	return predicate.FileHistory(sql.FieldNotNull(FieldBackupState))
 }
 
 // LastAccessedAtEQ applies the EQ predicate on the "last_accessed_at" field.

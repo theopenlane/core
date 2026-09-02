@@ -11,8 +11,8 @@ import (
 
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/pkg/objects/examples/config"
-	"github.com/theopenlane/core/pkg/objects/examples/openlane"
+	"github.com/theopenlane/core/v2/pkg/objects/examples/config"
+	"github.com/theopenlane/core/v2/pkg/objects/examples/openlane"
 )
 
 func setupCommand() *cli.Command {

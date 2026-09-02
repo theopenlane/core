@@ -14,12 +14,11 @@ import (
 	echo "github.com/theopenlane/echox"
 	"github.com/vektah/gqlparser/v2/ast"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/directives"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	gqlhistorygenerated "github.com/theopenlane/core/v2/internal/graphapi/historygenerated"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // Resolver provides a graph response resolver
@@ -78,7 +77,7 @@ type Handler struct {
 func (r *Resolver) Handler() *Handler {
 	c := &gqlhistorygenerated.Config{Resolvers: r}
 
-	directives.ImplementAllHistoryDirectives(c)
+	ImplementAllHistoryDirectives(c)
 
 	srv := handler.New(gqlhistorygenerated.NewExecutableSchema(
 		*c,

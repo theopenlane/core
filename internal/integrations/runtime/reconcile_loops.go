@@ -3,17 +3,18 @@ package runtime
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/theopenlane/core/common/enums"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	intobvs "github.com/theopenlane/core/internal/integrations/observability"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/operations"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// emitReconcileLoop emits the recurring loop for one operation on an installation; the topic's
-// UniqueKey derivation collapses concurrent seeds of the same loop to one job
+// emitReconcileLoop starts one operation's loop unless a live one exists; the metadata guard is
+// what stops seeds from spawning parallel chains, since successor cycles change their unique key
 func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integration, operationName string) error {
 	oc := types.NewOperationContext(installation.OwnerID, operationName, types.IntegrationSource{
 		IntegrationID: installation.ID,
@@ -23,6 +24,37 @@ func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integ
 
 	ctx, headers := intobvs.EmitContext(ctx, oc)
 
+	fragment, err := types.PropertiesFragment(map[string]string{
+		"entityId":  installation.ID,
+		"operation": operationName,
+		"runType":   enums.IntegrationRunTypeReconcile.String(),
+	})
+	if err != nil {
+		return err
+	}
+
+	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
+	if err != nil {
+		return err
+	}
+
+	if active {
+		return nil
+	}
+
+	op, err := r.Registry().Operation(installation.DefinitionID, operationName)
+	if err != nil {
+		return err
+	}
+
+	if op.ClientRef.Valid() {
+		if _, err := r.BuildClientForIntegration(ctx, installation, op.ClientRef); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("client unresolved, marking unhealthy instead of seeding loop")
+
+			return r.MarkIntegrationUnhealthy(ctx, installation, fmt.Sprintf(clientUnresolvedReasonFmt, err))
+		}
+	}
+
 	if _, err := r.Gala().EmitWithHeaders(ctx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers); err != nil {
 		return err
 	}
@@ -30,6 +62,35 @@ func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integ
 	logx.FromContext(ctx).Info().Msg("reconcile loop emitted")
 
 	return nil
+}
+
+// clientUnresolvedReasonFmt formats the actionable reason recorded when an integration cannot establish its client
+const clientUnresolvedReasonFmt = "the integration could not establish a connection and needs to be reconnected: %s"
+
+// reconcileExhaustedReasonFmt formats the user-facing reason recorded on the unhealthy installation
+const reconcileExhaustedReasonFmt = "repeated sync failures due to %s"
+
+// markReconcileExhausted marks the installation unhealthy when its loop exhausts its error budget
+func (r *Runtime) markReconcileExhausted(ctx context.Context, e operations.ReconcileEnvelope, cause error) {
+	src := types.IntegrationSourceFrom(e.OperationContext)
+	if src.IntegrationID == "" {
+		return
+	}
+
+	ctx = intobvs.WithContext(ctx, e.OperationContext)
+
+	installation, err := r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed resolving integration after exhausted reconcile loop")
+
+		return
+	}
+
+	logx.FromContext(ctx).Error().Err(cause).Msg("reconcile loop exhausted error budget, marking integration unhealthy")
+
+	if err := r.MarkIntegrationUnhealthy(ctx, installation, fmt.Sprintf(reconcileExhaustedReasonFmt, cause)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed marking integration unhealthy after exhausted reconcile loop")
+	}
 }
 
 // ResetReconcileLoops collapses each reconcilable operation on the installation to exactly one

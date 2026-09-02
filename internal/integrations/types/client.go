@@ -6,7 +6,7 @@ import (
 
 	"github.com/theopenlane/iam/tokens"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // ClientBuildRequest bundles the inputs for building one installation-scoped client

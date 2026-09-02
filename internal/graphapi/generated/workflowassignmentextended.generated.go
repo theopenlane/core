@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -37,7 +37,7 @@ func (ec *executionContext) _WorkflowAssignmentApprovePayload_workflowAssignment
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowAssignment) graphql.Marshaler {
-			return ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx, selections, v)
+			return ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx, selections, v)
 		},
 		true,
 		true,
@@ -69,7 +69,7 @@ func (ec *executionContext) _WorkflowAssignmentRejectPayload_workflowAssignment(
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.WorkflowAssignment) graphql.Marshaler {
-			return ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx, selections, v)
+			return ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx, selections, v)
 		},
 		true,
 		true,
@@ -180,11 +180,11 @@ func (ec *executionContext) _WorkflowAssignmentRejectPayload(ctx context.Context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNWorkflowAssignmentApprovePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentApprovePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentApprovePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowAssignmentApprovePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentApprovePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentApprovePayload) graphql.Marshaler {
 	return ec._WorkflowAssignmentApprovePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowAssignmentApprovePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentApprovePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentApprovePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowAssignmentApprovePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentApprovePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentApprovePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -194,11 +194,11 @@ func (ec *executionContext) marshalNWorkflowAssignmentApprovePayload2ᚖgithub�
 	return ec._WorkflowAssignmentApprovePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowAssignmentRejectPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentRejectPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentRejectPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowAssignmentRejectPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentRejectPayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowAssignmentRejectPayload) graphql.Marshaler {
 	return ec._WorkflowAssignmentRejectPayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowAssignmentRejectPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentRejectPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentRejectPayload) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowAssignmentRejectPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentRejectPayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowAssignmentRejectPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

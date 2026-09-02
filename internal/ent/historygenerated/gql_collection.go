@@ -9,74 +9,72 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/historygenerated/actionplanhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlobjectivehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/filehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/findingcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/findinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/grouphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationpreferencehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/notificationtemplatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/programmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/systemdetailhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterdochistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentersubprocessorhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/usersettinghistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vulnerabilityhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/actionplanhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlimplementationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlobjectivehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/customdomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/discussionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/documentdatahistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/emailtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/entitytypehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/evidencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/filehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/findingcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/findinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/grouphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/groupsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/hushhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/identityholderhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/internalpolicyhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappabledomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappedcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/narrativehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationpreferencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/notificationtemplatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/organizationsettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/orgmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/platformhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/procedurehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/programmembershiphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/remediationhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/reviewhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/standardhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/systemdetailhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/taskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/templatehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentercompliancehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterdochistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterfaqhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterndarequesthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcentersubprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/userhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/usersettinghistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorscoringconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vulnerabilityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowdefinitionhistory"
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
@@ -4009,6 +4007,11 @@ func (_q *EvidenceHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, evidencehistory.FieldReviewFrequency)
 				fieldSeen[evidencehistory.FieldReviewFrequency] = struct{}{}
 			}
+		case "auditorReferenceID":
+			if _, ok := fieldSeen[evidencehistory.FieldAuditorReferenceID]; !ok {
+				selectedFields = append(selectedFields, evidencehistory.FieldAuditorReferenceID)
+				fieldSeen[evidencehistory.FieldAuditorReferenceID] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -6179,190 +6182,6 @@ func newInternalPolicyHistoryPaginateArgs(rv map[string]any) *internalpolicyhist
 	}
 	if v, ok := rv[whereField].(*InternalPolicyHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithInternalPolicyHistoryFilter(v.Filter))
-	}
-	return args
-}
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (_q *JobTemplateHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*JobTemplateHistoryQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return _q, nil
-	}
-	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return _q, nil
-}
-
-func (_q *JobTemplateHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(jobtemplatehistory.Columns))
-		selectedFields = []string{jobtemplatehistory.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-		case "historyTime":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldHistoryTime]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldHistoryTime)
-				fieldSeen[jobtemplatehistory.FieldHistoryTime] = struct{}{}
-			}
-		case "ref":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldRef]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldRef)
-				fieldSeen[jobtemplatehistory.FieldRef] = struct{}{}
-			}
-		case "operation":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldOperation]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldOperation)
-				fieldSeen[jobtemplatehistory.FieldOperation] = struct{}{}
-			}
-		case "createdAt":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldCreatedAt)
-				fieldSeen[jobtemplatehistory.FieldCreatedAt] = struct{}{}
-			}
-		case "updatedAt":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldUpdatedAt)
-				fieldSeen[jobtemplatehistory.FieldUpdatedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldCreatedBy)
-				fieldSeen[jobtemplatehistory.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldUpdatedBy)
-				fieldSeen[jobtemplatehistory.FieldUpdatedBy] = struct{}{}
-			}
-		case "updatedByImpersonator":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldUpdatedByImpersonator]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldUpdatedByImpersonator)
-				fieldSeen[jobtemplatehistory.FieldUpdatedByImpersonator] = struct{}{}
-			}
-		case "displayID":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldDisplayID]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldDisplayID)
-				fieldSeen[jobtemplatehistory.FieldDisplayID] = struct{}{}
-			}
-		case "tags":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldTags]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldTags)
-				fieldSeen[jobtemplatehistory.FieldTags] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldOwnerID)
-				fieldSeen[jobtemplatehistory.FieldOwnerID] = struct{}{}
-			}
-		case "systemOwned":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldSystemOwned]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldSystemOwned)
-				fieldSeen[jobtemplatehistory.FieldSystemOwned] = struct{}{}
-			}
-		case "internalNotes":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldInternalNotes]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldInternalNotes)
-				fieldSeen[jobtemplatehistory.FieldInternalNotes] = struct{}{}
-			}
-		case "systemInternalID":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldSystemInternalID]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldSystemInternalID)
-				fieldSeen[jobtemplatehistory.FieldSystemInternalID] = struct{}{}
-			}
-		case "title":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldTitle]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldTitle)
-				fieldSeen[jobtemplatehistory.FieldTitle] = struct{}{}
-			}
-		case "description":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldDescription]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldDescription)
-				fieldSeen[jobtemplatehistory.FieldDescription] = struct{}{}
-			}
-		case "platform":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldPlatform]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldPlatform)
-				fieldSeen[jobtemplatehistory.FieldPlatform] = struct{}{}
-			}
-		case "downloadURL":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldDownloadURL]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldDownloadURL)
-				fieldSeen[jobtemplatehistory.FieldDownloadURL] = struct{}{}
-			}
-		case "configuration":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldConfiguration]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldConfiguration)
-				fieldSeen[jobtemplatehistory.FieldConfiguration] = struct{}{}
-			}
-		case "cron":
-			if _, ok := fieldSeen[jobtemplatehistory.FieldCron]; !ok {
-				selectedFields = append(selectedFields, jobtemplatehistory.FieldCron)
-				fieldSeen[jobtemplatehistory.FieldCron] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		_q.Select(selectedFields...)
-	}
-	return nil
-}
-
-type jobtemplatehistoryPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []JobTemplateHistoryPaginateOption
-}
-
-func newJobTemplateHistoryPaginateArgs(rv map[string]any) *jobtemplatehistoryPaginateArgs {
-	args := &jobtemplatehistoryPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[orderByField]; ok {
-		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &JobTemplateHistoryOrder{Field: &JobTemplateHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
-			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithJobTemplateHistoryOrder(order))
-			}
-		case *JobTemplateHistoryOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithJobTemplateHistoryOrder(v))
-			}
-		}
-	}
-	if v, ok := rv[whereField].(*JobTemplateHistoryWhereInput); ok {
-		args.opts = append(args.opts, WithJobTemplateHistoryFilter(v.Filter))
 	}
 	return args
 }
@@ -10201,165 +10020,6 @@ func newSLADefinitionHistoryPaginateArgs(rv map[string]any) *sladefinitionhistor
 	}
 	if v, ok := rv[whereField].(*SLADefinitionHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithSLADefinitionHistoryFilter(v.Filter))
-	}
-	return args
-}
-
-// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
-func (_q *ScheduledJobHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*ScheduledJobHistoryQuery, error) {
-	fc := graphql.GetFieldContext(ctx)
-	if fc == nil {
-		return _q, nil
-	}
-	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
-		return nil, err
-	}
-	return _q, nil
-}
-
-func (_q *ScheduledJobHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
-	path = append([]string(nil), path...)
-	var (
-		unknownSeen    bool
-		fieldSeen      = make(map[string]struct{}, len(scheduledjobhistory.Columns))
-		selectedFields = []string{scheduledjobhistory.FieldID}
-	)
-	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
-		switch field.Name {
-		case "historyTime":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldHistoryTime]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldHistoryTime)
-				fieldSeen[scheduledjobhistory.FieldHistoryTime] = struct{}{}
-			}
-		case "ref":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldRef]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldRef)
-				fieldSeen[scheduledjobhistory.FieldRef] = struct{}{}
-			}
-		case "operation":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldOperation]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldOperation)
-				fieldSeen[scheduledjobhistory.FieldOperation] = struct{}{}
-			}
-		case "createdAt":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldCreatedAt]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldCreatedAt)
-				fieldSeen[scheduledjobhistory.FieldCreatedAt] = struct{}{}
-			}
-		case "updatedAt":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldUpdatedAt]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedAt)
-				fieldSeen[scheduledjobhistory.FieldUpdatedAt] = struct{}{}
-			}
-		case "createdBy":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldCreatedBy]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldCreatedBy)
-				fieldSeen[scheduledjobhistory.FieldCreatedBy] = struct{}{}
-			}
-		case "updatedBy":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldUpdatedBy]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedBy)
-				fieldSeen[scheduledjobhistory.FieldUpdatedBy] = struct{}{}
-			}
-		case "updatedByImpersonator":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldUpdatedByImpersonator]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldUpdatedByImpersonator)
-				fieldSeen[scheduledjobhistory.FieldUpdatedByImpersonator] = struct{}{}
-			}
-		case "displayID":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldDisplayID]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldDisplayID)
-				fieldSeen[scheduledjobhistory.FieldDisplayID] = struct{}{}
-			}
-		case "ownerID":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldOwnerID]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldOwnerID)
-				fieldSeen[scheduledjobhistory.FieldOwnerID] = struct{}{}
-			}
-		case "jobID":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldJobID]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldJobID)
-				fieldSeen[scheduledjobhistory.FieldJobID] = struct{}{}
-			}
-		case "active":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldActive]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldActive)
-				fieldSeen[scheduledjobhistory.FieldActive] = struct{}{}
-			}
-		case "configuration":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldConfiguration]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldConfiguration)
-				fieldSeen[scheduledjobhistory.FieldConfiguration] = struct{}{}
-			}
-		case "cron":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldCron]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldCron)
-				fieldSeen[scheduledjobhistory.FieldCron] = struct{}{}
-			}
-		case "jobRunnerID":
-			if _, ok := fieldSeen[scheduledjobhistory.FieldJobRunnerID]; !ok {
-				selectedFields = append(selectedFields, scheduledjobhistory.FieldJobRunnerID)
-				fieldSeen[scheduledjobhistory.FieldJobRunnerID] = struct{}{}
-			}
-		case "id":
-		case "__typename":
-		default:
-			unknownSeen = true
-		}
-	}
-	if !unknownSeen {
-		_q.Select(selectedFields...)
-	}
-	return nil
-}
-
-type scheduledjobhistoryPaginateArgs struct {
-	first, last   *int
-	after, before *Cursor
-	opts          []ScheduledJobHistoryPaginateOption
-}
-
-func newScheduledJobHistoryPaginateArgs(rv map[string]any) *scheduledjobhistoryPaginateArgs {
-	args := &scheduledjobhistoryPaginateArgs{}
-	if rv == nil {
-		return args
-	}
-	if v := rv[firstField]; v != nil {
-		args.first = v.(*int)
-	}
-	if v := rv[lastField]; v != nil {
-		args.last = v.(*int)
-	}
-	if v := rv[afterField]; v != nil {
-		args.after = v.(*Cursor)
-	}
-	if v := rv[beforeField]; v != nil {
-		args.before = v.(*Cursor)
-	}
-	if v, ok := rv[orderByField]; ok {
-		switch v := v.(type) {
-		case map[string]any:
-			var (
-				err1, err2 error
-				order      = &ScheduledJobHistoryOrder{Field: &ScheduledJobHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
-			)
-			if d, ok := v[directionField]; ok {
-				err1 = order.Direction.UnmarshalGQL(d)
-			}
-			if f, ok := v[fieldField]; ok {
-				err2 = order.Field.UnmarshalGQL(f)
-			}
-			if err1 == nil && err2 == nil {
-				args.opts = append(args.opts, WithScheduledJobHistoryOrder(order))
-			}
-		case *ScheduledJobHistoryOrder:
-			if v != nil {
-				args.opts = append(args.opts, WithScheduledJobHistoryOrder(v))
-			}
-		}
-	}
-	if v, ok := rv[whereField].(*ScheduledJobHistoryWhereInput); ok {
-		args.opts = append(args.opts, WithScheduledJobHistoryFilter(v.Filter))
 	}
 	return args
 }

@@ -13,13 +13,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 )
 
 // HookWorkflowApprovalRouting intercepts mutations on workflowable schemas and routes them
@@ -43,22 +43,14 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			if client == nil {
 				return next.Mutate(ctx, m)
 			}
-			if !workflowEngineEnabled(ctx, client) {
+
+			wfEngine := engine.Default()
+			if wfEngine == nil {
 				return next.Mutate(ctx, m)
 			}
 
 			changeSet := entityops.ChangeSetFromMutation(m)
 			if len(changeSet.ChangedFields) == 0 && len(changeSet.ChangedEdges) == 0 {
-				return next.Mutate(ctx, m)
-			}
-
-			wfEngine, _ := client.WorkflowEngine.(*engine.WorkflowEngine)
-			if wfEngine == nil {
-				if ctxClient := generated.FromContext(ctx); ctxClient != nil {
-					wfEngine, _ = ctxClient.WorkflowEngine.(*engine.WorkflowEngine)
-				}
-			}
-			if wfEngine == nil {
 				return next.Mutate(ctx, m)
 			}
 
@@ -553,13 +545,7 @@ func createProposalWithInstance(ctx context.Context, client *generated.Client, d
 
 // triggerWorkflowAfterProposalCreation triggers a workflow for a newly created proposal
 func triggerWorkflowAfterProposalCreation(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domain workflows.DomainChanges, instanceID string) error {
-	// Get the workflow engine from the client or context
-	wfEngine, _ := client.WorkflowEngine.(*engine.WorkflowEngine)
-	if wfEngine == nil {
-		if ctxClient := generated.FromContext(ctx); ctxClient != nil {
-			wfEngine, _ = ctxClient.WorkflowEngine.(*engine.WorkflowEngine)
-		}
-	}
+	wfEngine := engine.Default()
 	if wfEngine == nil {
 		log.Ctx(ctx).Debug().Str("instance_id", instanceID).Msg("workflow engine not available, skipping trigger")
 		return nil

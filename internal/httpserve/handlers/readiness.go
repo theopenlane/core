@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/core/v2/internal/entdb"
 	echo "github.com/theopenlane/echox"
 )
 

@@ -8,405 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/grouphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/grouphistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // GroupHistoryUpdate is the builder for updating GroupHistory entities.
 type GroupHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *GroupHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *GroupHistoryMutation
 }
 
 // Where appends a list predicates to the GroupHistoryUpdate builder.
 func (_u *GroupHistoryUpdate) Where(ps ...predicate.GroupHistory) *GroupHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *GroupHistoryUpdate) SetUpdatedAt(v time.Time) *GroupHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *GroupHistoryUpdate) ClearUpdatedAt() *GroupHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *GroupHistoryUpdate) SetUpdatedBy(v string) *GroupHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableUpdatedBy(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *GroupHistoryUpdate) ClearUpdatedBy() *GroupHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *GroupHistoryUpdate) SetUpdatedByImpersonator(v string) *GroupHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *GroupHistoryUpdate) ClearUpdatedByImpersonator() *GroupHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *GroupHistoryUpdate) SetDeletedAt(v time.Time) *GroupHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableDeletedAt(v *time.Time) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *GroupHistoryUpdate) ClearDeletedAt() *GroupHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *GroupHistoryUpdate) SetDeletedBy(v string) *GroupHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableDeletedBy(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *GroupHistoryUpdate) ClearDeletedBy() *GroupHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *GroupHistoryUpdate) SetTags(v []string) *GroupHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *GroupHistoryUpdate) AppendTags(v []string) *GroupHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *GroupHistoryUpdate) ClearTags() *GroupHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *GroupHistoryUpdate) SetOwnerID(v string) *GroupHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableOwnerID(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *GroupHistoryUpdate) ClearOwnerID() *GroupHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *GroupHistoryUpdate) SetName(v string) *GroupHistoryUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableName(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *GroupHistoryUpdate) SetDescription(v string) *GroupHistoryUpdate {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableDescription(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *GroupHistoryUpdate) ClearDescription() *GroupHistoryUpdate {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetGravatarLogoURL sets the "gravatar_logo_url" field.
-func (_u *GroupHistoryUpdate) SetGravatarLogoURL(v string) *GroupHistoryUpdate {
-	_u.mutation.SetGravatarLogoURL(v)
-	return _u
-}
-
-// SetNillableGravatarLogoURL sets the "gravatar_logo_url" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableGravatarLogoURL(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetGravatarLogoURL(*v)
-	}
-	return _u
-}
-
-// ClearGravatarLogoURL clears the value of the "gravatar_logo_url" field.
-func (_u *GroupHistoryUpdate) ClearGravatarLogoURL() *GroupHistoryUpdate {
-	_u.mutation.ClearGravatarLogoURL()
-	return _u
-}
-
-// SetLogoURL sets the "logo_url" field.
-func (_u *GroupHistoryUpdate) SetLogoURL(v string) *GroupHistoryUpdate {
-	_u.mutation.SetLogoURL(v)
-	return _u
-}
-
-// SetNillableLogoURL sets the "logo_url" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableLogoURL(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetLogoURL(*v)
-	}
-	return _u
-}
-
-// ClearLogoURL clears the value of the "logo_url" field.
-func (_u *GroupHistoryUpdate) ClearLogoURL() *GroupHistoryUpdate {
-	_u.mutation.ClearLogoURL()
-	return _u
-}
-
-// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (_u *GroupHistoryUpdate) SetAvatarLocalFileID(v string) *GroupHistoryUpdate {
-	_u.mutation.SetAvatarLocalFileID(v)
-	return _u
-}
-
-// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableAvatarLocalFileID(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetAvatarLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
-func (_u *GroupHistoryUpdate) ClearAvatarLocalFileID() *GroupHistoryUpdate {
-	_u.mutation.ClearAvatarLocalFileID()
-	return _u
-}
-
-// SetDisplayName sets the "display_name" field.
-func (_u *GroupHistoryUpdate) SetDisplayName(v string) *GroupHistoryUpdate {
-	_u.mutation.SetDisplayName(v)
-	return _u
-}
-
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableDisplayName(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetDisplayName(*v)
-	}
-	return _u
-}
-
-// SetOscalRole sets the "oscal_role" field.
-func (_u *GroupHistoryUpdate) SetOscalRole(v string) *GroupHistoryUpdate {
-	_u.mutation.SetOscalRole(v)
-	return _u
-}
-
-// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableOscalRole(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetOscalRole(*v)
-	}
-	return _u
-}
-
-// ClearOscalRole clears the value of the "oscal_role" field.
-func (_u *GroupHistoryUpdate) ClearOscalRole() *GroupHistoryUpdate {
-	_u.mutation.ClearOscalRole()
-	return _u
-}
-
-// SetOscalPartyUUID sets the "oscal_party_uuid" field.
-func (_u *GroupHistoryUpdate) SetOscalPartyUUID(v string) *GroupHistoryUpdate {
-	_u.mutation.SetOscalPartyUUID(v)
-	return _u
-}
-
-// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableOscalPartyUUID(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetOscalPartyUUID(*v)
-	}
-	return _u
-}
-
-// ClearOscalPartyUUID clears the value of the "oscal_party_uuid" field.
-func (_u *GroupHistoryUpdate) ClearOscalPartyUUID() *GroupHistoryUpdate {
-	_u.mutation.ClearOscalPartyUUID()
-	return _u
-}
-
-// SetOscalContactUuids sets the "oscal_contact_uuids" field.
-func (_u *GroupHistoryUpdate) SetOscalContactUuids(v []string) *GroupHistoryUpdate {
-	_u.mutation.SetOscalContactUuids(v)
-	return _u
-}
-
-// AppendOscalContactUuids appends value to the "oscal_contact_uuids" field.
-func (_u *GroupHistoryUpdate) AppendOscalContactUuids(v []string) *GroupHistoryUpdate {
-	_u.mutation.AppendOscalContactUuids(v)
-	return _u
-}
-
-// ClearOscalContactUuids clears the value of the "oscal_contact_uuids" field.
-func (_u *GroupHistoryUpdate) ClearOscalContactUuids() *GroupHistoryUpdate {
-	_u.mutation.ClearOscalContactUuids()
-	return _u
-}
-
-// SetScimExternalID sets the "scim_external_id" field.
-func (_u *GroupHistoryUpdate) SetScimExternalID(v string) *GroupHistoryUpdate {
-	_u.mutation.SetScimExternalID(v)
-	return _u
-}
-
-// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableScimExternalID(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetScimExternalID(*v)
-	}
-	return _u
-}
-
-// ClearScimExternalID clears the value of the "scim_external_id" field.
-func (_u *GroupHistoryUpdate) ClearScimExternalID() *GroupHistoryUpdate {
-	_u.mutation.ClearScimExternalID()
-	return _u
-}
-
-// SetScimDisplayName sets the "scim_display_name" field.
-func (_u *GroupHistoryUpdate) SetScimDisplayName(v string) *GroupHistoryUpdate {
-	_u.mutation.SetScimDisplayName(v)
-	return _u
-}
-
-// SetNillableScimDisplayName sets the "scim_display_name" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableScimDisplayName(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetScimDisplayName(*v)
-	}
-	return _u
-}
-
-// ClearScimDisplayName clears the value of the "scim_display_name" field.
-func (_u *GroupHistoryUpdate) ClearScimDisplayName() *GroupHistoryUpdate {
-	_u.mutation.ClearScimDisplayName()
-	return _u
-}
-
-// SetScimActive sets the "scim_active" field.
-func (_u *GroupHistoryUpdate) SetScimActive(v bool) *GroupHistoryUpdate {
-	_u.mutation.SetScimActive(v)
-	return _u
-}
-
-// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableScimActive(v *bool) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetScimActive(*v)
-	}
-	return _u
-}
-
-// ClearScimActive clears the value of the "scim_active" field.
-func (_u *GroupHistoryUpdate) ClearScimActive() *GroupHistoryUpdate {
-	_u.mutation.ClearScimActive()
-	return _u
-}
-
-// SetScimGroupMailing sets the "scim_group_mailing" field.
-func (_u *GroupHistoryUpdate) SetScimGroupMailing(v string) *GroupHistoryUpdate {
-	_u.mutation.SetScimGroupMailing(v)
-	return _u
-}
-
-// SetNillableScimGroupMailing sets the "scim_group_mailing" field if the given value is not nil.
-func (_u *GroupHistoryUpdate) SetNillableScimGroupMailing(v *string) *GroupHistoryUpdate {
-	if v != nil {
-		_u.SetScimGroupMailing(*v)
-	}
-	return _u
-}
-
-// ClearScimGroupMailing clears the value of the "scim_group_mailing" field.
-func (_u *GroupHistoryUpdate) ClearScimGroupMailing() *GroupHistoryUpdate {
-	_u.mutation.ClearScimGroupMailing()
 	return _u
 }
 
@@ -417,9 +36,6 @@ func (_u *GroupHistoryUpdate) Mutation() *GroupHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *GroupHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -445,24 +61,6 @@ func (_u *GroupHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *GroupHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if grouphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized grouphistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := grouphistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *GroupHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(grouphistory.Table, grouphistory.Columns, sqlgraph.NewFieldSpec(grouphistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -478,61 +76,29 @@ func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(grouphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(grouphistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(grouphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(grouphistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(grouphistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(grouphistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(grouphistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(grouphistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(grouphistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(grouphistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, grouphistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(grouphistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(grouphistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(grouphistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(grouphistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(grouphistory.FieldDescription, field.TypeString, value)
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(grouphistory.FieldDescription, field.TypeString)
@@ -540,77 +106,36 @@ func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.IsManagedCleared() {
 		_spec.ClearField(grouphistory.FieldIsManaged, field.TypeBool)
 	}
-	if value, ok := _u.mutation.GravatarLogoURL(); ok {
-		_spec.SetField(grouphistory.FieldGravatarLogoURL, field.TypeString, value)
-	}
 	if _u.mutation.GravatarLogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldGravatarLogoURL, field.TypeString)
-	}
-	if value, ok := _u.mutation.LogoURL(); ok {
-		_spec.SetField(grouphistory.FieldLogoURL, field.TypeString, value)
 	}
 	if _u.mutation.LogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldLogoURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
-		_spec.SetField(grouphistory.FieldAvatarLocalFileID, field.TypeString, value)
-	}
 	if _u.mutation.AvatarLocalFileIDCleared() {
 		_spec.ClearField(grouphistory.FieldAvatarLocalFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.DisplayName(); ok {
-		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.OscalRole(); ok {
-		_spec.SetField(grouphistory.FieldOscalRole, field.TypeString, value)
 	}
 	if _u.mutation.OscalRoleCleared() {
 		_spec.ClearField(grouphistory.FieldOscalRole, field.TypeString)
 	}
-	if value, ok := _u.mutation.OscalPartyUUID(); ok {
-		_spec.SetField(grouphistory.FieldOscalPartyUUID, field.TypeString, value)
-	}
 	if _u.mutation.OscalPartyUUIDCleared() {
 		_spec.ClearField(grouphistory.FieldOscalPartyUUID, field.TypeString)
-	}
-	if value, ok := _u.mutation.OscalContactUuids(); ok {
-		_spec.SetField(grouphistory.FieldOscalContactUuids, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedOscalContactUuids(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, grouphistory.FieldOscalContactUuids, value)
-		})
 	}
 	if _u.mutation.OscalContactUuidsCleared() {
 		_spec.ClearField(grouphistory.FieldOscalContactUuids, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ScimExternalID(); ok {
-		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)
-	}
 	if _u.mutation.ScimExternalIDCleared() {
 		_spec.ClearField(grouphistory.FieldScimExternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScimDisplayName(); ok {
-		_spec.SetField(grouphistory.FieldScimDisplayName, field.TypeString, value)
 	}
 	if _u.mutation.ScimDisplayNameCleared() {
 		_spec.ClearField(grouphistory.FieldScimDisplayName, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScimActive(); ok {
-		_spec.SetField(grouphistory.FieldScimActive, field.TypeBool, value)
-	}
 	if _u.mutation.ScimActiveCleared() {
 		_spec.ClearField(grouphistory.FieldScimActive, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ScimGroupMailing(); ok {
-		_spec.SetField(grouphistory.FieldScimGroupMailing, field.TypeString, value)
 	}
 	if _u.mutation.ScimGroupMailingCleared() {
 		_spec.ClearField(grouphistory.FieldScimGroupMailing, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.GroupHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{grouphistory.Label}
@@ -626,386 +151,9 @@ func (_u *GroupHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 // GroupHistoryUpdateOne is the builder for updating a single GroupHistory entity.
 type GroupHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *GroupHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *GroupHistoryUpdateOne) SetUpdatedAt(v time.Time) *GroupHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *GroupHistoryUpdateOne) ClearUpdatedAt() *GroupHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *GroupHistoryUpdateOne) SetUpdatedBy(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableUpdatedBy(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *GroupHistoryUpdateOne) ClearUpdatedBy() *GroupHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *GroupHistoryUpdateOne) SetUpdatedByImpersonator(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *GroupHistoryUpdateOne) ClearUpdatedByImpersonator() *GroupHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *GroupHistoryUpdateOne) SetDeletedAt(v time.Time) *GroupHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *GroupHistoryUpdateOne) ClearDeletedAt() *GroupHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *GroupHistoryUpdateOne) SetDeletedBy(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableDeletedBy(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *GroupHistoryUpdateOne) ClearDeletedBy() *GroupHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *GroupHistoryUpdateOne) SetTags(v []string) *GroupHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *GroupHistoryUpdateOne) AppendTags(v []string) *GroupHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *GroupHistoryUpdateOne) ClearTags() *GroupHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *GroupHistoryUpdateOne) SetOwnerID(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableOwnerID(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *GroupHistoryUpdateOne) ClearOwnerID() *GroupHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *GroupHistoryUpdateOne) SetName(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableName(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *GroupHistoryUpdateOne) SetDescription(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableDescription(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *GroupHistoryUpdateOne) ClearDescription() *GroupHistoryUpdateOne {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetGravatarLogoURL sets the "gravatar_logo_url" field.
-func (_u *GroupHistoryUpdateOne) SetGravatarLogoURL(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetGravatarLogoURL(v)
-	return _u
-}
-
-// SetNillableGravatarLogoURL sets the "gravatar_logo_url" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableGravatarLogoURL(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetGravatarLogoURL(*v)
-	}
-	return _u
-}
-
-// ClearGravatarLogoURL clears the value of the "gravatar_logo_url" field.
-func (_u *GroupHistoryUpdateOne) ClearGravatarLogoURL() *GroupHistoryUpdateOne {
-	_u.mutation.ClearGravatarLogoURL()
-	return _u
-}
-
-// SetLogoURL sets the "logo_url" field.
-func (_u *GroupHistoryUpdateOne) SetLogoURL(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetLogoURL(v)
-	return _u
-}
-
-// SetNillableLogoURL sets the "logo_url" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableLogoURL(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetLogoURL(*v)
-	}
-	return _u
-}
-
-// ClearLogoURL clears the value of the "logo_url" field.
-func (_u *GroupHistoryUpdateOne) ClearLogoURL() *GroupHistoryUpdateOne {
-	_u.mutation.ClearLogoURL()
-	return _u
-}
-
-// SetAvatarLocalFileID sets the "avatar_local_file_id" field.
-func (_u *GroupHistoryUpdateOne) SetAvatarLocalFileID(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetAvatarLocalFileID(v)
-	return _u
-}
-
-// SetNillableAvatarLocalFileID sets the "avatar_local_file_id" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableAvatarLocalFileID(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetAvatarLocalFileID(*v)
-	}
-	return _u
-}
-
-// ClearAvatarLocalFileID clears the value of the "avatar_local_file_id" field.
-func (_u *GroupHistoryUpdateOne) ClearAvatarLocalFileID() *GroupHistoryUpdateOne {
-	_u.mutation.ClearAvatarLocalFileID()
-	return _u
-}
-
-// SetDisplayName sets the "display_name" field.
-func (_u *GroupHistoryUpdateOne) SetDisplayName(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetDisplayName(v)
-	return _u
-}
-
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableDisplayName(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetDisplayName(*v)
-	}
-	return _u
-}
-
-// SetOscalRole sets the "oscal_role" field.
-func (_u *GroupHistoryUpdateOne) SetOscalRole(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetOscalRole(v)
-	return _u
-}
-
-// SetNillableOscalRole sets the "oscal_role" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableOscalRole(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetOscalRole(*v)
-	}
-	return _u
-}
-
-// ClearOscalRole clears the value of the "oscal_role" field.
-func (_u *GroupHistoryUpdateOne) ClearOscalRole() *GroupHistoryUpdateOne {
-	_u.mutation.ClearOscalRole()
-	return _u
-}
-
-// SetOscalPartyUUID sets the "oscal_party_uuid" field.
-func (_u *GroupHistoryUpdateOne) SetOscalPartyUUID(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetOscalPartyUUID(v)
-	return _u
-}
-
-// SetNillableOscalPartyUUID sets the "oscal_party_uuid" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableOscalPartyUUID(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetOscalPartyUUID(*v)
-	}
-	return _u
-}
-
-// ClearOscalPartyUUID clears the value of the "oscal_party_uuid" field.
-func (_u *GroupHistoryUpdateOne) ClearOscalPartyUUID() *GroupHistoryUpdateOne {
-	_u.mutation.ClearOscalPartyUUID()
-	return _u
-}
-
-// SetOscalContactUuids sets the "oscal_contact_uuids" field.
-func (_u *GroupHistoryUpdateOne) SetOscalContactUuids(v []string) *GroupHistoryUpdateOne {
-	_u.mutation.SetOscalContactUuids(v)
-	return _u
-}
-
-// AppendOscalContactUuids appends value to the "oscal_contact_uuids" field.
-func (_u *GroupHistoryUpdateOne) AppendOscalContactUuids(v []string) *GroupHistoryUpdateOne {
-	_u.mutation.AppendOscalContactUuids(v)
-	return _u
-}
-
-// ClearOscalContactUuids clears the value of the "oscal_contact_uuids" field.
-func (_u *GroupHistoryUpdateOne) ClearOscalContactUuids() *GroupHistoryUpdateOne {
-	_u.mutation.ClearOscalContactUuids()
-	return _u
-}
-
-// SetScimExternalID sets the "scim_external_id" field.
-func (_u *GroupHistoryUpdateOne) SetScimExternalID(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetScimExternalID(v)
-	return _u
-}
-
-// SetNillableScimExternalID sets the "scim_external_id" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableScimExternalID(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetScimExternalID(*v)
-	}
-	return _u
-}
-
-// ClearScimExternalID clears the value of the "scim_external_id" field.
-func (_u *GroupHistoryUpdateOne) ClearScimExternalID() *GroupHistoryUpdateOne {
-	_u.mutation.ClearScimExternalID()
-	return _u
-}
-
-// SetScimDisplayName sets the "scim_display_name" field.
-func (_u *GroupHistoryUpdateOne) SetScimDisplayName(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetScimDisplayName(v)
-	return _u
-}
-
-// SetNillableScimDisplayName sets the "scim_display_name" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableScimDisplayName(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetScimDisplayName(*v)
-	}
-	return _u
-}
-
-// ClearScimDisplayName clears the value of the "scim_display_name" field.
-func (_u *GroupHistoryUpdateOne) ClearScimDisplayName() *GroupHistoryUpdateOne {
-	_u.mutation.ClearScimDisplayName()
-	return _u
-}
-
-// SetScimActive sets the "scim_active" field.
-func (_u *GroupHistoryUpdateOne) SetScimActive(v bool) *GroupHistoryUpdateOne {
-	_u.mutation.SetScimActive(v)
-	return _u
-}
-
-// SetNillableScimActive sets the "scim_active" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableScimActive(v *bool) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetScimActive(*v)
-	}
-	return _u
-}
-
-// ClearScimActive clears the value of the "scim_active" field.
-func (_u *GroupHistoryUpdateOne) ClearScimActive() *GroupHistoryUpdateOne {
-	_u.mutation.ClearScimActive()
-	return _u
-}
-
-// SetScimGroupMailing sets the "scim_group_mailing" field.
-func (_u *GroupHistoryUpdateOne) SetScimGroupMailing(v string) *GroupHistoryUpdateOne {
-	_u.mutation.SetScimGroupMailing(v)
-	return _u
-}
-
-// SetNillableScimGroupMailing sets the "scim_group_mailing" field if the given value is not nil.
-func (_u *GroupHistoryUpdateOne) SetNillableScimGroupMailing(v *string) *GroupHistoryUpdateOne {
-	if v != nil {
-		_u.SetScimGroupMailing(*v)
-	}
-	return _u
-}
-
-// ClearScimGroupMailing clears the value of the "scim_group_mailing" field.
-func (_u *GroupHistoryUpdateOne) ClearScimGroupMailing() *GroupHistoryUpdateOne {
-	_u.mutation.ClearScimGroupMailing()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *GroupHistoryMutation
 }
 
 // Mutation returns the GroupHistoryMutation object of the builder.
@@ -1028,9 +176,6 @@ func (_u *GroupHistoryUpdateOne) Select(field string, fields ...string) *GroupHi
 
 // Save executes the query and returns the updated GroupHistory entity.
 func (_u *GroupHistoryUpdateOne) Save(ctx context.Context) (*GroupHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1054,24 +199,6 @@ func (_u *GroupHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *GroupHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if grouphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized grouphistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := grouphistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *GroupHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *GroupHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHistory, err error) {
@@ -1106,61 +233,29 @@ func (_u *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHisto
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(grouphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(grouphistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(grouphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(grouphistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(grouphistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(grouphistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(grouphistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(grouphistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(grouphistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(grouphistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(grouphistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, grouphistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(grouphistory.FieldTags, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(grouphistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(grouphistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(grouphistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(grouphistory.FieldDescription, field.TypeString, value)
 	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(grouphistory.FieldDescription, field.TypeString)
@@ -1168,77 +263,36 @@ func (_u *GroupHistoryUpdateOne) sqlSave(ctx context.Context) (_node *GroupHisto
 	if _u.mutation.IsManagedCleared() {
 		_spec.ClearField(grouphistory.FieldIsManaged, field.TypeBool)
 	}
-	if value, ok := _u.mutation.GravatarLogoURL(); ok {
-		_spec.SetField(grouphistory.FieldGravatarLogoURL, field.TypeString, value)
-	}
 	if _u.mutation.GravatarLogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldGravatarLogoURL, field.TypeString)
-	}
-	if value, ok := _u.mutation.LogoURL(); ok {
-		_spec.SetField(grouphistory.FieldLogoURL, field.TypeString, value)
 	}
 	if _u.mutation.LogoURLCleared() {
 		_spec.ClearField(grouphistory.FieldLogoURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.AvatarLocalFileID(); ok {
-		_spec.SetField(grouphistory.FieldAvatarLocalFileID, field.TypeString, value)
-	}
 	if _u.mutation.AvatarLocalFileIDCleared() {
 		_spec.ClearField(grouphistory.FieldAvatarLocalFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.DisplayName(); ok {
-		_spec.SetField(grouphistory.FieldDisplayName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.OscalRole(); ok {
-		_spec.SetField(grouphistory.FieldOscalRole, field.TypeString, value)
 	}
 	if _u.mutation.OscalRoleCleared() {
 		_spec.ClearField(grouphistory.FieldOscalRole, field.TypeString)
 	}
-	if value, ok := _u.mutation.OscalPartyUUID(); ok {
-		_spec.SetField(grouphistory.FieldOscalPartyUUID, field.TypeString, value)
-	}
 	if _u.mutation.OscalPartyUUIDCleared() {
 		_spec.ClearField(grouphistory.FieldOscalPartyUUID, field.TypeString)
-	}
-	if value, ok := _u.mutation.OscalContactUuids(); ok {
-		_spec.SetField(grouphistory.FieldOscalContactUuids, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedOscalContactUuids(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, grouphistory.FieldOscalContactUuids, value)
-		})
 	}
 	if _u.mutation.OscalContactUuidsCleared() {
 		_spec.ClearField(grouphistory.FieldOscalContactUuids, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ScimExternalID(); ok {
-		_spec.SetField(grouphistory.FieldScimExternalID, field.TypeString, value)
-	}
 	if _u.mutation.ScimExternalIDCleared() {
 		_spec.ClearField(grouphistory.FieldScimExternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScimDisplayName(); ok {
-		_spec.SetField(grouphistory.FieldScimDisplayName, field.TypeString, value)
 	}
 	if _u.mutation.ScimDisplayNameCleared() {
 		_spec.ClearField(grouphistory.FieldScimDisplayName, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScimActive(); ok {
-		_spec.SetField(grouphistory.FieldScimActive, field.TypeBool, value)
-	}
 	if _u.mutation.ScimActiveCleared() {
 		_spec.ClearField(grouphistory.FieldScimActive, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ScimGroupMailing(); ok {
-		_spec.SetField(grouphistory.FieldScimGroupMailing, field.TypeString, value)
 	}
 	if _u.mutation.ScimGroupMailingCleared() {
 		_spec.ClearField(grouphistory.FieldScimGroupMailing, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.GroupHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &GroupHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

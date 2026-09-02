@@ -12,7 +12,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -160,7 +160,7 @@ func (ec *executionContext) _TemplateContextEntry_variables(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.TemplateVariable) graphql.Marshaler {
-			return ec.marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx, selections, v)
+			return ec.marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -439,11 +439,11 @@ func (ec *executionContext) marshalNTemplateContextEntry2ᚖgithubᚗcomᚋtheop
 	return ec._TemplateContextEntry(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TemplateVariable) graphql.Marshaler {
+func (ec *executionContext) marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTemplateVariableᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.TemplateVariable) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNTemplateVariable2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariable(ctx, sel, v[i])
+		return ec.marshalNTemplateVariable2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTemplateVariable(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -455,7 +455,7 @@ func (ec *executionContext) marshalNTemplateVariable2ᚕᚖgithubᚗcomᚋtheope
 	return ret
 }
 
-func (ec *executionContext) marshalNTemplateVariable2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTemplateVariable(ctx context.Context, sel ast.SelectionSet, v *model.TemplateVariable) graphql.Marshaler {
+func (ec *executionContext) marshalNTemplateVariable2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTemplateVariable(ctx context.Context, sel ast.SelectionSet, v *model.TemplateVariable) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

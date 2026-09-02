@@ -4,48 +4,50 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/iam/auth"
 )
 
 func TestQueryFile(t *testing.T) {
-	// create an Evidence to be queried using sharedTestUser1
-	fileUpload := uploadFile(t, "testdata/uploads/orgs.csv")
+	// create an Evidence to be queried using th.SharedTestUser1
+	fileUpload := th.UploadFile(t, "testdata/uploads/orgs.csv")
 
 	// create control to be used in the Evidence
-	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control := (&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*fileUpload})
 
-	evidence, err := suite.client.api.CreateEvidence(sharedTestUser1.UserCtx, testclient.CreateEvidenceInput{
+	evidence, err := suite.Client.API.CreateEvidence(th.SharedTestUser1.UserCtx, testclient.CreateEvidenceInput{
 		Name:       "Test Evidence",
 		ControlIDs: []string{control.ID},
 	}, []*graphql.Upload{fileUpload})
 	assert.NilError(t, err)
 
-	getEvidence, err := suite.client.api.GetEvidenceByID(sharedTestUser1.UserCtx, evidence.CreateEvidence.Evidence.ID)
+	getEvidence, err := suite.Client.API.GetEvidenceByID(th.SharedTestUser1.UserCtx, evidence.CreateEvidence.Evidence.ID)
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(getEvidence.Evidence.Files.Edges, 1))
 
 	evidenceFile := getEvidence.Evidence.Files.Edges[0].Node
 
-	fileUpload = uploadFile(t, logoFilePath)
+	fileUpload = th.UploadFile(t, th.LogoFilePath)
 
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*fileUpload})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(sharedTestUser1.UserCtx, sharedTestUser1.ID, testclient.UpdateUserInput{}, fileUpload, nil)
+	userResp, err := suite.Client.API.UpdateUser(th.SharedTestUser1.UserCtx, th.SharedTestUser1.ID, testclient.UpdateUserInput{}, fileUpload, nil)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
 	userFileID := *userResp.UpdateUser.User.AvatarLocalFileID
 
 	// user in another org context
-	adminUserCtxAnotherOrg := auth.NewTestContextWithOrgID(sharedAdminUser.ID, sharedAdminUser.PersonalOrgID)
+	adminUserCtxAnotherOrg := auth.NewTestContextWithOrgID(th.SharedAdminUser.ID, th.SharedAdminUser.PersonalOrgID)
 
 	// add test cases for querying the File
 	testCases := []struct {
@@ -58,66 +60,66 @@ func TestQueryFile(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: evidenceFile.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, avatar file",
 			queryID: userFileID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, admin user",
 			queryID: evidenceFile.ID,
-			client:  suite.client.api,
-			ctx:     sharedAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:    "avatar file needs to be found to display to other users",
 			queryID: userFileID,
-			client:  suite.client.api,
-			ctx:     sharedAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedAdminUser.UserCtx,
 		},
 		{
 			name:    "happy path, user authorized via the control to view the file",
 			queryID: evidenceFile.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: evidenceFile.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "admin user accessing a different org, shouldn't be able to access the evidence file from the other org",
 			queryID:  evidenceFile.ID,
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      adminUserCtxAnotherOrg,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "File not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "File not found, using not authorized user",
 			queryID:  evidenceFile.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "File not found, using not authorized user to avatar file",
 			queryID:  userFileID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -141,43 +143,43 @@ func TestQueryFile(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, IDs: []string{evidenceFile.ID, userFileID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidence.CreateEvidence.Evidence.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.FileDeleteOne]{Client: suite.Client.DB.File, IDs: []string{evidenceFile.ID, userFileID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EvidenceDeleteOne]{Client: suite.Client.DB.Evidence, ID: evidence.CreateEvidence.Evidence.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, ID: control.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryFiles(t *testing.T) {
 	// create users so we dont have conflicts with other tests
-	localTestUser := suite.seedFreshMinimalOrgUsers(t, true)
+	localTestUser := suite.SeedFreshMinimalOrgUsers(t, true)
 
 	// create users so we dont have conflicts with other tests
-	localTestUser2 := suite.seedOrgOwner(t)
+	localTestUser2 := suite.SeedOrgOwner(t)
 
-	anotherTestUser := suite.userBuilder(context.Background(), t)
+	anotherTestUser := suite.UserBuilder(context.Background(), t)
 
 	// create an evidence to be queried using testUser
-	fileUpload := uploadFile(t, "testdata/uploads/orgs.csv")
+	fileUpload := th.UploadFile(t, "testdata/uploads/orgs.csv")
 
 	// create control to be used in the Evidence
-	control := (&ControlBuilder{client: suite.client}).MustNew(localTestUser.owner.UserCtx, t)
+	control := (&th.ControlBuilder{Client: suite.Client}).MustNew(localTestUser.Owner.UserCtx, t)
 
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*fileUpload})
 
-	evidence, err := suite.client.api.CreateEvidence(localTestUser.owner.UserCtx, testclient.CreateEvidenceInput{
+	evidence, err := suite.Client.API.CreateEvidence(localTestUser.Owner.UserCtx, testclient.CreateEvidenceInput{
 		Name:       "Test Evidence",
 		ControlIDs: []string{control.ID},
 	}, []*graphql.Upload{fileUpload})
 	assert.NilError(t, err)
 
-	getEvidence, err := suite.client.api.GetEvidenceByID(localTestUser.owner.UserCtx, evidence.CreateEvidence.Evidence.ID)
+	getEvidence, err := suite.Client.API.GetEvidenceByID(localTestUser.Owner.UserCtx, evidence.CreateEvidence.Evidence.ID)
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(getEvidence.Evidence.Files.Edges, 1))
 
-	fileUpload = uploadFile(t, logoFilePath)
+	fileUpload = th.UploadFile(t, th.LogoFilePath)
 
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*fileUpload})
 	// update user avatar to the file
-	userResp, err := suite.client.api.UpdateUser(localTestUser.owner.UserCtx, localTestUser.owner.ID, testclient.UpdateUserInput{}, fileUpload, nil)
+	userResp, err := suite.Client.API.UpdateUser(localTestUser.Owner.UserCtx, localTestUser.Owner.ID, testclient.UpdateUserInput{}, fileUpload, nil)
 	assert.NilError(t, err)
 	assert.Check(t, userResp.UpdateUser.User.AvatarFile != nil)
 
@@ -189,37 +191,37 @@ func TestQueryFiles(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             localTestUser.owner.UserCtx,
+			client:          suite.Client.API,
+			ctx:             localTestUser.Owner.UserCtx,
 			expectedResults: 2, // 1 for evidence file, 1 for user avatar file
 		},
 		{
 			name:            "happy path, using read only user of the same org",
-			client:          suite.client.api,
-			ctx:             localTestUser.member.UserCtx,
+			client:          suite.Client.API,
+			ctx:             localTestUser.Member.UserCtx,
 			expectedResults: 2, // 1 for evidence file, 1 for user avatar file
 		},
 		{
 			name:            "happy path, using api token",
-			client:          localTestUser.apiClient,
+			client:          localTestUser.APIClient,
 			ctx:             context.Background(),
 			expectedResults: 1, // 1 for evidence file, as no avatar
 		},
 		{
 			name:            "another org api token cannot access orgs files",
-			client:          localTestUser2.apiClient,
+			client:          localTestUser2.APIClient,
 			ctx:             context.Background(),
 			expectedResults: 0,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          localTestUser.adminPatClient,
+			client:          localTestUser.AdminPatClient,
 			ctx:             context.Background(),
 			expectedResults: 2, // 1 for evidence file, 1 for user avatar file since its the same user's personal access token
 		},
 		{
 			name:            "another user, no Files should be returned",
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             anotherTestUser.UserCtx,
 			expectedResults: 0,
 		},
@@ -235,7 +237,7 @@ func TestQueryFiles(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(localTestUser.owner.UserCtx, t)
-	cleanupOrganizationDataWithContext(localTestUser2.owner.UserCtx, t)
-	cleanupOrganizationDataWithContext(anotherTestUser.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestUser.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestUser2.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(anotherTestUser.UserCtx, t)
 }

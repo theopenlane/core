@@ -4,9 +4,11 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"github.com/theopenlane/iam/auth"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -14,14 +16,14 @@ import (
 
 func TestQueryUserSetting(t *testing.T) {
 	// setup user context
-	reqCtx := sharedTestUser1.UserCtx
+	reqCtx := th.SharedTestUser1.UserCtx
 
-	user2 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
+	user2 := (&th.UserBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 	user2Setting, err := user2.Setting(reqCtx)
 	assert.NilError(t, err)
 
 	// setup valid user context
-	user1SettingResp, err := suite.client.api.GetUserSettings(reqCtx, testclient.UserSettingWhereInput{})
+	user1SettingResp, err := suite.Client.API.GetUserSettings(reqCtx, testclient.UserSettingWhereInput{})
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(user1SettingResp.UserSettings.Edges, 1))
 
@@ -38,30 +40,30 @@ func TestQueryUserSetting(t *testing.T) {
 		{
 			name:     "happy path user",
 			queryID:  user1Setting.ID,
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      reqCtx,
 			expected: user1Setting,
 		},
 		{
 			name:     "happy path user, using personal access token",
 			queryID:  user1Setting.ID,
-			client:   suite.client.apiWithPAT,
+			client:   suite.Client.APIWithPAT,
 			ctx:      context.Background(),
 			expected: user1Setting,
 		},
 		{
 			name:     "valid user, but not auth",
 			queryID:  user2Setting.ID,
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      reqCtx,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "invalid-id",
 			queryID:  "tacos-for-dinner",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      reqCtx,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -82,22 +84,22 @@ func TestQueryUserSetting(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, ID: user2.ID}).MustDelete(reqCtx, t)
+	(&th.Cleanup[*generated.UserDeleteOne]{Client: suite.Client.DB.User, ID: user2.ID}).MustDelete(reqCtx, t)
 }
 
 func TestQueryUserSettings(t *testing.T) {
 	// setup user context
-	reqCtx := sharedTestUser1.UserCtx
+	reqCtx := th.SharedTestUser1.UserCtx
 
-	user1 := (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
+	user1 := (&th.UserBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 	user1Setting, err := user1.Setting(reqCtx)
 	assert.NilError(t, err)
 
 	// create another user to make sure we don't get their settings back
-	_ = (&UserBuilder{client: suite.client}).MustNew(reqCtx, t)
+	_ = (&th.UserBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 
 	t.Run("Get User Settings", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllUserSettings(reqCtx)
+		resp, err := suite.Client.API.GetAllUserSettings(reqCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -109,7 +111,7 @@ func TestQueryUserSettings(t *testing.T) {
 		// setup valid user context
 		reqCtx := auth.NewTestContextWithValidUser(user1.ID)
 
-		resp, err = suite.client.api.GetAllUserSettings(reqCtx)
+		resp, err = suite.Client.API.GetAllUserSettings(reqCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -119,19 +121,19 @@ func TestQueryUserSettings(t *testing.T) {
 }
 
 func TestMutationUpdateUserSetting(t *testing.T) {
-	owner := suite.userBuilder(context.Background(), t)
-	viewOnly := suite.userBuilder(context.Background(), t)
-	suite.addUserToOrganization(owner.UserCtx, t, &viewOnly, enums.RoleMember, owner.OrganizationID)
+	owner := suite.UserBuilder(context.Background(), t)
+	viewOnly := suite.UserBuilder(context.Background(), t)
+	suite.AddUserToOrganization(owner.UserCtx, t, &viewOnly, enums.RoleMember, owner.OrganizationID)
 
-	patClient := suite.setupPatClient(owner, t)
+	patClient := suite.SetupPatClient(owner, t)
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(owner.UserCtx, t)
+	org := (&th.OrganizationBuilder{Client: suite.Client}).MustNew(owner.UserCtx, t)
 	// create membership for viewOnly in the new org (not owner's org, where viewOnly is already a member)
 	orgCtx := auth.NewTestContextWithOrgID(owner.ID, org.ID, auth.WithOrganizationRole(auth.OwnerRole))
-	om := (&OrgMemberBuilder{client: suite.client, UserID: viewOnly.ID}).MustNew(orgCtx, t)
+	om := (&th.OrgMemberBuilder{Client: suite.Client, UserID: viewOnly.ID}).MustNew(orgCtx, t)
 
-	otherUser := suite.userBuilder(context.Background(), t)
-	org2 := (&OrganizationBuilder{client: suite.client}).MustNew(otherUser.UserCtx, t)
+	otherUser := suite.UserBuilder(context.Background(), t)
+	org2 := (&th.OrganizationBuilder{Client: suite.Client}).MustNew(otherUser.UserCtx, t)
 
 	testCases := []struct {
 		name          string
@@ -149,7 +151,7 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 				DefaultOrgID: &org.ID,
 				Tags:         []string{"mitb", "funk"},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    owner.UserCtx,
 			expectedRes: testclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusActive,
@@ -166,7 +168,7 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 				DefaultOrgID: &om.OrganizationID,
 				Tags:         []string{"mitb", "funk"},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    viewOnly.UserCtx,
 			expectedRes: testclient.UpdateUserSetting_UpdateUserSetting_UserSetting{
 				Status: enums.UserStatusActive,
@@ -182,7 +184,7 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 			updateInput: testclient.UpdateUserSettingInput{
 				DefaultOrgID: &org2.ID,
 			},
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      owner.UserCtx,
 			errorMsg: "Organization with the specified ID was not found",
 		},
@@ -192,7 +194,7 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 			updateInput: testclient.UpdateUserSettingInput{
 				Status: &enums.UserStatusInvalid,
 			},
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      owner.UserCtx,
 			errorMsg: "INVALID is not a valid UserSettingUserStatus",
 		},
@@ -236,6 +238,6 @@ func TestMutationUpdateUserSetting(t *testing.T) {
 	}
 
 	// cleanup created organizations
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org.ID}).MustDelete(owner.UserCtx, t)
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org2.ID}).MustDelete(otherUser.UserCtx, t)
+	(&th.Cleanup[*generated.OrganizationDeleteOne]{Client: suite.Client.DB.Organization, ID: org.ID}).MustDelete(owner.UserCtx, t)
+	(&th.Cleanup[*generated.OrganizationDeleteOne]{Client: suite.Client.DB.Organization, ID: org2.ID}).MustDelete(otherUser.UserCtx, t)
 }

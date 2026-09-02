@@ -537,10 +537,6 @@ var ForeignKeys = []string{
 	"organization_identity_holder_creators",
 	"organization_internal_policy_creators",
 	"organization_invite_creators",
-	"organization_job_runner_creators",
-	"organization_job_runner_registration_token_creators",
-	"organization_job_runner_token_creators",
-	"organization_job_template_creators",
 	"organization_mapped_control_creators",
 	"organization_narrative_creators",
 	"organization_note_creators",
@@ -554,8 +550,6 @@ var ForeignKeys = []string{
 	"organization_review_creators",
 	"organization_risk_creators",
 	"organization_scan_creators",
-	"organization_scheduled_job_creators",
-	"organization_scheduled_job_run_creators",
 	"organization_sla_definition_creators",
 	"organization_standard_creators",
 	"organization_subcontrol_creators",
@@ -780,7 +774,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
+//	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
 	Hooks        [11]ent.Hook
 	Interceptors [3]ent.Interceptor

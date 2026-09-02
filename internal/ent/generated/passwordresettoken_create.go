@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/passwordresettoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // PasswordResetTokenCreate is the builder for creating a PasswordResetToken entity.
@@ -281,7 +281,6 @@ func (_c *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgraph
 		_node = &PasswordResetToken{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(passwordresettoken.Table, sqlgraph.NewFieldSpec(passwordresettoken.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.PasswordResetToken
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -337,7 +336,6 @@ func (_c *PasswordResetTokenCreate) createSpec() (*PasswordResetToken, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.PasswordResetToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

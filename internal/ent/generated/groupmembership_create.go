@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // GroupMembershipCreate is the builder for creating a GroupMembership entity.
@@ -297,7 +297,6 @@ func (_c *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Creat
 		_node = &GroupMembership{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(groupmembership.Table, sqlgraph.NewFieldSpec(groupmembership.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.GroupMembership
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -337,7 +336,6 @@ func (_c *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -355,7 +353,6 @@ func (_c *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -373,7 +370,6 @@ func (_c *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -391,7 +387,6 @@ func (_c *GroupMembershipCreate) createSpec() (*GroupMembership, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

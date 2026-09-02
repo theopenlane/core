@@ -116,16 +116,20 @@ Config contains the configuration for the core server
     "objectstorage": {
         "providers": {
             "s3": {
-                "credentials": {}
+                "credentials": {},
+                "backup": {}
             },
             "r2": {
-                "credentials": {}
+                "credentials": {},
+                "backup": {}
             },
             "disk": {
-                "credentials": {}
+                "credentials": {},
+                "backup": {}
             },
             "database": {
-                "credentials": {}
+                "credentials": {},
+                "backup": {}
             }
         }
     },
@@ -835,7 +839,7 @@ migrations for organizations and memberships that pre-date them
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled runs the backfill routines on server startup<br/>||
+|**enabled**|`boolean`|Enabled runs the backfill routines on server startup, this only setups up the main job, all configured backfills will run based on their settings<br/>||
 
 **Additional Properties:** not allowed   
    
@@ -886,7 +890,7 @@ Server settings for the echo server
 |**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
-|**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain<br/>|no|
+|**trustcenterpreviewcnametarget**|`string`|TrustCenterPreviewCnameTarget is the cname target for trust center preview domains<br/>|no|
 |**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
 
 **Additional Properties:** not allowed   
@@ -1811,16 +1815,20 @@ ProviderConfig contains configuration for object storage providers
 {
     "providers": {
         "s3": {
-            "credentials": {}
+            "credentials": {},
+            "backup": {}
         },
         "r2": {
-            "credentials": {}
+            "credentials": {},
+            "backup": {}
         },
         "disk": {
-            "credentials": {}
+            "credentials": {},
+            "backup": {}
         },
         "database": {
-            "credentials": {}
+            "credentials": {},
+            "backup": {}
         }
     }
 }
@@ -1852,16 +1860,20 @@ ProviderConfig contains configuration for object storage providers
 ```json
 {
     "s3": {
-        "credentials": {}
+        "credentials": {},
+        "backup": {}
     },
     "r2": {
-        "credentials": {}
+        "credentials": {},
+        "backup": {}
     },
     "disk": {
-        "credentials": {}
+        "credentials": {},
+        "backup": {}
     },
     "database": {
-        "credentials": {}
+        "credentials": {},
+        "backup": {}
     }
 }
 ```
@@ -1886,16 +1898,37 @@ This is structured to allow easy extension for additional providers in the futur
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#defsstorageprovidercredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**backup**](#defsstoragebackupconfig)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects. It only<br/>||
 
 **Additional Properties:** not allowed   
 **Example**
 
 ```json
 {
-    "credentials": {}
+    "credentials": {},
+    "backup": {}
 }
 ```
 
+   
+<a name="defsstoragebackupconfig"></a>
+##### $defs/storage\.BackupConfig: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects. It only
+names whether backups run and where they go; the destination provider's own configuration
+supplies the region, endpoint, and credentials
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**provider**|`string`|Provider names the destination backend type, e.g. s3; empty replicates to the source<br/>provider itself, which writes the backup to the suffixed bucket alongside the live one<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region optionally overrides the destination provider's region, so a backup can replicate<br/>into a region other than the one holding the live objects<br/>||
+
+**Additional Properties:** not allowed   
    
 <a name="defsstorageprovidercredentials"></a>
 ##### $defs/storage\.ProviderCredentials: object

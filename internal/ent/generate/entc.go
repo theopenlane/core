@@ -19,18 +19,18 @@ import (
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/common/enums/exportenums"
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/filecategorygen"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/internal/entitlements/genfeatures"
-	"github.com/theopenlane/core/internal/genhelpers"
-	"github.com/theopenlane/core/internal/graphapi/directives"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/shortlinks"
-	"github.com/theopenlane/core/pkg/summarizer"
+	"github.com/theopenlane/core/v2/internal/ent/entconfig"
+	"github.com/theopenlane/core/v2/internal/ent/filecategorygen"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/entitlements/genfeatures"
+	"github.com/theopenlane/core/v2/internal/genhelpers"
+	"github.com/theopenlane/core/v2/internal/graphapi/directives"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/shortlinks"
+	"github.com/theopenlane/core/v2/pkg/summarizer"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/entityops"
@@ -99,16 +99,12 @@ var (
 	}
 )
 
-var enabledFeatures = []gen.Feature{
+var enabledBaseFeatures = []gen.Feature{
 	gen.FeatureVersionedMigration,
 	gen.FeaturePrivacy,
 	gen.FeatureEntQL,
 	gen.FeatureNamedEdges,
-	gen.FeatureSchemaConfig,
 	gen.FeatureIntercept,
-	gen.FeatureModifier,
-	// this is disabled because it is not compatible with the entcache driver
-	// gen.FeatureExecQuery,
 }
 
 func main() {
@@ -241,6 +237,8 @@ func getEntGqlExtension() *entgql.Extension {
 
 	schemaHooks = append(schemaHooks, genhooks.WithStringSliceWhereOps())
 
+	schemaHooks = append(schemaHooks, genhelpers.PruneWhereInputOps())
+
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath(graphSchemaDir+"ent.graphql"),
@@ -262,6 +260,7 @@ func getEntHistoryGqlExtension() *entgql.Extension {
 		entgql.WithSchemaPath(graphHistorySchemaDir+"ent.graphql"),
 		entgql.WithConfigPath(graphDir+"/generate/.gqlgen_history.yml"),
 		entgql.WithWhereInputs(true),
+		entgql.WithSchemaHook(genhelpers.PruneWhereInputOps()),
 		WithGqlWithTemplates(),
 	)
 	if err != nil {
@@ -290,9 +289,7 @@ func getHistoryExtension(hasChanges bool) *history.Extension {
 	log.Info().Msg("creating history extension")
 
 	historyExt := history.New(
-		history.WithImmutableFields(),
 		history.WithHistoryTimeIndex(),
-		history.WithNillableFields(),
 		history.WithGQLQuery(),
 		history.WithAuthzPolicy(),
 		history.WithInputSchemaPath(schemaPath),
@@ -355,14 +352,14 @@ func runParallelPostGenHooks(g *gen.Graph) {
 	entityOpsExt := entityops.New(
 		entityops.WithOutputDir(entityOpsGeneratedPath),
 		entityops.WithPackageName("entityops"),
-		entityops.WithEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
-		entityops.WithGalaPackage("github.com/theopenlane/core/pkg/gala"),
-		entityops.WithJsonxPackage("github.com/theopenlane/core/pkg/jsonx"),
-		entityops.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
-		entityops.WithCelxPackage("github.com/theopenlane/core/pkg/celx"),
-		entityops.WithMapxPackage("github.com/theopenlane/core/pkg/mapx"),
+		entityops.WithEntPackage("github.com/theopenlane/core/v2/"+entGeneratedPath),
+		entityops.WithGalaPackage("github.com/theopenlane/core/v2/pkg/gala"),
+		entityops.WithJsonxPackage("github.com/theopenlane/core/v2/pkg/jsonx"),
+		entityops.WithLogxPackage("github.com/theopenlane/core/v2/pkg/logx"),
+		entityops.WithCelxPackage("github.com/theopenlane/core/v2/pkg/celx"),
+		entityops.WithMapxPackage("github.com/theopenlane/core/v2/pkg/mapx"),
 		entityops.WithEnumsPackage("github.com/theopenlane/core/common/enums"),
-		entityops.WithSlateparserPackage("github.com/theopenlane/core/pkg/slateparser"),
+		entityops.WithSlateparserPackage("github.com/theopenlane/core/v2/pkg/slateparser"),
 		entityops.WithEnumsOutputDir(enumsDir),
 		entityops.WithEnumsPackageName("enums"),
 	)
@@ -371,7 +368,7 @@ func runParallelPostGenHooks(g *gen.Graph) {
 		genhooks.GenCSVSchema(
 			genhooks.WithCSVOutputDir(csvGeneratedPath),
 			genhooks.WithCSVPackageName("csvgenerated"),
-			genhooks.WithCSVEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
+			genhooks.WithCSVEntPackage("github.com/theopenlane/core/v2/"+entGeneratedPath),
 			genhooks.WithCSVGenerateAllWrappers(true)),
 		accessMapExt.Hook(),
 		fileCategoryGen.Hook(),
@@ -453,8 +450,8 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 			// capture graph reference for parallel post-generation hooks
 			captureGraphHook,
 		},
-		Package:    "github.com/theopenlane/core/" + entGeneratedPath,
-		Features:   enabledFeatures,
+		Package:    "github.com/theopenlane/core/v2/" + entGeneratedPath,
+		Features:   append(enabledBaseFeatures, gen.FeatureModifier),
 		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
@@ -528,8 +525,8 @@ func historySchemaGenerate(extensions ...entc.Extension) {
 			genhooks.GenSchema(graphHistorySchemaDir),
 			genhooks.GenQuery(graphHistoryQueryDir, graphSchemaDir),
 		},
-		Package:    "github.com/theopenlane/core/" + entGeneratedHistoryPath,
-		Features:   enabledFeatures,
+		Package:    "github.com/theopenlane/core/v2/" + entGeneratedHistoryPath,
+		Features:   enabledBaseFeatures,
 		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(

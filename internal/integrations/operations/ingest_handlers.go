@@ -10,10 +10,10 @@ import (
 	"github.com/riverqueue/river"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 func withDirectorySyncRunID(ctx context.Context, id string) context.Context {

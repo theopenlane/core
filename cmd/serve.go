@@ -13,20 +13,22 @@ import (
 
 	"github.com/theopenlane/iam/fgax"
 
+	"github.com/theopenlane/core/v2/fga/modelversion"
+
 	"github.com/theopenlane/utils/cache"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/historygenerated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
-	"github.com/theopenlane/core/internal/httpserve/config"
-	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/httpserve/serveropts"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/gala"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/entdb"
+	"github.com/theopenlane/core/v2/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/v2/internal/httpserve/config"
+	"github.com/theopenlane/core/v2/internal/httpserve/server"
+	"github.com/theopenlane/core/v2/internal/httpserve/serveropts"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 )
 
 // galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.
@@ -91,6 +93,11 @@ func serve(ctx context.Context) error {
 	// setup Authz connection
 	// this must come before the database setup because the FGA Client
 	// is used as an ent dependency
+	so.Config.Settings.Authz.ModelMatcher, err = modelversion.Matcher(ctx)
+	if err != nil {
+		return err
+	}
+
 	fgaClient, err = fgax.CreateFGAClientWithStore(ctx, so.Config.Settings.Authz)
 	if err != nil {
 		return err
@@ -147,8 +154,8 @@ func serve(ctx context.Context) error {
 
 	// Set trust center config for hooks and email integration
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		PreviewZoneID:            so.Config.Settings.Server.TrustCenterPreviewZoneID,
 		CnameTarget:              so.Config.Settings.Server.TrustCenterCnameTarget,
+		PreviewCnameTarget:       so.Config.Settings.Server.TrustCenterPreviewCnameTarget,
 		DefaultTrustCenterDomain: so.Config.Settings.Server.DefaultTrustCenterDomain,
 	})
 
@@ -196,7 +203,6 @@ func serve(ctx context.Context) error {
 	}
 
 	clientOpts := []entdb.Option{
-		entdb.WithWorkflows(&so.Config.Settings.Workflows, galaApp),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
 	}
@@ -206,15 +212,21 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient); err != nil {
-		return err
-	}
+	var wfEngine *engine.WorkflowEngine
 
 	if so.Config.Settings.Workflows.Enabled {
-		if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok {
-			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
-			log.Info().Msg("workflow engine initialized")
+		wfEngine, err = engine.NewWorkflowEngineWithConfig(dbClient, galaApp, &so.Config.Settings.Workflows)
+		if err != nil {
+			return err
 		}
+
+		engine.SetDefault(wfEngine)
+		so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
+		log.Info().Msg("workflow engine initialized")
+	}
+
+	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient, wfEngine); err != nil {
+		return err
 	}
 
 	so.AddServerOptions(serveropts.WithCloudflareConfig())

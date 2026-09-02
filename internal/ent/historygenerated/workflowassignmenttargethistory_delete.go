@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/workflowassignmenttargethistory"
 )
 
 // WorkflowAssignmentTargetHistoryDelete is the builder for deleting a WorkflowAssignmentTargetHistory entity.
@@ -45,8 +43,6 @@ func (_d *WorkflowAssignmentTargetHistoryDelete) ExecX(ctx context.Context) int 
 
 func (_d *WorkflowAssignmentTargetHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(workflowassignmenttargethistory.Table, sqlgraph.NewFieldSpec(workflowassignmenttargethistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.WorkflowAssignmentTargetHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

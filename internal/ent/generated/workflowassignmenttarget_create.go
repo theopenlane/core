@@ -11,11 +11,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 )
 
 // WorkflowAssignmentTargetCreate is the builder for creating a WorkflowAssignmentTarget entity.
@@ -395,7 +395,6 @@ func (_c *WorkflowAssignmentTargetCreate) createSpec() (*WorkflowAssignmentTarge
 		_node = &WorkflowAssignmentTarget{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(workflowassignmenttarget.Table, sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.WorkflowAssignmentTarget
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -455,7 +454,6 @@ func (_c *WorkflowAssignmentTargetCreate) createSpec() (*WorkflowAssignmentTarge
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -473,7 +471,6 @@ func (_c *WorkflowAssignmentTargetCreate) createSpec() (*WorkflowAssignmentTarge
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -491,7 +488,6 @@ func (_c *WorkflowAssignmentTargetCreate) createSpec() (*WorkflowAssignmentTarge
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -509,7 +505,6 @@ func (_c *WorkflowAssignmentTargetCreate) createSpec() (*WorkflowAssignmentTarge
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

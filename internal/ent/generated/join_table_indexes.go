@@ -5,7 +5,7 @@ package generated
 import (
 	"entgo.io/ent/dialect/sql/schema"
 
-	"github.com/theopenlane/core/internal/ent/generated/migrate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/migrate"
 )
 
 // maxJoinIndexNameLen is the maximum length of an identifier in postgres, longer names are
@@ -114,7 +114,6 @@ var joinTables = map[string]bool{
 	"internal_policy_identity_holders":      true,
 	"invite_events":                         true,
 	"invite_groups":                         true,
-	"job_runner_job_runner_tokens":          true,
 	"mapped_control_blocked_groups":         true,
 	"mapped_control_editors":                true,
 	"mapped_control_from_controls":          true,
@@ -208,8 +207,6 @@ var joinTables = map[string]bool{
 	"scan_remediations":                     true,
 	"scan_action_plans":                     true,
 	"scan_tasks":                            true,
-	"scheduled_job_controls":                true,
-	"scheduled_job_subcontrols":             true,
 	"subcontrol_control_objectives":         true,
 	"subcontrol_tasks":                      true,
 	"subcontrol_risks":                      true,

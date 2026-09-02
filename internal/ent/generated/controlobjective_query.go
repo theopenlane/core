@@ -13,22 +13,21 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ControlObjectiveQuery is the builder for querying ControlObjective entities.
@@ -117,9 +116,6 @@ func (_q *ControlObjectiveQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, controlobjective.OwnerTable, controlobjective.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.ControlObjective
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -142,9 +138,6 @@ func (_q *ControlObjectiveQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.BlockedGroupsTable, controlobjective.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlObjectiveBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -167,9 +160,6 @@ func (_q *ControlObjectiveQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.EditorsTable, controlobjective.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlObjectiveEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -192,9 +182,6 @@ func (_q *ControlObjectiveQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.ViewersTable, controlobjective.ViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlObjectiveViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -217,9 +204,6 @@ func (_q *ControlObjectiveQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ProgramsTable, controlobjective.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -242,9 +226,6 @@ func (_q *ControlObjectiveQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.EvidenceTable, controlobjective.EvidencePrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -267,9 +248,6 @@ func (_q *ControlObjectiveQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.ControlsTable, controlobjective.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -292,9 +270,6 @@ func (_q *ControlObjectiveQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.SubcontrolsTable, controlobjective.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.SubcontrolControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -317,9 +292,6 @@ func (_q *ControlObjectiveQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlobjective.InternalPoliciesTable, controlobjective.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -342,9 +314,6 @@ func (_q *ControlObjectiveQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.ProceduresTable, controlobjective.ProceduresColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -367,9 +336,6 @@ func (_q *ControlObjectiveQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.RisksTable, controlobjective.RisksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -392,9 +358,6 @@ func (_q *ControlObjectiveQuery) QueryNarratives() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, controlobjective.NarrativesTable, controlobjective.NarrativesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.Narrative
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -417,9 +380,6 @@ func (_q *ControlObjectiveQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlobjective.TasksTable, controlobjective.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.ControlObjectiveTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -890,8 +850,6 @@ func (_q *ControlObjectiveQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.ControlObjective
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1130,7 +1088,6 @@ func (_q *ControlObjectiveQuery) loadBlockedGroups(ctx context.Context, query *G
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ControlObjectiveBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlobjective.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlobjective.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1192,7 +1149,6 @@ func (_q *ControlObjectiveQuery) loadEditors(ctx context.Context, query *GroupQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.EditorsTable)
-		joinT.Schema(_q.schemaConfig.ControlObjectiveEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlobjective.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlobjective.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1254,7 +1210,6 @@ func (_q *ControlObjectiveQuery) loadViewers(ctx context.Context, query *GroupQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.ViewersTable)
-		joinT.Schema(_q.schemaConfig.ControlObjectiveViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlobjective.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlobjective.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1316,7 +1271,6 @@ func (_q *ControlObjectiveQuery) loadPrograms(ctx context.Context, query *Progra
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramControlObjectives)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(controlobjective.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1378,7 +1332,6 @@ func (_q *ControlObjectiveQuery) loadEvidence(ctx context.Context, query *Eviden
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.EvidenceTable)
-		joinT.Schema(_q.schemaConfig.EvidenceControlObjectives)
 		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(controlobjective.EvidencePrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.EvidencePrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1440,7 +1393,6 @@ func (_q *ControlObjectiveQuery) loadControls(ctx context.Context, query *Contro
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlControlObjectives)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(controlobjective.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1502,7 +1454,6 @@ func (_q *ControlObjectiveQuery) loadSubcontrols(ctx context.Context, query *Sub
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolControlObjectives)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(controlobjective.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1564,7 +1515,6 @@ func (_q *ControlObjectiveQuery) loadInternalPolicies(ctx context.Context, query
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyControlObjectives)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(controlobjective.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlobjective.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1719,7 +1669,6 @@ func (_q *ControlObjectiveQuery) loadTasks(ctx context.Context, query *TaskQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlobjective.TasksTable)
-		joinT.Schema(_q.schemaConfig.ControlObjectiveTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(controlobjective.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlobjective.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1771,8 +1720,6 @@ func (_q *ControlObjectiveQuery) loadTasks(ctx context.Context, query *TaskQuery
 
 func (_q *ControlObjectiveQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.ControlObjective
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1841,9 +1788,6 @@ func (_q *ControlObjectiveQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.ControlObjective)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

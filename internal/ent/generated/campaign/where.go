@@ -9,9 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -2606,9 +2604,6 @@ func HasOwner() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2617,9 +2612,6 @@ func HasOwner() predicate.Campaign {
 func HasOwnerWith(preds ...predicate.Organization) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2635,9 +2627,6 @@ func HasBlockedGroups() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignBlockedGroups
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2646,9 +2635,6 @@ func HasBlockedGroups() predicate.Campaign {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignBlockedGroups
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2664,9 +2650,6 @@ func HasEditors() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignEditors
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2675,9 +2658,6 @@ func HasEditors() predicate.Campaign {
 func HasEditorsWith(preds ...predicate.Group) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignEditors
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2693,9 +2673,6 @@ func HasViewers() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignViewers
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2704,9 +2681,6 @@ func HasViewers() predicate.Campaign {
 func HasViewersWith(preds ...predicate.Group) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newViewersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignViewers
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2722,9 +2696,6 @@ func HasInternalOwnerUser() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2733,9 +2704,6 @@ func HasInternalOwnerUser() predicate.Campaign {
 func HasInternalOwnerUserWith(preds ...predicate.User) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newInternalOwnerUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2751,9 +2719,6 @@ func HasInternalOwnerGroup() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2762,9 +2727,6 @@ func HasInternalOwnerGroup() predicate.Campaign {
 func HasInternalOwnerGroupWith(preds ...predicate.Group) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newInternalOwnerGroupStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2780,9 +2742,6 @@ func HasAssessment() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, AssessmentTable, AssessmentColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2791,9 +2750,6 @@ func HasAssessment() predicate.Campaign {
 func HasAssessmentWith(preds ...predicate.Assessment) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newAssessmentStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2809,9 +2765,6 @@ func HasTemplate() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2820,9 +2773,6 @@ func HasTemplate() predicate.Campaign {
 func HasTemplateWith(preds ...predicate.Template) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newTemplateStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2838,9 +2788,6 @@ func HasIntegration() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, IntegrationTable, IntegrationColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2849,9 +2796,6 @@ func HasIntegration() predicate.Campaign {
 func HasIntegrationWith(preds ...predicate.Integration) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newIntegrationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2867,9 +2811,6 @@ func HasEmailTemplate() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, EmailTemplateTable, EmailTemplateColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2878,9 +2819,6 @@ func HasEmailTemplate() predicate.Campaign {
 func HasEmailTemplateWith(preds ...predicate.EmailTemplate) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newEmailTemplateStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2896,9 +2834,6 @@ func HasEntity() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, EntityTable, EntityColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2907,9 +2842,6 @@ func HasEntity() predicate.Campaign {
 func HasEntityWith(preds ...predicate.Entity) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newEntityStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2925,9 +2857,6 @@ func HasTrustCenter() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2936,9 +2865,6 @@ func HasTrustCenter() predicate.Campaign {
 func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newTrustCenterStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.Campaign
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2954,9 +2880,6 @@ func HasCampaignTargets() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, CampaignTargetsTable, CampaignTargetsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CampaignTarget
-		step.Edge.Schema = schemaConfig.CampaignTarget
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2965,9 +2888,6 @@ func HasCampaignTargets() predicate.Campaign {
 func HasCampaignTargetsWith(preds ...predicate.CampaignTarget) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newCampaignTargetsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CampaignTarget
-		step.Edge.Schema = schemaConfig.CampaignTarget
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2983,9 +2903,6 @@ func HasAssessmentResponses() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, AssessmentResponsesTable, AssessmentResponsesColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2994,9 +2911,6 @@ func HasAssessmentResponses() predicate.Campaign {
 func HasAssessmentResponsesWith(preds ...predicate.AssessmentResponse) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newAssessmentResponsesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3012,9 +2926,6 @@ func HasContacts() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ContactsTable, ContactsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Contact
-		step.Edge.Schema = schemaConfig.CampaignContacts
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3023,9 +2934,6 @@ func HasContacts() predicate.Campaign {
 func HasContactsWith(preds ...predicate.Contact) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newContactsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Contact
-		step.Edge.Schema = schemaConfig.CampaignContacts
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3041,9 +2949,6 @@ func HasUsers() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, UsersTable, UsersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.CampaignUsers
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3052,9 +2957,6 @@ func HasUsers() predicate.Campaign {
 func HasUsersWith(preds ...predicate.User) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newUsersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.CampaignUsers
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3070,9 +2972,6 @@ func HasGroups() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, GroupsTable, GroupsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignGroups
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3081,9 +2980,6 @@ func HasGroups() predicate.Campaign {
 func HasGroupsWith(preds ...predicate.Group) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignGroups
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3099,9 +2995,6 @@ func HasIdentityHolders() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.CampaignIdentityHolders
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3110,9 +3003,6 @@ func HasIdentityHolders() predicate.Campaign {
 func HasIdentityHoldersWith(preds ...predicate.IdentityHolder) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newIdentityHoldersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.CampaignIdentityHolders
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3128,9 +3018,6 @@ func HasControls() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, ControlsTable, ControlsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlCampaigns
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3139,9 +3026,6 @@ func HasControls() predicate.Campaign {
 func HasControlsWith(preds ...predicate.Control) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newControlsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlCampaigns
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3157,9 +3041,6 @@ func HasWorkflowObjectRefs() predicate.Campaign {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3168,9 +3049,6 @@ func HasWorkflowObjectRefs() predicate.Campaign {
 func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.Campaign {
 	return predicate.Campaign(func(s *sql.Selector) {
 		step := newWorkflowObjectRefsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

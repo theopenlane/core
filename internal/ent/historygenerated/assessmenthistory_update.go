@@ -8,299 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // AssessmentHistoryUpdate is the builder for updating AssessmentHistory entities.
 type AssessmentHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *AssessmentHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *AssessmentHistoryMutation
 }
 
 // Where appends a list predicates to the AssessmentHistoryUpdate builder.
 func (_u *AssessmentHistoryUpdate) Where(ps ...predicate.AssessmentHistory) *AssessmentHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *AssessmentHistoryUpdate) SetUpdatedAt(v time.Time) *AssessmentHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *AssessmentHistoryUpdate) ClearUpdatedAt() *AssessmentHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *AssessmentHistoryUpdate) SetUpdatedBy(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableUpdatedBy(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *AssessmentHistoryUpdate) ClearUpdatedBy() *AssessmentHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *AssessmentHistoryUpdate) SetUpdatedByImpersonator(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *AssessmentHistoryUpdate) ClearUpdatedByImpersonator() *AssessmentHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *AssessmentHistoryUpdate) SetDeletedAt(v time.Time) *AssessmentHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableDeletedAt(v *time.Time) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *AssessmentHistoryUpdate) ClearDeletedAt() *AssessmentHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *AssessmentHistoryUpdate) SetDeletedBy(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableDeletedBy(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *AssessmentHistoryUpdate) ClearDeletedBy() *AssessmentHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *AssessmentHistoryUpdate) SetTags(v []string) *AssessmentHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *AssessmentHistoryUpdate) AppendTags(v []string) *AssessmentHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *AssessmentHistoryUpdate) ClearTags() *AssessmentHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *AssessmentHistoryUpdate) SetInternalNotes(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableInternalNotes(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *AssessmentHistoryUpdate) ClearInternalNotes() *AssessmentHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *AssessmentHistoryUpdate) SetSystemInternalID(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableSystemInternalID(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *AssessmentHistoryUpdate) ClearSystemInternalID() *AssessmentHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *AssessmentHistoryUpdate) SetWorkflowEligibleMarker(v bool) *AssessmentHistoryUpdate {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *AssessmentHistoryUpdate) ClearWorkflowEligibleMarker() *AssessmentHistoryUpdate {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *AssessmentHistoryUpdate) SetName(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableName(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetAssessmentType sets the "assessment_type" field.
-func (_u *AssessmentHistoryUpdate) SetAssessmentType(v enums.AssessmentType) *AssessmentHistoryUpdate {
-	_u.mutation.SetAssessmentType(v)
-	return _u
-}
-
-// SetNillableAssessmentType sets the "assessment_type" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableAssessmentType(v *enums.AssessmentType) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetAssessmentType(*v)
-	}
-	return _u
-}
-
-// SetTemplateID sets the "template_id" field.
-func (_u *AssessmentHistoryUpdate) SetTemplateID(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetTemplateID(v)
-	return _u
-}
-
-// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableTemplateID(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetTemplateID(*v)
-	}
-	return _u
-}
-
-// ClearTemplateID clears the value of the "template_id" field.
-func (_u *AssessmentHistoryUpdate) ClearTemplateID() *AssessmentHistoryUpdate {
-	_u.mutation.ClearTemplateID()
-	return _u
-}
-
-// SetJsonconfig sets the "jsonconfig" field.
-func (_u *AssessmentHistoryUpdate) SetJsonconfig(v map[string]interface{}) *AssessmentHistoryUpdate {
-	_u.mutation.SetJsonconfig(v)
-	return _u
-}
-
-// ClearJsonconfig clears the value of the "jsonconfig" field.
-func (_u *AssessmentHistoryUpdate) ClearJsonconfig() *AssessmentHistoryUpdate {
-	_u.mutation.ClearJsonconfig()
-	return _u
-}
-
-// SetUischema sets the "uischema" field.
-func (_u *AssessmentHistoryUpdate) SetUischema(v map[string]interface{}) *AssessmentHistoryUpdate {
-	_u.mutation.SetUischema(v)
-	return _u
-}
-
-// ClearUischema clears the value of the "uischema" field.
-func (_u *AssessmentHistoryUpdate) ClearUischema() *AssessmentHistoryUpdate {
-	_u.mutation.ClearUischema()
-	return _u
-}
-
-// SetResponseDueDuration sets the "response_due_duration" field.
-func (_u *AssessmentHistoryUpdate) SetResponseDueDuration(v int64) *AssessmentHistoryUpdate {
-	_u.mutation.ResetResponseDueDuration()
-	_u.mutation.SetResponseDueDuration(v)
-	return _u
-}
-
-// SetNillableResponseDueDuration sets the "response_due_duration" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableResponseDueDuration(v *int64) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetResponseDueDuration(*v)
-	}
-	return _u
-}
-
-// AddResponseDueDuration adds value to the "response_due_duration" field.
-func (_u *AssessmentHistoryUpdate) AddResponseDueDuration(v int64) *AssessmentHistoryUpdate {
-	_u.mutation.AddResponseDueDuration(v)
-	return _u
-}
-
-// ClearResponseDueDuration clears the value of the "response_due_duration" field.
-func (_u *AssessmentHistoryUpdate) ClearResponseDueDuration() *AssessmentHistoryUpdate {
-	_u.mutation.ClearResponseDueDuration()
 	return _u
 }
 
@@ -311,9 +36,6 @@ func (_u *AssessmentHistoryUpdate) Mutation() *AssessmentHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *AssessmentHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -339,38 +61,7 @@ func (_u *AssessmentHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *AssessmentHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if assessmenthistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized assessmenthistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := assessmenthistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *AssessmentHistoryUpdate) check() error {
-	if v, ok := _u.mutation.AssessmentType(); ok {
-		if err := assessmenthistory.AssessmentTypeValidator(v); err != nil {
-			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssessmentHistory.assessment_type": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *AssessmentHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssessmentHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(assessmenthistory.Table, assessmenthistory.Columns, sqlgraph.NewFieldSpec(assessmenthistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -385,46 +76,23 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(assessmenthistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(assessmenthistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(assessmenthistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(assessmenthistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(assessmenthistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(assessmenthistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(assessmenthistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(assessmenthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(assessmenthistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(assessmenthistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(assessmenthistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmenthistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(assessmenthistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, assessmenthistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessmenthistory.FieldTags, field.TypeJSON)
@@ -435,60 +103,27 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(assessmenthistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(assessmenthistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(assessmenthistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(assessmenthistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(assessmenthistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(assessmenthistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(assessmenthistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.AssessmentType(); ok {
-		_spec.SetField(assessmenthistory.FieldAssessmentType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.TemplateID(); ok {
-		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
 	}
 	if _u.mutation.TemplateIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldTemplateID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Jsonconfig(); ok {
-		_spec.SetField(assessmenthistory.FieldJsonconfig, field.TypeJSON, value)
-	}
 	if _u.mutation.JsonconfigCleared() {
 		_spec.ClearField(assessmenthistory.FieldJsonconfig, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Uischema(); ok {
-		_spec.SetField(assessmenthistory.FieldUischema, field.TypeJSON, value)
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(assessmenthistory.FieldUischema, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ResponseDueDuration(); ok {
-		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
-		_spec.AddField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
-	}
 	if _u.mutation.ResponseDueDurationCleared() {
 		_spec.ClearField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64)
 	}
-	_spec.Node.Schema = _u.schemaConfig.AssessmentHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{assessmenthistory.Label}
@@ -504,279 +139,9 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 // AssessmentHistoryUpdateOne is the builder for updating a single AssessmentHistory entity.
 type AssessmentHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *AssessmentHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *AssessmentHistoryUpdateOne) SetUpdatedAt(v time.Time) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *AssessmentHistoryUpdateOne) ClearUpdatedAt() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *AssessmentHistoryUpdateOne) SetUpdatedBy(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableUpdatedBy(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *AssessmentHistoryUpdateOne) ClearUpdatedBy() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *AssessmentHistoryUpdateOne) SetUpdatedByImpersonator(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *AssessmentHistoryUpdateOne) ClearUpdatedByImpersonator() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *AssessmentHistoryUpdateOne) SetDeletedAt(v time.Time) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *AssessmentHistoryUpdateOne) ClearDeletedAt() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *AssessmentHistoryUpdateOne) SetDeletedBy(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableDeletedBy(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *AssessmentHistoryUpdateOne) ClearDeletedBy() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *AssessmentHistoryUpdateOne) SetTags(v []string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *AssessmentHistoryUpdateOne) AppendTags(v []string) *AssessmentHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *AssessmentHistoryUpdateOne) ClearTags() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *AssessmentHistoryUpdateOne) SetInternalNotes(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableInternalNotes(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *AssessmentHistoryUpdateOne) ClearInternalNotes() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *AssessmentHistoryUpdateOne) SetSystemInternalID(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableSystemInternalID(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *AssessmentHistoryUpdateOne) ClearSystemInternalID() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *AssessmentHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *AssessmentHistoryUpdateOne) ClearWorkflowEligibleMarker() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *AssessmentHistoryUpdateOne) SetName(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableName(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetAssessmentType sets the "assessment_type" field.
-func (_u *AssessmentHistoryUpdateOne) SetAssessmentType(v enums.AssessmentType) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetAssessmentType(v)
-	return _u
-}
-
-// SetNillableAssessmentType sets the "assessment_type" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableAssessmentType(v *enums.AssessmentType) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetAssessmentType(*v)
-	}
-	return _u
-}
-
-// SetTemplateID sets the "template_id" field.
-func (_u *AssessmentHistoryUpdateOne) SetTemplateID(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetTemplateID(v)
-	return _u
-}
-
-// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableTemplateID(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetTemplateID(*v)
-	}
-	return _u
-}
-
-// ClearTemplateID clears the value of the "template_id" field.
-func (_u *AssessmentHistoryUpdateOne) ClearTemplateID() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearTemplateID()
-	return _u
-}
-
-// SetJsonconfig sets the "jsonconfig" field.
-func (_u *AssessmentHistoryUpdateOne) SetJsonconfig(v map[string]interface{}) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetJsonconfig(v)
-	return _u
-}
-
-// ClearJsonconfig clears the value of the "jsonconfig" field.
-func (_u *AssessmentHistoryUpdateOne) ClearJsonconfig() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearJsonconfig()
-	return _u
-}
-
-// SetUischema sets the "uischema" field.
-func (_u *AssessmentHistoryUpdateOne) SetUischema(v map[string]interface{}) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetUischema(v)
-	return _u
-}
-
-// ClearUischema clears the value of the "uischema" field.
-func (_u *AssessmentHistoryUpdateOne) ClearUischema() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearUischema()
-	return _u
-}
-
-// SetResponseDueDuration sets the "response_due_duration" field.
-func (_u *AssessmentHistoryUpdateOne) SetResponseDueDuration(v int64) *AssessmentHistoryUpdateOne {
-	_u.mutation.ResetResponseDueDuration()
-	_u.mutation.SetResponseDueDuration(v)
-	return _u
-}
-
-// SetNillableResponseDueDuration sets the "response_due_duration" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableResponseDueDuration(v *int64) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetResponseDueDuration(*v)
-	}
-	return _u
-}
-
-// AddResponseDueDuration adds value to the "response_due_duration" field.
-func (_u *AssessmentHistoryUpdateOne) AddResponseDueDuration(v int64) *AssessmentHistoryUpdateOne {
-	_u.mutation.AddResponseDueDuration(v)
-	return _u
-}
-
-// ClearResponseDueDuration clears the value of the "response_due_duration" field.
-func (_u *AssessmentHistoryUpdateOne) ClearResponseDueDuration() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearResponseDueDuration()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *AssessmentHistoryMutation
 }
 
 // Mutation returns the AssessmentHistoryMutation object of the builder.
@@ -799,9 +164,6 @@ func (_u *AssessmentHistoryUpdateOne) Select(field string, fields ...string) *As
 
 // Save executes the query and returns the updated AssessmentHistory entity.
 func (_u *AssessmentHistoryUpdateOne) Save(ctx context.Context) (*AssessmentHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -827,38 +189,7 @@ func (_u *AssessmentHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *AssessmentHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if assessmenthistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized assessmenthistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := assessmenthistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *AssessmentHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.AssessmentType(); ok {
-		if err := assessmenthistory.AssessmentTypeValidator(v); err != nil {
-			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssessmentHistory.assessment_type": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *AssessmentHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssessmentHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssessmentHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(assessmenthistory.Table, assessmenthistory.Columns, sqlgraph.NewFieldSpec(assessmenthistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -890,46 +221,23 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(assessmenthistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(assessmenthistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(assessmenthistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(assessmenthistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(assessmenthistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(assessmenthistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(assessmenthistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(assessmenthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(assessmenthistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(assessmenthistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(assessmenthistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmenthistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(assessmenthistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, assessmenthistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(assessmenthistory.FieldTags, field.TypeJSON)
@@ -940,60 +248,27 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(assessmenthistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(assessmenthistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(assessmenthistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(assessmenthistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(assessmenthistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(assessmenthistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(assessmenthistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.AssessmentType(); ok {
-		_spec.SetField(assessmenthistory.FieldAssessmentType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.TemplateID(); ok {
-		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
 	}
 	if _u.mutation.TemplateIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldTemplateID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Jsonconfig(); ok {
-		_spec.SetField(assessmenthistory.FieldJsonconfig, field.TypeJSON, value)
-	}
 	if _u.mutation.JsonconfigCleared() {
 		_spec.ClearField(assessmenthistory.FieldJsonconfig, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Uischema(); ok {
-		_spec.SetField(assessmenthistory.FieldUischema, field.TypeJSON, value)
 	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(assessmenthistory.FieldUischema, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ResponseDueDuration(); ok {
-		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
-	}
-	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
-		_spec.AddField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
-	}
 	if _u.mutation.ResponseDueDurationCleared() {
 		_spec.ClearField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64)
 	}
-	_spec.Node.Schema = _u.schemaConfig.AssessmentHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &AssessmentHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

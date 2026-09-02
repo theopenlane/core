@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
 )
 
 // TrustCenterSettingDelete is the builder for deleting a TrustCenterSetting entity.
@@ -43,8 +41,6 @@ func (_d *TrustCenterSettingDelete) ExecX(ctx context.Context) int {
 
 func (_d *TrustCenterSettingDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(trustcentersetting.Table, sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.TrustCenterSetting
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

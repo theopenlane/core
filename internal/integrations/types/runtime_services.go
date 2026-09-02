@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/gala"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // RuntimeServices exposes the runtime capabilities available to definition-declared gala listeners

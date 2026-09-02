@@ -13,13 +13,11 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
 )
 
 // WorkflowAssignmentTargetUpdate is the builder for updating WorkflowAssignmentTarget entities.
@@ -445,7 +443,6 @@ func (_u *WorkflowAssignmentTargetUpdate) sqlSave(ctx context.Context) (_node in
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowAssignmentIDs(); len(nodes) > 0 {
@@ -459,7 +456,6 @@ func (_u *WorkflowAssignmentTargetUpdate) sqlSave(ctx context.Context) (_node in
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -476,7 +472,6 @@ func (_u *WorkflowAssignmentTargetUpdate) sqlSave(ctx context.Context) (_node in
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
@@ -490,7 +485,6 @@ func (_u *WorkflowAssignmentTargetUpdate) sqlSave(ctx context.Context) (_node in
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -507,7 +501,6 @@ func (_u *WorkflowAssignmentTargetUpdate) sqlSave(ctx context.Context) (_node in
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.GroupIDs(); len(nodes) > 0 {
@@ -521,14 +514,11 @@ func (_u *WorkflowAssignmentTargetUpdate) sqlSave(ctx context.Context) (_node in
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowAssignmentTarget
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -990,7 +980,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) sqlSave(ctx context.Context) (_node
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowAssignmentIDs(); len(nodes) > 0 {
@@ -1004,7 +993,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) sqlSave(ctx context.Context) (_node
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1021,7 +1009,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) sqlSave(ctx context.Context) (_node
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
@@ -1035,7 +1022,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) sqlSave(ctx context.Context) (_node
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1052,7 +1038,6 @@ func (_u *WorkflowAssignmentTargetUpdateOne) sqlSave(ctx context.Context) (_node
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.GroupIDs(); len(nodes) > 0 {
@@ -1066,14 +1051,11 @@ func (_u *WorkflowAssignmentTargetUpdateOne) sqlSave(ctx context.Context) (_node
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowAssignmentTarget
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &WorkflowAssignmentTarget{config: _u.config}
 	_spec.Assign = _node.assignValues

@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -595,9 +593,6 @@ func HasProgram() predicate.ProgramMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, ProgramTable, ProgramColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -606,9 +601,6 @@ func HasProgram() predicate.ProgramMembership {
 func HasProgramWith(preds ...predicate.Program) predicate.ProgramMembership {
 	return predicate.ProgramMembership(func(s *sql.Selector) {
 		step := newProgramStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -624,9 +616,6 @@ func HasUser() predicate.ProgramMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, UserTable, UserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -635,9 +624,6 @@ func HasUser() predicate.ProgramMembership {
 func HasUserWith(preds ...predicate.User) predicate.ProgramMembership {
 	return predicate.ProgramMembership(func(s *sql.Selector) {
 		step := newUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -653,9 +639,6 @@ func HasOrgMembership() predicate.ProgramMembership {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, OrgMembershipTable, OrgMembershipColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgMembership
-		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -664,9 +647,6 @@ func HasOrgMembership() predicate.ProgramMembership {
 func HasOrgMembershipWith(preds ...predicate.OrgMembership) predicate.ProgramMembership {
 	return predicate.ProgramMembership(func(s *sql.Selector) {
 		step := newOrgMembershipStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgMembership
-		step.Edge.Schema = schemaConfig.ProgramMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

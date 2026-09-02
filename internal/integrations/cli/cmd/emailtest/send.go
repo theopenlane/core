@@ -12,8 +12,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/theopenlane/httpsling"
 
-	"github.com/theopenlane/core/internal/integrations/cli/cmd"
-	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/cmd"
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // emailTestSendRequest mirrors handlers.EmailTestSendRequest

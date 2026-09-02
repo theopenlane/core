@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
 )
 
 // ProgramMembershipDelete is the builder for deleting a ProgramMembership entity.
@@ -43,8 +41,6 @@ func (_d *ProgramMembershipDelete) ExecX(ctx context.Context) int {
 
 func (_d *ProgramMembershipDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(programmembership.Table, sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.ProgramMembership
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

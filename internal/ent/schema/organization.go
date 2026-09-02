@@ -18,13 +18,13 @@ import (
 
 	"github.com/theopenlane/entx/accessmap"
 
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/internal/ent/taskrules"
-	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/internal/ent/taskrules"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
 
 const (
@@ -414,42 +414,7 @@ func (o Organization) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
-			edgeSchema:         JobRunner{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         JobRunnerToken{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         JobRunnerRegistrationToken{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
 			edgeSchema:         DNSVerification{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         JobTemplate{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         ScheduledJob{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         JobResult{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         ScheduledJobRun{},
 			cascadeDeleteOwner: true,
 		}),
 		edgeToWithPagination(&edgeDefinition{

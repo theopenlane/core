@@ -5,20 +5,18 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"gotest.tools/v3/assert"
 )
 
 func TestGetFinalFilters(t *testing.T) {
 	type testCase struct {
-		name                string
-		hasOwnerField       bool
-		hasSystemOwnedField bool
-		exportType          enums.ExportType
-		filters             string
-		ownerID             string
-		expectedErr         string
-		expectedFilters     map[string]any
+		name            string
+		exportType      enums.ExportType
+		filters         string
+		ownerID         string
+		expectedErr     string
+		expectedFilters map[string]any
 	}
 
 	cases := []testCase{

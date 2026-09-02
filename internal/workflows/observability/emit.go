@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // EmitTyped emits a typed payload through Gala, recording emit errors with operation metadata.

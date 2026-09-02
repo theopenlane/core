@@ -9,11 +9,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
 )
 
 // TestExecuteIntegrationAction_ConnectedIntegration verifies that executeIntegrationAction

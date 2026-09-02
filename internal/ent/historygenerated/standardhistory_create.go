@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -570,7 +570,6 @@ func (_c *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Creat
 		_node = &StandardHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(standardhistory.Table, sqlgraph.NewFieldSpec(standardhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.StandardHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

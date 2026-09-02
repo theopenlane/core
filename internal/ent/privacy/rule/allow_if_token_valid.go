@@ -6,8 +6,8 @@ import (
 
 	"entgo.io/ent/entql"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
 )
 
 // AllowIfContextHasPrivacyTokenOfType allows a mutation
@@ -122,9 +122,6 @@ func privacyTokenFromContextByType(ctx context.Context, tokenType reflect.Type) 
 		return t, t != nil
 	case reflect.TypeOf(&token.ResetToken{}):
 		t := token.ResetTokenFromContext(ctx)
-		return t, t != nil
-	case reflect.TypeOf(&token.JobRunnerRegistrationToken{}):
-		t := token.JobRunnerRegistrationTokenFromContext(ctx)
 		return t, t != nil
 	case reflect.TypeOf(&token.DownloadToken{}):
 		t := token.DownloadTokenFromContext(ctx)

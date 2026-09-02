@@ -7,114 +7,107 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/export"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/notification"
-	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/onboarding"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgprice"
-	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
-	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/webauthn"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/ent/schema"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailverificationtoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/export"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/filedownloadtoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/onboarding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/passwordresettoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/schema"
 
 	"entgo.io/ent"
 	"entgo.io/ent/privacy"
@@ -4166,386 +4159,6 @@ func init() {
 	inviteDescID := inviteMixinFields4[0].Descriptor()
 	// invite.DefaultID holds the default value on creation for the id field.
 	invite.DefaultID = inviteDescID.Default.(func() string)
-	jobresultMixin := schema.JobResult{}.Mixin()
-	jobresult.Policy = privacy.NewPolicies(schema.JobResult{})
-	jobresult.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := jobresult.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	jobresultMixinHooks0 := jobresultMixin[0].Hooks()
-	jobresultMixinHooks1 := jobresultMixin[1].Hooks()
-	jobresultMixinHooks3 := jobresultMixin[3].Hooks()
-	jobresultMixinHooks6 := jobresultMixin[6].Hooks()
-	jobresultHooks := schema.JobResult{}.Hooks()
-
-	jobresult.Hooks[1] = jobresultMixinHooks0[0]
-
-	jobresult.Hooks[2] = jobresultMixinHooks1[0]
-
-	jobresult.Hooks[3] = jobresultMixinHooks3[0]
-
-	jobresult.Hooks[4] = jobresultMixinHooks6[0]
-
-	jobresult.Hooks[5] = jobresultHooks[0]
-	jobresultMixinInters3 := jobresultMixin[3].Interceptors()
-	jobresultMixinInters6 := jobresultMixin[6].Interceptors()
-	jobresult.Interceptors[0] = jobresultMixinInters3[0]
-	jobresult.Interceptors[1] = jobresultMixinInters6[0]
-	jobresultMixinFields0 := jobresultMixin[0].Fields()
-	_ = jobresultMixinFields0
-	jobresultMixinFields4 := jobresultMixin[4].Fields()
-	_ = jobresultMixinFields4
-	jobresultMixinFields6 := jobresultMixin[6].Fields()
-	_ = jobresultMixinFields6
-	jobresultFields := schema.JobResult{}.Fields()
-	_ = jobresultFields
-	// jobresultDescCreatedAt is the schema descriptor for created_at field.
-	jobresultDescCreatedAt := jobresultMixinFields0[0].Descriptor()
-	// jobresult.DefaultCreatedAt holds the default value on creation for the created_at field.
-	jobresult.DefaultCreatedAt = jobresultDescCreatedAt.Default.(func() time.Time)
-	// jobresultDescUpdatedAt is the schema descriptor for updated_at field.
-	jobresultDescUpdatedAt := jobresultMixinFields0[1].Descriptor()
-	// jobresult.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	jobresult.DefaultUpdatedAt = jobresultDescUpdatedAt.Default.(func() time.Time)
-	// jobresult.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	jobresult.UpdateDefaultUpdatedAt = jobresultDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// jobresultDescOwnerID is the schema descriptor for owner_id field.
-	jobresultDescOwnerID := jobresultMixinFields6[0].Descriptor()
-	// jobresult.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	jobresult.OwnerIDValidator = jobresultDescOwnerID.Validators[0].(func(string) error)
-	// jobresultDescExitCode is the schema descriptor for exit_code field.
-	jobresultDescExitCode := jobresultFields[2].Descriptor()
-	// jobresult.ExitCodeValidator is a validator for the "exit_code" field. It is called by the builders before save.
-	jobresult.ExitCodeValidator = jobresultDescExitCode.Validators[0].(func(int) error)
-	// jobresultDescFinishedAt is the schema descriptor for finished_at field.
-	jobresultDescFinishedAt := jobresultFields[3].Descriptor()
-	// jobresult.DefaultFinishedAt holds the default value on creation for the finished_at field.
-	jobresult.DefaultFinishedAt = jobresultDescFinishedAt.Default.(func() time.Time)
-	// jobresultDescStartedAt is the schema descriptor for started_at field.
-	jobresultDescStartedAt := jobresultFields[4].Descriptor()
-	// jobresult.DefaultStartedAt holds the default value on creation for the started_at field.
-	jobresult.DefaultStartedAt = jobresultDescStartedAt.Default.(func() time.Time)
-	// jobresultDescID is the schema descriptor for id field.
-	jobresultDescID := jobresultMixinFields4[0].Descriptor()
-	// jobresult.DefaultID holds the default value on creation for the id field.
-	jobresult.DefaultID = jobresultDescID.Default.(func() string)
-	jobrunnerMixin := schema.JobRunner{}.Mixin()
-	jobrunner.Policy = privacy.NewPolicies(jobrunnerMixin[8], schema.JobRunner{})
-	jobrunner.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := jobrunner.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	jobrunnerMixinHooks0 := jobrunnerMixin[0].Hooks()
-	jobrunnerMixinHooks1 := jobrunnerMixin[1].Hooks()
-	jobrunnerMixinHooks3 := jobrunnerMixin[3].Hooks()
-	jobrunnerMixinHooks4 := jobrunnerMixin[4].Hooks()
-	jobrunnerMixinHooks5 := jobrunnerMixin[5].Hooks()
-	jobrunnerMixinHooks7 := jobrunnerMixin[7].Hooks()
-	jobrunnerMixinHooks8 := jobrunnerMixin[8].Hooks()
-	jobrunnerHooks := schema.JobRunner{}.Hooks()
-
-	jobrunner.Hooks[1] = jobrunnerMixinHooks0[0]
-
-	jobrunner.Hooks[2] = jobrunnerMixinHooks1[0]
-
-	jobrunner.Hooks[3] = jobrunnerMixinHooks3[0]
-
-	jobrunner.Hooks[4] = jobrunnerMixinHooks4[0]
-
-	jobrunner.Hooks[5] = jobrunnerMixinHooks5[0]
-
-	jobrunner.Hooks[6] = jobrunnerMixinHooks7[0]
-
-	jobrunner.Hooks[7] = jobrunnerMixinHooks8[0]
-
-	jobrunner.Hooks[8] = jobrunnerHooks[0]
-
-	jobrunner.Hooks[9] = jobrunnerHooks[1]
-	jobrunnerMixinInters3 := jobrunnerMixin[3].Interceptors()
-	jobrunnerMixinInters7 := jobrunnerMixin[7].Interceptors()
-	jobrunnerInters := schema.JobRunner{}.Interceptors()
-	jobrunner.Interceptors[0] = jobrunnerMixinInters3[0]
-	jobrunner.Interceptors[1] = jobrunnerMixinInters7[0]
-	jobrunner.Interceptors[2] = jobrunnerInters[0]
-	jobrunnerMixinFields0 := jobrunnerMixin[0].Fields()
-	_ = jobrunnerMixinFields0
-	jobrunnerMixinFields4 := jobrunnerMixin[4].Fields()
-	_ = jobrunnerMixinFields4
-	jobrunnerMixinFields5 := jobrunnerMixin[5].Fields()
-	_ = jobrunnerMixinFields5
-	jobrunnerMixinFields8 := jobrunnerMixin[8].Fields()
-	_ = jobrunnerMixinFields8
-	jobrunnerFields := schema.JobRunner{}.Fields()
-	_ = jobrunnerFields
-	// jobrunnerDescCreatedAt is the schema descriptor for created_at field.
-	jobrunnerDescCreatedAt := jobrunnerMixinFields0[0].Descriptor()
-	// jobrunner.DefaultCreatedAt holds the default value on creation for the created_at field.
-	jobrunner.DefaultCreatedAt = jobrunnerDescCreatedAt.Default.(func() time.Time)
-	// jobrunnerDescUpdatedAt is the schema descriptor for updated_at field.
-	jobrunnerDescUpdatedAt := jobrunnerMixinFields0[1].Descriptor()
-	// jobrunner.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	jobrunner.DefaultUpdatedAt = jobrunnerDescUpdatedAt.Default.(func() time.Time)
-	// jobrunner.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	jobrunner.UpdateDefaultUpdatedAt = jobrunnerDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// jobrunnerDescDisplayID is the schema descriptor for display_id field.
-	jobrunnerDescDisplayID := jobrunnerMixinFields4[1].Descriptor()
-	// jobrunner.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
-	jobrunner.DisplayIDValidator = jobrunnerDescDisplayID.Validators[0].(func(string) error)
-	// jobrunnerDescTags is the schema descriptor for tags field.
-	jobrunnerDescTags := jobrunnerMixinFields5[0].Descriptor()
-	// jobrunner.DefaultTags holds the default value on creation for the tags field.
-	jobrunner.DefaultTags = jobrunnerDescTags.Default.([]string)
-	// jobrunnerDescSystemOwned is the schema descriptor for system_owned field.
-	jobrunnerDescSystemOwned := jobrunnerMixinFields8[0].Descriptor()
-	// jobrunner.DefaultSystemOwned holds the default value on creation for the system_owned field.
-	jobrunner.DefaultSystemOwned = jobrunnerDescSystemOwned.Default.(bool)
-	// jobrunnerDescIPAddress is the schema descriptor for ip_address field.
-	jobrunnerDescIPAddress := jobrunnerFields[2].Descriptor()
-	// jobrunner.IPAddressValidator is a validator for the "ip_address" field. It is called by the builders before save.
-	jobrunner.IPAddressValidator = jobrunnerDescIPAddress.Validators[0].(func(string) error)
-	// jobrunnerDescID is the schema descriptor for id field.
-	jobrunnerDescID := jobrunnerMixinFields4[0].Descriptor()
-	// jobrunner.DefaultID holds the default value on creation for the id field.
-	jobrunner.DefaultID = jobrunnerDescID.Default.(func() string)
-	jobrunnerregistrationtokenMixin := schema.JobRunnerRegistrationToken{}.Mixin()
-	jobrunnerregistrationtoken.Policy = privacy.NewPolicies(schema.JobRunnerRegistrationToken{})
-	jobrunnerregistrationtoken.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := jobrunnerregistrationtoken.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	jobrunnerregistrationtokenMixinHooks0 := jobrunnerregistrationtokenMixin[0].Hooks()
-	jobrunnerregistrationtokenMixinHooks1 := jobrunnerregistrationtokenMixin[1].Hooks()
-	jobrunnerregistrationtokenMixinHooks3 := jobrunnerregistrationtokenMixin[3].Hooks()
-	jobrunnerregistrationtokenMixinHooks5 := jobrunnerregistrationtokenMixin[5].Hooks()
-	jobrunnerregistrationtokenMixinHooks7 := jobrunnerregistrationtokenMixin[7].Hooks()
-	jobrunnerregistrationtokenHooks := schema.JobRunnerRegistrationToken{}.Hooks()
-
-	jobrunnerregistrationtoken.Hooks[1] = jobrunnerregistrationtokenMixinHooks0[0]
-
-	jobrunnerregistrationtoken.Hooks[2] = jobrunnerregistrationtokenMixinHooks1[0]
-
-	jobrunnerregistrationtoken.Hooks[3] = jobrunnerregistrationtokenMixinHooks3[0]
-
-	jobrunnerregistrationtoken.Hooks[4] = jobrunnerregistrationtokenMixinHooks5[0]
-
-	jobrunnerregistrationtoken.Hooks[5] = jobrunnerregistrationtokenMixinHooks7[0]
-
-	jobrunnerregistrationtoken.Hooks[6] = jobrunnerregistrationtokenHooks[0]
-	jobrunnerregistrationtokenMixinInters3 := jobrunnerregistrationtokenMixin[3].Interceptors()
-	jobrunnerregistrationtokenMixinInters7 := jobrunnerregistrationtokenMixin[7].Interceptors()
-	jobrunnerregistrationtokenInters := schema.JobRunnerRegistrationToken{}.Interceptors()
-	jobrunnerregistrationtoken.Interceptors[0] = jobrunnerregistrationtokenMixinInters3[0]
-	jobrunnerregistrationtoken.Interceptors[1] = jobrunnerregistrationtokenMixinInters7[0]
-	jobrunnerregistrationtoken.Interceptors[2] = jobrunnerregistrationtokenInters[0]
-	jobrunnerregistrationtokenMixinFields0 := jobrunnerregistrationtokenMixin[0].Fields()
-	_ = jobrunnerregistrationtokenMixinFields0
-	jobrunnerregistrationtokenMixinFields4 := jobrunnerregistrationtokenMixin[4].Fields()
-	_ = jobrunnerregistrationtokenMixinFields4
-	jobrunnerregistrationtokenMixinFields5 := jobrunnerregistrationtokenMixin[5].Fields()
-	_ = jobrunnerregistrationtokenMixinFields5
-	jobrunnerregistrationtokenMixinFields7 := jobrunnerregistrationtokenMixin[7].Fields()
-	_ = jobrunnerregistrationtokenMixinFields7
-	jobrunnerregistrationtokenFields := schema.JobRunnerRegistrationToken{}.Fields()
-	_ = jobrunnerregistrationtokenFields
-	// jobrunnerregistrationtokenDescCreatedAt is the schema descriptor for created_at field.
-	jobrunnerregistrationtokenDescCreatedAt := jobrunnerregistrationtokenMixinFields0[0].Descriptor()
-	// jobrunnerregistrationtoken.DefaultCreatedAt holds the default value on creation for the created_at field.
-	jobrunnerregistrationtoken.DefaultCreatedAt = jobrunnerregistrationtokenDescCreatedAt.Default.(func() time.Time)
-	// jobrunnerregistrationtokenDescUpdatedAt is the schema descriptor for updated_at field.
-	jobrunnerregistrationtokenDescUpdatedAt := jobrunnerregistrationtokenMixinFields0[1].Descriptor()
-	// jobrunnerregistrationtoken.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	jobrunnerregistrationtoken.DefaultUpdatedAt = jobrunnerregistrationtokenDescUpdatedAt.Default.(func() time.Time)
-	// jobrunnerregistrationtoken.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	jobrunnerregistrationtoken.UpdateDefaultUpdatedAt = jobrunnerregistrationtokenDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// jobrunnerregistrationtokenDescTags is the schema descriptor for tags field.
-	jobrunnerregistrationtokenDescTags := jobrunnerregistrationtokenMixinFields5[0].Descriptor()
-	// jobrunnerregistrationtoken.DefaultTags holds the default value on creation for the tags field.
-	jobrunnerregistrationtoken.DefaultTags = jobrunnerregistrationtokenDescTags.Default.([]string)
-	// jobrunnerregistrationtokenDescOwnerID is the schema descriptor for owner_id field.
-	jobrunnerregistrationtokenDescOwnerID := jobrunnerregistrationtokenMixinFields7[0].Descriptor()
-	// jobrunnerregistrationtoken.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	jobrunnerregistrationtoken.OwnerIDValidator = jobrunnerregistrationtokenDescOwnerID.Validators[0].(func(string) error)
-	// jobrunnerregistrationtokenDescToken is the schema descriptor for token field.
-	jobrunnerregistrationtokenDescToken := jobrunnerregistrationtokenFields[0].Descriptor()
-	// jobrunnerregistrationtoken.DefaultToken holds the default value on creation for the token field.
-	jobrunnerregistrationtoken.DefaultToken = jobrunnerregistrationtokenDescToken.Default.(func() string)
-	// jobrunnerregistrationtokenDescExpiresAt is the schema descriptor for expires_at field.
-	jobrunnerregistrationtokenDescExpiresAt := jobrunnerregistrationtokenFields[1].Descriptor()
-	// jobrunnerregistrationtoken.DefaultExpiresAt holds the default value on creation for the expires_at field.
-	jobrunnerregistrationtoken.DefaultExpiresAt = jobrunnerregistrationtokenDescExpiresAt.Default.(time.Time)
-	// jobrunnerregistrationtokenDescID is the schema descriptor for id field.
-	jobrunnerregistrationtokenDescID := jobrunnerregistrationtokenMixinFields4[0].Descriptor()
-	// jobrunnerregistrationtoken.DefaultID holds the default value on creation for the id field.
-	jobrunnerregistrationtoken.DefaultID = jobrunnerregistrationtokenDescID.Default.(func() string)
-	jobrunnertokenMixin := schema.JobRunnerToken{}.Mixin()
-	jobrunnertoken.Policy = privacy.NewPolicies(schema.JobRunnerToken{})
-	jobrunnertoken.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := jobrunnertoken.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	jobrunnertokenMixinHooks0 := jobrunnertokenMixin[0].Hooks()
-	jobrunnertokenMixinHooks1 := jobrunnertokenMixin[1].Hooks()
-	jobrunnertokenMixinHooks3 := jobrunnertokenMixin[3].Hooks()
-	jobrunnertokenMixinHooks5 := jobrunnertokenMixin[5].Hooks()
-	jobrunnertokenMixinHooks7 := jobrunnertokenMixin[7].Hooks()
-
-	jobrunnertoken.Hooks[1] = jobrunnertokenMixinHooks0[0]
-
-	jobrunnertoken.Hooks[2] = jobrunnertokenMixinHooks1[0]
-
-	jobrunnertoken.Hooks[3] = jobrunnertokenMixinHooks3[0]
-
-	jobrunnertoken.Hooks[4] = jobrunnertokenMixinHooks5[0]
-
-	jobrunnertoken.Hooks[5] = jobrunnertokenMixinHooks7[0]
-	jobrunnertokenMixinInters3 := jobrunnertokenMixin[3].Interceptors()
-	jobrunnertokenMixinInters7 := jobrunnertokenMixin[7].Interceptors()
-	jobrunnertoken.Interceptors[0] = jobrunnertokenMixinInters3[0]
-	jobrunnertoken.Interceptors[1] = jobrunnertokenMixinInters7[0]
-	jobrunnertokenMixinFields0 := jobrunnertokenMixin[0].Fields()
-	_ = jobrunnertokenMixinFields0
-	jobrunnertokenMixinFields4 := jobrunnertokenMixin[4].Fields()
-	_ = jobrunnertokenMixinFields4
-	jobrunnertokenMixinFields5 := jobrunnertokenMixin[5].Fields()
-	_ = jobrunnertokenMixinFields5
-	jobrunnertokenMixinFields7 := jobrunnertokenMixin[7].Fields()
-	_ = jobrunnertokenMixinFields7
-	jobrunnertokenFields := schema.JobRunnerToken{}.Fields()
-	_ = jobrunnertokenFields
-	// jobrunnertokenDescCreatedAt is the schema descriptor for created_at field.
-	jobrunnertokenDescCreatedAt := jobrunnertokenMixinFields0[0].Descriptor()
-	// jobrunnertoken.DefaultCreatedAt holds the default value on creation for the created_at field.
-	jobrunnertoken.DefaultCreatedAt = jobrunnertokenDescCreatedAt.Default.(func() time.Time)
-	// jobrunnertokenDescUpdatedAt is the schema descriptor for updated_at field.
-	jobrunnertokenDescUpdatedAt := jobrunnertokenMixinFields0[1].Descriptor()
-	// jobrunnertoken.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	jobrunnertoken.DefaultUpdatedAt = jobrunnertokenDescUpdatedAt.Default.(func() time.Time)
-	// jobrunnertoken.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	jobrunnertoken.UpdateDefaultUpdatedAt = jobrunnertokenDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// jobrunnertokenDescTags is the schema descriptor for tags field.
-	jobrunnertokenDescTags := jobrunnertokenMixinFields5[0].Descriptor()
-	// jobrunnertoken.DefaultTags holds the default value on creation for the tags field.
-	jobrunnertoken.DefaultTags = jobrunnertokenDescTags.Default.([]string)
-	// jobrunnertokenDescOwnerID is the schema descriptor for owner_id field.
-	jobrunnertokenDescOwnerID := jobrunnertokenMixinFields7[0].Descriptor()
-	// jobrunnertoken.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	jobrunnertoken.OwnerIDValidator = jobrunnertokenDescOwnerID.Validators[0].(func(string) error)
-	// jobrunnertokenDescToken is the schema descriptor for token field.
-	jobrunnertokenDescToken := jobrunnertokenFields[0].Descriptor()
-	// jobrunnertoken.DefaultToken holds the default value on creation for the token field.
-	jobrunnertoken.DefaultToken = jobrunnertokenDescToken.Default.(func() string)
-	// jobrunnertokenDescIsActive is the schema descriptor for is_active field.
-	jobrunnertokenDescIsActive := jobrunnertokenFields[3].Descriptor()
-	// jobrunnertoken.DefaultIsActive holds the default value on creation for the is_active field.
-	jobrunnertoken.DefaultIsActive = jobrunnertokenDescIsActive.Default.(bool)
-	// jobrunnertokenDescID is the schema descriptor for id field.
-	jobrunnertokenDescID := jobrunnertokenMixinFields4[0].Descriptor()
-	// jobrunnertoken.DefaultID holds the default value on creation for the id field.
-	jobrunnertoken.DefaultID = jobrunnertokenDescID.Default.(func() string)
-	jobtemplateMixin := schema.JobTemplate{}.Mixin()
-	jobtemplate.Policy = privacy.NewPolicies(jobtemplateMixin[8], schema.JobTemplate{})
-	jobtemplate.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := jobtemplate.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	jobtemplateMixinHooks0 := jobtemplateMixin[0].Hooks()
-	jobtemplateMixinHooks1 := jobtemplateMixin[1].Hooks()
-	jobtemplateMixinHooks3 := jobtemplateMixin[3].Hooks()
-	jobtemplateMixinHooks4 := jobtemplateMixin[4].Hooks()
-	jobtemplateMixinHooks5 := jobtemplateMixin[5].Hooks()
-	jobtemplateMixinHooks7 := jobtemplateMixin[7].Hooks()
-	jobtemplateMixinHooks8 := jobtemplateMixin[8].Hooks()
-	jobtemplateHooks := schema.JobTemplate{}.Hooks()
-
-	jobtemplate.Hooks[1] = jobtemplateMixinHooks0[0]
-
-	jobtemplate.Hooks[2] = jobtemplateMixinHooks1[0]
-
-	jobtemplate.Hooks[3] = jobtemplateMixinHooks3[0]
-
-	jobtemplate.Hooks[4] = jobtemplateMixinHooks4[0]
-
-	jobtemplate.Hooks[5] = jobtemplateMixinHooks5[0]
-
-	jobtemplate.Hooks[6] = jobtemplateMixinHooks7[0]
-
-	jobtemplate.Hooks[7] = jobtemplateMixinHooks8[0]
-
-	jobtemplate.Hooks[8] = jobtemplateMixinHooks8[1]
-
-	jobtemplate.Hooks[9] = jobtemplateHooks[0]
-	jobtemplateMixinInters3 := jobtemplateMixin[3].Interceptors()
-	jobtemplateMixinInters7 := jobtemplateMixin[7].Interceptors()
-	jobtemplate.Interceptors[0] = jobtemplateMixinInters3[0]
-	jobtemplate.Interceptors[1] = jobtemplateMixinInters7[0]
-	jobtemplateMixinFields0 := jobtemplateMixin[0].Fields()
-	_ = jobtemplateMixinFields0
-	jobtemplateMixinFields4 := jobtemplateMixin[4].Fields()
-	_ = jobtemplateMixinFields4
-	jobtemplateMixinFields5 := jobtemplateMixin[5].Fields()
-	_ = jobtemplateMixinFields5
-	jobtemplateMixinFields8 := jobtemplateMixin[8].Fields()
-	_ = jobtemplateMixinFields8
-	jobtemplateFields := schema.JobTemplate{}.Fields()
-	_ = jobtemplateFields
-	// jobtemplateDescCreatedAt is the schema descriptor for created_at field.
-	jobtemplateDescCreatedAt := jobtemplateMixinFields0[0].Descriptor()
-	// jobtemplate.DefaultCreatedAt holds the default value on creation for the created_at field.
-	jobtemplate.DefaultCreatedAt = jobtemplateDescCreatedAt.Default.(func() time.Time)
-	// jobtemplateDescUpdatedAt is the schema descriptor for updated_at field.
-	jobtemplateDescUpdatedAt := jobtemplateMixinFields0[1].Descriptor()
-	// jobtemplate.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	jobtemplate.DefaultUpdatedAt = jobtemplateDescUpdatedAt.Default.(func() time.Time)
-	// jobtemplate.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	jobtemplate.UpdateDefaultUpdatedAt = jobtemplateDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// jobtemplateDescDisplayID is the schema descriptor for display_id field.
-	jobtemplateDescDisplayID := jobtemplateMixinFields4[1].Descriptor()
-	// jobtemplate.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
-	jobtemplate.DisplayIDValidator = jobtemplateDescDisplayID.Validators[0].(func(string) error)
-	// jobtemplateDescTags is the schema descriptor for tags field.
-	jobtemplateDescTags := jobtemplateMixinFields5[0].Descriptor()
-	// jobtemplate.DefaultTags holds the default value on creation for the tags field.
-	jobtemplate.DefaultTags = jobtemplateDescTags.Default.([]string)
-	// jobtemplateDescSystemOwned is the schema descriptor for system_owned field.
-	jobtemplateDescSystemOwned := jobtemplateMixinFields8[0].Descriptor()
-	// jobtemplate.DefaultSystemOwned holds the default value on creation for the system_owned field.
-	jobtemplate.DefaultSystemOwned = jobtemplateDescSystemOwned.Default.(bool)
-	// jobtemplateDescTitle is the schema descriptor for title field.
-	jobtemplateDescTitle := jobtemplateFields[0].Descriptor()
-	// jobtemplate.TitleValidator is a validator for the "title" field. It is called by the builders before save.
-	jobtemplate.TitleValidator = jobtemplateDescTitle.Validators[0].(func(string) error)
-	// jobtemplateDescWindmillPath is the schema descriptor for windmill_path field.
-	jobtemplateDescWindmillPath := jobtemplateFields[3].Descriptor()
-	// jobtemplate.WindmillPathValidator is a validator for the "windmill_path" field. It is called by the builders before save.
-	jobtemplate.WindmillPathValidator = jobtemplateDescWindmillPath.Validators[0].(func(string) error)
-	// jobtemplateDescCron is the schema descriptor for cron field.
-	jobtemplateDescCron := jobtemplateFields[6].Descriptor()
-	// jobtemplate.CronValidator is a validator for the "cron" field. It is called by the builders before save.
-	jobtemplate.CronValidator = jobtemplateDescCron.Validators[0].(func(string) error)
-	// jobtemplateDescID is the schema descriptor for id field.
-	jobtemplateDescID := jobtemplateMixinFields4[0].Descriptor()
-	// jobtemplate.DefaultID holds the default value on creation for the id field.
-	jobtemplate.DefaultID = jobtemplateDescID.Default.(func() string)
 	mappabledomainMixin := schema.MappableDomain{}.Mixin()
 	mappabledomain.Policy = privacy.NewPolicies(schema.MappableDomain{})
 	mappabledomain.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -5610,23 +5223,11 @@ func init() {
 
 	organization.Hooks[79] = organizationMixinHooks7[74]
 
-	organization.Hooks[80] = organizationMixinHooks7[75]
+	organization.Hooks[80] = organizationHooks[0]
 
-	organization.Hooks[81] = organizationMixinHooks7[76]
+	organization.Hooks[81] = organizationHooks[1]
 
-	organization.Hooks[82] = organizationMixinHooks7[77]
-
-	organization.Hooks[83] = organizationMixinHooks7[78]
-
-	organization.Hooks[84] = organizationMixinHooks7[79]
-
-	organization.Hooks[85] = organizationMixinHooks7[80]
-
-	organization.Hooks[86] = organizationHooks[0]
-
-	organization.Hooks[87] = organizationHooks[1]
-
-	organization.Hooks[88] = organizationHooks[2]
+	organization.Hooks[82] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]
@@ -6914,135 +6515,6 @@ func init() {
 	scanDescID := scanMixinFields4[0].Descriptor()
 	// scan.DefaultID holds the default value on creation for the id field.
 	scan.DefaultID = scanDescID.Default.(func() string)
-	scheduledjobMixin := schema.ScheduledJob{}.Mixin()
-	scheduledjob.Policy = privacy.NewPolicies(schema.ScheduledJob{})
-	scheduledjob.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := scheduledjob.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	scheduledjobMixinHooks0 := scheduledjobMixin[0].Hooks()
-	scheduledjobMixinHooks1 := scheduledjobMixin[1].Hooks()
-	scheduledjobMixinHooks3 := scheduledjobMixin[3].Hooks()
-	scheduledjobMixinHooks4 := scheduledjobMixin[4].Hooks()
-	scheduledjobMixinHooks6 := scheduledjobMixin[6].Hooks()
-	scheduledjobHooks := schema.ScheduledJob{}.Hooks()
-
-	scheduledjob.Hooks[1] = scheduledjobMixinHooks0[0]
-
-	scheduledjob.Hooks[2] = scheduledjobMixinHooks1[0]
-
-	scheduledjob.Hooks[3] = scheduledjobMixinHooks3[0]
-
-	scheduledjob.Hooks[4] = scheduledjobMixinHooks4[0]
-
-	scheduledjob.Hooks[5] = scheduledjobMixinHooks6[0]
-
-	scheduledjob.Hooks[6] = scheduledjobMixinHooks6[1]
-
-	scheduledjob.Hooks[7] = scheduledjobHooks[0]
-	scheduledjobMixinInters3 := scheduledjobMixin[3].Interceptors()
-	scheduledjobMixinInters6 := scheduledjobMixin[6].Interceptors()
-	scheduledjob.Interceptors[0] = scheduledjobMixinInters3[0]
-	scheduledjob.Interceptors[1] = scheduledjobMixinInters6[0]
-	scheduledjob.Interceptors[2] = scheduledjobMixinInters6[1]
-	scheduledjobMixinFields0 := scheduledjobMixin[0].Fields()
-	_ = scheduledjobMixinFields0
-	scheduledjobMixinFields4 := scheduledjobMixin[4].Fields()
-	_ = scheduledjobMixinFields4
-	scheduledjobMixinFields6 := scheduledjobMixin[6].Fields()
-	_ = scheduledjobMixinFields6
-	scheduledjobFields := schema.ScheduledJob{}.Fields()
-	_ = scheduledjobFields
-	// scheduledjobDescCreatedAt is the schema descriptor for created_at field.
-	scheduledjobDescCreatedAt := scheduledjobMixinFields0[0].Descriptor()
-	// scheduledjob.DefaultCreatedAt holds the default value on creation for the created_at field.
-	scheduledjob.DefaultCreatedAt = scheduledjobDescCreatedAt.Default.(func() time.Time)
-	// scheduledjobDescUpdatedAt is the schema descriptor for updated_at field.
-	scheduledjobDescUpdatedAt := scheduledjobMixinFields0[1].Descriptor()
-	// scheduledjob.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	scheduledjob.DefaultUpdatedAt = scheduledjobDescUpdatedAt.Default.(func() time.Time)
-	// scheduledjob.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	scheduledjob.UpdateDefaultUpdatedAt = scheduledjobDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// scheduledjobDescDisplayID is the schema descriptor for display_id field.
-	scheduledjobDescDisplayID := scheduledjobMixinFields4[1].Descriptor()
-	// scheduledjob.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
-	scheduledjob.DisplayIDValidator = scheduledjobDescDisplayID.Validators[0].(func(string) error)
-	// scheduledjobDescOwnerID is the schema descriptor for owner_id field.
-	scheduledjobDescOwnerID := scheduledjobMixinFields6[0].Descriptor()
-	// scheduledjob.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	scheduledjob.OwnerIDValidator = scheduledjobDescOwnerID.Validators[0].(func(string) error)
-	// scheduledjobDescJobID is the schema descriptor for job_id field.
-	scheduledjobDescJobID := scheduledjobFields[0].Descriptor()
-	// scheduledjob.JobIDValidator is a validator for the "job_id" field. It is called by the builders before save.
-	scheduledjob.JobIDValidator = scheduledjobDescJobID.Validators[0].(func(string) error)
-	// scheduledjobDescActive is the schema descriptor for active field.
-	scheduledjobDescActive := scheduledjobFields[1].Descriptor()
-	// scheduledjob.DefaultActive holds the default value on creation for the active field.
-	scheduledjob.DefaultActive = scheduledjobDescActive.Default.(bool)
-	// scheduledjobDescCron is the schema descriptor for cron field.
-	scheduledjobDescCron := scheduledjobFields[3].Descriptor()
-	// scheduledjob.CronValidator is a validator for the "cron" field. It is called by the builders before save.
-	scheduledjob.CronValidator = scheduledjobDescCron.Validators[0].(func(string) error)
-	// scheduledjobDescID is the schema descriptor for id field.
-	scheduledjobDescID := scheduledjobMixinFields4[0].Descriptor()
-	// scheduledjob.DefaultID holds the default value on creation for the id field.
-	scheduledjob.DefaultID = scheduledjobDescID.Default.(func() string)
-	scheduledjobrunMixin := schema.ScheduledJobRun{}.Mixin()
-	scheduledjobrun.Policy = privacy.NewPolicies(schema.ScheduledJobRun{})
-	scheduledjobrun.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := scheduledjobrun.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	scheduledjobrunMixinHooks0 := scheduledjobrunMixin[0].Hooks()
-	scheduledjobrunMixinHooks1 := scheduledjobrunMixin[1].Hooks()
-	scheduledjobrunMixinHooks3 := scheduledjobrunMixin[3].Hooks()
-	scheduledjobrunMixinHooks6 := scheduledjobrunMixin[6].Hooks()
-
-	scheduledjobrun.Hooks[1] = scheduledjobrunMixinHooks0[0]
-
-	scheduledjobrun.Hooks[2] = scheduledjobrunMixinHooks1[0]
-
-	scheduledjobrun.Hooks[3] = scheduledjobrunMixinHooks3[0]
-
-	scheduledjobrun.Hooks[4] = scheduledjobrunMixinHooks6[0]
-	scheduledjobrunMixinInters3 := scheduledjobrunMixin[3].Interceptors()
-	scheduledjobrunMixinInters6 := scheduledjobrunMixin[6].Interceptors()
-	scheduledjobrun.Interceptors[0] = scheduledjobrunMixinInters3[0]
-	scheduledjobrun.Interceptors[1] = scheduledjobrunMixinInters6[0]
-	scheduledjobrunMixinFields0 := scheduledjobrunMixin[0].Fields()
-	_ = scheduledjobrunMixinFields0
-	scheduledjobrunMixinFields4 := scheduledjobrunMixin[4].Fields()
-	_ = scheduledjobrunMixinFields4
-	scheduledjobrunMixinFields6 := scheduledjobrunMixin[6].Fields()
-	_ = scheduledjobrunMixinFields6
-	scheduledjobrunFields := schema.ScheduledJobRun{}.Fields()
-	_ = scheduledjobrunFields
-	// scheduledjobrunDescCreatedAt is the schema descriptor for created_at field.
-	scheduledjobrunDescCreatedAt := scheduledjobrunMixinFields0[0].Descriptor()
-	// scheduledjobrun.DefaultCreatedAt holds the default value on creation for the created_at field.
-	scheduledjobrun.DefaultCreatedAt = scheduledjobrunDescCreatedAt.Default.(func() time.Time)
-	// scheduledjobrunDescUpdatedAt is the schema descriptor for updated_at field.
-	scheduledjobrunDescUpdatedAt := scheduledjobrunMixinFields0[1].Descriptor()
-	// scheduledjobrun.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	scheduledjobrun.DefaultUpdatedAt = scheduledjobrunDescUpdatedAt.Default.(func() time.Time)
-	// scheduledjobrun.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	scheduledjobrun.UpdateDefaultUpdatedAt = scheduledjobrunDescUpdatedAt.UpdateDefault.(func() time.Time)
-	// scheduledjobrunDescOwnerID is the schema descriptor for owner_id field.
-	scheduledjobrunDescOwnerID := scheduledjobrunMixinFields6[0].Descriptor()
-	// scheduledjobrun.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
-	scheduledjobrun.OwnerIDValidator = scheduledjobrunDescOwnerID.Validators[0].(func(string) error)
-	// scheduledjobrunDescID is the schema descriptor for id field.
-	scheduledjobrunDescID := scheduledjobrunMixinFields4[0].Descriptor()
-	// scheduledjobrun.DefaultID holds the default value on creation for the id field.
-	scheduledjobrun.DefaultID = scheduledjobrunDescID.Default.(func() string)
 	standardMixin := schema.Standard{}.Mixin()
 	standard.Policy = privacy.NewPolicies(standardMixin[9], schema.Standard{})
 	standard.Hooks[0] = func(next ent.Mutator) ent.Mutator {

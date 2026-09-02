@@ -8,13 +8,13 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 )
 
 // ProposalPreview is the resolver for the proposalPreview field.
 func (r *workflowInstanceResolver) ProposalPreview(ctx context.Context, obj *generated.WorkflowInstance) (*model.WorkflowProposalPreview, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 

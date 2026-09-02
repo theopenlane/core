@@ -12,7 +12,7 @@ import (
 	"github.com/stripe/stripe-go/v86"
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/v2/pkg/entitlements"
 )
 
 const (

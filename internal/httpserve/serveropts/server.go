@@ -1,8 +1,8 @@
 package serveropts
 
 import (
-	"github.com/theopenlane/core/config"
-	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
+	"github.com/theopenlane/core/v2/config"
+	serverconfig "github.com/theopenlane/core/v2/internal/httpserve/config"
 )
 
 // ServerOptions defines the options for the server

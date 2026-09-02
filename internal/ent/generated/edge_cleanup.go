@@ -8,110 +8,103 @@ import (
 	"context"
 
 	"entgo.io/ent/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/export"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/notification"
-	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgprice"
-	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
-	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/tfasetting"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/webauthn"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/ent/hooks/contextx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailverificationtoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/export"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/filedownloadtoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/passwordresettoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tfasetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/hooks/contextx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -476,59 +469,6 @@ func InternalPolicyEdgeCleanup(ctx context.Context, id string) error {
 
 func InviteEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")))
-
-	return nil
-}
-
-func JobResultEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobresult edge")))
-
-	return nil
-}
-
-func JobRunnerEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunner edge")))
-
-	return nil
-}
-
-func JobRunnerRegistrationTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnerregistrationtoken edge")))
-
-	return nil
-}
-
-func JobRunnerTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnertoken edge")))
-
-	return nil
-}
-
-func JobTemplateEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobtemplate edge")))
-
-	{
-		ids, err := FromContext(ctx).ScheduledJob.Query().Where(scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjob ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjob edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasJobTemplateWith(jobtemplate.ID(id)))).Exist(ctx); err == nil && exists {
-		if err := PurgeScheduledJobHistory(ctx, scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))); err != nil {
-			return err
-		}
-		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("error deleting scheduledjob")
-			return err
-		}
-	}
 
 	return nil
 }
@@ -1615,66 +1555,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	}
 
 	{
-		ids, err := FromContext(ctx).JobRunner.Query().Where(jobrunner.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunner ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunner edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobRunner.Query().Where((jobrunner.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if jobrunnerCount, err := FromContext(ctx).JobRunner.Delete().Where(jobrunner.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerCount).Msg("error deleting jobrunner")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).JobRunnerToken.Query().Where(jobrunnertoken.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunnertoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunnertoken edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobRunnerToken.Query().Where((jobrunnertoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if jobrunnertokenCount, err := FromContext(ctx).JobRunnerToken.Delete().Where(jobrunnertoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnertokenCount).Msg("error deleting jobrunnertoken")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).JobRunnerRegistrationToken.Query().Where(jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunnerregistrationtoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerRegistrationTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunnerregistrationtoken edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobRunnerRegistrationToken.Query().Where((jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if jobrunnerregistrationtokenCount, err := FromContext(ctx).JobRunnerRegistrationToken.Delete().Where(jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerregistrationtokenCount).Msg("error deleting jobrunnerregistrationtoken")
-			return err
-		}
-	}
-
-	{
 		ids, err := FromContext(ctx).DNSVerification.Query().Where(dnsverification.HasOwnerWith(organization.ID(id))).IDs(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error querying dnsverification ids for cleanup")
@@ -1690,92 +1570,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).DNSVerification.Query().Where((dnsverification.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if dnsverificationCount, err := FromContext(ctx).DNSVerification.Delete().Where(dnsverification.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", dnsverificationCount).Msg("error deleting dnsverification")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).JobTemplate.Query().Where(jobtemplate.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobtemplate ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobTemplateEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobtemplate edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobTemplate.Query().Where((jobtemplate.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if err := PurgeJobTemplateHistory(ctx, jobtemplate.HasOwnerWith(organization.ID(id))); err != nil {
-			return err
-		}
-		if jobtemplateCount, err := FromContext(ctx).JobTemplate.Delete().Where(jobtemplate.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobtemplateCount).Msg("error deleting jobtemplate")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).ScheduledJob.Query().Where(scheduledjob.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjob ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjob edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if err := PurgeScheduledJobHistory(ctx, scheduledjob.HasOwnerWith(organization.ID(id))); err != nil {
-			return err
-		}
-		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("error deleting scheduledjob")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).JobResult.Query().Where(jobresult.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobresult ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobResultEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobresult edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobResult.Query().Where((jobresult.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if jobresultCount, err := FromContext(ctx).JobResult.Delete().Where(jobresult.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobresultCount).Msg("error deleting jobresult")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).ScheduledJobRun.Query().Where(scheduledjobrun.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjobrun ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobRunEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjobrun edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).ScheduledJobRun.Query().Where((scheduledjobrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if scheduledjobrunCount, err := FromContext(ctx).ScheduledJobRun.Delete().Where(scheduledjobrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobrunCount).Msg("error deleting scheduledjobrun")
 			return err
 		}
 	}
@@ -2547,18 +2341,6 @@ func SLADefinitionEdgeCleanup(ctx context.Context, id string) error {
 
 func ScanEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scan edge")))
-
-	return nil
-}
-
-func ScheduledJobEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjob edge")))
-
-	return nil
-}
-
-func ScheduledJobRunEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjobrun edge")))
 
 	return nil
 }

@@ -5,7 +5,7 @@
 ## Installation
 
 ```
-go get github.com/theopenlane/core/pkg/logx
+go get github.com/theopenlane/core/v2/pkg/logx
 ```
 
 
@@ -18,7 +18,7 @@ import (
 	"os"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 func main() {
@@ -63,7 +63,7 @@ import (
 	"os",
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/rs/zerolog"
 )
 
@@ -159,7 +159,7 @@ import (
     echo "github.com/theopenlane/echox"
     "github.com/theopenlane/echox/middleware"
     "github.com/labstack/gommon/log"
-    "github.com/theopenlane/core/pkg/logx"
+    "github.com/theopenlane/core/v2/pkg/logx"
 )
 
 func main() {

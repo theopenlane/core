@@ -14,22 +14,22 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
 
 // EvidenceUpdate is the builder for updating Evidence entities.
@@ -464,6 +464,26 @@ func (_u *EvidenceUpdate) ClearReviewFrequency() *EvidenceUpdate {
 	return _u
 }
 
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (_u *EvidenceUpdate) SetAuditorReferenceID(v string) *EvidenceUpdate {
+	_u.mutation.SetAuditorReferenceID(v)
+	return _u
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableAuditorReferenceID(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetAuditorReferenceID(*v)
+	}
+	return _u
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (_u *EvidenceUpdate) ClearAuditorReferenceID() *EvidenceUpdate {
+	_u.mutation.ClearAuditorReferenceID()
+	return _u
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *EvidenceUpdate) SetEnvironment(v *CustomTypeEnum) *EvidenceUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -532,6 +552,36 @@ func (_u *EvidenceUpdate) AddControlImplementations(v ...*ControlImplementation)
 		ids[i] = v[i].ID
 	}
 	return _u.AddControlImplementationIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_u *EvidenceUpdate) AddInternalPolicyIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_u *EvidenceUpdate) AddInternalPolicies(v ...*InternalPolicy) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (_u *EvidenceUpdate) AddProcedureIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (_u *EvidenceUpdate) AddProcedures(v ...*Procedure) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -738,6 +788,48 @@ func (_u *EvidenceUpdate) RemoveControlImplementations(v ...*ControlImplementati
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlImplementationIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (_u *EvidenceUpdate) ClearInternalPolicies() *EvidenceUpdate {
+	_u.mutation.ClearInternalPolicies()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (_u *EvidenceUpdate) RemoveInternalPolicyIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (_u *EvidenceUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
+}
+
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (_u *EvidenceUpdate) ClearProcedures() *EvidenceUpdate {
+	_u.mutation.ClearProcedures()
+	return _u
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
+func (_u *EvidenceUpdate) RemoveProcedureIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
+}
+
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (_u *EvidenceUpdate) RemoveProcedures(v ...*Procedure) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -1097,6 +1189,12 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(evidence.FieldReviewFrequency, field.TypeEnum)
 	}
+	if value, ok := _u.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(evidence.FieldAuditorReferenceID, field.TypeString, value)
+	}
+	if _u.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(evidence.FieldAuditorReferenceID, field.TypeString)
+	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1108,7 +1206,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -1122,7 +1219,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1139,7 +1235,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -1153,7 +1248,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1170,7 +1264,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
@@ -1184,7 +1277,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1201,7 +1293,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1218,7 +1309,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
@@ -1232,7 +1322,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1249,7 +1338,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1266,7 +1354,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
@@ -1280,7 +1367,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1297,7 +1383,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1314,7 +1399,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
@@ -1328,7 +1412,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1345,7 +1428,96 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1362,7 +1534,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -1376,7 +1547,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1393,7 +1563,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1410,7 +1579,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
@@ -1424,7 +1592,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1441,7 +1608,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1458,7 +1624,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TaskEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
@@ -1472,7 +1637,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1489,7 +1653,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1506,7 +1669,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
@@ -1520,7 +1682,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1537,7 +1698,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1554,7 +1714,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ScanEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
@@ -1568,7 +1727,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ScanEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1585,7 +1743,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ScanEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1602,7 +1759,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
@@ -1616,7 +1772,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1633,7 +1788,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1650,7 +1804,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
@@ -1664,7 +1817,6 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1681,14 +1833,11 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Evidence
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -2129,6 +2278,26 @@ func (_u *EvidenceUpdateOne) ClearReviewFrequency() *EvidenceUpdateOne {
 	return _u
 }
 
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (_u *EvidenceUpdateOne) SetAuditorReferenceID(v string) *EvidenceUpdateOne {
+	_u.mutation.SetAuditorReferenceID(v)
+	return _u
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableAuditorReferenceID(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetAuditorReferenceID(*v)
+	}
+	return _u
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (_u *EvidenceUpdateOne) ClearAuditorReferenceID() *EvidenceUpdateOne {
+	_u.mutation.ClearAuditorReferenceID()
+	return _u
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *EvidenceUpdateOne) SetEnvironment(v *CustomTypeEnum) *EvidenceUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -2197,6 +2366,36 @@ func (_u *EvidenceUpdateOne) AddControlImplementations(v ...*ControlImplementati
 		ids[i] = v[i].ID
 	}
 	return _u.AddControlImplementationIDs(ids...)
+}
+
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_u *EvidenceUpdateOne) AddInternalPolicyIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_u *EvidenceUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (_u *EvidenceUpdateOne) AddProcedureIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (_u *EvidenceUpdateOne) AddProcedures(v ...*Procedure) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddProcedureIDs(ids...)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -2403,6 +2602,48 @@ func (_u *EvidenceUpdateOne) RemoveControlImplementations(v ...*ControlImplement
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlImplementationIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (_u *EvidenceUpdateOne) ClearInternalPolicies() *EvidenceUpdateOne {
+	_u.mutation.ClearInternalPolicies()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (_u *EvidenceUpdateOne) RemoveInternalPolicyIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (_u *EvidenceUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
+}
+
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (_u *EvidenceUpdateOne) ClearProcedures() *EvidenceUpdateOne {
+	_u.mutation.ClearProcedures()
+	return _u
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
+func (_u *EvidenceUpdateOne) RemoveProcedureIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
+}
+
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (_u *EvidenceUpdateOne) RemoveProcedures(v ...*Procedure) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -2792,6 +3033,12 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(evidence.FieldReviewFrequency, field.TypeEnum)
 	}
+	if value, ok := _u.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(evidence.FieldAuditorReferenceID, field.TypeString, value)
+	}
+	if _u.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(evidence.FieldAuditorReferenceID, field.TypeString)
+	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2803,7 +3050,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -2817,7 +3063,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2834,7 +3079,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -2848,7 +3092,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Evidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2865,7 +3108,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControls
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
@@ -2879,7 +3121,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2896,7 +3137,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2913,7 +3153,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
@@ -2927,7 +3166,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2944,7 +3182,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2961,7 +3198,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlObjectivesIDs(); len(nodes) > 0 && !_u.mutation.ControlObjectivesCleared() {
@@ -2975,7 +3211,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2992,7 +3227,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3009,7 +3243,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlImplementationsIDs(); len(nodes) > 0 && !_u.mutation.ControlImplementationsCleared() {
@@ -3023,7 +3256,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3040,7 +3272,96 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlImplementation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3057,7 +3378,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -3071,7 +3391,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3088,7 +3407,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.EvidenceFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3105,7 +3423,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedProgramsIDs(); len(nodes) > 0 && !_u.mutation.ProgramsCleared() {
@@ -3119,7 +3436,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3136,7 +3452,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ProgramEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3153,7 +3468,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TaskEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
@@ -3167,7 +3481,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3184,7 +3497,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TaskEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3201,7 +3513,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
@@ -3215,7 +3526,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3232,7 +3542,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3249,7 +3558,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ScanEvidence
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedScansIDs(); len(nodes) > 0 && !_u.mutation.ScansCleared() {
@@ -3263,7 +3571,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ScanEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3280,7 +3587,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ScanEvidence
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3297,7 +3603,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCommentsIDs(); len(nodes) > 0 && !_u.mutation.CommentsCleared() {
@@ -3311,7 +3616,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3328,7 +3632,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3345,7 +3648,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
@@ -3359,7 +3661,6 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3376,14 +3677,11 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Evidence
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &Evidence{config: _u.config}
 	_spec.Assign = _node.assignValues

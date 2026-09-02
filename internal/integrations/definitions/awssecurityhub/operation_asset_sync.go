@@ -5,9 +5,9 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/configservice"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // IngestHandle adapts IAM directory sync to the ingest operation registration boundary

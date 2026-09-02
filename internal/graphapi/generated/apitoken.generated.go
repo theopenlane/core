@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _APITokenBulkCreatePayload_apiTokens(ctx context.Con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.APIToken) graphql.Marshaler {
-			return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, selections, v)
+			return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _APITokenBulkUpdatePayload_apiTokens(ctx context.Con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.APIToken) graphql.Marshaler {
-			return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, selections, v)
+			return ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _APITokenCreatePayload_apiToken(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.APIToken) graphql.Marshaler {
-			return ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx, selections, v)
+			return ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _APITokenUpdatePayload_apiToken(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.APIToken) graphql.Marshaler {
-			return ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx, selections, v)
+			return ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _APITokenUpdatePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAPITokenBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkCreatePayload) graphql.Marshaler {
 	return ec._APITokenBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNAPITokenBulkCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._APITokenBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAPITokenBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkDeletePayload) graphql.Marshaler {
 	return ec._APITokenBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNAPITokenBulkDeletePayload2ᚖgithubᚗcomᚋ
 	return ec._APITokenBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenBulkUpdatePayload) graphql.Marshaler {
 	return ec._APITokenBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNAPITokenBulkUpdatePayload2ᚖgithubᚗcomᚋ
 	return ec._APITokenBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAPITokenCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenCreatePayload) graphql.Marshaler {
 	return ec._APITokenCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAPITokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNAPITokenCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._APITokenCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAPITokenDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenDeletePayload) graphql.Marshaler {
 	return ec._APITokenDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAPITokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNAPITokenDeletePayload2ᚖgithubᚗcomᚋtheo
 	return ec._APITokenDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAPITokenUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.APITokenUpdatePayload) graphql.Marshaler {
 	return ec._APITokenUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAPITokenUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAPITokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNAPITokenUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAPITokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.APITokenUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

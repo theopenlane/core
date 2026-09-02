@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated"
 )
 
 // The ActionPlanHistoryFunc type is an adapter to allow the use of ordinary
@@ -323,18 +323,6 @@ func (f InternalPolicyHistoryFunc) Mutate(ctx context.Context, m historygenerate
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.InternalPolicyHistoryMutation", m)
 }
 
-// The JobTemplateHistoryFunc type is an adapter to allow the use of ordinary
-// function as JobTemplateHistory mutator.
-type JobTemplateHistoryFunc func(context.Context, *historygenerated.JobTemplateHistoryMutation) (historygenerated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f JobTemplateHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
-	if mv, ok := m.(*historygenerated.JobTemplateHistoryMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.JobTemplateHistoryMutation", m)
-}
-
 // The MappableDomainHistoryFunc type is an adapter to allow the use of ordinary
 // function as MappableDomainHistory mutator.
 type MappableDomainHistoryFunc func(context.Context, *historygenerated.MappableDomainHistoryMutation) (historygenerated.Value, error)
@@ -537,18 +525,6 @@ func (f SLADefinitionHistoryFunc) Mutate(ctx context.Context, m historygenerated
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.SLADefinitionHistoryMutation", m)
-}
-
-// The ScheduledJobHistoryFunc type is an adapter to allow the use of ordinary
-// function as ScheduledJobHistory mutator.
-type ScheduledJobHistoryFunc func(context.Context, *historygenerated.ScheduledJobHistoryMutation) (historygenerated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ScheduledJobHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
-	if mv, ok := m.(*historygenerated.ScheduledJobHistoryMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.ScheduledJobHistoryMutation", m)
 }
 
 // The StandardHistoryFunc type is an adapter to allow the use of ordinary

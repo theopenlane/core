@@ -731,11 +731,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
-}, "scheduled_jobs": {
-	ObjectType:          "scheduled_job",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
 }, "mapped_to_controls": {
 	ObjectType:          "mapped_to_control",
 	SkipEditCheck:       false,
@@ -1572,6 +1567,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "control_implementation",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "internal_policies": {
+	ObjectType:          "internal_policy",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "procedures": {
+	ObjectType:          "procedure",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "files": {
 	ObjectType:          "file",
@@ -2695,66 +2700,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 },
-}, "job_result": {"owner": {
-	ObjectType:          "owner",
-	SkipEditCheck:       true,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "scheduled_job": {
-	ObjectType:          "scheduled_job",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "file": {
-	ObjectType:          "file",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
-},
-}, "job_runner": {"owner": {
-	ObjectType:          "owner",
-	SkipEditCheck:       true,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "job_runner_tokens": {
-	ObjectType:          "job_runner_token",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-},
-}, "job_runner_registration_token": {"owner": {
-	ObjectType:          "owner",
-	SkipEditCheck:       true,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "job_runner": {
-	ObjectType:          "organization",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-},
-}, "job_runner_token": {"owner": {
-	ObjectType:          "owner",
-	SkipEditCheck:       true,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "job_runners": {
-	ObjectType:          "organization",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-},
-}, "job_template": {"owner": {
-	ObjectType:          "owner",
-	SkipEditCheck:       true,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "scheduled_jobs": {
-	ObjectType:          "scheduled_job",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-},
 }, "mappable_domain": {"custom_domains": {
 	ObjectType:          "custom_domain",
 	SkipEditCheck:       false,
@@ -3233,26 +3178,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
-}, "job_runner_creators": {
-	ObjectType:          "group",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: false,
-}, "job_runner_registration_token_creators": {
-	ObjectType:          "group",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: false,
-}, "job_runner_token_creators": {
-	ObjectType:          "group",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: false,
-}, "job_template_creators": {
-	ObjectType:          "group",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: false,
 }, "mapped_control_creators": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
@@ -3314,16 +3239,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "scan_creators": {
-	ObjectType:          "group",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: false,
-}, "scheduled_job_creators": {
-	ObjectType:          "group",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: false,
-}, "scheduled_job_run_creators": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
@@ -3718,43 +3633,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
-}, "job_runners": {
-	ObjectType:          "job_runner",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
-}, "job_runner_tokens": {
-	ObjectType:          "job_runner_token",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "job_runner_registration_tokens": {
-	ObjectType:          "job_runner_registration_token",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
 }, "dns_verifications": {
 	ObjectType:          "dns_verification",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "job_templates": {
-	ObjectType:          "job_template",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
-}, "scheduled_jobs": {
-	ObjectType:          "scheduled_job",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "job_results": {
-	ObjectType:          "job_result",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "scheduled_job_runs": {
-	ObjectType:          "scheduled_job_run",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
@@ -4921,48 +4801,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 },
-}, "scheduled_job": {"owner": {
-	ObjectType:          "owner",
-	SkipEditCheck:       true,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "job_template": {
-	ObjectType:          "job_template",
-	SkipEditCheck:       true,
-	CheckViewAccess:     true,
-	HasSystemOwnedField: true,
-}, "controls": {
-	ObjectType:          "control",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
-}, "subcontrols": {
-	ObjectType:          "subcontrol",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
-}, "job_runner": {
-	ObjectType:          "organization",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-},
-}, "scheduled_job_run": {"owner": {
-	ObjectType:          "owner",
-	SkipEditCheck:       true,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "scheduled_job": {
-	ObjectType:          "scheduled_job",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-}, "job_runner": {
-	ObjectType:          "organization",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
-},
 }, "standard": {"owner": {
 	ObjectType:          "owner",
 	SkipEditCheck:       true,
@@ -5094,11 +4932,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
-}, "scheduled_jobs": {
-	ObjectType:          "scheduled_job",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
 }, "mapped_to_subcontrols": {
 	ObjectType:          "mapped_to_subcontrol",
 	SkipEditCheck:       false,

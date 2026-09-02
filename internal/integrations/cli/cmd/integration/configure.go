@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 
 	api "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/integrations/cli/cmd"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/cmd"
 )
 
 var configureCmd = &cobra.Command{

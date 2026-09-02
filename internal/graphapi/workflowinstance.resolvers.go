@@ -8,14 +8,14 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
 )
 
 // WorkflowInstance is the resolver for the workflowInstance field.
 func (r *queryResolver) WorkflowInstance(ctx context.Context, id string) (*generated.WorkflowInstance, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 

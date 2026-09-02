@@ -44,7 +44,7 @@ unicode = true
 ignore-hex = true
 identifier-leading-digits = false
 locale = "en"
-extend-ignore-identifiers-re = []
+extend-ignore-identifiers-re = ["NDAs?"]
 extend-ignore-words-re = [
   "(?i)requestor",
   "(?i)indentity",

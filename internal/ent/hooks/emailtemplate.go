@@ -5,9 +5,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 )
 
 // HookEmailTemplateSanitize sanitizes customer-supplied fields on email template

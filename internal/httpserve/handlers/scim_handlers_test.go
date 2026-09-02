@@ -10,10 +10,10 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/route"
-	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
-	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/httpserve/route"
+	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/utils/ulids"
 )
 

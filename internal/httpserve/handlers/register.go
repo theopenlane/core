@@ -10,14 +10,14 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	entval "github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	entval "github.com/theopenlane/core/v2/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 
 	"github.com/theopenlane/core/common/enums"
 	models "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 const (

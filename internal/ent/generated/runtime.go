@@ -2,4 +2,4 @@
 
 package generated
 
-// The schema-stitching logic is generated in github.com/theopenlane/core/internal/ent/generated/runtime/runtime.go
+// The schema-stitching logic is generated in github.com/theopenlane/core/v2/internal/ent/generated/runtime/runtime.go

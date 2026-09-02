@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/internal/integrations/templatekit"
+	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 )
 
 // TestUnsubscribeTokenFromMetadata verifies the per-recipient unsubscribe token is read from

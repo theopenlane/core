@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/discussionhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -330,7 +330,6 @@ func (_c *DiscussionHistoryCreate) createSpec() (*DiscussionHistory, *sqlgraph.C
 		_node = &DiscussionHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(discussionhistory.Table, sqlgraph.NewFieldSpec(discussionhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.DiscussionHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

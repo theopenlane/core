@@ -24,7 +24,7 @@ import (
 	{{- end }}
 	"entgo.io/ent/dialect/sql"
  	"entgo.io/ent/dialect/sql/sqljson"
-	"github.com/theopenlane/core/internal/ent/schemautil"
+	"github.com/theopenlane/core/v2/internal/ent/schemautil"
 )
 {{ template "import" $ }}
 
@@ -66,6 +66,26 @@ import (
 
 			// "{{ $f.Name }}" field predicates.
 			{{- range $op := $f.Ops }}
+				{{- /* ops the console never sends and that read oddly for the type:
+				       strings have no meaningful lexicographic order, and set membership
+				       on a timestamp or an integer is not a filter anyone builds.
+				       enums keep NEQ/In/NotIn, floats keep everything, time/int keep their ordering.
+				       Type.Integer is Numeric && !Float, which is exactly what maps to the
+				       GraphQL Int scalar, so this matches pruneWhereInputOps in entc.go.
+				       must stay in sync with the same guard in the P() body below */}}
+				{{- if $f.IsString }}
+					{{- if or (eq $op.Name "GT") (eq $op.Name "GTE") (eq $op.Name "LT") (eq $op.Name "LTE") }}
+						{{- continue }}
+					{{- end }}
+				{{- else if $f.IsTime }}
+					{{- if or (eq $op.Name "In") (eq $op.Name "NotIn") (eq $op.Name "NEQ") }}
+						{{- continue }}
+					{{- end }}
+				{{- else if $f.Type.Type.Integer }}
+					{{- if or (eq $op.Name "In") (eq $op.Name "NotIn") }}
+						{{- continue }}
+					{{- end }}
+				{{- end }}
 				{{- $field := print $f.StructField $op.Name }}
 				{{- $jsonTag := print $f.Name "_" $op.Name }}
 				{{- /* We name the field filter "<Field>EQ()" as "<Field>()", because it's cleaner (e.g. "name_eq" -> "name") */}}
@@ -180,6 +200,20 @@ import (
 		predicates = append(predicates, i.Predicates...)
 		{{- range $f := $comparableFields }}
 			{{- range $op := $f.Ops }}
+				{{- /* must stay in sync with the guard in the struct definition above */}}
+				{{- if $f.IsString }}
+					{{- if or (eq $op.Name "GT") (eq $op.Name "GTE") (eq $op.Name "LT") (eq $op.Name "LTE") }}
+						{{- continue }}
+					{{- end }}
+				{{- else if $f.IsTime }}
+					{{- if or (eq $op.Name "In") (eq $op.Name "NotIn") (eq $op.Name "NEQ") }}
+						{{- continue }}
+					{{- end }}
+				{{- else if $f.Type.Type.Integer }}
+					{{- if or (eq $op.Name "In") (eq $op.Name "NotIn") }}
+						{{- continue }}
+					{{- end }}
+				{{- end }}
 				{{- $func := print $f.StructField $op.Name }}
 				{{- $field := $func }}
 				{{- /* We name the <Field>EQ() filter as <Field>(), because it's nicer (e.g. "name_eq" -> "name") */}}

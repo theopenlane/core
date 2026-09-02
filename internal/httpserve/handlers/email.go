@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // sendEmail dispatches a system email operation via the integrations runtime,

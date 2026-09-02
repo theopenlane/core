@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersubprocessor"
 )
 
 // TrustCenterSubprocessorCreate is the builder for creating a TrustCenterSubprocessor entity.
@@ -345,7 +345,6 @@ func (_c *TrustCenterSubprocessorCreate) createSpec() (*TrustCenterSubprocessor,
 		_node = &TrustCenterSubprocessor{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcentersubprocessor.Table, sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustCenterSubprocessor
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -397,7 +396,6 @@ func (_c *TrustCenterSubprocessorCreate) createSpec() (*TrustCenterSubprocessor,
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -415,7 +413,6 @@ func (_c *TrustCenterSubprocessorCreate) createSpec() (*TrustCenterSubprocessor,
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -432,7 +429,6 @@ func (_c *TrustCenterSubprocessorCreate) createSpec() (*TrustCenterSubprocessor,
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -449,7 +445,6 @@ func (_c *TrustCenterSubprocessorCreate) createSpec() (*TrustCenterSubprocessor,
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -467,7 +462,6 @@ func (_c *TrustCenterSubprocessorCreate) createSpec() (*TrustCenterSubprocessor,
 				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

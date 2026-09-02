@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterentityhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterentityhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -346,7 +346,6 @@ func (_c *TrustCenterEntityHistoryCreate) createSpec() (*TrustCenterEntityHistor
 		_node = &TrustCenterEntityHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcenterentityhistory.Table, sqlgraph.NewFieldSpec(trustcenterentityhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustCenterEntityHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

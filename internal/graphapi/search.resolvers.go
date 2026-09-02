@@ -6,10 +6,10 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
@@ -42,8 +42,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		integrationResults          *generated.IntegrationConnection
 		internalpolicyResults       *generated.InternalPolicyConnection
 		inviteResults               *generated.InviteConnection
-		jobrunnerResults            *generated.JobRunnerConnection
-		jobtemplateResults          *generated.JobTemplateConnection
 		narrativeResults            *generated.NarrativeConnection
 		notificationtemplateResults *generated.NotificationTemplateConnection
 		organizationResults         *generated.OrganizationConnection
@@ -297,30 +295,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, inviteResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			jobrunnerResults, err = searchJobRunners(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, jobrunnerResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			jobtemplateResults, err = searchJobTemplates(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, jobtemplateResults, highlightTracker)
 			}
 		},
 		func() {
@@ -672,16 +646,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += inviteResults.TotalCount
 	}
-	if jobrunnerResults != nil && len(jobrunnerResults.Edges) > 0 {
-		res.JobRunners = jobrunnerResults
-
-		res.TotalCount += jobrunnerResults.TotalCount
-	}
-	if jobtemplateResults != nil && len(jobtemplateResults.Edges) > 0 {
-		res.JobTemplates = jobtemplateResults
-
-		res.TotalCount += jobtemplateResults.TotalCount
-	}
 	if narrativeResults != nil && len(narrativeResults.Edges) > 0 {
 		res.Narratives = narrativeResults
 
@@ -974,26 +938,6 @@ func (r *queryResolver) InviteSearch(ctx context.Context, query string, after *e
 
 	// return the results
 	return inviteResults, nil
-}
-func (r *queryResolver) JobRunnerSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerConnection, error) {
-	jobrunnerResults, err := searchJobRunners(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, common.ErrSearchFailed
-	}
-
-	// return the results
-	return jobrunnerResults, nil
-}
-func (r *queryResolver) JobTemplateSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobTemplateConnection, error) {
-	jobtemplateResults, err := searchJobTemplates(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, common.ErrSearchFailed
-	}
-
-	// return the results
-	return jobtemplateResults, nil
 }
 func (r *queryResolver) NarrativeSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.NarrativeConnection, error) {
 	narrativeResults, err := searchNarratives(ctx, query, after, first, before, last)

@@ -10,15 +10,15 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	handlerpkg "github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/internal/objects/resolver"
-	"github.com/theopenlane/core/internal/objects/upload"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/filedownloadtoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	handlerpkg "github.com/theopenlane/core/v2/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/internal/objects/resolver"
+	"github.com/theopenlane/core/v2/internal/objects/upload"
+	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 )
@@ -274,10 +274,13 @@ func (suite *HandlerTestSuite) swapObjectStoreToDatabase() func() {
 }
 
 func (suite *HandlerTestSuite) createDatabaseStoreWithPresignConfig(cfg storage.ProviderConfig, baseURL string) *objects.Service {
-	return resolver.NewServiceFromConfig(cfg,
+	service, err := resolver.NewServiceFromConfig(cfg,
 		resolver.WithPresignConfig(func() *tokens.TokenManager {
 			return suite.sharedTokenManager
 		}, testTokenIssuer, testTokenIssuer),
 		resolver.WithPresignBaseURL(baseURL),
 	)
+	require.NoError(suite.T(), err)
+
+	return service
 }

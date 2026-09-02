@@ -8,239 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/customdomainhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // CustomDomainHistoryUpdate is the builder for updating CustomDomainHistory entities.
 type CustomDomainHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *CustomDomainHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *CustomDomainHistoryMutation
 }
 
 // Where appends a list predicates to the CustomDomainHistoryUpdate builder.
 func (_u *CustomDomainHistoryUpdate) Where(ps ...predicate.CustomDomainHistory) *CustomDomainHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *CustomDomainHistoryUpdate) SetUpdatedAt(v time.Time) *CustomDomainHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *CustomDomainHistoryUpdate) ClearUpdatedAt() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *CustomDomainHistoryUpdate) SetUpdatedBy(v string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableUpdatedBy(v *string) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *CustomDomainHistoryUpdate) ClearUpdatedBy() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *CustomDomainHistoryUpdate) SetUpdatedByImpersonator(v string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *CustomDomainHistoryUpdate) ClearUpdatedByImpersonator() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *CustomDomainHistoryUpdate) SetDeletedAt(v time.Time) *CustomDomainHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableDeletedAt(v *time.Time) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *CustomDomainHistoryUpdate) ClearDeletedAt() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *CustomDomainHistoryUpdate) SetDeletedBy(v string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableDeletedBy(v *string) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *CustomDomainHistoryUpdate) ClearDeletedBy() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *CustomDomainHistoryUpdate) SetTags(v []string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *CustomDomainHistoryUpdate) AppendTags(v []string) *CustomDomainHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *CustomDomainHistoryUpdate) ClearTags() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *CustomDomainHistoryUpdate) SetOwnerID(v string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableOwnerID(v *string) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *CustomDomainHistoryUpdate) ClearOwnerID() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *CustomDomainHistoryUpdate) SetInternalNotes(v string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableInternalNotes(v *string) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *CustomDomainHistoryUpdate) ClearInternalNotes() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *CustomDomainHistoryUpdate) SetSystemInternalID(v string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableSystemInternalID(v *string) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *CustomDomainHistoryUpdate) ClearSystemInternalID() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetDNSVerificationID sets the "dns_verification_id" field.
-func (_u *CustomDomainHistoryUpdate) SetDNSVerificationID(v string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetDNSVerificationID(v)
-	return _u
-}
-
-// SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableDNSVerificationID(v *string) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetDNSVerificationID(*v)
-	}
-	return _u
-}
-
-// ClearDNSVerificationID clears the value of the "dns_verification_id" field.
-func (_u *CustomDomainHistoryUpdate) ClearDNSVerificationID() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearDNSVerificationID()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *CustomDomainHistoryUpdate) SetTrustCenterID(v string) *CustomDomainHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdate) SetNillableTrustCenterID(v *string) *CustomDomainHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *CustomDomainHistoryUpdate) ClearTrustCenterID() *CustomDomainHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -251,9 +36,6 @@ func (_u *CustomDomainHistoryUpdate) Mutation() *CustomDomainHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *CustomDomainHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -279,24 +61,6 @@ func (_u *CustomDomainHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *CustomDomainHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if customdomainhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized customdomainhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := customdomainhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *CustomDomainHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CustomDomainHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(customdomainhistory.Table, customdomainhistory.Columns, sqlgraph.NewFieldSpec(customdomainhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -312,52 +76,26 @@ func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(customdomainhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(customdomainhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(customdomainhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(customdomainhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(customdomainhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(customdomainhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(customdomainhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(customdomainhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(customdomainhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(customdomainhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(customdomainhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(customdomainhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(customdomainhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, customdomainhistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(customdomainhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(customdomainhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldOwnerID, field.TypeString)
@@ -365,33 +103,18 @@ func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(customdomainhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(customdomainhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(customdomainhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(customdomainhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.DNSVerificationID(); ok {
-		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
-	}
 	if _u.mutation.DNSVerificationIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldDNSVerificationID, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(customdomainhistory.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldTrustCenterID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.CustomDomainHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{customdomainhistory.Label}
@@ -407,220 +130,9 @@ func (_u *CustomDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 // CustomDomainHistoryUpdateOne is the builder for updating a single CustomDomainHistory entity.
 type CustomDomainHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *CustomDomainHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *CustomDomainHistoryUpdateOne) SetUpdatedAt(v time.Time) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearUpdatedAt() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *CustomDomainHistoryUpdateOne) SetUpdatedBy(v string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableUpdatedBy(v *string) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearUpdatedBy() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *CustomDomainHistoryUpdateOne) SetUpdatedByImpersonator(v string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearUpdatedByImpersonator() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *CustomDomainHistoryUpdateOne) SetDeletedAt(v time.Time) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearDeletedAt() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *CustomDomainHistoryUpdateOne) SetDeletedBy(v string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableDeletedBy(v *string) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearDeletedBy() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *CustomDomainHistoryUpdateOne) SetTags(v []string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *CustomDomainHistoryUpdateOne) AppendTags(v []string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearTags() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *CustomDomainHistoryUpdateOne) SetOwnerID(v string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableOwnerID(v *string) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearOwnerID() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *CustomDomainHistoryUpdateOne) SetInternalNotes(v string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableInternalNotes(v *string) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearInternalNotes() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *CustomDomainHistoryUpdateOne) SetSystemInternalID(v string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableSystemInternalID(v *string) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearSystemInternalID() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetDNSVerificationID sets the "dns_verification_id" field.
-func (_u *CustomDomainHistoryUpdateOne) SetDNSVerificationID(v string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetDNSVerificationID(v)
-	return _u
-}
-
-// SetNillableDNSVerificationID sets the "dns_verification_id" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableDNSVerificationID(v *string) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetDNSVerificationID(*v)
-	}
-	return _u
-}
-
-// ClearDNSVerificationID clears the value of the "dns_verification_id" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearDNSVerificationID() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearDNSVerificationID()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *CustomDomainHistoryUpdateOne) SetTrustCenterID(v string) *CustomDomainHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *CustomDomainHistoryUpdateOne) SetNillableTrustCenterID(v *string) *CustomDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *CustomDomainHistoryUpdateOne) ClearTrustCenterID() *CustomDomainHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *CustomDomainHistoryMutation
 }
 
 // Mutation returns the CustomDomainHistoryMutation object of the builder.
@@ -643,9 +155,6 @@ func (_u *CustomDomainHistoryUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated CustomDomainHistory entity.
 func (_u *CustomDomainHistoryUpdateOne) Save(ctx context.Context) (*CustomDomainHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -669,24 +178,6 @@ func (_u *CustomDomainHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *CustomDomainHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if customdomainhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized customdomainhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := customdomainhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *CustomDomainHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *CustomDomainHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *CustomDomainHistory, err error) {
@@ -721,52 +212,26 @@ func (_u *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Cus
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(customdomainhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(customdomainhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(customdomainhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(customdomainhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(customdomainhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(customdomainhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(customdomainhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(customdomainhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(customdomainhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(customdomainhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(customdomainhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(customdomainhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(customdomainhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, customdomainhistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(customdomainhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(customdomainhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldOwnerID, field.TypeString)
@@ -774,33 +239,18 @@ func (_u *CustomDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Cus
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(customdomainhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(customdomainhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(customdomainhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(customdomainhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.DNSVerificationID(); ok {
-		_spec.SetField(customdomainhistory.FieldDNSVerificationID, field.TypeString, value)
-	}
 	if _u.mutation.DNSVerificationIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldDNSVerificationID, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(customdomainhistory.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(customdomainhistory.FieldTrustCenterID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.CustomDomainHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &CustomDomainHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

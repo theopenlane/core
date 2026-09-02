@@ -1,6 +1,7 @@
 mutation CreateBulkCSVEvidence ($input: Upload!) {
 	createBulkCSVEvidence(input: $input) {
 		evidences {
+			auditorReferenceID
 			collectionProcedure
 			createdAt
 			createdBy
@@ -103,6 +104,24 @@ mutation CreateEvidence ($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]
 					}
 				}
 			}
+			internalPolicies {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			procedures {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
 		}
 	}
 }
@@ -190,6 +209,7 @@ query GetAllEvidences {
 }
 query GetEvidenceByID ($evidenceId: ID!) {
 	evidence(id: $evidenceId) {
+		auditorReferenceID
 		collectionProcedure
 		createdAt
 		createdBy
@@ -259,6 +279,24 @@ query GetEvidenceByID ($evidenceId: ID!) {
 			}
 		}
 		controlObjectives {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		internalPolicies {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		procedures {
 			edges {
 				node {
 					id
@@ -349,6 +387,7 @@ query GetEvidences ($where: EvidenceWhereInput) {
 mutation UpdateBulkEvidence ($ids: [ID!]!, $input: UpdateEvidenceInput!) {
 	updateBulkEvidence(ids: $ids, input: $input) {
 		evidences {
+			auditorReferenceID
 			collectionProcedure
 			createdAt
 			createdBy
@@ -444,6 +483,24 @@ mutation UpdateEvidence ($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $
 				}
 			}
 			controlObjectives {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			internalPolicies {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			procedures {
 				edges {
 					node {
 						id

@@ -4,9 +4,9 @@ import (
 	"context"
 	"maps"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/mapx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/workflows"
+	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
 // buildNotificationTemplateVars builds CEL vars and merged data for template rendering

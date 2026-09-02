@@ -5,11 +5,11 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	runtime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/gala"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	runtime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/keystore"
+	"github.com/theopenlane/core/v2/internal/workflows/engine"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // WithIntegrationsRuntime builds the integration runtime from server settings and wires it
@@ -49,8 +49,7 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 
 		s.Config.Handler.IntegrationsRuntime = rt
 
-		// set the runtime on the ent client so hooks/mutations can access it
-		dbClient.IntegrationsRuntime = rt
+		runtime.SetDefault(rt)
 
 		// make the runtime resolvable from gala listener injectors
 		if err := galaInstance.Attach(gala.WithValue(rt)); err != nil {

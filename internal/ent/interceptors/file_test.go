@@ -14,9 +14,9 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/core/common/storagetypes"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
 )
 
@@ -161,7 +161,7 @@ func newObjectManager(t *testing.T, provider storage.Provider) *objects.Service 
 	clientService := eddy.NewClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions](pool)
 
 	builder := &eddy.BuilderFunc[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
-		Type: string(provider.ProviderType()),
+		Type: provider.ProviderType().String(),
 		Func: func(context.Context, storage.ProviderCredentials, *storage.ProviderOptions) (storage.Provider, error) {
 			return provider, nil
 		},

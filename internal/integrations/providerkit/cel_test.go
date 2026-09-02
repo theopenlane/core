@@ -6,7 +6,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 func TestEvalFilter(t *testing.T) {

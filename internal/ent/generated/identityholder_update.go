@@ -14,28 +14,26 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 )
 
 // IdentityHolderUpdate is the builder for updating IdentityHolder entities.
@@ -1762,7 +1760,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -1776,7 +1773,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1793,7 +1789,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1810,7 +1805,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -1824,7 +1818,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1841,7 +1834,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1858,7 +1850,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
@@ -1872,7 +1863,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1889,7 +1879,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1906,7 +1895,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
@@ -1920,7 +1908,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1937,7 +1924,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
@@ -1951,7 +1937,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1968,7 +1953,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -1982,7 +1966,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1999,7 +1982,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -2013,7 +1995,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2030,7 +2011,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EmployerIDs(); len(nodes) > 0 {
@@ -2044,7 +2024,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2061,7 +2040,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentResponsesIDs(); len(nodes) > 0 && !_u.mutation.AssessmentResponsesCleared() {
@@ -2075,7 +2053,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2092,7 +2069,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2109,7 +2085,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentsCleared() {
@@ -2123,7 +2098,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2140,7 +2114,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2157,7 +2130,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTemplates
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !_u.mutation.TemplatesCleared() {
@@ -2171,7 +2143,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2188,7 +2159,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2205,7 +2175,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
@@ -2219,7 +2188,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2236,7 +2204,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2253,7 +2220,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderEntities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
@@ -2267,7 +2233,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2284,7 +2249,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2301,7 +2265,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
@@ -2315,7 +2278,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2332,7 +2294,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2349,7 +2310,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
@@ -2363,7 +2323,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2380,7 +2339,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2397,7 +2355,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
@@ -2411,7 +2368,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2428,7 +2384,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2445,7 +2400,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
@@ -2459,7 +2413,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2476,7 +2429,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2493,7 +2445,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
@@ -2507,7 +2458,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2524,7 +2474,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2541,7 +2490,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
@@ -2555,7 +2503,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2572,7 +2519,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2589,7 +2535,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -2603,7 +2548,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2620,7 +2564,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2637,7 +2580,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
@@ -2651,7 +2593,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2668,7 +2609,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2685,7 +2625,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
@@ -2699,7 +2638,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2716,7 +2654,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2733,7 +2670,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAccessPlatformsIDs(); len(nodes) > 0 && !_u.mutation.AccessPlatformsCleared() {
@@ -2747,7 +2683,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2764,7 +2699,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2781,7 +2715,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
@@ -2795,7 +2728,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2812,7 +2744,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
@@ -2826,7 +2757,6 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2843,14 +2773,11 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.IdentityHolder
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -4613,7 +4540,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -4627,7 +4553,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4644,7 +4569,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4661,7 +4585,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -4675,7 +4598,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4692,7 +4614,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4709,7 +4630,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedViewersIDs(); len(nodes) > 0 && !_u.mutation.ViewersCleared() {
@@ -4723,7 +4643,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4740,7 +4659,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4757,7 +4675,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.InternalOwnerUserIDs(); len(nodes) > 0 {
@@ -4771,7 +4688,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4788,7 +4704,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.InternalOwnerGroupIDs(); len(nodes) > 0 {
@@ -4802,7 +4717,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4819,7 +4733,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -4833,7 +4746,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4850,7 +4762,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -4864,7 +4775,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4881,7 +4791,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EmployerIDs(); len(nodes) > 0 {
@@ -4895,7 +4804,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4912,7 +4820,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentResponsesIDs(); len(nodes) > 0 && !_u.mutation.AssessmentResponsesCleared() {
@@ -4926,7 +4833,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4943,7 +4849,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4960,7 +4865,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentsCleared() {
@@ -4974,7 +4878,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4991,7 +4894,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssessments
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5008,7 +4910,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTemplates
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTemplatesIDs(); len(nodes) > 0 && !_u.mutation.TemplatesCleared() {
@@ -5022,7 +4923,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5039,7 +4939,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(template.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTemplates
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5056,7 +4955,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssets
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
@@ -5070,7 +4968,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5087,7 +4984,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5104,7 +5000,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderEntities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
@@ -5118,7 +5013,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5135,7 +5029,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5152,7 +5045,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
@@ -5166,7 +5058,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5183,7 +5074,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5200,7 +5090,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedControlsIDs(); len(nodes) > 0 && !_u.mutation.ControlsCleared() {
@@ -5214,7 +5103,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5231,7 +5119,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.ControlIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5248,7 +5135,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedSubcontrolsIDs(); len(nodes) > 0 && !_u.mutation.SubcontrolsCleared() {
@@ -5262,7 +5148,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5279,7 +5164,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5296,7 +5180,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedPlatformsIDs(); len(nodes) > 0 && !_u.mutation.PlatformsCleared() {
@@ -5310,7 +5193,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5327,7 +5209,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.PlatformIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5344,7 +5225,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedCampaignsIDs(); len(nodes) > 0 && !_u.mutation.CampaignsCleared() {
@@ -5358,7 +5238,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5375,7 +5254,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.CampaignIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5392,7 +5270,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTasks
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
@@ -5406,7 +5283,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5423,7 +5299,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5440,7 +5315,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
@@ -5454,7 +5328,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5471,7 +5344,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolderFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5488,7 +5360,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
@@ -5502,7 +5373,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5519,7 +5389,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.FindingIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5536,7 +5405,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
@@ -5550,7 +5418,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5567,7 +5434,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5584,7 +5450,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedAccessPlatformsIDs(); len(nodes) > 0 && !_u.mutation.AccessPlatformsCleared() {
@@ -5598,7 +5463,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5615,7 +5479,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5632,7 +5495,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
@@ -5646,7 +5508,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.IdentityHolder
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5663,7 +5524,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
@@ -5677,7 +5537,6 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -5694,14 +5553,11 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.InternalPolicyIdentityHolders
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.IdentityHolder
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &IdentityHolder{config: _u.config}
 	_spec.Assign = _node.assignValues

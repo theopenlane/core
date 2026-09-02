@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/platformhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -1007,7 +1007,6 @@ func (_c *PlatformHistoryCreate) createSpec() (*PlatformHistory, *sqlgraph.Creat
 		_node = &PlatformHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(platformhistory.Table, sqlgraph.NewFieldSpec(platformhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.PlatformHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

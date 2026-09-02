@@ -9,8 +9,8 @@ import (
 	admin "google.golang.org/api/admin/directory/v1"
 
 	"github.com/theopenlane/core/common/openapi"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/types"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 // directorySyncRequest builds an OperationRequest carrying the given installation metadata attributes

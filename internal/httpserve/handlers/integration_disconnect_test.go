@@ -12,9 +12,9 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	openmodels "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/integrations/registry"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 const disconnectTestDefinitionID = "def_01K0TESTDISC0000000000001"

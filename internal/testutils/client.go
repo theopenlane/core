@@ -14,17 +14,16 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/lru"
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/labstack/gommon/log"
-	"github.com/theopenlane/core/internal/graphapi"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/directives"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/auth"
-	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/v2/internal/graphapi"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	gqlgenerated "github.com/theopenlane/core/v2/internal/graphapi/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/objects"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/middleware/auth"
+	mock_shared "github.com/theopenlane/core/v2/pkg/objects/mocks"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/eddy"
@@ -32,7 +31,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/vektah/gqlparser/v2/ast"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 var (
@@ -68,26 +67,6 @@ func TestClient(c *ent.Client, objectStore *objects.Service, opts ...testclient.
 		}
 	}
 
-	e := testEchoServer(c, service, false)
-
-	// setup interceptors
-	if opts == nil {
-		opts = []testclient.ClientOption{}
-	}
-
-	opts = append(opts, testclient.WithTransport(localRoundTripper{server: e}))
-
-	config := testclient.NewDefaultConfig()
-
-	return testclient.New(config, opts...)
-}
-
-// TestRestClient creates a new OpenlaneClient for testing
-func TestRestClient(c *ent.Client, opts ...testclient.ClientOption) (*testclient.TestClient, error) {
-	service, err := MockStorageService(nil, nil)
-	if err != nil {
-		return nil, err
-	}
 	e := testEchoServer(c, service, false)
 
 	// setup interceptors
@@ -204,7 +183,7 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 
 	conf := gqlgenerated.Config{Resolvers: r}
 
-	directives.ImplementAllDirectives(&conf)
+	graphapi.ImplementAllDirectives(&conf)
 
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(
@@ -260,6 +239,48 @@ func MockStorageService(t *testing.T, uploader storage.UploaderFunc) (*objects.S
 func MockStorageServiceWithValidation(t *testing.T, uploader storage.UploaderFunc, validationFunc storage.ValidationFunc) (*objects.Service, error) {
 	storageService, _, err := MockStorageServiceWithValidationAndProvider(t, uploader, validationFunc)
 	return storageService, err
+}
+
+// MockStorageServiceWithBackup creates a storage service whose source provider replicates to a
+// backup provider, returning the service and both mock providers
+func MockStorageServiceWithBackup(t *testing.T, source storage.ProviderType, readFromBackup bool) (*objects.Service, *mock_shared.MockProvider, *mock_shared.MockProvider, error) {
+	sourceProvider := mock_shared.NewMockProvider(t)
+	backupProvider := mock_shared.NewMockProvider(t)
+
+	pool := eddy.NewClientPool[storage.Provider](time.Minute)
+	clientService := eddy.NewClientService(pool, eddy.WithConfigClone[
+		storage.Provider,
+		storage.ProviderCredentials](func(in *storage.ProviderOptions) *storage.ProviderOptions {
+		if in == nil {
+			return nil
+		}
+
+		return in.Clone()
+	}))
+
+	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+	resolver.AddRule(&helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+		Predicate: func(_ context.Context) bool {
+			return true
+		},
+		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+			return &eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+				Builder: &testProviderBuilder{provider: sourceProvider},
+				Output:  storage.ProviderCredentials{},
+				Config:  storage.NewProviderOptions(),
+			}, nil
+		},
+	})
+
+	service := objects.NewService(objects.Config{
+		Resolver:      resolver,
+		ClientService: clientService,
+		Backups: map[storage.ProviderType]objects.BackupTarget{
+			source: {Provider: backupProvider, ReadFromBackup: readFromBackup},
+		},
+	})
+
+	return service, sourceProvider, backupProvider, nil
 }
 
 // MockStorageServiceWithValidationAndProvider creates a new storage service for testing with custom validation

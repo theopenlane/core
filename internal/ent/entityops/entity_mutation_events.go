@@ -11,8 +11,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/contextx"
 
-	gala "github.com/theopenlane/core/pkg/gala"
-	logx "github.com/theopenlane/core/pkg/logx"
+	gala "github.com/theopenlane/core/v2/pkg/gala"
+	logx "github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // mutation operation vocabulary for listener registration and payload matching

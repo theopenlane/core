@@ -9,15 +9,15 @@ import (
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/trustcenterurl"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/trustcenterurl"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookSubscriberCreate runs on subscriber create mutations
@@ -83,7 +83,7 @@ func HookSubscriberCreate() ent.Hook {
 
 			customDomain, slug, branding := subscriberTrustCenterDomain(ctx, m.Client(), trustCenterID)
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
+			if err := sendSystemEmail(ctx, emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
 				RecipientInfo:       emaildef.RecipientInfo{Email: emailAddress},
 				TrustCenterBranding: branding,
 				OrgName:             orgName,

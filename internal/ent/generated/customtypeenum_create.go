@@ -10,17 +10,17 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 )
 
 // CustomTypeEnumCreate is the builder for creating a CustomTypeEnum entity.
@@ -549,7 +549,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 		_node = &CustomTypeEnum{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(customtypeenum.Table, sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.CustomTypeEnum
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -629,7 +628,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CustomTypeEnum
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -647,7 +645,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -664,7 +661,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Control
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -681,7 +677,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subcontrol
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -698,7 +693,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -715,7 +709,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -732,7 +725,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.InternalPolicy
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -749,7 +741,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -766,7 +757,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ActionPlan
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -783,7 +773,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Program
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -800,7 +789,6 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Platform
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -13,12 +13,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/workflows"
 )
 
 func (s *WorkflowEngineTestSuite) createApprovalWorkflowDefinitionWithTiming(ctx context.Context, orgID string, action models.WorkflowAction, timing enums.WorkflowApprovalTiming) *generated.WorkflowDefinition {
@@ -239,7 +239,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitReviewCompletes() 
 	seedCtx := s.SeedContext(approverID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{

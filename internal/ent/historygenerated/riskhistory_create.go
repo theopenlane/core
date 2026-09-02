@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/riskhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -808,7 +808,6 @@ func (_c *RiskHistoryCreate) createSpec() (*RiskHistory, *sqlgraph.CreateSpec) {
 		_node = &RiskHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(riskhistory.Table, sqlgraph.NewFieldSpec(riskhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.RiskHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

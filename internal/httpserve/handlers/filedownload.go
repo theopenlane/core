@@ -13,11 +13,11 @@ import (
 
 	models "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/common/storagetypes"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	dbprovider "github.com/theopenlane/core/pkg/objects/storage/providers/database"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/token"
+	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/objects/storage"
+	dbprovider "github.com/theopenlane/core/v2/pkg/objects/storage/providers/database"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/ulids"
@@ -194,6 +194,7 @@ func buildStorageFile(fileEntity *ent.File) *storagetypes.File {
 				KnownProvider: storagetypes.ProviderType(fileEntity.StorageProvider),
 			},
 		},
+		BackupLocation: fileEntity.BackupState.Location(),
 	}
 
 	return storFile

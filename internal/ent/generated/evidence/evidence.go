@@ -71,6 +71,8 @@ const (
 	FieldStatus = "status"
 	// FieldReviewFrequency holds the string denoting the review_frequency field in the database.
 	FieldReviewFrequency = "review_frequency"
+	// FieldAuditorReferenceID holds the string denoting the auditor_reference_id field in the database.
+	FieldAuditorReferenceID = "auditor_reference_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -85,6 +87,10 @@ const (
 	EdgeControlObjectives = "control_objectives"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
 	EdgeControlImplementations = "control_implementations"
+	// EdgeInternalPolicies holds the string denoting the internal_policies edge name in mutations.
+	EdgeInternalPolicies = "internal_policies"
+	// EdgeProcedures holds the string denoting the procedures edge name in mutations.
+	EdgeProcedures = "procedures"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
@@ -144,6 +150,20 @@ const (
 	ControlImplementationsInverseTable = "control_implementations"
 	// ControlImplementationsColumn is the table column denoting the control_implementations relation/edge.
 	ControlImplementationsColumn = "evidence_control_implementations"
+	// InternalPoliciesTable is the table that holds the internal_policies relation/edge.
+	InternalPoliciesTable = "internal_policies"
+	// InternalPoliciesInverseTable is the table name for the InternalPolicy entity.
+	// It exists in this package in order to avoid circular dependency with the "internalpolicy" package.
+	InternalPoliciesInverseTable = "internal_policies"
+	// InternalPoliciesColumn is the table column denoting the internal_policies relation/edge.
+	InternalPoliciesColumn = "evidence_internal_policies"
+	// ProceduresTable is the table that holds the procedures relation/edge.
+	ProceduresTable = "procedures"
+	// ProceduresInverseTable is the table name for the Procedure entity.
+	// It exists in this package in order to avoid circular dependency with the "procedure" package.
+	ProceduresInverseTable = "procedures"
+	// ProceduresColumn is the table column denoting the procedures relation/edge.
+	ProceduresColumn = "evidence_procedures"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "evidence_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -214,6 +234,7 @@ var Columns = []string{
 	FieldURL,
 	FieldStatus,
 	FieldReviewFrequency,
+	FieldAuditorReferenceID,
 }
 
 var (
@@ -257,7 +278,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
+//	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
 	Hooks        [14]ent.Hook
 	Interceptors [3]ent.Interceptor
@@ -445,6 +466,11 @@ func ByReviewFrequency(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewFrequency, opts...).ToFunc()
 }
 
+// ByAuditorReferenceID orders the results by the auditor_reference_id field.
+func ByAuditorReferenceID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAuditorReferenceID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -519,6 +545,34 @@ func ByControlImplementationsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newControlImplementationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByInternalPoliciesCount orders the results by internal_policies count.
+func ByInternalPoliciesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newInternalPoliciesStep(), opts...)
+	}
+}
+
+// ByInternalPolicies orders the results by internal_policies terms.
+func ByInternalPolicies(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalPoliciesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByProceduresCount orders the results by procedures count.
+func ByProceduresCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newProceduresStep(), opts...)
+	}
+}
+
+// ByProcedures orders the results by procedures terms.
+func ByProcedures(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProceduresStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -666,6 +720,20 @@ func newControlImplementationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, ControlImplementationsTable, ControlImplementationsColumn),
+	)
+}
+func newInternalPoliciesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalPoliciesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, InternalPoliciesTable, InternalPoliciesColumn),
+	)
+}
+func newProceduresStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ProceduresInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
 	)
 }
 func newFilesStep() *sqlgraph.Step {

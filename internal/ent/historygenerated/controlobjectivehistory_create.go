@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/controlobjectivehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/controlobjectivehistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -496,7 +496,6 @@ func (_c *ControlObjectiveHistoryCreate) createSpec() (*ControlObjectiveHistory,
 		_node = &ControlObjectiveHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(controlobjectivehistory.Table, sqlgraph.NewFieldSpec(controlobjectivehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ControlObjectiveHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

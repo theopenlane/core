@@ -9,8 +9,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 )
 
 // TestCampaignTargetDispatchableOverdueResend ensures overdue targets can be resent.

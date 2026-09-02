@@ -14,9 +14,9 @@ import (
 	emixin "github.com/theopenlane/entx/mixin"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/mixin"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
 
 // Webauthn holds the schema definition for the Webauthn entity

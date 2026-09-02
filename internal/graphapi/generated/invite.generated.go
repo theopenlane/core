@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _InviteBulkCreatePayload_invites(ctx context.Context
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Invite) graphql.Marshaler {
-			return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ(ctx, selections, v)
+			return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInviteᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _InviteBulkUpdatePayload_invites(ctx context.Context
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Invite) graphql.Marshaler {
-			return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ(ctx, selections, v)
+			return ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInviteᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _InviteCreatePayload_invite(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Invite) graphql.Marshaler {
-			return ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite(ctx, selections, v)
+			return ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInvite(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _InviteUpdatePayload_invite(ctx context.Context, fie
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Invite) graphql.Marshaler {
-			return ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite(ctx, selections, v)
+			return ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInvite(ctx, selections, v)
 		},
 		true,
 		true,
@@ -583,11 +583,11 @@ func (ec *executionContext) _InviteUpdatePayload(ctx context.Context, sel ast.Se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNInviteBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkCreatePayload) graphql.Marshaler {
 	return ec._InviteBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNInviteBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -597,11 +597,11 @@ func (ec *executionContext) marshalNInviteBulkCreatePayload2ᚖgithubᚗcomᚋth
 	return ec._InviteBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInviteBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkDeletePayload) graphql.Marshaler {
 	return ec._InviteBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNInviteBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -611,11 +611,11 @@ func (ec *executionContext) marshalNInviteBulkDeletePayload2ᚖgithubᚗcomᚋth
 	return ec._InviteBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInviteBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkUpdatePayload) graphql.Marshaler {
 	return ec._InviteBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNInviteBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -625,11 +625,11 @@ func (ec *executionContext) marshalNInviteBulkUpdatePayload2ᚖgithubᚗcomᚋth
 	return ec._InviteBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInviteCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteCreatePayload) graphql.Marshaler {
 	return ec._InviteCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNInviteCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -639,11 +639,11 @@ func (ec *executionContext) marshalNInviteCreatePayload2ᚖgithubᚗcomᚋtheope
 	return ec._InviteCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInviteDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteDeletePayload) graphql.Marshaler {
 	return ec._InviteDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNInviteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -653,11 +653,11 @@ func (ec *executionContext) marshalNInviteDeletePayload2ᚖgithubᚗcomᚋtheope
 	return ec._InviteDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInviteUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteUpdatePayload) graphql.Marshaler {
 	return ec._InviteUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNInviteUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInviteUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNInviteUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

@@ -14,11 +14,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/mappedcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // MappedControlHistoryQuery is the builder for querying MappedControlHistory entities.
@@ -28,8 +27,8 @@ type MappedControlHistoryQuery struct {
 	order      []mappedcontrolhistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.MappedControlHistory
-	loadTotal  []func(context.Context, []*MappedControlHistory) error
 	modifiers  []func(*sql.Selector)
+	loadTotal  []func(context.Context, []*MappedControlHistory) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -259,9 +258,8 @@ func (_q *MappedControlHistoryQuery) Clone() *MappedControlHistoryQuery {
 		inters:     append([]Interceptor{}, _q.inters...),
 		predicates: append([]predicate.MappedControlHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       _q.sql.Clone(),
-		path:      _q.path,
-		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -358,8 +356,6 @@ func (_q *MappedControlHistoryQuery) sqlAll(ctx context.Context, hooks ...queryH
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.MappedControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -382,8 +378,6 @@ func (_q *MappedControlHistoryQuery) sqlAll(ctx context.Context, hooks ...queryH
 
 func (_q *MappedControlHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.MappedControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -449,12 +443,6 @@ func (_q *MappedControlHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.MappedControlHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
-	for _, m := range _q.modifiers {
-		m(selector)
-	}
 	for _, p := range _q.predicates {
 		p(selector)
 	}
@@ -470,12 +458,6 @@ func (_q *MappedControlHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_q *MappedControlHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *MappedControlHistorySelect {
-	_q.modifiers = append(_q.modifiers, modifiers...)
-	return _q.Select()
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied
@@ -584,10 +566,4 @@ func (_s *MappedControlHistorySelect) sqlScan(ctx context.Context, root *MappedC
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_s *MappedControlHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *MappedControlHistorySelect {
-	_s.modifiers = append(_s.modifiers, modifiers...)
-	return _s
 }

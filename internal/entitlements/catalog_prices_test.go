@@ -6,7 +6,7 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/pkg/catalog/gencatalog"
+	"github.com/theopenlane/core/v2/pkg/catalog/gencatalog"
 )
 
 func TestFreeMonthlyPriceIDs(t *testing.T) {

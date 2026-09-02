@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/vendorriskscorehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/vendorriskscorehistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -480,7 +480,6 @@ func (_c *VendorRiskScoreHistoryCreate) createSpec() (*VendorRiskScoreHistory, *
 		_node = &VendorRiskScoreHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(vendorriskscorehistory.Table, sqlgraph.NewFieldSpec(vendorriskscorehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.VendorRiskScoreHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

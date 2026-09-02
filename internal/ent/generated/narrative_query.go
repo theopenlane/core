@@ -13,17 +13,16 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // NarrativeQuery is the builder for querying Narrative entities.
@@ -103,9 +102,6 @@ func (_q *NarrativeQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, narrative.OwnerTable, narrative.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Narrative
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -128,9 +124,6 @@ func (_q *NarrativeQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, narrative.BlockedGroupsTable, narrative.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -153,9 +146,6 @@ func (_q *NarrativeQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, narrative.EditorsTable, narrative.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -178,9 +168,6 @@ func (_q *NarrativeQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, narrative.ViewersTable, narrative.ViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -203,9 +190,6 @@ func (_q *NarrativeQuery) QuerySatisfies() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, narrative.SatisfiesTable, narrative.SatisfiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlNarratives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -228,9 +212,6 @@ func (_q *NarrativeQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProgramsTable, narrative.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramNarratives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -253,9 +234,6 @@ func (_q *NarrativeQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, narrative.InternalPoliciesTable, narrative.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -278,9 +256,6 @@ func (_q *NarrativeQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, narrative.ProceduresTable, narrative.ProceduresPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -690,8 +665,6 @@ func (_q *NarrativeQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Na
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -858,7 +831,6 @@ func (_q *NarrativeQuery) loadBlockedGroups(ctx context.Context, query *GroupQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.NarrativeBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(narrative.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -920,7 +892,6 @@ func (_q *NarrativeQuery) loadEditors(ctx context.Context, query *GroupQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.EditorsTable)
-		joinT.Schema(_q.schemaConfig.NarrativeEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(narrative.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -982,7 +953,6 @@ func (_q *NarrativeQuery) loadViewers(ctx context.Context, query *GroupQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.ViewersTable)
-		joinT.Schema(_q.schemaConfig.NarrativeViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(narrative.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(narrative.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1044,7 +1014,6 @@ func (_q *NarrativeQuery) loadSatisfies(ctx context.Context, query *ControlQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.SatisfiesTable)
-		joinT.Schema(_q.schemaConfig.ControlNarratives)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(narrative.SatisfiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(narrative.SatisfiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1106,7 +1075,6 @@ func (_q *NarrativeQuery) loadPrograms(ctx context.Context, query *ProgramQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramNarratives)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(narrative.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(narrative.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1168,7 +1136,6 @@ func (_q *NarrativeQuery) loadInternalPolicies(ctx context.Context, query *Inter
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyNarratives)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(narrative.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(narrative.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1230,7 +1197,6 @@ func (_q *NarrativeQuery) loadProcedures(ctx context.Context, query *ProcedureQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(narrative.ProceduresTable)
-		joinT.Schema(_q.schemaConfig.ProcedureNarratives)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(narrative.ProceduresPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(narrative.ProceduresPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1282,8 +1248,6 @@ func (_q *NarrativeQuery) loadProcedures(ctx context.Context, query *ProcedureQu
 
 func (_q *NarrativeQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Narrative
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1352,9 +1316,6 @@ func (_q *NarrativeQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Narrative)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

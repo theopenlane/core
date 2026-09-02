@@ -13,30 +13,29 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // RemediationQuery is the builder for querying Remediation entities.
@@ -139,9 +138,6 @@ func (_q *RemediationQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, remediation.OwnerTable, remediation.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Remediation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -164,9 +160,6 @@ func (_q *RemediationQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.BlockedGroupsTable, remediation.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.RemediationBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -189,9 +182,6 @@ func (_q *RemediationQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.EditorsTable, remediation.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.RemediationEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -214,9 +204,6 @@ func (_q *RemediationQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, remediation.EnvironmentTable, remediation.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Remediation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -239,9 +226,6 @@ func (_q *RemediationQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, remediation.ScopeTable, remediation.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Remediation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -264,9 +248,6 @@ func (_q *RemediationQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, remediation.IntegrationsTable, remediation.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationRemediations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -289,9 +270,6 @@ func (_q *RemediationQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, remediation.ScansTable, remediation.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ScanRemediations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -314,9 +292,6 @@ func (_q *RemediationQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.FindingsTable, remediation.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.RemediationFindings
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -339,9 +314,6 @@ func (_q *RemediationQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.VulnerabilitiesTable, remediation.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.RemediationVulnerabilities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -364,9 +336,6 @@ func (_q *RemediationQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.ActionPlansTable, remediation.ActionPlansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.RemediationActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -389,9 +358,6 @@ func (_q *RemediationQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, remediation.TasksTable, remediation.TasksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -414,9 +380,6 @@ func (_q *RemediationQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.ControlsTable, remediation.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.RemediationControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -439,9 +402,6 @@ func (_q *RemediationQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.SubcontrolsTable, remediation.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.RemediationSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -464,9 +424,6 @@ func (_q *RemediationQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.RisksTable, remediation.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.RemediationRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -489,9 +446,6 @@ func (_q *RemediationQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.ProgramsTable, remediation.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.RemediationPrograms
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -514,9 +468,6 @@ func (_q *RemediationQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.AssetsTable, remediation.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.RemediationAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -539,9 +490,6 @@ func (_q *RemediationQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, remediation.EntitiesTable, remediation.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.RemediationEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -564,9 +512,6 @@ func (_q *RemediationQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, remediation.ReviewsTable, remediation.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewRemediations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -589,9 +534,6 @@ func (_q *RemediationQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, remediation.CommentsTable, remediation.CommentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -614,9 +556,6 @@ func (_q *RemediationQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, remediation.FilesTable, remediation.FilesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -639,9 +578,6 @@ func (_q *RemediationQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, remediation.WorkflowObjectRefsTable, remediation.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1216,8 +1152,6 @@ func (_q *RemediationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Remediation
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1552,7 +1486,6 @@ func (_q *RemediationQuery) loadBlockedGroups(ctx context.Context, query *GroupQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.RemediationBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(remediation.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1614,7 +1547,6 @@ func (_q *RemediationQuery) loadEditors(ctx context.Context, query *GroupQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.EditorsTable)
-		joinT.Schema(_q.schemaConfig.RemediationEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(remediation.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1734,7 +1666,6 @@ func (_q *RemediationQuery) loadIntegrations(ctx context.Context, query *Integra
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.IntegrationsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationRemediations)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(remediation.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(remediation.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1796,7 +1727,6 @@ func (_q *RemediationQuery) loadScans(ctx context.Context, query *ScanQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.ScansTable)
-		joinT.Schema(_q.schemaConfig.ScanRemediations)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(remediation.ScansPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(remediation.ScansPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1858,7 +1788,6 @@ func (_q *RemediationQuery) loadFindings(ctx context.Context, query *FindingQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.FindingsTable)
-		joinT.Schema(_q.schemaConfig.RemediationFindings)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(remediation.FindingsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.FindingsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1920,7 +1849,6 @@ func (_q *RemediationQuery) loadVulnerabilities(ctx context.Context, query *Vuln
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.RemediationVulnerabilities)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(remediation.VulnerabilitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.VulnerabilitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1982,7 +1910,6 @@ func (_q *RemediationQuery) loadActionPlans(ctx context.Context, query *ActionPl
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.ActionPlansTable)
-		joinT.Schema(_q.schemaConfig.RemediationActionPlans)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(remediation.ActionPlansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2075,7 +2002,6 @@ func (_q *RemediationQuery) loadControls(ctx context.Context, query *ControlQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.ControlsTable)
-		joinT.Schema(_q.schemaConfig.RemediationControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(remediation.ControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.ControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2137,7 +2063,6 @@ func (_q *RemediationQuery) loadSubcontrols(ctx context.Context, query *Subcontr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.RemediationSubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(remediation.SubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.SubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2199,7 +2124,6 @@ func (_q *RemediationQuery) loadRisks(ctx context.Context, query *RiskQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.RisksTable)
-		joinT.Schema(_q.schemaConfig.RemediationRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(remediation.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2261,7 +2185,6 @@ func (_q *RemediationQuery) loadPrograms(ctx context.Context, query *ProgramQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.RemediationPrograms)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(remediation.ProgramsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.ProgramsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2323,7 +2246,6 @@ func (_q *RemediationQuery) loadAssets(ctx context.Context, query *AssetQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.AssetsTable)
-		joinT.Schema(_q.schemaConfig.RemediationAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(remediation.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2385,7 +2307,6 @@ func (_q *RemediationQuery) loadEntities(ctx context.Context, query *EntityQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.RemediationEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(remediation.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(remediation.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2447,7 +2368,6 @@ func (_q *RemediationQuery) loadReviews(ctx context.Context, query *ReviewQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(remediation.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewRemediations)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(remediation.ReviewsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(remediation.ReviewsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2592,8 +2512,6 @@ func (_q *RemediationQuery) loadWorkflowObjectRefs(ctx context.Context, query *W
 
 func (_q *RemediationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Remediation
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2668,9 +2586,6 @@ func (_q *RemediationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Remediation)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

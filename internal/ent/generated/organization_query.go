@@ -13,98 +13,90 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/assessment"
-	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/asset"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/discussion"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/export"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/notification"
-	"github.com/theopenlane/core/internal/ent/generated/notificationpreference"
-	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgprice"
-	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
-	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
-	"github.com/theopenlane/core/internal/ent/generated/subscriber"
-	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
-	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
-	"github.com/theopenlane/core/internal/ent/generated/vendorscoringconfig"
-	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
-	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/apitoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/export"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationpreference"
+	"github.com/theopenlane/core/v2/internal/ent/generated/notificationtemplate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subprocessor"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/v2/internal/ent/generated/systemdetail"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vendorscoringconfig"
+	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowproposal"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // OrganizationQuery is the builder for querying Organization entities.
@@ -147,10 +139,6 @@ type OrganizationQuery struct {
 	withIdentityHolderCreators                  *GroupQuery
 	withInternalPolicyCreators                  *GroupQuery
 	withInviteCreators                          *GroupQuery
-	withJobRunnerCreators                       *GroupQuery
-	withJobRunnerRegistrationTokenCreators      *GroupQuery
-	withJobRunnerTokenCreators                  *GroupQuery
-	withJobTemplateCreators                     *GroupQuery
 	withMappedControlCreators                   *GroupQuery
 	withNarrativeCreators                       *GroupQuery
 	withNoteCreators                            *GroupQuery
@@ -164,8 +152,6 @@ type OrganizationQuery struct {
 	withReviewCreators                          *GroupQuery
 	withRiskCreators                            *GroupQuery
 	withScanCreators                            *GroupQuery
-	withScheduledJobCreators                    *GroupQuery
-	withScheduledJobRunCreators                 *GroupQuery
 	withSLADefinitionCreators                   *GroupQuery
 	withStandardCreators                        *GroupQuery
 	withSubcontrolCreators                      *GroupQuery
@@ -244,14 +230,7 @@ type OrganizationQuery struct {
 	withStandards                               *StandardQuery
 	withActionPlans                             *ActionPlanQuery
 	withCustomDomains                           *CustomDomainQuery
-	withJobRunners                              *JobRunnerQuery
-	withJobRunnerTokens                         *JobRunnerTokenQuery
-	withJobRunnerRegistrationTokens             *JobRunnerRegistrationTokenQuery
 	withDNSVerifications                        *DNSVerificationQuery
-	withJobTemplates                            *JobTemplateQuery
-	withScheduledJobs                           *ScheduledJobQuery
-	withJobResults                              *JobResultQuery
-	withScheduledJobRuns                        *ScheduledJobRunQuery
 	withTrustCenters                            *TrustCenterQuery
 	withAssets                                  *AssetQuery
 	withScans                                   *ScanQuery
@@ -320,10 +299,6 @@ type OrganizationQuery struct {
 	withNamedIdentityHolderCreators             map[string]*GroupQuery
 	withNamedInternalPolicyCreators             map[string]*GroupQuery
 	withNamedInviteCreators                     map[string]*GroupQuery
-	withNamedJobRunnerCreators                  map[string]*GroupQuery
-	withNamedJobRunnerRegistrationTokenCreators map[string]*GroupQuery
-	withNamedJobRunnerTokenCreators             map[string]*GroupQuery
-	withNamedJobTemplateCreators                map[string]*GroupQuery
 	withNamedMappedControlCreators              map[string]*GroupQuery
 	withNamedNarrativeCreators                  map[string]*GroupQuery
 	withNamedNoteCreators                       map[string]*GroupQuery
@@ -337,8 +312,6 @@ type OrganizationQuery struct {
 	withNamedReviewCreators                     map[string]*GroupQuery
 	withNamedRiskCreators                       map[string]*GroupQuery
 	withNamedScanCreators                       map[string]*GroupQuery
-	withNamedScheduledJobCreators               map[string]*GroupQuery
-	withNamedScheduledJobRunCreators            map[string]*GroupQuery
 	withNamedSLADefinitionCreators              map[string]*GroupQuery
 	withNamedStandardCreators                   map[string]*GroupQuery
 	withNamedSubcontrolCreators                 map[string]*GroupQuery
@@ -414,14 +387,7 @@ type OrganizationQuery struct {
 	withNamedStandards                          map[string]*StandardQuery
 	withNamedActionPlans                        map[string]*ActionPlanQuery
 	withNamedCustomDomains                      map[string]*CustomDomainQuery
-	withNamedJobRunners                         map[string]*JobRunnerQuery
-	withNamedJobRunnerTokens                    map[string]*JobRunnerTokenQuery
-	withNamedJobRunnerRegistrationTokens        map[string]*JobRunnerRegistrationTokenQuery
 	withNamedDNSVerifications                   map[string]*DNSVerificationQuery
-	withNamedJobTemplates                       map[string]*JobTemplateQuery
-	withNamedScheduledJobs                      map[string]*ScheduledJobQuery
-	withNamedJobResults                         map[string]*JobResultQuery
-	withNamedScheduledJobRuns                   map[string]*ScheduledJobRunQuery
 	withNamedTrustCenters                       map[string]*TrustCenterQuery
 	withNamedAssets                             map[string]*AssetQuery
 	withNamedScans                              map[string]*ScanQuery
@@ -507,9 +473,6 @@ func (_q *OrganizationQuery) QueryActionPlanCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ActionPlanCreatorsTable, organization.ActionPlanCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -532,9 +495,6 @@ func (_q *OrganizationQuery) QueryAPITokenCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.APITokenCreatorsTable, organization.APITokenCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -557,9 +517,6 @@ func (_q *OrganizationQuery) QueryAssessmentCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentCreatorsTable, organization.AssessmentCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -582,9 +539,6 @@ func (_q *OrganizationQuery) QueryAssetCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssetCreatorsTable, organization.AssetCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -607,9 +561,6 @@ func (_q *OrganizationQuery) QueryCampaignCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignCreatorsTable, organization.CampaignCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -632,9 +583,6 @@ func (_q *OrganizationQuery) QueryCampaignTargetCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignTargetCreatorsTable, organization.CampaignTargetCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -657,9 +605,6 @@ func (_q *OrganizationQuery) QueryCheckResultCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CheckResultCreatorsTable, organization.CheckResultCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -682,9 +627,6 @@ func (_q *OrganizationQuery) QueryContactCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ContactCreatorsTable, organization.ContactCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -707,9 +649,6 @@ func (_q *OrganizationQuery) QueryControlCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlCreatorsTable, organization.ControlCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -732,9 +671,6 @@ func (_q *OrganizationQuery) QueryControlImplementationCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlImplementationCreatorsTable, organization.ControlImplementationCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -757,9 +693,6 @@ func (_q *OrganizationQuery) QueryControlObjectiveCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlObjectiveCreatorsTable, organization.ControlObjectiveCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -782,9 +715,6 @@ func (_q *OrganizationQuery) QueryCustomDomainCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CustomDomainCreatorsTable, organization.CustomDomainCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -807,9 +737,6 @@ func (_q *OrganizationQuery) QueryCustomTypeEnumCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CustomTypeEnumCreatorsTable, organization.CustomTypeEnumCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -832,9 +759,6 @@ func (_q *OrganizationQuery) QueryDirectoryAccountCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryAccountCreatorsTable, organization.DirectoryAccountCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -857,9 +781,6 @@ func (_q *OrganizationQuery) QueryDirectoryGroupCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryGroupCreatorsTable, organization.DirectoryGroupCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -882,9 +803,6 @@ func (_q *OrganizationQuery) QueryDirectoryMembershipCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryMembershipCreatorsTable, organization.DirectoryMembershipCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -907,9 +825,6 @@ func (_q *OrganizationQuery) QueryDirectorySyncRunCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectorySyncRunCreatorsTable, organization.DirectorySyncRunCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -932,9 +847,6 @@ func (_q *OrganizationQuery) QueryDiscussionCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DiscussionCreatorsTable, organization.DiscussionCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -957,9 +869,6 @@ func (_q *OrganizationQuery) QueryDocumentDataCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentDataCreatorsTable, organization.DocumentDataCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -982,9 +891,6 @@ func (_q *OrganizationQuery) QueryEmailTemplateCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailTemplateCreatorsTable, organization.EmailTemplateCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1007,9 +913,6 @@ func (_q *OrganizationQuery) QueryEntityCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EntityCreatorsTable, organization.EntityCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1032,9 +935,6 @@ func (_q *OrganizationQuery) QueryEntityTypeCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EntityTypeCreatorsTable, organization.EntityTypeCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1057,9 +957,6 @@ func (_q *OrganizationQuery) QueryEvidenceCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EvidenceCreatorsTable, organization.EvidenceCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1082,9 +979,6 @@ func (_q *OrganizationQuery) QueryFileCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.FileCreatorsTable, organization.FileCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1107,9 +1001,6 @@ func (_q *OrganizationQuery) QueryFindingCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingCreatorsTable, organization.FindingCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1132,9 +1023,6 @@ func (_q *OrganizationQuery) QueryFindingControlCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingControlCreatorsTable, organization.FindingControlCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1157,9 +1045,6 @@ func (_q *OrganizationQuery) QueryGroupCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupCreatorsTable, organization.GroupCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1182,9 +1067,6 @@ func (_q *OrganizationQuery) QueryGroupMembershipCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupMembershipCreatorsTable, organization.GroupMembershipCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1207,9 +1089,6 @@ func (_q *OrganizationQuery) QueryGroupSettingCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupSettingCreatorsTable, organization.GroupSettingCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1232,9 +1111,6 @@ func (_q *OrganizationQuery) QueryHushCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.HushCreatorsTable, organization.HushCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1257,9 +1133,6 @@ func (_q *OrganizationQuery) QueryIdentityHolderCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.IdentityHolderCreatorsTable, organization.IdentityHolderCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1282,9 +1155,6 @@ func (_q *OrganizationQuery) QueryInternalPolicyCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.InternalPolicyCreatorsTable, organization.InternalPolicyCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1307,109 +1177,6 @@ func (_q *OrganizationQuery) QueryInviteCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.InviteCreatorsTable, organization.InviteCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobRunnerCreators chains the current query on the "job_runner_creators" edge.
-func (_q *OrganizationQuery) QueryJobRunnerCreators() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerCreatorsTable, organization.JobRunnerCreatorsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobRunnerRegistrationTokenCreators chains the current query on the "job_runner_registration_token_creators" edge.
-func (_q *OrganizationQuery) QueryJobRunnerRegistrationTokenCreators() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerRegistrationTokenCreatorsTable, organization.JobRunnerRegistrationTokenCreatorsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobRunnerTokenCreators chains the current query on the "job_runner_token_creators" edge.
-func (_q *OrganizationQuery) QueryJobRunnerTokenCreators() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerTokenCreatorsTable, organization.JobRunnerTokenCreatorsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobTemplateCreators chains the current query on the "job_template_creators" edge.
-func (_q *OrganizationQuery) QueryJobTemplateCreators() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobTemplateCreatorsTable, organization.JobTemplateCreatorsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1432,9 +1199,6 @@ func (_q *OrganizationQuery) QueryMappedControlCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.MappedControlCreatorsTable, organization.MappedControlCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1457,9 +1221,6 @@ func (_q *OrganizationQuery) QueryNarrativeCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NarrativeCreatorsTable, organization.NarrativeCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1482,9 +1243,6 @@ func (_q *OrganizationQuery) QueryNoteCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NoteCreatorsTable, organization.NoteCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1507,9 +1265,6 @@ func (_q *OrganizationQuery) QueryNotificationTemplateCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationTemplateCreatorsTable, organization.NotificationTemplateCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1532,9 +1287,6 @@ func (_q *OrganizationQuery) QueryOrgMembershipCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgMembershipCreatorsTable, organization.OrgMembershipCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1557,9 +1309,6 @@ func (_q *OrganizationQuery) QueryPlatformCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.PlatformCreatorsTable, organization.PlatformCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1582,9 +1331,6 @@ func (_q *OrganizationQuery) QueryProcedureCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProcedureCreatorsTable, organization.ProcedureCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1607,9 +1353,6 @@ func (_q *OrganizationQuery) QueryProgramCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProgramCreatorsTable, organization.ProgramCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1632,9 +1375,6 @@ func (_q *OrganizationQuery) QueryProgramMembershipCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProgramMembershipCreatorsTable, organization.ProgramMembershipCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1657,9 +1397,6 @@ func (_q *OrganizationQuery) QueryRemediationCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RemediationCreatorsTable, organization.RemediationCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1682,9 +1419,6 @@ func (_q *OrganizationQuery) QueryReviewCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ReviewCreatorsTable, organization.ReviewCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1707,9 +1441,6 @@ func (_q *OrganizationQuery) QueryRiskCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskCreatorsTable, organization.RiskCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1732,59 +1463,6 @@ func (_q *OrganizationQuery) QueryScanCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScanCreatorsTable, organization.ScanCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryScheduledJobCreators chains the current query on the "scheduled_job_creators" edge.
-func (_q *OrganizationQuery) QueryScheduledJobCreators() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobCreatorsTable, organization.ScheduledJobCreatorsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryScheduledJobRunCreators chains the current query on the "scheduled_job_run_creators" edge.
-func (_q *OrganizationQuery) QueryScheduledJobRunCreators() *GroupQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobRunCreatorsTable, organization.ScheduledJobRunCreatorsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1807,9 +1485,6 @@ func (_q *OrganizationQuery) QuerySLADefinitionCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SLADefinitionCreatorsTable, organization.SLADefinitionCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1832,9 +1507,6 @@ func (_q *OrganizationQuery) QueryStandardCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.StandardCreatorsTable, organization.StandardCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1857,9 +1529,6 @@ func (_q *OrganizationQuery) QuerySubcontrolCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubcontrolCreatorsTable, organization.SubcontrolCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1882,9 +1551,6 @@ func (_q *OrganizationQuery) QuerySubprocessorCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubprocessorCreatorsTable, organization.SubprocessorCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1907,9 +1573,6 @@ func (_q *OrganizationQuery) QuerySubscriberCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubscriberCreatorsTable, organization.SubscriberCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1932,9 +1595,6 @@ func (_q *OrganizationQuery) QuerySystemDetailCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SystemDetailCreatorsTable, organization.SystemDetailCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1957,9 +1617,6 @@ func (_q *OrganizationQuery) QueryTagDefinitionCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TagDefinitionCreatorsTable, organization.TagDefinitionCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1982,9 +1639,6 @@ func (_q *OrganizationQuery) QueryTaskCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TaskCreatorsTable, organization.TaskCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2007,9 +1661,6 @@ func (_q *OrganizationQuery) QueryTemplateCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplateCreatorsTable, organization.TemplateCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2032,9 +1683,6 @@ func (_q *OrganizationQuery) QueryTrustCenterCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterCreatorsTable, organization.TrustCenterCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2057,9 +1705,6 @@ func (_q *OrganizationQuery) QueryTrustCenterComplianceCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterComplianceCreatorsTable, organization.TrustCenterComplianceCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2082,9 +1727,6 @@ func (_q *OrganizationQuery) QueryTrustCenterDocCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterDocCreatorsTable, organization.TrustCenterDocCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2107,9 +1749,6 @@ func (_q *OrganizationQuery) QueryTrustCenterEntityCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterEntityCreatorsTable, organization.TrustCenterEntityCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2132,9 +1771,6 @@ func (_q *OrganizationQuery) QueryTrustCenterFaqCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterFaqCreatorsTable, organization.TrustCenterFaqCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2157,9 +1793,6 @@ func (_q *OrganizationQuery) QueryTrustCenterNdaRequestCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterNdaRequestCreatorsTable, organization.TrustCenterNdaRequestCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2182,9 +1815,6 @@ func (_q *OrganizationQuery) QueryTrustCenterSubprocessorCreators() *GroupQuery 
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterSubprocessorCreatorsTable, organization.TrustCenterSubprocessorCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2207,9 +1837,6 @@ func (_q *OrganizationQuery) QueryTrustCenterWatermarkConfigCreators() *GroupQue
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterWatermarkConfigCreatorsTable, organization.TrustCenterWatermarkConfigCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2232,9 +1859,6 @@ func (_q *OrganizationQuery) QueryVendorRiskScoreCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorRiskScoreCreatorsTable, organization.VendorRiskScoreCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2257,9 +1881,6 @@ func (_q *OrganizationQuery) QueryVendorScoringConfigCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorScoringConfigCreatorsTable, organization.VendorScoringConfigCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2282,9 +1903,6 @@ func (_q *OrganizationQuery) QueryVulnerabilityCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.VulnerabilityCreatorsTable, organization.VulnerabilityCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2307,9 +1925,6 @@ func (_q *OrganizationQuery) QueryWorkflowDefinitionCreators() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowDefinitionCreatorsTable, organization.WorkflowDefinitionCreatorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2332,9 +1947,6 @@ func (_q *OrganizationQuery) QueryCampaignsManager() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignsManagerTable, organization.CampaignsManagerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2357,9 +1969,6 @@ func (_q *OrganizationQuery) QueryComplianceManager() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ComplianceManagerTable, organization.ComplianceManagerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2382,9 +1991,6 @@ func (_q *OrganizationQuery) QueryGroupManager() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupManagerTable, organization.GroupManagerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2407,9 +2013,6 @@ func (_q *OrganizationQuery) QueryPoliciesManager() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.PoliciesManagerTable, organization.PoliciesManagerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2432,9 +2035,6 @@ func (_q *OrganizationQuery) QueryRegistryManager() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RegistryManagerTable, organization.RegistryManagerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2457,9 +2057,6 @@ func (_q *OrganizationQuery) QueryRiskManager() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RiskManagerTable, organization.RiskManagerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2482,9 +2079,6 @@ func (_q *OrganizationQuery) QueryTrustCenterManager() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterManagerTable, organization.TrustCenterManagerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2507,9 +2101,6 @@ func (_q *OrganizationQuery) QueryWorkflowsManager() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowsManagerTable, organization.WorkflowsManagerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2532,9 +2123,6 @@ func (_q *OrganizationQuery) QueryParent() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, organization.ParentTable, organization.ParentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Organization
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2557,9 +2145,6 @@ func (_q *OrganizationQuery) QueryChildren() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ChildrenTable, organization.ChildrenColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Organization
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2582,9 +2167,6 @@ func (_q *OrganizationQuery) QuerySetting() *OrganizationSettingQuery {
 			sqlgraph.To(organizationsetting.Table, organizationsetting.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, organization.SettingTable, organization.SettingColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrganizationSetting
-		step.Edge.Schema = schemaConfig.OrganizationSetting
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2607,9 +2189,6 @@ func (_q *OrganizationQuery) QueryPersonalAccessTokens() *PersonalAccessTokenQue
 			sqlgraph.To(personalaccesstoken.Table, personalaccesstoken.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, organization.PersonalAccessTokensTable, organization.PersonalAccessTokensPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.PersonalAccessToken
-		step.Edge.Schema = schemaConfig.OrganizationPersonalAccessTokens
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2632,9 +2211,6 @@ func (_q *OrganizationQuery) QueryAPITokens() *APITokenQuery {
 			sqlgraph.To(apitoken.Table, apitoken.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.APITokensTable, organization.APITokensColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.APIToken
-		step.Edge.Schema = schemaConfig.APIToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2657,9 +2233,6 @@ func (_q *OrganizationQuery) QueryEmailTemplates() *EmailTemplateQuery {
 			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EmailTemplatesTable, organization.EmailTemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2682,9 +2255,6 @@ func (_q *OrganizationQuery) QueryIntegrationWebhooks() *IntegrationWebhookQuery
 			sqlgraph.To(integrationwebhook.Table, integrationwebhook.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationWebhooksTable, organization.IntegrationWebhooksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IntegrationWebhook
-		step.Edge.Schema = schemaConfig.IntegrationWebhook
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2707,9 +2277,6 @@ func (_q *OrganizationQuery) QueryIntegrationRuns() *IntegrationRunQuery {
 			sqlgraph.To(integrationrun.Table, integrationrun.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationRunsTable, organization.IntegrationRunsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IntegrationRun
-		step.Edge.Schema = schemaConfig.IntegrationRun
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2732,9 +2299,6 @@ func (_q *OrganizationQuery) QueryNotificationPreferences() *NotificationPrefere
 			sqlgraph.To(notificationpreference.Table, notificationpreference.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationPreferencesTable, organization.NotificationPreferencesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.NotificationPreference
-		step.Edge.Schema = schemaConfig.NotificationPreference
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2757,9 +2321,6 @@ func (_q *OrganizationQuery) QueryNotificationTemplates() *NotificationTemplateQ
 			sqlgraph.To(notificationtemplate.Table, notificationtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationTemplatesTable, organization.NotificationTemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.NotificationTemplate
-		step.Edge.Schema = schemaConfig.NotificationTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2782,9 +2343,6 @@ func (_q *OrganizationQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, organization.UsersTable, organization.UsersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.OrgMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2807,9 +2365,6 @@ func (_q *OrganizationQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, organization.FilesTable, organization.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.OrganizationFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2832,9 +2387,6 @@ func (_q *OrganizationQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, organization.EventsTable, organization.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.OrganizationEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2857,9 +2409,6 @@ func (_q *OrganizationQuery) QuerySecrets() *HushQuery {
 			sqlgraph.To(hush.Table, hush.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SecretsTable, organization.SecretsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.Hush
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2882,9 +2431,6 @@ func (_q *OrganizationQuery) QueryAvatarFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, organization.AvatarFileTable, organization.AvatarFileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.Organization
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2907,9 +2453,6 @@ func (_q *OrganizationQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.GroupsTable, organization.GroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2932,9 +2475,6 @@ func (_q *OrganizationQuery) QueryTemplates() *TemplateQuery {
 			sqlgraph.To(template.Table, template.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplatesTable, organization.TemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.Template
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2957,9 +2497,6 @@ func (_q *OrganizationQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationsTable, organization.IntegrationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2982,9 +2519,6 @@ func (_q *OrganizationQuery) QueryDocuments() *DocumentDataQuery {
 			sqlgraph.To(documentdata.Table, documentdata.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DocumentsTable, organization.DocumentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.DocumentData
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3007,9 +2541,6 @@ func (_q *OrganizationQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
 			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgSubscriptionsTable, organization.OrgSubscriptionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3032,9 +2563,6 @@ func (_q *OrganizationQuery) QueryOrgProducts() *OrgProductQuery {
 			sqlgraph.To(orgproduct.Table, orgproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgProductsTable, organization.OrgProductsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgProduct
-		step.Edge.Schema = schemaConfig.OrgProduct
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3057,9 +2585,6 @@ func (_q *OrganizationQuery) QueryOrgPrices() *OrgPriceQuery {
 			sqlgraph.To(orgprice.Table, orgprice.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgPricesTable, organization.OrgPricesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgPrice
-		step.Edge.Schema = schemaConfig.OrgPrice
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3082,9 +2607,6 @@ func (_q *OrganizationQuery) QueryOrgModules() *OrgModuleQuery {
 			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.OrgModulesTable, organization.OrgModulesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgModule
-		step.Edge.Schema = schemaConfig.OrgModule
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3107,9 +2629,6 @@ func (_q *OrganizationQuery) QueryInvites() *InviteQuery {
 			sqlgraph.To(invite.Table, invite.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.InvitesTable, organization.InvitesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Invite
-		step.Edge.Schema = schemaConfig.Invite
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3132,9 +2651,6 @@ func (_q *OrganizationQuery) QuerySubscribers() *SubscriberQuery {
 			sqlgraph.To(subscriber.Table, subscriber.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubscribersTable, organization.SubscribersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3157,9 +2673,6 @@ func (_q *OrganizationQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EntitiesTable, organization.EntitiesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3182,9 +2695,6 @@ func (_q *OrganizationQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.PlatformsTable, organization.PlatformsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3207,9 +2717,6 @@ func (_q *OrganizationQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.IdentityHoldersTable, organization.IdentityHoldersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3232,9 +2739,6 @@ func (_q *OrganizationQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignsTable, organization.CampaignsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3257,9 +2761,6 @@ func (_q *OrganizationQuery) QueryCampaignTargets() *CampaignTargetQuery {
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CampaignTargetsTable, organization.CampaignTargetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CampaignTarget
-		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3282,9 +2783,6 @@ func (_q *OrganizationQuery) QueryEntityTypes() *EntityTypeQuery {
 			sqlgraph.To(entitytype.Table, entitytype.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EntityTypesTable, organization.EntityTypesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EntityType
-		step.Edge.Schema = schemaConfig.EntityType
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3307,9 +2805,6 @@ func (_q *OrganizationQuery) QueryContacts() *ContactQuery {
 			sqlgraph.To(contact.Table, contact.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ContactsTable, organization.ContactsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Contact
-		step.Edge.Schema = schemaConfig.Contact
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3332,9 +2827,6 @@ func (_q *OrganizationQuery) QueryNotes() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotesTable, organization.NotesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3357,9 +2849,6 @@ func (_q *OrganizationQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TasksTable, organization.TasksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3382,9 +2871,6 @@ func (_q *OrganizationQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProgramsTable, organization.ProgramsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Program
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3407,9 +2893,6 @@ func (_q *OrganizationQuery) QuerySystemDetails() *SystemDetailQuery {
 			sqlgraph.To(systemdetail.Table, systemdetail.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SystemDetailsTable, organization.SystemDetailsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3432,9 +2915,6 @@ func (_q *OrganizationQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ProceduresTable, organization.ProceduresColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3457,9 +2937,6 @@ func (_q *OrganizationQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.InternalPoliciesTable, organization.InternalPoliciesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3482,9 +2959,6 @@ func (_q *OrganizationQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RisksTable, organization.RisksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3507,9 +2981,6 @@ func (_q *OrganizationQuery) QueryControlObjectives() *ControlObjectiveQuery {
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlObjectivesTable, organization.ControlObjectivesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjective
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3532,9 +3003,6 @@ func (_q *OrganizationQuery) QueryNarratives() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NarrativesTable, organization.NarrativesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.Narrative
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3557,9 +3025,6 @@ func (_q *OrganizationQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlsTable, organization.ControlsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3582,9 +3047,6 @@ func (_q *OrganizationQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubcontrolsTable, organization.SubcontrolsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3607,9 +3069,6 @@ func (_q *OrganizationQuery) QueryControlImplementations() *ControlImplementatio
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ControlImplementationsTable, organization.ControlImplementationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.ControlImplementation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3632,9 +3091,6 @@ func (_q *OrganizationQuery) QueryMappedControls() *MappedControlQuery {
 			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.MappedControlsTable, organization.MappedControlsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControl
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3657,9 +3113,6 @@ func (_q *OrganizationQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.EvidenceTable, organization.EvidenceColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.Evidence
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3682,9 +3135,6 @@ func (_q *OrganizationQuery) QueryStandards() *StandardQuery {
 			sqlgraph.To(standard.Table, standard.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.StandardsTable, organization.StandardsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.Standard
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3707,9 +3157,6 @@ func (_q *OrganizationQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ActionPlansTable, organization.ActionPlansColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3732,84 +3179,6 @@ func (_q *OrganizationQuery) QueryCustomDomains() *CustomDomainQuery {
 			sqlgraph.To(customdomain.Table, customdomain.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CustomDomainsTable, organization.CustomDomainsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomDomain
-		step.Edge.Schema = schemaConfig.CustomDomain
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobRunners chains the current query on the "job_runners" edge.
-func (_q *OrganizationQuery) QueryJobRunners() *JobRunnerQuery {
-	query := (&JobRunnerClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnersTable, organization.JobRunnersColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunner
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobRunnerTokens chains the current query on the "job_runner_tokens" edge.
-func (_q *OrganizationQuery) QueryJobRunnerTokens() *JobRunnerTokenQuery {
-	query := (&JobRunnerTokenClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(jobrunnertoken.Table, jobrunnertoken.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerTokensTable, organization.JobRunnerTokensColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobRunnerToken
-		step.Edge.Schema = schemaConfig.JobRunnerToken
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobRunnerRegistrationTokens chains the current query on the "job_runner_registration_tokens" edge.
-func (_q *OrganizationQuery) QueryJobRunnerRegistrationTokens() *JobRunnerRegistrationTokenQuery {
-	query := (&JobRunnerRegistrationTokenClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(jobrunnerregistrationtoken.Table, jobrunnerregistrationtoken.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerRegistrationTokensTable, organization.JobRunnerRegistrationTokensColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobRunnerRegistrationToken
-		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3832,109 +3201,6 @@ func (_q *OrganizationQuery) QueryDNSVerifications() *DNSVerificationQuery {
 			sqlgraph.To(dnsverification.Table, dnsverification.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DNSVerificationsTable, organization.DNSVerificationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DNSVerification
-		step.Edge.Schema = schemaConfig.DNSVerification
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobTemplates chains the current query on the "job_templates" edge.
-func (_q *OrganizationQuery) QueryJobTemplates() *JobTemplateQuery {
-	query := (&JobTemplateClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(jobtemplate.Table, jobtemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobTemplatesTable, organization.JobTemplatesColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobTemplate
-		step.Edge.Schema = schemaConfig.JobTemplate
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryScheduledJobs chains the current query on the "scheduled_jobs" edge.
-func (_q *OrganizationQuery) QueryScheduledJobs() *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobsTable, organization.ScheduledJobsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.ScheduledJob
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryJobResults chains the current query on the "job_results" edge.
-func (_q *OrganizationQuery) QueryJobResults() *JobResultQuery {
-	query := (&JobResultClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(jobresult.Table, jobresult.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobResultsTable, organization.JobResultsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobResult
-		step.Edge.Schema = schemaConfig.JobResult
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryScheduledJobRuns chains the current query on the "scheduled_job_runs" edge.
-func (_q *OrganizationQuery) QueryScheduledJobRuns() *ScheduledJobRunQuery {
-	query := (&ScheduledJobRunClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, selector),
-			sqlgraph.To(scheduledjobrun.Table, scheduledjobrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobRunsTable, organization.ScheduledJobRunsColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ScheduledJobRun
-		step.Edge.Schema = schemaConfig.ScheduledJobRun
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3957,9 +3223,6 @@ func (_q *OrganizationQuery) QueryTrustCenters() *TrustCenterQuery {
 			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCentersTable, organization.TrustCentersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -3982,9 +3245,6 @@ func (_q *OrganizationQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssetsTable, organization.AssetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.Asset
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4007,9 +3267,6 @@ func (_q *OrganizationQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScansTable, organization.ScansColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4032,9 +3289,6 @@ func (_q *OrganizationQuery) QuerySLADefinitions() *SLADefinitionQuery {
 			sqlgraph.To(sladefinition.Table, sladefinition.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SLADefinitionsTable, organization.SLADefinitionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.SLADefinition
-		step.Edge.Schema = schemaConfig.SLADefinition
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4057,9 +3311,6 @@ func (_q *OrganizationQuery) QuerySubprocessors() *SubprocessorQuery {
 			sqlgraph.To(subprocessor.Table, subprocessor.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubprocessorsTable, organization.SubprocessorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subprocessor
-		step.Edge.Schema = schemaConfig.Subprocessor
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4082,9 +3333,6 @@ func (_q *OrganizationQuery) QueryExports() *ExportQuery {
 			sqlgraph.To(export.Table, export.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ExportsTable, organization.ExportsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Export
-		step.Edge.Schema = schemaConfig.Export
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4107,9 +3355,6 @@ func (_q *OrganizationQuery) QueryTrustCenterWatermarkConfigs() *TrustCenterWate
 			sqlgraph.To(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TrustCenterWatermarkConfigsTable, organization.TrustCenterWatermarkConfigsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterWatermarkConfig
-		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4132,9 +3377,6 @@ func (_q *OrganizationQuery) QueryImpersonationEvents() *ImpersonationEventQuery
 			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ImpersonationEventsTable, organization.ImpersonationEventsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ImpersonationEvent
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4157,9 +3399,6 @@ func (_q *OrganizationQuery) QueryAssessments() *AssessmentQuery {
 			sqlgraph.To(assessment.Table, assessment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentsTable, organization.AssessmentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.Assessment
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4182,9 +3421,6 @@ func (_q *OrganizationQuery) QueryAssessmentResponses() *AssessmentResponseQuery
 			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentResponsesTable, organization.AssessmentResponsesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4207,9 +3443,6 @@ func (_q *OrganizationQuery) QueryCustomTypeEnums() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.CustomTypeEnumsTable, organization.CustomTypeEnumsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.CustomTypeEnum
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4232,9 +3465,6 @@ func (_q *OrganizationQuery) QueryTagDefinitions() *TagDefinitionQuery {
 			sqlgraph.To(tagdefinition.Table, tagdefinition.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TagDefinitionsTable, organization.TagDefinitionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TagDefinition
-		step.Edge.Schema = schemaConfig.TagDefinition
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4257,9 +3487,6 @@ func (_q *OrganizationQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.RemediationsTable, organization.RemediationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.Remediation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4282,9 +3509,6 @@ func (_q *OrganizationQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingsTable, organization.FindingsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4307,9 +3531,6 @@ func (_q *OrganizationQuery) QueryFindingControls() *FindingControlQuery {
 			sqlgraph.To(findingcontrol.Table, findingcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingControlsTable, organization.FindingControlsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.FindingControl
-		step.Edge.Schema = schemaConfig.FindingControl
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4332,9 +3553,6 @@ func (_q *OrganizationQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ReviewsTable, organization.ReviewsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.Review
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4357,9 +3575,6 @@ func (_q *OrganizationQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.VulnerabilitiesTable, organization.VulnerabilitiesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.Vulnerability
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4382,9 +3597,6 @@ func (_q *OrganizationQuery) QueryNotifications() *NotificationQuery {
 			sqlgraph.To(notification.Table, notification.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationsTable, organization.NotificationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Notification
-		step.Edge.Schema = schemaConfig.Notification
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4407,9 +3619,6 @@ func (_q *OrganizationQuery) QueryWorkflowDefinitions() *WorkflowDefinitionQuery
 			sqlgraph.To(workflowdefinition.Table, workflowdefinition.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowDefinitionsTable, organization.WorkflowDefinitionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowDefinition
-		step.Edge.Schema = schemaConfig.WorkflowDefinition
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4432,9 +3641,6 @@ func (_q *OrganizationQuery) QueryWorkflowInstances() *WorkflowInstanceQuery {
 			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowInstancesTable, organization.WorkflowInstancesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowInstance
-		step.Edge.Schema = schemaConfig.WorkflowInstance
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4457,9 +3663,6 @@ func (_q *OrganizationQuery) QueryWorkflowEvents() *WorkflowEventQuery {
 			sqlgraph.To(workflowevent.Table, workflowevent.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowEventsTable, organization.WorkflowEventsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowEvent
-		step.Edge.Schema = schemaConfig.WorkflowEvent
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4482,9 +3685,6 @@ func (_q *OrganizationQuery) QueryWorkflowAssignments() *WorkflowAssignmentQuery
 			sqlgraph.To(workflowassignment.Table, workflowassignment.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowAssignmentsTable, organization.WorkflowAssignmentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowAssignment
-		step.Edge.Schema = schemaConfig.WorkflowAssignment
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4507,9 +3707,6 @@ func (_q *OrganizationQuery) QueryWorkflowAssignmentTargets() *WorkflowAssignmen
 			sqlgraph.To(workflowassignmenttarget.Table, workflowassignmenttarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowAssignmentTargetsTable, organization.WorkflowAssignmentTargetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowAssignmentTarget
-		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4532,9 +3729,6 @@ func (_q *OrganizationQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowObjectRefsTable, organization.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4557,9 +3751,6 @@ func (_q *OrganizationQuery) QueryWorkflowProposals() *WorkflowProposalQuery {
 			sqlgraph.To(workflowproposal.Table, workflowproposal.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowProposalsTable, organization.WorkflowProposalsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowProposal
-		step.Edge.Schema = schemaConfig.WorkflowProposal
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4582,9 +3773,6 @@ func (_q *OrganizationQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryAccountsTable, organization.DirectoryAccountsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryAccount
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4607,9 +3795,6 @@ func (_q *OrganizationQuery) QueryDirectoryGroups() *DirectoryGroupQuery {
 			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryGroupsTable, organization.DirectoryGroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4632,9 +3817,6 @@ func (_q *OrganizationQuery) QueryDirectoryMemberships() *DirectoryMembershipQue
 			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryMembershipsTable, organization.DirectoryMembershipsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4657,9 +3839,6 @@ func (_q *OrganizationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
 			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectorySyncRunsTable, organization.DirectorySyncRunsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectorySyncRun
-		step.Edge.Schema = schemaConfig.DirectorySyncRun
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4682,9 +3861,6 @@ func (_q *OrganizationQuery) QueryDiscussions() *DiscussionQuery {
 			sqlgraph.To(discussion.Table, discussion.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DiscussionsTable, organization.DiscussionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Discussion
-		step.Edge.Schema = schemaConfig.Discussion
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4707,9 +3883,6 @@ func (_q *OrganizationQuery) QueryVendorScoringConfigs() *VendorScoringConfigQue
 			sqlgraph.To(vendorscoringconfig.Table, vendorscoringconfig.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorScoringConfigsTable, organization.VendorScoringConfigsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.VendorScoringConfig
-		step.Edge.Schema = schemaConfig.VendorScoringConfig
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4732,9 +3905,6 @@ func (_q *OrganizationQuery) QueryVendorRiskScores() *VendorRiskScoreQuery {
 			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.VendorRiskScoresTable, organization.VendorRiskScoresColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.VendorRiskScore
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4757,9 +3927,6 @@ func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, organization.MembersTable, organization.MembersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgMembership
-		step.Edge.Schema = schemaConfig.OrgMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -4991,10 +4158,6 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withIdentityHolderCreators:             _q.withIdentityHolderCreators.Clone(),
 		withInternalPolicyCreators:             _q.withInternalPolicyCreators.Clone(),
 		withInviteCreators:                     _q.withInviteCreators.Clone(),
-		withJobRunnerCreators:                  _q.withJobRunnerCreators.Clone(),
-		withJobRunnerRegistrationTokenCreators: _q.withJobRunnerRegistrationTokenCreators.Clone(),
-		withJobRunnerTokenCreators:             _q.withJobRunnerTokenCreators.Clone(),
-		withJobTemplateCreators:                _q.withJobTemplateCreators.Clone(),
 		withMappedControlCreators:              _q.withMappedControlCreators.Clone(),
 		withNarrativeCreators:                  _q.withNarrativeCreators.Clone(),
 		withNoteCreators:                       _q.withNoteCreators.Clone(),
@@ -5008,8 +4171,6 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withReviewCreators:                     _q.withReviewCreators.Clone(),
 		withRiskCreators:                       _q.withRiskCreators.Clone(),
 		withScanCreators:                       _q.withScanCreators.Clone(),
-		withScheduledJobCreators:               _q.withScheduledJobCreators.Clone(),
-		withScheduledJobRunCreators:            _q.withScheduledJobRunCreators.Clone(),
 		withSLADefinitionCreators:              _q.withSLADefinitionCreators.Clone(),
 		withStandardCreators:                   _q.withStandardCreators.Clone(),
 		withSubcontrolCreators:                 _q.withSubcontrolCreators.Clone(),
@@ -5088,14 +4249,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withStandards:                          _q.withStandards.Clone(),
 		withActionPlans:                        _q.withActionPlans.Clone(),
 		withCustomDomains:                      _q.withCustomDomains.Clone(),
-		withJobRunners:                         _q.withJobRunners.Clone(),
-		withJobRunnerTokens:                    _q.withJobRunnerTokens.Clone(),
-		withJobRunnerRegistrationTokens:        _q.withJobRunnerRegistrationTokens.Clone(),
 		withDNSVerifications:                   _q.withDNSVerifications.Clone(),
-		withJobTemplates:                       _q.withJobTemplates.Clone(),
-		withScheduledJobs:                      _q.withScheduledJobs.Clone(),
-		withJobResults:                         _q.withJobResults.Clone(),
-		withScheduledJobRuns:                   _q.withScheduledJobRuns.Clone(),
 		withTrustCenters:                       _q.withTrustCenters.Clone(),
 		withAssets:                             _q.withAssets.Clone(),
 		withScans:                              _q.withScans.Clone(),
@@ -5499,50 +4653,6 @@ func (_q *OrganizationQuery) WithInviteCreators(opts ...func(*GroupQuery)) *Orga
 	return _q
 }
 
-// WithJobRunnerCreators tells the query-builder to eager-load the nodes that are connected to
-// the "job_runner_creators" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobRunnerCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobRunnerCreators = query
-	return _q
-}
-
-// WithJobRunnerRegistrationTokenCreators tells the query-builder to eager-load the nodes that are connected to
-// the "job_runner_registration_token_creators" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobRunnerRegistrationTokenCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobRunnerRegistrationTokenCreators = query
-	return _q
-}
-
-// WithJobRunnerTokenCreators tells the query-builder to eager-load the nodes that are connected to
-// the "job_runner_token_creators" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobRunnerTokenCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobRunnerTokenCreators = query
-	return _q
-}
-
-// WithJobTemplateCreators tells the query-builder to eager-load the nodes that are connected to
-// the "job_template_creators" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobTemplateCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobTemplateCreators = query
-	return _q
-}
-
 // WithMappedControlCreators tells the query-builder to eager-load the nodes that are connected to
 // the "mapped_control_creators" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMappedControlCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -5683,28 +4793,6 @@ func (_q *OrganizationQuery) WithScanCreators(opts ...func(*GroupQuery)) *Organi
 		opt(query)
 	}
 	_q.withScanCreators = query
-	return _q
-}
-
-// WithScheduledJobCreators tells the query-builder to eager-load the nodes that are connected to
-// the "scheduled_job_creators" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithScheduledJobCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withScheduledJobCreators = query
-	return _q
-}
-
-// WithScheduledJobRunCreators tells the query-builder to eager-load the nodes that are connected to
-// the "scheduled_job_run_creators" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithScheduledJobRunCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withScheduledJobRunCreators = query
 	return _q
 }
 
@@ -6566,39 +5654,6 @@ func (_q *OrganizationQuery) WithCustomDomains(opts ...func(*CustomDomainQuery))
 	return _q
 }
 
-// WithJobRunners tells the query-builder to eager-load the nodes that are connected to
-// the "job_runners" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobRunners(opts ...func(*JobRunnerQuery)) *OrganizationQuery {
-	query := (&JobRunnerClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobRunners = query
-	return _q
-}
-
-// WithJobRunnerTokens tells the query-builder to eager-load the nodes that are connected to
-// the "job_runner_tokens" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobRunnerTokens(opts ...func(*JobRunnerTokenQuery)) *OrganizationQuery {
-	query := (&JobRunnerTokenClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobRunnerTokens = query
-	return _q
-}
-
-// WithJobRunnerRegistrationTokens tells the query-builder to eager-load the nodes that are connected to
-// the "job_runner_registration_tokens" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobRunnerRegistrationTokens(opts ...func(*JobRunnerRegistrationTokenQuery)) *OrganizationQuery {
-	query := (&JobRunnerRegistrationTokenClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobRunnerRegistrationTokens = query
-	return _q
-}
-
 // WithDNSVerifications tells the query-builder to eager-load the nodes that are connected to
 // the "dns_verifications" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithDNSVerifications(opts ...func(*DNSVerificationQuery)) *OrganizationQuery {
@@ -6607,50 +5662,6 @@ func (_q *OrganizationQuery) WithDNSVerifications(opts ...func(*DNSVerificationQ
 		opt(query)
 	}
 	_q.withDNSVerifications = query
-	return _q
-}
-
-// WithJobTemplates tells the query-builder to eager-load the nodes that are connected to
-// the "job_templates" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobTemplates(opts ...func(*JobTemplateQuery)) *OrganizationQuery {
-	query := (&JobTemplateClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobTemplates = query
-	return _q
-}
-
-// WithScheduledJobs tells the query-builder to eager-load the nodes that are connected to
-// the "scheduled_jobs" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithScheduledJobs(opts ...func(*ScheduledJobQuery)) *OrganizationQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withScheduledJobs = query
-	return _q
-}
-
-// WithJobResults tells the query-builder to eager-load the nodes that are connected to
-// the "job_results" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithJobResults(opts ...func(*JobResultQuery)) *OrganizationQuery {
-	query := (&JobResultClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withJobResults = query
-	return _q
-}
-
-// WithScheduledJobRuns tells the query-builder to eager-load the nodes that are connected to
-// the "scheduled_job_runs" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithScheduledJobRuns(opts ...func(*ScheduledJobRunQuery)) *OrganizationQuery {
-	query := (&ScheduledJobRunClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withScheduledJobRuns = query
 	return _q
 }
 
@@ -7101,7 +6112,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [171]bool{
+		loadedTypes = [158]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -7135,10 +6146,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withIdentityHolderCreators != nil,
 			_q.withInternalPolicyCreators != nil,
 			_q.withInviteCreators != nil,
-			_q.withJobRunnerCreators != nil,
-			_q.withJobRunnerRegistrationTokenCreators != nil,
-			_q.withJobRunnerTokenCreators != nil,
-			_q.withJobTemplateCreators != nil,
 			_q.withMappedControlCreators != nil,
 			_q.withNarrativeCreators != nil,
 			_q.withNoteCreators != nil,
@@ -7152,8 +6159,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withReviewCreators != nil,
 			_q.withRiskCreators != nil,
 			_q.withScanCreators != nil,
-			_q.withScheduledJobCreators != nil,
-			_q.withScheduledJobRunCreators != nil,
 			_q.withSLADefinitionCreators != nil,
 			_q.withStandardCreators != nil,
 			_q.withSubcontrolCreators != nil,
@@ -7232,14 +6237,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withStandards != nil,
 			_q.withActionPlans != nil,
 			_q.withCustomDomains != nil,
-			_q.withJobRunners != nil,
-			_q.withJobRunnerTokens != nil,
-			_q.withJobRunnerRegistrationTokens != nil,
 			_q.withDNSVerifications != nil,
-			_q.withJobTemplates != nil,
-			_q.withScheduledJobs != nil,
-			_q.withJobResults != nil,
-			_q.withScheduledJobRuns != nil,
 			_q.withTrustCenters != nil,
 			_q.withAssets != nil,
 			_q.withScans != nil,
@@ -7284,8 +6282,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Organization
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -7561,38 +6557,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	if query := _q.withJobRunnerCreators; query != nil {
-		if err := _q.loadJobRunnerCreators(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobRunnerCreators = []*Group{} },
-			func(n *Organization, e *Group) { n.Edges.JobRunnerCreators = append(n.Edges.JobRunnerCreators, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withJobRunnerRegistrationTokenCreators; query != nil {
-		if err := _q.loadJobRunnerRegistrationTokenCreators(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobRunnerRegistrationTokenCreators = []*Group{} },
-			func(n *Organization, e *Group) {
-				n.Edges.JobRunnerRegistrationTokenCreators = append(n.Edges.JobRunnerRegistrationTokenCreators, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withJobRunnerTokenCreators; query != nil {
-		if err := _q.loadJobRunnerTokenCreators(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobRunnerTokenCreators = []*Group{} },
-			func(n *Organization, e *Group) {
-				n.Edges.JobRunnerTokenCreators = append(n.Edges.JobRunnerTokenCreators, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withJobTemplateCreators; query != nil {
-		if err := _q.loadJobTemplateCreators(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobTemplateCreators = []*Group{} },
-			func(n *Organization, e *Group) { n.Edges.JobTemplateCreators = append(n.Edges.JobTemplateCreators, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withMappedControlCreators; query != nil {
 		if err := _q.loadMappedControlCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.MappedControlCreators = []*Group{} },
@@ -7689,24 +6653,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadScanCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.ScanCreators = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.ScanCreators = append(n.Edges.ScanCreators, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withScheduledJobCreators; query != nil {
-		if err := _q.loadScheduledJobCreators(ctx, query, nodes,
-			func(n *Organization) { n.Edges.ScheduledJobCreators = []*Group{} },
-			func(n *Organization, e *Group) {
-				n.Edges.ScheduledJobCreators = append(n.Edges.ScheduledJobCreators, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withScheduledJobRunCreators; query != nil {
-		if err := _q.loadScheduledJobRunCreators(ctx, query, nodes,
-			func(n *Organization) { n.Edges.ScheduledJobRunCreators = []*Group{} },
-			func(n *Organization, e *Group) {
-				n.Edges.ScheduledJobRunCreators = append(n.Edges.ScheduledJobRunCreators, e)
-			}); err != nil {
 			return nil, err
 		}
 	}
@@ -8299,64 +7245,11 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	if query := _q.withJobRunners; query != nil {
-		if err := _q.loadJobRunners(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobRunners = []*JobRunner{} },
-			func(n *Organization, e *JobRunner) { n.Edges.JobRunners = append(n.Edges.JobRunners, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withJobRunnerTokens; query != nil {
-		if err := _q.loadJobRunnerTokens(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobRunnerTokens = []*JobRunnerToken{} },
-			func(n *Organization, e *JobRunnerToken) { n.Edges.JobRunnerTokens = append(n.Edges.JobRunnerTokens, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withJobRunnerRegistrationTokens; query != nil {
-		if err := _q.loadJobRunnerRegistrationTokens(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobRunnerRegistrationTokens = []*JobRunnerRegistrationToken{} },
-			func(n *Organization, e *JobRunnerRegistrationToken) {
-				n.Edges.JobRunnerRegistrationTokens = append(n.Edges.JobRunnerRegistrationTokens, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withDNSVerifications; query != nil {
 		if err := _q.loadDNSVerifications(ctx, query, nodes,
 			func(n *Organization) { n.Edges.DNSVerifications = []*DNSVerification{} },
 			func(n *Organization, e *DNSVerification) {
 				n.Edges.DNSVerifications = append(n.Edges.DNSVerifications, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withJobTemplates; query != nil {
-		if err := _q.loadJobTemplates(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobTemplates = []*JobTemplate{} },
-			func(n *Organization, e *JobTemplate) { n.Edges.JobTemplates = append(n.Edges.JobTemplates, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withScheduledJobs; query != nil {
-		if err := _q.loadScheduledJobs(ctx, query, nodes,
-			func(n *Organization) { n.Edges.ScheduledJobs = []*ScheduledJob{} },
-			func(n *Organization, e *ScheduledJob) { n.Edges.ScheduledJobs = append(n.Edges.ScheduledJobs, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withJobResults; query != nil {
-		if err := _q.loadJobResults(ctx, query, nodes,
-			func(n *Organization) { n.Edges.JobResults = []*JobResult{} },
-			func(n *Organization, e *JobResult) { n.Edges.JobResults = append(n.Edges.JobResults, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withScheduledJobRuns; query != nil {
-		if err := _q.loadScheduledJobRuns(ctx, query, nodes,
-			func(n *Organization) { n.Edges.ScheduledJobRuns = []*ScheduledJobRun{} },
-			func(n *Organization, e *ScheduledJobRun) {
-				n.Edges.ScheduledJobRuns = append(n.Edges.ScheduledJobRuns, e)
 			}); err != nil {
 			return nil, err
 		}
@@ -8851,34 +7744,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	for name, query := range _q.withNamedJobRunnerCreators {
-		if err := _q.loadJobRunnerCreators(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobRunnerCreators(name) },
-			func(n *Organization, e *Group) { n.appendNamedJobRunnerCreators(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedJobRunnerRegistrationTokenCreators {
-		if err := _q.loadJobRunnerRegistrationTokenCreators(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobRunnerRegistrationTokenCreators(name) },
-			func(n *Organization, e *Group) { n.appendNamedJobRunnerRegistrationTokenCreators(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedJobRunnerTokenCreators {
-		if err := _q.loadJobRunnerTokenCreators(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobRunnerTokenCreators(name) },
-			func(n *Organization, e *Group) { n.appendNamedJobRunnerTokenCreators(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedJobTemplateCreators {
-		if err := _q.loadJobTemplateCreators(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobTemplateCreators(name) },
-			func(n *Organization, e *Group) { n.appendNamedJobTemplateCreators(name, e) }); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range _q.withNamedMappedControlCreators {
 		if err := _q.loadMappedControlCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedMappedControlCreators(name) },
@@ -8967,20 +7832,6 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadScanCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedScanCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedScanCreators(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedScheduledJobCreators {
-		if err := _q.loadScheduledJobCreators(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedScheduledJobCreators(name) },
-			func(n *Organization, e *Group) { n.appendNamedScheduledJobCreators(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedScheduledJobRunCreators {
-		if err := _q.loadScheduledJobRunCreators(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedScheduledJobRunCreators(name) },
-			func(n *Organization, e *Group) { n.appendNamedScheduledJobRunCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -9509,61 +8360,10 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	for name, query := range _q.withNamedJobRunners {
-		if err := _q.loadJobRunners(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobRunners(name) },
-			func(n *Organization, e *JobRunner) { n.appendNamedJobRunners(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedJobRunnerTokens {
-		if err := _q.loadJobRunnerTokens(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobRunnerTokens(name) },
-			func(n *Organization, e *JobRunnerToken) { n.appendNamedJobRunnerTokens(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedJobRunnerRegistrationTokens {
-		if err := _q.loadJobRunnerRegistrationTokens(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobRunnerRegistrationTokens(name) },
-			func(n *Organization, e *JobRunnerRegistrationToken) {
-				n.appendNamedJobRunnerRegistrationTokens(name, e)
-			}); err != nil {
-			return nil, err
-		}
-	}
 	for name, query := range _q.withNamedDNSVerifications {
 		if err := _q.loadDNSVerifications(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedDNSVerifications(name) },
 			func(n *Organization, e *DNSVerification) { n.appendNamedDNSVerifications(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedJobTemplates {
-		if err := _q.loadJobTemplates(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobTemplates(name) },
-			func(n *Organization, e *JobTemplate) { n.appendNamedJobTemplates(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedScheduledJobs {
-		if err := _q.loadScheduledJobs(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedScheduledJobs(name) },
-			func(n *Organization, e *ScheduledJob) { n.appendNamedScheduledJobs(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedJobResults {
-		if err := _q.loadJobResults(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedJobResults(name) },
-			func(n *Organization, e *JobResult) { n.appendNamedJobResults(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedScheduledJobRuns {
-		if err := _q.loadScheduledJobRuns(ctx, query, nodes,
-			func(n *Organization) { n.appendNamedScheduledJobRuns(name) },
-			func(n *Organization, e *ScheduledJobRun) { n.appendNamedScheduledJobRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -10831,130 +9631,6 @@ func (_q *OrganizationQuery) loadInviteCreators(ctx context.Context, query *Grou
 	}
 	return nil
 }
-func (_q *OrganizationQuery) loadJobRunnerCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobRunnerCreatorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.organization_job_runner_creators
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "organization_job_runner_creators" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "organization_job_runner_creators" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadJobRunnerRegistrationTokenCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobRunnerRegistrationTokenCreatorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.organization_job_runner_registration_token_creators
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "organization_job_runner_registration_token_creators" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "organization_job_runner_registration_token_creators" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadJobRunnerTokenCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobRunnerTokenCreatorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.organization_job_runner_token_creators
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "organization_job_runner_token_creators" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "organization_job_runner_token_creators" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadJobTemplateCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobTemplateCreatorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.organization_job_template_creators
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "organization_job_template_creators" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "organization_job_template_creators" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (_q *OrganizationQuery) loadMappedControlCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -11353,68 +10029,6 @@ func (_q *OrganizationQuery) loadScanCreators(ctx context.Context, query *GroupQ
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_scan_creators" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadScheduledJobCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.ScheduledJobCreatorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.organization_scheduled_job_creators
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "organization_scheduled_job_creators" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "organization_scheduled_job_creators" returned %v for node %v`, *fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadScheduledJobRunCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	query.withFKs = true
-	query.Where(predicate.Group(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.ScheduledJobRunCreatorsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.organization_scheduled_job_run_creators
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "organization_scheduled_job_run_creators" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "organization_scheduled_job_run_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -12418,7 +11032,6 @@ func (_q *OrganizationQuery) loadPersonalAccessTokens(ctx context.Context, query
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(organization.PersonalAccessTokensTable)
-		joinT.Schema(_q.schemaConfig.OrganizationPersonalAccessTokens)
 		s.Join(joinT).On(s.C(personalaccesstoken.FieldID), joinT.C(organization.PersonalAccessTokensPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(organization.PersonalAccessTokensPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -12660,7 +11273,6 @@ func (_q *OrganizationQuery) loadUsers(ctx context.Context, query *UserQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(organization.UsersTable)
-		joinT.Schema(_q.schemaConfig.OrgMembership)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(organization.UsersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(organization.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -12722,7 +11334,6 @@ func (_q *OrganizationQuery) loadFiles(ctx context.Context, query *FileQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(organization.FilesTable)
-		joinT.Schema(_q.schemaConfig.OrganizationFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(organization.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(organization.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -12784,7 +11395,6 @@ func (_q *OrganizationQuery) loadEvents(ctx context.Context, query *EventQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(organization.EventsTable)
-		joinT.Schema(_q.schemaConfig.OrganizationEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(organization.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(organization.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -13933,96 +12543,6 @@ func (_q *OrganizationQuery) loadCustomDomains(ctx context.Context, query *Custo
 	}
 	return nil
 }
-func (_q *OrganizationQuery) loadJobRunners(ctx context.Context, query *JobRunnerQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *JobRunner)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(jobrunner.FieldOwnerID)
-	}
-	query.Where(predicate.JobRunner(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobRunnersColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadJobRunnerTokens(ctx context.Context, query *JobRunnerTokenQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *JobRunnerToken)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(jobrunnertoken.FieldOwnerID)
-	}
-	query.Where(predicate.JobRunnerToken(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobRunnerTokensColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadJobRunnerRegistrationTokens(ctx context.Context, query *JobRunnerRegistrationTokenQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *JobRunnerRegistrationToken)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(jobrunnerregistrationtoken.FieldOwnerID)
-	}
-	query.Where(predicate.JobRunnerRegistrationToken(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobRunnerRegistrationTokensColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
 func (_q *OrganizationQuery) loadDNSVerifications(ctx context.Context, query *DNSVerificationQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DNSVerification)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -14038,126 +12558,6 @@ func (_q *OrganizationQuery) loadDNSVerifications(ctx context.Context, query *DN
 	}
 	query.Where(predicate.DNSVerification(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.DNSVerificationsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadJobTemplates(ctx context.Context, query *JobTemplateQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *JobTemplate)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(jobtemplate.FieldOwnerID)
-	}
-	query.Where(predicate.JobTemplate(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobTemplatesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadScheduledJobs(ctx context.Context, query *ScheduledJobQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ScheduledJob)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(scheduledjob.FieldOwnerID)
-	}
-	query.Where(predicate.ScheduledJob(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.ScheduledJobsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadJobResults(ctx context.Context, query *JobResultQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *JobResult)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(jobresult.FieldOwnerID)
-	}
-	query.Where(predicate.JobResult(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.JobResultsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		fk := n.OwnerID
-		node, ok := nodeids[fk]
-		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
-		}
-		assign(node, n)
-	}
-	return nil
-}
-func (_q *OrganizationQuery) loadScheduledJobRuns(ctx context.Context, query *ScheduledJobRunQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *ScheduledJobRun)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Organization)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
-		if init != nil {
-			init(nodes[i])
-		}
-	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(scheduledjobrun.FieldOwnerID)
-	}
-	query.Where(predicate.ScheduledJobRun(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(organization.ScheduledJobRunsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -15177,8 +13577,6 @@ func (_q *OrganizationQuery) loadMembers(ctx context.Context, query *OrgMembersh
 
 func (_q *OrganizationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Organization
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -15250,9 +13648,6 @@ func (_q *OrganizationQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Organization)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}
@@ -15741,62 +14136,6 @@ func (_q *OrganizationQuery) WithNamedInviteCreators(name string, opts ...func(*
 	return _q
 }
 
-// WithNamedJobRunnerCreators tells the query-builder to eager-load the nodes that are connected to the "job_runner_creators"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobRunnerCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobRunnerCreators == nil {
-		_q.withNamedJobRunnerCreators = make(map[string]*GroupQuery)
-	}
-	_q.withNamedJobRunnerCreators[name] = query
-	return _q
-}
-
-// WithNamedJobRunnerRegistrationTokenCreators tells the query-builder to eager-load the nodes that are connected to the "job_runner_registration_token_creators"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobRunnerRegistrationTokenCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobRunnerRegistrationTokenCreators == nil {
-		_q.withNamedJobRunnerRegistrationTokenCreators = make(map[string]*GroupQuery)
-	}
-	_q.withNamedJobRunnerRegistrationTokenCreators[name] = query
-	return _q
-}
-
-// WithNamedJobRunnerTokenCreators tells the query-builder to eager-load the nodes that are connected to the "job_runner_token_creators"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobRunnerTokenCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobRunnerTokenCreators == nil {
-		_q.withNamedJobRunnerTokenCreators = make(map[string]*GroupQuery)
-	}
-	_q.withNamedJobRunnerTokenCreators[name] = query
-	return _q
-}
-
-// WithNamedJobTemplateCreators tells the query-builder to eager-load the nodes that are connected to the "job_template_creators"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobTemplateCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobTemplateCreators == nil {
-		_q.withNamedJobTemplateCreators = make(map[string]*GroupQuery)
-	}
-	_q.withNamedJobTemplateCreators[name] = query
-	return _q
-}
-
 // WithNamedMappedControlCreators tells the query-builder to eager-load the nodes that are connected to the "mapped_control_creators"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedMappedControlCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
@@ -15976,34 +14315,6 @@ func (_q *OrganizationQuery) WithNamedScanCreators(name string, opts ...func(*Gr
 		_q.withNamedScanCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedScanCreators[name] = query
-	return _q
-}
-
-// WithNamedScheduledJobCreators tells the query-builder to eager-load the nodes that are connected to the "scheduled_job_creators"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedScheduledJobCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedScheduledJobCreators == nil {
-		_q.withNamedScheduledJobCreators = make(map[string]*GroupQuery)
-	}
-	_q.withNamedScheduledJobCreators[name] = query
-	return _q
-}
-
-// WithNamedScheduledJobRunCreators tells the query-builder to eager-load the nodes that are connected to the "scheduled_job_run_creators"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedScheduledJobRunCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
-	query := (&GroupClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedScheduledJobRunCreators == nil {
-		_q.withNamedScheduledJobRunCreators = make(map[string]*GroupQuery)
-	}
-	_q.withNamedScheduledJobRunCreators[name] = query
 	return _q
 }
 
@@ -17057,48 +15368,6 @@ func (_q *OrganizationQuery) WithNamedCustomDomains(name string, opts ...func(*C
 	return _q
 }
 
-// WithNamedJobRunners tells the query-builder to eager-load the nodes that are connected to the "job_runners"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobRunners(name string, opts ...func(*JobRunnerQuery)) *OrganizationQuery {
-	query := (&JobRunnerClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobRunners == nil {
-		_q.withNamedJobRunners = make(map[string]*JobRunnerQuery)
-	}
-	_q.withNamedJobRunners[name] = query
-	return _q
-}
-
-// WithNamedJobRunnerTokens tells the query-builder to eager-load the nodes that are connected to the "job_runner_tokens"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobRunnerTokens(name string, opts ...func(*JobRunnerTokenQuery)) *OrganizationQuery {
-	query := (&JobRunnerTokenClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobRunnerTokens == nil {
-		_q.withNamedJobRunnerTokens = make(map[string]*JobRunnerTokenQuery)
-	}
-	_q.withNamedJobRunnerTokens[name] = query
-	return _q
-}
-
-// WithNamedJobRunnerRegistrationTokens tells the query-builder to eager-load the nodes that are connected to the "job_runner_registration_tokens"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobRunnerRegistrationTokens(name string, opts ...func(*JobRunnerRegistrationTokenQuery)) *OrganizationQuery {
-	query := (&JobRunnerRegistrationTokenClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobRunnerRegistrationTokens == nil {
-		_q.withNamedJobRunnerRegistrationTokens = make(map[string]*JobRunnerRegistrationTokenQuery)
-	}
-	_q.withNamedJobRunnerRegistrationTokens[name] = query
-	return _q
-}
-
 // WithNamedDNSVerifications tells the query-builder to eager-load the nodes that are connected to the "dns_verifications"
 // edge with the given name. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNamedDNSVerifications(name string, opts ...func(*DNSVerificationQuery)) *OrganizationQuery {
@@ -17110,62 +15379,6 @@ func (_q *OrganizationQuery) WithNamedDNSVerifications(name string, opts ...func
 		_q.withNamedDNSVerifications = make(map[string]*DNSVerificationQuery)
 	}
 	_q.withNamedDNSVerifications[name] = query
-	return _q
-}
-
-// WithNamedJobTemplates tells the query-builder to eager-load the nodes that are connected to the "job_templates"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobTemplates(name string, opts ...func(*JobTemplateQuery)) *OrganizationQuery {
-	query := (&JobTemplateClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobTemplates == nil {
-		_q.withNamedJobTemplates = make(map[string]*JobTemplateQuery)
-	}
-	_q.withNamedJobTemplates[name] = query
-	return _q
-}
-
-// WithNamedScheduledJobs tells the query-builder to eager-load the nodes that are connected to the "scheduled_jobs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedScheduledJobs(name string, opts ...func(*ScheduledJobQuery)) *OrganizationQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedScheduledJobs == nil {
-		_q.withNamedScheduledJobs = make(map[string]*ScheduledJobQuery)
-	}
-	_q.withNamedScheduledJobs[name] = query
-	return _q
-}
-
-// WithNamedJobResults tells the query-builder to eager-load the nodes that are connected to the "job_results"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedJobResults(name string, opts ...func(*JobResultQuery)) *OrganizationQuery {
-	query := (&JobResultClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedJobResults == nil {
-		_q.withNamedJobResults = make(map[string]*JobResultQuery)
-	}
-	_q.withNamedJobResults[name] = query
-	return _q
-}
-
-// WithNamedScheduledJobRuns tells the query-builder to eager-load the nodes that are connected to the "scheduled_job_runs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *OrganizationQuery) WithNamedScheduledJobRuns(name string, opts ...func(*ScheduledJobRunQuery)) *OrganizationQuery {
-	query := (&ScheduledJobRunClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedScheduledJobRuns == nil {
-		_q.withNamedScheduledJobRuns = make(map[string]*ScheduledJobRunQuery)
-	}
-	_q.withNamedScheduledJobRuns[name] = query
 	return _q
 }
 

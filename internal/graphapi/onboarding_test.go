@@ -4,13 +4,15 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 func TestMutationCreateOnboarding(t *testing.T) {
@@ -18,8 +20,8 @@ func TestMutationCreateOnboarding(t *testing.T) {
 
 	// create another user for this test
 	// so it doesn't interfere with the other tests
-	onboardingUser := suite.userBuilder(context.Background(), t)
-	onboardingUser2 := suite.userBuilder(context.Background(), t)
+	onboardingUser := suite.UserBuilder(context.Background(), t)
+	onboardingUser2 := suite.UserBuilder(context.Background(), t)
 
 	companyName := "Test Acme Corp, Inc."
 
@@ -35,7 +37,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			request: testclient.CreateOnboardingInput{
 				CompanyName: companyName,
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    onboardingUser.UserCtx,
 		},
 		{
@@ -58,13 +60,13 @@ func TestMutationCreateOnboarding(t *testing.T) {
 					"risk_assessment":   true,
 				},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    onboardingUser2.UserCtx,
 		},
 		{
 			name:        "missing required field",
 			request:     testclient.CreateOnboardingInput{},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         onboardingUser.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
@@ -73,7 +75,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			request: testclient.CreateOnboardingInput{
 				CompanyName: companyName,
 			},
-			client:      suite.client.apiWithPAT,
+			client:      suite.Client.APIWithPAT,
 			ctx:         context.Background(),
 			expectedErr: common.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -82,7 +84,7 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			request: testclient.CreateOnboardingInput{
 				CompanyName: companyName,
 			},
-			client:      suite.client.apiWithToken,
+			client:      suite.Client.APIWithToken,
 			ctx:         context.Background(),
 			expectedErr: common.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -106,8 +108,8 @@ func TestMutationCreateOnboarding(t *testing.T) {
 			assert.Check(t, resp.CreateOnboarding.Onboarding.OrganizationID != nil)
 			assert.Check(t, is.Equal(tc.request.CompanyName, resp.CreateOnboarding.Onboarding.CompanyName))
 
-			// Cleanup onboarding data
-			(&Cleanup[*generated.OnboardingDeleteOne]{client: suite.client.db.Onboarding, IDs: []string{resp.CreateOnboarding.Onboarding.ID}}).MustDelete(tc.ctx, t)
+			// th.Cleanup onboarding data
+			(&th.Cleanup[*generated.OnboardingDeleteOne]{Client: suite.Client.DB.Onboarding, IDs: []string{resp.CreateOnboarding.Onboarding.ID}}).MustDelete(tc.ctx, t)
 		})
 	}
 }

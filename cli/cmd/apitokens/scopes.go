@@ -7,7 +7,7 @@ import (
 	"sort"
 
 	"github.com/spf13/cobra"
-	fgamodel "github.com/theopenlane/core/fga/model"
+	fgamodel "github.com/theopenlane/core/v2/fga/model"
 )
 
 var scopesCmd = &cobra.Command{

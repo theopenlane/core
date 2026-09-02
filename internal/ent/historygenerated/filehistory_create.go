@@ -12,7 +12,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/filehistory"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/filehistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -499,6 +500,20 @@ func (_c *FileHistoryCreate) SetNillableStorageProvider(v *string) *FileHistoryC
 	return _c
 }
 
+// SetBackupState sets the "backup_state" field.
+func (_c *FileHistoryCreate) SetBackupState(v models.FileBackupState) *FileHistoryCreate {
+	_c.mutation.SetBackupState(v)
+	return _c
+}
+
+// SetNillableBackupState sets the "backup_state" field if the given value is not nil.
+func (_c *FileHistoryCreate) SetNillableBackupState(v *models.FileBackupState) *FileHistoryCreate {
+	if v != nil {
+		_c.SetBackupState(*v)
+	}
+	return _c
+}
+
 // SetLastAccessedAt sets the "last_accessed_at" field.
 func (_c *FileHistoryCreate) SetLastAccessedAt(v time.Time) *FileHistoryCreate {
 	_c.mutation.SetLastAccessedAt(v)
@@ -656,7 +671,6 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 		_node = &FileHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(filehistory.Table, sqlgraph.NewFieldSpec(filehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.FileHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -812,6 +826,10 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.StorageProvider(); ok {
 		_spec.SetField(filehistory.FieldStorageProvider, field.TypeString, value)
 		_node.StorageProvider = value
+	}
+	if value, ok := _c.mutation.BackupState(); ok {
+		_spec.SetField(filehistory.FieldBackupState, field.TypeJSON, value)
+		_node.BackupState = value
 	}
 	if value, ok := _c.mutation.LastAccessedAt(); ok {
 		_spec.SetField(filehistory.FieldLastAccessedAt, field.TypeTime, value)

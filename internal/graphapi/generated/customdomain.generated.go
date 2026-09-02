@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _CustomDomainBulkCreatePayload_customDomains(ctx con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.CustomDomain) graphql.Marshaler {
-			return ec.marshalOCustomDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomainᚄ(ctx, selections, v)
+			return ec.marshalOCustomDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -139,7 +139,7 @@ func (ec *executionContext) _CustomDomainBulkUpdatePayload_customDomains(ctx con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.CustomDomain) graphql.Marshaler {
-			return ec.marshalOCustomDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomainᚄ(ctx, selections, v)
+			return ec.marshalOCustomDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -240,7 +240,7 @@ func (ec *executionContext) _CustomDomainCreatePayload_customDomain(ctx context.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomDomain) graphql.Marshaler {
-			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
+			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
 		},
 		true,
 		true,
@@ -295,7 +295,7 @@ func (ec *executionContext) _CustomDomainUpdatePayload_customDomain(ctx context.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomDomain) graphql.Marshaler {
-			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
+			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
 		},
 		true,
 		true,
@@ -327,7 +327,7 @@ func (ec *executionContext) _CustomDomainValidatePayload_customDomain(ctx contex
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.CustomDomain) graphql.Marshaler {
-			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
+			return ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx, selections, v)
 		},
 		true,
 		true,
@@ -653,11 +653,11 @@ func (ec *executionContext) _CustomDomainValidatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNCustomDomainBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainBulkCreatePayload) graphql.Marshaler {
 	return ec._CustomDomainBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -667,11 +667,11 @@ func (ec *executionContext) marshalNCustomDomainBulkCreatePayload2ᚖgithubᚗco
 	return ec._CustomDomainBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomDomainBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainBulkDeletePayload) graphql.Marshaler {
 	return ec._CustomDomainBulkDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -681,11 +681,11 @@ func (ec *executionContext) marshalNCustomDomainBulkDeletePayload2ᚖgithubᚗco
 	return ec._CustomDomainBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomDomainBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainBulkUpdatePayload) graphql.Marshaler {
 	return ec._CustomDomainBulkUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -695,11 +695,11 @@ func (ec *executionContext) marshalNCustomDomainBulkUpdatePayload2ᚖgithubᚗco
 	return ec._CustomDomainBulkUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainCreatePayload) graphql.Marshaler {
 	return ec._CustomDomainCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -709,11 +709,11 @@ func (ec *executionContext) marshalNCustomDomainCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._CustomDomainCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomDomainDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainDeletePayload) graphql.Marshaler {
 	return ec._CustomDomainDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomDomainDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -723,11 +723,11 @@ func (ec *executionContext) marshalNCustomDomainDeletePayload2ᚖgithubᚗcomᚋ
 	return ec._CustomDomainDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomDomainUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainUpdatePayload) graphql.Marshaler {
 	return ec._CustomDomainUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomDomainUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -737,11 +737,11 @@ func (ec *executionContext) marshalNCustomDomainUpdatePayload2ᚖgithubᚗcomᚋ
 	return ec._CustomDomainUpdatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomDomainValidatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainValidatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainValidatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomDomainValidatePayload) graphql.Marshaler {
 	return ec._CustomDomainValidatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCustomDomainValidatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainValidatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCustomDomainValidatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomDomainValidatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomDomainValidatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

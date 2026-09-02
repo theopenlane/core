@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // DNSVerificationCreate is the builder for creating a DNSVerification entity.
@@ -443,7 +443,6 @@ func (_c *DNSVerificationCreate) createSpec() (*DNSVerification, *sqlgraph.Creat
 		_node = &DNSVerification{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(dnsverification.Table, sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.DNSVerification
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -527,7 +526,6 @@ func (_c *DNSVerificationCreate) createSpec() (*DNSVerification, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DNSVerification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -545,7 +543,6 @@ func (_c *DNSVerificationCreate) createSpec() (*DNSVerification, *sqlgraph.Creat
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

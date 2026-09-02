@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subprocessorhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subprocessorhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -402,7 +402,6 @@ func (_c *SubprocessorHistoryCreate) createSpec() (*SubprocessorHistory, *sqlgra
 		_node = &SubprocessorHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subprocessorhistory.Table, sqlgraph.NewFieldSpec(subprocessorhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.SubprocessorHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

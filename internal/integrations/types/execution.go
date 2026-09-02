@@ -2,7 +2,7 @@ package types //nolint:revive
 
 import (
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // IntegrationSource is the integration-specific provenance carried in the

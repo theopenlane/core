@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 )
 
 // ProgramMembershipCreate is the builder for creating a ProgramMembership entity.
@@ -281,7 +281,6 @@ func (_c *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.C
 		_node = &ProgramMembership{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(programmembership.Table, sqlgraph.NewFieldSpec(programmembership.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ProgramMembership
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -321,7 +320,6 @@ func (_c *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -339,7 +337,6 @@ func (_c *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -357,7 +354,6 @@ func (_c *ProgramMembershipCreate) createSpec() (*ProgramMembership, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

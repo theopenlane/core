@@ -8,195 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/sladefinitionhistory"
 )
 
 // SLADefinitionHistoryUpdate is the builder for updating SLADefinitionHistory entities.
 type SLADefinitionHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *SLADefinitionHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *SLADefinitionHistoryMutation
 }
 
 // Where appends a list predicates to the SLADefinitionHistoryUpdate builder.
 func (_u *SLADefinitionHistoryUpdate) Where(ps ...predicate.SLADefinitionHistory) *SLADefinitionHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *SLADefinitionHistoryUpdate) SetUpdatedAt(v time.Time) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *SLADefinitionHistoryUpdate) ClearUpdatedAt() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *SLADefinitionHistoryUpdate) SetUpdatedBy(v string) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableUpdatedBy(v *string) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *SLADefinitionHistoryUpdate) ClearUpdatedBy() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *SLADefinitionHistoryUpdate) SetUpdatedByImpersonator(v string) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *SLADefinitionHistoryUpdate) ClearUpdatedByImpersonator() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *SLADefinitionHistoryUpdate) SetDeletedAt(v time.Time) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableDeletedAt(v *time.Time) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *SLADefinitionHistoryUpdate) ClearDeletedAt() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *SLADefinitionHistoryUpdate) SetDeletedBy(v string) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableDeletedBy(v *string) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *SLADefinitionHistoryUpdate) ClearDeletedBy() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *SLADefinitionHistoryUpdate) SetTags(v []string) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *SLADefinitionHistoryUpdate) AppendTags(v []string) *SLADefinitionHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *SLADefinitionHistoryUpdate) ClearTags() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *SLADefinitionHistoryUpdate) SetOwnerID(v string) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableOwnerID(v *string) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *SLADefinitionHistoryUpdate) ClearOwnerID() *SLADefinitionHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetSLADays sets the "sla_days" field.
-func (_u *SLADefinitionHistoryUpdate) SetSLADays(v int) *SLADefinitionHistoryUpdate {
-	_u.mutation.ResetSLADays()
-	_u.mutation.SetSLADays(v)
-	return _u
-}
-
-// SetNillableSLADays sets the "sla_days" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableSLADays(v *int) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetSLADays(*v)
-	}
-	return _u
-}
-
-// AddSLADays adds value to the "sla_days" field.
-func (_u *SLADefinitionHistoryUpdate) AddSLADays(v int) *SLADefinitionHistoryUpdate {
-	_u.mutation.AddSLADays(v)
-	return _u
-}
-
-// SetSecurityLevel sets the "security_level" field.
-func (_u *SLADefinitionHistoryUpdate) SetSecurityLevel(v enums.SecurityLevel) *SLADefinitionHistoryUpdate {
-	_u.mutation.SetSecurityLevel(v)
-	return _u
-}
-
-// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdate) SetNillableSecurityLevel(v *enums.SecurityLevel) *SLADefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetSecurityLevel(*v)
-	}
 	return _u
 }
 
@@ -207,9 +36,6 @@ func (_u *SLADefinitionHistoryUpdate) Mutation() *SLADefinitionHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *SLADefinitionHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -235,38 +61,7 @@ func (_u *SLADefinitionHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *SLADefinitionHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if sladefinitionhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized sladefinitionhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := sladefinitionhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *SLADefinitionHistoryUpdate) check() error {
-	if v, ok := _u.mutation.SecurityLevel(); ok {
-		if err := sladefinitionhistory.SecurityLevelValidator(v); err != nil {
-			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "SLADefinitionHistory.security_level": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *SLADefinitionHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SLADefinitionHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *SLADefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(sladefinitionhistory.Table, sladefinitionhistory.Columns, sqlgraph.NewFieldSpec(sladefinitionhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -281,68 +76,30 @@ func (_u *SLADefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(sladefinitionhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(sladefinitionhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(sladefinitionhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(sladefinitionhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(sladefinitionhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(sladefinitionhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, sladefinitionhistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(sladefinitionhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.SLADays(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedSLADays(); ok {
-		_spec.AddField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.SecurityLevel(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.SLADefinitionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{sladefinitionhistory.Label}
@@ -358,175 +115,9 @@ func (_u *SLADefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 // SLADefinitionHistoryUpdateOne is the builder for updating a single SLADefinitionHistory entity.
 type SLADefinitionHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *SLADefinitionHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetUpdatedAt(v time.Time) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearUpdatedAt() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetUpdatedBy(v string) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableUpdatedBy(v *string) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearUpdatedBy() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetUpdatedByImpersonator(v string) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearUpdatedByImpersonator() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetDeletedAt(v time.Time) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearDeletedAt() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetDeletedBy(v string) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableDeletedBy(v *string) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearDeletedBy() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetTags(v []string) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *SLADefinitionHistoryUpdateOne) AppendTags(v []string) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearTags() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetOwnerID(v string) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableOwnerID(v *string) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *SLADefinitionHistoryUpdateOne) ClearOwnerID() *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetSLADays sets the "sla_days" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetSLADays(v int) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.ResetSLADays()
-	_u.mutation.SetSLADays(v)
-	return _u
-}
-
-// SetNillableSLADays sets the "sla_days" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableSLADays(v *int) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetSLADays(*v)
-	}
-	return _u
-}
-
-// AddSLADays adds value to the "sla_days" field.
-func (_u *SLADefinitionHistoryUpdateOne) AddSLADays(v int) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.AddSLADays(v)
-	return _u
-}
-
-// SetSecurityLevel sets the "security_level" field.
-func (_u *SLADefinitionHistoryUpdateOne) SetSecurityLevel(v enums.SecurityLevel) *SLADefinitionHistoryUpdateOne {
-	_u.mutation.SetSecurityLevel(v)
-	return _u
-}
-
-// SetNillableSecurityLevel sets the "security_level" field if the given value is not nil.
-func (_u *SLADefinitionHistoryUpdateOne) SetNillableSecurityLevel(v *enums.SecurityLevel) *SLADefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetSecurityLevel(*v)
-	}
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *SLADefinitionHistoryMutation
 }
 
 // Mutation returns the SLADefinitionHistoryMutation object of the builder.
@@ -549,9 +140,6 @@ func (_u *SLADefinitionHistoryUpdateOne) Select(field string, fields ...string) 
 
 // Save executes the query and returns the updated SLADefinitionHistory entity.
 func (_u *SLADefinitionHistoryUpdateOne) Save(ctx context.Context) (*SLADefinitionHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -577,38 +165,7 @@ func (_u *SLADefinitionHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *SLADefinitionHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if sladefinitionhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized sladefinitionhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := sladefinitionhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *SLADefinitionHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.SecurityLevel(); ok {
-		if err := sladefinitionhistory.SecurityLevelValidator(v); err != nil {
-			return &ValidationError{Name: "security_level", err: fmt.Errorf(`historygenerated: validator failed for field "SLADefinitionHistory.security_level": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *SLADefinitionHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *SLADefinitionHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *SLADefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SLADefinitionHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(sladefinitionhistory.Table, sladefinitionhistory.Columns, sqlgraph.NewFieldSpec(sladefinitionhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -640,68 +197,30 @@ func (_u *SLADefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *SL
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(sladefinitionhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(sladefinitionhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(sladefinitionhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(sladefinitionhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(sladefinitionhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(sladefinitionhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, sladefinitionhistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(sladefinitionhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(sladefinitionhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.SLADays(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedSLADays(); ok {
-		_spec.AddField(sladefinitionhistory.FieldSLADays, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.SecurityLevel(); ok {
-		_spec.SetField(sladefinitionhistory.FieldSecurityLevel, field.TypeEnum, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.SLADefinitionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &SLADefinitionHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

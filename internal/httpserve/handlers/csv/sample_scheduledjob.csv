@@ -1,2 +1,0 @@
-Active,Configuration,Cron,OwnerId,JobTemplateId,ControlIDs,SubcontrolIDs,JobRunnerId,ControlRefCodes
-example_active,example_configuration,example_cron,example_ownerid,example_jobtemplateid,example_controlids,example_subcontrolids,example_jobrunnerid,"example_controlrefcodes1,example_controlrefcodes2"

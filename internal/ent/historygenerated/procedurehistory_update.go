@@ -8,760 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/procedurehistory"
 )
 
 // ProcedureHistoryUpdate is the builder for updating ProcedureHistory entities.
 type ProcedureHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *ProcedureHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *ProcedureHistoryMutation
 }
 
 // Where appends a list predicates to the ProcedureHistoryUpdate builder.
 func (_u *ProcedureHistoryUpdate) Where(ps ...predicate.ProcedureHistory) *ProcedureHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *ProcedureHistoryUpdate) SetUpdatedAt(v time.Time) *ProcedureHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *ProcedureHistoryUpdate) ClearUpdatedAt() *ProcedureHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *ProcedureHistoryUpdate) SetUpdatedBy(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableUpdatedBy(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *ProcedureHistoryUpdate) ClearUpdatedBy() *ProcedureHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *ProcedureHistoryUpdate) SetUpdatedByImpersonator(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *ProcedureHistoryUpdate) ClearUpdatedByImpersonator() *ProcedureHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *ProcedureHistoryUpdate) SetDeletedAt(v time.Time) *ProcedureHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *ProcedureHistoryUpdate) ClearDeletedAt() *ProcedureHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *ProcedureHistoryUpdate) SetDeletedBy(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableDeletedBy(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *ProcedureHistoryUpdate) ClearDeletedBy() *ProcedureHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *ProcedureHistoryUpdate) SetTags(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *ProcedureHistoryUpdate) AppendTags(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *ProcedureHistoryUpdate) ClearTags() *ProcedureHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetRevision sets the "revision" field.
-func (_u *ProcedureHistoryUpdate) SetRevision(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetRevision(v)
-	return _u
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableRevision(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetRevision(*v)
-	}
-	return _u
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (_u *ProcedureHistoryUpdate) ClearRevision() *ProcedureHistoryUpdate {
-	_u.mutation.ClearRevision()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *ProcedureHistoryUpdate) SetOwnerID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableOwnerID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ProcedureHistoryUpdate) ClearOwnerID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *ProcedureHistoryUpdate) SetName(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableName(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *ProcedureHistoryUpdate) SetStatus(v enums.DocumentStatus) *ProcedureHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableStatus(v *enums.DocumentStatus) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *ProcedureHistoryUpdate) ClearStatus() *ProcedureHistoryUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetManagementMode sets the "management_mode" field.
-func (_u *ProcedureHistoryUpdate) SetManagementMode(v enums.DocumentManagementMode) *ProcedureHistoryUpdate {
-	_u.mutation.SetManagementMode(v)
-	return _u
-}
-
-// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableManagementMode(v *enums.DocumentManagementMode) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetManagementMode(*v)
-	}
-	return _u
-}
-
-// ClearManagementMode clears the value of the "management_mode" field.
-func (_u *ProcedureHistoryUpdate) ClearManagementMode() *ProcedureHistoryUpdate {
-	_u.mutation.ClearManagementMode()
-	return _u
-}
-
-// SetDetails sets the "details" field.
-func (_u *ProcedureHistoryUpdate) SetDetails(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetDetails(v)
-	return _u
-}
-
-// SetNillableDetails sets the "details" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableDetails(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetDetails(*v)
-	}
-	return _u
-}
-
-// ClearDetails clears the value of the "details" field.
-func (_u *ProcedureHistoryUpdate) ClearDetails() *ProcedureHistoryUpdate {
-	_u.mutation.ClearDetails()
-	return _u
-}
-
-// SetDetailsJSON sets the "details_json" field.
-func (_u *ProcedureHistoryUpdate) SetDetailsJSON(v []interface{}) *ProcedureHistoryUpdate {
-	_u.mutation.SetDetailsJSON(v)
-	return _u
-}
-
-// AppendDetailsJSON appends value to the "details_json" field.
-func (_u *ProcedureHistoryUpdate) AppendDetailsJSON(v []interface{}) *ProcedureHistoryUpdate {
-	_u.mutation.AppendDetailsJSON(v)
-	return _u
-}
-
-// ClearDetailsJSON clears the value of the "details_json" field.
-func (_u *ProcedureHistoryUpdate) ClearDetailsJSON() *ProcedureHistoryUpdate {
-	_u.mutation.ClearDetailsJSON()
-	return _u
-}
-
-// SetApprovalRequired sets the "approval_required" field.
-func (_u *ProcedureHistoryUpdate) SetApprovalRequired(v bool) *ProcedureHistoryUpdate {
-	_u.mutation.SetApprovalRequired(v)
-	return _u
-}
-
-// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableApprovalRequired(v *bool) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetApprovalRequired(*v)
-	}
-	return _u
-}
-
-// ClearApprovalRequired clears the value of the "approval_required" field.
-func (_u *ProcedureHistoryUpdate) ClearApprovalRequired() *ProcedureHistoryUpdate {
-	_u.mutation.ClearApprovalRequired()
-	return _u
-}
-
-// SetReviewDue sets the "review_due" field.
-func (_u *ProcedureHistoryUpdate) SetReviewDue(v time.Time) *ProcedureHistoryUpdate {
-	_u.mutation.SetReviewDue(v)
-	return _u
-}
-
-// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableReviewDue(v *time.Time) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetReviewDue(*v)
-	}
-	return _u
-}
-
-// ClearReviewDue clears the value of the "review_due" field.
-func (_u *ProcedureHistoryUpdate) ClearReviewDue() *ProcedureHistoryUpdate {
-	_u.mutation.ClearReviewDue()
-	return _u
-}
-
-// SetReviewFrequency sets the "review_frequency" field.
-func (_u *ProcedureHistoryUpdate) SetReviewFrequency(v enums.Frequency) *ProcedureHistoryUpdate {
-	_u.mutation.SetReviewFrequency(v)
-	return _u
-}
-
-// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableReviewFrequency(v *enums.Frequency) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetReviewFrequency(*v)
-	}
-	return _u
-}
-
-// ClearReviewFrequency clears the value of the "review_frequency" field.
-func (_u *ProcedureHistoryUpdate) ClearReviewFrequency() *ProcedureHistoryUpdate {
-	_u.mutation.ClearReviewFrequency()
-	return _u
-}
-
-// SetApproverID sets the "approver_id" field.
-func (_u *ProcedureHistoryUpdate) SetApproverID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetApproverID(v)
-	return _u
-}
-
-// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableApproverID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetApproverID(*v)
-	}
-	return _u
-}
-
-// ClearApproverID clears the value of the "approver_id" field.
-func (_u *ProcedureHistoryUpdate) ClearApproverID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearApproverID()
-	return _u
-}
-
-// SetDelegateID sets the "delegate_id" field.
-func (_u *ProcedureHistoryUpdate) SetDelegateID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetDelegateID(v)
-	return _u
-}
-
-// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableDelegateID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetDelegateID(*v)
-	}
-	return _u
-}
-
-// ClearDelegateID clears the value of the "delegate_id" field.
-func (_u *ProcedureHistoryUpdate) ClearDelegateID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearDelegateID()
-	return _u
-}
-
-// SetSummary sets the "summary" field.
-func (_u *ProcedureHistoryUpdate) SetSummary(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetSummary(v)
-	return _u
-}
-
-// SetNillableSummary sets the "summary" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableSummary(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetSummary(*v)
-	}
-	return _u
-}
-
-// ClearSummary clears the value of the "summary" field.
-func (_u *ProcedureHistoryUpdate) ClearSummary() *ProcedureHistoryUpdate {
-	_u.mutation.ClearSummary()
-	return _u
-}
-
-// SetTagSuggestions sets the "tag_suggestions" field.
-func (_u *ProcedureHistoryUpdate) SetTagSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.SetTagSuggestions(v)
-	return _u
-}
-
-// AppendTagSuggestions appends value to the "tag_suggestions" field.
-func (_u *ProcedureHistoryUpdate) AppendTagSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.AppendTagSuggestions(v)
-	return _u
-}
-
-// ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (_u *ProcedureHistoryUpdate) ClearTagSuggestions() *ProcedureHistoryUpdate {
-	_u.mutation.ClearTagSuggestions()
-	return _u
-}
-
-// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (_u *ProcedureHistoryUpdate) SetDismissedTagSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.SetDismissedTagSuggestions(v)
-	return _u
-}
-
-// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
-func (_u *ProcedureHistoryUpdate) AppendDismissedTagSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.AppendDismissedTagSuggestions(v)
-	return _u
-}
-
-// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (_u *ProcedureHistoryUpdate) ClearDismissedTagSuggestions() *ProcedureHistoryUpdate {
-	_u.mutation.ClearDismissedTagSuggestions()
-	return _u
-}
-
-// SetControlSuggestions sets the "control_suggestions" field.
-func (_u *ProcedureHistoryUpdate) SetControlSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.SetControlSuggestions(v)
-	return _u
-}
-
-// AppendControlSuggestions appends value to the "control_suggestions" field.
-func (_u *ProcedureHistoryUpdate) AppendControlSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.AppendControlSuggestions(v)
-	return _u
-}
-
-// ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (_u *ProcedureHistoryUpdate) ClearControlSuggestions() *ProcedureHistoryUpdate {
-	_u.mutation.ClearControlSuggestions()
-	return _u
-}
-
-// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (_u *ProcedureHistoryUpdate) SetDismissedControlSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.SetDismissedControlSuggestions(v)
-	return _u
-}
-
-// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
-func (_u *ProcedureHistoryUpdate) AppendDismissedControlSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.AppendDismissedControlSuggestions(v)
-	return _u
-}
-
-// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (_u *ProcedureHistoryUpdate) ClearDismissedControlSuggestions() *ProcedureHistoryUpdate {
-	_u.mutation.ClearDismissedControlSuggestions()
-	return _u
-}
-
-// SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdate) SetImprovementSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.SetImprovementSuggestions(v)
-	return _u
-}
-
-// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdate) AppendImprovementSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.AppendImprovementSuggestions(v)
-	return _u
-}
-
-// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdate) ClearImprovementSuggestions() *ProcedureHistoryUpdate {
-	_u.mutation.ClearImprovementSuggestions()
-	return _u
-}
-
-// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdate) SetDismissedImprovementSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.SetDismissedImprovementSuggestions(v)
-	return _u
-}
-
-// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdate) AppendDismissedImprovementSuggestions(v []string) *ProcedureHistoryUpdate {
-	_u.mutation.AppendDismissedImprovementSuggestions(v)
-	return _u
-}
-
-// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdate) ClearDismissedImprovementSuggestions() *ProcedureHistoryUpdate {
-	_u.mutation.ClearDismissedImprovementSuggestions()
-	return _u
-}
-
-// SetURL sets the "url" field.
-func (_u *ProcedureHistoryUpdate) SetURL(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetURL(v)
-	return _u
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableURL(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetURL(*v)
-	}
-	return _u
-}
-
-// ClearURL clears the value of the "url" field.
-func (_u *ProcedureHistoryUpdate) ClearURL() *ProcedureHistoryUpdate {
-	_u.mutation.ClearURL()
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *ProcedureHistoryUpdate) SetFileID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableFileID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *ProcedureHistoryUpdate) ClearFileID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetExternalFileID sets the "external_file_id" field.
-func (_u *ProcedureHistoryUpdate) SetExternalFileID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetExternalFileID(v)
-	return _u
-}
-
-// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableExternalFileID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetExternalFileID(*v)
-	}
-	return _u
-}
-
-// ClearExternalFileID clears the value of the "external_file_id" field.
-func (_u *ProcedureHistoryUpdate) ClearExternalFileID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearExternalFileID()
-	return _u
-}
-
-// SetExternalContents sets the "external_contents" field.
-func (_u *ProcedureHistoryUpdate) SetExternalContents(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetExternalContents(v)
-	return _u
-}
-
-// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableExternalContents(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetExternalContents(*v)
-	}
-	return _u
-}
-
-// ClearExternalContents clears the value of the "external_contents" field.
-func (_u *ProcedureHistoryUpdate) ClearExternalContents() *ProcedureHistoryUpdate {
-	_u.mutation.ClearExternalContents()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *ProcedureHistoryUpdate) SetInternalNotes(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableInternalNotes(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *ProcedureHistoryUpdate) ClearInternalNotes() *ProcedureHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *ProcedureHistoryUpdate) SetSystemInternalID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableSystemInternalID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *ProcedureHistoryUpdate) ClearSystemInternalID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetProcedureKindName sets the "procedure_kind_name" field.
-func (_u *ProcedureHistoryUpdate) SetProcedureKindName(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetProcedureKindName(v)
-	return _u
-}
-
-// SetNillableProcedureKindName sets the "procedure_kind_name" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableProcedureKindName(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetProcedureKindName(*v)
-	}
-	return _u
-}
-
-// ClearProcedureKindName clears the value of the "procedure_kind_name" field.
-func (_u *ProcedureHistoryUpdate) ClearProcedureKindName() *ProcedureHistoryUpdate {
-	_u.mutation.ClearProcedureKindName()
-	return _u
-}
-
-// SetProcedureKindID sets the "procedure_kind_id" field.
-func (_u *ProcedureHistoryUpdate) SetProcedureKindID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetProcedureKindID(v)
-	return _u
-}
-
-// SetNillableProcedureKindID sets the "procedure_kind_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableProcedureKindID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetProcedureKindID(*v)
-	}
-	return _u
-}
-
-// ClearProcedureKindID clears the value of the "procedure_kind_id" field.
-func (_u *ProcedureHistoryUpdate) ClearProcedureKindID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearProcedureKindID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *ProcedureHistoryUpdate) SetEnvironmentName(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableEnvironmentName(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *ProcedureHistoryUpdate) ClearEnvironmentName() *ProcedureHistoryUpdate {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *ProcedureHistoryUpdate) SetEnvironmentID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableEnvironmentID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *ProcedureHistoryUpdate) ClearEnvironmentID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *ProcedureHistoryUpdate) SetScopeName(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableScopeName(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *ProcedureHistoryUpdate) ClearScopeName() *ProcedureHistoryUpdate {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *ProcedureHistoryUpdate) SetScopeID(v string) *ProcedureHistoryUpdate {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableScopeID(v *string) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *ProcedureHistoryUpdate) ClearScopeID() *ProcedureHistoryUpdate {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *ProcedureHistoryUpdate) SetWorkflowEligibleMarker(v bool) *ProcedureHistoryUpdate {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *ProcedureHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *ProcedureHistoryUpdate) ClearWorkflowEligibleMarker() *ProcedureHistoryUpdate {
-	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -772,9 +36,6 @@ func (_u *ProcedureHistoryUpdate) Mutation() *ProcedureHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *ProcedureHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -800,48 +61,7 @@ func (_u *ProcedureHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *ProcedureHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if procedurehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized procedurehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := procedurehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *ProcedureHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := procedurehistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.status": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ManagementMode(); ok {
-		if err := procedurehistory.ManagementModeValidator(v); err != nil {
-			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.management_mode": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ReviewFrequency(); ok {
-		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
-			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *ProcedureHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(procedurehistory.Table, procedurehistory.Columns, sqlgraph.NewFieldSpec(procedurehistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -856,216 +76,89 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(procedurehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(procedurehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(procedurehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(procedurehistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Revision(); ok {
-		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
 	}
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(procedurehistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(procedurehistory.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedurehistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.ManagementMode(); ok {
-		_spec.SetField(procedurehistory.FieldManagementMode, field.TypeEnum, value)
-	}
 	if _u.mutation.ManagementModeCleared() {
 		_spec.ClearField(procedurehistory.FieldManagementMode, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.Details(); ok {
-		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(procedurehistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := _u.mutation.DetailsJSON(); ok {
-		_spec.SetField(procedurehistory.FieldDetailsJSON, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldDetailsJSON, value)
-		})
-	}
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(procedurehistory.FieldDetailsJSON, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ApprovalRequired(); ok {
-		_spec.SetField(procedurehistory.FieldApprovalRequired, field.TypeBool, value)
 	}
 	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(procedurehistory.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := _u.mutation.ReviewDue(); ok {
-		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
-	}
 	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewDue, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ReviewFrequency(); ok {
-		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.ApproverID(); ok {
-		_spec.SetField(procedurehistory.FieldApproverID, field.TypeString, value)
-	}
 	if _u.mutation.ApproverIDCleared() {
 		_spec.ClearField(procedurehistory.FieldApproverID, field.TypeString)
-	}
-	if value, ok := _u.mutation.DelegateID(); ok {
-		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
 	}
 	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(procedurehistory.FieldDelegateID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Summary(); ok {
-		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
-	}
 	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(procedurehistory.FieldSummary, field.TypeString)
-	}
-	if value, ok := _u.mutation.TagSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldTagSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldTagSuggestions, value)
-		})
 	}
 	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldDismissedTagSuggestions, value)
-		})
-	}
 	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ControlSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldControlSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldControlSuggestions, value)
-		})
 	}
 	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldDismissedControlSuggestions, value)
-		})
-	}
 	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldImprovementSuggestions, value)
-		})
 	}
 	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldDismissedImprovementSuggestions, value)
-		})
-	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.URL(); ok {
-		_spec.SetField(procedurehistory.FieldURL, field.TypeString, value)
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(procedurehistory.FieldURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
-	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(procedurehistory.FieldFileID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalFileID(); ok {
-		_spec.SetField(procedurehistory.FieldExternalFileID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalFileIDCleared() {
 		_spec.ClearField(procedurehistory.FieldExternalFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalContents(); ok {
-		_spec.SetField(procedurehistory.FieldExternalContents, field.TypeString, value)
 	}
 	if _u.mutation.ExternalContentsCleared() {
 		_spec.ClearField(procedurehistory.FieldExternalContents, field.TypeString)
@@ -1073,63 +166,33 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(procedurehistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(procedurehistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(procedurehistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProcedureKindName(); ok {
-		_spec.SetField(procedurehistory.FieldProcedureKindName, field.TypeString, value)
-	}
 	if _u.mutation.ProcedureKindNameCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProcedureKindID(); ok {
-		_spec.SetField(procedurehistory.FieldProcedureKindID, field.TypeString, value)
 	}
 	if _u.mutation.ProcedureKindIDCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureKindID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(procedurehistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(procedurehistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(procedurehistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(procedurehistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(procedurehistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(procedurehistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(procedurehistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(procedurehistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{procedurehistory.Label}
@@ -1145,740 +208,9 @@ func (_u *ProcedureHistoryUpdate) sqlSave(ctx context.Context) (_node int, err e
 // ProcedureHistoryUpdateOne is the builder for updating a single ProcedureHistory entity.
 type ProcedureHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *ProcedureHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *ProcedureHistoryUpdateOne) SetUpdatedAt(v time.Time) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *ProcedureHistoryUpdateOne) ClearUpdatedAt() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *ProcedureHistoryUpdateOne) SetUpdatedBy(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *ProcedureHistoryUpdateOne) ClearUpdatedBy() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *ProcedureHistoryUpdateOne) SetUpdatedByImpersonator(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *ProcedureHistoryUpdateOne) ClearUpdatedByImpersonator() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *ProcedureHistoryUpdateOne) SetDeletedAt(v time.Time) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *ProcedureHistoryUpdateOne) ClearDeletedAt() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *ProcedureHistoryUpdateOne) SetDeletedBy(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableDeletedBy(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *ProcedureHistoryUpdateOne) ClearDeletedBy() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *ProcedureHistoryUpdateOne) SetTags(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *ProcedureHistoryUpdateOne) AppendTags(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *ProcedureHistoryUpdateOne) ClearTags() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetRevision sets the "revision" field.
-func (_u *ProcedureHistoryUpdateOne) SetRevision(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetRevision(v)
-	return _u
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableRevision(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetRevision(*v)
-	}
-	return _u
-}
-
-// ClearRevision clears the value of the "revision" field.
-func (_u *ProcedureHistoryUpdateOne) ClearRevision() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearRevision()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetOwnerID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableOwnerID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearOwnerID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *ProcedureHistoryUpdateOne) SetName(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableName(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *ProcedureHistoryUpdateOne) SetStatus(v enums.DocumentStatus) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableStatus(v *enums.DocumentStatus) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *ProcedureHistoryUpdateOne) ClearStatus() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetManagementMode sets the "management_mode" field.
-func (_u *ProcedureHistoryUpdateOne) SetManagementMode(v enums.DocumentManagementMode) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetManagementMode(v)
-	return _u
-}
-
-// SetNillableManagementMode sets the "management_mode" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableManagementMode(v *enums.DocumentManagementMode) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetManagementMode(*v)
-	}
-	return _u
-}
-
-// ClearManagementMode clears the value of the "management_mode" field.
-func (_u *ProcedureHistoryUpdateOne) ClearManagementMode() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearManagementMode()
-	return _u
-}
-
-// SetDetails sets the "details" field.
-func (_u *ProcedureHistoryUpdateOne) SetDetails(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetDetails(v)
-	return _u
-}
-
-// SetNillableDetails sets the "details" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableDetails(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetDetails(*v)
-	}
-	return _u
-}
-
-// ClearDetails clears the value of the "details" field.
-func (_u *ProcedureHistoryUpdateOne) ClearDetails() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearDetails()
-	return _u
-}
-
-// SetDetailsJSON sets the "details_json" field.
-func (_u *ProcedureHistoryUpdateOne) SetDetailsJSON(v []interface{}) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetDetailsJSON(v)
-	return _u
-}
-
-// AppendDetailsJSON appends value to the "details_json" field.
-func (_u *ProcedureHistoryUpdateOne) AppendDetailsJSON(v []interface{}) *ProcedureHistoryUpdateOne {
-	_u.mutation.AppendDetailsJSON(v)
-	return _u
-}
-
-// ClearDetailsJSON clears the value of the "details_json" field.
-func (_u *ProcedureHistoryUpdateOne) ClearDetailsJSON() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearDetailsJSON()
-	return _u
-}
-
-// SetApprovalRequired sets the "approval_required" field.
-func (_u *ProcedureHistoryUpdateOne) SetApprovalRequired(v bool) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetApprovalRequired(v)
-	return _u
-}
-
-// SetNillableApprovalRequired sets the "approval_required" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableApprovalRequired(v *bool) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetApprovalRequired(*v)
-	}
-	return _u
-}
-
-// ClearApprovalRequired clears the value of the "approval_required" field.
-func (_u *ProcedureHistoryUpdateOne) ClearApprovalRequired() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearApprovalRequired()
-	return _u
-}
-
-// SetReviewDue sets the "review_due" field.
-func (_u *ProcedureHistoryUpdateOne) SetReviewDue(v time.Time) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetReviewDue(v)
-	return _u
-}
-
-// SetNillableReviewDue sets the "review_due" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableReviewDue(v *time.Time) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetReviewDue(*v)
-	}
-	return _u
-}
-
-// ClearReviewDue clears the value of the "review_due" field.
-func (_u *ProcedureHistoryUpdateOne) ClearReviewDue() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearReviewDue()
-	return _u
-}
-
-// SetReviewFrequency sets the "review_frequency" field.
-func (_u *ProcedureHistoryUpdateOne) SetReviewFrequency(v enums.Frequency) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetReviewFrequency(v)
-	return _u
-}
-
-// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetReviewFrequency(*v)
-	}
-	return _u
-}
-
-// ClearReviewFrequency clears the value of the "review_frequency" field.
-func (_u *ProcedureHistoryUpdateOne) ClearReviewFrequency() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearReviewFrequency()
-	return _u
-}
-
-// SetApproverID sets the "approver_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetApproverID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetApproverID(v)
-	return _u
-}
-
-// SetNillableApproverID sets the "approver_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableApproverID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetApproverID(*v)
-	}
-	return _u
-}
-
-// ClearApproverID clears the value of the "approver_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearApproverID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearApproverID()
-	return _u
-}
-
-// SetDelegateID sets the "delegate_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetDelegateID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetDelegateID(v)
-	return _u
-}
-
-// SetNillableDelegateID sets the "delegate_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableDelegateID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetDelegateID(*v)
-	}
-	return _u
-}
-
-// ClearDelegateID clears the value of the "delegate_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearDelegateID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearDelegateID()
-	return _u
-}
-
-// SetSummary sets the "summary" field.
-func (_u *ProcedureHistoryUpdateOne) SetSummary(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetSummary(v)
-	return _u
-}
-
-// SetNillableSummary sets the "summary" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableSummary(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetSummary(*v)
-	}
-	return _u
-}
-
-// ClearSummary clears the value of the "summary" field.
-func (_u *ProcedureHistoryUpdateOne) ClearSummary() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearSummary()
-	return _u
-}
-
-// SetTagSuggestions sets the "tag_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) SetTagSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetTagSuggestions(v)
-	return _u
-}
-
-// AppendTagSuggestions appends value to the "tag_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) AppendTagSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.AppendTagSuggestions(v)
-	return _u
-}
-
-// ClearTagSuggestions clears the value of the "tag_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) ClearTagSuggestions() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearTagSuggestions()
-	return _u
-}
-
-// SetDismissedTagSuggestions sets the "dismissed_tag_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) SetDismissedTagSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetDismissedTagSuggestions(v)
-	return _u
-}
-
-// AppendDismissedTagSuggestions appends value to the "dismissed_tag_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) AppendDismissedTagSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.AppendDismissedTagSuggestions(v)
-	return _u
-}
-
-// ClearDismissedTagSuggestions clears the value of the "dismissed_tag_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) ClearDismissedTagSuggestions() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearDismissedTagSuggestions()
-	return _u
-}
-
-// SetControlSuggestions sets the "control_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) SetControlSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetControlSuggestions(v)
-	return _u
-}
-
-// AppendControlSuggestions appends value to the "control_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) AppendControlSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.AppendControlSuggestions(v)
-	return _u
-}
-
-// ClearControlSuggestions clears the value of the "control_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) ClearControlSuggestions() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearControlSuggestions()
-	return _u
-}
-
-// SetDismissedControlSuggestions sets the "dismissed_control_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) SetDismissedControlSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetDismissedControlSuggestions(v)
-	return _u
-}
-
-// AppendDismissedControlSuggestions appends value to the "dismissed_control_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) AppendDismissedControlSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.AppendDismissedControlSuggestions(v)
-	return _u
-}
-
-// ClearDismissedControlSuggestions clears the value of the "dismissed_control_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) ClearDismissedControlSuggestions() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearDismissedControlSuggestions()
-	return _u
-}
-
-// SetImprovementSuggestions sets the "improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) SetImprovementSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetImprovementSuggestions(v)
-	return _u
-}
-
-// AppendImprovementSuggestions appends value to the "improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) AppendImprovementSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.AppendImprovementSuggestions(v)
-	return _u
-}
-
-// ClearImprovementSuggestions clears the value of the "improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) ClearImprovementSuggestions() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearImprovementSuggestions()
-	return _u
-}
-
-// SetDismissedImprovementSuggestions sets the "dismissed_improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) SetDismissedImprovementSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetDismissedImprovementSuggestions(v)
-	return _u
-}
-
-// AppendDismissedImprovementSuggestions appends value to the "dismissed_improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) AppendDismissedImprovementSuggestions(v []string) *ProcedureHistoryUpdateOne {
-	_u.mutation.AppendDismissedImprovementSuggestions(v)
-	return _u
-}
-
-// ClearDismissedImprovementSuggestions clears the value of the "dismissed_improvement_suggestions" field.
-func (_u *ProcedureHistoryUpdateOne) ClearDismissedImprovementSuggestions() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearDismissedImprovementSuggestions()
-	return _u
-}
-
-// SetURL sets the "url" field.
-func (_u *ProcedureHistoryUpdateOne) SetURL(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetURL(v)
-	return _u
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableURL(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetURL(*v)
-	}
-	return _u
-}
-
-// ClearURL clears the value of the "url" field.
-func (_u *ProcedureHistoryUpdateOne) ClearURL() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearURL()
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetFileID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableFileID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearFileID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearFileID()
-	return _u
-}
-
-// SetExternalFileID sets the "external_file_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetExternalFileID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetExternalFileID(v)
-	return _u
-}
-
-// SetNillableExternalFileID sets the "external_file_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableExternalFileID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalFileID(*v)
-	}
-	return _u
-}
-
-// ClearExternalFileID clears the value of the "external_file_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearExternalFileID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearExternalFileID()
-	return _u
-}
-
-// SetExternalContents sets the "external_contents" field.
-func (_u *ProcedureHistoryUpdateOne) SetExternalContents(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetExternalContents(v)
-	return _u
-}
-
-// SetNillableExternalContents sets the "external_contents" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableExternalContents(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalContents(*v)
-	}
-	return _u
-}
-
-// ClearExternalContents clears the value of the "external_contents" field.
-func (_u *ProcedureHistoryUpdateOne) ClearExternalContents() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearExternalContents()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *ProcedureHistoryUpdateOne) SetInternalNotes(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableInternalNotes(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *ProcedureHistoryUpdateOne) ClearInternalNotes() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetSystemInternalID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableSystemInternalID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearSystemInternalID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetProcedureKindName sets the "procedure_kind_name" field.
-func (_u *ProcedureHistoryUpdateOne) SetProcedureKindName(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetProcedureKindName(v)
-	return _u
-}
-
-// SetNillableProcedureKindName sets the "procedure_kind_name" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableProcedureKindName(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetProcedureKindName(*v)
-	}
-	return _u
-}
-
-// ClearProcedureKindName clears the value of the "procedure_kind_name" field.
-func (_u *ProcedureHistoryUpdateOne) ClearProcedureKindName() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearProcedureKindName()
-	return _u
-}
-
-// SetProcedureKindID sets the "procedure_kind_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetProcedureKindID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetProcedureKindID(v)
-	return _u
-}
-
-// SetNillableProcedureKindID sets the "procedure_kind_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableProcedureKindID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetProcedureKindID(*v)
-	}
-	return _u
-}
-
-// ClearProcedureKindID clears the value of the "procedure_kind_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearProcedureKindID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearProcedureKindID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *ProcedureHistoryUpdateOne) SetEnvironmentName(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableEnvironmentName(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *ProcedureHistoryUpdateOne) ClearEnvironmentName() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetEnvironmentID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableEnvironmentID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearEnvironmentID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *ProcedureHistoryUpdateOne) SetScopeName(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableScopeName(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *ProcedureHistoryUpdateOne) ClearScopeName() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *ProcedureHistoryUpdateOne) SetScopeID(v string) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableScopeID(v *string) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *ProcedureHistoryUpdateOne) ClearScopeID() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *ProcedureHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *ProcedureHistoryUpdateOne {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *ProcedureHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *ProcedureHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *ProcedureHistoryUpdateOne) ClearWorkflowEligibleMarker() *ProcedureHistoryUpdateOne {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *ProcedureHistoryMutation
 }
 
 // Mutation returns the ProcedureHistoryMutation object of the builder.
@@ -1901,9 +233,6 @@ func (_u *ProcedureHistoryUpdateOne) Select(field string, fields ...string) *Pro
 
 // Save executes the query and returns the updated ProcedureHistory entity.
 func (_u *ProcedureHistoryUpdateOne) Save(ctx context.Context) (*ProcedureHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1929,48 +258,7 @@ func (_u *ProcedureHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *ProcedureHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if procedurehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized procedurehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := procedurehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *ProcedureHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := procedurehistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.status": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ManagementMode(); ok {
-		if err := procedurehistory.ManagementModeValidator(v); err != nil {
-			return &ValidationError{Name: "management_mode", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.management_mode": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ReviewFrequency(); ok {
-		if err := procedurehistory.ReviewFrequencyValidator(v); err != nil {
-			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "ProcedureHistory.review_frequency": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *ProcedureHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ProcedureHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ProcedureHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(procedurehistory.Table, procedurehistory.Columns, sqlgraph.NewFieldSpec(procedurehistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -2002,216 +290,89 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(procedurehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(procedurehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(procedurehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(procedurehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(procedurehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(procedurehistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(procedurehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(procedurehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(procedurehistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Revision(); ok {
-		_spec.SetField(procedurehistory.FieldRevision, field.TypeString, value)
 	}
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(procedurehistory.FieldRevision, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(procedurehistory.FieldOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(procedurehistory.FieldOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(procedurehistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(procedurehistory.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(procedurehistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.ManagementMode(); ok {
-		_spec.SetField(procedurehistory.FieldManagementMode, field.TypeEnum, value)
-	}
 	if _u.mutation.ManagementModeCleared() {
 		_spec.ClearField(procedurehistory.FieldManagementMode, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.Details(); ok {
-		_spec.SetField(procedurehistory.FieldDetails, field.TypeString, value)
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(procedurehistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := _u.mutation.DetailsJSON(); ok {
-		_spec.SetField(procedurehistory.FieldDetailsJSON, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldDetailsJSON, value)
-		})
-	}
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(procedurehistory.FieldDetailsJSON, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ApprovalRequired(); ok {
-		_spec.SetField(procedurehistory.FieldApprovalRequired, field.TypeBool, value)
 	}
 	if _u.mutation.ApprovalRequiredCleared() {
 		_spec.ClearField(procedurehistory.FieldApprovalRequired, field.TypeBool)
 	}
-	if value, ok := _u.mutation.ReviewDue(); ok {
-		_spec.SetField(procedurehistory.FieldReviewDue, field.TypeTime, value)
-	}
 	if _u.mutation.ReviewDueCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewDue, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ReviewFrequency(); ok {
-		_spec.SetField(procedurehistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(procedurehistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.ApproverID(); ok {
-		_spec.SetField(procedurehistory.FieldApproverID, field.TypeString, value)
-	}
 	if _u.mutation.ApproverIDCleared() {
 		_spec.ClearField(procedurehistory.FieldApproverID, field.TypeString)
-	}
-	if value, ok := _u.mutation.DelegateID(); ok {
-		_spec.SetField(procedurehistory.FieldDelegateID, field.TypeString, value)
 	}
 	if _u.mutation.DelegateIDCleared() {
 		_spec.ClearField(procedurehistory.FieldDelegateID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Summary(); ok {
-		_spec.SetField(procedurehistory.FieldSummary, field.TypeString, value)
-	}
 	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(procedurehistory.FieldSummary, field.TypeString)
-	}
-	if value, ok := _u.mutation.TagSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldTagSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTagSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldTagSuggestions, value)
-		})
 	}
 	if _u.mutation.TagSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldTagSuggestions, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.DismissedTagSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDismissedTagSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldDismissedTagSuggestions, value)
-		})
-	}
 	if _u.mutation.DismissedTagSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedTagSuggestions, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ControlSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldControlSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedControlSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldControlSuggestions, value)
-		})
 	}
 	if _u.mutation.ControlSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldControlSuggestions, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.DismissedControlSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDismissedControlSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldDismissedControlSuggestions, value)
-		})
-	}
 	if _u.mutation.DismissedControlSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedControlSuggestions, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ImprovementSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedImprovementSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldImprovementSuggestions, value)
-		})
 	}
 	if _u.mutation.ImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldImprovementSuggestions, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.DismissedImprovementSuggestions(); ok {
-		_spec.SetField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDismissedImprovementSuggestions(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, procedurehistory.FieldDismissedImprovementSuggestions, value)
-		})
-	}
 	if _u.mutation.DismissedImprovementSuggestionsCleared() {
 		_spec.ClearField(procedurehistory.FieldDismissedImprovementSuggestions, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.URL(); ok {
-		_spec.SetField(procedurehistory.FieldURL, field.TypeString, value)
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(procedurehistory.FieldURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(procedurehistory.FieldFileID, field.TypeString, value)
-	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(procedurehistory.FieldFileID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalFileID(); ok {
-		_spec.SetField(procedurehistory.FieldExternalFileID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalFileIDCleared() {
 		_spec.ClearField(procedurehistory.FieldExternalFileID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalContents(); ok {
-		_spec.SetField(procedurehistory.FieldExternalContents, field.TypeString, value)
 	}
 	if _u.mutation.ExternalContentsCleared() {
 		_spec.ClearField(procedurehistory.FieldExternalContents, field.TypeString)
@@ -2219,63 +380,33 @@ func (_u *ProcedureHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Proced
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(procedurehistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(procedurehistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(procedurehistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(procedurehistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ProcedureKindName(); ok {
-		_spec.SetField(procedurehistory.FieldProcedureKindName, field.TypeString, value)
-	}
 	if _u.mutation.ProcedureKindNameCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ProcedureKindID(); ok {
-		_spec.SetField(procedurehistory.FieldProcedureKindID, field.TypeString, value)
 	}
 	if _u.mutation.ProcedureKindIDCleared() {
 		_spec.ClearField(procedurehistory.FieldProcedureKindID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(procedurehistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(procedurehistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(procedurehistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(procedurehistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(procedurehistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(procedurehistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(procedurehistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(procedurehistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(procedurehistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ProcedureHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &ProcedureHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

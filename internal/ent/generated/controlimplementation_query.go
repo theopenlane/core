@@ -13,16 +13,15 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // ControlImplementationQuery is the builder for querying ControlImplementation entities.
@@ -100,9 +99,6 @@ func (_q *ControlImplementationQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, controlimplementation.OwnerTable, controlimplementation.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.ControlImplementation
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -125,9 +121,6 @@ func (_q *ControlImplementationQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.BlockedGroupsTable, controlimplementation.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlImplementationBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -150,9 +143,6 @@ func (_q *ControlImplementationQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.EditorsTable, controlimplementation.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlImplementationEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -175,9 +165,6 @@ func (_q *ControlImplementationQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.ViewersTable, controlimplementation.ViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlImplementationViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -200,9 +187,6 @@ func (_q *ControlImplementationQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlimplementation.ControlsTable, controlimplementation.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlControlImplementations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -225,9 +209,6 @@ func (_q *ControlImplementationQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, controlimplementation.SubcontrolsTable, controlimplementation.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.SubcontrolControlImplementations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -250,9 +231,6 @@ func (_q *ControlImplementationQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, controlimplementation.TasksTable, controlimplementation.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.ControlImplementationTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -649,8 +627,6 @@ func (_q *ControlImplementationQuery) sqlAll(ctx context.Context, hooks ...query
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.ControlImplementation
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -803,7 +779,6 @@ func (_q *ControlImplementationQuery) loadBlockedGroups(ctx context.Context, que
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlimplementation.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ControlImplementationBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlimplementation.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlimplementation.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -865,7 +840,6 @@ func (_q *ControlImplementationQuery) loadEditors(ctx context.Context, query *Gr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlimplementation.EditorsTable)
-		joinT.Schema(_q.schemaConfig.ControlImplementationEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlimplementation.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlimplementation.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -927,7 +901,6 @@ func (_q *ControlImplementationQuery) loadViewers(ctx context.Context, query *Gr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlimplementation.ViewersTable)
-		joinT.Schema(_q.schemaConfig.ControlImplementationViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(controlimplementation.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlimplementation.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -989,7 +962,6 @@ func (_q *ControlImplementationQuery) loadControls(ctx context.Context, query *C
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlimplementation.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlControlImplementations)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(controlimplementation.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlimplementation.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1051,7 +1023,6 @@ func (_q *ControlImplementationQuery) loadSubcontrols(ctx context.Context, query
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlimplementation.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolControlImplementations)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(controlimplementation.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(controlimplementation.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1113,7 +1084,6 @@ func (_q *ControlImplementationQuery) loadTasks(ctx context.Context, query *Task
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(controlimplementation.TasksTable)
-		joinT.Schema(_q.schemaConfig.ControlImplementationTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(controlimplementation.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(controlimplementation.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1165,8 +1135,6 @@ func (_q *ControlImplementationQuery) loadTasks(ctx context.Context, query *Task
 
 func (_q *ControlImplementationQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.ControlImplementation
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1235,9 +1203,6 @@ func (_q *ControlImplementationQuery) sqlQuery(ctx context.Context) *sql.Selecto
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.ControlImplementation)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

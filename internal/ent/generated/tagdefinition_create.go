@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/tagdefinition"
 )
 
 // TagDefinitionCreate is the builder for creating a TagDefinition entity.
@@ -371,7 +371,6 @@ func (_c *TagDefinitionCreate) createSpec() (*TagDefinition, *sqlgraph.CreateSpe
 		_node = &TagDefinition{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tagdefinition.Table, sqlgraph.NewFieldSpec(tagdefinition.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TagDefinition
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -447,7 +446,6 @@ func (_c *TagDefinitionCreate) createSpec() (*TagDefinition, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TagDefinition
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

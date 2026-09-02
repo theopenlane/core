@@ -12,7 +12,7 @@ import (
 	gtassert "gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 func makeAssumeRoleBindings(t *testing.T, schema AssumeRoleCredentialSchema) types.CredentialBindings {

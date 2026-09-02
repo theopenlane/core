@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1045,9 +1043,6 @@ func HasOwner() predicate.WorkflowProposal {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.WorkflowProposal
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1056,9 +1051,6 @@ func HasOwner() predicate.WorkflowProposal {
 func HasOwnerWith(preds ...predicate.Organization) predicate.WorkflowProposal {
 	return predicate.WorkflowProposal(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.WorkflowProposal
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1074,9 +1066,6 @@ func HasWorkflowObjectRef() predicate.WorkflowProposal {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, WorkflowObjectRefTable, WorkflowObjectRefColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowProposal
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1085,9 +1074,6 @@ func HasWorkflowObjectRef() predicate.WorkflowProposal {
 func HasWorkflowObjectRefWith(preds ...predicate.WorkflowObjectRef) predicate.WorkflowProposal {
 	return predicate.WorkflowProposal(func(s *sql.Selector) {
 		step := newWorkflowObjectRefStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowProposal
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1103,9 +1089,6 @@ func HasUser() predicate.WorkflowProposal {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, UserTable, UserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.WorkflowProposal
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1114,9 +1097,6 @@ func HasUser() predicate.WorkflowProposal {
 func HasUserWith(preds ...predicate.User) predicate.WorkflowProposal {
 	return predicate.WorkflowProposal(func(s *sql.Selector) {
 		step := newUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.WorkflowProposal
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1132,9 +1112,6 @@ func HasWorkflowInstances() predicate.WorkflowProposal {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowInstancesTable, WorkflowInstancesColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowInstance
-		step.Edge.Schema = schemaConfig.WorkflowInstance
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1143,9 +1120,6 @@ func HasWorkflowInstances() predicate.WorkflowProposal {
 func HasWorkflowInstancesWith(preds ...predicate.WorkflowInstance) predicate.WorkflowProposal {
 	return predicate.WorkflowProposal(func(s *sql.Selector) {
 		step := newWorkflowInstancesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowInstance
-		step.Edge.Schema = schemaConfig.WorkflowInstance
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

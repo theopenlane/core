@@ -4,16 +4,18 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestQueryDNSVerificationByID(t *testing.T) {
-	dnsVerification := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	dnsVerification := (&th.DNSVerificationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name                 string
@@ -27,37 +29,37 @@ func TestQueryDNSVerificationByID(t *testing.T) {
 			name:                 "happy path",
 			expectedCloudflareID: dnsVerification.CloudflareHostnameID,
 			queryID:              dnsVerification.ID,
-			client:               suite.client.api,
-			ctx:                  sharedTestUser1.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:                 "happy path, view only user",
 			expectedCloudflareID: dnsVerification.CloudflareHostnameID,
 			queryID:              dnsVerification.ID,
-			client:               suite.client.api,
-			ctx:                  sharedViewOnlyUser.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:                 "happy path, sysadmin user",
 			expectedCloudflareID: dnsVerification.CloudflareHostnameID,
 			queryID:              dnsVerification.ID,
-			client:               suite.client.api,
-			ctx:                  sharedSystemAdminUser.UserCtx,
+			client:               suite.Client.API,
+			ctx:                  th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:     "verification not found",
 			queryID:  "non-existent-id",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:                 "not authorized to query org",
 			expectedCloudflareID: dnsVerification.CloudflareHostnameID,
 			queryID:              dnsVerification.ID,
-			client:               suite.client.api,
-			ctx:                  sharedTestUser2.UserCtx,
-			errorMsg:             notFoundErrorMsg,
+			client:               suite.Client.API,
+			ctx:                  th.SharedTestUser2.UserCtx,
+			errorMsg:             th.NotFoundErrorMsg,
 		},
 	}
 
@@ -77,13 +79,13 @@ func TestQueryDNSVerificationByID(t *testing.T) {
 			assert.Check(t, is.Equal(tc.expectedCloudflareID, resp.DNSVerification.CloudflareHostnameID))
 		})
 	}
-	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.DNSVerificationDeleteOne]{Client: suite.Client.DB.DNSVerification, ID: dnsVerification.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryDNSVerifications(t *testing.T) {
-	dnsVerification1 := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	dnsVerification2 := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	dnsVerification3 := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	dnsVerification1 := (&th.DNSVerificationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	dnsVerification2 := (&th.DNSVerificationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	dnsVerification3 := (&th.DNSVerificationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	nonExistentCloudflareID := "nonexistent-cloudflare-id"
 
@@ -96,29 +98,29 @@ func TestQueryDNSVerifications(t *testing.T) {
 	}{
 		{
 			name:            "return all",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "return all, ro user",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:   "return all, sysadmin user",
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 			where: &testclient.DNSVerificationWhereInput{
-				OwnerID: lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
 			},
 			expectedResults: 2,
 		},
 		{
 			name:   "query by cloudflare hostname ID",
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 			where: &testclient.DNSVerificationWhereInput{
 				CloudflareHostnameID: &dnsVerification1.CloudflareHostnameID,
 			},
@@ -126,8 +128,8 @@ func TestQueryDNSVerifications(t *testing.T) {
 		},
 		{
 			name:   "query by cloudflare hostname ID, not found",
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 			where: &testclient.DNSVerificationWhereInput{
 				CloudflareHostnameID: &nonExistentCloudflareID,
 			},
@@ -135,8 +137,8 @@ func TestQueryDNSVerifications(t *testing.T) {
 		},
 		{
 			name:   "query by DNS TXT record",
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 			where: &testclient.DNSVerificationWhereInput{
 				DNSTxtRecord: &dnsVerification2.DNSTxtRecord,
 			},
@@ -154,13 +156,13 @@ func TestQueryDNSVerifications(t *testing.T) {
 			assert.Check(t, is.Equal(tc.expectedResults, resp.DNSVerifications.TotalCount))
 
 			for _, verification := range resp.DNSVerifications.Edges {
-				assert.Check(t, is.Equal(*verification.Node.OwnerID, sharedTestUser1.OrganizationID))
+				assert.Check(t, is.Equal(*verification.Node.OwnerID, th.SharedTestUser1.OrganizationID))
 			}
 		})
 	}
 
-	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, IDs: []string{dnsVerification1.ID, dnsVerification2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification3.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.DNSVerificationDeleteOne]{Client: suite.Client.DB.DNSVerification, IDs: []string{dnsVerification1.ID, dnsVerification2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.DNSVerificationDeleteOne]{Client: suite.Client.DB.DNSVerification, ID: dnsVerification3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 }
 
 func TestMutationCreateDNSVerification(t *testing.T) {
@@ -179,10 +181,10 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 				DNSTxtValue:                "test-dns-value",
 				AcmeChallengePath:          lo.ToPtr("acmepaththing"),
 				ExpectedAcmeChallengeValue: lo.ToPtr("test-ssl-value"),
-				OwnerID:                    lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:                    lo.ToPtr(th.SharedTestUser1.OrganizationID),
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "not authorized",
@@ -192,11 +194,11 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 				DNSTxtValue:                "test-dns-value-unauthorized",
 				AcmeChallengePath:          lo.ToPtr("acmepaththing"),
 				ExpectedAcmeChallengeValue: lo.ToPtr("test-ssl-value"),
-				OwnerID:                    lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:                    lo.ToPtr(th.SharedTestUser1.OrganizationID),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "missing cloudflare hostname ID",
@@ -205,10 +207,10 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 				DNSTxtValue:                "test-dns-value-missing",
 				AcmeChallengePath:          lo.ToPtr("acmepaththing"),
 				ExpectedAcmeChallengeValue: lo.ToPtr("test-ssl-value"),
-				OwnerID:                    lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:                    lo.ToPtr(th.SharedTestUser1.OrganizationID),
 			},
-			client:      suite.client.api,
-			ctx:         sharedSystemAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedSystemAdminUser.UserCtx,
 			expectedErr: "cloudflare_hostname_id",
 		},
 	}
@@ -229,15 +231,15 @@ func TestMutationCreateDNSVerification(t *testing.T) {
 			assert.Check(t, is.Equal(tc.request.DNSTxtValue, resp.CreateDNSVerification.DNSVerification.DNSTxtValue))
 
 			// Clean up
-			(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: resp.CreateDNSVerification.DNSVerification.ID}).MustDelete(tc.ctx, t)
+			(&th.Cleanup[*generated.DNSVerificationDeleteOne]{Client: suite.Client.DB.DNSVerification, ID: resp.CreateDNSVerification.DNSVerification.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 }
 
 func TestMutationDeleteDNSVerification(t *testing.T) {
-	dnsVerification := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	dnsVerification2 := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	dnsVerification3 := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	dnsVerification := (&th.DNSVerificationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	dnsVerification2 := (&th.DNSVerificationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	dnsVerification3 := (&th.DNSVerificationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
@@ -250,22 +252,22 @@ func TestMutationDeleteDNSVerification(t *testing.T) {
 		{
 			name:   "delete verification",
 			id:     dnsVerification.ID,
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:        "unauthorized",
 			id:          dnsVerification3.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "verification not found",
 			id:          nonExistentID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -285,14 +287,14 @@ func TestMutationDeleteDNSVerification(t *testing.T) {
 
 			// Verify the verification is deleted
 			_, err = tc.client.GetDNSVerificationByID(tc.ctx, tc.id)
-			assert.ErrorContains(t, err, notFoundErrorMsg)
+			assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 		})
 	}
-	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, IDs: []string{dnsVerification2.ID, dnsVerification3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.DNSVerificationDeleteOne]{Client: suite.Client.DB.DNSVerification, IDs: []string{dnsVerification2.ID, dnsVerification3.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestUpdateDNSVerification(t *testing.T) {
-	dnsVerification := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	dnsVerification := (&th.DNSVerificationBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -305,25 +307,25 @@ func TestUpdateDNSVerification(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: dnsVerification.ID,
-			client:  suite.client.api,
-			ctx:     sharedSystemAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedSystemAdminUser.UserCtx,
 			updateInput: testclient.UpdateDNSVerificationInput{
 				AcmeChallengeStatus:         lo.ToPtr(enums.SSLVerificationStatusActive),
 				DNSVerificationStatus:       lo.ToPtr(enums.DNSVerificationStatusActive),
 				AcmeChallengeStatusReason:   lo.ToPtr("all good!"),
 				DNSVerificationStatusReason: lo.ToPtr("all good for the domain!"),
-				OwnerID:                     lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:                     lo.ToPtr(th.SharedTestUser1.OrganizationID),
 			},
 		},
 		{
 			name:    "not allowed",
 			queryID: dnsVerification.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 			updateInput: testclient.UpdateDNSVerificationInput{
 				Tags: []string{"unauthorized"},
 			},
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -340,22 +342,22 @@ func TestUpdateDNSVerification(t *testing.T) {
 			assert.Assert(t, resp != nil)
 		})
 	}
-	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.DNSVerificationDeleteOne]{Client: suite.Client.DB.DNSVerification, ID: dnsVerification.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestGetAllDNSVerifications(t *testing.T) {
 	// Create test DNS verifications with different users
-	dnsVerification1 := (&DNSVerificationBuilder{
-		client: suite.client,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	dnsVerification1 := (&th.DNSVerificationBuilder{
+		Client: suite.Client,
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	dnsVerification2 := (&DNSVerificationBuilder{
-		client: suite.client,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	dnsVerification2 := (&th.DNSVerificationBuilder{
+		Client: suite.Client,
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	dnsVerification3 := (&DNSVerificationBuilder{
-		client: suite.client,
-	}).MustNew(sharedTestUser2.UserCtx, t)
+	dnsVerification3 := (&th.DNSVerificationBuilder{
+		Client: suite.Client,
+	}).MustNew(th.SharedTestUser2.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -366,26 +368,26 @@ func TestGetAllDNSVerifications(t *testing.T) {
 	}{
 		{
 			name:            "happy path - regular user sees only their verifications",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
-			expectedResults: 2, // Should see only verifications owned by sharedTestUser1
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
+			expectedResults: 2, // Should see only verifications owned by th.SharedTestUser1
 		},
 		{
 			name:            "happy path - admin user sees all verifications",
-			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedAdminUser.UserCtx,
 			expectedResults: 2, // Should see all owned by testUser
 		},
 		{
 			name:            "happy path - view only user",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 2, // Should see only verifications from their organization
 		},
 		{
 			name:            "happy path - different user sees only their verifications",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 1, // Should see only verifications owned by testUser2
 		},
 	}
@@ -421,19 +423,19 @@ func TestGetAllDNSVerifications(t *testing.T) {
 			}
 
 			// Verify that users only see verifications from their organization
-			if tc.ctx == sharedTestUser1.UserCtx || tc.ctx == sharedViewOnlyUser.UserCtx {
+			if tc.ctx == th.SharedTestUser1.UserCtx || tc.ctx == th.SharedViewOnlyUser.UserCtx {
 				for _, edge := range resp.DNSVerifications.Edges {
-					assert.Check(t, is.Equal(sharedTestUser1.OrganizationID, *edge.Node.OwnerID))
+					assert.Check(t, is.Equal(th.SharedTestUser1.OrganizationID, *edge.Node.OwnerID))
 				}
-			} else if tc.ctx == sharedTestUser2.UserCtx {
+			} else if tc.ctx == th.SharedTestUser2.UserCtx {
 				for _, edge := range resp.DNSVerifications.Edges {
-					assert.Check(t, is.Equal(sharedTestUser2.OrganizationID, *edge.Node.OwnerID))
+					assert.Check(t, is.Equal(th.SharedTestUser2.OrganizationID, *edge.Node.OwnerID))
 				}
 			}
 		})
 	}
 
 	// Clean up created verifications
-	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, IDs: []string{dnsVerification1.ID, dnsVerification2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification3.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.DNSVerificationDeleteOne]{Client: suite.Client.DB.DNSVerification, IDs: []string{dnsVerification1.ID, dnsVerification2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.DNSVerificationDeleteOne]{Client: suite.Client.DB.DNSVerification, ID: dnsVerification3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
 }

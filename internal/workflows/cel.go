@@ -3,7 +3,7 @@ package workflows
 import (
 	"github.com/google/cel-go/cel"
 
-	"github.com/theopenlane/core/pkg/celx"
+	"github.com/theopenlane/core/v2/pkg/celx"
 )
 
 // CELExpressionScope determines which variables are available when compiling CEL expressions

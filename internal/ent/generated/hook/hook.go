@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
 // The APITokenFunc type is an adapter to allow the use of ordinary
@@ -525,66 +525,6 @@ func (f InviteFunc) Mutate(ctx context.Context, m generated.Mutation) (generated
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.InviteMutation", m)
 }
 
-// The JobResultFunc type is an adapter to allow the use of ordinary
-// function as JobResult mutator.
-type JobResultFunc func(context.Context, *generated.JobResultMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f JobResultFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.JobResultMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobResultMutation", m)
-}
-
-// The JobRunnerFunc type is an adapter to allow the use of ordinary
-// function as JobRunner mutator.
-type JobRunnerFunc func(context.Context, *generated.JobRunnerMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f JobRunnerFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.JobRunnerMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerMutation", m)
-}
-
-// The JobRunnerRegistrationTokenFunc type is an adapter to allow the use of ordinary
-// function as JobRunnerRegistrationToken mutator.
-type JobRunnerRegistrationTokenFunc func(context.Context, *generated.JobRunnerRegistrationTokenMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f JobRunnerRegistrationTokenFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.JobRunnerRegistrationTokenMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerRegistrationTokenMutation", m)
-}
-
-// The JobRunnerTokenFunc type is an adapter to allow the use of ordinary
-// function as JobRunnerToken mutator.
-type JobRunnerTokenFunc func(context.Context, *generated.JobRunnerTokenMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f JobRunnerTokenFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.JobRunnerTokenMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobRunnerTokenMutation", m)
-}
-
-// The JobTemplateFunc type is an adapter to allow the use of ordinary
-// function as JobTemplate mutator.
-type JobTemplateFunc func(context.Context, *generated.JobTemplateMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f JobTemplateFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.JobTemplateMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.JobTemplateMutation", m)
-}
-
 // The MappableDomainFunc type is an adapter to allow the use of ordinary
 // function as MappableDomain mutator.
 type MappableDomainFunc func(context.Context, *generated.MappableDomainMutation) (generated.Value, error)
@@ -895,30 +835,6 @@ func (f ScanFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.V
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScanMutation", m)
-}
-
-// The ScheduledJobFunc type is an adapter to allow the use of ordinary
-// function as ScheduledJob mutator.
-type ScheduledJobFunc func(context.Context, *generated.ScheduledJobMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ScheduledJobFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.ScheduledJobMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobMutation", m)
-}
-
-// The ScheduledJobRunFunc type is an adapter to allow the use of ordinary
-// function as ScheduledJobRun mutator.
-type ScheduledJobRunFunc func(context.Context, *generated.ScheduledJobRunMutation) (generated.Value, error)
-
-// Mutate calls f(ctx, m).
-func (f ScheduledJobRunFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
-	if mv, ok := m.(*generated.ScheduledJobRunMutation); ok {
-		return f(ctx, mv)
-	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.ScheduledJobRunMutation", m)
 }
 
 // The StandardFunc type is an adapter to allow the use of ordinary

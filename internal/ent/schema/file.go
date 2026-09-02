@@ -11,11 +11,11 @@ import (
 
 	"github.com/theopenlane/core/common/models"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/mixin"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
 )
 
 // File defines the file schema.
@@ -102,6 +102,12 @@ func (File) Fields() []ent.Field {
 		field.String("storage_provider").
 			Comment("the storage provider the file is stored in, if applicable").
 			Optional(),
+		field.JSON("backup_state", models.FileBackupState{}).
+			Comment("internal backup replication state for this file, if handled internally").
+			Optional().
+			Annotations(
+				entgql.Skip(), // internal-only backup info for disaster recovery enablement
+			),
 		field.Time("last_accessed_at").
 			Optional().
 			Annotations(

@@ -6,7 +6,7 @@ import (
 
 	"entgo.io/ent"
 
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
@@ -14,15 +14,15 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // HookInvite runs on invite create mutations
@@ -112,7 +112,7 @@ func HookInvite() ent.Hook {
 				recipientExists = true
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.InviteOp.Name(), emaildef.InviteRequest{
+			if err := sendSystemEmail(ctx, emaildef.InviteOp.Name(), emaildef.InviteRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
 				InviterName:   inviterName,
 				OrgName:       orgName,
@@ -332,7 +332,7 @@ func HookInviteAccepted() ent.Hook {
 				return retValue, err
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.InviteJoinedOp.Name(), emaildef.InviteJoinedRequest{
+			if err := sendSystemEmail(ctx, emaildef.InviteJoinedOp.Name(), emaildef.InviteJoinedRequest{
 				RecipientInfo: emaildef.RecipientInfo{Email: recipient},
 				OrgName:       org.DisplayName,
 			}); err != nil {

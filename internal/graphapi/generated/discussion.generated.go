@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _DiscussionBulkCreatePayload_discussions(ctx context
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Discussion) graphql.Marshaler {
-			return ec.marshalODiscussion2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussionᚄ(ctx, selections, v)
+			return ec.marshalODiscussion2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _DiscussionCreatePayload_discussion(ctx context.Cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Discussion) graphql.Marshaler {
-			return ec.marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx, selections, v)
+			return ec.marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _DiscussionUpdatePayload_discussion(ctx context.Cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Discussion) graphql.Marshaler {
-			return ec.marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx, selections, v)
+			return ec.marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _DiscussionUpdatePayload(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNDiscussionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscussionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionBulkCreatePayload) graphql.Marshaler {
 	return ec._DiscussionBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDiscussionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscussionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNDiscussionBulkCreatePayload2ᚖgithubᚗcom�
 	return ec._DiscussionBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDiscussionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscussionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionCreatePayload) graphql.Marshaler {
 	return ec._DiscussionCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDiscussionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscussionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNDiscussionCreatePayload2ᚖgithubᚗcomᚋth
 	return ec._DiscussionCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDiscussionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscussionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionDeletePayload) graphql.Marshaler {
 	return ec._DiscussionDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDiscussionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscussionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -354,11 +354,11 @@ func (ec *executionContext) marshalNDiscussionDeletePayload2ᚖgithubᚗcomᚋth
 	return ec._DiscussionDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNDiscussionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscussionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.DiscussionUpdatePayload) graphql.Marshaler {
 	return ec._DiscussionUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNDiscussionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDiscussionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNDiscussionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐDiscussionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DiscussionUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

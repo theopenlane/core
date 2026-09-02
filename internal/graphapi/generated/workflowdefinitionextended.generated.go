@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -106,7 +106,7 @@ func (ec *executionContext) _WorkflowMetadata_objectTypes(ctx context.Context, f
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.WorkflowObjectTypeMetadata) graphql.Marshaler {
-			return ec.marshalNWorkflowObjectTypeMetadata2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadataᚄ(ctx, selections, v)
+			return ec.marshalNWorkflowObjectTypeMetadata2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadataᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -230,7 +230,7 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata_eligibleFields(ctx conte
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*model.WorkflowFieldMetadata) graphql.Marshaler {
-			return ec.marshalNWorkflowFieldMetadata2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadataᚄ(ctx, selections, v)
+			return ec.marshalNWorkflowFieldMetadata2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadataᚄ(ctx, selections, v)
 		},
 		true,
 		true,
@@ -465,11 +465,11 @@ func (ec *executionContext) _WorkflowObjectTypeMetadata(ctx context.Context, sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadataᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.WorkflowFieldMetadata) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadataᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.WorkflowFieldMetadata) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNWorkflowFieldMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadata(ctx, sel, v[i])
+		return ec.marshalNWorkflowFieldMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadata(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -481,7 +481,7 @@ func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚕᚖgithubᚗcomᚋt
 	return ret
 }
 
-func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowFieldMetadata) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowFieldMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowFieldMetadata) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -491,11 +491,11 @@ func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚖgithubᚗcomᚋtheo
 	return ec._WorkflowFieldMetadata(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowMetadata2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowMetadata(ctx context.Context, sel ast.SelectionSet, v model.WorkflowMetadata) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowMetadata2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowMetadata(ctx context.Context, sel ast.SelectionSet, v model.WorkflowMetadata) graphql.Marshaler {
 	return ec._WorkflowMetadata(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNWorkflowMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowMetadata) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowMetadata) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -505,11 +505,11 @@ func (ec *executionContext) marshalNWorkflowMetadata2ᚖgithubᚗcomᚋtheopenla
 	return ec._WorkflowMetadata(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowObjectTypeMetadata2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadataᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.WorkflowObjectTypeMetadata) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowObjectTypeMetadata2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadataᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.WorkflowObjectTypeMetadata) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
-		return ec.marshalNWorkflowObjectTypeMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadata(ctx, sel, v[i])
+		return ec.marshalNWorkflowObjectTypeMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadata(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
@@ -521,7 +521,7 @@ func (ec *executionContext) marshalNWorkflowObjectTypeMetadata2ᚕᚖgithubᚗco
 	return ret
 }
 
-func (ec *executionContext) marshalNWorkflowObjectTypeMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowObjectTypeMetadata) graphql.Marshaler {
+func (ec *executionContext) marshalNWorkflowObjectTypeMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowObjectTypeMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowObjectTypeMetadata) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

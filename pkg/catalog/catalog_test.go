@@ -7,7 +7,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/v2/pkg/catalog"
 )
 
 func writeTempCatalog(t *testing.T, data string) string {

@@ -11,9 +11,9 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	gala "github.com/theopenlane/core/pkg/gala"
-	logx "github.com/theopenlane/core/pkg/logx"
+	generated "github.com/theopenlane/core/v2/internal/ent/generated"
+	gala "github.com/theopenlane/core/v2/pkg/gala"
+	logx "github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // FieldMatch is one declarative proposed-value predicate on a mutation listener: the

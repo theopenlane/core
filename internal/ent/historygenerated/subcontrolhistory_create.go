@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/subcontrolhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -785,7 +785,6 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 		_node = &SubcontrolHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subcontrolhistory.Table, sqlgraph.NewFieldSpec(subcontrolhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.SubcontrolHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

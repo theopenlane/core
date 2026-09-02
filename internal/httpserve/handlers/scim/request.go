@@ -7,8 +7,8 @@ import (
 
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/middleware/transaction"
 )
 
 var requestKey = contextx.NewKey[*Request]()

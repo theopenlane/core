@@ -11,15 +11,15 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -218,7 +218,7 @@ func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *ca
 // integration runtime. It performs an active lookup for the email integration at
 // dispatch time so integrations created after campaign creation are picked up
 func (r *mutationResolver) dispatchCampaignOperation(ctx context.Context, state *campaignDispatchState) error {
-	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
+	rt := intruntime.Default()
 	if rt == nil {
 		return ErrCampaignDispatchRuntimeRequired
 	}
@@ -408,7 +408,7 @@ func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, state
 		return ErrCampaignDispatchScheduleRequired
 	}
 
-	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
+	rt := intruntime.Default()
 	if rt == nil {
 		return ErrCampaignDispatchRuntimeRequired
 	}

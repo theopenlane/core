@@ -12,7 +12,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/narrativehistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -397,7 +397,6 @@ func (_c *NarrativeHistoryCreate) createSpec() (*NarrativeHistory, *sqlgraph.Cre
 		_node = &NarrativeHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(narrativehistory.Table, sqlgraph.NewFieldSpec(narrativehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.NarrativeHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

@@ -17,11 +17,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/validator"
 )
 
 // Evidence holds the schema definition for the Evidence entity
@@ -148,6 +148,10 @@ func (Evidence) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("REVIEW_FREQUENCY"),
 			),
+		field.String("auditor_reference_id").
+			Annotations(entx.FieldWorkflowEligible()).
+			Optional().
+			Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
 	}
 }
 
@@ -210,6 +214,20 @@ func (e Evidence) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(e, ControlObjective{}),
 		defaultEdgeToWithPagination(e, ControlImplementation{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: InternalPolicy{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(InternalPolicy{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Procedure{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Procedure{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(e, File{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: e,

@@ -6,9 +6,9 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // persistDirectoryAccountInput upserts one DirectoryAccount record using the ingest lookup key fields

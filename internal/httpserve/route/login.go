@@ -3,7 +3,7 @@ package route
 import (
 	"net/http"
 
-	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 )
 
 // Login is oriented towards human users who use their email and password for

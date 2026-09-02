@@ -13,7 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -451,7 +451,6 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) createSpec() (*TrustCenterWat
 		_node = &TrustCenterWatermarkConfigHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcenterwatermarkconfighistory.Table, sqlgraph.NewFieldSpec(trustcenterwatermarkconfighistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustCenterWatermarkConfigHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/v2/pkg/objects"
 )
 
 func TestGetOrgOwnerIDUsesSingleAuthorizedOrg(t *testing.T) {

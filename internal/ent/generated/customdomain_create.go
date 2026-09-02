@@ -11,10 +11,10 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
-	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/dnsverification"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 )
 
 // CustomDomainCreate is the builder for creating a CustomDomain entity.
@@ -400,7 +400,6 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 		_node = &CustomDomain{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(customdomain.Table, sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.CustomDomain
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -472,7 +471,6 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -490,7 +488,6 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(mappabledomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -508,7 +505,6 @@ func (_c *CustomDomainCreate) createSpec() (*CustomDomain, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

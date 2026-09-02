@@ -3,7 +3,7 @@
 package cmd
 
 import (
-	"github.com/theopenlane/core/internal/integrations/cli/config"
+	"github.com/theopenlane/core/v2/internal/integrations/cli/config"
 )
 
 // OutputFormat returns the resolved output format (json or table)

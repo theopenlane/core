@@ -11,8 +11,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
 )
 
 // GroupSettingCreate is the builder for creating a GroupSetting entity.
@@ -335,7 +335,6 @@ func (_c *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec)
 		_node = &GroupSetting{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(groupsetting.Table, sqlgraph.NewFieldSpec(groupsetting.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.GroupSetting
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -395,7 +394,6 @@ func (_c *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

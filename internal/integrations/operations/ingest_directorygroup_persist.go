@@ -5,8 +5,8 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 )
 
 // persistDirectoryGroupInput upserts one DirectoryGroup record using the ingest lookup key fields

@@ -9,21 +9,21 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/note"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterfaq"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
@@ -370,8 +370,6 @@ func (r *updateControlInputResolver) AddDiscussion(ctx context.Context, obj *gen
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
-
 	return nil
 }
 
@@ -516,8 +514,6 @@ func (r *updateInternalPolicyInputResolver) AddDiscussion(ctx context.Context, o
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
-
 	return nil
 }
 
@@ -622,8 +618,6 @@ func (r *updateProcedureInputResolver) AddDiscussion(ctx context.Context, obj *g
 	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
 
 	return nil
 }
@@ -769,8 +763,6 @@ func (r *updateRiskInputResolver) AddDiscussion(ctx context.Context, obj *genera
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
-
 	return nil
 }
 
@@ -875,8 +867,6 @@ func (r *updateSubcontrolInputResolver) AddDiscussion(ctx context.Context, obj *
 	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
 
 	return nil
 }

@@ -8,518 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/predicate"
 )
 
 // AssessmentResponseHistoryUpdate is the builder for updating AssessmentResponseHistory entities.
 type AssessmentResponseHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *AssessmentResponseHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *AssessmentResponseHistoryMutation
 }
 
 // Where appends a list predicates to the AssessmentResponseHistoryUpdate builder.
 func (_u *AssessmentResponseHistoryUpdate) Where(ps ...predicate.AssessmentResponseHistory) *AssessmentResponseHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *AssessmentResponseHistoryUpdate) SetUpdatedAt(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearUpdatedAt() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *AssessmentResponseHistoryUpdate) SetUpdatedBy(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableUpdatedBy(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearUpdatedBy() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *AssessmentResponseHistoryUpdate) SetUpdatedByImpersonator(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearUpdatedByImpersonator() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *AssessmentResponseHistoryUpdate) SetDeletedAt(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableDeletedAt(v *time.Time) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearDeletedAt() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *AssessmentResponseHistoryUpdate) SetDeletedBy(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableDeletedBy(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearDeletedBy() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *AssessmentResponseHistoryUpdate) SetWorkflowEligibleMarker(v bool) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearWorkflowEligibleMarker() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetAssessmentID sets the "assessment_id" field.
-func (_u *AssessmentResponseHistoryUpdate) SetAssessmentID(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetAssessmentID(v)
-	return _u
-}
-
-// SetNillableAssessmentID sets the "assessment_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableAssessmentID(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetAssessmentID(*v)
-	}
-	return _u
-}
-
-// SetIsTest sets the "is_test" field.
-func (_u *AssessmentResponseHistoryUpdate) SetIsTest(v bool) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetIsTest(v)
-	return _u
-}
-
-// SetNillableIsTest sets the "is_test" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableIsTest(v *bool) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetIsTest(*v)
-	}
-	return _u
-}
-
-// SetCampaignID sets the "campaign_id" field.
-func (_u *AssessmentResponseHistoryUpdate) SetCampaignID(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetCampaignID(v)
-	return _u
-}
-
-// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableCampaignID(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetCampaignID(*v)
-	}
-	return _u
-}
-
-// ClearCampaignID clears the value of the "campaign_id" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearCampaignID() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearCampaignID()
-	return _u
-}
-
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_u *AssessmentResponseHistoryUpdate) SetIdentityHolderID(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetIdentityHolderID(v)
-	return _u
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableIdentityHolderID(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetIdentityHolderID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearIdentityHolderID() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearIdentityHolderID()
-	return _u
-}
-
-// SetEntityID sets the "entity_id" field.
-func (_u *AssessmentResponseHistoryUpdate) SetEntityID(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetEntityID(v)
-	return _u
-}
-
-// SetNillableEntityID sets the "entity_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableEntityID(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetEntityID(*v)
-	}
-	return _u
-}
-
-// ClearEntityID clears the value of the "entity_id" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearEntityID() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearEntityID()
-	return _u
-}
-
-// SetDisplayName sets the "display_name" field.
-func (_u *AssessmentResponseHistoryUpdate) SetDisplayName(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetDisplayName(v)
-	return _u
-}
-
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableDisplayName(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetDisplayName(*v)
-	}
-	return _u
-}
-
-// ClearDisplayName clears the value of the "display_name" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearDisplayName() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearDisplayName()
-	return _u
-}
-
-// SetSendAttempts sets the "send_attempts" field.
-func (_u *AssessmentResponseHistoryUpdate) SetSendAttempts(v int) *AssessmentResponseHistoryUpdate {
-	_u.mutation.ResetSendAttempts()
-	_u.mutation.SetSendAttempts(v)
-	return _u
-}
-
-// SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableSendAttempts(v *int) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetSendAttempts(*v)
-	}
-	return _u
-}
-
-// AddSendAttempts adds value to the "send_attempts" field.
-func (_u *AssessmentResponseHistoryUpdate) AddSendAttempts(v int) *AssessmentResponseHistoryUpdate {
-	_u.mutation.AddSendAttempts(v)
-	return _u
-}
-
-// SetEmailDeliveredAt sets the "email_delivered_at" field.
-func (_u *AssessmentResponseHistoryUpdate) SetEmailDeliveredAt(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetEmailDeliveredAt(v)
-	return _u
-}
-
-// SetNillableEmailDeliveredAt sets the "email_delivered_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableEmailDeliveredAt(v *time.Time) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetEmailDeliveredAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailDeliveredAt clears the value of the "email_delivered_at" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearEmailDeliveredAt() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearEmailDeliveredAt()
-	return _u
-}
-
-// SetEmailOpenedAt sets the "email_opened_at" field.
-func (_u *AssessmentResponseHistoryUpdate) SetEmailOpenedAt(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetEmailOpenedAt(v)
-	return _u
-}
-
-// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableEmailOpenedAt(v *time.Time) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetEmailOpenedAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailOpenedAt clears the value of the "email_opened_at" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearEmailOpenedAt() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearEmailOpenedAt()
-	return _u
-}
-
-// SetEmailClickedAt sets the "email_clicked_at" field.
-func (_u *AssessmentResponseHistoryUpdate) SetEmailClickedAt(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetEmailClickedAt(v)
-	return _u
-}
-
-// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableEmailClickedAt(v *time.Time) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetEmailClickedAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailClickedAt clears the value of the "email_clicked_at" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearEmailClickedAt() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearEmailClickedAt()
-	return _u
-}
-
-// SetEmailOpenCount sets the "email_open_count" field.
-func (_u *AssessmentResponseHistoryUpdate) SetEmailOpenCount(v int) *AssessmentResponseHistoryUpdate {
-	_u.mutation.ResetEmailOpenCount()
-	_u.mutation.SetEmailOpenCount(v)
-	return _u
-}
-
-// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableEmailOpenCount(v *int) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetEmailOpenCount(*v)
-	}
-	return _u
-}
-
-// AddEmailOpenCount adds value to the "email_open_count" field.
-func (_u *AssessmentResponseHistoryUpdate) AddEmailOpenCount(v int) *AssessmentResponseHistoryUpdate {
-	_u.mutation.AddEmailOpenCount(v)
-	return _u
-}
-
-// ClearEmailOpenCount clears the value of the "email_open_count" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearEmailOpenCount() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearEmailOpenCount()
-	return _u
-}
-
-// SetEmailClickCount sets the "email_click_count" field.
-func (_u *AssessmentResponseHistoryUpdate) SetEmailClickCount(v int) *AssessmentResponseHistoryUpdate {
-	_u.mutation.ResetEmailClickCount()
-	_u.mutation.SetEmailClickCount(v)
-	return _u
-}
-
-// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableEmailClickCount(v *int) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetEmailClickCount(*v)
-	}
-	return _u
-}
-
-// AddEmailClickCount adds value to the "email_click_count" field.
-func (_u *AssessmentResponseHistoryUpdate) AddEmailClickCount(v int) *AssessmentResponseHistoryUpdate {
-	_u.mutation.AddEmailClickCount(v)
-	return _u
-}
-
-// ClearEmailClickCount clears the value of the "email_click_count" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearEmailClickCount() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearEmailClickCount()
-	return _u
-}
-
-// SetLastEmailEventAt sets the "last_email_event_at" field.
-func (_u *AssessmentResponseHistoryUpdate) SetLastEmailEventAt(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetLastEmailEventAt(v)
-	return _u
-}
-
-// SetNillableLastEmailEventAt sets the "last_email_event_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableLastEmailEventAt(v *time.Time) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetLastEmailEventAt(*v)
-	}
-	return _u
-}
-
-// ClearLastEmailEventAt clears the value of the "last_email_event_at" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearLastEmailEventAt() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearLastEmailEventAt()
-	return _u
-}
-
-// SetEmailMetadata sets the "email_metadata" field.
-func (_u *AssessmentResponseHistoryUpdate) SetEmailMetadata(v map[string]interface{}) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetEmailMetadata(v)
-	return _u
-}
-
-// ClearEmailMetadata clears the value of the "email_metadata" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearEmailMetadata() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearEmailMetadata()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *AssessmentResponseHistoryUpdate) SetStatus(v enums.AssessmentResponseStatus) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableStatus(v *enums.AssessmentResponseStatus) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetStartedAt sets the "started_at" field.
-func (_u *AssessmentResponseHistoryUpdate) SetStartedAt(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetStartedAt(v)
-	return _u
-}
-
-// SetNillableStartedAt sets the "started_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableStartedAt(v *time.Time) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetStartedAt(*v)
-	}
-	return _u
-}
-
-// SetCompletedAt sets the "completed_at" field.
-func (_u *AssessmentResponseHistoryUpdate) SetCompletedAt(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetCompletedAt(v)
-	return _u
-}
-
-// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableCompletedAt(v *time.Time) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetCompletedAt(*v)
-	}
-	return _u
-}
-
-// ClearCompletedAt clears the value of the "completed_at" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearCompletedAt() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearCompletedAt()
-	return _u
-}
-
-// SetDueDate sets the "due_date" field.
-func (_u *AssessmentResponseHistoryUpdate) SetDueDate(v time.Time) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetDueDate(v)
-	return _u
-}
-
-// SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableDueDate(v *time.Time) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetDueDate(*v)
-	}
-	return _u
-}
-
-// ClearDueDate clears the value of the "due_date" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearDueDate() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearDueDate()
-	return _u
-}
-
-// SetDocumentDataID sets the "document_data_id" field.
-func (_u *AssessmentResponseHistoryUpdate) SetDocumentDataID(v string) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetDocumentDataID(v)
-	return _u
-}
-
-// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableDocumentDataID(v *string) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetDocumentDataID(*v)
-	}
-	return _u
-}
-
-// ClearDocumentDataID clears the value of the "document_data_id" field.
-func (_u *AssessmentResponseHistoryUpdate) ClearDocumentDataID() *AssessmentResponseHistoryUpdate {
-	_u.mutation.ClearDocumentDataID()
-	return _u
-}
-
-// SetIsDraft sets the "is_draft" field.
-func (_u *AssessmentResponseHistoryUpdate) SetIsDraft(v bool) *AssessmentResponseHistoryUpdate {
-	_u.mutation.SetIsDraft(v)
-	return _u
-}
-
-// SetNillableIsDraft sets the "is_draft" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdate) SetNillableIsDraft(v *bool) *AssessmentResponseHistoryUpdate {
-	if v != nil {
-		_u.SetIsDraft(*v)
-	}
 	return _u
 }
 
@@ -530,9 +36,6 @@ func (_u *AssessmentResponseHistoryUpdate) Mutation() *AssessmentResponseHistory
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *AssessmentResponseHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -558,38 +61,7 @@ func (_u *AssessmentResponseHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *AssessmentResponseHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if assessmentresponsehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized assessmentresponsehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := assessmentresponsehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *AssessmentResponseHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := assessmentresponsehistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "AssessmentResponseHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *AssessmentResponseHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssessmentResponseHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(assessmentresponsehistory.Table, assessmentresponsehistory.Columns, sqlgraph.NewFieldSpec(assessmentresponsehistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -604,35 +76,20 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDeletedBy, field.TypeString)
@@ -640,38 +97,17 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.AssessmentID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.IsTest(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldIsTest, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.CampaignID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldCampaignID, field.TypeString, value)
 	}
 	if _u.mutation.CampaignIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldCampaignID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IdentityHolderID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldIdentityHolderID, field.TypeString, value)
-	}
 	if _u.mutation.IdentityHolderIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldIdentityHolderID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EntityID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEntityID, field.TypeString, value)
-	}
 	if _u.mutation.EntityIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEntityID, field.TypeString)
-	}
-	if value, ok := _u.mutation.DisplayName(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDisplayName, field.TypeString, value)
 	}
 	if _u.mutation.DisplayNameCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDisplayName, field.TypeString)
@@ -679,90 +115,36 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.EmailCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmail, field.TypeString)
 	}
-	if value, ok := _u.mutation.SendAttempts(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedSendAttempts(); ok {
-		_spec.AddField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.EmailDeliveredAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailDeliveredAt, field.TypeTime, value)
-	}
 	if _u.mutation.EmailDeliveredAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailDeliveredAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailOpenedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailOpenedAt, field.TypeTime, value)
 	}
 	if _u.mutation.EmailOpenedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailOpenedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.EmailClickedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailClickedAt, field.TypeTime, value)
-	}
 	if _u.mutation.EmailClickedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailClickedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailOpenCount(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailOpenCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedEmailOpenCount(); ok {
-		_spec.AddField(assessmentresponsehistory.FieldEmailOpenCount, field.TypeInt, value)
 	}
 	if _u.mutation.EmailOpenCountCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailOpenCount, field.TypeInt)
 	}
-	if value, ok := _u.mutation.EmailClickCount(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailClickCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedEmailClickCount(); ok {
-		_spec.AddField(assessmentresponsehistory.FieldEmailClickCount, field.TypeInt, value)
-	}
 	if _u.mutation.EmailClickCountCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailClickCount, field.TypeInt)
-	}
-	if value, ok := _u.mutation.LastEmailEventAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldLastEmailEventAt, field.TypeTime, value)
 	}
 	if _u.mutation.LastEmailEventAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldLastEmailEventAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.EmailMetadata(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.EmailMetadataCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.StartedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldStartedAt, field.TypeTime, value)
-	}
-	if value, ok := _u.mutation.CompletedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldCompletedAt, field.TypeTime, value)
 	}
 	if _u.mutation.CompletedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldCompletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DueDate(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDueDate, field.TypeTime, value)
-	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDueDate, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DocumentDataID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDocumentDataID, field.TypeString, value)
 	}
 	if _u.mutation.DocumentDataIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDocumentDataID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IsDraft(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldIsDraft, field.TypeBool, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.AssessmentResponseHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{assessmentresponsehistory.Label}
@@ -778,499 +160,9 @@ func (_u *AssessmentResponseHistoryUpdate) sqlSave(ctx context.Context) (_node i
 // AssessmentResponseHistoryUpdateOne is the builder for updating a single AssessmentResponseHistory entity.
 type AssessmentResponseHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *AssessmentResponseHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetUpdatedAt(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearUpdatedAt() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetUpdatedBy(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableUpdatedBy(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearUpdatedBy() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetUpdatedByImpersonator(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearUpdatedByImpersonator() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetDeletedAt(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearDeletedAt() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetDeletedBy(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableDeletedBy(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearDeletedBy() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearWorkflowEligibleMarker() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetAssessmentID sets the "assessment_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetAssessmentID(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetAssessmentID(v)
-	return _u
-}
-
-// SetNillableAssessmentID sets the "assessment_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableAssessmentID(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetAssessmentID(*v)
-	}
-	return _u
-}
-
-// SetIsTest sets the "is_test" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetIsTest(v bool) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetIsTest(v)
-	return _u
-}
-
-// SetNillableIsTest sets the "is_test" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableIsTest(v *bool) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsTest(*v)
-	}
-	return _u
-}
-
-// SetCampaignID sets the "campaign_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetCampaignID(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetCampaignID(v)
-	return _u
-}
-
-// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableCampaignID(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetCampaignID(*v)
-	}
-	return _u
-}
-
-// ClearCampaignID clears the value of the "campaign_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearCampaignID() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearCampaignID()
-	return _u
-}
-
-// SetIdentityHolderID sets the "identity_holder_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetIdentityHolderID(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetIdentityHolderID(v)
-	return _u
-}
-
-// SetNillableIdentityHolderID sets the "identity_holder_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableIdentityHolderID(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdentityHolderID(*v)
-	}
-	return _u
-}
-
-// ClearIdentityHolderID clears the value of the "identity_holder_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearIdentityHolderID() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearIdentityHolderID()
-	return _u
-}
-
-// SetEntityID sets the "entity_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetEntityID(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetEntityID(v)
-	return _u
-}
-
-// SetNillableEntityID sets the "entity_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableEntityID(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetEntityID(*v)
-	}
-	return _u
-}
-
-// ClearEntityID clears the value of the "entity_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearEntityID() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearEntityID()
-	return _u
-}
-
-// SetDisplayName sets the "display_name" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetDisplayName(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetDisplayName(v)
-	return _u
-}
-
-// SetNillableDisplayName sets the "display_name" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableDisplayName(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetDisplayName(*v)
-	}
-	return _u
-}
-
-// ClearDisplayName clears the value of the "display_name" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearDisplayName() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearDisplayName()
-	return _u
-}
-
-// SetSendAttempts sets the "send_attempts" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetSendAttempts(v int) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ResetSendAttempts()
-	_u.mutation.SetSendAttempts(v)
-	return _u
-}
-
-// SetNillableSendAttempts sets the "send_attempts" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableSendAttempts(v *int) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetSendAttempts(*v)
-	}
-	return _u
-}
-
-// AddSendAttempts adds value to the "send_attempts" field.
-func (_u *AssessmentResponseHistoryUpdateOne) AddSendAttempts(v int) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.AddSendAttempts(v)
-	return _u
-}
-
-// SetEmailDeliveredAt sets the "email_delivered_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetEmailDeliveredAt(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetEmailDeliveredAt(v)
-	return _u
-}
-
-// SetNillableEmailDeliveredAt sets the "email_delivered_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableEmailDeliveredAt(v *time.Time) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmailDeliveredAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailDeliveredAt clears the value of the "email_delivered_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearEmailDeliveredAt() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearEmailDeliveredAt()
-	return _u
-}
-
-// SetEmailOpenedAt sets the "email_opened_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetEmailOpenedAt(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetEmailOpenedAt(v)
-	return _u
-}
-
-// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableEmailOpenedAt(v *time.Time) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmailOpenedAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailOpenedAt clears the value of the "email_opened_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearEmailOpenedAt() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearEmailOpenedAt()
-	return _u
-}
-
-// SetEmailClickedAt sets the "email_clicked_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetEmailClickedAt(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetEmailClickedAt(v)
-	return _u
-}
-
-// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableEmailClickedAt(v *time.Time) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmailClickedAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailClickedAt clears the value of the "email_clicked_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearEmailClickedAt() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearEmailClickedAt()
-	return _u
-}
-
-// SetEmailOpenCount sets the "email_open_count" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetEmailOpenCount(v int) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ResetEmailOpenCount()
-	_u.mutation.SetEmailOpenCount(v)
-	return _u
-}
-
-// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableEmailOpenCount(v *int) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmailOpenCount(*v)
-	}
-	return _u
-}
-
-// AddEmailOpenCount adds value to the "email_open_count" field.
-func (_u *AssessmentResponseHistoryUpdateOne) AddEmailOpenCount(v int) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.AddEmailOpenCount(v)
-	return _u
-}
-
-// ClearEmailOpenCount clears the value of the "email_open_count" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearEmailOpenCount() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearEmailOpenCount()
-	return _u
-}
-
-// SetEmailClickCount sets the "email_click_count" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetEmailClickCount(v int) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ResetEmailClickCount()
-	_u.mutation.SetEmailClickCount(v)
-	return _u
-}
-
-// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableEmailClickCount(v *int) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmailClickCount(*v)
-	}
-	return _u
-}
-
-// AddEmailClickCount adds value to the "email_click_count" field.
-func (_u *AssessmentResponseHistoryUpdateOne) AddEmailClickCount(v int) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.AddEmailClickCount(v)
-	return _u
-}
-
-// ClearEmailClickCount clears the value of the "email_click_count" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearEmailClickCount() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearEmailClickCount()
-	return _u
-}
-
-// SetLastEmailEventAt sets the "last_email_event_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetLastEmailEventAt(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetLastEmailEventAt(v)
-	return _u
-}
-
-// SetNillableLastEmailEventAt sets the "last_email_event_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableLastEmailEventAt(v *time.Time) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetLastEmailEventAt(*v)
-	}
-	return _u
-}
-
-// ClearLastEmailEventAt clears the value of the "last_email_event_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearLastEmailEventAt() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearLastEmailEventAt()
-	return _u
-}
-
-// SetEmailMetadata sets the "email_metadata" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetEmailMetadata(v map[string]interface{}) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetEmailMetadata(v)
-	return _u
-}
-
-// ClearEmailMetadata clears the value of the "email_metadata" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearEmailMetadata() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearEmailMetadata()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetStatus(v enums.AssessmentResponseStatus) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableStatus(v *enums.AssessmentResponseStatus) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetStartedAt sets the "started_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetStartedAt(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetStartedAt(v)
-	return _u
-}
-
-// SetNillableStartedAt sets the "started_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableStartedAt(v *time.Time) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetStartedAt(*v)
-	}
-	return _u
-}
-
-// SetCompletedAt sets the "completed_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetCompletedAt(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetCompletedAt(v)
-	return _u
-}
-
-// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableCompletedAt(v *time.Time) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompletedAt(*v)
-	}
-	return _u
-}
-
-// ClearCompletedAt clears the value of the "completed_at" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearCompletedAt() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearCompletedAt()
-	return _u
-}
-
-// SetDueDate sets the "due_date" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetDueDate(v time.Time) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetDueDate(v)
-	return _u
-}
-
-// SetNillableDueDate sets the "due_date" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableDueDate(v *time.Time) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetDueDate(*v)
-	}
-	return _u
-}
-
-// ClearDueDate clears the value of the "due_date" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearDueDate() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearDueDate()
-	return _u
-}
-
-// SetDocumentDataID sets the "document_data_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetDocumentDataID(v string) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetDocumentDataID(v)
-	return _u
-}
-
-// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableDocumentDataID(v *string) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetDocumentDataID(*v)
-	}
-	return _u
-}
-
-// ClearDocumentDataID clears the value of the "document_data_id" field.
-func (_u *AssessmentResponseHistoryUpdateOne) ClearDocumentDataID() *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.ClearDocumentDataID()
-	return _u
-}
-
-// SetIsDraft sets the "is_draft" field.
-func (_u *AssessmentResponseHistoryUpdateOne) SetIsDraft(v bool) *AssessmentResponseHistoryUpdateOne {
-	_u.mutation.SetIsDraft(v)
-	return _u
-}
-
-// SetNillableIsDraft sets the "is_draft" field if the given value is not nil.
-func (_u *AssessmentResponseHistoryUpdateOne) SetNillableIsDraft(v *bool) *AssessmentResponseHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsDraft(*v)
-	}
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *AssessmentResponseHistoryMutation
 }
 
 // Mutation returns the AssessmentResponseHistoryMutation object of the builder.
@@ -1293,9 +185,6 @@ func (_u *AssessmentResponseHistoryUpdateOne) Select(field string, fields ...str
 
 // Save executes the query and returns the updated AssessmentResponseHistory entity.
 func (_u *AssessmentResponseHistoryUpdateOne) Save(ctx context.Context) (*AssessmentResponseHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1321,38 +210,7 @@ func (_u *AssessmentResponseHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *AssessmentResponseHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if assessmentresponsehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized assessmentresponsehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := assessmentresponsehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *AssessmentResponseHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := assessmentresponsehistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "AssessmentResponseHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *AssessmentResponseHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssessmentResponseHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssessmentResponseHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(assessmentresponsehistory.Table, assessmentresponsehistory.Columns, sqlgraph.NewFieldSpec(assessmentresponsehistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1384,35 +242,20 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDeletedBy, field.TypeString)
@@ -1420,38 +263,17 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.AssessmentID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldAssessmentID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.IsTest(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldIsTest, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.CampaignID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldCampaignID, field.TypeString, value)
 	}
 	if _u.mutation.CampaignIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldCampaignID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IdentityHolderID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldIdentityHolderID, field.TypeString, value)
-	}
 	if _u.mutation.IdentityHolderIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldIdentityHolderID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EntityID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEntityID, field.TypeString, value)
-	}
 	if _u.mutation.EntityIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEntityID, field.TypeString)
-	}
-	if value, ok := _u.mutation.DisplayName(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDisplayName, field.TypeString, value)
 	}
 	if _u.mutation.DisplayNameCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDisplayName, field.TypeString)
@@ -1459,90 +281,36 @@ func (_u *AssessmentResponseHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.EmailCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmail, field.TypeString)
 	}
-	if value, ok := _u.mutation.SendAttempts(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedSendAttempts(); ok {
-		_spec.AddField(assessmentresponsehistory.FieldSendAttempts, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.EmailDeliveredAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailDeliveredAt, field.TypeTime, value)
-	}
 	if _u.mutation.EmailDeliveredAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailDeliveredAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailOpenedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailOpenedAt, field.TypeTime, value)
 	}
 	if _u.mutation.EmailOpenedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailOpenedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.EmailClickedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailClickedAt, field.TypeTime, value)
-	}
 	if _u.mutation.EmailClickedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailClickedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailOpenCount(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailOpenCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedEmailOpenCount(); ok {
-		_spec.AddField(assessmentresponsehistory.FieldEmailOpenCount, field.TypeInt, value)
 	}
 	if _u.mutation.EmailOpenCountCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailOpenCount, field.TypeInt)
 	}
-	if value, ok := _u.mutation.EmailClickCount(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailClickCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedEmailClickCount(); ok {
-		_spec.AddField(assessmentresponsehistory.FieldEmailClickCount, field.TypeInt, value)
-	}
 	if _u.mutation.EmailClickCountCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailClickCount, field.TypeInt)
-	}
-	if value, ok := _u.mutation.LastEmailEventAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldLastEmailEventAt, field.TypeTime, value)
 	}
 	if _u.mutation.LastEmailEventAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldLastEmailEventAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.EmailMetadata(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldEmailMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.EmailMetadataCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldEmailMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.StartedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldStartedAt, field.TypeTime, value)
-	}
-	if value, ok := _u.mutation.CompletedAt(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldCompletedAt, field.TypeTime, value)
 	}
 	if _u.mutation.CompletedAtCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldCompletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DueDate(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDueDate, field.TypeTime, value)
-	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDueDate, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DocumentDataID(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldDocumentDataID, field.TypeString, value)
 	}
 	if _u.mutation.DocumentDataIDCleared() {
 		_spec.ClearField(assessmentresponsehistory.FieldDocumentDataID, field.TypeString)
 	}
-	if value, ok := _u.mutation.IsDraft(); ok {
-		_spec.SetField(assessmentresponsehistory.FieldIsDraft, field.TypeBool, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.AssessmentResponseHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &AssessmentResponseHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

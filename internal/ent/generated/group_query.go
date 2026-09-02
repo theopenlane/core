@@ -13,38 +13,37 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
-	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
-	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/finding"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/narrative"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/remediation"
-	"github.com/theopenlane/core/internal/ent/generated/review"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/task"
-	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
+	"github.com/theopenlane/core/v2/internal/ent/generated/control"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlimplementation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/controlobjective"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/internalpolicy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/invite"
+	"github.com/theopenlane/core/v2/internal/ent/generated/mappedcontrol"
+	"github.com/theopenlane/core/v2/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/v2/internal/ent/generated/review"
+	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/generated/user"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // GroupQuery is the builder for querying Group entities.
@@ -214,9 +213,6 @@ func (_q *GroupQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, group.OwnerTable, group.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -239,9 +235,6 @@ func (_q *GroupQuery) QueryProgramEditors() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ProgramEditorsTable, group.ProgramEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -264,9 +257,6 @@ func (_q *GroupQuery) QueryProgramBlockedGroups() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ProgramBlockedGroupsTable, group.ProgramBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -289,9 +279,6 @@ func (_q *GroupQuery) QueryProgramViewers() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ProgramViewersTable, group.ProgramViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -314,9 +301,6 @@ func (_q *GroupQuery) QueryRiskEditors() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.RiskEditorsTable, group.RiskEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.RiskEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -339,9 +323,6 @@ func (_q *GroupQuery) QueryRiskBlockedGroups() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.RiskBlockedGroupsTable, group.RiskBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.RiskBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -364,9 +345,6 @@ func (_q *GroupQuery) QueryRiskViewers() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.RiskViewersTable, group.RiskViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.RiskViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -389,9 +367,6 @@ func (_q *GroupQuery) QueryControlObjectiveEditors() *ControlObjectiveQuery {
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlObjectiveEditorsTable, group.ControlObjectiveEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -414,9 +389,6 @@ func (_q *GroupQuery) QueryControlObjectiveBlockedGroups() *ControlObjectiveQuer
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlObjectiveBlockedGroupsTable, group.ControlObjectiveBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -439,9 +411,6 @@ func (_q *GroupQuery) QueryControlObjectiveViewers() *ControlObjectiveQuery {
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlObjectiveViewersTable, group.ControlObjectiveViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlObjectiveViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -464,9 +433,6 @@ func (_q *GroupQuery) QueryNarrativeEditors() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeEditorsTable, group.NarrativeEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.NarrativeEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -489,9 +455,6 @@ func (_q *GroupQuery) QueryNarrativeBlockedGroups() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeBlockedGroupsTable, group.NarrativeBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -514,9 +477,6 @@ func (_q *GroupQuery) QueryNarrativeViewers() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.NarrativeViewersTable, group.NarrativeViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.NarrativeViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -539,9 +499,6 @@ func (_q *GroupQuery) QueryControlImplementationEditors() *ControlImplementation
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlImplementationEditorsTable, group.ControlImplementationEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.ControlImplementationEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -564,9 +521,6 @@ func (_q *GroupQuery) QueryControlImplementationBlockedGroups() *ControlImplemen
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlImplementationBlockedGroupsTable, group.ControlImplementationBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.ControlImplementationBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -589,9 +543,6 @@ func (_q *GroupQuery) QueryControlImplementationViewers() *ControlImplementation
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlImplementationViewersTable, group.ControlImplementationViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.ControlImplementationViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -614,9 +565,6 @@ func (_q *GroupQuery) QueryActionPlanEditors() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ActionPlanEditorsTable, group.ActionPlanEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlanEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -639,9 +587,6 @@ func (_q *GroupQuery) QueryActionPlanBlockedGroups() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ActionPlanBlockedGroupsTable, group.ActionPlanBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlanBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -664,9 +609,6 @@ func (_q *GroupQuery) QueryActionPlanViewers() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ActionPlanViewersTable, group.ActionPlanViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlanViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -689,9 +631,6 @@ func (_q *GroupQuery) QueryPlatformEditors() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformEditorsTable, group.PlatformEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -714,9 +653,6 @@ func (_q *GroupQuery) QueryPlatformBlockedGroups() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformBlockedGroupsTable, group.PlatformBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -739,9 +675,6 @@ func (_q *GroupQuery) QueryPlatformViewers() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.PlatformViewersTable, group.PlatformViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -764,9 +697,6 @@ func (_q *GroupQuery) QueryCampaignEditors() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignEditorsTable, group.CampaignEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.CampaignEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -789,9 +719,6 @@ func (_q *GroupQuery) QueryCampaignBlockedGroups() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignBlockedGroupsTable, group.CampaignBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.CampaignBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -814,9 +741,6 @@ func (_q *GroupQuery) QueryCampaignViewers() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignViewersTable, group.CampaignViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.CampaignViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -839,9 +763,6 @@ func (_q *GroupQuery) QueryProcedureEditors() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureEditorsTable, group.ProcedureEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -864,9 +785,6 @@ func (_q *GroupQuery) QueryProcedureBlockedGroups() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ProcedureBlockedGroupsTable, group.ProcedureBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -889,9 +807,6 @@ func (_q *GroupQuery) QueryInternalPolicyEditors() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyEditorsTable, group.InternalPolicyEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -914,9 +829,6 @@ func (_q *GroupQuery) QueryInternalPolicyBlockedGroups() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.InternalPolicyBlockedGroupsTable, group.InternalPolicyBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -939,9 +851,6 @@ func (_q *GroupQuery) QueryControlEditors() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlEditorsTable, group.ControlEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -964,9 +873,6 @@ func (_q *GroupQuery) QueryControlBlockedGroups() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ControlBlockedGroupsTable, group.ControlBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -989,9 +895,6 @@ func (_q *GroupQuery) QueryMappedControlEditors() *MappedControlQuery {
 			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.MappedControlEditorsTable, group.MappedControlEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1014,9 +917,6 @@ func (_q *GroupQuery) QueryMappedControlBlockedGroups() *MappedControlQuery {
 			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.MappedControlBlockedGroupsTable, group.MappedControlBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1039,9 +939,6 @@ func (_q *GroupQuery) QueryScanEditors() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ScanEditorsTable, group.ScanEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ScanEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1064,9 +961,6 @@ func (_q *GroupQuery) QueryScanBlockedGroups() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ScanBlockedGroupsTable, group.ScanBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ScanBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1089,9 +983,6 @@ func (_q *GroupQuery) QueryEntityEditors() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.EntityEditorsTable, group.EntityEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntityEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1114,9 +1005,6 @@ func (_q *GroupQuery) QueryEntityBlockedGroups() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.EntityBlockedGroupsTable, group.EntityBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntityBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1139,9 +1027,6 @@ func (_q *GroupQuery) QueryFindingEditors() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.FindingEditorsTable, group.FindingEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1164,9 +1049,6 @@ func (_q *GroupQuery) QueryFindingBlockedGroups() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.FindingBlockedGroupsTable, group.FindingBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1189,9 +1071,6 @@ func (_q *GroupQuery) QueryReviewEditors() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ReviewEditorsTable, group.ReviewEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1214,9 +1093,6 @@ func (_q *GroupQuery) QueryReviewBlockedGroups() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.ReviewBlockedGroupsTable, group.ReviewBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1239,9 +1115,6 @@ func (_q *GroupQuery) QueryRemediationEditors() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.RemediationEditorsTable, group.RemediationEditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1264,9 +1137,6 @@ func (_q *GroupQuery) QueryRemediationBlockedGroups() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.RemediationBlockedGroupsTable, group.RemediationBlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1289,9 +1159,6 @@ func (_q *GroupQuery) QuerySetting() *GroupSettingQuery {
 			sqlgraph.To(groupsetting.Table, groupsetting.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, group.SettingTable, group.SettingColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.GroupSetting
-		step.Edge.Schema = schemaConfig.GroupSetting
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1314,9 +1181,6 @@ func (_q *GroupQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.UsersTable, group.UsersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.GroupMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1339,9 +1203,6 @@ func (_q *GroupQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, group.EventsTable, group.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.GroupEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1364,9 +1225,6 @@ func (_q *GroupQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, group.IntegrationsTable, group.IntegrationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1389,9 +1247,6 @@ func (_q *GroupQuery) QueryAvatarFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, group.AvatarFileTable, group.AvatarFileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1414,9 +1269,6 @@ func (_q *GroupQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, group.FilesTable, group.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.GroupFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1439,9 +1291,6 @@ func (_q *GroupQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, group.TasksTable, group.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.GroupTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1464,9 +1313,6 @@ func (_q *GroupQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.CampaignsTable, group.CampaignsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.CampaignGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1489,9 +1335,6 @@ func (_q *GroupQuery) QueryCampaignTargets() *CampaignTargetQuery {
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, group.CampaignTargetsTable, group.CampaignTargetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CampaignTarget
-		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1514,9 +1357,6 @@ func (_q *GroupQuery) QueryInvites() *InviteQuery {
 			sqlgraph.To(invite.Table, invite.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, group.InvitesTable, group.InvitesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Invite
-		step.Edge.Schema = schemaConfig.InviteGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1539,9 +1379,6 @@ func (_q *GroupQuery) QueryMembers() *GroupMembershipQuery {
 			sqlgraph.To(groupmembership.Table, groupmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, group.MembersTable, group.MembersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.GroupMembership
-		step.Edge.Schema = schemaConfig.GroupMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2549,8 +2386,6 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Group
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -3373,7 +3208,6 @@ func (_q *GroupQuery) loadProgramEditors(ctx context.Context, query *ProgramQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ProgramEditorsTable)
-		joinT.Schema(_q.schemaConfig.ProgramEditors)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(group.ProgramEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ProgramEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3435,7 +3269,6 @@ func (_q *GroupQuery) loadProgramBlockedGroups(ctx context.Context, query *Progr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ProgramBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ProgramBlockedGroups)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(group.ProgramBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ProgramBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3497,7 +3330,6 @@ func (_q *GroupQuery) loadProgramViewers(ctx context.Context, query *ProgramQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ProgramViewersTable)
-		joinT.Schema(_q.schemaConfig.ProgramViewers)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(group.ProgramViewersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ProgramViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3559,7 +3391,6 @@ func (_q *GroupQuery) loadRiskEditors(ctx context.Context, query *RiskQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.RiskEditorsTable)
-		joinT.Schema(_q.schemaConfig.RiskEditors)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(group.RiskEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.RiskEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3621,7 +3452,6 @@ func (_q *GroupQuery) loadRiskBlockedGroups(ctx context.Context, query *RiskQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.RiskBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.RiskBlockedGroups)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(group.RiskBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.RiskBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3683,7 +3513,6 @@ func (_q *GroupQuery) loadRiskViewers(ctx context.Context, query *RiskQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.RiskViewersTable)
-		joinT.Schema(_q.schemaConfig.RiskViewers)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(group.RiskViewersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.RiskViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3745,7 +3574,6 @@ func (_q *GroupQuery) loadControlObjectiveEditors(ctx context.Context, query *Co
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ControlObjectiveEditorsTable)
-		joinT.Schema(_q.schemaConfig.ControlObjectiveEditors)
 		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlObjectiveEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ControlObjectiveEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3807,7 +3635,6 @@ func (_q *GroupQuery) loadControlObjectiveBlockedGroups(ctx context.Context, que
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ControlObjectiveBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ControlObjectiveBlockedGroups)
 		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlObjectiveBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ControlObjectiveBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3869,7 +3696,6 @@ func (_q *GroupQuery) loadControlObjectiveViewers(ctx context.Context, query *Co
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ControlObjectiveViewersTable)
-		joinT.Schema(_q.schemaConfig.ControlObjectiveViewers)
 		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(group.ControlObjectiveViewersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ControlObjectiveViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3931,7 +3757,6 @@ func (_q *GroupQuery) loadNarrativeEditors(ctx context.Context, query *Narrative
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.NarrativeEditorsTable)
-		joinT.Schema(_q.schemaConfig.NarrativeEditors)
 		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(group.NarrativeEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.NarrativeEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3993,7 +3818,6 @@ func (_q *GroupQuery) loadNarrativeBlockedGroups(ctx context.Context, query *Nar
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.NarrativeBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.NarrativeBlockedGroups)
 		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(group.NarrativeBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.NarrativeBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4055,7 +3879,6 @@ func (_q *GroupQuery) loadNarrativeViewers(ctx context.Context, query *Narrative
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.NarrativeViewersTable)
-		joinT.Schema(_q.schemaConfig.NarrativeViewers)
 		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(group.NarrativeViewersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.NarrativeViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4117,7 +3940,6 @@ func (_q *GroupQuery) loadControlImplementationEditors(ctx context.Context, quer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ControlImplementationEditorsTable)
-		joinT.Schema(_q.schemaConfig.ControlImplementationEditors)
 		s.Join(joinT).On(s.C(controlimplementation.FieldID), joinT.C(group.ControlImplementationEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ControlImplementationEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4179,7 +4001,6 @@ func (_q *GroupQuery) loadControlImplementationBlockedGroups(ctx context.Context
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ControlImplementationBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ControlImplementationBlockedGroups)
 		s.Join(joinT).On(s.C(controlimplementation.FieldID), joinT.C(group.ControlImplementationBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ControlImplementationBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4241,7 +4062,6 @@ func (_q *GroupQuery) loadControlImplementationViewers(ctx context.Context, quer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ControlImplementationViewersTable)
-		joinT.Schema(_q.schemaConfig.ControlImplementationViewers)
 		s.Join(joinT).On(s.C(controlimplementation.FieldID), joinT.C(group.ControlImplementationViewersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ControlImplementationViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4303,7 +4123,6 @@ func (_q *GroupQuery) loadActionPlanEditors(ctx context.Context, query *ActionPl
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ActionPlanEditorsTable)
-		joinT.Schema(_q.schemaConfig.ActionPlanEditors)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(group.ActionPlanEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ActionPlanEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4365,7 +4184,6 @@ func (_q *GroupQuery) loadActionPlanBlockedGroups(ctx context.Context, query *Ac
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ActionPlanBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ActionPlanBlockedGroups)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(group.ActionPlanBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ActionPlanBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4427,7 +4245,6 @@ func (_q *GroupQuery) loadActionPlanViewers(ctx context.Context, query *ActionPl
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ActionPlanViewersTable)
-		joinT.Schema(_q.schemaConfig.ActionPlanViewers)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(group.ActionPlanViewersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ActionPlanViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4489,7 +4306,6 @@ func (_q *GroupQuery) loadPlatformEditors(ctx context.Context, query *PlatformQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.PlatformEditorsTable)
-		joinT.Schema(_q.schemaConfig.PlatformEditors)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(group.PlatformEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.PlatformEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4551,7 +4367,6 @@ func (_q *GroupQuery) loadPlatformBlockedGroups(ctx context.Context, query *Plat
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.PlatformBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.PlatformBlockedGroups)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(group.PlatformBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.PlatformBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4613,7 +4428,6 @@ func (_q *GroupQuery) loadPlatformViewers(ctx context.Context, query *PlatformQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.PlatformViewersTable)
-		joinT.Schema(_q.schemaConfig.PlatformViewers)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(group.PlatformViewersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.PlatformViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4675,7 +4489,6 @@ func (_q *GroupQuery) loadCampaignEditors(ctx context.Context, query *CampaignQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.CampaignEditorsTable)
-		joinT.Schema(_q.schemaConfig.CampaignEditors)
 		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(group.CampaignEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.CampaignEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4737,7 +4550,6 @@ func (_q *GroupQuery) loadCampaignBlockedGroups(ctx context.Context, query *Camp
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.CampaignBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.CampaignBlockedGroups)
 		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(group.CampaignBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.CampaignBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4799,7 +4611,6 @@ func (_q *GroupQuery) loadCampaignViewers(ctx context.Context, query *CampaignQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.CampaignViewersTable)
-		joinT.Schema(_q.schemaConfig.CampaignViewers)
 		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(group.CampaignViewersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.CampaignViewersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4861,7 +4672,6 @@ func (_q *GroupQuery) loadProcedureEditors(ctx context.Context, query *Procedure
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ProcedureEditorsTable)
-		joinT.Schema(_q.schemaConfig.ProcedureEditors)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(group.ProcedureEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ProcedureEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4923,7 +4733,6 @@ func (_q *GroupQuery) loadProcedureBlockedGroups(ctx context.Context, query *Pro
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ProcedureBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ProcedureBlockedGroups)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(group.ProcedureBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ProcedureBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4985,7 +4794,6 @@ func (_q *GroupQuery) loadInternalPolicyEditors(ctx context.Context, query *Inte
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.InternalPolicyEditorsTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyEditors)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(group.InternalPolicyEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.InternalPolicyEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5047,7 +4855,6 @@ func (_q *GroupQuery) loadInternalPolicyBlockedGroups(ctx context.Context, query
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.InternalPolicyBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyBlockedGroups)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(group.InternalPolicyBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.InternalPolicyBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5109,7 +4916,6 @@ func (_q *GroupQuery) loadControlEditors(ctx context.Context, query *ControlQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ControlEditorsTable)
-		joinT.Schema(_q.schemaConfig.ControlEditors)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(group.ControlEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ControlEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5171,7 +4977,6 @@ func (_q *GroupQuery) loadControlBlockedGroups(ctx context.Context, query *Contr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ControlBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ControlBlockedGroups)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(group.ControlBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ControlBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5233,7 +5038,6 @@ func (_q *GroupQuery) loadMappedControlEditors(ctx context.Context, query *Mappe
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.MappedControlEditorsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlEditors)
 		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(group.MappedControlEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.MappedControlEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5295,7 +5099,6 @@ func (_q *GroupQuery) loadMappedControlBlockedGroups(ctx context.Context, query 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.MappedControlBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlBlockedGroups)
 		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(group.MappedControlBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.MappedControlBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5357,7 +5160,6 @@ func (_q *GroupQuery) loadScanEditors(ctx context.Context, query *ScanQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ScanEditorsTable)
-		joinT.Schema(_q.schemaConfig.ScanEditors)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(group.ScanEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ScanEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5419,7 +5221,6 @@ func (_q *GroupQuery) loadScanBlockedGroups(ctx context.Context, query *ScanQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ScanBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ScanBlockedGroups)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(group.ScanBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ScanBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5481,7 +5282,6 @@ func (_q *GroupQuery) loadEntityEditors(ctx context.Context, query *EntityQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.EntityEditorsTable)
-		joinT.Schema(_q.schemaConfig.EntityEditors)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(group.EntityEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.EntityEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5543,7 +5343,6 @@ func (_q *GroupQuery) loadEntityBlockedGroups(ctx context.Context, query *Entity
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.EntityBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.EntityBlockedGroups)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(group.EntityBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.EntityBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5605,7 +5404,6 @@ func (_q *GroupQuery) loadFindingEditors(ctx context.Context, query *FindingQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.FindingEditorsTable)
-		joinT.Schema(_q.schemaConfig.FindingEditors)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(group.FindingEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.FindingEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5667,7 +5465,6 @@ func (_q *GroupQuery) loadFindingBlockedGroups(ctx context.Context, query *Findi
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.FindingBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.FindingBlockedGroups)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(group.FindingBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.FindingBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5729,7 +5526,6 @@ func (_q *GroupQuery) loadReviewEditors(ctx context.Context, query *ReviewQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ReviewEditorsTable)
-		joinT.Schema(_q.schemaConfig.ReviewEditors)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(group.ReviewEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ReviewEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5791,7 +5587,6 @@ func (_q *GroupQuery) loadReviewBlockedGroups(ctx context.Context, query *Review
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.ReviewBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ReviewBlockedGroups)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(group.ReviewBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.ReviewBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5853,7 +5648,6 @@ func (_q *GroupQuery) loadRemediationEditors(ctx context.Context, query *Remedia
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.RemediationEditorsTable)
-		joinT.Schema(_q.schemaConfig.RemediationEditors)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(group.RemediationEditorsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.RemediationEditorsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -5915,7 +5709,6 @@ func (_q *GroupQuery) loadRemediationBlockedGroups(ctx context.Context, query *R
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.RemediationBlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.RemediationBlockedGroups)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(group.RemediationBlockedGroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.RemediationBlockedGroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -6004,7 +5797,6 @@ func (_q *GroupQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.UsersTable)
-		joinT.Schema(_q.schemaConfig.GroupMembership)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(group.UsersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -6066,7 +5858,6 @@ func (_q *GroupQuery) loadEvents(ctx context.Context, query *EventQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.EventsTable)
-		joinT.Schema(_q.schemaConfig.GroupEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(group.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(group.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -6191,7 +5982,6 @@ func (_q *GroupQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.FilesTable)
-		joinT.Schema(_q.schemaConfig.GroupFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(group.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(group.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -6253,7 +6043,6 @@ func (_q *GroupQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.TasksTable)
-		joinT.Schema(_q.schemaConfig.GroupTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(group.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(group.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -6315,7 +6104,6 @@ func (_q *GroupQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.CampaignsTable)
-		joinT.Schema(_q.schemaConfig.CampaignGroups)
 		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(group.CampaignsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.CampaignsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -6407,7 +6195,6 @@ func (_q *GroupQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(group.InvitesTable)
-		joinT.Schema(_q.schemaConfig.InviteGroups)
 		s.Join(joinT).On(s.C(invite.FieldID), joinT.C(group.InvitesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(group.InvitesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -6490,8 +6277,6 @@ func (_q *GroupQuery) loadMembers(ctx context.Context, query *GroupMembershipQue
 
 func (_q *GroupQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Group
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -6563,9 +6348,6 @@ func (_q *GroupQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Group)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

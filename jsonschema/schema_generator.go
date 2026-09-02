@@ -18,9 +18,9 @@ import (
 
 	"github.com/theopenlane/utils/envparse"
 
-	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/internal/genhelpers"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
+	"github.com/theopenlane/core/v2/config"
+	"github.com/theopenlane/core/v2/internal/genhelpers"
+	"github.com/theopenlane/core/v2/pkg/middleware/ratelimit"
 )
 
 // const values used for the schema generator
@@ -1684,33 +1684,6 @@ func formatValue(v any) string {
 
 		return formatted
 	}
-}
-
-// formatHelmDefaultLiteral formats a value as a Helm template-friendly default literal.
-func formatHelmDefaultLiteral(v any) string {
-	if v == nil {
-		return "\"\""
-	}
-
-	value := reflect.ValueOf(v)
-	for value.Kind() == reflect.Ptr {
-		if value.IsNil() {
-			return "\"\""
-		}
-		value = value.Elem()
-	}
-
-	unwrapped := value.Interface()
-
-	if b, ok := unwrapped.(bool); ok {
-		return fmt.Sprintf("%t", b)
-	}
-
-	if d, ok := unwrapped.(time.Duration); ok {
-		return strconv.Quote(d.String())
-	}
-
-	return strconv.Quote(fmt.Sprintf("%v", unwrapped))
 }
 
 // hasSecretChildren checks if a struct has any sensitive child fields

@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -695,7 +695,6 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 		_node = &TaskHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(taskhistory.Table, sqlgraph.NewFieldSpec(taskhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TaskHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

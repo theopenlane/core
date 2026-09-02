@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _CampaignBulkCreatePayload_campaigns(ctx context.Con
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.Campaign) graphql.Marshaler {
-			return ec.marshalOCampaign2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaignᚄ(ctx, selections, v)
+			return ec.marshalOCampaign2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _CampaignCreatePayload_campaign(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Campaign) graphql.Marshaler {
-			return ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaign(ctx, selections, v)
+			return ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaign(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _CampaignUpdatePayload_campaign(ctx context.Context,
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Campaign) graphql.Marshaler {
-			return ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCampaign(ctx, selections, v)
+			return ec.marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaign(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _CampaignUpdatePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNCampaignBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaignBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignBulkCreatePayload) graphql.Marshaler {
 	return ec._CampaignBulkCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCampaignBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignBulkCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaignBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNCampaignBulkCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._CampaignBulkCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCampaignCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaignCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignCreatePayload) graphql.Marshaler {
 	return ec._CampaignCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCampaignCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaignCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNCampaignCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._CampaignCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCampaignDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaignDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignDeletePayload) graphql.Marshaler {
 	return ec._CampaignDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCampaignDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaignDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -354,11 +354,11 @@ func (ec *executionContext) marshalNCampaignDeletePayload2ᚖgithubᚗcomᚋtheo
 	return ec._CampaignDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCampaignUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaignUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignUpdatePayload) graphql.Marshaler {
 	return ec._CampaignUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNCampaignUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCampaignUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNCampaignUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")

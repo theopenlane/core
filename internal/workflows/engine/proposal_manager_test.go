@@ -10,10 +10,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
-	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -45,9 +45,6 @@ func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() 
 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
-
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	buildApprovalAction := func(key string, fields []string) models.WorkflowAction {
 		params := workflows.ApprovalActionParams{

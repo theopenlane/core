@@ -13,29 +13,28 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/contact"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/entity"
-	"github.com/theopenlane/core/internal/ent/generated/event"
-	"github.com/theopenlane/core/internal/ent/generated/evidence"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/hush"
-	"github.com/theopenlane/core/internal/ent/generated/identityholder"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
+	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hush"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
+	"github.com/theopenlane/core/v2/internal/ent/generated/template"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterentity"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // FileQuery is the builder for querying File entities.
@@ -139,9 +138,6 @@ func (_q *FileQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.EnvironmentTable, file.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -164,9 +160,6 @@ func (_q *FileQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.ScopeTable, file.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -189,9 +182,6 @@ func (_q *FileQuery) QueryCategory() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, file.CategoryTable, file.CategoryColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.File
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -214,9 +204,6 @@ func (_q *FileQuery) QueryOrganization() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.OrganizationTable, file.OrganizationPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -239,9 +226,6 @@ func (_q *FileQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.GroupsTable, file.GroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.GroupFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -264,9 +248,6 @@ func (_q *FileQuery) QueryContact() *ContactQuery {
 			sqlgraph.To(contact.Table, contact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.ContactTable, file.ContactPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Contact
-		step.Edge.Schema = schemaConfig.ContactFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -289,9 +270,6 @@ func (_q *FileQuery) QueryEntity() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.EntityTable, file.EntityPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntityFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -314,9 +292,6 @@ func (_q *FileQuery) QueryOrganizationSetting() *OrganizationSettingQuery {
 			sqlgraph.To(organizationsetting.Table, organizationsetting.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.OrganizationSettingTable, file.OrganizationSettingPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrganizationSetting
-		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -339,9 +314,6 @@ func (_q *FileQuery) QueryTemplate() *TemplateQuery {
 			sqlgraph.To(template.Table, template.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.TemplateTable, file.TemplatePrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.TemplateFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -364,9 +336,6 @@ func (_q *FileQuery) QueryDocument() *DocumentDataQuery {
 			sqlgraph.To(documentdata.Table, documentdata.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.DocumentTable, file.DocumentPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.DocumentDataFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -389,9 +358,6 @@ func (_q *FileQuery) QueryProgram() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.ProgramTable, file.ProgramPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -414,9 +380,6 @@ func (_q *FileQuery) QueryPlatform() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.PlatformTable, file.PlatformPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -439,9 +402,6 @@ func (_q *FileQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.EvidenceTable, file.EvidencePrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -464,9 +424,6 @@ func (_q *FileQuery) QueryIdentityHolder() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.IdentityHolderTable, file.IdentityHolderPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.IdentityHolderFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -489,9 +446,6 @@ func (_q *FileQuery) QueryScan() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, file.ScanTable, file.ScanPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ScanFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -514,9 +468,6 @@ func (_q *FileQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, file.EventsTable, file.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.FileEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -539,9 +490,6 @@ func (_q *FileQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, file.IntegrationsTable, file.IntegrationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Integration
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -564,9 +512,6 @@ func (_q *FileQuery) QuerySecrets() *HushQuery {
 			sqlgraph.To(hush.Table, hush.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, file.SecretsTable, file.SecretsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.FileSecrets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -589,9 +534,6 @@ func (_q *FileQuery) QueryTrustCenterEntities() *TrustCenterEntityQuery {
 			sqlgraph.To(trustcenterentity.Table, trustcenterentity.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, file.TrustCenterEntitiesTable, file.TrustCenterEntitiesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterEntity
-		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -614,9 +556,6 @@ func (_q *FileQuery) QueryTrustCenterDoc() *TrustCenterDocQuery {
 			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, file.TrustCenterDocTable, file.TrustCenterDocColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterDoc
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -639,9 +578,6 @@ func (_q *FileQuery) QueryOriginalTrustCenterDoc() *TrustCenterDocQuery {
 			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, file.OriginalTrustCenterDocTable, file.OriginalTrustCenterDocColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterDoc
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1220,8 +1156,6 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.File
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1618,7 +1552,6 @@ func (_q *FileQuery) loadOrganization(ctx context.Context, query *OrganizationQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.OrganizationTable)
-		joinT.Schema(_q.schemaConfig.OrganizationFiles)
 		s.Join(joinT).On(s.C(organization.FieldID), joinT.C(file.OrganizationPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.OrganizationPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1680,7 +1613,6 @@ func (_q *FileQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.GroupsTable)
-		joinT.Schema(_q.schemaConfig.GroupFiles)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(file.GroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.GroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1742,7 +1674,6 @@ func (_q *FileQuery) loadContact(ctx context.Context, query *ContactQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.ContactTable)
-		joinT.Schema(_q.schemaConfig.ContactFiles)
 		s.Join(joinT).On(s.C(contact.FieldID), joinT.C(file.ContactPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.ContactPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1804,7 +1735,6 @@ func (_q *FileQuery) loadEntity(ctx context.Context, query *EntityQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.EntityTable)
-		joinT.Schema(_q.schemaConfig.EntityFiles)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(file.EntityPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.EntityPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1866,7 +1796,6 @@ func (_q *FileQuery) loadOrganizationSetting(ctx context.Context, query *Organiz
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.OrganizationSettingTable)
-		joinT.Schema(_q.schemaConfig.OrganizationSettingFiles)
 		s.Join(joinT).On(s.C(organizationsetting.FieldID), joinT.C(file.OrganizationSettingPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.OrganizationSettingPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1928,7 +1857,6 @@ func (_q *FileQuery) loadTemplate(ctx context.Context, query *TemplateQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.TemplateTable)
-		joinT.Schema(_q.schemaConfig.TemplateFiles)
 		s.Join(joinT).On(s.C(template.FieldID), joinT.C(file.TemplatePrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.TemplatePrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1990,7 +1918,6 @@ func (_q *FileQuery) loadDocument(ctx context.Context, query *DocumentDataQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.DocumentTable)
-		joinT.Schema(_q.schemaConfig.DocumentDataFiles)
 		s.Join(joinT).On(s.C(documentdata.FieldID), joinT.C(file.DocumentPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.DocumentPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2052,7 +1979,6 @@ func (_q *FileQuery) loadProgram(ctx context.Context, query *ProgramQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.ProgramTable)
-		joinT.Schema(_q.schemaConfig.ProgramFiles)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(file.ProgramPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.ProgramPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2114,7 +2040,6 @@ func (_q *FileQuery) loadPlatform(ctx context.Context, query *PlatformQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.PlatformTable)
-		joinT.Schema(_q.schemaConfig.PlatformFiles)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(file.PlatformPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.PlatformPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2176,7 +2101,6 @@ func (_q *FileQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.EvidenceTable)
-		joinT.Schema(_q.schemaConfig.EvidenceFiles)
 		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(file.EvidencePrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.EvidencePrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2238,7 +2162,6 @@ func (_q *FileQuery) loadIdentityHolder(ctx context.Context, query *IdentityHold
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.IdentityHolderTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderFiles)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(file.IdentityHolderPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.IdentityHolderPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2300,7 +2223,6 @@ func (_q *FileQuery) loadScan(ctx context.Context, query *ScanQuery, nodes []*Fi
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.ScanTable)
-		joinT.Schema(_q.schemaConfig.ScanFiles)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(file.ScanPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(file.ScanPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2362,7 +2284,6 @@ func (_q *FileQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.EventsTable)
-		joinT.Schema(_q.schemaConfig.FileEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(file.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(file.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2455,7 +2376,6 @@ func (_q *FileQuery) loadSecrets(ctx context.Context, query *HushQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(file.SecretsTable)
-		joinT.Schema(_q.schemaConfig.FileSecrets)
 		s.Join(joinT).On(s.C(hush.FieldID), joinT.C(file.SecretsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(file.SecretsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2606,8 +2526,6 @@ func (_q *FileQuery) loadOriginalTrustCenterDoc(ctx context.Context, query *Trus
 
 func (_q *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.File
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2682,9 +2600,6 @@ func (_q *FileQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.File)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

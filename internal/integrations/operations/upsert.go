@@ -9,10 +9,10 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // legacyScientificKey converts a numeric key like "147884153" into the "1.47884153e+08" form the

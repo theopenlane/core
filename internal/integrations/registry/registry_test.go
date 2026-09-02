@@ -6,8 +6,8 @@ import (
 	"errors"
 	"testing"
 
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
+	integrationtypes "github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
 // testCredentialSlot is a reusable credential slot for tests

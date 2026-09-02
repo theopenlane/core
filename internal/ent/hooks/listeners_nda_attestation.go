@@ -4,15 +4,18 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/jsonx"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/ent/generated/documentdata"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterndarequest"
+	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
+	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
+
+// init registers the NDA attestation listeners so gala setup picks them up automatically
+func init() { registerListeners(NDAAttestationListeners) }
 
 // NDAAttestationListeners attests signed trust center NDAs after document data creation
 func NDAAttestationListeners() []gala.Registration {
@@ -101,7 +104,7 @@ func handleNDAAttestationCreated(inv entityops.Invocation, payload entityops.Mut
 		return err
 	}
 
-	if err := sendSystemEmail(inv.Context, inv.Client, emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
+	if err := sendSystemEmail(inv.Context, emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
 		RecipientInfo:      emaildef.RecipientInfo{Email: inv.Caller.SubjectEmail},
 		OrgName:            result.OrgName,
 		RequestID:          requestID,

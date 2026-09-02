@@ -6,7 +6,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/newman/render"
 
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
 // BrandedMessageRequest is a customer-selectable catalog entry providing a flexible,

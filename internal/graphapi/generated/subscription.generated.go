@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _Subscription_notificationCreated(ctx context.Contex
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.Notification) graphql.Marshaler {
-			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
+			return ec.marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotification(ctx, selections, v)
 		},
 		true,
 		true,

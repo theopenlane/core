@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/file"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenterdoc"
 )
 
 // TrustCenterDocCreate is the builder for creating a TrustCenterDoc entity.
@@ -460,7 +460,6 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 		_node = &TrustCenterDoc{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcenterdoc.Table, sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustCenterDoc
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -528,7 +527,6 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -546,7 +544,6 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -563,7 +560,6 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -580,7 +576,6 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -598,7 +593,6 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -616,7 +610,6 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -634,7 +627,6 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

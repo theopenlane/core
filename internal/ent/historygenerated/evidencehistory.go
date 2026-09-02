@@ -14,7 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/evidencehistory"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -81,7 +81,9 @@ type EvidenceHistory struct {
 	Status enums.EvidenceStatus `json:"status,omitempty"`
 	// the cadence for reviewing the evidence
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
-	selectValues    sql.SelectValues
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
+	selectValues       sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -97,7 +99,7 @@ func (*EvidenceHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case evidencehistory.FieldWorkflowEligibleMarker, evidencehistory.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldUpdatedByImpersonator, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldEnvironmentName, evidencehistory.FieldEnvironmentID, evidencehistory.FieldScopeName, evidencehistory.FieldScopeID, evidencehistory.FieldExternalUUID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus, evidencehistory.FieldReviewFrequency:
+		case evidencehistory.FieldID, evidencehistory.FieldRef, evidencehistory.FieldCreatedBy, evidencehistory.FieldUpdatedBy, evidencehistory.FieldUpdatedByImpersonator, evidencehistory.FieldDeletedBy, evidencehistory.FieldDisplayID, evidencehistory.FieldOwnerID, evidencehistory.FieldEnvironmentName, evidencehistory.FieldEnvironmentID, evidencehistory.FieldScopeName, evidencehistory.FieldScopeID, evidencehistory.FieldExternalUUID, evidencehistory.FieldName, evidencehistory.FieldDescription, evidencehistory.FieldCollectionProcedure, evidencehistory.FieldSource, evidencehistory.FieldURL, evidencehistory.FieldStatus, evidencehistory.FieldReviewFrequency, evidencehistory.FieldAuditorReferenceID:
 			values[i] = new(sql.NullString)
 		case evidencehistory.FieldHistoryTime, evidencehistory.FieldCreatedAt, evidencehistory.FieldUpdatedAt, evidencehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -302,6 +304,12 @@ func (_m *EvidenceHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ReviewFrequency = enums.Frequency(value.String)
 			}
+		case evidencehistory.FieldAuditorReferenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
+			} else if value.Valid {
+				_m.AuditorReferenceID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -432,6 +440,9 @@ func (_m *EvidenceHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("auditor_reference_id=")
+	builder.WriteString(_m.AuditorReferenceID)
 	builder.WriteByte(')')
 	return builder.String()
 }

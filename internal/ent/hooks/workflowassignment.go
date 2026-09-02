@@ -7,20 +7,20 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/groupmembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 )
 
 // HookWorkflowAssignmentDecisionAuth ensures only assignment targets can approve/reject.
 func HookWorkflowAssignmentDecisionAuth() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WorkflowAssignmentFunc(func(ctx context.Context, m *generated.WorkflowAssignmentMutation) (generated.Value, error) {
-			if !workflowEngineEnabled(ctx, m.Client()) {
+			if !workflowEngineEnabled() {
 				return next.Mutate(ctx, m)
 			}
 

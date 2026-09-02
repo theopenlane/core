@@ -85,6 +85,8 @@ const (
 	FieldStorageRegion = "storage_region"
 	// FieldStorageProvider holds the string denoting the storage_provider field in the database.
 	FieldStorageProvider = "storage_provider"
+	// FieldBackupState holds the string denoting the backup_state field in the database.
+	FieldBackupState = "backup_state"
 	// FieldLastAccessedAt holds the string denoting the last_accessed_at field in the database.
 	FieldLastAccessedAt = "last_accessed_at"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -290,6 +292,7 @@ var Columns = []string{
 	FieldMetadata,
 	FieldStorageRegion,
 	FieldStorageProvider,
+	FieldBackupState,
 	FieldLastAccessedAt,
 }
 
@@ -373,7 +376,7 @@ func ValidColumn(column string) bool {
 // package on the initialization of the application. Therefore,
 // it should be imported in the main as follows:
 //
-//	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
+//	import _ "github.com/theopenlane/core/v2/internal/ent/generated/runtime"
 var (
 	Hooks        [10]ent.Hook
 	Interceptors [4]ent.Interceptor

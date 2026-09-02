@@ -8,9 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // ID filters vertices based on their ID field.
@@ -1225,9 +1223,6 @@ func HasTrustCenterDocKind() predicate.TrustCenterDoc {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterDocKindTable, TrustCenterDocKindColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1236,9 +1231,6 @@ func HasTrustCenterDocKind() predicate.TrustCenterDoc {
 func HasTrustCenterDocKindWith(preds ...predicate.CustomTypeEnum) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
 		step := newTrustCenterDocKindStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1254,9 +1246,6 @@ func HasBlockedGroups() predicate.TrustCenterDoc {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1265,9 +1254,6 @@ func HasBlockedGroups() predicate.TrustCenterDoc {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1283,9 +1269,6 @@ func HasEditors() predicate.TrustCenterDoc {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1294,9 +1277,6 @@ func HasEditors() predicate.TrustCenterDoc {
 func HasEditorsWith(preds ...predicate.Group) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1312,9 +1292,6 @@ func HasTrustCenter() predicate.TrustCenterDoc {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1323,9 +1300,6 @@ func HasTrustCenter() predicate.TrustCenterDoc {
 func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
 		step := newTrustCenterStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1341,9 +1315,6 @@ func HasStandard() predicate.TrustCenterDoc {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, StandardTable, StandardColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1352,9 +1323,6 @@ func HasStandard() predicate.TrustCenterDoc {
 func HasStandardWith(preds ...predicate.Standard) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
 		step := newStandardStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1370,9 +1338,6 @@ func HasFile() predicate.TrustCenterDoc {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1381,9 +1346,6 @@ func HasFile() predicate.TrustCenterDoc {
 func HasFileWith(preds ...predicate.File) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
 		step := newFileStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1399,9 +1361,6 @@ func HasOriginalFile() predicate.TrustCenterDoc {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, OriginalFileTable, OriginalFileColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1410,9 +1369,6 @@ func HasOriginalFile() predicate.TrustCenterDoc {
 func HasOriginalFileWith(preds ...predicate.File) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
 		step := newOriginalFileStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

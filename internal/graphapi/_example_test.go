@@ -4,12 +4,14 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
 // This file provides examples for testing the basic CRUD operations for the Openlane API for a given object
@@ -20,7 +22,7 @@ import (
 
 // Seed data for test users is created in seed_test.go, refer to the file for details
 // the seeded data includes:
-// - sharedTestUser1 (org owner), viewOnlyUser (read-only access), and adminUser (view and edit access)
+// - th.SharedTestUser1 (org owner), viewOnlyUser (read-only access), and adminUser (view and edit access)
 //   as part of one organization
 // - testUser2 part of another organization
 // if you find yourself needing additional test users, you can add them to the seed data so they
@@ -56,8 +58,8 @@ import (
 
 func TestQuerySingleOBJECT(t *testing.T) {
 
-	// create an OBJECT to be queried using sharedTestUser1
-	OBJECT := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create an OBJECT to be queried using th.SharedTestUser1
+	OBJECT := (&OBJECTBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// add test cases for querying the OBJECT
 	testCases := []struct {
@@ -70,34 +72,34 @@ func TestQuerySingleOBJECT(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: OBJECT.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, read only user",
 			queryID: OBJECT.ID,
-			client:  suite.client.api,
+			client:  suite.Client.API,
 			ctx:     viewOnlyUser.UserCtx,
 		},
 		{
 			name:    "happy path using personal access token",
 			queryID: OBJECT.ID,
-			client:  suite.client.apiWithPAT,
+			client:  suite.Client.APIWithPAT,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "OBJECT not found, invalid ID",
 			queryID:  "invalid",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "OBJECT not found, using not authorized user",
 			queryID:  OBJECT.ID,
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      testUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -121,13 +123,13 @@ func TestQuerySingleOBJECT(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, ID: OBJECT.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.OBJECTDeleteOne]{Client: suite.Client.DB.OBJECT, ID: OBJECT.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryAllOBJECTs(t *testing.T) {
-	// create multiple objects to be queried using sharedTestUser1
-	OBJECT1 := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	OBJECT2 := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	// create multiple objects to be queried using th.SharedTestUser1
+	OBJECT1 := (&OBJECTBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	OBJECT2 := (&OBJECTBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -137,31 +139,31 @@ func TestQueryAllOBJECTs(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using read only user of the same org",
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             viewOnlyUser.UserCtx,
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          suite.client.apiWithToken,
+			client:          suite.Client.APIWithToken,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          suite.client.apiWithPAT,
+			client:          suite.Client.APIWithPAT,
 			ctx:             context.Background(),
 			expectedResults: 2,
 		},
 		{
 			name:            "another user, no OBJECTs should be returned",
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             testUser2.UserCtx,
 			expectedResults: 0,
 		},
@@ -177,7 +179,7 @@ func TestQueryAllOBJECTs(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, IDs: []string{OBJECT1.ID, OBJECT2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.OBJECTDeleteOne]{Client: suite.Client.DB.OBJECT, IDs: []string{OBJECT1.ID, OBJECT2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateOBJECT(t *testing.T) {
@@ -193,23 +195,23 @@ func TestMutationCreateOBJECT(t *testing.T) {
 			request: testclient.CreateOBJECTInput{
 				// add minimal input for the OBJECT
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, all input",
 			request: testclient.CreateOBJECTInput{
 				// add all input for the OBJECT
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, using pat",
 			request: testclient.CreateOBJECTInput{
 				// add input for the OBJECT
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -217,7 +219,7 @@ func TestMutationCreateOBJECT(t *testing.T) {
 			request: testclient.CreateOBJECTInput{
 				// add input for the OBJECT
 			},
-			client: suite.client.apiWithToken,
+			client: suite.Client.APIWithToken,
 			ctx:    context.Background(),
 		},
 		{
@@ -225,9 +227,9 @@ func TestMutationCreateOBJECT(t *testing.T) {
 			request: testclient.CreateOBJECTInput{
 				// add all input for the OBJECT
 			},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		// add additional test cases for the OBJECT
 		//   - add test cases for required fields not being provided
@@ -235,8 +237,8 @@ func TestMutationCreateOBJECT(t *testing.T) {
 		{
 			name:        "missing required field",
 			request:     testclient.CreateOBJECTInput{},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "value is less than the required length",
 		},
 	}
@@ -258,13 +260,13 @@ func TestMutationCreateOBJECT(t *testing.T) {
 			// check optional fields with if checks if they were provided or not
 
 			// cleanup each object created
-			(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, ID: resp.CreateOBJECT.OBJECT.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.OBJECTDeleteOne]{Client: suite.Client.DB.OBJECT, ID: resp.CreateOBJECT.OBJECT.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateOBJECT(t *testing.T) {
-	OBJECT := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	OBJECT := (&OBJECTBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -278,15 +280,15 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 			request: testclient.UpdateOBJECTInput{
 				// add field to update
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:    "happy path, update multiple fields",
 			request: testclient.UpdateOBJECTInput{
 				// add fields to update
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		// add additional test update cases for the OBJECT
@@ -295,18 +297,18 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 			request: testclient.UpdateOBJECTInput{
 				// add field to update
 			},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:    "update not allowed, no permissions",
 			request: testclient.UpdateOBJECTInput{
 				// add field to update
 			},
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -325,14 +327,14 @@ func TestMutationUpdateOBJECT(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.OBJECTDeleteOne]{client: suite.client.db.OBJECT, ID: OBJECT.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.OBJECTDeleteOne]{Client: suite.Client.DB.OBJECT, ID: OBJECT.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteOBJECT(t *testing.T) {
 	// create objects to be deleted
-	OBJECT1 := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	OBJECT2 := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	OBJECT3 := (&OBJECTBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	OBJECT1 := (&OBJECTBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	OBJECT2 := (&OBJECTBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	OBJECT3 := (&OBJECTBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -344,48 +346,48 @@ func TestMutationDeleteOBJECT(t *testing.T) {
 		{
 			name:        "not found, delete",
 			idToDelete:  OBJECT1.ID,
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, delete",
 			idToDelete:  OBJECT1.ID,
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:       "happy path, delete",
 			idToDelete: OBJECT1.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "already deleted, not found",
 			idToDelete:  OBJECT1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: OBJECT2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:       "happy path, delete using api token",
 			idToDelete: OBJECT3.ID,
-			client:     suite.client.apiWithToken,
+			client:     suite.Client.APIWithToken,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown id, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 

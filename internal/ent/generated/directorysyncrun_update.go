@@ -12,15 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
-	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
-	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
-	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
-	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // DirectorySyncRunUpdate is the builder for updating DirectorySyncRun entities.
@@ -696,7 +694,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -710,7 +707,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -727,7 +723,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -741,7 +736,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -758,7 +752,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -772,7 +765,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -789,7 +781,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
@@ -803,7 +794,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -820,7 +810,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -837,7 +826,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
@@ -851,7 +839,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -868,7 +855,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -885,7 +871,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
@@ -899,7 +884,6 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -916,14 +900,11 @@ func (_u *DirectorySyncRunUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.DirectorySyncRun
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1635,7 +1616,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -1649,7 +1629,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1666,7 +1645,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EnvironmentIDs(); len(nodes) > 0 {
@@ -1680,7 +1658,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1697,7 +1674,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ScopeIDs(); len(nodes) > 0 {
@@ -1711,7 +1687,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1728,7 +1703,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
@@ -1742,7 +1716,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1759,7 +1732,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryAccount
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1776,7 +1748,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
@@ -1790,7 +1761,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1807,7 +1777,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1824,7 +1793,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
@@ -1838,7 +1806,6 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1855,14 +1822,11 @@ func (_u *DirectorySyncRunUpdateOne) sqlSave(ctx context.Context) (_node *Direct
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.DirectorySyncRun
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &DirectorySyncRun{config: _u.config}
 	_spec.Assign = _node.assignValues

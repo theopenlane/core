@@ -11,19 +11,19 @@ import (
 	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/csvgenerated"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/ent/csvgenerated"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/v2/internal/graphapi/common"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateWorkflowDefinition is the resolver for the createWorkflowDefinition field.
 func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input generated.CreateWorkflowDefinitionInput) (*model.WorkflowDefinitionCreatePayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -77,7 +77,7 @@ func (r *mutationResolver) CreateWorkflowDefinition(ctx context.Context, input g
 
 // CreateBulkWorkflowDefinition is the resolver for the createBulkWorkflowDefinition field.
 func (r *mutationResolver) CreateBulkWorkflowDefinition(ctx context.Context, input []*generated.CreateWorkflowDefinitionInput) (*model.WorkflowDefinitionBulkCreatePayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -99,7 +99,7 @@ func (r *mutationResolver) CreateBulkWorkflowDefinition(ctx context.Context, inp
 
 // CreateBulkCSVWorkflowDefinition is the resolver for the createBulkCSVWorkflowDefinition field.
 func (r *mutationResolver) CreateBulkCSVWorkflowDefinition(ctx context.Context, input graphql.Upload) (*model.WorkflowDefinitionBulkCreatePayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -141,7 +141,7 @@ func (r *mutationResolver) CreateBulkCSVWorkflowDefinition(ctx context.Context, 
 
 // UpdateWorkflowDefinition is the resolver for the updateWorkflowDefinition field.
 func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id string, input generated.UpdateWorkflowDefinitionInput) (*model.WorkflowDefinitionUpdatePayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -207,7 +207,7 @@ func (r *mutationResolver) UpdateWorkflowDefinition(ctx context.Context, id stri
 
 // DeleteWorkflowDefinition is the resolver for the deleteWorkflowDefinition field.
 func (r *mutationResolver) DeleteWorkflowDefinition(ctx context.Context, id string) (*model.WorkflowDefinitionDeletePayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -226,7 +226,7 @@ func (r *mutationResolver) DeleteWorkflowDefinition(ctx context.Context, id stri
 
 // WorkflowDefinition is the resolver for the workflowDefinition field.
 func (r *queryResolver) WorkflowDefinition(ctx context.Context, id string) (*generated.WorkflowDefinition, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 

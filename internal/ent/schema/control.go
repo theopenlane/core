@@ -16,13 +16,13 @@ import (
 	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
-	"github.com/theopenlane/core/internal/ent/mixin"
-	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/graphapi/directives"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/hooks"
+	"github.com/theopenlane/core/v2/internal/ent/interceptors"
+	"github.com/theopenlane/core/v2/internal/ent/mixin"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/v2/internal/graphapi/directives"
 )
 
 // Control defines the control schema.
@@ -134,10 +134,6 @@ func (c Control) Edges() []ent.Edge {
 			fromSchema:    c,
 			edgeSchema:    Subcontrol{},
 			cascadeDelete: "Control",
-		}),
-		edgeFromWithPagination(&edgeDefinition{
-			fromSchema: c,
-			edgeSchema: ScheduledJob{},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,

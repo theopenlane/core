@@ -12,15 +12,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgprice"
-	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgmodule"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgprice"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgproduct"
+	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // OrgProductQuery is the builder for querying OrgProduct entities.
@@ -91,9 +90,6 @@ func (_q *OrgProductQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orgproduct.OwnerTable, orgproduct.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrgProduct
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -116,9 +112,6 @@ func (_q *OrgProductQuery) QueryOrgSubscription() *OrgSubscriptionQuery {
 			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orgproduct.OrgSubscriptionTable, orgproduct.OrgSubscriptionColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgProduct
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -141,9 +134,6 @@ func (_q *OrgProductQuery) QueryOrgPrices() *OrgPriceQuery {
 			sqlgraph.To(orgprice.Table, orgprice.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, orgproduct.OrgPricesTable, orgproduct.OrgPricesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgPrice
-		step.Edge.Schema = schemaConfig.OrgProductOrgPrices
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -166,9 +156,6 @@ func (_q *OrgProductQuery) QueryOrgModules() *OrgModuleQuery {
 			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, orgproduct.OrgModulesTable, orgproduct.OrgModulesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgModule
-		step.Edge.Schema = schemaConfig.OrgModule
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -520,8 +507,6 @@ func (_q *OrgProductQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*O
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.OrgProduct
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -653,7 +638,6 @@ func (_q *OrgProductQuery) loadOrgPrices(ctx context.Context, query *OrgPriceQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(orgproduct.OrgPricesTable)
-		joinT.Schema(_q.schemaConfig.OrgProductOrgPrices)
 		s.Join(joinT).On(s.C(orgprice.FieldID), joinT.C(orgproduct.OrgPricesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(orgproduct.OrgPricesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -736,8 +720,6 @@ func (_q *OrgProductQuery) loadOrgModules(ctx context.Context, query *OrgModuleQ
 
 func (_q *OrgProductQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.OrgProduct
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -809,9 +791,6 @@ func (_q *OrgProductQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.OrgProduct)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

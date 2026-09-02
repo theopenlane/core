@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/graphapi/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigBulkCreatePayload_trustCe
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []*generated.TrustCenterWatermarkConfig) graphql.Marshaler {
-			return ec.marshalOTrustCenterWatermarkConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigᚄ(ctx, selections, v)
+			return ec.marshalOTrustCenterWatermarkConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigᚄ(ctx, selections, v)
 		},
 		true,
 		false,
@@ -70,7 +70,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigCreatePayload_trustCenter
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterWatermarkConfig) graphql.Marshaler {
-			return ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx, selections, v)
+			return ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx, selections, v)
 		},
 		true,
 		true,
@@ -125,7 +125,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigUpdatePayload_trustCenter
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *generated.TrustCenterWatermarkConfig) graphql.Marshaler {
-			return ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx, selections, v)
+			return ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx, selections, v)
 		},
 		true,
 		true,
@@ -312,11 +312,11 @@ func (ec *executionContext) _TrustCenterWatermarkConfigUpdatePayload(ctx context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigCreatePayload) graphql.Marshaler {
 	return ec._TrustCenterWatermarkConfigCreatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigCreatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -326,11 +326,11 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2ᚖg
 	return ec._TrustCenterWatermarkConfigCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigDeletePayload) graphql.Marshaler {
 	return ec._TrustCenterWatermarkConfigDeletePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigDeletePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -340,11 +340,11 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2ᚖg
 	return ec._TrustCenterWatermarkConfigDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterWatermarkConfigUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigUpdatePayload) graphql.Marshaler {
 	return ec._TrustCenterWatermarkConfigUpdatePayload(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigUpdatePayload) graphql.Marshaler {
+func (ec *executionContext) marshalNTrustCenterWatermarkConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
