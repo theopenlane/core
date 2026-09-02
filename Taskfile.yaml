@@ -408,6 +408,15 @@ tasks:
     cmds:
       - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-graph.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-graph.out -tags test
 
+  go:testsum:ci:events:
+    desc: runs only the event driven (listener + integrations) graphapi tests using gotestsum for CI
+    silent: true
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    aliases: ['testsum:ci:events']
+    cmds:
+      - go run gotest.tools/gotestsum@latest --format standard-verbose --junitfile junit-events.xml --junitfile-hide-empty-pkg --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails=3 --rerun-fails-run-root-test  --hide-summary output -- -p 20 -timeout 20m -coverprofile=coverage-events.out -tags test
+
   go:testsum:ci:handlers:
     desc: runs tests only graph tests using gotestsum for CI
     silent: true
@@ -467,6 +476,15 @@ tasks:
     aliases: ['testsum:graph']
     cmds:
       - gotestsum --packages "github.com/theopenlane/core/v2/internal/httpserve/handlers" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
+
+  go:testsum:events:
+    desc: runs only the event driven (listener + integrations) graphapi tests using gotestsum
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    silent: true
+    aliases: ['testsum:events']
+    cmds:
+      - gotestsum --packages "github.com/theopenlane/core/v2/internal/graphapi/eventstest" --format-hide-empty-pkg --rerun-fails --format-icons hivis --hide-summary output -- -p 20 -tags test
 
   go:fmt:
     desc: format all go code

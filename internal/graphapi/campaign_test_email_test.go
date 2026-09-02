@@ -8,6 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -21,13 +23,13 @@ import (
 )
 
 // createBrandedTestCampaign creates an email template and a branded (non-questionnaire) campaign
-// owned by sharedTestUser1, registering cleanup for both
+// owned by th.SharedTestUser1, registering cleanup for both
 func createBrandedTestCampaign(t *testing.T, name string) *generated.Campaign {
 	t.Helper()
 
-	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
-	emailTemplate := suite.client.db.EmailTemplate.Create().
+	emailTemplate := suite.Client.DB.EmailTemplate.Create().
 		SetName(name + " Template").
 		SetKey(email.BrandedMessageOp.Name()).
 		SetTemplateContext(enums.TemplateContextCampaignRecipient).
@@ -38,25 +40,25 @@ func createBrandedTestCampaign(t *testing.T, name string) *generated.Campaign {
 		}).
 		SaveX(ctx)
 
-	campaignObj := suite.client.db.Campaign.Create().
+	campaignObj := suite.Client.DB.Campaign.Create().
 		SetName(name).
-		SetOwnerID(sharedTestUser1.OrganizationID).
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetCampaignType(enums.CampaignTypeCustom).
 		SetEmailTemplateID(emailTemplate.ID).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SaveX(ctx)
 
 	t.Cleanup(func() {
-		(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignObj.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-		(&Cleanup[*generated.EmailTemplateDeleteOne]{client: suite.client.db.EmailTemplate, ID: emailTemplate.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, ID: campaignObj.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.EmailTemplateDeleteOne]{Client: suite.Client.DB.EmailTemplate, ID: emailTemplate.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
 	return campaignObj
 }
 
-// sendTestEmail invokes the sendCampaignTestEmail mutation as sharedTestUser1
+// sendTestEmail invokes the sendCampaignTestEmail mutation as th.SharedTestUser1
 func sendTestEmail(campaignID string, emails []string) (*testclient.SendCampaignTestEmail, error) {
-	return suite.client.api.SendCampaignTestEmail(sharedTestUser1.UserCtx, testclient.SendCampaignTestEmailInput{
+	return suite.Client.API.SendCampaignTestEmail(th.SharedTestUser1.UserCtx, testclient.SendCampaignTestEmailInput{
 		CampaignID: campaignID,
 		Emails:     emails,
 	})
@@ -66,9 +68,9 @@ func sendTestEmail(campaignID string, emails []string) (*testclient.SendCampaign
 // questionnaire template reference gets an assessment created from the template and linked on the
 // first test email send, and that subsequent sends reuse the same assessment
 func TestSendCampaignTestEmailAssessmentBackfill(t *testing.T) {
-	template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	template := (&th.TemplateBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	createResp, err := suite.client.api.CreateCampaign(sharedTestUser1.UserCtx, testclient.CreateCampaignInput{
+	createResp, err := suite.Client.API.CreateCampaign(th.SharedTestUser1.UserCtx, testclient.CreateCampaignInput{
 		Name:                fmt.Sprintf("questionnaire-backfill-%s", ulids.New().String()),
 		CampaignType:        lo.ToPtr(enums.CampaignTypeQuestionnaire),
 		TemplateID:          lo.ToPtr(template.ID),
@@ -82,25 +84,25 @@ func TestSendCampaignTestEmailAssessmentBackfill(t *testing.T) {
 	var assessmentID string
 
 	t.Cleanup(func() {
-		allowCtx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+		allowCtx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
-		responses := suite.client.db.AssessmentResponse.Query().
+		responses := suite.Client.DB.AssessmentResponse.Query().
 			Where(assessmentresponse.CampaignIDEQ(campaignID)).
 			AllX(allowCtx)
 		if len(responses) > 0 {
-			(&Cleanup[*generated.AssessmentResponseDeleteOne]{
-				client: suite.client.db.AssessmentResponse,
+			(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{
+				Client: suite.Client.DB.AssessmentResponse,
 				IDs:    lo.Map(responses, func(r *generated.AssessmentResponse, _ int) string { return r.ID }),
-			}).MustDelete(sharedTestUser1.UserCtx, t)
+			}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		}
 
-		(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignID}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, ID: campaignID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 
 		if assessmentID != "" {
-			(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessmentID}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessmentID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		}
 
-		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: template.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
 	sendResp, err := sendTestEmail(campaignID, []string{"backfill-recipient@test.example"})
@@ -111,8 +113,8 @@ func TestSendCampaignTestEmailAssessmentBackfill(t *testing.T) {
 	assessmentID = lo.FromPtr(sendResp.SendCampaignTestEmail.Campaign.AssessmentID)
 	assert.Assert(t, assessmentID != "", "expected assessment to be backfilled from the questionnaire template")
 
-	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
-	assessmentObj := suite.client.db.Assessment.GetX(ctx, assessmentID)
+	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+	assessmentObj := suite.Client.DB.Assessment.GetX(ctx, assessmentID)
 	assert.Check(t, is.Equal(template.ID, assessmentObj.TemplateID))
 	assert.Check(t, is.Equal(template.Name, assessmentObj.Name))
 
@@ -143,17 +145,17 @@ func TestSendCampaignTestEmailBrandedCampaign(t *testing.T) {
 // TestSendCampaignTestEmailMissingEmailTemplate verifies a non-questionnaire campaign without a
 // linked email template is rejected
 func TestSendCampaignTestEmailMissingEmailTemplate(t *testing.T) {
-	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+	ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
 
-	campaignObj := suite.client.db.Campaign.Create().
+	campaignObj := suite.Client.DB.Campaign.Create().
 		SetName("Missing Email Template Test Campaign").
-		SetOwnerID(sharedTestUser1.OrganizationID).
+		SetOwnerID(th.SharedTestUser1.OrganizationID).
 		SetCampaignType(enums.CampaignTypeCustom).
 		SetRecurrenceFrequency(enums.FrequencyNone).
 		SaveX(ctx)
 
 	t.Cleanup(func() {
-		(&Cleanup[*generated.CampaignDeleteOne]{client: suite.client.db.Campaign, ID: campaignObj.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.CampaignDeleteOne]{Client: suite.Client.DB.Campaign, ID: campaignObj.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
 	_, err := sendTestEmail(campaignObj.ID, []string{"missing-template@test.example"})

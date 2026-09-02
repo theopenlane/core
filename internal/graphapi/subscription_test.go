@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/gorilla/websocket"
 	"github.com/theopenlane/iam/tokens"
@@ -20,17 +22,17 @@ import (
 func TestNotificationCreated(t *testing.T) {
 	testCases := []struct {
 		name        string
-		testUser    testUserDetails
+		testUser    th.TestUserDetails
 		expectError bool
 	}{
 		{
 			name:        "happy path",
-			testUser:    sharedTestUser1,
+			testUser:    th.SharedTestUser1,
 			expectError: false,
 		},
 		{
 			name: "invalid auth",
-			testUser: testUserDetails{
+			testUser: th.TestUserDetails{
 				ID: "nonexistent-user-id",
 			},
 			expectError: true,
@@ -39,7 +41,7 @@ func TestNotificationCreated(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			srv := httptest.NewServer(newTestGraphServer(t))
+			srv := httptest.NewServer(th.NewTestGraphServer(t))
 			defer srv.Close()
 
 			u, _ := url.Parse(srv.URL)
@@ -57,7 +59,7 @@ func TestNotificationCreated(t *testing.T) {
 				OrgID:  tc.testUser.OrganizationID,
 			}
 
-			access, _, err := suite.client.db.TokenManager.CreateTokenPair(claims)
+			access, _, err := suite.Client.DB.TokenManager.CreateTokenPair(claims)
 			assert.NilError(t, err)
 
 			// Send connection_init
@@ -123,7 +125,7 @@ func TestNotificationCreated(t *testing.T) {
 			}()
 
 			select {
-			case <-TestAfterCancel:
+			case <-th.TestAfterCancel:
 				t.Fatalf("Non nil-response after context cancelled, this will cause an infinite loop if not fixed")
 			case <-done:
 				assert.ErrorContains(t, readErr, "close")
@@ -131,7 +133,7 @@ func TestNotificationCreated(t *testing.T) {
 				// ensure no late messages are received after close
 				// from test extension to signal bad behavior
 				select {
-				case <-TestAfterCancel:
+				case <-th.TestAfterCancel:
 					t.Fatalf("Non nil-response after context cancelled (late), this will cause an infinite loop if not fixed")
 				case <-time.After(1 * time.Second):
 					// no late messages, test passes

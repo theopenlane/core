@@ -2,10 +2,15 @@ package operations
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -21,6 +26,10 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 
 	if createInput.DirectoryName == nil && integrationDef.Name != "" {
 		createInput.DirectoryName = &integrationDef.Name
+	}
+
+	if hash := directoryProfileHash(createInput.Profile); hash != "" {
+		createInput.ProfileHash = &hash
 	}
 
 	now := time.Now()
@@ -70,9 +79,46 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 			return da.ID, nil
 		},
 		func(ctx context.Context, existing *ent.DirectoryAccount, input ent.UpdateDirectoryAccountInput) error {
+			if directoryAccountUnchanged(existing, input) {
+				return db.DirectoryAccount.UpdateOneID(existing.ID).
+					SetLastSeenAt(now).
+					Exec(entityops.WithEmissionVetoed(ctx))
+			}
+
 			input.LastSeenAt = &now
 			return db.DirectoryAccount.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
 		},
 		func(da *ent.DirectoryAccount) string { return da.ID },
 	)
+}
+
+// directoryProfileHash returns the canonical hash of the normalized profile payload, or empty when
+// the mapping carries no profile, which disables hash-based change detection for the record
+func directoryProfileHash(profile map[string]any) string {
+	if len(profile) == 0 {
+		return ""
+	}
+
+	raw, err := json.Marshal(profile)
+	if err != nil {
+		return ""
+	}
+
+	sum := sha256.Sum256(raw)
+
+	return hex.EncodeToString(sum[:])
+}
+
+// directoryAccountUnchanged reports whether the incoming update carries no payload or
+// integration-derived changes for the existing row
+func directoryAccountUnchanged(existing *ent.DirectoryAccount, input ent.UpdateDirectoryAccountInput) bool {
+	if input.ProfileHash == nil || *input.ProfileHash == "" || existing.ProfileHash != *input.ProfileHash {
+		return false
+	}
+
+	if input.PrimarySource != nil && existing.PrimarySource != *input.PrimarySource {
+		return false
+	}
+
+	return input.DirectoryName == nil || lo.FromPtr(existing.DirectoryName) == *input.DirectoryName
 }

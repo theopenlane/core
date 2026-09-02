@@ -5,6 +5,8 @@ import (
 	"testing"
 	"time"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -32,13 +34,13 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 				Title:   "Test Review",
 				Summary: lo.ToPtr("Test summary"),
 			},
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 			expectFields: true,
 			setup: func(t *testing.T) ([]string, []string) {
-				entity := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-				ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
-				err := suite.client.db.Entity.UpdateOneID(entity.ID).
+				entity := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+				ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+				err := suite.Client.DB.Entity.UpdateOneID(entity.ID).
 					SetReviewFrequency(frequency).
 					Exec(ctx)
 				assert.NilError(t, err)
@@ -51,12 +53,12 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 				Title:   "Review with Frequency",
 				Summary: lo.ToPtr("With frequency"),
 			},
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 			expectFields: true,
 			setup: func(t *testing.T) ([]string, []string) {
-				entity := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-				_, err := suite.client.api.UpdateEntity(sharedTestUser1.UserCtx, entity.ID, testclient.UpdateEntityInput{
+				entity := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+				_, err := suite.Client.API.UpdateEntity(th.SharedTestUser1.UserCtx, entity.ID, testclient.UpdateEntityInput{
 					ReviewFrequency: lo.ToPtr(frequency),
 				}, nil, nil, nil, nil)
 				assert.NilError(t, err)
@@ -69,11 +71,11 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 				Title:   "Review Without Entities",
 				Summary: lo.ToPtr("This review has no entities linked"),
 			},
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 			expectFields: false,
 			setup: func(t *testing.T) ([]string, []string) {
-				entity := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+				entity := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 				return []string{entity.ID}, []string{entity.EntityTypeID}
 			},
 		},
@@ -101,7 +103,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 
 			if tc.expectFields {
 				for _, entityID := range entityIDs {
-					resp, err := suite.client.api.GetEntityByID(sharedTestUser1.UserCtx, entityID)
+					resp, err := suite.Client.API.GetEntityByID(th.SharedTestUser1.UserCtx, entityID)
 					assert.NilError(t, err)
 
 					updatedEntity := resp.Entity
@@ -124,7 +126,7 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 				}
 			} else {
 				for _, entityID := range entityIDs {
-					resp, err := suite.client.api.GetEntityByID(sharedTestUser1.UserCtx, entityID)
+					resp, err := suite.Client.API.GetEntityByID(th.SharedTestUser1.UserCtx, entityID)
 					assert.NilError(t, err)
 
 					entity := resp.Entity
@@ -135,25 +137,25 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 				}
 			}
 
-			_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, review.ID)
+			_, err = suite.Client.API.DeleteReview(th.SharedTestUser1.UserCtx, review.ID)
 			assert.NilError(t, err)
 
-			(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entityIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-			(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypeIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: entityIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: entityTypeIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		})
 	}
 }
 
 func TestCreateReview(t *testing.T) {
-	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	program2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	control := (&ControlBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
+	entity1 := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	program := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	program2 := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	control := (&th.ControlBuilder{Client: suite.Client, ProgramID: program.ID}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	programInOrg2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
-	controlInOrg2 := (&ControlBuilder{client: suite.client, ProgramID: programInOrg2.ID}).MustNew(sharedTestUser2.UserCtx, t)
+	programInOrg2 := (&th.ProgramBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
+	controlInOrg2 := (&th.ControlBuilder{Client: suite.Client, ProgramID: programInOrg2.ID}).MustNew(th.SharedTestUser2.UserCtx, t)
 
-	firstProgramReviewResp, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+	firstProgramReviewResp, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:      "First Program Review",
 		ProgramIDs: []string{program.ID},
 	})
@@ -179,8 +181,8 @@ func TestCreateReview(t *testing.T) {
 			reviewInput: testclient.CreateReviewInput{
 				Title: "Minimal Review",
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, full input",
@@ -194,8 +196,8 @@ func TestCreateReview(t *testing.T) {
 				Source:    lo.ToPtr("manual"),
 				Tags:      []string{"test", "review"},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, auditor creating review linked to program",
@@ -203,8 +205,8 @@ func TestCreateReview(t *testing.T) {
 				Title:      "Program Review",
 				ProgramIDs: []string{program.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedAuditorUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAuditorUser.UserCtx,
 		},
 		{
 			name: "happy path, second review linked to same program",
@@ -212,8 +214,8 @@ func TestCreateReview(t *testing.T) {
 				Title:      "Second Program Review",
 				ProgramIDs: []string{program.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, auditor creating review linked to program with reviewer",
@@ -221,10 +223,10 @@ func TestCreateReview(t *testing.T) {
 				Title:      "Program Review with Reviewer",
 				ProgramIDs: []string{program2.ID},
 				Reporter:   lo.ToPtr("Reporter 1"),
-				ReviewerID: lo.ToPtr(sharedAuditorUser.ID),
+				ReviewerID: lo.ToPtr(th.SharedAuditorUser.ID),
 			},
-			client: suite.client.api,
-			ctx:    sharedAuditorUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAuditorUser.UserCtx,
 		},
 		{
 			name: "happy path, auditor creating review linked to control",
@@ -232,8 +234,8 @@ func TestCreateReview(t *testing.T) {
 				Title:      "Control Review",
 				ControlIDs: []string{control.ID},
 			},
-			client: suite.client.api,
-			ctx:    sharedAuditorUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAuditorUser.UserCtx,
 		},
 		{
 			name: "auditor unable to access program",
@@ -241,9 +243,9 @@ func TestCreateReview(t *testing.T) {
 				Title:      "Unauthorized Program Review",
 				ProgramIDs: []string{programInOrg2.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedAuditorUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedAuditorUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "auditor unable to access control",
@@ -251,16 +253,16 @@ func TestCreateReview(t *testing.T) {
 				Title:      "Unauthorized Control Review",
 				ControlIDs: []string{controlInOrg2.ID},
 			},
-			client:      suite.client.api,
-			ctx:         sharedAuditorUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedAuditorUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, using PAT",
 			reviewInput: testclient.CreateReviewInput{
 				Title: "PAT Review",
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -268,17 +270,17 @@ func TestCreateReview(t *testing.T) {
 			reviewInput: testclient.CreateReviewInput{
 				Title: "Auditor Review",
 			},
-			client: suite.client.api,
-			ctx:    sharedAuditorUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAuditorUser.UserCtx,
 		},
 		{
 			name: "not authorized to create review",
 			reviewInput: testclient.CreateReviewInput{
 				Title: "Unauthorized Review",
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 	}
 
@@ -311,8 +313,8 @@ func TestCreateReview(t *testing.T) {
 			}
 
 			if len(tc.reviewInput.ProgramIDs) > 0 {
-				ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
-				entReview, err := suite.client.db.Review.Get(ctx, review.ID)
+				ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+				entReview, err := suite.Client.DB.Review.Get(ctx, review.ID)
 				assert.NilError(t, err)
 
 				programs, err := entReview.QueryPrograms().All(ctx)
@@ -323,7 +325,7 @@ func TestCreateReview(t *testing.T) {
 				}
 
 				if tc.reviewInput.ProgramIDs[0] == program.ID {
-					entProgram, err := suite.client.db.Program.Get(ctx, program.ID)
+					entProgram, err := suite.Client.DB.Program.Get(ctx, program.ID)
 					assert.NilError(t, err)
 
 					linkedReviews, err := entProgram.QueryReviews().All(ctx)
@@ -333,8 +335,8 @@ func TestCreateReview(t *testing.T) {
 			}
 
 			if len(tc.reviewInput.ControlIDs) > 0 {
-				ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
-				entReview, err := suite.client.db.Review.Get(ctx, review.ID)
+				ctx := th.SetContext(th.SharedTestUser1.UserCtx, suite.Client.DB)
+				entReview, err := suite.Client.DB.Review.Get(ctx, review.ID)
 				assert.NilError(t, err)
 
 				controls, err := entReview.QueryControls().All(ctx)
@@ -346,28 +348,28 @@ func TestCreateReview(t *testing.T) {
 			}
 
 			if len(tc.reviewInput.EntityIDs) > 0 || len(tc.reviewInput.ProgramIDs) > 0 || len(tc.reviewInput.ControlIDs) > 0 {
-				_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, review.ID)
+				_, err = suite.Client.API.DeleteReview(th.SharedTestUser1.UserCtx, review.ID)
 				assert.NilError(t, err)
 			}
 		})
 	}
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entitiesToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypesToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ReviewDeleteOne]{client: suite.client.db.Review, ID: firstProgramReviewResp.CreateReview.Review.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programsToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsNoAccessToCleanup}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programsNoAccessToCleanup}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: entitiesToCleanup}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: entityTypesToCleanup}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: controlsToCleanup}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ReviewDeleteOne]{Client: suite.Client.DB.Review, ID: firstProgramReviewResp.CreateReview.Review.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, IDs: programsToCleanup}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.ControlDeleteOne]{Client: suite.Client.DB.Control, IDs: controlsNoAccessToCleanup}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.ProgramDeleteOne]{Client: suite.Client.DB.Program, IDs: programsNoAccessToCleanup}).MustDelete(th.SharedTestUser2.UserCtx, t)
 }
 
 func TestQueryReview(t *testing.T) {
-	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entity1 := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	entityIDs := []string{entity1.ID}
 	entityTypeIDs := []string{entity1.EntityTypeID}
 
-	createResp, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+	createResp, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:     "Query Test Review",
 		EntityIDs: entityIDs,
 		Summary:   lo.ToPtr("Test summary for query"),
@@ -379,7 +381,7 @@ func TestQueryReview(t *testing.T) {
 	reviewID := review.ID
 
 	t.Run("get review by ID", func(t *testing.T) {
-		resp, err := suite.client.api.GetReviewByID(sharedTestUser1.UserCtx, reviewID)
+		resp, err := suite.Client.API.GetReviewByID(th.SharedTestUser1.UserCtx, reviewID)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
@@ -390,45 +392,45 @@ func TestQueryReview(t *testing.T) {
 	})
 
 	t.Run("review not found", func(t *testing.T) {
-		_, err := suite.client.api.GetReviewByID(sharedTestUser1.UserCtx, "invalid-id")
+		_, err := suite.Client.API.GetReviewByID(th.SharedTestUser1.UserCtx, "invalid-id")
 		assert.ErrorContains(t, err, "review not found")
 	})
 
-	_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, reviewID)
+	_, err = suite.Client.API.DeleteReview(th.SharedTestUser1.UserCtx, reviewID)
 	assert.NilError(t, err)
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entityIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypeIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: entityIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: entityTypeIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryReviews(t *testing.T) {
-	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entity1 := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	entityIDs := []string{entity1.ID}
 	entityTypeIDs := []string{entity1.EntityTypeID}
 	reviewsToCleanup := []string{}
 
-	beforeResp, err := suite.client.api.GetAllReviews(sharedTestUser1.UserCtx)
+	beforeResp, err := suite.Client.API.GetAllReviews(th.SharedTestUser1.UserCtx)
 	initialCount := 0
 	if err == nil && beforeResp.GetReviews() != nil {
 		initialCount = len(beforeResp.GetReviews().Edges)
 	}
 
-	review1, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+	review1, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:   "First Review",
 		Summary: lo.ToPtr("First summary"),
 	})
 	assert.NilError(t, err)
 	reviewsToCleanup = append(reviewsToCleanup, review1.GetCreateReview().GetReview().ID)
 
-	review2, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+	review2, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:   "Second Review",
 		Summary: lo.ToPtr("Second summary"),
 	})
 	assert.NilError(t, err)
 	reviewsToCleanup = append(reviewsToCleanup, review2.GetCreateReview().GetReview().ID)
 
-	review3, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+	review3, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:     "Entity Review",
 		EntityIDs: entityIDs,
 	})
@@ -443,13 +445,13 @@ func TestQueryReviews(t *testing.T) {
 	}{
 		{
 			name:         "list all reviews",
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 			expectedDiff: 3,
 		},
 		{
 			name:         "list reviews using PAT",
-			client:       suite.client.apiWithPAT,
+			client:       suite.Client.APIWithPAT,
 			ctx:          context.Background(),
 			expectedDiff: 3,
 		},
@@ -467,23 +469,23 @@ func TestQueryReviews(t *testing.T) {
 	}
 
 	for _, reviewID := range reviewsToCleanup {
-		_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, reviewID)
+		_, err = suite.Client.API.DeleteReview(th.SharedTestUser1.UserCtx, reviewID)
 		if err != nil {
 			t.Logf("failed to delete review %s: %v", reviewID, err)
 		}
 	}
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entityIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypeIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: entityIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: entityTypeIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestDeleteReview(t *testing.T) {
-	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entity1 := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	entityIDs := []string{entity1.ID}
 	entityTypeIDs := []string{entity1.EntityTypeID}
 
-	createResp, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+	createResp, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:     "Delete Test Review",
 		EntityIDs: entityIDs,
 	})
@@ -492,7 +494,7 @@ func TestDeleteReview(t *testing.T) {
 	reviewID := createResp.GetCreateReview().GetReview().ID
 
 	t.Run("delete review", func(t *testing.T) {
-		resp, err := suite.client.api.DeleteReview(sharedTestUser1.UserCtx, reviewID)
+		resp, err := suite.Client.API.DeleteReview(th.SharedTestUser1.UserCtx, reviewID)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		deletedReview := resp.GetDeleteReview()
@@ -500,35 +502,35 @@ func TestDeleteReview(t *testing.T) {
 	})
 
 	t.Run("review not found after delete", func(t *testing.T) {
-		_, err := suite.client.api.GetReviewByID(sharedTestUser1.UserCtx, reviewID)
+		_, err := suite.Client.API.GetReviewByID(th.SharedTestUser1.UserCtx, reviewID)
 		assert.ErrorContains(t, err, "review not found")
 	})
 
 	t.Run("not authorized to delete", func(t *testing.T) {
-		anotherReview, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+		anotherReview, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 			Title: "Another Review",
 		})
 		assert.NilError(t, err)
 		anotherReviewID := anotherReview.GetCreateReview().GetReview().ID
 
-		_, err = suite.client.api.DeleteReview(sharedViewOnlyUser.UserCtx, anotherReviewID)
-		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
+		_, err = suite.Client.API.DeleteReview(th.SharedViewOnlyUser.UserCtx, anotherReviewID)
+		assert.ErrorContains(t, err, th.NotAuthorizedErrorMsg)
 
-		_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, anotherReviewID)
+		_, err = suite.Client.API.DeleteReview(th.SharedTestUser1.UserCtx, anotherReviewID)
 		assert.NilError(t, err)
 	})
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entityIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypeIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: entityIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: entityTypeIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestUpdateReview(t *testing.T) {
-	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	entity1 := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	entityIDs := []string{entity1.ID}
 	entityTypeIDs := []string{entity1.EntityTypeID}
 
-	createResp, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+	createResp, err := suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:   "Original Title",
 		Summary: lo.ToPtr("Original summary"),
 	})
@@ -537,7 +539,7 @@ func TestUpdateReview(t *testing.T) {
 	reviewID := createResp.GetCreateReview().GetReview().ID
 
 	t.Run("update review", func(t *testing.T) {
-		resp, err := suite.client.api.UpdateReview(sharedTestUser1.UserCtx, reviewID, testclient.UpdateReviewInput{
+		resp, err := suite.Client.API.UpdateReview(th.SharedTestUser1.UserCtx, reviewID, testclient.UpdateReviewInput{
 			Title:   lo.ToPtr("Updated Title"),
 			Summary: lo.ToPtr("Updated summary"),
 		}, nil)
@@ -550,36 +552,36 @@ func TestUpdateReview(t *testing.T) {
 	})
 
 	t.Run("auditor can update review", func(t *testing.T) {
-		createResp, err := suite.client.api.CreateReview(sharedAuditorUser.UserCtx, testclient.CreateReviewInput{
+		createResp, err := suite.Client.API.CreateReview(th.SharedAuditorUser.UserCtx, testclient.CreateReviewInput{
 			Title: "Auditor Review",
 		})
 		assert.NilError(t, err)
 
 		auditorReviewID := createResp.GetCreateReview().GetReview().ID
 
-		resp, err := suite.client.api.UpdateReview(sharedAuditorUser.UserCtx, auditorReviewID, testclient.UpdateReviewInput{
+		resp, err := suite.Client.API.UpdateReview(th.SharedAuditorUser.UserCtx, auditorReviewID, testclient.UpdateReviewInput{
 			Title: lo.ToPtr("Auditor Updated Review"),
 		}, nil)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal("Auditor Updated Review", resp.GetUpdateReview().GetReview().Title))
 
-		_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, auditorReviewID)
+		_, err = suite.Client.API.DeleteReview(th.SharedTestUser1.UserCtx, auditorReviewID)
 		assert.NilError(t, err)
 	})
 
 	t.Run("update review not found", func(t *testing.T) {
-		_, err := suite.client.api.UpdateReview(sharedTestUser1.UserCtx, "invalid-id", testclient.UpdateReviewInput{
+		_, err := suite.Client.API.UpdateReview(th.SharedTestUser1.UserCtx, "invalid-id", testclient.UpdateReviewInput{
 			Title: lo.ToPtr("New Title"),
 		}, nil)
 		assert.ErrorContains(t, err, "review not found")
 	})
 
-	_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, reviewID)
+	_, err = suite.Client.API.DeleteReview(th.SharedTestUser1.UserCtx, reviewID)
 	assert.NilError(t, err)
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entityIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypeIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: entityIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: entityTypeIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestReviewWithReviewFrequencyCalculation(t *testing.T) {
@@ -597,28 +599,28 @@ func TestReviewWithReviewFrequencyCalculation(t *testing.T) {
 
 	for _, freq := range frequencies {
 		t.Run("next review date for "+freq.name+" frequency", func(t *testing.T) {
-			testEntity := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+			testEntity := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 			entityIDs := []string{testEntity.ID}
 			entityTypeIDs := []string{testEntity.EntityTypeID}
 
 			defer func() {
-				(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entityIDs}).MustDelete(sharedTestUser1.UserCtx, t)
-				(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypeIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+				(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: entityIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
+				(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: entityTypeIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 			}()
 
-			_, err := suite.client.api.UpdateEntity(sharedTestUser1.UserCtx, testEntity.ID, testclient.UpdateEntityInput{
+			_, err := suite.Client.API.UpdateEntity(th.SharedTestUser1.UserCtx, testEntity.ID, testclient.UpdateEntityInput{
 				ReviewFrequency: lo.ToPtr(freq.frequency),
 			}, nil, nil, nil, nil)
 			assert.NilError(t, err)
 
-			_, err = suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+			_, err = suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 				Title:     freq.name + " review",
 				EntityIDs: []string{testEntity.ID},
 				Summary:   lo.ToPtr("Testing " + freq.name + " frequency"),
 			})
 			assert.NilError(t, err)
 
-			resp, err := suite.client.apiWithToken.GetEntityByID(sharedTestUser1.UserCtx, testEntity.ID)
+			resp, err := suite.Client.APIWithToken.GetEntityByID(th.SharedTestUser1.UserCtx, testEntity.ID)
 			assert.NilError(t, err)
 
 			updatedEntity := resp.Entity
@@ -650,24 +652,24 @@ func TestReviewWithReviewFrequencyCalculation(t *testing.T) {
 }
 
 func TestReviewWithMultipleConnectedEntities(t *testing.T) {
-	testEntity := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	testEntity := (&th.EntityBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	ids := []string{testEntity.ID}
 	typeIDs := []string{testEntity.EntityTypeID}
 
-	_, err := suite.client.api.UpdateEntity(sharedTestUser1.UserCtx, testEntity.ID, testclient.UpdateEntityInput{
+	_, err := suite.Client.API.UpdateEntity(th.SharedTestUser1.UserCtx, testEntity.ID, testclient.UpdateEntityInput{
 		ReviewFrequency: lo.ToPtr(enums.FrequencyMonthly),
 	}, nil, nil, nil, nil)
 	assert.NilError(t, err)
 
-	_, err = suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+	_, err = suite.Client.API.CreateReview(th.SharedTestUser1.UserCtx, testclient.CreateReviewInput{
 		Title:     "Multi-Entity Review",
 		EntityIDs: ids,
 		Summary:   lo.ToPtr("we are reviewing multiple entities at once"),
 	})
 	assert.NilError(t, err)
 
-	resp, err := suite.client.apiWithToken.GetEntityByID(sharedTestUser1.UserCtx, testEntity.ID)
+	resp, err := suite.Client.APIWithToken.GetEntityByID(th.SharedTestUser1.UserCtx, testEntity.ID)
 	assert.NilError(t, err)
 
 	newEntity := resp.Entity
@@ -684,6 +686,6 @@ func TestReviewWithMultipleConnectedEntities(t *testing.T) {
 	assert.Check(t, is.DeepEqual(expectedReviewDate, nextReviewTime),
 		"next_review_at should be one month after last_reviewed_at")
 
-	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: ids}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: typeIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityDeleteOne]{Client: suite.Client.DB.Entity, IDs: ids}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.EntityTypeDeleteOne]{Client: suite.Client.DB.EntityType, IDs: typeIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

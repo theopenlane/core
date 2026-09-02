@@ -327,6 +327,10 @@ func syncEmailAliases(ctx context.Context, client *entgen.Client, holder *entgen
 		})
 	}))
 
+	if len(aliases) == len(holder.EmailAliases) && lo.Every(holder.EmailAliases, aliases) {
+		return nil
+	}
+
 	return client.IdentityHolder.UpdateOneID(holder.ID).
 		SetEmailAliases(aliases).
 		Exec(ctx)

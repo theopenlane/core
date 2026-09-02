@@ -165,15 +165,13 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 	if directorySyncRunID != "" && directorySync && !options.SkipDirectorySyncRunFinalization {
 		defer func() {
-			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, err); finalizeErr != nil {
+			if finalizeErr := finalizeDirectorySyncRun(ctx, ic.DB, directorySyncRunID, err, result); finalizeErr != nil {
 				err = errors.Join(err, finalizeErr)
 			}
 		}()
 	}
 
-	var attempted, failed int
 	var membershipSetSeen bool
-	var recordFailures []RecordFailure
 	membershipsComplete := true
 
 	for _, payloadSet := range payloadSets {
@@ -192,15 +190,15 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		}
 
 		for _, envelope := range payloadSet.Envelopes {
-			attempted++
+			result.Attempted++
 			envCtx := logx.WithFields(ctx, map[string]any{"schema": payloadSet.Schema, "resource": envelope.Resource})
 
 			mapping, found := findMapping(definition.Mappings, payloadSet.Schema, envelope.Variant)
 			if !found {
 				logx.FromContext(envCtx).Error().Err(ErrIngestMappingNotFound).Msg("error mapping ingest record")
 
-				failed++
-				recordFailures = append(recordFailures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: ErrIngestMappingNotFound})
+				result.Failed++
+				result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: ErrIngestMappingNotFound})
 
 				continue
 			}
@@ -209,8 +207,8 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			if mapErr != nil {
 				logx.FromContext(envCtx).Error().Err(mapErr).Msg("error mapping ingest record")
 
-				failed++
-				recordFailures = append(recordFailures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: mapErr})
+				result.Failed++
+				result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: mapErr})
 
 				continue
 			}
@@ -227,9 +225,8 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			if err != nil {
 				logx.FromContext(envCtx).Error().Err(err).Msg("ingest link injection failed")
 
-				attempted++
-				failed++
-				recordFailures = append(recordFailures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: err})
+				result.Failed++
+				result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: err})
 
 				continue
 			}
@@ -237,26 +234,22 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			if handleErr := handle(envCtx, record); handleErr != nil {
 				logx.FromContext(envCtx).Error().Err(handleErr).Msg("ingest persist failed")
 
-				failed++
-				recordFailures = append(recordFailures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: handleErr})
+				result.Failed++
+				result.Failures = append(result.Failures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: handleErr})
 			} else {
 				result.Succeeded++
 			}
 		}
 	}
 
-	if failed > 0 {
+	if result.Failed > 0 {
 		// skipped records are not retried; failing the job would reprocess the whole batch
-		logx.FromContext(ctx).Warn().Int("failed", failed).Int("attempted", attempted).Msg("ingest skipped records that could not be imported")
+		logx.FromContext(ctx).Warn().Int("failed", result.Failed).Int("attempted", result.Attempted).Msg("ingest skipped records that could not be imported")
 	}
-
-	result.Attempted = attempted
-	result.Failed = failed
-	result.Failures = recordFailures
 
 	// only a fully-confirmed complete snapshot authorizes removal inference: a skipped record
 	// risks a false removal, and partial sources never carry full membership state
-	if directorySync && membershipSetSeen && membershipsComplete && !options.SkipDirectorySyncRunFinalization && failed == 0 {
+	if directorySync && membershipSetSeen && membershipsComplete && !options.SkipDirectorySyncRunFinalization && result.Failed == 0 {
 		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
 			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
@@ -411,9 +404,9 @@ func createDirectorySyncRun(ctx context.Context, db *ent.Client, installation *e
 	return run.ID, nil
 }
 
-// finalizeDirectorySyncRun marks the directory sync run as completed or failed, and when markRemoved
-// is true and the sync succeeded, marks any directory accounts not seen during this sync as deleted
-func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, ingestErr error) error {
+// finalizeDirectorySyncRun marks the directory sync run as completed or failed, recording the
+// processed record count and, for completed runs with skipped records, a failure summary
+func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, ingestErr error, result IngestResult) error {
 	current, err := isCurrentDirectorySyncRun(ctx, db, directorySyncRunID)
 	if err != nil {
 		return err
@@ -424,17 +417,29 @@ func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySync
 	}
 
 	update := db.DirectorySyncRun.UpdateOneID(directorySyncRunID).
-		SetCompletedAt(time.Now())
+		SetCompletedAt(time.Now()).
+		SetFullCount(result.Attempted)
 
-	if ingestErr != nil {
+	switch {
+	case ingestErr != nil:
 		update.SetStatus(enums.DirectorySyncRunStatusFailed)
 		update.SetError(ingestErr.Error())
-	} else {
+	case result.Failed > 0:
+		update.SetStatus(enums.DirectorySyncRunStatusCompleted)
+		update.SetError(recordFailureSummary(result))
+	default:
 		update.SetStatus(enums.DirectorySyncRunStatusCompleted)
 		update.ClearError()
 	}
 
 	return update.Exec(ctx)
+}
+
+// recordFailureSummary renders a compact description of a run's skipped records for the sync run row
+func recordFailureSummary(result IngestResult) string {
+	first := result.Failures[0]
+
+	return fmt.Sprintf("%d of %d records failed to import; first failure: %s %s: %v", result.Failed, result.Attempted, first.Schema, first.Resource, first.Err)
 }
 
 func isCurrentDirectorySyncRun(ctx context.Context, db *ent.Client, runID string) (bool, error) {

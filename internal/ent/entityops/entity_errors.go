@@ -195,7 +195,17 @@ func logPersistError(ctx context.Context, ref SchemaRef, sentinel error, err err
 // attached via logx.WithField travel on the context logger already, including across durable gala
 // hops, so only the operation context needs explicit embedding
 func errorEvent(ctx context.Context, ref SchemaRef, err error) *zerolog.Event {
-	event := logx.FromContext(ctx).Error().Err(err).EmbedObject(ref)
+	var event *zerolog.Event
+
+	switch {
+	case generated.IsNotFound(err):
+		// a missing row logs at warn since callers uniformly treat not-found as a benign skip
+		event = logx.FromContext(ctx).Warn().Err(err)
+	default:
+		event = logx.FromContext(ctx).Error().Err(err)
+	}
+
+	event = event.EmbedObject(ref)
 
 	oc, ok := gala.OperationContextFromContext(ctx)
 	if !ok {

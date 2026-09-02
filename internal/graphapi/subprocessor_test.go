@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
@@ -15,17 +17,17 @@ import (
 )
 
 func TestQuerySubprocessorByID(t *testing.T) {
-	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	subprocessor := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// create a file to be used as logo and ensure file is returned properly
-	logoFile := uploadFile(t, logoFilePath)
+	logoFile := th.UploadFile(t, th.LogoFilePath)
 	input := testclient.CreateSubprocessorInput{
 		Name: "test subprocessor" + ulids.New().String(),
 	}
 
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*logoFile})
 
-	systemOwnedSubprocessor, err := suite.client.api.CreateSubprocessor(sharedSystemAdminUser.UserCtx, input, logoFile, nil)
+	systemOwnedSubprocessor, err := suite.Client.API.CreateSubprocessor(th.SharedSystemAdminUser.UserCtx, input, logoFile, nil)
 	assert.NilError(t, err)
 
 	systemSubprocessr := systemOwnedSubprocessor.CreateSubprocessor.Subprocessor
@@ -42,43 +44,43 @@ func TestQuerySubprocessorByID(t *testing.T) {
 			name:         "happy path",
 			expectedName: subprocessor.Name,
 			queryID:      subprocessor.ID,
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:         "happy path, view only user",
 			expectedName: subprocessor.Name,
 			queryID:      subprocessor.ID,
-			client:       suite.client.api,
-			ctx:          sharedViewOnlyUser.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedViewOnlyUser.UserCtx,
 		},
 		{
 			name:     "subprocessor not found",
 			queryID:  "non-existent-id",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:         "not authorized to query org",
 			expectedName: subprocessor.Name,
 			queryID:      subprocessor.ID,
-			client:       suite.client.api,
-			ctx:          sharedTestUser2.UserCtx,
-			errorMsg:     notFoundErrorMsg,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser2.UserCtx,
+			errorMsg:     th.NotFoundErrorMsg,
 		},
 		{
 			name:         "happy path, system owned",
 			queryID:      systemSubprocessr.ID,
-			client:       suite.client.api,
-			ctx:          sharedSystemAdminUser.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedSystemAdminUser.UserCtx,
 			expectedName: systemSubprocessr.Name,
 		},
 		{
 			name:         "happy path, system owned, regular only user",
 			queryID:      systemSubprocessr.ID,
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 			expectedName: systemSubprocessr.Name,
 		},
 	}
@@ -107,19 +109,19 @@ func TestQuerySubprocessorByID(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: systemSubprocessr.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: systemSubprocessr.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestQuerySubprocessors(t *testing.T) {
-	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
-	testUser := localTestOrg.owner
-	viewUser := localTestOrg.member
+	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	testUser := localTestOrg.Owner
+	viewUser := localTestOrg.Member
 
-	subprocessor1 := (&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	(&SubprocessorBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
-	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
-	subprocessor4 := (&SubprocessorBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	subprocessor1 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
+	(&th.SubprocessorBuilder{Client: suite.Client}).MustNew(testUser.UserCtx, t)
+	subprocessor3 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser2.UserCtx, t)
+	subprocessor4 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	nonExistentName := "nonexistent-subprocessor"
 
@@ -132,19 +134,19 @@ func TestQuerySubprocessors(t *testing.T) {
 	}{
 		{
 			name:            "return all",
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             testUser.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:            "return all, ro user",
-			client:          suite.client.api,
+			client:          suite.Client.API,
 			ctx:             viewUser.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:   "query by name",
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    testUser.UserCtx,
 			where: &testclient.SubprocessorWhereInput{
 				Name: &subprocessor1.Name,
@@ -153,7 +155,7 @@ func TestQuerySubprocessors(t *testing.T) {
 		},
 		{
 			name:   "query by name, not found",
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    testUser.UserCtx,
 			where: &testclient.SubprocessorWhereInput{
 				Name: &nonExistentName,
@@ -182,13 +184,13 @@ func TestQuerySubprocessors(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor3.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor4.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
-	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor4.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
 }
 
 func TestMutationCreateSubprocessor(t *testing.T) {
-	createImageUpload := logoFileFunc(t)
+	createImageUpload := th.LogoFileFunc(t)
 
 	testCases := []struct {
 		name            string
@@ -204,9 +206,9 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			request: testclient.CreateSubprocessorInput{
 				Name: "Test Subprocessor",
 			},
-			expectedOwnerID: lo.ToPtr(sharedTestUser1.OrganizationID),
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			expectedOwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path with description and logo upload",
@@ -215,36 +217,36 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 				Description: lo.ToPtr("This is a test subprocessor"),
 			},
 			upload:          createImageUpload(),
-			expectedOwnerID: lo.ToPtr(sharedTestUser1.OrganizationID),
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
+			expectedOwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, adminUser",
 			request: testclient.CreateSubprocessorInput{
 				Name: "Admin Test Subprocessor",
 			},
-			expectedOwnerID: lo.ToPtr(sharedTestUser1.OrganizationID),
-			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
+			expectedOwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
+			client:          suite.Client.API,
+			ctx:             th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "not authorized",
 			request: testclient.CreateSubprocessorInput{
 				Name:    "Unauthorized Subprocessor",
-				OwnerID: lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "missing name",
 			request: testclient.CreateSubprocessorInput{
-				OwnerID: lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID: lo.ToPtr(th.SharedTestUser1.OrganizationID),
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "name",
 		},
 		{
@@ -252,8 +254,8 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			request: testclient.CreateSubprocessorInput{
 				Name: "Sys Admin Test Subprocessor",
 			},
-			client:          suite.client.api,
-			ctx:             sharedSystemAdminUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedSystemAdminUser.UserCtx,
 			expectedOwnerID: nil,
 		},
 	}
@@ -261,7 +263,7 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.upload != nil {
-				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
+				th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*tc.upload})
 			}
 
 			resp, err := tc.client.CreateSubprocessor(tc.ctx, tc.request, tc.upload, nil)
@@ -293,15 +295,15 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			}
 
 			// Clean up
-			(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: resp.CreateSubprocessor.Subprocessor.ID}).MustDelete(tc.ctx, t)
+			(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: resp.CreateSubprocessor.Subprocessor.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 }
 
 func TestMutationDeleteSubprocessor(t *testing.T) {
-	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	subprocessor2 := (&SubprocessorBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	subprocessor3 := (&SubprocessorBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	subprocessor := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	subprocessor2 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	subprocessor3 := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
@@ -314,22 +316,22 @@ func TestMutationDeleteSubprocessor(t *testing.T) {
 		{
 			name:   "delete subprocessor",
 			id:     subprocessor.ID,
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "unauthorized",
 			id:          subprocessor3.ID,
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:        "subprocessor not found",
 			id:          nonExistentID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -349,16 +351,16 @@ func TestMutationDeleteSubprocessor(t *testing.T) {
 
 			// Verify the subprocessor is deleted
 			_, err = tc.client.GetSubprocessorByID(tc.ctx, tc.id)
-			assert.ErrorContains(t, err, notFoundErrorMsg)
+			assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 		})
 	}
 
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, IDs: []string{subprocessor2.ID, subprocessor3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, IDs: []string{subprocessor2.ID, subprocessor3.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestUpdateSubprocessor(t *testing.T) {
-	subprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	systemOwnedSubprocessor := (&SubprocessorBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	subprocessor := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	systemOwnedSubprocessor := (&th.SubprocessorBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -371,8 +373,8 @@ func TestUpdateSubprocessor(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: subprocessor.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
 				Tags: []string{"updated", "test"},
 			},
@@ -380,8 +382,8 @@ func TestUpdateSubprocessor(t *testing.T) {
 		{
 			name:    "update name and description",
 			queryID: subprocessor.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
 				Name:        lo.ToPtr("Updated Subprocessor Name"),
 				Description: lo.ToPtr("Updated description"),
@@ -390,8 +392,8 @@ func TestUpdateSubprocessor(t *testing.T) {
 		{
 			name:    "update name and description, system owned",
 			queryID: systemOwnedSubprocessor.ID,
-			client:  suite.client.api,
-			ctx:     sharedSystemAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedSystemAdminUser.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
 				Name:        lo.ToPtr("Updated System Owned Subprocessor Name"),
 				Description: lo.ToPtr("Updated system owned description"),
@@ -400,8 +402,8 @@ func TestUpdateSubprocessor(t *testing.T) {
 		{
 			name:    "update logo remote URL",
 			queryID: subprocessor.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
 				LogoRemoteURL: lo.ToPtr("https://example.com/new-logo.png"),
 			},
@@ -409,22 +411,22 @@ func TestUpdateSubprocessor(t *testing.T) {
 		{
 			name:    "not allowed",
 			queryID: subprocessor.ID,
-			client:  suite.client.api,
-			ctx:     sharedViewOnlyUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedViewOnlyUser.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
 				Tags: []string{"unauthorized"},
 			},
-			errorMsg: notAuthorizedErrorMsg,
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:    "not allowed to update system owned",
 			queryID: systemOwnedSubprocessor.ID,
-			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedTestUser1.UserCtx,
 			updateInput: testclient.UpdateSubprocessorInput{
 				Tags: []string{"unauthorized"},
 			},
-			errorMsg: notAuthorizedErrorMsg,
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 	}
 
@@ -452,35 +454,35 @@ func TestUpdateSubprocessor(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: systemOwnedSubprocessor.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: systemOwnedSubprocessor.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestGetAllSubprocessors(t *testing.T) {
 	// Clean up any existing subprocessors to ensure clean test state
-	deletectx := setContext(sharedSystemAdminUser.UserCtx, suite.client.db)
-	existingSubprocessors, err := suite.client.db.Subprocessor.Query().All(deletectx)
+	deletectx := th.SetContext(th.SharedSystemAdminUser.UserCtx, suite.Client.DB)
+	existingSubprocessors, err := suite.Client.DB.Subprocessor.Query().All(deletectx)
 	assert.NilError(t, err)
 	for _, sp := range existingSubprocessors {
-		suite.client.db.Subprocessor.DeleteOneID(sp.ID).ExecX(deletectx)
+		suite.Client.DB.Subprocessor.DeleteOneID(sp.ID).ExecX(deletectx)
 	}
 
 	// Create test subprocessors with different users
-	subprocessor1 := (&SubprocessorBuilder{
-		client: suite.client,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	subprocessor1 := (&th.SubprocessorBuilder{
+		Client: suite.Client,
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	subprocessor2 := (&SubprocessorBuilder{
-		client: suite.client,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	subprocessor2 := (&th.SubprocessorBuilder{
+		Client: suite.Client,
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	subprocessor3 := (&SubprocessorBuilder{
-		client: suite.client,
-	}).MustNew(sharedTestUser2.UserCtx, t)
+	subprocessor3 := (&th.SubprocessorBuilder{
+		Client: suite.Client,
+	}).MustNew(th.SharedTestUser2.UserCtx, t)
 
-	subprocessor4 := (&SubprocessorBuilder{
-		client: suite.client,
-	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	subprocessor4 := (&th.SubprocessorBuilder{
+		Client: suite.Client,
+	}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -491,32 +493,32 @@ func TestGetAllSubprocessors(t *testing.T) {
 	}{
 		{
 			name:            "happy path - regular user sees only their subprocessors",
-			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
-			expectedResults: 3, // Should see only subprocessors owned by sharedTestUser1
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser1.UserCtx,
+			expectedResults: 3, // Should see only subprocessors owned by th.SharedTestUser1
 		},
 		{
 			name:            "happy path - admin user sees all subprocessors",
-			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
-			expectedResults: 3, // Should see all owned by sharedTestUser1
+			client:          suite.Client.API,
+			ctx:             th.SharedAdminUser.UserCtx,
+			expectedResults: 3, // Should see all owned by th.SharedTestUser1
 		},
 		{
 			name:            "happy path - view only user",
-			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedViewOnlyUser.UserCtx,
 			expectedResults: 3, // Should see only subprocessors from their organization
 		},
 		{
 			name:            "happy path - different user sees only their subprocessors",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 2, // Should see only subprocessors owned by testUser2
 		},
 		{
 			name:   "happy path - sysadmin",
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 			// a system admin holds CapBypassOrgFilter, which the subprocessor interceptor honors, so it
 			// sees every organization's subprocessors (all four created above), not just system-owned ones
 			expectedResults: 4,
@@ -552,26 +554,26 @@ func TestGetAllSubprocessors(t *testing.T) {
 			}
 
 			// Verify that users only see subprocessors from their organization
-			if tc.ctx == sharedTestUser1.UserCtx || tc.ctx == sharedViewOnlyUser.UserCtx {
+			if tc.ctx == th.SharedTestUser1.UserCtx || tc.ctx == th.SharedViewOnlyUser.UserCtx {
 				for _, edge := range resp.Subprocessors.Edges {
 					if edge.Node.Owner == nil {
 						continue
 					}
-					assert.Check(t, is.Equal(sharedTestUser1.OrganizationID, edge.Node.Owner.ID))
+					assert.Check(t, is.Equal(th.SharedTestUser1.OrganizationID, edge.Node.Owner.ID))
 				}
-			} else if tc.ctx == sharedTestUser2.UserCtx {
+			} else if tc.ctx == th.SharedTestUser2.UserCtx {
 				for _, edge := range resp.Subprocessors.Edges {
 					if edge.Node.Owner == nil {
 						continue
 					}
-					assert.Check(t, is.Equal(sharedTestUser2.OrganizationID, edge.Node.Owner.ID))
+					assert.Check(t, is.Equal(th.SharedTestUser2.OrganizationID, edge.Node.Owner.ID))
 				}
 			}
 		})
 	}
 
 	// Clean up created subprocessors
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, IDs: []string{subprocessor1.ID, subprocessor2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor3.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.SubprocessorDeleteOne]{client: suite.client.db.Subprocessor, ID: subprocessor4.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, IDs: []string{subprocessor1.ID, subprocessor2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor3.ID}).MustDelete(th.SharedTestUser2.UserCtx, t)
+	(&th.Cleanup[*generated.SubprocessorDeleteOne]{Client: suite.Client.DB.Subprocessor, ID: subprocessor4.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
