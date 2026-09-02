@@ -276,6 +276,12 @@ func (s *Schema) PersistIngest(ctx context.Context, client *generated.Client, in
 	return id, applyThroughEdgeIDs(ctx, client, s, id, throughIDs)
 }
 
+// logSanitizedIngestField records one optional mapped field dropped by ingest preparation because
+// its value failed the schema's field validation
+func logSanitizedIngestField(ctx context.Context, schema, field string, err error) {
+	logx.FromContext(ctx).Warn().Err(err).Str(FieldSchema, schema).Str("field", field).Msg("entityops: dropped invalid optional ingest field")
+}
+
 // handleIngest runs the mandatory consumer-side pipeline for one queued mapped entity.
 func (s *Schema) handleIngest(ctx context.Context, client *generated.Client, resolve IngestIntegrationResolver, request IngestRequest) error {
 	ref := SchemaRef{Schema: s.Snake, Operation: refOpCreate}
@@ -1072,6 +1078,20 @@ var (
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
 				}
 
+				if input.DisplayName != nil {
+					if err := asset.DisplayNameValidator(*input.DisplayName); err != nil {
+						logSanitizedIngestField(ctx, "asset", "display_name", err)
+						input.DisplayName = nil
+					}
+				}
+
+				if input.OwnerID != nil {
+					if err := asset.OwnerIDValidator(*input.OwnerID); err != nil {
+						logSanitizedIngestField(ctx, "asset", "owner_id", err)
+						input.OwnerID = nil
+					}
+				}
+
 				if integration != nil {
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
@@ -1386,6 +1406,20 @@ var (
 				input, err := jsonx.Decode[generated.CreateContactInput](payload)
 				if err != nil {
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
+				}
+
+				if input.FullName != nil {
+					if err := contact.FullNameValidator(*input.FullName); err != nil {
+						logSanitizedIngestField(ctx, "contact", "full_name", err)
+						input.FullName = nil
+					}
+				}
+
+				if input.PhoneNumber != nil {
+					if err := contact.PhoneNumberValidator(*input.PhoneNumber); err != nil {
+						logSanitizedIngestField(ctx, "contact", "phone_number", err)
+						input.PhoneNumber = nil
+					}
 				}
 
 				if integration != nil {
@@ -1742,6 +1776,55 @@ var (
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
 				}
 
+				if input.AvatarRemoteURL != nil {
+					if err := directoryaccount.AvatarRemoteURLValidator(*input.AvatarRemoteURL); err != nil {
+						logSanitizedIngestField(ctx, "directory_account", "avatar_remote_url", err)
+						input.AvatarRemoteURL = nil
+					}
+				}
+
+				if input.DirectorySyncRunID != nil {
+					if err := directoryaccount.DirectorySyncRunIDValidator(*input.DirectorySyncRunID); err != nil {
+						logSanitizedIngestField(ctx, "directory_account", "directory_sync_run_id", err)
+						input.DirectorySyncRunID = nil
+					}
+				}
+
+				if input.EmailAliases != nil {
+					if err := directoryaccount.EmailAliasesValidator(input.EmailAliases); err != nil {
+						logSanitizedIngestField(ctx, "directory_account", "email_aliases", err)
+						input.EmailAliases = nil
+					}
+				}
+
+				if input.IntegrationID != nil {
+					if err := directoryaccount.IntegrationIDValidator(*input.IntegrationID); err != nil {
+						logSanitizedIngestField(ctx, "directory_account", "integration_id", err)
+						input.IntegrationID = nil
+					}
+				}
+
+				if input.OwnerID != nil {
+					if err := directoryaccount.OwnerIDValidator(*input.OwnerID); err != nil {
+						logSanitizedIngestField(ctx, "directory_account", "owner_id", err)
+						input.OwnerID = nil
+					}
+				}
+
+				if input.PhoneNumber != nil {
+					if err := directoryaccount.PhoneNumberValidator(*input.PhoneNumber); err != nil {
+						logSanitizedIngestField(ctx, "directory_account", "phone_number", err)
+						input.PhoneNumber = nil
+					}
+				}
+
+				if input.PlatformID != nil {
+					if err := directoryaccount.PlatformIDValidator(*input.PlatformID); err != nil {
+						logSanitizedIngestField(ctx, "directory_account", "platform_id", err)
+						input.PlatformID = nil
+					}
+				}
+
 				if integration != nil {
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
@@ -1847,6 +1930,20 @@ var (
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
 				}
 
+				if input.Email != nil {
+					if err := directorygroup.EmailValidator(*input.Email); err != nil {
+						logSanitizedIngestField(ctx, "directory_group", "email", err)
+						input.Email = nil
+					}
+				}
+
+				if input.PlatformID != nil {
+					if err := directorygroup.PlatformIDValidator(*input.PlatformID); err != nil {
+						logSanitizedIngestField(ctx, "directory_group", "platform_id", err)
+						input.PlatformID = nil
+					}
+				}
+
 				if integration != nil {
 					if input.IntegrationID == "" {
 						input.IntegrationID = integration.ID
@@ -1950,6 +2047,13 @@ var (
 				input, err := jsonx.Decode[generated.CreateDirectoryMembershipInput](payload)
 				if err != nil {
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
+				}
+
+				if input.PlatformID != nil {
+					if err := directorymembership.PlatformIDValidator(*input.PlatformID); err != nil {
+						logSanitizedIngestField(ctx, "directory_membership", "platform_id", err)
+						input.PlatformID = nil
+					}
 				}
 
 				if integration != nil {
@@ -2234,6 +2338,55 @@ var (
 				input, err := jsonx.Decode[generated.CreateEntityInput](payload)
 				if err != nil {
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
+				}
+
+				if input.DisplayName != nil {
+					if err := entity.DisplayNameValidator(*input.DisplayName); err != nil {
+						logSanitizedIngestField(ctx, "entity", "display_name", err)
+						input.DisplayName = nil
+					}
+				}
+
+				if input.Domains != nil {
+					if err := entity.DomainsValidator(input.Domains); err != nil {
+						logSanitizedIngestField(ctx, "entity", "domains", err)
+						input.Domains = nil
+					}
+				}
+
+				if input.Links != nil {
+					if err := entity.LinksValidator(input.Links); err != nil {
+						logSanitizedIngestField(ctx, "entity", "links", err)
+						input.Links = nil
+					}
+				}
+
+				if input.LogoRemoteURL != nil {
+					if err := entity.LogoRemoteURLValidator(*input.LogoRemoteURL); err != nil {
+						logSanitizedIngestField(ctx, "entity", "logo_remote_url", err)
+						input.LogoRemoteURL = nil
+					}
+				}
+
+				if input.Name != nil {
+					if err := entity.NameValidator(*input.Name); err != nil {
+						logSanitizedIngestField(ctx, "entity", "name", err)
+						input.Name = nil
+					}
+				}
+
+				if input.OwnerID != nil {
+					if err := entity.OwnerIDValidator(*input.OwnerID); err != nil {
+						logSanitizedIngestField(ctx, "entity", "owner_id", err)
+						input.OwnerID = nil
+					}
+				}
+
+				if input.StatusPageURL != nil {
+					if err := entity.StatusPageURLValidator(*input.StatusPageURL); err != nil {
+						logSanitizedIngestField(ctx, "entity", "status_page_url", err)
+						input.StatusPageURL = nil
+					}
 				}
 
 				if integration != nil {
@@ -2525,6 +2678,13 @@ var (
 				input, err := jsonx.Decode[generated.CreateFindingInput](payload)
 				if err != nil {
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
+				}
+
+				if input.OwnerID != nil {
+					if err := finding.OwnerIDValidator(*input.OwnerID); err != nil {
+						logSanitizedIngestField(ctx, "finding", "owner_id", err)
+						input.OwnerID = nil
+					}
 				}
 
 				if integration != nil {
@@ -2976,6 +3136,20 @@ var (
 				input, err := jsonx.Decode[generated.CreateInternalPolicyInput](payload)
 				if err != nil {
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
+				}
+
+				if input.Revision != nil {
+					if err := internalpolicy.RevisionValidator(*input.Revision); err != nil {
+						logSanitizedIngestField(ctx, "internal_policy", "revision", err)
+						input.Revision = nil
+					}
+				}
+
+				if input.URL != nil {
+					if err := internalpolicy.URLValidator(*input.URL); err != nil {
+						logSanitizedIngestField(ctx, "internal_policy", "url", err)
+						input.URL = nil
+					}
 				}
 
 				if integration != nil {
@@ -3892,6 +4066,13 @@ var (
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
 				}
 
+				if input.OwnerID != nil {
+					if err := risk.OwnerIDValidator(*input.OwnerID); err != nil {
+						logSanitizedIngestField(ctx, "risk", "owner_id", err)
+						input.OwnerID = nil
+					}
+				}
+
 				if integration != nil {
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
@@ -4748,6 +4929,13 @@ var (
 				input, err := jsonx.Decode[generated.CreateVulnerabilityInput](payload)
 				if err != nil {
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
+				}
+
+				if input.OwnerID != nil {
+					if err := vulnerability.OwnerIDValidator(*input.OwnerID); err != nil {
+						logSanitizedIngestField(ctx, "vulnerability", "owner_id", err)
+						input.OwnerID = nil
+					}
 				}
 
 				if integration != nil {

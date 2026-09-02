@@ -4,6 +4,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/gala"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
@@ -84,6 +85,7 @@ func Builder(cfg Config) registry.Builder {
 					ClientRef:    entraClient.ID(),
 					ConfigSchema: directorySyncSchema,
 					Policy:       types.ExecutionPolicy{Reconcile: true},
+					Schedule:     gala.NewFullFetchSchedule(),
 					Ingest: []types.IngestContract{
 						{
 							Schema: entityops.SchemaDirectoryAccount.Name,
