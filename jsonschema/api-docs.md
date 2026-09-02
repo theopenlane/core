@@ -307,6 +307,7 @@ Config contains the configuration for the core server
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**bulkscan**|`boolean`|||
 |[**nonvendorcategories**](#defsstring)|`string[]`|||
 |[**deniedvendornames**](#defsstring)|`string[]`|||
 |**scanttl**|`integer`|||

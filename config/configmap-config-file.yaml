@@ -1102,7 +1102,9 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan }}
         domainscan:
+          {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.bulkscan }}
           bulkscan: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.bulkscan }}
+          {{- end }}
           {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.nonvendorcategories | default (list)) }}
           {{- if gt (len $sliceValue) 0 }}
           nonvendorcategories:

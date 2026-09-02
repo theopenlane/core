@@ -582,7 +582,6 @@ coreConfiguration:
       accountid: ""  # @schema type:string
       # -- Vendor/technology classification and enrichment behavior for onboarding domain scan reports
       domainscan:
-        # -- Submit onboarding domains through Cloudflare's bulk URL Scanner endpoint
         bulkscan: true  # @schema type:boolean; default:true
         nonvendorcategories:
             - Miscellaneous
