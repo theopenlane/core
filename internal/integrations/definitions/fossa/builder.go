@@ -31,16 +31,15 @@ func Builder() registry.Builder {
 				{
 					Ref:         fossaCredential.ID(),
 					Name:        "FOSSA API Token",
-					Description: "FOSSA API token with full access, used to read issues and organization details.",
+					Description: "FOSSA API token with read access, used to read issues and organization details.",
 					Schema:      fossaSchema,
-					Recommended: true,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
 				{
 					CredentialRef:       fossaCredential.ID(),
 					Name:                "FOSSA API Token",
-					Description:         "Configure FOSSA access using an API token generated from Account Settings, Integrations, API.",
+					Description:         "Configure FOSSA access using an API token generated from Account Settings, Integrations, API Service Account",
 					CredentialRefs:      []types.CredentialSlotID{fossaCredential.ID()},
 					ClientRefs:          []types.ClientID{fossaClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
