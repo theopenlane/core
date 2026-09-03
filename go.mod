@@ -102,7 +102,7 @@ require (
 	github.com/theopenlane/core/common v1.0.25
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.33.0
+	github.com/theopenlane/entx v0.33.5
 	github.com/theopenlane/go-client v0.13.1
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0

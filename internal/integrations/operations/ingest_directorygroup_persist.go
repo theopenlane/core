@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
@@ -17,6 +18,10 @@ func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration
 
 	if createInput.DirectoryName == nil && integration.Name != "" {
 		createInput.DirectoryName = &integration.Name
+	}
+
+	if hash := directoryProfileHash(createInput.Profile); hash != "" {
+		createInput.ProfileHash = &hash
 	}
 
 	return persistRoundTripUpsert(
@@ -49,8 +54,22 @@ func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration
 			return dg.ID, nil
 		},
 		func(ctx context.Context, existing *ent.DirectoryGroup, input ent.UpdateDirectoryGroupInput) error {
+			if directoryGroupUnchanged(existing, input) {
+				return nil
+			}
+
 			return db.DirectoryGroup.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
 		},
 		func(dg *ent.DirectoryGroup) string { return dg.ID },
 	)
+}
+
+// directoryGroupUnchanged reports whether the incoming update carries no payload or
+// integration-derived changes for the existing row
+func directoryGroupUnchanged(existing *ent.DirectoryGroup, input ent.UpdateDirectoryGroupInput) bool {
+	if input.ProfileHash == nil || *input.ProfileHash == "" || existing.ProfileHash != *input.ProfileHash {
+		return false
+	}
+
+	return input.DirectoryName == nil || lo.FromPtr(existing.DirectoryName) == *input.DirectoryName
 }
