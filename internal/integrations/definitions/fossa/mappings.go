@@ -1,8 +1,8 @@
 package fossa
 
 import (
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 )
 
 // mapExprVulnerability is the CEL mapping expression for FOSSA security vulnerability issues.

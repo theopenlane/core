@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
 const (

@@ -3,8 +3,8 @@ package fossa
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // resolveInstallationMetadata derives the FOSSA organization identity from the bound credential
