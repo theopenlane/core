@@ -31,7 +31,7 @@ func Builder() registry.Builder {
 				{
 					Ref:         fossaCredential.ID(),
 					Name:        "FOSSA API Token",
-					Description: "FOSSA API token with read access, used to read issues and organization details.",
+					Description: "Full API token from a FOSSA service account, used to read issues and organization details.",
 					Schema:      fossaSchema,
 				},
 			},
@@ -39,7 +39,7 @@ func Builder() registry.Builder {
 				{
 					CredentialRef:       fossaCredential.ID(),
 					Name:                "FOSSA API Token",
-					Description:         "Configure FOSSA access using an API token generated from Account Settings, Integrations, API Service Account",
+					Description:         "Configure FOSSA access using a full API token from a service account (Account Settings, Integrations, API Service Accounts) whose role can view issues.",
 					CredentialRefs:      []types.CredentialSlotID{fossaCredential.ID()},
 					ClientRefs:          []types.ClientID{fossaClient.ID()},
 					ValidationOperation: healthCheckOperation.Name(),
@@ -87,7 +87,7 @@ func Builder() registry.Builder {
 					},
 					IngestHandle:        VulnerabilityCollect{}.IngestHandle(),
 					SkipDefaultLookback: true,
-					RequiredPermissions: []string{"FOSSA API token with full access"},
+					RequiredPermissions: []string{"Full API token (not push-only) on a FOSSA service account with a role that can view issues"},
 					Schedule:            gala.NewFullFetchSchedule(),
 				},
 			},

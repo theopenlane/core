@@ -27,7 +27,7 @@ func (h HealthCheck) Handle() types.OperationHandler {
 }
 
 // Run validates FOSSA access by reading the organization details and issue category counts.
-// Both calls require read access, so a push-only token fails here rather than at collection time.
+// Both calls read data, so a push-only token fails here rather than at collection time.
 func (HealthCheck) Run(ctx context.Context, c *APIClient) (json.RawMessage, error) {
 	org, err := c.organization(ctx)
 	if err != nil {

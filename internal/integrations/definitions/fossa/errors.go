@@ -12,7 +12,7 @@ var (
 	// ErrClientBuild indicates the FOSSA API client could not be constructed
 	ErrClientBuild = errors.New("fossa: unable to build api client")
 	// ErrUnauthorized indicates FOSSA rejected the API token
-	ErrUnauthorized = errors.New("fossa: api token was rejected, a full access token is required")
+	ErrUnauthorized = errors.New("fossa: api token was rejected, a full api token is required (push-only tokens cannot read issues)")
 	// ErrRateLimited indicates FOSSA rate limited the request
 	ErrRateLimited = errors.New("fossa: rate limited by the api")
 	// ErrAPIRequest indicates the FOSSA API returned an unexpected status

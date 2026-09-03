@@ -40,7 +40,7 @@ type VulnerabilitySync struct {
 // CredentialSchema holds the FOSSA API credentials for one installation
 type CredentialSchema struct {
 	// APIToken is the FOSSA API token used to authenticate requests
-	APIToken string `json:"apiToken" jsonschema:"required,title=API Token,secret=true,description=FOSSA API token with full access. Push-only tokens cannot read issues."`
+	APIToken string `json:"apiToken" jsonschema:"required,title=API Token,secret=true,description=Full API token from a FOSSA service account. Push-only tokens cannot read issues. Read scope is controlled by the service account role."`
 	// BaseURL is the FOSSA API base URL, overridden only for on-premise deployments
 	BaseURL string `json:"baseUrl,omitempty" jsonschema:"title=Base URL,description=FOSSA base URL. Leave blank to use https://app.fossa.com."`
 }
