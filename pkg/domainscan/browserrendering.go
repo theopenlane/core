@@ -102,6 +102,26 @@ func (c *Config) GetComplianceData(ctx context.Context, domain string) (*Complia
 	return comp, nil
 }
 
+// GetBrandingData extracts visual design tokens from the rendered website
+func (c *Config) GetBrandingData(ctx context.Context, domain string) (*BrandDesignProfile, error) {
+	resp, err := c.browserRendering(ctx, domain, promptBranding, "")
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := json.Marshal(resp)
+	if err != nil {
+		return nil, err
+	}
+
+	branding := &BrandDesignProfile{}
+	if err := json.Unmarshal(data, branding); err != nil {
+		return nil, err
+	}
+
+	return branding, nil
+}
+
 // fetchCompliancePage runs the compliance prompt against a single URL and unmarshals the structured result into a CompliancePage
 func (c *Config) fetchCompliancePage(ctx context.Context, url string) (*CompliancePage, error) {
 	resp, err := c.browserRendering(ctx, url, promptCompliance, "")
@@ -373,6 +393,8 @@ func (c *Config) getBrowserRenderingJSONParams(url string, prompt string, kind P
 		schema = buildCompliancePageSchema()
 	case promptTrustCenter:
 		schema = buildTrustCenterPageSchema()
+	case promptBranding:
+		schema = buildBrandDesignProfileSchema()
 	default:
 		schema = buildCompanyProfileSchema()
 	}
@@ -424,6 +446,66 @@ func (r ResponseFormat) toParams() browser_rendering.JsonNewParamsResponseFormat
 	out.JsonSchema = cloudflare.F(schema)
 
 	return out
+}
+
+func buildBrandDesignProfileSchema() ResponseFormat {
+	return ResponseFormat{
+		Type: "json_schema",
+		Schema: JSONSchema{
+			Type: "object",
+			// https://developers.cloudflare.com/workers-ai/features/json-mode/#json-mode-example
+			// for some reson, required is needed to steer the llm to return these
+			Required: []string{
+				"logo_url",
+				"favicon_url",
+				"primary_color",
+				"font",
+				"foreground_color",
+				"background_color",
+				"accent_color",
+				"secondary_background_color",
+				"secondary_foreground_color",
+			},
+			Properties: map[string]JSONSchemaProperty{
+				"logo_url": {
+					Type:        "string",
+					Description: "The URL of the company logo shown in the header or navigation, or an empty string when unavailable",
+				},
+				"favicon_url": {
+					Type:        "string",
+					Description: "The URL of the site's favicon, or an empty string when unavailable",
+				},
+				"primary_color": {
+					Type:        "string",
+					Description: "The site's primary brand color as a six-digit hexadecimal value in #RRGGBB format",
+				},
+				"font": {
+					Type:        "string",
+					Description: "The primary font family used for body text, without CSS fallbacks, quotes, weights, or style descriptors",
+				},
+				"foreground_color": {
+					Type:        "string",
+					Description: "The main text or foreground color as a six-digit hexadecimal value in #RRGGBB format",
+				},
+				"background_color": {
+					Type:        "string",
+					Description: "The main page background color as a six-digit hexadecimal value in #RRGGBB format",
+				},
+				"accent_color": {
+					Type:        "string",
+					Description: "The prominent accent color used for calls to action, links, or highlights as a six-digit hexadecimal value in #RRGGBB format",
+				},
+				"secondary_background_color": {
+					Type:        "string",
+					Description: "The background color used for contrasting sections, cards, or navigation surfaces as a six-digit hexadecimal value in #RRGGBB format",
+				},
+				"secondary_foreground_color": {
+					Type:        "string",
+					Description: "The text or foreground color used on secondary background surfaces as a six-digit hexadecimal value in #RRGGBB format",
+				},
+			},
+		},
+	}
 }
 
 // buildCompanyProfileSchema constructs the JSON schema for company profile extraction

@@ -582,6 +582,7 @@ coreConfiguration:
       accountid: ""  # @schema type:string
       # -- Vendor/technology classification and enrichment behavior for onboarding domain scan reports
       domainscan:
+        bulkscan: true  # @schema type:boolean; default:true
         nonvendorcategories:
             - Miscellaneous
             - JavaScript frameworks

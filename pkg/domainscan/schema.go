@@ -191,6 +191,22 @@ type Favicon struct {
 type Branding struct {
 	// Favicon is the scanned site's favicon
 	Favicon Favicon `json:"favicon"`
+	// LogoURL is the primary site logo discovered from the rendered page
+	LogoURL string `json:"logo_url,omitempty"`
+	// PrimaryColor is the site's primary brand color
+	PrimaryColor string `json:"primary_color,omitempty"`
+	// Font is the site's primary font family
+	Font string `json:"font,omitempty"`
+	// ForegroundColor is the main text or foreground color
+	ForegroundColor string `json:"foreground_color,omitempty"`
+	// BackgroundColor is the main page background color
+	BackgroundColor string `json:"background_color,omitempty"`
+	// AccentColor is the color used for calls to action, links, or highlights
+	AccentColor string `json:"accent_color,omitempty"`
+	// SecondaryBackgroundColor is the background color used for contrasting surfaces
+	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
+	// SecondaryForegroundColor is the text color used on secondary background surfaces
+	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
 }
 
 // ScanReport is BuildScanReport's typed output for a single domain

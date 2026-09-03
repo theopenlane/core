@@ -3,7 +3,9 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -14,6 +16,11 @@ import (
 // DomainScanRequest queues a domain scan for a single domain by creating a pending Scan record which
 // is then picked up to do the domain scan
 type DomainScanRequest struct {
+	// ScanID identifies the Scan record that triggered an internally dispatched request
+	// this is needed beceause domain_scan previously just filtered the scans table by domain
+	// and selected the first one. but this may end up picking out an older record
+	// if no id is provided, default to picking out the first one as before ( coming in from onboarding/domain scan)
+	ScanID string `json:"scanId,omitempty"`
 	// OrganizationID is the organization the scan belongs to, only used when dispatched without an  Integration
 	// customer-facing calls always derive the organization from their resolved Integration instead, ignoring this field
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -22,6 +29,10 @@ type DomainScanRequest struct {
 	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
 	// instead of reusing one from a previous scan of the same domain
 	ForceRefresh bool `json:"forceRefresh,omitempty" jsonschema:"title=Force Refresh,description=Bypass the render cache and force a fresh scan"`
+	// BrandDesignOnly extracts the brand design without running the full domain scan
+	BrandDesignOnly bool `json:"brandDesignOnly,omitempty" jsonschema:"title=Brand Design Only,description=Extract and apply the brand design without building a full domain scan report"`
+	// ApplyBrandDesign applies extracted brand design to Trust Center settings
+	ApplyBrandDesign bool `json:"applyBrandDesign,omitempty" jsonschema:"title=Apply Brand Design,description=Apply extracted brand design to Trust Center settings"`
 	// GroupID links this scan to sibling scans requested together so they can be recombined into a
 	// single notification once the whole group finishes
 	GroupID string `json:"groupId,omitempty"`
@@ -55,21 +66,55 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 			return nil, ErrInstallationRequired
 		}
 
-		scanRecord, err := request.DB.Scan.Query().
-			Where(
+		var scanRecord *generated.Scan
+		var err error
+
+		if cfg.ScanID != "" {
+
+			// if scan id exists, we need to make sure the domain matches what we expect
+			// and is also a candidate for scanning
+			scanRecord, err = request.DB.Scan.Query().Where(
+				scan.ID(cfg.ScanID),
 				scan.OwnerID(organizationID),
 				scan.Target(cfg.Domain),
 				scan.ScanTypeEQ(enums.ScanTypeDomain),
 				scan.PerformedBy(DomainScanPerformedBy),
-				scan.StatusEQ(enums.ScanStatusPending),
-			).
-			First(ctx)
-		if err != nil && !generated.IsNotFound(err) {
-			return nil, err
+			).Only(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			if scanRecord.Status != enums.ScanStatusPending && scanRecord.Status != enums.ScanStatusProcessing {
+				return providerkit.EncodeResult(DomainScanRequestResult{
+					Message: "domain scan already processed",
+					ScanID:  scanRecord.ID,
+				}, ErrResultEncode)
+			}
+
+		} else {
+
+			scanRecord, err = request.DB.Scan.Query().
+				Where(
+					scan.OwnerID(organizationID),
+					scan.Target(cfg.Domain),
+					scan.ScanTypeEQ(enums.ScanTypeDomain),
+					scan.PerformedBy(DomainScanPerformedBy),
+					scan.StatusEQ(enums.ScanStatusPending),
+				).
+				First(ctx)
+			if err != nil && !generated.IsNotFound(err) {
+				return nil, err
+			}
 		}
 
 		if scanRecord == nil {
 			metadata := map[string]any{"forceRefresh": cfg.ForceRefresh}
+			if cfg.BrandDesignOnly {
+				metadata[DomainScanBrandDesignOnlyMetadataKey] = true
+			}
+			if cfg.ApplyBrandDesign {
+				metadata[DomainScanApplyBrandDesignMetadataKey] = true
+			}
 			if groupID != "" {
 				metadata[DomainScanGroupMetadataKey] = groupID
 			}
@@ -93,7 +138,12 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 				return nil, err
 			}
 		} else if groupID != "" {
-			scanRecord, err = scanRecord.Update().SetMetadata(map[string]any{DomainScanGroupMetadataKey: groupID}).Save(ctx)
+			metadata := map[string]any{DomainScanGroupMetadataKey: groupID}
+			if cfg.ApplyBrandDesign {
+				metadata[DomainScanApplyBrandDesignMetadataKey] = true
+			}
+
+			scanRecord, err = scanRecord.Update().SetMetadata(metadata).Save(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -107,6 +157,17 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 		}
 
 		saga := domainScanSaga{services: request.Services}
+
+		if cfg.BrandDesignOnly {
+			if err := saga.runBrandDesignScan(ctx, organizationID, scanRecord.ID, cfg.Domain, cfg.ApplyBrandDesign); err != nil {
+				return nil, err
+			}
+
+			return providerkit.EncodeResult(DomainScanRequestResult{
+				Message: "domain brand design scan completed",
+				ScanID:  scanRecord.ID,
+			}, ErrResultEncode)
+		}
 
 		if err := saga.submitAndScheduleDomainScan(ctx, organizationID, scanRecord.ID, cfg.Domain, cfg.ForceRefresh); err != nil {
 			return nil, err

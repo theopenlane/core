@@ -44,6 +44,10 @@ var (
 const (
 	// DomainScanPerformedBy marks a Scan record as one the system should actually submit to the cloudflare domain scan job
 	DomainScanPerformedBy = "openlane_domain_scan"
+	// DomainScanBrandDesignOnlyMetadataKey selects the brand-design-only scan path
+	DomainScanBrandDesignOnlyMetadataKey = "brandDesignOnly"
+	// DomainScanApplyBrandDesignMetadataKey allows a scan to update Trust Center brand design settings
+	DomainScanApplyBrandDesignMetadataKey = "applyBrandDesign"
 	// DomainScanGroupMetadataKey is the Scan.Metadata key carrying the shared group id for scans
 	// created together (e.g. every domain from one organization settings update), so scans
 	// submitted independently can still be recombined into a single notification once the whole

@@ -16,6 +16,7 @@ import (
 	"golang.org/x/sync/errgroup"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -36,6 +37,98 @@ const domainScanEnrichmentMetadataKey = "enrichment"
 type domainScanSaga struct {
 	// services exposes runtime execution, persistence, and event capabilities
 	services types.RuntimeServices
+}
+
+// runBrandDesignScan runs only the brand design portion of the scan
+func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, scanID, domain string, applyBrandDesign bool) error {
+	systemCtx := domainScanSystemContext(ctx, organizationID)
+
+	if err := s.services.DB().Scan.UpdateOneID(scanID).
+		SetStatus(enums.ScanStatusProcessing).
+		Exec(systemCtx); err != nil {
+		return err
+	}
+
+	config, err := json.Marshal(DomainScanGatherEnrichment{
+		Domain:          domain,
+		ForceRefresh:    true,
+		BrandDesignOnly: true,
+	})
+	if err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	response, err := s.services.ExecuteRuntimeOperation(ctx, DefinitionID.ID(), DomainScanEnrichmentOp.Name(), config)
+	if err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	var result DomainScanGatherEnrichmentResult
+	if err := json.Unmarshal(response, &result); err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	if result.Enrichment.Branding == nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return nil
+	}
+
+	if applyBrandDesign {
+		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(result.Enrichment.Branding)); err != nil {
+			s.markDomainScanFailed(ctx, organizationID, scanID)
+
+			return err
+		}
+	}
+
+	metadata := map[string]any{
+		"url": domain,
+		"branding": domainscan.Branding{
+			Favicon: domainscan.Favicon{
+				URL: result.Enrichment.Branding.FaviconURL,
+			},
+			LogoURL:                  result.Enrichment.Branding.LogoURL,
+			PrimaryColor:             result.Enrichment.Branding.PrimaryColor,
+			Font:                     result.Enrichment.Branding.Font,
+			ForegroundColor:          result.Enrichment.Branding.ForegroundColor,
+			BackgroundColor:          result.Enrichment.Branding.BackgroundColor,
+			AccentColor:              result.Enrichment.Branding.AccentColor,
+			SecondaryBackgroundColor: result.Enrichment.Branding.SecondaryBackgroundColor,
+			SecondaryForegroundColor: result.Enrichment.Branding.SecondaryForegroundColor,
+		},
+	}
+
+	if err := s.services.DB().Scan.UpdateOneID(scanID).
+		SetStatus(enums.ScanStatusCompleted).
+		SetMetadata(metadata).
+		Exec(systemCtx); err != nil {
+		s.markDomainScanFailed(ctx, organizationID, scanID)
+
+		return err
+	}
+
+	return nil
+}
+
+func buildBrandDesignImport(brandDesign *domainscan.BrandDesignProfile) DomainScanImportBranding {
+	return DomainScanImportBranding{
+		LogoURL:                  brandDesign.LogoURL,
+		FaviconURL:               brandDesign.FaviconURL,
+		PrimaryColor:             brandDesign.PrimaryColor,
+		Font:                     brandDesign.Font,
+		ForegroundColor:          brandDesign.ForegroundColor,
+		BackgroundColor:          brandDesign.BackgroundColor,
+		AccentColor:              brandDesign.AccentColor,
+		SecondaryBackgroundColor: brandDesign.SecondaryBackgroundColor,
+		SecondaryForegroundColor: brandDesign.SecondaryForegroundColor,
+	}
 }
 
 // domainScanListeners declares the standalone gala listeners implementing the domain scan saga
@@ -234,15 +327,42 @@ func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, o
 // persistDomainScanEnrichment stores the enrichment on the scan record; on failure it marks the
 // scan failed and checks sibling completion so the batch never stalls
 func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organizationID, internalScanID string, enrichment domainscan.Enrichment, siblingScanIDs []string) error {
+	systemCtx := domainScanSystemContext(ctx, organizationID)
+
+	scanRecord, err := s.services.DB().Scan.Get(systemCtx, internalScanID)
+	if err != nil {
+		s.markDomainScanFailed(ctx, organizationID, internalScanID)
+
+		return err
+	}
+
+	applyBrandDesign, _ := scanRecord.Metadata[DomainScanApplyBrandDesignMetadataKey].(bool)
+
 	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
 		SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichment}).
-		Exec(domainScanSystemContext(ctx, organizationID)); err != nil {
+		Exec(systemCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed updating scan record with enrichment")
 		s.markDomainScanFailed(ctx, organizationID, internalScanID)
 
 		if notifyErr := s.maybeNotifyDomainScanGroup(ctx, organizationID, siblingScanIDs); notifyErr != nil {
 			logx.FromContext(ctx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
 		}
+
+		return err
+	}
+
+	if !applyBrandDesign {
+		return nil
+	}
+
+	if enrichment.Branding == nil {
+		s.markDomainScanFailed(ctx, organizationID, internalScanID)
+
+		return ErrDomainScanBrandDesignMissing
+	}
+
+	if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(enrichment.Branding)); err != nil {
+		s.markDomainScanFailed(ctx, organizationID, internalScanID)
 
 		return err
 	}
