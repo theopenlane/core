@@ -39,17 +39,18 @@ func CheckIfCommentOnly() privacy.MutationRuleFunc {
 			return privacy.Allowf("mutation has no changes beyond allowed edges, allowing")
 		}
 
-		detailsJSONFieldName := "details_json"
-		if !lo.Contains(fields, detailsJSONFieldName) {
-			// try description_json instead
-			detailsJSONFieldName = "description_json"
+		// pick up the matching text/json fields the mutation uses
+		// either details or description
+		jsonFieldName := "details_json"
+		textFieldName := "details"
+		if !lo.Contains(fields, jsonFieldName) {
+			jsonFieldName = "description_json"
+			textFieldName = "description"
 		}
 
-		// if just one fields changed, check the details_json, this is done for plate comments
-		if len(fields) == 1 && lo.Contains(fields, detailsJSONFieldName) {
-			// get the old details json value from the mutation
-			oldDetailsJSON, _ := m.OldField(ctx, detailsJSONFieldName)
-			newDetailsJSON, _ := m.Field(detailsJSONFieldName)
+		if len(fields) == 1 && lo.Contains(fields, jsonFieldName) {
+			oldDetailsJSON, _ := m.OldField(ctx, jsonFieldName)
+			newDetailsJSON, _ := m.Field(jsonFieldName)
 
 			oldDetailsTyped, _ := oldDetailsJSON.([]any)
 			newDetailsTyped, _ := newDetailsJSON.([]any)
@@ -57,21 +58,21 @@ func CheckIfCommentOnly() privacy.MutationRuleFunc {
 			if slateparser.NoDetailsChanged(oldDetailsTyped, newDetailsTyped) {
 				mergedComments, ok := slateparser.MergeComments(oldDetailsTyped, newDetailsTyped)
 				if !ok {
-					return privacy.Allowf("mutation has only comments added to details_json, allowing")
+					return privacy.Allowf("mutation has only comments added to %s, allowing", jsonFieldName)
 				}
 
-				if err := m.SetField(detailsJSONFieldName, mergedComments); err != nil {
+				if err := m.SetField(jsonFieldName, mergedComments); err != nil {
 					return privacy.Denyf("unable to merge comment markers")
 				}
 
-				return privacy.Allowf("mutation has only comments added to details_json, allowing")
+				return privacy.Allowf("mutation has only comments added to %s, allowing", jsonFieldName)
 			}
 
-			if detailsJSONFieldName == "details_json" && len(oldDetailsTyped) == 0 {
-				oldDetails, _ := m.OldField(ctx, "details")
-				oldDetailsTyped, _ := oldDetails.(string)
-				if slateparser.DoesMarkdownMatchSlate(oldDetailsTyped, newDetailsTyped) {
-					return privacy.Allowf("mutation initializes details_json with comments without changing details, allowing")
+			if len(oldDetailsTyped) == 0 {
+				oldText, _ := m.OldField(ctx, textFieldName)
+				oldTextTyped, _ := oldText.(string)
+				if slateparser.DoesMarkdownMatchSlate(oldTextTyped, newDetailsTyped) {
+					return privacy.Allowf("mutation initializes %s with comments without changing %s, allowing", jsonFieldName, textFieldName)
 				}
 			}
 		}
