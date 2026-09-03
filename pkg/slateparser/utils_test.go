@@ -116,52 +116,42 @@ func TestContainsCommentsInTextJSON(t *testing.T) {
 }
 
 func TestNoDetailsChanged(t *testing.T) {
-	// Helper to wrap children in Slate element
-	makeSlate := func(children ...any) []any {
-		return []any{
-			map[string]any{
-				"type":     "paragraph",
-				"children": children,
-			},
-		}
-	}
-
 	t.Run("no changes", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello"})
-		newText := makeSlate(map[string]any{"text": "hello"})
+		oldText := makeSlate(t, map[string]any{"text": "hello"})
+		newText := makeSlate(t, map[string]any{"text": "hello"})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("comment added", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello"})
-		newText := makeSlate(map[string]any{"text": "hello", "comment": "my comment"})
+		oldText := makeSlate(t, map[string]any{"text": "hello"})
+		newText := makeSlate(t, map[string]any{"text": "hello", "comment": "my comment"})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("comment changed", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello", "comment": "old"})
-		newText := makeSlate(map[string]any{"text": "hello", "comment": "new"})
+		oldText := makeSlate(t, map[string]any{"text": "hello", "comment": "old"})
+		newText := makeSlate(t, map[string]any{"text": "hello", "comment": "new"})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("text changed", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello"})
-		newText := makeSlate(map[string]any{"text": "world"})
+		oldText := makeSlate(t, map[string]any{"text": "hello"})
+		newText := makeSlate(t, map[string]any{"text": "world"})
 		assert.Check(t, !slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("comment removed", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello", "comment": "gone"})
-		newText := makeSlate(map[string]any{"text": "hello"})
+		oldText := makeSlate(t, map[string]any{"text": "hello", "comment": "gone"})
+		newText := makeSlate(t, map[string]any{"text": "hello"})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("multiple children, only comments added", func(t *testing.T) {
-		oldText := makeSlate(
+		oldText := makeSlate(t,
 			map[string]any{"text": "a"},
 			map[string]any{"text": "b"},
 		)
-		newText := makeSlate(
+		newText := makeSlate(t,
 			map[string]any{"text": "a", "comment": "c1"},
 			map[string]any{"text": "b", "comment": "c2"},
 		)
@@ -169,11 +159,11 @@ func TestNoDetailsChanged(t *testing.T) {
 	})
 
 	t.Run("multiple children, text changed in one", func(t *testing.T) {
-		oldText := makeSlate(
+		oldText := makeSlate(t,
 			map[string]any{"text": "a"},
 			map[string]any{"text": "b"},
 		)
-		newText := makeSlate(
+		newText := makeSlate(t,
 			map[string]any{"text": "a"},
 			map[string]any{"text": "B"},
 		)
@@ -181,23 +171,23 @@ func TestNoDetailsChanged(t *testing.T) {
 	})
 
 	t.Run("different number of children", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "a"})
-		newText := makeSlate(map[string]any{"text": "a"}, map[string]any{"text": "b"})
+		oldText := makeSlate(t, map[string]any{"text": "a"})
+		newText := makeSlate(t, map[string]any{"text": "a"}, map[string]any{"text": "b"})
 		assert.Check(t, !slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("non-map children", func(t *testing.T) {
-		oldText := makeSlate("not a map")
-		newText := makeSlate("not a map")
+		oldText := makeSlate(t, "not a map")
+		newText := makeSlate(t, "not a map")
 		assert.Check(t, !slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("comment added to one of multiple children", func(t *testing.T) {
-		oldText := makeSlate(
+		oldText := makeSlate(t,
 			map[string]any{"text": "a"},
 			map[string]any{"text": "b"},
 		)
-		newText := makeSlate(
+		newText := makeSlate(t,
 			map[string]any{"text": "a", "comment": "c"},
 			map[string]any{"text": "b"},
 		)
@@ -215,11 +205,11 @@ func TestNoDetailsChanged(t *testing.T) {
 	})
 
 	t.Run("multiple children, extra key added", func(t *testing.T) {
-		oldText := makeSlate(
+		oldText := makeSlate(t,
 			map[string]any{"text": "a"},
 			map[string]any{"text": "b"},
 		)
-		newText := makeSlate(
+		newText := makeSlate(t,
 			map[string]any{"text": "a", "comment": "c1", "extra": "not allowed"},
 			map[string]any{"text": "b", "comment": "c2"},
 		)
@@ -228,51 +218,51 @@ func TestNoDetailsChanged(t *testing.T) {
 
 	// bold/italic/underline are stored as booleans on leaf nodes in Slate
 	t.Run("bold mark unchanged, comment added", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello", "bold": true})
-		newText := makeSlate(map[string]any{"text": "hello", "bold": true, "comment": true})
+		oldText := makeSlate(t, map[string]any{"text": "hello", "bold": true})
+		newText := makeSlate(t, map[string]any{"text": "hello", "bold": true, "comment": true})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("bold mark changed", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello", "bold": true})
-		newText := makeSlate(map[string]any{"text": "hello", "bold": false})
+		oldText := makeSlate(t, map[string]any{"text": "hello", "bold": true})
+		newText := makeSlate(t, map[string]any{"text": "hello", "bold": false})
 		assert.Check(t, !slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("bold mark added (formatting change, not comment)", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello"})
-		newText := makeSlate(map[string]any{"text": "hello", "bold": true})
+		oldText := makeSlate(t, map[string]any{"text": "hello"})
+		newText := makeSlate(t, map[string]any{"text": "hello", "bold": true})
 		assert.Check(t, !slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("multiple marks unchanged, comment added", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true})
-		newText := makeSlate(map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true, "comment": true})
+		oldText := makeSlate(t, map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true})
+		newText := makeSlate(t, map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true, "comment": true})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("multiple marks unchanged, no comment changes", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true})
-		newText := makeSlate(map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true})
+		oldText := makeSlate(t, map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true})
+		newText := makeSlate(t, map[string]any{"text": "hello", "bold": true, "italic": true, "underline": true})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	// Slate adds both "comment" and "comment_<id>" keys when creating a comment
 	t.Run("comment and comment_id keys added", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello"})
-		newText := makeSlate(map[string]any{"text": "hello", "comment": true, "comment_MDHGnHfbfTfX": true})
+		oldText := makeSlate(t, map[string]any{"text": "hello"})
+		newText := makeSlate(t, map[string]any{"text": "hello", "comment": true, "comment_MDHGnHfbfTfX": true})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("multiple comment_id keys added", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello"})
-		newText := makeSlate(map[string]any{"text": "hello", "comment": true, "comment_abc": true, "comment_xyz": true})
+		oldText := makeSlate(t, map[string]any{"text": "hello"})
+		newText := makeSlate(t, map[string]any{"text": "hello", "comment": true, "comment_abc": true, "comment_xyz": true})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
 	t.Run("bold with comment_id added", func(t *testing.T) {
-		oldText := makeSlate(map[string]any{"text": "hello", "bold": true})
-		newText := makeSlate(map[string]any{"text": "hello", "bold": true, "comment": true, "comment_abc123": true})
+		oldText := makeSlate(t, map[string]any{"text": "hello", "bold": true})
+		newText := makeSlate(t, map[string]any{"text": "hello", "bold": true, "comment": true, "comment_abc123": true})
 		assert.Check(t, slateparser.NoDetailsChanged(oldText, newText))
 	})
 
