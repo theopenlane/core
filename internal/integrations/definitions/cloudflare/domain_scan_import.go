@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/domainscan"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
 	"github.com/theopenlane/core/v2/pkg/logx"
-	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
 // domainScanImportVendorEntityType is the entityTypeName to use when creating the entities from
@@ -34,13 +33,13 @@ const domainScanImportVendorEntityType = "vendor"
 // notification. The per-type fields hold every resolved record; CreatedIDs holds the subset that
 // this import actually created, so a resubmission can report what was new versus already there
 type importSummary struct {
-	PlatformIDs          []string `json:"platform_ids,omitempty"`
-	SystemDetailIDs      []string `json:"system_detail_ids,omitempty"`
-	EntityIDs            []string `json:"entity_ids,omitempty"`
-	AssetIDs             []string `json:"asset_ids,omitempty"`
-	FindingIDs           []string `json:"finding_ids,omitempty"`
-	CreatedIDs           []string `json:"created_ids,omitempty"`
-	TrustCenterSettingID string   `json:"trust_center_setting_id,omitempty"`
+	PlatformIDs        []string `json:"platform_ids,omitempty"`
+	SystemDetailIDs    []string `json:"system_detail_ids,omitempty"`
+	EntityIDs          []string `json:"entity_ids,omitempty"`
+	AssetIDs           []string `json:"asset_ids,omitempty"`
+	FindingIDs         []string `json:"finding_ids,omitempty"`
+	CreatedIDs         []string `json:"created_ids,omitempty"`
+	BrandDesignUpdated bool     `json:"-"`
 }
 
 // createdCount returns how many of ids this import created rather than reused
@@ -95,7 +94,7 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 		body += fmt.Sprintf("; %d existing record(s) were linked to this scan", reused)
 	}
 
-	if summary.TrustCenterSettingID != "" {
+	if summary.BrandDesignUpdated {
 		body += "; updated trust center branding"
 	}
 
@@ -183,7 +182,7 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 	summary.CreatedIDs = append(summary.CreatedIDs, createdFindingIDs...)
 
 	if envelope.Branding != nil {
-		summary.TrustCenterSettingID, err = updateTrustcenterBrandDesign(ctx, client, envelope.ScanIDs, *envelope.Branding)
+		summary.BrandDesignUpdated, err = applyBrandingToTrustCenter(ctx, client, *envelope.Branding)
 		if err != nil {
 			return summary, err
 		}
@@ -192,79 +191,36 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 	return summary, nil
 }
 
-// updateTrustcenterBrandDesign updates the live setting of a trustcenter only when the scanned domain
-// matches the custom domain they have set up previously
-func updateTrustcenterBrandDesign(ctx context.Context, client *generated.Client, scanIDs []string, brandDesign DomainScanImportBranding) (string, error) {
-	tc, err := client.TrustCenter.Query().WithCustomDomain().First(ctx)
-	if generated.IsNotFound(err) {
-		return "", nil
-	}
-
-	if err != nil {
-		return "", fmt.Errorf("could not find trustcenter for brand design import: %w", err)
-	}
-
-	cd, err := tc.Edges.CustomDomainOrErr()
-	if generated.IsNotFound(err) {
-		return "", nil
-	}
-
-	if err != nil {
-		return "", fmt.Errorf("could not fetch external trust center domain for brand design import: %w", err)
-	}
-
-	hostName, err := urlx.NormalizeHostname(cd.CnameRecord)
-	if err != nil {
-		return "", fmt.Errorf("could not normalize external trust center domain for brand design import: %w", err)
-	}
-
-	domain, ok := domainscan.RegistrableDomain(hostName)
-	if !ok {
-		return "", nil
-	}
-
-	scans, err := client.Scan.Query().Where(scan.IDIn(scanIDs...)).All(ctx)
-	if err != nil {
-		return "", fmt.Errorf("could not fetch scans for brand design import: %w", err)
-	}
-
-	// check if any of the scanned items are on the same domain/asset as the live trustcenter domain we have
-	doesScanMatchDomain := lo.SomeBy(scans, func(scanRecord *generated.Scan) bool {
-		hostname, err := urlx.NormalizeHostname(scanRecord.Target)
+func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, brandDesign DomainScanImportBranding) (bool, error) {
+	return workflows.WithTx(ctx, client, nil, func(tx *generated.Tx) (bool, error) {
+		tc, err := tx.TrustCenter.Query().First(ctx)
 		if err != nil {
-			return false
+			return false, fmt.Errorf("could not find trustcenter for brand design: %w", err)
 		}
 
-		d, ok := domainscan.RegistrableDomain(hostname)
-		return ok && d == domain
+		settings, err := tx.TrustCenterSetting.Query().Where(
+			trustcentersetting.TrustCenterIDEQ(tc.ID),
+			trustcentersetting.EnvironmentIn(
+				enums.TrustCenterEnvironmentLive,
+				enums.TrustCenterEnvironmentPreview,
+			),
+		).All(ctx)
+		if err != nil {
+			return false, fmt.Errorf("could not fetch trust center settings for brand design: %w", err)
+		}
+
+		updated := false
+		for _, setting := range settings {
+			settingUpdated, err := updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
+			if err != nil {
+				return false, err
+			}
+
+			updated = updated || settingUpdated
+		}
+
+		return updated, nil
 	})
-
-	if !doesScanMatchDomain {
-		return "", nil
-	}
-
-	setting, err := client.TrustCenterSetting.Query().Where(
-		trustcentersetting.TrustCenterIDEQ(tc.ID),
-		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
-	).Only(ctx)
-	if generated.IsNotFound(err) {
-		return "", nil
-	}
-
-	if err != nil {
-		return "", fmt.Errorf("could not fetch live trust center setting for brand design import: %w", err)
-	}
-
-	updated, err := updateTrustcenterBrandDesignSetting(ctx, setting, brandDesign)
-	if err != nil {
-		return "", err
-	}
-
-	if !updated {
-		return "", nil
-	}
-
-	return setting.ID, nil
 }
 
 func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated.TrustCenterSetting, brandDesign DomainScanImportBranding) (bool, error) {

@@ -29,8 +29,10 @@ type DomainScanRequest struct {
 	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
 	// instead of reusing one from a previous scan of the same domain
 	ForceRefresh bool `json:"forceRefresh,omitempty" jsonschema:"title=Force Refresh,description=Bypass the render cache and force a fresh scan"`
-	// BrandDesignOnly extracts and applies the brand design without running the full domain scan
+	// BrandDesignOnly extracts the brand design without running the full domain scan
 	BrandDesignOnly bool `json:"brandDesignOnly,omitempty" jsonschema:"title=Brand Design Only,description=Extract and apply the brand design without building a full domain scan report"`
+	// ApplyBrandDesign applies extracted brand design to Trust Center settings
+	ApplyBrandDesign bool `json:"applyBrandDesign,omitempty" jsonschema:"title=Apply Brand Design,description=Apply extracted brand design to Trust Center settings"`
 	// GroupID links this scan to sibling scans requested together so they can be recombined into a
 	// single notification once the whole group finishes
 	GroupID string `json:"groupId,omitempty"`
@@ -110,6 +112,9 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 			if cfg.BrandDesignOnly {
 				metadata[DomainScanBrandDesignOnlyMetadataKey] = true
 			}
+			if cfg.ApplyBrandDesign {
+				metadata[DomainScanApplyBrandDesignMetadataKey] = true
+			}
 			if groupID != "" {
 				metadata[DomainScanGroupMetadataKey] = groupID
 			}
@@ -133,7 +138,12 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 				return nil, err
 			}
 		} else if groupID != "" {
-			scanRecord, err = scanRecord.Update().SetMetadata(map[string]any{DomainScanGroupMetadataKey: groupID}).Save(ctx)
+			metadata := map[string]any{DomainScanGroupMetadataKey: groupID}
+			if cfg.ApplyBrandDesign {
+				metadata[DomainScanApplyBrandDesignMetadataKey] = true
+			}
+
+			scanRecord, err = scanRecord.Update().SetMetadata(metadata).Save(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -149,7 +159,7 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 		saga := domainScanSaga{services: request.Services}
 
 		if cfg.BrandDesignOnly {
-			if err := saga.runBrandDesignScan(ctx, organizationID, scanRecord.ID, cfg.Domain); err != nil {
+			if err := saga.runBrandDesignScan(ctx, organizationID, scanRecord.ID, cfg.Domain, cfg.ApplyBrandDesign); err != nil {
 				return nil, err
 			}
 

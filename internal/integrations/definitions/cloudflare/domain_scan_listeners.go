@@ -40,7 +40,7 @@ type domainScanSaga struct {
 }
 
 // runBrandDesignScan runs only the brand design portion of the scan
-func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, scanID, domain string) error {
+func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, scanID, domain string, applyBrandDesign bool) error {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
 	if err := s.services.DB().Scan.UpdateOneID(scanID).
@@ -80,23 +80,12 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 		return nil
 	}
 
-	brandDesign := DomainScanImportBranding{
-		LogoURL:                  result.Enrichment.Branding.LogoURL,
-		FaviconURL:               result.Enrichment.Branding.FaviconURL,
-		PrimaryColor:             result.Enrichment.Branding.PrimaryColor,
-		Font:                     result.Enrichment.Branding.Font,
-		ForegroundColor:          result.Enrichment.Branding.ForegroundColor,
-		BackgroundColor:          result.Enrichment.Branding.BackgroundColor,
-		AccentColor:              result.Enrichment.Branding.AccentColor,
-		SecondaryBackgroundColor: result.Enrichment.Branding.SecondaryBackgroundColor,
-		SecondaryForegroundColor: result.Enrichment.Branding.SecondaryForegroundColor,
-	}
+	if applyBrandDesign {
+		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(result.Enrichment.Branding)); err != nil {
+			s.markDomainScanFailed(ctx, organizationID, scanID)
 
-	_, err = updateTrustcenterBrandDesign(systemCtx, s.services.DB(), []string{scanID}, brandDesign)
-	if err != nil {
-		s.markDomainScanFailed(ctx, organizationID, scanID)
-
-		return err
+			return err
+		}
 	}
 
 	metadata := map[string]any{
@@ -126,6 +115,20 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 	}
 
 	return nil
+}
+
+func buildBrandDesignImport(brandDesign *domainscan.BrandDesignProfile) DomainScanImportBranding {
+	return DomainScanImportBranding{
+		LogoURL:                  brandDesign.LogoURL,
+		FaviconURL:               brandDesign.FaviconURL,
+		PrimaryColor:             brandDesign.PrimaryColor,
+		Font:                     brandDesign.Font,
+		ForegroundColor:          brandDesign.ForegroundColor,
+		BackgroundColor:          brandDesign.BackgroundColor,
+		AccentColor:              brandDesign.AccentColor,
+		SecondaryBackgroundColor: brandDesign.SecondaryBackgroundColor,
+		SecondaryForegroundColor: brandDesign.SecondaryForegroundColor,
+	}
 }
 
 // domainScanListeners declares the standalone gala listeners implementing the domain scan saga
@@ -324,15 +327,42 @@ func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, o
 // persistDomainScanEnrichment stores the enrichment on the scan record; on failure it marks the
 // scan failed and checks sibling completion so the batch never stalls
 func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organizationID, internalScanID string, enrichment domainscan.Enrichment, siblingScanIDs []string) error {
+	systemCtx := domainScanSystemContext(ctx, organizationID)
+
+	scanRecord, err := s.services.DB().Scan.Get(systemCtx, internalScanID)
+	if err != nil {
+		s.markDomainScanFailed(ctx, organizationID, internalScanID)
+
+		return err
+	}
+
+	applyBrandDesign, _ := scanRecord.Metadata[DomainScanApplyBrandDesignMetadataKey].(bool)
+
 	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
 		SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichment}).
-		Exec(domainScanSystemContext(ctx, organizationID)); err != nil {
+		Exec(systemCtx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed updating scan record with enrichment")
 		s.markDomainScanFailed(ctx, organizationID, internalScanID)
 
 		if notifyErr := s.maybeNotifyDomainScanGroup(ctx, organizationID, siblingScanIDs); notifyErr != nil {
 			logx.FromContext(ctx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
 		}
+
+		return err
+	}
+
+	if !applyBrandDesign {
+		return nil
+	}
+
+	if enrichment.Branding == nil {
+		s.markDomainScanFailed(ctx, organizationID, internalScanID)
+
+		return ErrDomainScanBrandDesignMissing
+	}
+
+	if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(enrichment.Branding)); err != nil {
+		s.markDomainScanFailed(ctx, organizationID, internalScanID)
 
 		return err
 	}

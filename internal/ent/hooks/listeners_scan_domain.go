@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organizationsetting"
@@ -57,13 +58,15 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 
 	forceRefresh, _ := scanRecord.Metadata["forceRefresh"].(bool)
 	isBrandDesignOnly, _ := scanRecord.Metadata[cloudflare.DomainScanBrandDesignOnlyMetadataKey].(bool)
+	applyBrandDesign, _ := scanRecord.Metadata[cloudflare.DomainScanApplyBrandDesignMetadataKey].(bool)
 
 	return dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID)), cloudflare.DomainScanRequest{
-		ScanID:          scanRecord.ID,
-		OrganizationID:  scanRecord.OwnerID,
-		Domain:          scanRecord.Target,
-		ForceRefresh:    forceRefresh,
-		BrandDesignOnly: isBrandDesignOnly,
+		ScanID:           scanRecord.ID,
+		OrganizationID:   scanRecord.OwnerID,
+		Domain:           scanRecord.Target,
+		ForceRefresh:     forceRefresh,
+		BrandDesignOnly:  isBrandDesignOnly,
+		ApplyBrandDesign: applyBrandDesign,
 	})
 }
 
@@ -75,11 +78,13 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityo
 		return err
 	}
 
-	for _, domain := range setting.Domains {
+	for idx, domain := range setting.Domains {
 		if err := dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID), domain), cloudflare.DomainScanRequest{
 			OrganizationID: setting.OrganizationID,
 			Domain:         domain,
 			GroupID:        string(inv.Envelope.ID),
+			// just pick out the first one to apply it's brand design to the trustcenters
+			ApplyBrandDesign: idx == 0,
 		}); err != nil {
 			return err
 		}

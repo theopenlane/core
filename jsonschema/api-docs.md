@@ -1691,13 +1691,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-<<<<<<< HEAD
 |**bulkscan**|`boolean`|||
-||||||| 79652f30a
-<a name="defstotpconfig"></a>
-## $defs/totp\.Config: object
-=======
->>>>>>> origin/main
 |[**nonvendorcategories**](#defsstring)|`string[]`|||
 |[**deniedvendornames**](#defsstring)|`string[]`|||
 |**scanttl**|`integer`|||

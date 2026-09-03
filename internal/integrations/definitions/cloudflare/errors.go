@@ -43,6 +43,8 @@ var (
 	ErrDomainScanTaskFailed = errors.New("cloudflare: domain scan task failed")
 	// ErrDomainScanMaxAttemptsReached indicates a scan never completed within the poll budget
 	ErrDomainScanMaxAttemptsReached = errors.New("cloudflare: domain scan max poll attempts reached")
+	// ErrDomainScanBrandDesignMissing indicates a scan selected to apply brand design returned no branding
+	ErrDomainScanBrandDesignMissing = errors.New("cloudflare: domain scan brand design missing")
 	// ErrInstallationRequired indicates the operation requires a resolved installation but none was provided
 	ErrInstallationRequired = errors.New("cloudflare: installation required")
 )
