@@ -16,6 +16,11 @@ import (
 // DomainScanRequest queues a domain scan for a single domain by creating a pending Scan record which
 // is then picked up to do the domain scan
 type DomainScanRequest struct {
+	// ScanID identifies the Scan record that triggered an internally dispatched request
+	// this is needed beceause domain_scan previously just filtered the scans table by domain
+	// and selected the first one. but this may end up picking out an older record
+	// if no id is provided, default to picking out the first one as before ( coming in from onboarding/domain scan)
+	ScanID string `json:"scanId,omitempty"`
 	// OrganizationID is the organization the scan belongs to, only used when dispatched without an  Integration
 	// customer-facing calls always derive the organization from their resolved Integration instead, ignoring this field
 	OrganizationID string `json:"organizationId,omitempty"`
@@ -59,17 +64,45 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 			return nil, ErrInstallationRequired
 		}
 
-		scanRecord, err := request.DB.Scan.Query().
-			Where(
+		var scanRecord *generated.Scan
+		var err error
+
+		if cfg.ScanID != "" {
+
+			// if scan id exists, we need to make sure the domain matches what we expect
+			// and is also a candidate for scanning
+			scanRecord, err = request.DB.Scan.Query().Where(
+				scan.ID(cfg.ScanID),
 				scan.OwnerID(organizationID),
 				scan.Target(cfg.Domain),
 				scan.ScanTypeEQ(enums.ScanTypeDomain),
 				scan.PerformedBy(DomainScanPerformedBy),
-				scan.StatusEQ(enums.ScanStatusPending),
-			).
-			First(ctx)
-		if err != nil && !generated.IsNotFound(err) {
-			return nil, err
+			).Only(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			if scanRecord.Status != enums.ScanStatusPending && scanRecord.Status != enums.ScanStatusProcessing {
+				return providerkit.EncodeResult(DomainScanRequestResult{
+					Message: "domain scan already processed",
+					ScanID:  scanRecord.ID,
+				}, ErrResultEncode)
+			}
+
+		} else {
+
+			scanRecord, err = request.DB.Scan.Query().
+				Where(
+					scan.OwnerID(organizationID),
+					scan.Target(cfg.Domain),
+					scan.ScanTypeEQ(enums.ScanTypeDomain),
+					scan.PerformedBy(DomainScanPerformedBy),
+					scan.StatusEQ(enums.ScanStatusPending),
+				).
+				First(ctx)
+			if err != nil && !generated.IsNotFound(err) {
+				return nil, err
+			}
 		}
 
 		if scanRecord == nil {

@@ -42607,15 +42607,6 @@ type Mutation {
 		input: ImportDomainScanReviewInput!
 	): ImportDomainScanReviewPayload!
 	"""
-	Request fresh branding enrichment for a URL through the domain scan workflow
-	"""
-	requestDomainImport(
-		"""
-		the domain scan enrichment request
-		"""
-		input: RequestDomainImportInput!
-	): RequestDomainImportPayload!
-	"""
 	Create a new emailTemplate
 	"""
 	createEmailTemplate(
@@ -68830,24 +68821,6 @@ input RemediationWhereInput {
 	Filter for tagsHas to contain a specific value
 	"""
 	tagsHas: String
-}
-"""
-Input for requesting fresh domain scan enrichment for a URL
-"""
-input RequestDomainImportInput {
-	"""
-	the URL to extract domain scan enrichment from
-	"""
-	url: String!
-}
-"""
-Return response for a domain scan enrichment request
-"""
-type RequestDomainImportPayload {
-	"""
-	whether the enrichment request was accepted
-	"""
-	accepted: Boolean!
 }
 """
 Input for resendCampaignIncompleteTargets mutation

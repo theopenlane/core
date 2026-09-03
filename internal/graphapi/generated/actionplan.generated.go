@@ -163,7 +163,6 @@ type MutationResolver interface {
 	UpdateBulkDocumentData(ctx context.Context, ids []string, input generated.UpdateDocumentDataInput) (*model.DocumentDataBulkUpdatePayload, error)
 	UpdateBulkCSVDocumentData(ctx context.Context, input graphql.Upload) (*model.DocumentDataBulkUpdatePayload, error)
 	ImportDomainScanReview(ctx context.Context, input model.ImportDomainScanReviewInput) (*model.ImportDomainScanReviewPayload, error)
-	RequestDomainImport(ctx context.Context, input model.RequestDomainImportInput) (*model.RequestDomainImportPayload, error)
 	CreateEmailTemplate(ctx context.Context, input generated.CreateEmailTemplateInput) (*model.EmailTemplateCreatePayload, error)
 	CreateBulkEmailTemplate(ctx context.Context, input []*generated.CreateEmailTemplateInput) (*model.EmailTemplateBulkCreatePayload, error)
 	CreateBulkCSVEmailTemplate(ctx context.Context, input graphql.Upload) (*model.EmailTemplateBulkCreatePayload, error)
@@ -6535,20 +6534,6 @@ func (ec *executionContext) field_Mutation_requestChangesWorkflowAssignment_args
 		return nil, err
 	}
 	args["inputs"] = arg2
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_requestDomainImport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
-		func(ctx context.Context, v any) (model.RequestDomainImportInput, error) {
-			return ec.unmarshalNRequestDomainImportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRequestDomainImportInput(ctx, v)
-		})
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg0
 	return args, nil
 }
 
@@ -17783,50 +17768,6 @@ func (ec *executionContext) fieldContext_Mutation_importDomainScanReview(ctx con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_importDomainScanReview_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_requestDomainImport(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_Mutation_requestDomainImport(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.Resolvers.Mutation().RequestDomainImport(ctx, fc.Args["input"].(model.RequestDomainImportInput))
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *model.RequestDomainImportPayload) graphql.Marshaler {
-			return ec.marshalNRequestDomainImportPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRequestDomainImportPayload(ctx, selections, v)
-		},
-		true,
-		true,
-	)
-}
-func (ec *executionContext) fieldContext_Mutation_requestDomainImport(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_RequestDomainImportPayload(ctx, field)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_requestDomainImport_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -38558,13 +38499,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "importDomainScanReview":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_importDomainScanReview(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "requestDomainImport":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_requestDomainImport(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

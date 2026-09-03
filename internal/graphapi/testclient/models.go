@@ -27036,18 +27036,6 @@ type RemediationWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
 
-// Input for requesting fresh domain scan enrichment for a URL
-type RequestDomainImportInput struct {
-	// the URL to extract domain scan enrichment from
-	URL string `json:"url"`
-}
-
-// Return response for a domain scan enrichment request
-type RequestDomainImportPayload struct {
-	// whether the enrichment request was accepted
-	Accepted bool `json:"accepted"`
-}
-
 // Input for resendCampaignIncompleteTargets mutation
 type ResendCampaignIncompleteInput struct {
 	// ID of the campaign

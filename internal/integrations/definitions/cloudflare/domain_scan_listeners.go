@@ -99,8 +99,26 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 		return err
 	}
 
+	metadata := map[string]any{
+		"url": domain,
+		"branding": domainscan.Branding{
+			Favicon: domainscan.Favicon{
+				URL: result.Enrichment.Branding.FaviconURL,
+			},
+			LogoURL:                  result.Enrichment.Branding.LogoURL,
+			PrimaryColor:             result.Enrichment.Branding.PrimaryColor,
+			Font:                     result.Enrichment.Branding.Font,
+			ForegroundColor:          result.Enrichment.Branding.ForegroundColor,
+			BackgroundColor:          result.Enrichment.Branding.BackgroundColor,
+			AccentColor:              result.Enrichment.Branding.AccentColor,
+			SecondaryBackgroundColor: result.Enrichment.Branding.SecondaryBackgroundColor,
+			SecondaryForegroundColor: result.Enrichment.Branding.SecondaryForegroundColor,
+		},
+	}
+
 	if err := s.services.DB().Scan.UpdateOneID(scanID).
 		SetStatus(enums.ScanStatusCompleted).
+		SetMetadata(metadata).
 		Exec(systemCtx); err != nil {
 		s.markDomainScanFailed(ctx, organizationID, scanID)
 

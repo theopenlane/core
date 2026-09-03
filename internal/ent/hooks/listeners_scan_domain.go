@@ -59,6 +59,7 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 	isBrandDesignOnly, _ := scanRecord.Metadata[cloudflare.DomainScanBrandDesignOnlyMetadataKey].(bool)
 
 	return dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID)), cloudflare.DomainScanRequest{
+		ScanID:          scanRecord.ID,
 		OrganizationID:  scanRecord.OwnerID,
 		Domain:          scanRecord.Target,
 		ForceRefresh:    forceRefresh,

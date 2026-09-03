@@ -3776,7 +3776,6 @@ type ComplexityRoot struct {
 		ReassignWorkflowAssignment           func(childComplexity int, id string, targetUserID string) int
 		RejectWorkflowAssignment             func(childComplexity int, id string, reason *string) int
 		RequestChangesWorkflowAssignment     func(childComplexity int, id string, reason *string, inputs map[string]any) int
-		RequestDomainImport                  func(childComplexity int, input model.RequestDomainImportInput) int
 		RequestNewTrustCenterToken           func(childComplexity int, email string) int
 		ResendCampaignIncompleteTargets      func(childComplexity int, input model.ResendCampaignIncompleteInput) int
 		ResolveVulnerability                 func(childComplexity int, id string, input model.ResolveVulnerabilityInput) int
@@ -5508,10 +5507,6 @@ type ComplexityRoot struct {
 
 	RemediationUpdatePayload struct {
 		Remediation func(childComplexity int) int
-	}
-
-	RequestDomainImportPayload struct {
-		Accepted func(childComplexity int) int
 	}
 
 	Review struct {
@@ -27762,17 +27757,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.RequestChangesWorkflowAssignment(childComplexity, args["id"].(string), args["reason"].(*string), args["inputs"].(map[string]any)), true
-	case "Mutation.requestDomainImport":
-		if e.ComplexityRoot.Mutation.RequestDomainImport == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_requestDomainImport_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.ComplexityRoot.Mutation.RequestDomainImport(childComplexity, args["input"].(model.RequestDomainImportInput)), true
 	case "Mutation.requestNewTrustCenterToken":
 		if e.ComplexityRoot.Mutation.RequestNewTrustCenterToken == nil {
 			break
@@ -39443,13 +39427,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RemediationUpdatePayload.Remediation(childComplexity), true
 
-	case "RequestDomainImportPayload.accepted":
-		if e.ComplexityRoot.RequestDomainImportPayload.Accepted == nil {
-			break
-		}
-
-		return e.ComplexityRoot.RequestDomainImportPayload.Accepted(childComplexity), true
-
 	case "Review.actionPlans":
 		if e.ComplexityRoot.Review.ActionPlans == nil {
 			break
@@ -50847,7 +50824,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputReassignWorkflowAssignmentInput,
 		ec.unmarshalInputRemediationOrder,
 		ec.unmarshalInputRemediationWhereInput,
-		ec.unmarshalInputRequestDomainImportInput,
 		ec.unmarshalInputResendCampaignIncompleteInput,
 		ec.unmarshalInputResolveVulnerabilityInput,
 		ec.unmarshalInputReviewOrder,
@@ -55492,26 +55468,6 @@ type ImportDomainScanReviewPayload {
     accepted: Boolean!
 }
 
-"""
-Input for requesting fresh domain scan enrichment for a URL
-"""
-input RequestDomainImportInput {
-    """
-    the URL to extract domain scan enrichment from
-    """
-    url: String!
-}
-
-"""
-Return response for a domain scan enrichment request
-"""
-type RequestDomainImportPayload {
-    """
-    whether the enrichment request was accepted
-    """
-    accepted: Boolean!
-}
-
 extend type Mutation {
     """
     Accept a domain scan review and asynchronously create the corresponding platform, system
@@ -55523,16 +55479,6 @@ extend type Mutation {
         """
         input: ImportDomainScanReviewInput!
     ): ImportDomainScanReviewPayload!
-
-    """
-    Request fresh branding enrichment for a URL through the domain scan workflow
-    """
-    requestDomainImport(
-        """
-        the domain scan enrichment request
-        """
-        input: RequestDomainImportInput!
-    ): RequestDomainImportPayload!
 }
 `, BuiltIn: false},
 	{Name: "../schema/emailtemplate.graphql", Input: `extend type Query {
@@ -162702,14 +162648,6 @@ func (ec *executionContext) childFields_RemediationUpdatePayload(ctx context.Con
 		return ec.fieldContext_RemediationUpdatePayload_remediation(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type RemediationUpdatePayload", field.Name)
-}
-
-func (ec *executionContext) childFields_RequestDomainImportPayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-	switch field.Name {
-	case "accepted":
-		return ec.fieldContext_RequestDomainImportPayload_accepted(ctx, field)
-	}
-	return nil, fmt.Errorf("no field named %q was found under type RequestDomainImportPayload", field.Name)
 }
 
 func (ec *executionContext) childFields_Review(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
