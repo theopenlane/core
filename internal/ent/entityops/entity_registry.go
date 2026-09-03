@@ -6238,6 +6238,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "family", Label: "Family", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "health", Label: "Health", Type: "models.IntegrationHealth", Clearable: true},
 		{Name: "installation_metadata", Label: "InstallationMetadata", Type: "openapi.IntegrationInstallationMetadata", Clearable: true},
 		{Name: "integration_type", Label: "IntegrationType", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},

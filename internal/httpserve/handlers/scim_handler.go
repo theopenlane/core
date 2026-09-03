@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 
@@ -55,7 +56,7 @@ func (h *Handler) SCIMHandler(scimHandler http.Handler, routePrefix string) echo
 			return echo.NewHTTPError(http.StatusForbidden, "integration is not a SCIM installation")
 		}
 
-		if installation.Status != enums.IntegrationStatusConnected {
+		if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
 			return echo.NewHTTPError(http.StatusForbidden, "integration is not active")
 		}
 

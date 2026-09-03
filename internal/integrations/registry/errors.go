@@ -39,8 +39,8 @@ var (
 	ErrConnectionCredentialRefNotDeclared = errors.New("integrations/registry: connection credential ref not declared by definition")
 	// ErrConnectionClientRefNotDeclared indicates a connection references a client ref not declared by the definition
 	ErrConnectionClientRefNotDeclared = errors.New("integrations/registry: connection client ref not declared by definition")
-	// ErrConnectionValidationOperationNotDeclared indicates a connection validation operation does not exist on the definition
-	ErrConnectionValidationOperationNotDeclared = errors.New("integrations/registry: connection validation operation not declared by definition")
+	// ErrConnectionHealthCheckHandlerRequired indicates a connection health check registration has no handler
+	ErrConnectionHealthCheckHandlerRequired = errors.New("integrations/registry: connection health check handler required")
 	// ErrConnectionAuthCredentialRefNotDeclared indicates a connection auth registration references an undeclared credential ref
 	ErrConnectionAuthCredentialRefNotDeclared = errors.New("integrations/registry: connection auth credential ref not declared by connection")
 	// ErrConnectionDisconnectCredentialRefNotDeclared indicates a connection disconnect registration references an undeclared credential ref

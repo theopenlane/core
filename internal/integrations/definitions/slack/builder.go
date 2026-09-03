@@ -49,13 +49,16 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       slackCredential.ID(),
-					Name:                "Slack OAuth",
-					Description:         "Connect your Slack workspace via OAuth",
-					CredentialRefs:      []types.CredentialSlotID{slackCredential.ID()},
-					ClientRefs:          []types.ClientID{slackClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  slackCredential.ID(),
+					Name:           "Slack OAuth",
+					Description:    "Connect your Slack workspace via OAuth",
+					CredentialRefs: []types.CredentialSlotID{slackCredential.ID()},
+					ClientRefs:     []types.ClientID{slackClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: slackClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[slackCred]{
 						CredentialRef: slackCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -102,13 +105,16 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 					},
 				},
 				{
-					CredentialRef:       slackBotTokenCredential.ID(),
-					Name:                "Slack Bot Token",
-					Description:         "Connect your Slack workspace using a bot token from a custom Slack app.",
-					CredentialRefs:      []types.CredentialSlotID{slackBotTokenCredential.ID()},
-					ClientRefs:          []types.ClientID{slackClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  slackBotTokenCredential.ID(),
+					Name:           "Slack Bot Token",
+					Description:    "Connect your Slack workspace using a bot token from a custom Slack app.",
+					CredentialRefs: []types.CredentialSlotID{slackBotTokenCredential.ID()},
+					ClientRefs:     []types.ClientID{slackClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: slackClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: slackBotTokenCredential.ID(),
 						Description:   "Removes the stored bot token from Openlane. To fully revoke access, delete or regenerate the token in your Slack app under OAuth & Permissions.",
@@ -124,15 +130,6 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 				},
 			},
 			Operations: append(AllSlackSystemMessages(),
-				types.OperationRegistration{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call auth.test to ensure the Slack token is valid and scoped correctly",
-					Topic:        DefinitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    slackClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				types.OperationRegistration{
 					Name:                MessageSendOp.Name(),
 					Description:         "Send a Slack message via chat.postMessage",

@@ -16,8 +16,6 @@ var (
 	tailscaleSchema, tailscaleCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// tailscaleClient is the client ref for the Tailscale API client used by this definition
 	tailscaleClient = types.NewClientRef[*tsclient.Client]()
-	// healthCheckSchema is the operation schema for the health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation schema for the directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 	// assetSyncSchema is the operation schema for the asset sync operation

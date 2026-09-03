@@ -45,6 +45,10 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 					Description:    "Configure email delivery using an API key for resend, sendgrid, or postmark",
 					CredentialRefs: []types.CredentialSlotID{emailCredentialRef.ID()},
 					ClientRefs:     []types.ClientID{emailClientRef.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: emailClientRef.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
 				},
 			},
 			Clients: []types.ClientRegistration{
@@ -59,15 +63,6 @@ func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 				Schema: jsonx.SchemaFrom[UserInput](),
 			},
 			Operations: append(AllEmailOperations(),
-				types.OperationRegistration{
-					Name:         healthCheckOp.Name(),
-					Description:  "Validate the email provider credentials are functional",
-					Topic:        DefinitionID.OperationTopic(healthCheckOp.Name()),
-					ClientRef:    emailClientRef.ID(),
-					ConfigSchema: healthCheckSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       HealthCheck{}.Handle(),
-				},
 				types.OperationRegistration{
 					Name:         SendEmailOp.Name(),
 					Description:  "Send a single templated email",

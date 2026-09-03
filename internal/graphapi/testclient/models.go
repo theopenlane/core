@@ -18883,6 +18883,8 @@ type Integration struct {
 	PlatformID *string `json:"platformID,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]any `json:"metadata,omitempty"`
+	// runtime health state recorded by health checks and reconcile failures
+	Health *models.IntegrationHealth `json:"health,omitempty"`
 	// the canonical definition identifier for the installation
 	DefinitionID *string `json:"definitionID,omitempty"`
 	// the definition version recorded for this installation

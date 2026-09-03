@@ -12,8 +12,6 @@ var (
 	SCIMAuthWebhook = types.NewWebhookRef("scim.auth")
 	// directorySyncSchema is the operation ref for the SCIM directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
-	// healthCheckSchema is the operation ref for the SCIM health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 )
 
 // UserInput captures optional user-provided configuration for the SCIM integration

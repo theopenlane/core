@@ -33601,6 +33601,10 @@ type Integration implements Node {
   """
   metadata: Map
   """
+  runtime health state recorded by health checks and reconcile failures
+  """
+  health: IntegrationHealth
+  """
   the canonical definition identifier for the installation
   """
   definitionID: String
@@ -34296,9 +34300,9 @@ IntegrationIntegrationStatus is enum for the field status
 enum IntegrationIntegrationStatus @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationStatus") {
   PENDING
   CONNECTED
+  DEGRADED
   ERRORED
   DISABLED
-  DELETED
 }
 """
 Ordering options for Integration connections

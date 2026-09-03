@@ -123,17 +123,23 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 		}
 	}
 
-	if !wasErrored {
-		return nil
-	}
+	if wasErrored {
+		if credential == nil {
+			if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
+				return err
+			}
+		}
 
-	if credential == nil {
-		if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
+		if err := r.ClearIntegrationUnhealthy(ctx, installation); err != nil {
 			return err
 		}
 	}
 
-	return r.ClearIntegrationUnhealthy(ctx, installation)
+	if credential != nil || wasErrored {
+		r.assessOperationHealth(ctx, installation, def)
+	}
+
+	return nil
 }
 
 // reconcileUserInput validates and persists user input for one installation
@@ -249,17 +255,11 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 
 	bindings = bindings.With(credentialRef, credential)
 
-	if connection.ValidationOperation != "" {
-		validationOp, err := r.Registry().Operation(def.ID, connection.ValidationOperation)
-		if err != nil {
-			return fmt.Errorf("resolve validation operation: %w", err)
-		}
+	if connection.HealthCheck != nil {
+		if err := r.runConnectionHealthCheck(ctx, installation, connection, bindings); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("validation failed during reconcile")
 
-		_, validationErr := r.ExecuteOperation(ctx, installation, validationOp, bindings, nil)
-		if validationErr != nil {
-			logx.FromContext(ctx).Error().Err(validationErr).Msg("validation failed during reconcile")
-
-			return fmt.Errorf("validation failed: %w", validationErr)
+			return fmt.Errorf("validation failed: %w", err)
 		}
 	}
 
@@ -299,14 +299,28 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 	}
 
 	wasFirstConnection := installation.Status == enums.IntegrationStatusPending
+	wasErrored := installation.Status == enums.IntegrationStatusErrored
 
-	if err := r.DB().Integration.UpdateOneID(installation.ID).
-		SetStatus(enums.IntegrationStatusConnected).
-		Exec(systemCtx); err != nil {
+	// a credential change invalidates recorded per-operation failures; probes re-derive them
+	health := installation.Health
+	health.UnhealthyOperations = nil
+	installation.Health = health
+
+	update := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health)
+
+	// an errored installation transitions through ClearIntegrationUnhealthy so the recovery
+	// notification fires and the unhealthy reason is wiped
+	if !wasErrored {
+		update = update.SetStatus(enums.IntegrationStatusConnected)
+	}
+
+	if err := update.Exec(systemCtx); err != nil {
 		return err
 	}
 
-	installation.Status = enums.IntegrationStatusConnected
+	if !wasErrored {
+		installation.Status = enums.IntegrationStatusConnected
+	}
 
 	if err := r.reconcileInstallationWebhooks(systemCtx, installation, ""); err != nil {
 		return err

@@ -36,13 +36,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       ociCredential.ID(),
-					Name:                "OCI API Key",
-					Description:         "Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.",
-					CredentialRefs:      []types.CredentialSlotID{ociCredential.ID()},
-					ClientRefs:          []types.ClientID{identityClient.ID(), cloudGuardClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  ociCredential.ID(),
+					Name:           "OCI API Key",
+					Description:    "Configure Oracle Cloud Infrastructure access using an API signing key registered to a tenancy user.",
+					CredentialRefs: []types.CredentialSlotID{ociCredential.ID()},
+					ClientRefs:     []types.ClientID{identityClient.ID(), cloudGuardClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: identityClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: ociCredential.ID(),
 						Description:   "Removes the stored API signing key from Openlane. If the key is no longer needed, delete it from the user's API keys in the OCI console.",
@@ -64,16 +67,6 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:                healthCheckOperation.Name(),
-					Description:         "Verify OCI API signing key access by reading the tenancy",
-					Topic:               definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:           identityClient.ID(),
-					Policy:              types.ExecutionPolicy{Inline: true},
-					Handle:              HealthCheck{}.Handle(),
-					ConfigSchema:        healthCheckSchema,
-					RequiredPermissions: []string{"inspect tenancies in tenancy"},
-				},
 				{
 					Name:           findingsSyncOperation.Name(),
 					Description:    "Collect OCI Cloud Guard problems as findings",

@@ -601,6 +601,16 @@ func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋthe
 	return ret
 }
 
+func (ec *executionContext) unmarshalOIntegrationHealth2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐIntegrationHealth(ctx context.Context, v any) (models.IntegrationHealth, error) {
+	var res models.IntegrationHealth
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOIntegrationHealth2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐIntegrationHealth(ctx context.Context, sel ast.SelectionSet, v models.IntegrationHealth) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐReferenceᚄ(ctx context.Context, v any) ([]models.Reference, error) {
 	if v == nil {
 		return nil, nil

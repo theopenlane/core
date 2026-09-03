@@ -206,7 +206,7 @@ func runBackfillRoutine(handlerCtx gala.HandlerContext, galaApp *gala.Gala, name
 // duplication
 func backfillReconcileLoops(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
 	installations, err := dbClient.Integration.Query().
-		Where(integration.StatusEQ(enums.IntegrationStatusConnected)).
+		Where(integration.StatusIn(enums.IntegrationOperationalStatuses...)).
 		All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query connected integrations for loop reset")

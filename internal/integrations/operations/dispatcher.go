@@ -153,8 +153,8 @@ func ResolveIntegration(ctx context.Context, db *ent.Client, integrationID, owne
 	return record, nil
 }
 
-// ResolveOwnerIntegration finds a connected integration for the given definition
-// and owner. When multiple connected integrations exist, the optional prefer
+// ResolveOwnerIntegration finds an operational integration for the given definition
+// and owner. When multiple operational integrations exist, the optional prefer
 // function selects among them. Returns empty string with no error when no
 // integration is found, allowing the caller to fall through to runtime dispatch
 func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
@@ -162,7 +162,7 @@ func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, 
 		Where(
 			integration.OwnerIDEQ(ownerID),
 			integration.DefinitionIDEQ(definitionID),
-			integration.StatusEQ(enums.IntegrationStatusConnected),
+			integration.StatusIn(enums.IntegrationOperationalStatuses...),
 		).All(ctx)
 	if err != nil {
 		return "", err

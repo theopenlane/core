@@ -1636,6 +1636,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldInstallationMetadata:     {Type: field.TypeJSON, Column: integration.FieldInstallationMetadata},
 			integration.FieldProviderState:            {Type: field.TypeJSON, Column: integration.FieldProviderState},
 			integration.FieldMetadata:                 {Type: field.TypeJSON, Column: integration.FieldMetadata},
+			integration.FieldHealth:                   {Type: field.TypeJSON, Column: integration.FieldHealth},
 			integration.FieldDefinitionID:             {Type: field.TypeString, Column: integration.FieldDefinitionID},
 			integration.FieldDefinitionVersion:        {Type: field.TypeString, Column: integration.FieldDefinitionVersion},
 			integration.FieldDefinitionSlug:           {Type: field.TypeString, Column: integration.FieldDefinitionSlug},
@@ -31779,6 +31780,11 @@ func (f *IntegrationFilter) WhereProviderState(p entql.BytesP) {
 // WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
 func (f *IntegrationFilter) WhereMetadata(p entql.BytesP) {
 	f.Where(p.Field(integration.FieldMetadata))
+}
+
+// WhereHealth applies the entql json.RawMessage predicate on the health field.
+func (f *IntegrationFilter) WhereHealth(p entql.BytesP) {
+	f.Where(p.Field(integration.FieldHealth))
 }
 
 // WhereDefinitionID applies the entql string predicate on the definition_id field.

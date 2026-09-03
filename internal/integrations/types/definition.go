@@ -108,14 +108,23 @@ type ConnectionRegistration struct {
 	CredentialRefs []CredentialSlotID `json:"credentialRefs,omitempty"`
 	// ClientRefs lists the clients initialized by this connection mode
 	ClientRefs []ClientID `json:"-"`
-	// ValidationOperation names the operation used to validate credentials before persistence
-	ValidationOperation string `json:"validationOperation,omitempty"`
+	// HealthCheck exercises the connection's credentials before persistence and during health assessments
+	HealthCheck *HealthCheckRegistration `json:"-"`
 	// Integration describes installation-scoped metadata derived by this connection mode
 	Integration *InstallationRegistration `json:"installation,omitempty"`
 	// Auth describes how this connection mode performs auth when supported
 	Auth *AuthRegistration `json:"auth,omitempty"`
 	// Disconnect describes how this connection mode tears down an installation
 	Disconnect *DisconnectRegistration `json:"disconnect,omitempty"`
+}
+
+// HealthCheckRegistration declares the credential-exercising health check for one connection mode
+type HealthCheckRegistration struct {
+	// ClientRef identifies which registered client the check builds; when empty the handler
+	// receives only the credential bindings
+	ClientRef ClientID `json:"-"`
+	// Handle executes the check
+	Handle OperationHandler `json:"-"`
 }
 
 // MetaInfo is data to store for the UI to present to the user during credential setup of an integration

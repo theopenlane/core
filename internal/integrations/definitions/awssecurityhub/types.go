@@ -24,8 +24,6 @@ var (
 	configServiceClient = types.NewClientRef[*configservice.Client]()
 	// iamClient is the client ref for the AWS IAM client used by directory sync operations
 	iamClient = types.NewClientRef[*iam.Client]()
-	// healthCheckSchema is the AWS Security Hub health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// findingsCollectSchema is the AWS Security Hub finding and vulnerabilities collection operation
 	findingsCollectSchema, findingsCollectOperation = providerkit.OperationSchema[FindingSync]()
 	// directorySyncSchema is the AWS IAM directory sync operation schema

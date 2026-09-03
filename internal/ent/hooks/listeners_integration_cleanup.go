@@ -44,7 +44,8 @@ func handleIntegrationUpdated(inv entityops.Invocation, payload entityops.Mutati
 		return nil
 	}
 
-	if status == enums.IntegrationStatusConnected {
+	switch status {
+	case enums.IntegrationStatusConnected, enums.IntegrationStatusDegraded:
 		return reseedInstallationJobs(inv, rt)
 	}
 

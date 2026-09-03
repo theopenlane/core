@@ -18,8 +18,6 @@ var (
 	_, workspaceCredential = providerkit.CredentialSchema[googleWorkspaceCred]()
 	// workspaceClient is the client ref for the Google Workspace Admin SDK
 	workspaceClient = types.NewClientRef[*admin.Service]()
-	// healthCheckSchema is the operation ref for the health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation ref for the directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )

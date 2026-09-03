@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -469,6 +470,26 @@ func (_u *IntegrationUpdate) SetMetadata(v map[string]interface{}) *IntegrationU
 // ClearMetadata clears the value of the "metadata" field.
 func (_u *IntegrationUpdate) ClearMetadata() *IntegrationUpdate {
 	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetHealth sets the "health" field.
+func (_u *IntegrationUpdate) SetHealth(v models.IntegrationHealth) *IntegrationUpdate {
+	_u.mutation.SetHealth(v)
+	return _u
+}
+
+// SetNillableHealth sets the "health" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableHealth(v *models.IntegrationHealth) *IntegrationUpdate {
+	if v != nil {
+		_u.SetHealth(*v)
+	}
+	return _u
+}
+
+// ClearHealth clears the value of the "health" field.
+func (_u *IntegrationUpdate) ClearHealth() *IntegrationUpdate {
+	_u.mutation.ClearHealth()
 	return _u
 }
 
@@ -1635,6 +1656,12 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(integration.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Health(); ok {
+		_spec.SetField(integration.FieldHealth, field.TypeJSON, value)
+	}
+	if _u.mutation.HealthCleared() {
+		_spec.ClearField(integration.FieldHealth, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.DefinitionID(); ok {
 		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)
@@ -3190,6 +3217,26 @@ func (_u *IntegrationUpdateOne) ClearMetadata() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetHealth sets the "health" field.
+func (_u *IntegrationUpdateOne) SetHealth(v models.IntegrationHealth) *IntegrationUpdateOne {
+	_u.mutation.SetHealth(v)
+	return _u
+}
+
+// SetNillableHealth sets the "health" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableHealth(v *models.IntegrationHealth) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetHealth(*v)
+	}
+	return _u
+}
+
+// ClearHealth clears the value of the "health" field.
+func (_u *IntegrationUpdateOne) ClearHealth() *IntegrationUpdateOne {
+	_u.mutation.ClearHealth()
+	return _u
+}
+
 // SetDefinitionID sets the "definition_id" field.
 func (_u *IntegrationUpdateOne) SetDefinitionID(v string) *IntegrationUpdateOne {
 	_u.mutation.SetDefinitionID(v)
@@ -4383,6 +4430,12 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(integration.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Health(); ok {
+		_spec.SetField(integration.FieldHealth, field.TypeJSON, value)
+	}
+	if _u.mutation.HealthCleared() {
+		_spec.ClearField(integration.FieldHealth, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.DefinitionID(); ok {
 		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)

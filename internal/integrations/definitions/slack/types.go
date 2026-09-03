@@ -23,8 +23,6 @@ var (
 	slackClient = types.NewClientRef[*SlackClient]()
 	// runtimeSlackSchema is the JSON schema and typed ref for the runtime Slack config
 	runtimeSlackSchema, runtimeSlackRef = providerkit.RuntimeSchema[RuntimeSlackConfig]()
-	// healthDefaultOperation is the operation ref for the Slack health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation ref for the directory account sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 	// messageSendSchema is the operation ref for the Slack message send operation

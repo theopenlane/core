@@ -98623,6 +98623,29 @@ func (ec *executionContext) fieldContext_Integration_metadata(_ context.Context,
 	return graphql.NewScalarFieldContext("Integration", field, false, false, errors.New("field of type Map does not have child fields"))
 }
 
+func (ec *executionContext) _Integration_health(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Integration_health(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Health, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v models.IntegrationHealth) graphql.Marshaler {
+			return ec.marshalOIntegrationHealth2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐIntegrationHealth(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Integration_health(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Integration", field, false, false, errors.New("field of type IntegrationHealth does not have child fields"))
+}
+
 func (ec *executionContext) _Integration_definitionID(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -407010,6 +407033,11 @@ func (ec *executionContext) _Integration(ctx context.Context, sel ast.SelectionS
 			}
 		case "metadata":
 			out.Values[i] = ec._Integration_metadata(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "health":
+			out.Values[i] = ec._Integration_health(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

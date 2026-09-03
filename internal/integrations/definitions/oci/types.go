@@ -19,8 +19,6 @@ var (
 	identityClient = types.NewClientRef[*identity.IdentityClient]()
 	// cloudGuardClient is the client ref for the OCI Cloud Guard client used by findings collection
 	cloudGuardClient = types.NewClientRef[*cloudguard.CloudGuardClient]()
-	// healthCheckSchema is the operation schema for the Oracle Cloud Infrastructure health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// findingsSyncSchema is the operation schema for the Cloud Guard findings collection operation
 	findingsSyncSchema, findingsSyncOperation = providerkit.OperationSchema[FindingsSync]()
 )

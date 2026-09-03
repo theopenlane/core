@@ -101,7 +101,7 @@ func handleStandardMutation(inv entityops.Invocation, payload entityops.Mutation
 		controls := entry.Value
 		logCtx := logx.WithFields(inv.Context, map[string]any{"org_id": orgID})
 
-		ids, err := orgUserIDsByRole(inv.Context, inv.Client, orgID, enums.RoleOwner, enums.RoleAdmin)
+		ids, err := OrgUserIDsByRole(inv.Context, inv.Client, orgID, enums.RoleOwner, enums.RoleAdmin)
 		if err != nil {
 			logx.FromContext(logCtx).Error().Err(err).Msg("failed to get org admin and owner IDs")
 

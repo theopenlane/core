@@ -47,7 +47,7 @@ func addNotificationForAuditor(ctx context.Context, client *generated.Client, id
 	}
 
 	if len(ids) == 0 {
-		ids, err = orgUserIDsByRole(ctx, client, program.OwnerID, enums.RoleAuditor)
+		ids, err = OrgUserIDsByRole(ctx, client, program.OwnerID, enums.RoleAuditor)
 		if err != nil {
 			return err
 		}

@@ -407,7 +407,7 @@ func compileDefinition(def types.Definition) (definitionEntry, error) {
 		return definitionEntry{}, err
 	}
 
-	connections, err := indexConnections(def.Connections, credentialNames, clients, operations)
+	connections, err := indexConnections(def.Connections, credentialNames, clients)
 	if err != nil {
 		return definitionEntry{}, err
 	}
@@ -455,8 +455,8 @@ func indexClients(clients []types.ClientRegistration, credentialNames map[string
 	return index, nil
 }
 
-// indexConnections indexes connection registrations while enforcing credential, client, and validation constraints
-func indexConnections(connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration, operations map[string]types.OperationRegistration) (map[string]types.ConnectionRegistration, error) {
+// indexConnections indexes connection registrations while enforcing credential, client, and health check constraints
+func indexConnections(connections []types.ConnectionRegistration, credentialNames map[string]struct{}, clients map[types.ClientID]types.ClientRegistration) (map[string]types.ConnectionRegistration, error) {
 	connectionIndex := make(map[string]types.ConnectionRegistration, len(connections))
 
 	for _, connection := range connections {
@@ -486,9 +486,15 @@ func indexConnections(connections []types.ConnectionRegistration, credentialName
 			}
 		}
 
-		if connection.ValidationOperation != "" {
-			if _, ok := operations[connection.ValidationOperation]; !ok {
-				return nil, ErrConnectionValidationOperationNotDeclared
+		if connection.HealthCheck != nil {
+			if connection.HealthCheck.Handle == nil {
+				return nil, ErrConnectionHealthCheckHandlerRequired
+			}
+
+			if connection.HealthCheck.ClientRef.Valid() {
+				if _, declared := clients[connection.HealthCheck.ClientRef]; !declared {
+					return nil, ErrConnectionClientRefNotDeclared
+				}
 			}
 		}
 
