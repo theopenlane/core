@@ -516,7 +516,7 @@ func workloadOperations(def types.Definition, installation *ent.Integration) []t
 
 // notifyIntegrationHealth sends one health notification to the owning organization's owners and admins
 func (r *Runtime) notifyIntegrationHealth(ctx context.Context, installation *ent.Integration, objectType, title, body string, data map[string]any) error {
-	ids, err := notifications.OrgUserIDsByRole(ctx, r.DB(), installation.OwnerID, enums.RoleOwner, enums.RoleAdmin)
+	ids, err := notifications.OrgUserIDsByRole(ctx, r.DB(), installation.OwnerID, enums.RoleOwner, enums.RoleSuperAdmin)
 	if err != nil {
 		return err
 	}
