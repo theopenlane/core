@@ -15,8 +15,6 @@ var (
 	cloudflareSchema, cloudflareCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// cloudflareClient is the client ref for the Cloudflare API client used by this definition
 	cloudflareClient = types.NewClientRef[*CloudflareClient]()
-	// healthDefaultOperation is the operation ref for the Cloudflare health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation ref for the directory account sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 	// assetSyncSchema is the operation ref for the domain asset sync operation

@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/riverqueue/river"
+	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/iam/auth"
 
@@ -98,8 +99,14 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 
 	ctx = auth.EnsureIntegrationCaller(ctx, installation.OwnerID)
 
-	if installation.Status != enums.IntegrationStatusConnected {
-		logx.FromContext(ctx).Info().Str("status", installation.Status.String()).Msg("integration is not connected, skipping current run")
+	if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
+		logx.FromContext(ctx).Info().Str("status", installation.Status.String()).Msg("integration is not operational, skipping current run")
+
+		return 0, operations.ErrOperationDisabled
+	}
+
+	if _, failing := installation.Health.UnhealthyOperations[envelope.Operation]; failing {
+		logx.FromContext(ctx).Info().Msg("operation is marked unhealthy, stopping cycle")
 
 		return 0, operations.ErrOperationDisabled
 	}
@@ -173,9 +180,17 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 			logx.FromContext(ctx).Error().Err(outputErr).Msg("failed to record river output")
 		}
 
-		if unhealthy, ok := types.UnhealthyFrom(execErr); ok {
+		unhealthy, isUnhealthy := types.UnhealthyFrom(execErr)
+		degraded, isDegraded := types.DegradedFrom(execErr)
+
+		switch {
+		case isUnhealthy:
 			if markErr := r.MarkIntegrationUnhealthy(ctx, installation, unhealthy.Reason); markErr != nil {
 				logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after terminal operation failure")
+			}
+		case isDegraded:
+			if markErr := r.MarkOperationUnhealthy(ctx, installation, envelope.Operation, degraded.Reason); markErr != nil {
+				logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking operation unhealthy after terminal operation failure")
 			}
 		}
 
@@ -462,7 +477,7 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 
 	installations, err := r.DB().Integration.Query().
 		Where(
-			integration.StatusEQ(enums.IntegrationStatusConnected),
+			integration.StatusIn(enums.IntegrationOperationalStatuses...),
 			integration.DefinitionIDIn(definitionIDs...),
 		).
 		All(systemCtx)
@@ -492,7 +507,7 @@ func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *en
 // seedReconcileJobsForInstallation is the shared implementation used by both
 // SeedReconcileJobs and SeedReconcileJobsForInstallation
 func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
-	if inst.Status != enums.IntegrationStatusConnected {
+	if !lo.Contains(enums.IntegrationOperationalStatuses, inst.Status) {
 		return nil
 	}
 
@@ -516,12 +531,18 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 
 	var errs []error
 
+	unhealthy := inst.Health.UnhealthyOperations
+
 	for _, op := range def.Operations {
 		if !op.Policy.Reconcile {
 			continue
 		}
 
 		if op.Disabled != nil && op.Disabled(inst.Config.ClientConfig) {
+			continue
+		}
+
+		if _, failing := unhealthy[op.Name]; failing {
 			continue
 		}
 

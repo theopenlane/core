@@ -116390,6 +116390,7 @@ type IntegrationMutation struct {
 	installation_metadata         *openapi.IntegrationInstallationMetadata
 	provider_state                *openapi.IntegrationProviderState
 	metadata                      *map[string]interface{}
+	health                        *models.IntegrationHealth
 	definition_id                 *string
 	definition_version            *string
 	definition_slug               *string
@@ -117857,6 +117858,55 @@ func (m *IntegrationMutation) MetadataCleared() bool {
 func (m *IntegrationMutation) ResetMetadata() {
 	m.metadata = nil
 	delete(m.clearedFields, integration.FieldMetadata)
+}
+
+// SetHealth sets the "health" field.
+func (m *IntegrationMutation) SetHealth(mh models.IntegrationHealth) {
+	m.health = &mh
+}
+
+// Health returns the value of the "health" field in the mutation.
+func (m *IntegrationMutation) Health() (r models.IntegrationHealth, exists bool) {
+	v := m.health
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHealth returns the old "health" field's value of the Integration entity.
+// If the Integration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationMutation) OldHealth(ctx context.Context) (v models.IntegrationHealth, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHealth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHealth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHealth: %w", err)
+	}
+	return oldValue.Health, nil
+}
+
+// ClearHealth clears the value of the "health" field.
+func (m *IntegrationMutation) ClearHealth() {
+	m.health = nil
+	m.clearedFields[integration.FieldHealth] = struct{}{}
+}
+
+// HealthCleared returns if the "health" field was cleared in this mutation.
+func (m *IntegrationMutation) HealthCleared() bool {
+	_, ok := m.clearedFields[integration.FieldHealth]
+	return ok
+}
+
+// ResetHealth resets all changes to the "health" field.
+func (m *IntegrationMutation) ResetHealth() {
+	m.health = nil
+	delete(m.clearedFields, integration.FieldHealth)
 }
 
 // SetDefinitionID sets the "definition_id" field.
@@ -119542,7 +119592,7 @@ func (m *IntegrationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IntegrationMutation) Fields() []string {
-	fields := make([]string, 0, 34)
+	fields := make([]string, 0, 35)
 	if m.created_at != nil {
 		fields = append(fields, integration.FieldCreatedAt)
 	}
@@ -119620,6 +119670,9 @@ func (m *IntegrationMutation) Fields() []string {
 	}
 	if m.metadata != nil {
 		fields = append(fields, integration.FieldMetadata)
+	}
+	if m.health != nil {
+		fields = append(fields, integration.FieldHealth)
 	}
 	if m.definition_id != nil {
 		fields = append(fields, integration.FieldDefinitionID)
@@ -119705,6 +119758,8 @@ func (m *IntegrationMutation) Field(name string) (ent.Value, bool) {
 		return m.ProviderState()
 	case integration.FieldMetadata:
 		return m.Metadata()
+	case integration.FieldHealth:
+		return m.Health()
 	case integration.FieldDefinitionID:
 		return m.DefinitionID()
 	case integration.FieldDefinitionVersion:
@@ -119782,6 +119837,8 @@ func (m *IntegrationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldProviderState(ctx)
 	case integration.FieldMetadata:
 		return m.OldMetadata(ctx)
+	case integration.FieldHealth:
+		return m.OldHealth(ctx)
 	case integration.FieldDefinitionID:
 		return m.OldDefinitionID(ctx)
 	case integration.FieldDefinitionVersion:
@@ -119989,6 +120046,13 @@ func (m *IntegrationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMetadata(v)
 		return nil
+	case integration.FieldHealth:
+		v, ok := value.(models.IntegrationHealth)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHealth(v)
+		return nil
 	case integration.FieldDefinitionID:
 		v, ok := value.(string)
 		if !ok {
@@ -120150,6 +120214,9 @@ func (m *IntegrationMutation) ClearedFields() []string {
 	if m.FieldCleared(integration.FieldMetadata) {
 		fields = append(fields, integration.FieldMetadata)
 	}
+	if m.FieldCleared(integration.FieldHealth) {
+		fields = append(fields, integration.FieldHealth)
+	}
 	if m.FieldCleared(integration.FieldDefinitionID) {
 		fields = append(fields, integration.FieldDefinitionID)
 	}
@@ -120254,6 +120321,9 @@ func (m *IntegrationMutation) ClearField(name string) error {
 	case integration.FieldMetadata:
 		m.ClearMetadata()
 		return nil
+	case integration.FieldHealth:
+		m.ClearHealth()
+		return nil
 	case integration.FieldDefinitionID:
 		m.ClearDefinitionID()
 		return nil
@@ -120354,6 +120424,9 @@ func (m *IntegrationMutation) ResetField(name string) error {
 		return nil
 	case integration.FieldMetadata:
 		m.ResetMetadata()
+		return nil
+	case integration.FieldHealth:
+		m.ResetHealth()
 		return nil
 	case integration.FieldDefinitionID:
 		m.ResetDefinitionID()

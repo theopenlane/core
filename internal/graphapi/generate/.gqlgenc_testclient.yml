@@ -58,6 +58,9 @@ models:
   CredentialSet:
     model:
       - github.com/theopenlane/core/common/models.CredentialSet
+  IntegrationHealth:
+    model:
+      - github.com/theopenlane/core/common/models.IntegrationHealth
   WorkflowDefinitionDocument:
     model:
       - github.com/theopenlane/core/common/models.WorkflowDefinitionDocument

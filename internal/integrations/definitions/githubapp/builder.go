@@ -46,13 +46,16 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       gitHubAppCredential.ID(),
-					Name:                "GitHub App installation",
-					Description:         "Install the Openlane GitHub App into your GitHub organization.",
-					CredentialRefs:      []types.CredentialSlotID{gitHubAppCredential.ID()},
-					ClientRefs:          []types.ClientID{gitHubClient.ID()},
-					ValidationOperation: healthDefaultOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  gitHubAppCredential.ID(),
+					Name:           "GitHub App installation",
+					Description:    "Install the Openlane GitHub App into your GitHub organization.",
+					CredentialRefs: []types.CredentialSlotID{gitHubAppCredential.ID()},
+					ClientRefs:     []types.ClientID{gitHubClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: gitHubClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: &types.AuthRegistration{
 						CredentialRef: gitHubAppCredential.ID(),
 						Start: func(_ context.Context, _ json.RawMessage) (types.AuthStartResult, error) {
@@ -102,15 +105,6 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthDefaultOperation.Name(),
-					Description:  "Validate the GitHub App installation is reachable",
-					Topic:        DefinitionID.OperationTopic(healthDefaultOperation.Name()),
-					ClientRef:    gitHubClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				{
 					Name:           repositorySyncOperation.Name(),
 					Description:    "Collect repository inventory from the installation as assets",

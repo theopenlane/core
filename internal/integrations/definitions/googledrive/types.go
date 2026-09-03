@@ -19,8 +19,6 @@ var (
 	_, driveCredential = providerkit.CredentialSchema[googleDriveCred]()
 	// driveClient is the client ref for the Google Drive SDK
 	driveClient = types.NewClientRef[DriveClient]()
-	// healthCheckSchema is the operation ref for the health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// documentExportSchema is the operation ref for the document export operation
 	documentExportSchema, documentExportOperation = providerkit.OperationSchema[operations.DocumentExport]()
 	// folderSyncSchema is the operation ref for the folder sync operation

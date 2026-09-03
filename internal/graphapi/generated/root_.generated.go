@@ -3051,6 +3051,7 @@ type ComplexityRoot struct {
 		Family                   func(childComplexity int) int
 		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		Findings                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		Health                   func(childComplexity int) int
 		ID                       func(childComplexity int) int
 		IntegrationType          func(childComplexity int) int
 		InternalNotes            func(childComplexity int) int
@@ -22002,6 +22003,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Integration.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+	case "Integration.health":
+		if e.ComplexityRoot.Integration.Health == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Integration.Health(childComplexity), true
 	case "Integration.id":
 		if e.ComplexityRoot.Integration.ID == nil {
 			break
@@ -51238,6 +51245,10 @@ scalar VendorScoringQuestionsConfig
 RiskThresholdsConfig holds org-custom threshold overrides for vendor risk levels
 """
 scalar RiskThresholdsConfig
+"""
+The ` + "`" + `IntegrationHealth` + "`" + ` scalar type records the runtime health state of an installed integration, including the unhealthy reason, per-operation failure reasons, and the last successful health check time
+"""
+scalar IntegrationHealth
 `, BuiltIn: false},
 	{Name: "../schema/actionplan.graphql", Input: `extend type ActionPlan {
     """
@@ -89324,6 +89335,10 @@ type Integration implements Node {
   """
   metadata: Map
   """
+  runtime health state recorded by health checks and reconcile failures
+  """
+  health: IntegrationHealth
+  """
   the canonical definition identifier for the installation
   """
   definitionID: String
@@ -90019,9 +90034,9 @@ IntegrationIntegrationStatus is enum for the field status
 enum IntegrationIntegrationStatus @goModel(model: "github.com/theopenlane/core/common/enums.IntegrationStatus") {
   PENDING
   CONNECTED
+  DEGRADED
   ERRORED
   DISABLED
-  DELETED
 }
 """
 Ordering options for Integration connections
@@ -159386,6 +159401,8 @@ func (ec *executionContext) childFields_Integration(ctx context.Context, field g
 		return ec.fieldContext_Integration_platformID(ctx, field)
 	case "metadata":
 		return ec.fieldContext_Integration_metadata(ctx, field)
+	case "health":
+		return ec.fieldContext_Integration_health(ctx, field)
 	case "definitionID":
 		return ec.fieldContext_Integration_definitionID(ctx, field)
 	case "definitionVersion":

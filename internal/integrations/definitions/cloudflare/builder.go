@@ -48,13 +48,16 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       cloudflareCredential.ID(),
-					Name:                "Cloudflare API Token",
-					Description:         "Configure Cloudflare access using an API token scoped to your account and zones.",
-					CredentialRefs:      []types.CredentialSlotID{cloudflareCredential.ID()},
-					ClientRefs:          []types.ClientID{cloudflareClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  cloudflareCredential.ID(),
+					Name:           "Cloudflare API Token",
+					Description:    "Configure Cloudflare access using an API token scoped to your account and zones.",
+					CredentialRefs: []types.CredentialSlotID{cloudflareCredential.ID()},
+					ClientRefs:     []types.ClientID{cloudflareClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: cloudflareClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: cloudflareCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Cloudflare dashboard.",
@@ -70,15 +73,6 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Verify Cloudflare API token via /user/tokens/verify",
-					Topic:        DefinitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    cloudflareClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       HealthCheck{}.Handle(),
-					ConfigSchema: healthCheckSchema,
-				},
 				{
 					Name:           directorySyncOperation.Name(),
 					Description:    "Collect account members as directory accounts",

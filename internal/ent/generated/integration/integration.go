@@ -70,6 +70,8 @@ const (
 	FieldProviderState = "provider_state"
 	// FieldMetadata holds the string denoting the metadata field in the database.
 	FieldMetadata = "metadata"
+	// FieldHealth holds the string denoting the health field in the database.
+	FieldHealth = "health"
 	// FieldDefinitionID holds the string denoting the definition_id field in the database.
 	FieldDefinitionID = "definition_id"
 	// FieldDefinitionVersion holds the string denoting the definition_version field in the database.
@@ -335,6 +337,7 @@ var Columns = []string{
 	FieldInstallationMetadata,
 	FieldProviderState,
 	FieldMetadata,
+	FieldHealth,
 	FieldDefinitionID,
 	FieldDefinitionVersion,
 	FieldDefinitionSlug,
@@ -433,7 +436,7 @@ const DefaultStatus enums.IntegrationStatus = "PENDING"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.IntegrationStatus) error {
 	switch s.String() {
-	case "PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED":
+	case "PENDING", "CONNECTED", "DEGRADED", "ERRORED", "DISABLED":
 		return nil
 	default:
 		return fmt.Errorf("integration: invalid enum value for status field: %q", s)

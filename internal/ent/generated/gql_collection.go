@@ -39302,6 +39302,11 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, integration.FieldMetadata)
 				fieldSeen[integration.FieldMetadata] = struct{}{}
 			}
+		case "health":
+			if _, ok := fieldSeen[integration.FieldHealth]; !ok {
+				selectedFields = append(selectedFields, integration.FieldHealth)
+				fieldSeen[integration.FieldHealth] = struct{}{}
+			}
 		case "definitionID":
 			if _, ok := fieldSeen[integration.FieldDefinitionID]; !ok {
 				selectedFields = append(selectedFields, integration.FieldDefinitionID)

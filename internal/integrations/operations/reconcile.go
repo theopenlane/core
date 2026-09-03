@@ -135,5 +135,11 @@ func reconcileShouldCancel(ctx context.Context, reg *registry.Registry, e Reconc
 		return true
 	}
 
+	if degraded, ok := types.DegradedFrom(err); ok {
+		logx.FromContext(ctx).Error().Err(err).Str("reason", degraded.Reason).Msg("operation unhealthy, stopping cycle")
+
+		return true
+	}
+
 	return false
 }

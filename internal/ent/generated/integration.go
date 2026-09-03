@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
@@ -75,6 +76,8 @@ type Integration struct {
 	ProviderState openapi.IntegrationProviderState `json:"provider_state,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// runtime health state recorded by health checks and reconcile failures
+	Health models.IntegrationHealth `json:"health,omitempty"`
 	// the canonical definition identifier for the installation
 	DefinitionID string `json:"definition_id,omitempty"`
 	// the definition version recorded for this installation
@@ -430,7 +433,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldProviderMetadataSnapshot:
+		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldHealth, integration.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory, integration.FieldCampaignEmail:
 			values[i] = new(sql.NullBool)
@@ -632,6 +635,14 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
+		case integration.FieldHealth:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field health", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Health); err != nil {
+					return fmt.Errorf("unmarshal field health: %w", err)
 				}
 			}
 		case integration.FieldDefinitionID:
@@ -947,6 +958,9 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
+	builder.WriteString(", ")
+	builder.WriteString("health=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Health))
 	builder.WriteString(", ")
 	builder.WriteString("definition_id=")
 	builder.WriteString(_m.DefinitionID)

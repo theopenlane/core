@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -384,6 +385,20 @@ func (_c *IntegrationCreate) SetNillableProviderState(v *openapi.IntegrationProv
 // SetMetadata sets the "metadata" field.
 func (_c *IntegrationCreate) SetMetadata(v map[string]interface{}) *IntegrationCreate {
 	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetHealth sets the "health" field.
+func (_c *IntegrationCreate) SetHealth(v models.IntegrationHealth) *IntegrationCreate {
+	_c.mutation.SetHealth(v)
+	return _c
+}
+
+// SetNillableHealth sets the "health" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableHealth(v *models.IntegrationHealth) *IntegrationCreate {
+	if v != nil {
+		_c.SetHealth(*v)
+	}
 	return _c
 }
 
@@ -1087,6 +1102,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Metadata(); ok {
 		_spec.SetField(integration.FieldMetadata, field.TypeJSON, value)
 		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.Health(); ok {
+		_spec.SetField(integration.FieldHealth, field.TypeJSON, value)
+		_node.Health = value
 	}
 	if value, ok := _c.mutation.DefinitionID(); ok {
 		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)

@@ -111,6 +111,12 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.JSON("health", models.IntegrationHealth{}).
+			Comment("runtime health state recorded by health checks and reconcile failures").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.String("definition_id").
 			Comment("the canonical definition identifier for the installation").
 			Optional().

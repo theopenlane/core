@@ -10,12 +10,12 @@ var (
 	IntegrationStatusPending IntegrationStatus = "PENDING"
 	// IntegrationStatusConnected indicates the installation is configured and ready for use
 	IntegrationStatusConnected IntegrationStatus = "CONNECTED"
+	// IntegrationStatusDegraded indicates the installation is connected but one or more operations are unhealthy
+	IntegrationStatusDegraded IntegrationStatus = "DEGRADED"
 	// IntegrationStatusErrored indicates the installation is present but currently unhealthy or misconfigured
 	IntegrationStatusErrored IntegrationStatus = "ERRORED"
 	// IntegrationStatusDisabled indicates the installation is intentionally disabled
 	IntegrationStatusDisabled IntegrationStatus = "DISABLED"
-	// IntegrationStatusDeleted indicates the installation has been deleted or is pending cleanup
-	IntegrationStatusDeleted IntegrationStatus = "DELETED"
 	// IntegrationStatusInvalid represents an invalid lifecycle status
 	IntegrationStatusInvalid IntegrationStatus = "INVALID"
 )
@@ -23,9 +23,15 @@ var (
 var integrationStatusValues = []IntegrationStatus{
 	IntegrationStatusPending,
 	IntegrationStatusConnected,
+	IntegrationStatusDegraded,
 	IntegrationStatusErrored,
 	IntegrationStatusDisabled,
-	IntegrationStatusDeleted,
+}
+
+// IntegrationOperationalStatuses are the states in which an installation executes recurring operations
+var IntegrationOperationalStatuses = []IntegrationStatus{
+	IntegrationStatusConnected,
+	IntegrationStatusDegraded,
 }
 
 // Values returns the valid lifecycle states as strings

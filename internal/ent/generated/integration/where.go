@@ -1616,6 +1616,16 @@ func MetadataNotNil() predicate.Integration {
 	return predicate.Integration(sql.FieldNotNull(FieldMetadata))
 }
 
+// HealthIsNil applies the IsNil predicate on the "health" field.
+func HealthIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldHealth))
+}
+
+// HealthNotNil applies the NotNil predicate on the "health" field.
+func HealthNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldHealth))
+}
+
 // DefinitionIDEQ applies the EQ predicate on the "definition_id" field.
 func DefinitionIDEQ(v string) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldDefinitionID, v))

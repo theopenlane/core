@@ -1020,35 +1020,36 @@ type IdentityHolderProjection struct {
 // the full generated.Integration whose edge graph cannot be reflected
 type IntegrationProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                       string                  `json:"id,omitempty"`
-	CampaignEmail            bool                    `json:"campaign_email,omitempty"`
-	CreatedAt                time.Time               `json:"created_at,omitempty"`
-	CreatedBy                string                  `json:"created_by,omitempty"`
-	DefinitionID             string                  `json:"definition_id,omitempty"`
-	DefinitionSlug           string                  `json:"definition_slug,omitempty"`
-	DefinitionVersion        string                  `json:"definition_version,omitempty"`
-	Description              string                  `json:"description,omitempty"`
-	EnvironmentID            string                  `json:"environment_id,omitempty"`
-	EnvironmentName          string                  `json:"environment_name,omitempty"`
-	Family                   string                  `json:"family,omitempty"`
-	IntegrationType          string                  `json:"integration_type,omitempty"`
-	InternalNotes            string                  `json:"internal_notes,omitempty"`
-	Kind                     string                  `json:"kind,omitempty"`
-	Metadata                 map[string]interface{}  `json:"metadata,omitempty"`
-	Name                     string                  `json:"name,omitempty"`
-	OwnerID                  string                  `json:"owner_id,omitempty"`
-	PlatformID               string                  `json:"platform_id,omitempty"`
-	PrimaryDirectory         bool                    `json:"primary_directory,omitempty"`
-	ProviderMetadataSnapshot map[string]interface{}  `json:"provider_metadata_snapshot,omitempty"`
-	ScopeID                  string                  `json:"scope_id,omitempty"`
-	ScopeName                string                  `json:"scope_name,omitempty"`
-	Status                   enums.IntegrationStatus `json:"status,omitempty"`
-	SystemInternalID         string                  `json:"system_internal_id,omitempty"`
-	SystemOwned              bool                    `json:"system_owned,omitempty"`
-	Tags                     []string                `json:"tags,omitempty"`
-	UpdatedAt                time.Time               `json:"updated_at,omitempty"`
-	UpdatedBy                string                  `json:"updated_by,omitempty"`
-	UpdatedByImpersonator    string                  `json:"updated_by_impersonator,omitempty"`
+	ID                       string                   `json:"id,omitempty"`
+	CampaignEmail            bool                     `json:"campaign_email,omitempty"`
+	CreatedAt                time.Time                `json:"created_at,omitempty"`
+	CreatedBy                string                   `json:"created_by,omitempty"`
+	DefinitionID             string                   `json:"definition_id,omitempty"`
+	DefinitionSlug           string                   `json:"definition_slug,omitempty"`
+	DefinitionVersion        string                   `json:"definition_version,omitempty"`
+	Description              string                   `json:"description,omitempty"`
+	EnvironmentID            string                   `json:"environment_id,omitempty"`
+	EnvironmentName          string                   `json:"environment_name,omitempty"`
+	Family                   string                   `json:"family,omitempty"`
+	Health                   models.IntegrationHealth `json:"health,omitempty"`
+	IntegrationType          string                   `json:"integration_type,omitempty"`
+	InternalNotes            string                   `json:"internal_notes,omitempty"`
+	Kind                     string                   `json:"kind,omitempty"`
+	Metadata                 map[string]interface{}   `json:"metadata,omitempty"`
+	Name                     string                   `json:"name,omitempty"`
+	OwnerID                  string                   `json:"owner_id,omitempty"`
+	PlatformID               string                   `json:"platform_id,omitempty"`
+	PrimaryDirectory         bool                     `json:"primary_directory,omitempty"`
+	ProviderMetadataSnapshot map[string]interface{}   `json:"provider_metadata_snapshot,omitempty"`
+	ScopeID                  string                   `json:"scope_id,omitempty"`
+	ScopeName                string                   `json:"scope_name,omitempty"`
+	Status                   enums.IntegrationStatus  `json:"status,omitempty"`
+	SystemInternalID         string                   `json:"system_internal_id,omitempty"`
+	SystemOwned              bool                     `json:"system_owned,omitempty"`
+	Tags                     []string                 `json:"tags,omitempty"`
+	UpdatedAt                time.Time                `json:"updated_at,omitempty"`
+	UpdatedBy                string                   `json:"updated_by,omitempty"`
+	UpdatedByImpersonator    string                   `json:"updated_by_impersonator,omitempty"`
 }
 
 // InternalPolicyProjection is the flat, CEL- and jsonschema-facing view of a InternalPolicy: its

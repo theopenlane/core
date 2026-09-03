@@ -64,22 +64,22 @@ func Builder() registry.Builder {
 					},
 				},
 				{
-					CredentialRef:       TokenCredential.ID(),
-					Name:                "Test Token",
-					Description:         "Connect with an API token validated by the health check.",
-					CredentialRefs:      []types.CredentialSlotID{TokenCredential.ID()},
-					ValidationOperation: HealthOp.Name(),
+					CredentialRef:  TokenCredential.ID(),
+					Name:           "Test Token",
+					Description:    "Connect with an API token validated by the health check.",
+					CredentialRefs: []types.CredentialSlotID{TokenCredential.ID()},
+					HealthCheck:    &types.HealthCheckRegistration{Handle: healthHandler},
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: TokenCredential.ID(),
 						Description:   "Remove the persisted token credential and disconnect this installation.",
 					},
 				},
 				{
-					CredentialRef:       ServiceAccountCredential.ID(),
-					Name:                "Test Service Account",
-					Description:         "Connect with a service account validated by the health check.",
-					CredentialRefs:      []types.CredentialSlotID{ServiceAccountCredential.ID()},
-					ValidationOperation: HealthOp.Name(),
+					CredentialRef:  ServiceAccountCredential.ID(),
+					Name:           "Test Service Account",
+					Description:    "Connect with a service account validated by the health check.",
+					CredentialRefs: []types.CredentialSlotID{ServiceAccountCredential.ID()},
+					HealthCheck:    &types.HealthCheckRegistration{Handle: healthHandler},
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: ServiceAccountCredential.ID(),
 						Description:   "Remove the persisted service account credential and disconnect this installation.",
@@ -108,14 +108,6 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         HealthOp.Name(),
-					Description:  "Validate the bound credential",
-					Topic:        DefinitionID.OperationTopic(HealthOp.Name()),
-					ConfigSchema: healthSchema,
-					Policy:       types.ExecutionPolicy{Inline: true},
-					Handle:       healthHandler,
-				},
 				{
 					Name:         RepoSyncOp.Name(),
 					Description:  "Async operation running with the built client",

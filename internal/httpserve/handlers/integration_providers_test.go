@@ -51,8 +51,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	assert.Len(t, provider.CredentialRegistrations, 1)
 	assert.NotNil(t, provider.CredentialRegistrations[0].Schema)
 	assert.NotNil(t, provider.UserInput)
-	assert.Len(t, provider.Operations, 1)
-	assert.Equal(t, configHealthCheckOperation.Name(), provider.Operations[0].Name)
+	assert.Empty(t, provider.Operations)
 
 	_, ok = providers["def_01K0TESTOTH00000000000001"]
 	assert.True(t, ok)
