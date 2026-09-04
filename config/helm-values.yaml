@@ -678,11 +678,11 @@ coreConfiguration:
       enabled: false  # @schema type:boolean
     integrationlifecycle:
       # -- Whether the integration lifecycle sweep is enabled
-      enabled: false  # @schema type:boolean
+      enabled: true  # @schema type:boolean; default:true
       # -- If true only log integration IDs and actions that would be dispatched
       dryrun: true  # @schema type:boolean; default:true
       # -- Maximum integrations to evaluate per run
-      maxperrun: 0  # @schema type:integer
+      maxperrun: 100  # @schema type:integer; default:100
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false

@@ -1885,7 +1885,7 @@
         "enabled": {
           "type": "boolean",
           "description": "Whether the integration lifecycle sweep is enabled",
-          "default": false
+          "default": true
         },
         "dryrun": {
           "type": "boolean",

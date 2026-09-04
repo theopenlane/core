@@ -162,7 +162,7 @@ Config contains the configuration for the core server
             "maxdeletesperrun": 25
         },
         "integrationlifecycle": {
-            "enabled": false,
+            "enabled": true,
             "dryrun": true,
             "maxperrun": 100
         }
@@ -1653,7 +1653,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
         "maxdeletesperrun": 25
     },
     "integrationlifecycle": {
-        "enabled": false,
+        "enabled": true,
         "dryrun": true,
         "maxperrun": 100
     }
@@ -1936,7 +1936,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Whether the integration lifecycle sweep is enabled<br/>Default: `false`<br/>||
+|**enabled**|`boolean`|Whether the integration lifecycle sweep is enabled<br/>Default: `true`<br/>||
 |**dryrun**|`boolean`|If true only log integration IDs and actions that would be dispatched<br/>Default: `true`<br/>||
 |**maxperrun**|`integer`|Maximum integrations to evaluate per run<br/>Default: `100`<br/>||
 
@@ -1945,7 +1945,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
 ```json
 {
-    "enabled": false,
+    "enabled": true,
     "dryrun": true,
     "maxperrun": 100
 }

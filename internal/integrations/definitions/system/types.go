@@ -60,11 +60,11 @@ type OrganizationDeleteConfig struct {
 // IntegrationLifecycleConfig contains the operator configuration for the integration lifecycle sweep
 type IntegrationLifecycleConfig struct {
 	// Enabled controls whether the integration lifecycle sweep is seeded at startup
-	Enabled bool `json:"enabled" koanf:"enabled" jsonschema:"default=false,description=Whether the integration lifecycle sweep is enabled"`
+	Enabled bool `json:"enabled" koanf:"enabled" default:"true" jsonschema:"default=true,description=Whether the integration lifecycle sweep is enabled"`
 	// DryRun logs matching integration IDs and actions without dispatching them
 	DryRun bool `json:"dryrun" koanf:"dryrun" default:"true" jsonschema:"default=true,description=If true only log integration IDs and actions that would be dispatched"`
 	// MaxPerRun caps how many integrations are evaluated per sweep
-	MaxPerRun int `json:"maxperrun" koanf:"maxperrun" jsonschema:"default=100,description=Maximum integrations to evaluate per run"`
+	MaxPerRun int `json:"maxperrun" koanf:"maxperrun" default:"100" jsonschema:"default=100,description=Maximum integrations to evaluate per run"`
 }
 
 // Sweep maps the operator configuration to its sweep defaults
