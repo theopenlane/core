@@ -49,7 +49,7 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 				},
 				{
 					Name:                IntegrationLifecycleOp.Name(),
-					Description:         "Reap expired pending integration installations",
+					Description:         "Reap expired integration installations that never connected",
 					Topic:               DefinitionID.OperationTopic(IntegrationLifecycleOp.Name()),
 					ConfigSchema:        integrationLifecycleSweepSchema,
 					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},

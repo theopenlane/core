@@ -4301,37 +4301,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integrations_files_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[32]},
+				Columns:    []*schema.Column{IntegrationsColumns[33]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[33]},
+				Columns:    []*schema.Column{IntegrationsColumns[34]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_custom_type_enums_environment",
-				Columns:    []*schema.Column{IntegrationsColumns[34]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "integrations_custom_type_enums_scope",
 				Columns:    []*schema.Column{IntegrationsColumns[35]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integrations_organizations_integrations",
+				Symbol:     "integrations_custom_type_enums_scope",
 				Columns:    []*schema.Column{IntegrationsColumns[36]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integrations_organizations_integrations",
+				Columns:    []*schema.Column{IntegrationsColumns[37]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_platforms_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[37]},
+				Columns:    []*schema.Column{IntegrationsColumns[38]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4340,12 +4340,12 @@ var (
 			{
 				Name:    "integration_platform_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[37]},
+				Columns: []*schema.Column{IntegrationsColumns[38]},
 			},
 			{
 				Name:    "integration_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[36]},
+				Columns: []*schema.Column{IntegrationsColumns[37]},
 			},
 		},
 	}

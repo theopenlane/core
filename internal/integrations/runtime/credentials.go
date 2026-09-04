@@ -58,13 +58,12 @@ func (r *Runtime) cleanupInstallation(ctx context.Context, integrationID string)
 	return r.DB().Integration.DeleteOneID(integrationID).Exec(ctx)
 }
 
-// ReapExpiredInstallation soft-deletes one expired pending installation and its credentials;
+// ReapExpiredInstallation soft-deletes one expired never-connected installation and its credentials;
 // the predicated delete is the atomic guard against a concurrently completing auth flow
 func (r *Runtime) ReapExpiredInstallation(ctx context.Context, integrationID string) (bool, error) {
 	reaped, err := r.DB().Integration.Delete().
 		Where(
 			integration.ID(integrationID),
-			integration.StatusEQ(enums.IntegrationStatusPending),
 			integration.ExpiresAtLTE(time.Now()),
 		).
 		Exec(ctx)

@@ -61,8 +61,8 @@ func installationCredentialIDs(t *testing.T, ctx context.Context, integrationID 
 	return ids
 }
 
-// TestIntegrationLifecycleSweep drives the sweep through the real runtime: expired pending
-// are reaped with their credentials, every other state survives
+// TestIntegrationLifecycleSweep drives the sweep through the real runtime: expired
+// never-connected installations are reaped with their credentials, every other state survives
 func TestIntegrationLifecycleSweep(t *testing.T) {
 	org := suite.UserBuilder(context.Background(), t)
 
@@ -90,25 +90,40 @@ func TestIntegrationLifecycleSweep(t *testing.T) {
 	errored, _ := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
 	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, errored, "credentials revoked"))
 
+	erroredStray, _ := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
+	strayCredentialIDs := installationCredentialIDs(t, allowCtx, erroredStray.ID)
+	require.NotEmpty(t, strayCredentialIDs)
+	require.NoError(t, suite.Client.DB.Integration.UpdateOneID(erroredStray.ID).
+		SetStatus(enums.IntegrationStatusPending).
+		SetExpiresAt(time.Now().Add(-time.Hour)).
+		Exec(allowCtx))
+	require.NoError(t, suite.IntegrationsRT.MarkIntegrationUnhealthy(allowCtx, reloadIntegration(t, allowCtx, erroredStray.ID), "connection check failed"))
+
+	flippedStray := reloadIntegration(t, allowCtx, erroredStray.ID)
+	require.Equal(t, enums.IntegrationStatusErrored, flippedStray.Status)
+	require.NotNil(t, flippedStray.ExpiresAt)
+
 	waitForEvents()
 
 	t.Run("dry run dispatches nothing", func(t *testing.T) {
 		processed := runLifecycleSweep(t, allowCtx, json.RawMessage(`{"dryRun":true}`))
-		require.GreaterOrEqual(t, processed, 1)
+		require.GreaterOrEqual(t, processed, 2)
 
 		require.True(t, integrationVisible(t, allowCtx, expiredPending.ID))
+		require.True(t, integrationVisible(t, allowCtx, erroredStray.ID))
 	})
 
-	t.Run("sweep reaps expired pending only", func(t *testing.T) {
+	t.Run("sweep reaps expired never-connected only", func(t *testing.T) {
 		processed := runLifecycleSweep(t, allowCtx, nil)
-		require.GreaterOrEqual(t, processed, 1)
+		require.GreaterOrEqual(t, processed, 2)
 
 		waitForEvents()
 
 		require.False(t, integrationVisible(t, allowCtx, expiredPending.ID))
+		require.False(t, integrationVisible(t, allowCtx, erroredStray.ID))
 
 		credentialCount, err := suite.Client.DB.Hush.Query().
-			Where(hush.IDIn(expiredCredentialIDs...)).
+			Where(hush.IDIn(append(expiredCredentialIDs, strayCredentialIDs...)...)).
 			Count(allowCtx)
 		require.NoError(t, err)
 		require.Zero(t, credentialCount)

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
@@ -32,8 +31,7 @@ func (s IntegrationLifecycleSweep) Handle() types.OperationHandler {
 	}
 }
 
-// Run executes one integration lifecycle sweep, reaping expired pending installations, and
-// returns the number reaped
+// Run executes one integration lifecycle sweep and returns the number reaped
 func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
 	logger := logx.FromContext(ctx)
 
@@ -44,12 +42,12 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 	systemCtx := systemSweepContext(ctx)
 
 	ids, err := req.DB.Integration.Query().
-		Where(integration.StatusEQ(enums.IntegrationStatusPending), integration.ExpiresAtLTE(time.Now())).
+		Where(integration.ExpiresAtLTE(time.Now())).
 		Order(integration.ByExpiresAt()).
 		Limit(s.MaxPerRun).
 		IDs(systemCtx)
 	if err != nil {
-		logger.Error().Err(err).Msg("failed querying expired pending installations for lifecycle sweep")
+		logger.Error().Err(err).Msg("failed querying expired installations for lifecycle sweep")
 		return 0, err
 	}
 
@@ -59,7 +57,7 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 		rowLogger := logger.With().Str("integration_id", id).Logger()
 
 		if s.DryRun {
-			rowLogger.Info().Msg("dry run: would reap expired pending installation")
+			rowLogger.Info().Msg("dry run: would reap expired installation")
 			processed++
 
 			continue
@@ -67,7 +65,7 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 
 		reaped, err := req.Services.ReapExpiredInstallation(systemCtx, id)
 		if err != nil {
-			rowLogger.Error().Err(err).Msg("failed to reap expired pending installation")
+			rowLogger.Error().Err(err).Msg("failed to reap expired installation")
 
 			continue
 		}
@@ -76,7 +74,7 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 			continue
 		}
 
-		rowLogger.Info().Msg("reaped expired pending installation")
+		rowLogger.Info().Msg("reaped expired installation")
 		processed++
 	}
 
