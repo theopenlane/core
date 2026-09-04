@@ -33,8 +33,6 @@ func (s IntegrationLifecycleSweep) Handle() types.OperationHandler {
 
 // Run executes one integration lifecycle sweep and returns the number reaped
 func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
-	logger := logx.FromContext(ctx)
-
 	if s.MaxPerRun <= 0 {
 		s.MaxPerRun = DefaultIntegrationLifecycleMaxPerRun
 	}
@@ -47,17 +45,15 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 		Limit(s.MaxPerRun).
 		IDs(systemCtx)
 	if err != nil {
-		logger.Error().Err(err).Msg("failed querying expired installations for lifecycle sweep")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed querying expired installations for lifecycle sweep")
 		return 0, err
 	}
 
 	processed := 0
 
 	for _, id := range ids {
-		rowLogger := logger.With().Str("integration_id", id).Logger()
-
 		if s.DryRun {
-			rowLogger.Info().Msg("dry run: would reap expired installation")
+			logx.FromContext(ctx).Info().Str("integration_id", id).Msg("dry run: would reap expired installation")
 			processed++
 
 			continue
@@ -65,7 +61,7 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 
 		reaped, err := req.Services.ReapExpiredInstallation(systemCtx, id)
 		if err != nil {
-			rowLogger.Error().Err(err).Msg("failed to reap expired installation")
+			logx.FromContext(ctx).Error().Err(err).Str("integration_id", id).Msg("failed to reap expired installation")
 
 			continue
 		}
@@ -74,11 +70,11 @@ func (s IntegrationLifecycleSweep) Run(ctx context.Context, req types.OperationR
 			continue
 		}
 
-		rowLogger.Info().Msg("reaped expired installation")
+		logx.FromContext(ctx).Info().Str("integration_id", id).Msg("reaped expired installation")
 		processed++
 	}
 
-	logger.Info().Int("count", processed).Msg("integration lifecycle sweep summary")
+	logx.FromContext(ctx).Info().Int("count", processed).Msg("integration lifecycle sweep summary")
 
 	return processed, nil
 }
