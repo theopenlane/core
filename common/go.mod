@@ -13,7 +13,7 @@ require (
 	github.com/stretchr/testify v1.12.1
 	github.com/theopenlane/core/v2 v2.3.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.33.4
+	github.com/theopenlane/entx v0.33.5
 	github.com/theopenlane/utils v0.7.1
 	github.com/zitadel/oidc/v3 v3.49.2
 	golang.org/x/oauth2 v0.36.0
@@ -88,7 +88,7 @@ require (
 	golang.org/x/tools v0.49.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260819154853-08b0e4226688 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260819154853-08b0e4226688 // indirect
-	google.golang.org/grpc v1.83.1 // indirect
+	google.golang.org/grpc v1.83.2 // indirect
 	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

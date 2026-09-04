@@ -21768,6 +21768,8 @@ input DirectoryMembershipWhereInput {
 	lastConfirmedRunIDNotNil: Boolean
 	lastConfirmedRunIDEqualFold: String
 	lastConfirmedRunIDContainsFold: String
+	ownerID: String
+	integrationIDIn: [String!]
 }
 type DirectorySyncRun implements Node {
 	id: ID!

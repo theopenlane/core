@@ -54720,6 +54720,11 @@ type DirectoryMembershipBulkCreatePayload {
     """
     directoryMemberships: [DirectoryMembership!]
 }`, BuiltIn: false},
+	{Name: "../schema/directorymembershipextended.graphql", Input: `extend input DirectoryMembershipWhereInput {
+  ownerID: String
+  integrationIDIn: [String!]
+}
+`, BuiltIn: false},
 	{Name: "../schema/directorysyncrun.graphql", Input: `extend type Query {
     """
     Look up directorySyncRun by ID

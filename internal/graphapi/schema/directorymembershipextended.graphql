@@ -1,0 +1,4 @@
+extend input DirectoryMembershipWhereInput {
+  ownerID: String
+  integrationIDIn: [String!]
+}

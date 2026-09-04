@@ -7,7 +7,7 @@ package graphapi
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
 
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
@@ -42,7 +42,7 @@ func (r *integrationResolver) WebhookURLs(ctx context.Context, obj *generated.In
 }
 
 // Credentials is the resolver for the credentials field.
-func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.Integration) (json.RawMessage, error) {
+func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.Integration) (jsontext.Value, error) {
 	if r.integrationsRuntime == nil {
 		return nil, nil
 	}
@@ -95,7 +95,7 @@ func (r *integrationResolver) Credentials(ctx context.Context, obj *generated.In
 }
 
 // Config is the resolver for the config field.
-func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integration) (json.RawMessage, error) {
+func (r *integrationResolver) Config(ctx context.Context, obj *generated.Integration) (jsontext.Value, error) {
 	if r.integrationsRuntime == nil {
 		return nil, nil
 	}

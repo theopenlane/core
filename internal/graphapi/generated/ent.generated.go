@@ -4,7 +4,7 @@ package gqlgenerated
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
 	"errors"
 	"fmt"
 	"math"
@@ -86,8 +86,8 @@ type IdentityHolderResolver interface {
 }
 type IntegrationResolver interface {
 	WebhookURLs(ctx context.Context, obj *generated.Integration) (map[string]any, error)
-	Credentials(ctx context.Context, obj *generated.Integration) (json.RawMessage, error)
-	Config(ctx context.Context, obj *generated.Integration) (json.RawMessage, error)
+	Credentials(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
+	Config(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
 }
 type InternalPolicyResolver interface {
 	HasPendingWorkflow(ctx context.Context, obj *generated.InternalPolicy) (bool, error)
@@ -99873,8 +99873,8 @@ func (ec *executionContext) _Integration_credentials(ctx context.Context, field 
 			return ec.Resolvers.Integration().Credentials(ctx, obj)
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
-			return ec.marshalOJSON2encodingᚋjsonᚐRawMessage(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
+			return ec.marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx, selections, v)
 		},
 		true,
 		false,
@@ -99896,8 +99896,8 @@ func (ec *executionContext) _Integration_config(ctx context.Context, field graph
 			return ec.Resolvers.Integration().Config(ctx, obj)
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
-			return ec.marshalOJSON2encodingᚋjsonᚐRawMessage(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
+			return ec.marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx, selections, v)
 		},
 		true,
 		false,
@@ -226022,7 +226022,7 @@ func (ec *executionContext) unmarshalInputDirectoryMembershipWhereInput(ctx cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "directoryInstanceID", "directoryInstanceIDNEQ", "directoryInstanceIDIn", "directoryInstanceIDNotIn", "directoryInstanceIDContains", "directoryInstanceIDHasPrefix", "directoryInstanceIDHasSuffix", "directoryInstanceIDIsNil", "directoryInstanceIDNotNil", "directoryInstanceIDEqualFold", "directoryInstanceIDContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "roleIsNil", "roleNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "firstSeenAt", "firstSeenAtGT", "firstSeenAtGTE", "firstSeenAtLT", "firstSeenAtLTE", "firstSeenAtIsNil", "firstSeenAtNotNil", "lastSeenAt", "lastSeenAtGT", "lastSeenAtGTE", "lastSeenAtLT", "lastSeenAtLTE", "lastSeenAtIsNil", "lastSeenAtNotNil", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "lastConfirmedRunID", "lastConfirmedRunIDNEQ", "lastConfirmedRunIDIn", "lastConfirmedRunIDNotIn", "lastConfirmedRunIDContains", "lastConfirmedRunIDHasPrefix", "lastConfirmedRunIDHasSuffix", "lastConfirmedRunIDIsNil", "lastConfirmedRunIDNotNil", "lastConfirmedRunIDEqualFold", "lastConfirmedRunIDContainsFold"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "directoryInstanceID", "directoryInstanceIDNEQ", "directoryInstanceIDIn", "directoryInstanceIDNotIn", "directoryInstanceIDContains", "directoryInstanceIDHasPrefix", "directoryInstanceIDHasSuffix", "directoryInstanceIDIsNil", "directoryInstanceIDNotNil", "directoryInstanceIDEqualFold", "directoryInstanceIDContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "roleIsNil", "roleNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "directoryName", "directoryNameNEQ", "directoryNameIn", "directoryNameNotIn", "directoryNameContains", "directoryNameHasPrefix", "directoryNameHasSuffix", "directoryNameIsNil", "directoryNameNotNil", "directoryNameEqualFold", "directoryNameContainsFold", "firstSeenAt", "firstSeenAtGT", "firstSeenAtGTE", "firstSeenAtLT", "firstSeenAtLTE", "firstSeenAtIsNil", "firstSeenAtNotNil", "lastSeenAt", "lastSeenAtGT", "lastSeenAtGTE", "lastSeenAtLT", "lastSeenAtLTE", "lastSeenAtIsNil", "lastSeenAtNotNil", "addedAt", "addedAtGT", "addedAtGTE", "addedAtLT", "addedAtLTE", "addedAtIsNil", "addedAtNotNil", "removedAt", "removedAtGT", "removedAtGTE", "removedAtLT", "removedAtLTE", "removedAtIsNil", "removedAtNotNil", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "lastConfirmedRunID", "lastConfirmedRunIDNEQ", "lastConfirmedRunIDIn", "lastConfirmedRunIDNotIn", "lastConfirmedRunIDContains", "lastConfirmedRunIDHasPrefix", "lastConfirmedRunIDHasSuffix", "lastConfirmedRunIDIsNil", "lastConfirmedRunIDNotNil", "lastConfirmedRunIDEqualFold", "lastConfirmedRunIDContainsFold", "ownerID", "integrationIDIn"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -227219,6 +227219,20 @@ func (ec *executionContext) unmarshalInputDirectoryMembershipWhereInput(ctx cont
 				return it, err
 			}
 			it.LastConfirmedRunIDContainsFold = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "integrationIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("integrationIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IntegrationIDIn = data
 		}
 	}
 	return it, nil
@@ -468913,7 +468927,7 @@ func (ec *executionContext) unmarshalOInviteWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚐRawMessage(ctx context.Context, v any) (json.RawMessage, error) {
+func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx context.Context, v any) (jsontext.Value, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -468921,7 +468935,7 @@ func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚐRawMessage(ctx cont
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOJSON2encodingᚋjsonᚐRawMessage(ctx context.Context, sel ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
+func (ec *executionContext) marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx context.Context, sel ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
