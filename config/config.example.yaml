@@ -218,6 +218,10 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    integrationlifecycle:
+        dryrun: true
+        enabled: false
+        maxperrun: 0
     microsoftteams:
         applicationid: ""
         clientid: ""
