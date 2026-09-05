@@ -149,6 +149,7 @@ github.com/theopenlane/core/v2 v2.3.0/go.mod h1:VkcfF7fg9Qy1KsiRYeFdXKGQd9Ov4BQZ
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/entx v0.33.5 h1:Ewf6ZtGzIu9jbmaev8w6njJClTJrgQDW3ODQvgtKNT8=
+github.com/theopenlane/entx v0.33.5/go.mod h1:ubJf45e2Ivax9rq6tDUog6/Rthe3MT9pWB1EHnp9ylA=
 github.com/theopenlane/utils v0.7.1 h1:x+9kVMgOALYqAH6GaLaDb9tj16nzasoGM8X0v0XNTn8=
 github.com/theopenlane/utils v0.7.1/go.mod h1:uxiLqjtcqgH57yOpYl3tTfKuenGYyAROxHFMpXx6mDY=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
@@ -178,8 +179,8 @@ github.com/zclconf/go-cty-debug v0.0.0-20240509010212-0d6042c53940 h1:4r45xpDWB6
 github.com/zclconf/go-cty-debug v0.0.0-20240509010212-0d6042c53940/go.mod h1:CmBdvvj3nqzfzJ6nTCIwDTPZ56aVGvDrmztiO5g3qrM=
 github.com/zclconf/go-cty-yaml v1.2.0 h1:GDyL4+e/Qe/S0B7YaecMLbVvAR/Mp21CXMOSiCTOi1M=
 github.com/zclconf/go-cty-yaml v1.2.0/go.mod h1:9YLUH4g7lOhVWqUbctnVlZ5KLpg7JAprQNgxSZ1Gyxs=
-github.com/zitadel/oidc/v3 v3.49.2 h1:yKvB2Hx6rVWp0vOTk1pEyXAPxJusgIHNmr20AxOohmQ=
-github.com/zitadel/oidc/v3 v3.49.2/go.mod h1:HwoguOGo0eem0RK5Gb+P6Q4aQLVinJ9LhomlVEA57ck=
+github.com/zitadel/oidc/v3 v3.49.4 h1:ROW+QObjcVMLK+z8he4psMMTm73pvycY2qFWQ+DTaLg=
+github.com/zitadel/oidc/v3 v3.49.4/go.mod h1:KQmYte+zOePAeVwR3LM153dxWBC9orWZAIa4w9r1ZhU=
 github.com/zitadel/schema v1.3.2 h1:gfJvt7dOMfTmxzhscZ9KkapKo3Nei3B6cAxjav+lyjI=
 github.com/zitadel/schema v1.3.2/go.mod h1:IZmdfF9Wu62Zu6tJJTH3UsArevs3Y4smfJIj3L8fzxw=
 go.opentelemetry.io/auto/sdk v1.2.1 h1:jXsnJ4Lmnqd11kwkBV2LgLoFMZKizbCi5fNZ/ipaZ64=
