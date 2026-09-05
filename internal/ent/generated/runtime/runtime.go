@@ -3745,11 +3745,11 @@ func init() {
 	// integration.PlatformIDValidator is a validator for the "platform_id" field. It is called by the builders before save.
 	integration.PlatformIDValidator = integrationDescPlatformID.Validators[0].(func(string) error)
 	// integrationDescPrimaryDirectory is the schema descriptor for primary_directory field.
-	integrationDescPrimaryDirectory := integrationFields[17].Descriptor()
+	integrationDescPrimaryDirectory := integrationFields[18].Descriptor()
 	// integration.DefaultPrimaryDirectory holds the default value on creation for the primary_directory field.
 	integration.DefaultPrimaryDirectory = integrationDescPrimaryDirectory.Default.(bool)
 	// integrationDescCampaignEmail is the schema descriptor for campaign_email field.
-	integrationDescCampaignEmail := integrationFields[18].Descriptor()
+	integrationDescCampaignEmail := integrationFields[19].Descriptor()
 	// integration.DefaultCampaignEmail holds the default value on creation for the campaign_email field.
 	integration.DefaultCampaignEmail = integrationDescCampaignEmail.Default.(bool)
 	// integrationDescID is the schema descriptor for id field.

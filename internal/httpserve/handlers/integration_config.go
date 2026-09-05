@@ -69,6 +69,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context) error {
 	if len(def.CredentialRegistrations) == 0 && installationRec.Status == enums.IntegrationStatusPending {
 		if err := h.IntegrationsRuntime.DB().Integration.UpdateOneID(installationRec.ID).
 			SetStatus(enums.IntegrationStatusConnected).
+			ClearExpiresAt().
 			Exec(requestCtx); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Str("installation_id", installationRec.ID).Msg("failed to mark credential-less installation connected")
 

@@ -49,4 +49,6 @@ type Config struct {
 	PaymentReminder system.PaymentReminderConfig `json:"paymentreminder" koanf:"paymentreminder"`
 	// OrganizationDelete configures the scheduled organization deletion sweep
 	OrganizationDelete system.OrganizationDeleteConfig `json:"organizationdelete" koanf:"organizationdelete"`
+	// IntegrationLifecycle configures the scheduled integration lifecycle sweep
+	IntegrationLifecycle system.IntegrationLifecycleConfig `json:"integrationlifecycle" koanf:"integrationlifecycle"`
 }

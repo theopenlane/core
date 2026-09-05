@@ -4282,6 +4282,7 @@ var (
 		{Name: "definition_slug", Type: field.TypeString, Nullable: true},
 		{Name: "family", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "CONNECTED", "DEGRADED", "ERRORED", "DISABLED"}, Default: "PENDING"},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "provider_metadata_snapshot", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_directory", Type: field.TypeBool, Default: false},
 		{Name: "campaign_email", Type: field.TypeBool, Default: false},
@@ -4300,37 +4301,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integrations_files_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[32]},
+				Columns:    []*schema.Column{IntegrationsColumns[33]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[33]},
+				Columns:    []*schema.Column{IntegrationsColumns[34]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_custom_type_enums_environment",
-				Columns:    []*schema.Column{IntegrationsColumns[34]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "integrations_custom_type_enums_scope",
 				Columns:    []*schema.Column{IntegrationsColumns[35]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "integrations_organizations_integrations",
+				Symbol:     "integrations_custom_type_enums_scope",
 				Columns:    []*schema.Column{IntegrationsColumns[36]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "integrations_organizations_integrations",
+				Columns:    []*schema.Column{IntegrationsColumns[37]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_platforms_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[37]},
+				Columns:    []*schema.Column{IntegrationsColumns[38]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4339,12 +4340,12 @@ var (
 			{
 				Name:    "integration_platform_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[37]},
+				Columns: []*schema.Column{IntegrationsColumns[38]},
 			},
 			{
 				Name:    "integration_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[36]},
+				Columns: []*schema.Column{IntegrationsColumns[37]},
 			},
 		},
 	}

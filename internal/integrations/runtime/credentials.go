@@ -5,12 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	slackdef "github.com/theopenlane/core/v2/internal/integrations/definitions/slack"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
@@ -54,6 +56,26 @@ func (r *Runtime) cleanupInstallation(ctx context.Context, integrationID string)
 	}
 
 	return r.DB().Integration.DeleteOneID(integrationID).Exec(ctx)
+}
+
+// ReapExpiredInstallation soft-deletes one expired never-connected installation and its credentials;
+// the predicated delete is the atomic guard against a concurrently completing auth flow
+func (r *Runtime) ReapExpiredInstallation(ctx context.Context, integrationID string) (bool, error) {
+	reaped, err := r.DB().Integration.Delete().
+		Where(
+			integration.ID(integrationID),
+			integration.ExpiresAtLTE(time.Now()),
+		).
+		Exec(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	if reaped == 0 {
+		return false, nil
+	}
+
+	return true, r.deleteCredential(ctx, integrationID)
 }
 
 // Disconnect executes the teardown flow for one installation
@@ -306,7 +328,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 	health.UnhealthyOperations = nil
 	installation.Health = health
 
-	update := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health)
+	update := r.DB().Integration.UpdateOneID(installation.ID).SetHealth(health).ClearExpiresAt()
 
 	// an errored installation transitions through ClearIntegrationUnhealthy so the recovery
 	// notification fires and the unhealthy reason is wiped

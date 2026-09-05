@@ -160,6 +160,11 @@ Config contains the configuration for the core server
         },
         "organizationdelete": {
             "maxdeletesperrun": 25
+        },
+        "integrationlifecycle": {
+            "enabled": true,
+            "dryrun": true,
+            "maxperrun": 100
         }
     },
     "workflows": {
@@ -1617,6 +1622,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |[**email**](#defsemailruntimeemailconfig)|`object`||yes|
 |[**paymentreminder**](#defssystempaymentreminderconfig)|`object`|||
 |[**organizationdelete**](#defssystemorganizationdeleteconfig)|`object`|||
+|[**integrationlifecycle**](#defssystemintegrationlifecycleconfig)|`object`|||
 
 **Additional Properties:** not allowed   
 **Example**
@@ -1645,6 +1651,11 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
     },
     "organizationdelete": {
         "maxdeletesperrun": 25
+    },
+    "integrationlifecycle": {
+        "enabled": true,
+        "dryrun": true,
+        "maxperrun": 100
     }
 }
 ```
@@ -1914,6 +1925,29 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 ```json
 {
     "maxdeletesperrun": 25
+}
+```
+
+   
+<a name="defssystemintegrationlifecycleconfig"></a>
+### $defs/system\.IntegrationLifecycleConfig: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|Whether the integration lifecycle sweep is enabled<br/>Default: `true`<br/>||
+|**dryrun**|`boolean`|If true only log integration IDs and actions that would be dispatched<br/>Default: `true`<br/>||
+|**maxperrun**|`integer`|Maximum integrations to evaluate per run<br/>Default: `100`<br/>||
+
+**Additional Properties:** not allowed   
+**Example**
+
+```json
+{
+    "enabled": true,
+    "dryrun": true,
+    "maxperrun": 100
 }
 ```
 

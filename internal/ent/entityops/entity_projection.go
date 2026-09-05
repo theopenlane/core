@@ -1030,6 +1030,7 @@ type IntegrationProjection struct {
 	Description              string                   `json:"description,omitempty"`
 	EnvironmentID            string                   `json:"environment_id,omitempty"`
 	EnvironmentName          string                   `json:"environment_name,omitempty"`
+	ExpiresAt                time.Time                `json:"expires_at,omitempty"`
 	Family                   string                   `json:"family,omitempty"`
 	Health                   models.IntegrationHealth `json:"health,omitempty"`
 	IntegrationType          string                   `json:"integration_type,omitempty"`

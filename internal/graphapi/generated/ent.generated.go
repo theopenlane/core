@@ -98761,6 +98761,29 @@ func (ec *executionContext) fieldContext_Integration_status(_ context.Context, f
 	return graphql.NewScalarFieldContext("Integration", field, false, false, errors.New("field of type IntegrationIntegrationStatus does not have child fields"))
 }
 
+func (ec *executionContext) _Integration_expiresAt(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Integration_expiresAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExpiresAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Integration_expiresAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Integration", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
 func (ec *executionContext) _Integration_providerMetadataSnapshot(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -255804,7 +255827,7 @@ func (ec *executionContext) unmarshalInputIntegrationWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "kind", "kindNEQ", "kindIn", "kindNotIn", "kindContains", "kindHasPrefix", "kindHasSuffix", "kindIsNil", "kindNotNil", "kindEqualFold", "kindContainsFold", "integrationType", "integrationTypeNEQ", "integrationTypeIn", "integrationTypeNotIn", "integrationTypeContains", "integrationTypeHasPrefix", "integrationTypeHasSuffix", "integrationTypeIsNil", "integrationTypeNotNil", "integrationTypeEqualFold", "integrationTypeContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "definitionID", "definitionIDNEQ", "definitionIDIn", "definitionIDNotIn", "definitionIDContains", "definitionIDHasPrefix", "definitionIDHasSuffix", "definitionIDIsNil", "definitionIDNotNil", "definitionIDEqualFold", "definitionIDContainsFold", "definitionVersion", "definitionVersionNEQ", "definitionVersionIn", "definitionVersionNotIn", "definitionVersionContains", "definitionVersionHasPrefix", "definitionVersionHasSuffix", "definitionVersionIsNil", "definitionVersionNotNil", "definitionVersionEqualFold", "definitionVersionContainsFold", "definitionSlug", "definitionSlugNEQ", "definitionSlugIn", "definitionSlugNotIn", "definitionSlugContains", "definitionSlugHasPrefix", "definitionSlugHasSuffix", "definitionSlugIsNil", "definitionSlugNotNil", "definitionSlugEqualFold", "definitionSlugContainsFold", "family", "familyNEQ", "familyIn", "familyNotIn", "familyContains", "familyHasPrefix", "familyHasSuffix", "familyIsNil", "familyNotNil", "familyEqualFold", "familyContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "primaryDirectory", "primaryDirectoryNEQ", "campaignEmail", "campaignEmailNEQ", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasSecrets", "hasSecretsWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasTasks", "hasTasksWith", "hasActionPlans", "hasActionPlansWith", "hasAssets", "hasAssetsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasDirectorySyncRuns", "hasDirectorySyncRunsWith", "hasCheckResults", "hasCheckResultsWith", "hasPlatform", "hasPlatformWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasEmailTemplates", "hasEmailTemplatesWith", "hasCampaigns", "hasCampaignsWith", "hasEntities", "hasEntitiesWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "kind", "kindNEQ", "kindIn", "kindNotIn", "kindContains", "kindHasPrefix", "kindHasSuffix", "kindIsNil", "kindNotNil", "kindEqualFold", "kindContainsFold", "integrationType", "integrationTypeNEQ", "integrationTypeIn", "integrationTypeNotIn", "integrationTypeContains", "integrationTypeHasPrefix", "integrationTypeHasSuffix", "integrationTypeIsNil", "integrationTypeNotNil", "integrationTypeEqualFold", "integrationTypeContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "definitionID", "definitionIDNEQ", "definitionIDIn", "definitionIDNotIn", "definitionIDContains", "definitionIDHasPrefix", "definitionIDHasSuffix", "definitionIDIsNil", "definitionIDNotNil", "definitionIDEqualFold", "definitionIDContainsFold", "definitionVersion", "definitionVersionNEQ", "definitionVersionIn", "definitionVersionNotIn", "definitionVersionContains", "definitionVersionHasPrefix", "definitionVersionHasSuffix", "definitionVersionIsNil", "definitionVersionNotNil", "definitionVersionEqualFold", "definitionVersionContainsFold", "definitionSlug", "definitionSlugNEQ", "definitionSlugIn", "definitionSlugNotIn", "definitionSlugContains", "definitionSlugHasPrefix", "definitionSlugHasSuffix", "definitionSlugIsNil", "definitionSlugNotNil", "definitionSlugEqualFold", "definitionSlugContainsFold", "family", "familyNEQ", "familyIn", "familyNotIn", "familyContains", "familyHasPrefix", "familyHasSuffix", "familyIsNil", "familyNotNil", "familyEqualFold", "familyContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "expiresAt", "expiresAtGT", "expiresAtGTE", "expiresAtLT", "expiresAtLTE", "expiresAtIsNil", "expiresAtNotNil", "primaryDirectory", "primaryDirectoryNEQ", "campaignEmail", "campaignEmailNEQ", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasSecrets", "hasSecretsWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasTasks", "hasTasksWith", "hasActionPlans", "hasActionPlansWith", "hasAssets", "hasAssetsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasDirectorySyncRuns", "hasDirectorySyncRunsWith", "hasCheckResults", "hasCheckResultsWith", "hasPlatform", "hasPlatformWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasEmailTemplates", "hasEmailTemplatesWith", "hasCampaigns", "hasCampaignsWith", "hasEntities", "hasEntitiesWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -257400,6 +257423,55 @@ func (ec *executionContext) unmarshalInputIntegrationWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.StatusNotIn = data
+		case "expiresAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAt = data
+		case "expiresAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtGT = data
+		case "expiresAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtGTE = data
+		case "expiresAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtLT = data
+		case "expiresAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtLTE = data
+		case "expiresAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtIsNil = data
+		case "expiresAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtNotNil = data
 		case "primaryDirectory":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryDirectory"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -407064,6 +407136,11 @@ func (ec *executionContext) _Integration(ctx context.Context, sel ast.SelectionS
 		case "status":
 			out.Values[i] = ec._Integration_status(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "expiresAt":
+			out.Values[i] = ec._Integration_expiresAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "providerMetadataSnapshot":

@@ -10,7 +10,7 @@ import (
 
 // Builder returns the system definition hosting the scheduled runtime sweeps; it exposes
 // no credentials, clients, or connections and is never visible in catalog surfaces
-func Builder(paymentReminder PaymentReminderConfig, organizationDelete OrganizationDeleteConfig) registry.Builder {
+func Builder(paymentReminder PaymentReminderConfig, organizationDelete OrganizationDeleteConfig, integrationLifecycle IntegrationLifecycleConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -45,6 +45,18 @@ func Builder(paymentReminder PaymentReminderConfig, organizationDelete Organizat
 					Handle:              organizationDelete.Sweep().Handle(),
 					CustomerSelectable:  lo.ToPtr(false),
 					DisabledForAll:      !organizationDelete.Enabled,
+					SkipDefaultLookback: true,
+				},
+				{
+					Name:                IntegrationLifecycleOp.Name(),
+					Description:         "Reap expired integration installations that never connected",
+					Topic:               DefinitionID.OperationTopic(IntegrationLifecycleOp.Name()),
+					ConfigSchema:        integrationLifecycleSweepSchema,
+					Policy:              types.ExecutionPolicy{Scheduled: true, SkipRunRecord: true},
+					Schedule:            &gala.Schedule{MinInterval: IntegrationLifecycleMinInterval, MaxInterval: IntegrationLifecycleMaxInterval},
+					Handle:              integrationLifecycle.Sweep().Handle(),
+					CustomerSelectable:  lo.ToPtr(false),
+					DisabledForAll:      !integrationLifecycle.Enabled,
 					SkipDefaultLookback: true,
 				},
 			},

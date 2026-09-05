@@ -472,6 +472,20 @@ func (_c *IntegrationCreate) SetNillableStatus(v *enums.IntegrationStatus) *Inte
 	return _c
 }
 
+// SetExpiresAt sets the "expires_at" field.
+func (_c *IntegrationCreate) SetExpiresAt(v time.Time) *IntegrationCreate {
+	_c.mutation.SetExpiresAt(v)
+	return _c
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_c *IntegrationCreate) SetNillableExpiresAt(v *time.Time) *IntegrationCreate {
+	if v != nil {
+		_c.SetExpiresAt(*v)
+	}
+	return _c
+}
+
 // SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
 func (_c *IntegrationCreate) SetProviderMetadataSnapshot(v map[string]interface{}) *IntegrationCreate {
 	_c.mutation.SetProviderMetadataSnapshot(v)
@@ -1126,6 +1140,10 @@ func (_c *IntegrationCreate) createSpec() (*Integration, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
 		_node.Status = value
+	}
+	if value, ok := _c.mutation.ExpiresAt(); ok {
+		_spec.SetField(integration.FieldExpiresAt, field.TypeTime, value)
+		_node.ExpiresAt = &value
 	}
 	if value, ok := _c.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)

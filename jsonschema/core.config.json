@@ -191,6 +191,9 @@
         },
         "organizationdelete": {
           "$ref": "#/$defs/system.OrganizationDeleteConfig"
+        },
+        "integrationlifecycle": {
+          "$ref": "#/$defs/system.IntegrationLifecycleConfig"
         }
       },
       "additionalProperties": false,
@@ -1876,6 +1879,27 @@
       "additionalProperties": false,
       "type": "object",
       "description": "OpenAIConfig contains OpenAI specific configuration"
+    },
+    "system.IntegrationLifecycleConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the integration lifecycle sweep is enabled",
+          "default": true
+        },
+        "dryrun": {
+          "type": "boolean",
+          "description": "If true only log integration IDs and actions that would be dispatched",
+          "default": true
+        },
+        "maxperrun": {
+          "type": "integer",
+          "description": "Maximum integrations to evaluate per run",
+          "default": 100
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "system.OrganizationDeleteConfig": {
       "properties": {

@@ -35,6 +35,7 @@ query GetIntegrationByID($integrationId: ID!) {
     description
     environmentID
     environmentName
+    expiresAt
     family
     health
     id

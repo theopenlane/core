@@ -186,6 +186,11 @@ func Family(v string) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldFamily, v))
 }
 
+// ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
+func ExpiresAt(v time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldExpiresAt, v))
+}
+
 // PrimaryDirectory applies equality check predicate on the "primary_directory" field. It's identical to PrimaryDirectoryEQ.
 func PrimaryDirectory(v bool) predicate.Integration {
 	return predicate.Integration(sql.FieldEQ(FieldPrimaryDirectory, v))
@@ -1954,6 +1959,56 @@ func StatusNotIn(vs ...enums.IntegrationStatus) predicate.Integration {
 		v[i] = vs[i]
 	}
 	return predicate.Integration(sql.FieldNotIn(FieldStatus, v...))
+}
+
+// ExpiresAtEQ applies the EQ predicate on the "expires_at" field.
+func ExpiresAtEQ(v time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldEQ(FieldExpiresAt, v))
+}
+
+// ExpiresAtNEQ applies the NEQ predicate on the "expires_at" field.
+func ExpiresAtNEQ(v time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldNEQ(FieldExpiresAt, v))
+}
+
+// ExpiresAtIn applies the In predicate on the "expires_at" field.
+func ExpiresAtIn(vs ...time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldIn(FieldExpiresAt, vs...))
+}
+
+// ExpiresAtNotIn applies the NotIn predicate on the "expires_at" field.
+func ExpiresAtNotIn(vs ...time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldNotIn(FieldExpiresAt, vs...))
+}
+
+// ExpiresAtGT applies the GT predicate on the "expires_at" field.
+func ExpiresAtGT(v time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldGT(FieldExpiresAt, v))
+}
+
+// ExpiresAtGTE applies the GTE predicate on the "expires_at" field.
+func ExpiresAtGTE(v time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldGTE(FieldExpiresAt, v))
+}
+
+// ExpiresAtLT applies the LT predicate on the "expires_at" field.
+func ExpiresAtLT(v time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldLT(FieldExpiresAt, v))
+}
+
+// ExpiresAtLTE applies the LTE predicate on the "expires_at" field.
+func ExpiresAtLTE(v time.Time) predicate.Integration {
+	return predicate.Integration(sql.FieldLTE(FieldExpiresAt, v))
+}
+
+// ExpiresAtIsNil applies the IsNil predicate on the "expires_at" field.
+func ExpiresAtIsNil() predicate.Integration {
+	return predicate.Integration(sql.FieldIsNull(FieldExpiresAt))
+}
+
+// ExpiresAtNotNil applies the NotNil predicate on the "expires_at" field.
+func ExpiresAtNotNil() predicate.Integration {
+	return predicate.Integration(sql.FieldNotNull(FieldExpiresAt))
 }
 
 // ProviderMetadataSnapshotIsNil applies the IsNil predicate on the "provider_metadata_snapshot" field.

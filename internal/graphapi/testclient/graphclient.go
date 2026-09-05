@@ -64333,6 +64333,7 @@ type GetIntegrationByID_Integration struct {
 	Description              *string                   "json:\"description,omitempty\" graphql:\"description\""
 	EnvironmentID            *string                   "json:\"environmentID,omitempty\" graphql:\"environmentID\""
 	EnvironmentName          *string                   "json:\"environmentName,omitempty\" graphql:\"environmentName\""
+	ExpiresAt                *time.Time                "json:\"expiresAt,omitempty\" graphql:\"expiresAt\""
 	Family                   *string                   "json:\"family,omitempty\" graphql:\"family\""
 	Health                   *models.IntegrationHealth "json:\"health,omitempty\" graphql:\"health\""
 	ID                       string                    "json:\"id\" graphql:\"id\""
@@ -64409,6 +64410,12 @@ func (t *GetIntegrationByID_Integration) GetEnvironmentName() *string {
 		t = &GetIntegrationByID_Integration{}
 	}
 	return t.EnvironmentName
+}
+func (t *GetIntegrationByID_Integration) GetExpiresAt() *time.Time {
+	if t == nil {
+		t = &GetIntegrationByID_Integration{}
+	}
+	return t.ExpiresAt
 }
 func (t *GetIntegrationByID_Integration) GetFamily() *string {
 	if t == nil {
@@ -187502,6 +187509,7 @@ const GetIntegrationByIDDocument = `query GetIntegrationByID ($integrationId: ID
 		description
 		environmentID
 		environmentName
+		expiresAt
 		family
 		health
 		id

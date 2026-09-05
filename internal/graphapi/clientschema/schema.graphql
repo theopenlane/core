@@ -37116,6 +37116,10 @@ type Integration implements Node {
 	"""
 	status: IntegrationIntegrationStatus!
 	"""
+	when a pending installation is considered abandoned and eligible for cleanup; cleared when the installation connects
+	"""
+	expiresAt: Time
+	"""
 	snapshot of definition metadata captured on the installation
 	"""
 	providerMetadataSnapshot: Map
@@ -37838,6 +37842,7 @@ enum IntegrationOrderField {
 	definition_slug
 	family
 	status
+	expires_at
 }
 """
 IntegrationWhereInput is used for filtering Integration objects.
@@ -38140,6 +38145,16 @@ input IntegrationWhereInput {
 	statusNEQ: IntegrationIntegrationStatus
 	statusIn: [IntegrationIntegrationStatus!]
 	statusNotIn: [IntegrationIntegrationStatus!]
+	"""
+	expires_at field predicates
+	"""
+	expiresAt: Time
+	expiresAtGT: Time
+	expiresAtGTE: Time
+	expiresAtLT: Time
+	expiresAtLTE: Time
+	expiresAtIsNil: Boolean
+	expiresAtNotNil: Boolean
 	"""
 	primary_directory field predicates
 	"""

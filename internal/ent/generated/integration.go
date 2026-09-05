@@ -88,6 +88,8 @@ type Integration struct {
 	Family string `json:"family,omitempty"`
 	// the lifecycle status of the installation
 	Status enums.IntegrationStatus `json:"status,omitempty"`
+	// when a pending installation is considered abandoned and eligible for cleanup; cleared when the installation connects
+	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// snapshot of definition metadata captured on the installation
 	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
 	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
@@ -439,7 +441,7 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldUpdatedByImpersonator, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID, integration.FieldDefinitionID, integration.FieldDefinitionVersion, integration.FieldDefinitionSlug, integration.FieldFamily, integration.FieldStatus:
 			values[i] = new(sql.NullString)
-		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
+		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt, integration.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
 		case integration.ForeignKeys[0]: // file_integrations
 			values[i] = new(sql.NullString)
@@ -674,6 +676,13 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.IntegrationStatus(value.String)
+			}
+		case integration.FieldExpiresAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
+			} else if value.Valid {
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		case integration.FieldProviderMetadataSnapshot:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -976,6 +985,11 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	if v := _m.ExpiresAt; v != nil {
+		builder.WriteString("expires_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("provider_metadata_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadataSnapshot))

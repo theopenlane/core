@@ -1642,6 +1642,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldDefinitionSlug:           {Type: field.TypeString, Column: integration.FieldDefinitionSlug},
 			integration.FieldFamily:                   {Type: field.TypeString, Column: integration.FieldFamily},
 			integration.FieldStatus:                   {Type: field.TypeEnum, Column: integration.FieldStatus},
+			integration.FieldExpiresAt:                {Type: field.TypeTime, Column: integration.FieldExpiresAt},
 			integration.FieldProviderMetadataSnapshot: {Type: field.TypeJSON, Column: integration.FieldProviderMetadataSnapshot},
 			integration.FieldPrimaryDirectory:         {Type: field.TypeBool, Column: integration.FieldPrimaryDirectory},
 			integration.FieldCampaignEmail:            {Type: field.TypeBool, Column: integration.FieldCampaignEmail},
@@ -31810,6 +31811,11 @@ func (f *IntegrationFilter) WhereFamily(p entql.StringP) {
 // WhereStatus applies the entql string predicate on the status field.
 func (f *IntegrationFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(integration.FieldStatus))
+}
+
+// WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
+func (f *IntegrationFilter) WhereExpiresAt(p entql.TimeP) {
+	f.Where(p.Field(integration.FieldExpiresAt))
 }
 
 // WhereProviderMetadataSnapshot applies the entql json.RawMessage predicate on the provider_metadata_snapshot field.

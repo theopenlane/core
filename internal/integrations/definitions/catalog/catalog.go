@@ -49,7 +49,7 @@ func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Buil
 		okta.Builder(),
 		scim.Builder(),
 		slack.Builder(cfg.Slack, &cfg.SlackRuntime, devMode),
-		system.Builder(cfg.PaymentReminder, cfg.OrganizationDelete),
+		system.Builder(cfg.PaymentReminder, cfg.OrganizationDelete, cfg.IntegrationLifecycle),
 		tailscale.Builder(),
 		zitadel.Builder(),
 	}

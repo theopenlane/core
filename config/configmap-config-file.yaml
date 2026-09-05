@@ -1276,6 +1276,18 @@ data:
         enabled: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.integrationlifecycle }}
+      integrationlifecycle:
+        {{- if .Values.openlane.coreConfiguration.integrations.integrationlifecycle.enabled }}
+        enabled: {{ .Values.openlane.coreConfiguration.integrations.integrationlifecycle.enabled }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.integrationlifecycle.dryrun }}
+        dryrun: {{ .Values.openlane.coreConfiguration.integrations.integrationlifecycle.dryrun }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.integrationlifecycle.maxperrun }}
+        maxperrun: {{ .Values.openlane.coreConfiguration.integrations.integrationlifecycle.maxperrun }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.workflows }}
     workflows:

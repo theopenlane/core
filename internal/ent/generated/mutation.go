@@ -116396,6 +116396,7 @@ type IntegrationMutation struct {
 	definition_slug               *string
 	family                        *string
 	status                        *enums.IntegrationStatus
+	expires_at                    *time.Time
 	provider_metadata_snapshot    *map[string]interface{}
 	primary_directory             *bool
 	campaign_email                *bool
@@ -118141,6 +118142,55 @@ func (m *IntegrationMutation) ResetStatus() {
 	m.status = nil
 }
 
+// SetExpiresAt sets the "expires_at" field.
+func (m *IntegrationMutation) SetExpiresAt(t time.Time) {
+	m.expires_at = &t
+}
+
+// ExpiresAt returns the value of the "expires_at" field in the mutation.
+func (m *IntegrationMutation) ExpiresAt() (r time.Time, exists bool) {
+	v := m.expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExpiresAt returns the old "expires_at" field's value of the Integration entity.
+// If the Integration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationMutation) OldExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExpiresAt: %w", err)
+	}
+	return oldValue.ExpiresAt, nil
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (m *IntegrationMutation) ClearExpiresAt() {
+	m.expires_at = nil
+	m.clearedFields[integration.FieldExpiresAt] = struct{}{}
+}
+
+// ExpiresAtCleared returns if the "expires_at" field was cleared in this mutation.
+func (m *IntegrationMutation) ExpiresAtCleared() bool {
+	_, ok := m.clearedFields[integration.FieldExpiresAt]
+	return ok
+}
+
+// ResetExpiresAt resets all changes to the "expires_at" field.
+func (m *IntegrationMutation) ResetExpiresAt() {
+	m.expires_at = nil
+	delete(m.clearedFields, integration.FieldExpiresAt)
+}
+
 // SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
 func (m *IntegrationMutation) SetProviderMetadataSnapshot(value map[string]interface{}) {
 	m.provider_metadata_snapshot = &value
@@ -119592,7 +119642,7 @@ func (m *IntegrationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IntegrationMutation) Fields() []string {
-	fields := make([]string, 0, 35)
+	fields := make([]string, 0, 36)
 	if m.created_at != nil {
 		fields = append(fields, integration.FieldCreatedAt)
 	}
@@ -119689,6 +119739,9 @@ func (m *IntegrationMutation) Fields() []string {
 	if m.status != nil {
 		fields = append(fields, integration.FieldStatus)
 	}
+	if m.expires_at != nil {
+		fields = append(fields, integration.FieldExpiresAt)
+	}
 	if m.provider_metadata_snapshot != nil {
 		fields = append(fields, integration.FieldProviderMetadataSnapshot)
 	}
@@ -119770,6 +119823,8 @@ func (m *IntegrationMutation) Field(name string) (ent.Value, bool) {
 		return m.Family()
 	case integration.FieldStatus:
 		return m.Status()
+	case integration.FieldExpiresAt:
+		return m.ExpiresAt()
 	case integration.FieldProviderMetadataSnapshot:
 		return m.ProviderMetadataSnapshot()
 	case integration.FieldPrimaryDirectory:
@@ -119849,6 +119904,8 @@ func (m *IntegrationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldFamily(ctx)
 	case integration.FieldStatus:
 		return m.OldStatus(ctx)
+	case integration.FieldExpiresAt:
+		return m.OldExpiresAt(ctx)
 	case integration.FieldProviderMetadataSnapshot:
 		return m.OldProviderMetadataSnapshot(ctx)
 	case integration.FieldPrimaryDirectory:
@@ -120088,6 +120145,13 @@ func (m *IntegrationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStatus(v)
 		return nil
+	case integration.FieldExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExpiresAt(v)
+		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		v, ok := value.(map[string]interface{})
 		if !ok {
@@ -120229,6 +120293,9 @@ func (m *IntegrationMutation) ClearedFields() []string {
 	if m.FieldCleared(integration.FieldFamily) {
 		fields = append(fields, integration.FieldFamily)
 	}
+	if m.FieldCleared(integration.FieldExpiresAt) {
+		fields = append(fields, integration.FieldExpiresAt)
+	}
 	if m.FieldCleared(integration.FieldProviderMetadataSnapshot) {
 		fields = append(fields, integration.FieldProviderMetadataSnapshot)
 	}
@@ -120336,6 +120403,9 @@ func (m *IntegrationMutation) ClearField(name string) error {
 	case integration.FieldFamily:
 		m.ClearFamily()
 		return nil
+	case integration.FieldExpiresAt:
+		m.ClearExpiresAt()
+		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		m.ClearProviderMetadataSnapshot()
 		return nil
@@ -120442,6 +120512,9 @@ func (m *IntegrationMutation) ResetField(name string) error {
 		return nil
 	case integration.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case integration.FieldExpiresAt:
+		m.ResetExpiresAt()
 		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		m.ResetProviderMetadataSnapshot()

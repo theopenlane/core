@@ -112,6 +112,7 @@ func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *e
 	transitioned, err := r.DB().Integration.Update().
 		Where(integration.ID(installation.ID), integration.StatusEQ(enums.IntegrationStatusErrored)).
 		SetStatus(enums.IntegrationStatusConnected).
+		ClearExpiresAt().
 		SetHealth(health).
 		Save(systemCtx)
 	if err != nil {
