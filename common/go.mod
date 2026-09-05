@@ -4,7 +4,7 @@ go 1.26.6
 
 require (
 	entgo.io/ent v0.14.6
-	github.com/go-webauthn/webauthn v0.17.4
+	github.com/go-webauthn/webauthn v0.18.0
 	github.com/google/uuid v1.6.0
 	github.com/riverqueue/river v0.45.0
 	github.com/robfig/cron/v3 v3.0.1
