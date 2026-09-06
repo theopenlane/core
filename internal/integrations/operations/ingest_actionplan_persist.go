@@ -9,5 +9,7 @@ import (
 
 // persistActionPlanInput upserts one ActionPlan record through the catalog-driven entityops upsert
 func persistActionPlanInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateActionPlanInput) (string, error) {
-	return persistCatalogUpsert(ctx, db, entityops.SchemaActionPlan, integration.OwnerID, createInput)
+	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaActionPlan, integration.OwnerID, createInput)
+
+	return id, err
 }

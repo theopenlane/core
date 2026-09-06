@@ -17,6 +17,7 @@ mutation CreateBulkCSVDirectoryMembership ($input: Upload!) {
 			integrationID
 			lastConfirmedRunID
 			lastSeenAt
+			managedBy
 			metadata
 			observedAt
 			ownerID
@@ -26,6 +27,9 @@ mutation CreateBulkCSVDirectoryMembership ($input: Upload!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -51,6 +55,7 @@ mutation CreateBulkDirectoryMembership ($input: [CreateDirectoryMembershipInput!
 			integrationID
 			lastConfirmedRunID
 			lastSeenAt
+			managedBy
 			metadata
 			observedAt
 			ownerID
@@ -60,6 +65,9 @@ mutation CreateBulkDirectoryMembership ($input: [CreateDirectoryMembershipInput!
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -85,6 +93,7 @@ mutation CreateDirectoryMembership ($input: CreateDirectoryMembershipInput!) {
 			integrationID
 			lastConfirmedRunID
 			lastSeenAt
+			managedBy
 			metadata
 			observedAt
 			ownerID
@@ -94,6 +103,9 @@ mutation CreateDirectoryMembership ($input: CreateDirectoryMembershipInput!) {
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator
@@ -156,6 +168,7 @@ query GetDirectoryMembershipByID ($directoryMembershipId: ID!) {
 		integrationID
 		lastConfirmedRunID
 		lastSeenAt
+		managedBy
 		metadata
 		observedAt
 		ownerID
@@ -165,6 +178,9 @@ query GetDirectoryMembershipByID ($directoryMembershipId: ID!) {
 		scopeID
 		scopeName
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		updatedAt
 		updatedBy
 		updatedByImpersonator
@@ -222,6 +238,7 @@ mutation UpdateDirectoryMembership ($updateDirectoryMembershipId: ID!, $input: U
 			integrationID
 			lastConfirmedRunID
 			lastSeenAt
+			managedBy
 			metadata
 			observedAt
 			ownerID
@@ -231,6 +248,9 @@ mutation UpdateDirectoryMembership ($updateDirectoryMembershipId: ID!, $input: U
 			scopeID
 			scopeName
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			updatedAt
 			updatedBy
 			updatedByImpersonator

@@ -8,6 +8,8 @@ import (
 var (
 	// DefinitionID is the stable reference for the SCIM integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0SCIM000000000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTR6BMPE00A0EQTGTX81")
 	// SCIMAuthWebhook is the stable identity handle for the SCIM authentication webhook
 	SCIMAuthWebhook = types.NewWebhookRef("scim.auth")
 	// directorySyncSchema is the operation ref for the SCIM directory sync operation

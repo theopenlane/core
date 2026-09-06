@@ -197,6 +197,14 @@ func TestPersistUpsert_ToUpdateError(t *testing.T) {
 	}
 }
 
+// stubValidationError wraps a bare ValidationError so log stringification is safe while
+// errors.As still classifies the chain as a validation failure
+type stubValidationError struct{ inner error }
+
+func (e stubValidationError) Error() string { return "validation failed" }
+
+func (e stubValidationError) Unwrap() error { return e.inner }
+
 func TestPersistUpsert_CreateError(t *testing.T) {
 	t.Parallel()
 
@@ -210,7 +218,7 @@ func TestPersistUpsert_CreateError(t *testing.T) {
 			return nil, &ent.NotFoundError{}
 		},
 		func(context.Context, input) (string, error) {
-			return "", &ent.ValidationError{Name: "name"}
+			return "", stubValidationError{inner: &ent.ValidationError{Name: "name"}}
 		},
 		func(context.Context, any, input) error {
 			t.Fatal("update should not be called")

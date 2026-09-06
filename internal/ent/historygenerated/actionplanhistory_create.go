@@ -176,6 +176,62 @@ func (_c *ActionPlanHistoryCreate) SetNillableRevision(v *string) *ActionPlanHis
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *ActionPlanHistoryCreate) SetSourceDefinitionID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableSourceDefinitionID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *ActionPlanHistoryCreate) SetSourceDefinitionVersion(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *ActionPlanHistoryCreate) SetSourceInstanceID(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableSourceInstanceID(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *ActionPlanHistoryCreate) SetManagedBy(v string) *ActionPlanHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *ActionPlanHistoryCreate) SetNillableManagedBy(v *string) *ActionPlanHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *ActionPlanHistoryCreate) SetName(v string) *ActionPlanHistoryCreate {
 	_c.mutation.SetName(v)
@@ -911,6 +967,22 @@ func (_c *ActionPlanHistoryCreate) createSpec() (*ActionPlanHistory, *sqlgraph.C
 	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(actionplanhistory.FieldRevision, field.TypeString, value)
 		_node.Revision = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(actionplanhistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(actionplanhistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(actionplanhistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(actionplanhistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(actionplanhistory.FieldName, field.TypeString, value)

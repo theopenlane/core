@@ -10,6 +10,8 @@ import (
 var (
 	// definitionID is the stable identifier for the Tailscale integration definition
 	definitionID = types.NewDefinitionRef("def_01K0TAILSCALE0000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTR1KNT64WA9N3QEEDMN")
 	// installation is the typed installation metadata handle for the Tailscale definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// tailscaleSchema is the credential schema for the Tailscale integration definition

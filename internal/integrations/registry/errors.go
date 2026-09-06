@@ -5,6 +5,12 @@ import "errors"
 var (
 	// ErrDefinitionIDRequired indicates a definition is missing its canonical identifier
 	ErrDefinitionIDRequired = errors.New("integrations/registry: definition id required")
+	// ErrVirtualUserRequired indicates a definition is missing its virtual actor identity
+	ErrVirtualUserRequired = errors.New("integrations/registry: virtual user required")
+	// ErrVirtualUserSubjectInvalid indicates a definition's virtual actor subject id is not a valid ULID
+	ErrVirtualUserSubjectInvalid = errors.New("integrations/registry: virtual user subject id must be a valid ulid")
+	// ErrVirtualUserSubjectDuplicate indicates two definitions declare the same virtual actor subject id
+	ErrVirtualUserSubjectDuplicate = errors.New("integrations/registry: virtual user subject id already registered")
 	// ErrDefinitionAlreadyRegistered indicates the definition ID is already present
 	ErrDefinitionAlreadyRegistered = errors.New("integrations/registry: definition already registered")
 	// ErrDefinitionNotFound indicates the requested definition does not exist

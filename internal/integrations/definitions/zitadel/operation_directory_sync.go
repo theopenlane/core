@@ -27,6 +27,7 @@ type DirectorySync struct{}
 func (d DirectorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequest(zitadelClient, func(ctx context.Context, request types.OperationRequest, c *client.Client) ([]types.IngestPayloadSet, error) {
 		var cfg UserInput
+
 		if request.Integration != nil {
 			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
 		}

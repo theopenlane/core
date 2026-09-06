@@ -154,6 +154,62 @@ func (_c *ActionPlanCreate) SetNillableRevision(v *string) *ActionPlanCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *ActionPlanCreate) SetSourceDefinitionID(v string) *ActionPlanCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableSourceDefinitionID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *ActionPlanCreate) SetSourceDefinitionVersion(v string) *ActionPlanCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableSourceDefinitionVersion(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *ActionPlanCreate) SetSourceInstanceID(v string) *ActionPlanCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableSourceInstanceID(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *ActionPlanCreate) SetManagedBy(v string) *ActionPlanCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableManagedBy(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
 // SetName sets the "name" field.
 func (_c *ActionPlanCreate) SetName(v string) *ActionPlanCreate {
 	_c.mutation.SetName(v)
@@ -1119,6 +1175,22 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Revision(); ok {
 		_spec.SetField(actionplan.FieldRevision, field.TypeString, value)
 		_node.Revision = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(actionplan.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(actionplan.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(actionplan.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(actionplan.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
 	}
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(actionplan.FieldName, field.TypeString, value)

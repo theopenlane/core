@@ -8,8 +8,12 @@ mutation CreateBulkCSVCheckResult ($input: Upload!) {
 			id
 			integrationID
 			lastObservedAt
+			managedBy
 			parentExternalID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			updatedAt
@@ -28,8 +32,12 @@ mutation CreateBulkCheckResult ($input: [CreateCheckResultInput!]) {
 			id
 			integrationID
 			lastObservedAt
+			managedBy
 			parentExternalID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			updatedAt
@@ -48,8 +56,12 @@ mutation CreateCheckResult ($input: CreateCheckResultInput!) {
 			id
 			integrationID
 			lastObservedAt
+			managedBy
 			parentExternalID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			updatedAt
@@ -88,8 +100,12 @@ query GetAllCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				id
 				integrationID
 				lastObservedAt
+				managedBy
 				parentExternalID
 				source
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				status
 				tags
 				updatedAt
@@ -108,8 +124,12 @@ query GetCheckResultByID ($checkResultId: ID!) {
 		id
 		integrationID
 		lastObservedAt
+		managedBy
 		parentExternalID
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		status
 		tags
 		updatedAt
@@ -135,8 +155,12 @@ query GetCheckResults ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				id
 				integrationID
 				lastObservedAt
+				managedBy
 				parentExternalID
 				source
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				status
 				tags
 				updatedAt
@@ -156,8 +180,12 @@ mutation UpdateBulkCSVCheckResult ($input: Upload!) {
 			id
 			integrationID
 			lastObservedAt
+			managedBy
 			parentExternalID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			updatedAt
@@ -179,8 +207,12 @@ mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
 			id
 			integrationID
 			lastObservedAt
+			managedBy
 			parentExternalID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			updatedAt
@@ -202,8 +234,12 @@ mutation UpdateCheckResult ($updateCheckResultId: ID!, $input: UpdateCheckResult
 			id
 			integrationID
 			lastObservedAt
+			managedBy
 			parentExternalID
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			updatedAt

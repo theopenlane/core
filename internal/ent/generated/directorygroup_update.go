@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
@@ -103,6 +104,86 @@ func (_u *DirectoryGroupUpdate) AppendTags(v []string) *DirectoryGroupUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *DirectoryGroupUpdate) ClearTags() *DirectoryGroupUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *DirectoryGroupUpdate) SetSourceDefinitionID(v string) *DirectoryGroupUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *DirectoryGroupUpdate) SetNillableSourceDefinitionID(v *string) *DirectoryGroupUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *DirectoryGroupUpdate) ClearSourceDefinitionID() *DirectoryGroupUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *DirectoryGroupUpdate) SetSourceDefinitionVersion(v string) *DirectoryGroupUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *DirectoryGroupUpdate) SetNillableSourceDefinitionVersion(v *string) *DirectoryGroupUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *DirectoryGroupUpdate) ClearSourceDefinitionVersion() *DirectoryGroupUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *DirectoryGroupUpdate) SetSourceInstanceID(v string) *DirectoryGroupUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *DirectoryGroupUpdate) SetNillableSourceInstanceID(v *string) *DirectoryGroupUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *DirectoryGroupUpdate) ClearSourceInstanceID() *DirectoryGroupUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *DirectoryGroupUpdate) SetManagedBy(v string) *DirectoryGroupUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *DirectoryGroupUpdate) SetNillableManagedBy(v *string) *DirectoryGroupUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *DirectoryGroupUpdate) ClearManagedBy() *DirectoryGroupUpdate {
+	_u.mutation.ClearManagedBy()
 	return _u
 }
 
@@ -203,6 +284,20 @@ func (_u *DirectoryGroupUpdate) SetNillableScopeID(v *string) *DirectoryGroupUpd
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *DirectoryGroupUpdate) ClearScopeID() *DirectoryGroupUpdate {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *DirectoryGroupUpdate) SetIntegrationID(v string) *DirectoryGroupUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *DirectoryGroupUpdate) SetNillableIntegrationID(v *string) *DirectoryGroupUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
 	return _u
 }
 
@@ -554,6 +649,11 @@ func (_u *DirectoryGroupUpdate) SetScope(v *CustomTypeEnum) *DirectoryGroupUpdat
 	return _u.SetScopeID(v.ID)
 }
 
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *DirectoryGroupUpdate) SetIntegration(v *Integration) *DirectoryGroupUpdate {
+	return _u.SetIntegrationID(v.ID)
+}
+
 // AddAccountIDs adds the "accounts" edge to the DirectoryAccount entity by IDs.
 func (_u *DirectoryGroupUpdate) AddAccountIDs(ids ...string) *DirectoryGroupUpdate {
 	_u.mutation.AddAccountIDs(ids...)
@@ -619,6 +719,12 @@ func (_u *DirectoryGroupUpdate) ClearEnvironment() *DirectoryGroupUpdate {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryGroupUpdate) ClearScope() *DirectoryGroupUpdate {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *DirectoryGroupUpdate) ClearIntegration() *DirectoryGroupUpdate {
+	_u.mutation.ClearIntegration()
 	return _u
 }
 
@@ -734,6 +840,11 @@ func (_u *DirectoryGroupUpdate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryGroup.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.IntegrationID(); ok {
+		if err := directorygroup.IntegrationIDValidator(v); err != nil {
+			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryGroup.integration_id": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Email(); ok {
 		if err := directorygroup.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "DirectoryGroup.email": %w`, err)}
@@ -810,6 +921,30 @@ func (_u *DirectoryGroupUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(directorygroup.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(directorygroup.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(directorygroup.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(directorygroup.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(directorygroup.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(directorygroup.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(directorygroup.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(directorygroup.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(directorygroup.FieldManagedBy, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorygroup.FieldEnvironmentName, field.TypeString, value)
@@ -1005,6 +1140,35 @@ func (_u *DirectoryGroupUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorygroup.IntegrationTable,
+			Columns: []string{directorygroup.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorygroup.IntegrationTable,
+			Columns: []string{directorygroup.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -1260,6 +1424,86 @@ func (_u *DirectoryGroupUpdateOne) ClearTags() *DirectoryGroupUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *DirectoryGroupUpdateOne) SetSourceDefinitionID(v string) *DirectoryGroupUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *DirectoryGroupUpdateOne) SetNillableSourceDefinitionID(v *string) *DirectoryGroupUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *DirectoryGroupUpdateOne) ClearSourceDefinitionID() *DirectoryGroupUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *DirectoryGroupUpdateOne) SetSourceDefinitionVersion(v string) *DirectoryGroupUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *DirectoryGroupUpdateOne) SetNillableSourceDefinitionVersion(v *string) *DirectoryGroupUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *DirectoryGroupUpdateOne) ClearSourceDefinitionVersion() *DirectoryGroupUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *DirectoryGroupUpdateOne) SetSourceInstanceID(v string) *DirectoryGroupUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *DirectoryGroupUpdateOne) SetNillableSourceInstanceID(v *string) *DirectoryGroupUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *DirectoryGroupUpdateOne) ClearSourceInstanceID() *DirectoryGroupUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *DirectoryGroupUpdateOne) SetManagedBy(v string) *DirectoryGroupUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *DirectoryGroupUpdateOne) SetNillableManagedBy(v *string) *DirectoryGroupUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *DirectoryGroupUpdateOne) ClearManagedBy() *DirectoryGroupUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *DirectoryGroupUpdateOne) SetOwnerID(v string) *DirectoryGroupUpdateOne {
 	_u.mutation.SetOwnerID(v)
@@ -1357,6 +1601,20 @@ func (_u *DirectoryGroupUpdateOne) SetNillableScopeID(v *string) *DirectoryGroup
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *DirectoryGroupUpdateOne) ClearScopeID() *DirectoryGroupUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *DirectoryGroupUpdateOne) SetIntegrationID(v string) *DirectoryGroupUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *DirectoryGroupUpdateOne) SetNillableIntegrationID(v *string) *DirectoryGroupUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
 	return _u
 }
 
@@ -1708,6 +1966,11 @@ func (_u *DirectoryGroupUpdateOne) SetScope(v *CustomTypeEnum) *DirectoryGroupUp
 	return _u.SetScopeID(v.ID)
 }
 
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *DirectoryGroupUpdateOne) SetIntegration(v *Integration) *DirectoryGroupUpdateOne {
+	return _u.SetIntegrationID(v.ID)
+}
+
 // AddAccountIDs adds the "accounts" edge to the DirectoryAccount entity by IDs.
 func (_u *DirectoryGroupUpdateOne) AddAccountIDs(ids ...string) *DirectoryGroupUpdateOne {
 	_u.mutation.AddAccountIDs(ids...)
@@ -1773,6 +2036,12 @@ func (_u *DirectoryGroupUpdateOne) ClearEnvironment() *DirectoryGroupUpdateOne {
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryGroupUpdateOne) ClearScope() *DirectoryGroupUpdateOne {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *DirectoryGroupUpdateOne) ClearIntegration() *DirectoryGroupUpdateOne {
+	_u.mutation.ClearIntegration()
 	return _u
 }
 
@@ -1901,6 +2170,11 @@ func (_u *DirectoryGroupUpdateOne) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryGroup.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.IntegrationID(); ok {
+		if err := directorygroup.IntegrationIDValidator(v); err != nil {
+			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryGroup.integration_id": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Email(); ok {
 		if err := directorygroup.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "DirectoryGroup.email": %w`, err)}
@@ -1994,6 +2268,30 @@ func (_u *DirectoryGroupUpdateOne) sqlSave(ctx context.Context) (_node *Director
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(directorygroup.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(directorygroup.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(directorygroup.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(directorygroup.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(directorygroup.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(directorygroup.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(directorygroup.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(directorygroup.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(directorygroup.FieldManagedBy, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorygroup.FieldEnvironmentName, field.TypeString, value)
@@ -2189,6 +2487,35 @@ func (_u *DirectoryGroupUpdateOne) sqlSave(ctx context.Context) (_node *Director
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorygroup.IntegrationTable,
+			Columns: []string{directorygroup.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorygroup.IntegrationTable,
+			Columns: []string{directorygroup.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

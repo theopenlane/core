@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/control"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
@@ -145,6 +146,86 @@ func (_u *CheckResultUpdate) ClearTags() *CheckResultUpdate {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *CheckResultUpdate) SetSourceDefinitionID(v string) *CheckResultUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *CheckResultUpdate) SetNillableSourceDefinitionID(v *string) *CheckResultUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *CheckResultUpdate) ClearSourceDefinitionID() *CheckResultUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *CheckResultUpdate) SetSourceDefinitionVersion(v string) *CheckResultUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *CheckResultUpdate) SetNillableSourceDefinitionVersion(v *string) *CheckResultUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *CheckResultUpdate) ClearSourceDefinitionVersion() *CheckResultUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *CheckResultUpdate) SetSourceInstanceID(v string) *CheckResultUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *CheckResultUpdate) SetNillableSourceInstanceID(v *string) *CheckResultUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *CheckResultUpdate) ClearSourceInstanceID() *CheckResultUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *CheckResultUpdate) SetManagedBy(v string) *CheckResultUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *CheckResultUpdate) SetNillableManagedBy(v *string) *CheckResultUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *CheckResultUpdate) ClearManagedBy() *CheckResultUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *CheckResultUpdate) SetStatus(v enums.CheckStatus) *CheckResultUpdate {
 	_u.mutation.SetStatus(v)
@@ -253,6 +334,26 @@ func (_u *CheckResultUpdate) ClearParentExternalID() *CheckResultUpdate {
 	return _u
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_u *CheckResultUpdate) SetIntegrationID(v string) *CheckResultUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *CheckResultUpdate) SetNillableIntegrationID(v *string) *CheckResultUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *CheckResultUpdate) ClearIntegrationID() *CheckResultUpdate {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CheckResultUpdate) AddBlockedGroupIDs(ids ...string) *CheckResultUpdate {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -326,6 +427,11 @@ func (_u *CheckResultUpdate) AddFindings(v ...*Finding) *CheckResultUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddFindingIDs(ids...)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *CheckResultUpdate) SetIntegration(v *Integration) *CheckResultUpdate {
+	return _u.SetIntegrationID(v.ID)
 }
 
 // Mutation returns the CheckResultMutation object of the builder.
@@ -436,6 +542,12 @@ func (_u *CheckResultUpdate) RemoveFindings(v ...*Finding) *CheckResultUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *CheckResultUpdate) ClearIntegration() *CheckResultUpdate {
+	_u.mutation.ClearIntegration()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -554,6 +666,30 @@ func (_u *CheckResultUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(checkresult.FieldTags, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(checkresult.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(checkresult.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(checkresult.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(checkresult.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(checkresult.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(checkresult.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(checkresult.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(checkresult.FieldManagedBy, field.TypeString)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(checkresult.FieldStatus, field.TypeEnum, value)
@@ -810,6 +946,35 @@ func (_u *CheckResultUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   checkresult.IntegrationTable,
+			Columns: []string{checkresult.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   checkresult.IntegrationTable,
+			Columns: []string{checkresult.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -942,6 +1107,86 @@ func (_u *CheckResultUpdateOne) ClearTags() *CheckResultUpdateOne {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *CheckResultUpdateOne) SetSourceDefinitionID(v string) *CheckResultUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *CheckResultUpdateOne) SetNillableSourceDefinitionID(v *string) *CheckResultUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *CheckResultUpdateOne) ClearSourceDefinitionID() *CheckResultUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *CheckResultUpdateOne) SetSourceDefinitionVersion(v string) *CheckResultUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *CheckResultUpdateOne) SetNillableSourceDefinitionVersion(v *string) *CheckResultUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *CheckResultUpdateOne) ClearSourceDefinitionVersion() *CheckResultUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *CheckResultUpdateOne) SetSourceInstanceID(v string) *CheckResultUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *CheckResultUpdateOne) SetNillableSourceInstanceID(v *string) *CheckResultUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *CheckResultUpdateOne) ClearSourceInstanceID() *CheckResultUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *CheckResultUpdateOne) SetManagedBy(v string) *CheckResultUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *CheckResultUpdateOne) SetNillableManagedBy(v *string) *CheckResultUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *CheckResultUpdateOne) ClearManagedBy() *CheckResultUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *CheckResultUpdateOne) SetStatus(v enums.CheckStatus) *CheckResultUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -1050,6 +1295,26 @@ func (_u *CheckResultUpdateOne) ClearParentExternalID() *CheckResultUpdateOne {
 	return _u
 }
 
+// SetIntegrationID sets the "integration_id" field.
+func (_u *CheckResultUpdateOne) SetIntegrationID(v string) *CheckResultUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *CheckResultUpdateOne) SetNillableIntegrationID(v *string) *CheckResultUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
+	return _u
+}
+
+// ClearIntegrationID clears the value of the "integration_id" field.
+func (_u *CheckResultUpdateOne) ClearIntegrationID() *CheckResultUpdateOne {
+	_u.mutation.ClearIntegrationID()
+	return _u
+}
+
 // AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
 func (_u *CheckResultUpdateOne) AddBlockedGroupIDs(ids ...string) *CheckResultUpdateOne {
 	_u.mutation.AddBlockedGroupIDs(ids...)
@@ -1123,6 +1388,11 @@ func (_u *CheckResultUpdateOne) AddFindings(v ...*Finding) *CheckResultUpdateOne
 		ids[i] = v[i].ID
 	}
 	return _u.AddFindingIDs(ids...)
+}
+
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *CheckResultUpdateOne) SetIntegration(v *Integration) *CheckResultUpdateOne {
+	return _u.SetIntegrationID(v.ID)
 }
 
 // Mutation returns the CheckResultMutation object of the builder.
@@ -1233,6 +1503,12 @@ func (_u *CheckResultUpdateOne) RemoveFindings(v ...*Finding) *CheckResultUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *CheckResultUpdateOne) ClearIntegration() *CheckResultUpdateOne {
+	_u.mutation.ClearIntegration()
+	return _u
 }
 
 // Where appends a list predicates to the CheckResultUpdate builder.
@@ -1382,6 +1658,30 @@ func (_u *CheckResultUpdateOne) sqlSave(ctx context.Context) (_node *CheckResult
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(checkresult.FieldTags, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(checkresult.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(checkresult.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(checkresult.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(checkresult.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(checkresult.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(checkresult.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(checkresult.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(checkresult.FieldManagedBy, field.TypeString)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(checkresult.FieldStatus, field.TypeEnum, value)
 	}
@@ -1630,6 +1930,35 @@ func (_u *CheckResultUpdateOne) sqlSave(ctx context.Context) (_node *CheckResult
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   checkresult.IntegrationTable,
+			Columns: []string{checkresult.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   checkresult.IntegrationTable,
+			Columns: []string{checkresult.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

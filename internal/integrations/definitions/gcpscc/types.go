@@ -13,6 +13,8 @@ import (
 var (
 	// definitionID is the stable identifier for the GCP Security Command Center integration definition
 	definitionID = types.NewDefinitionRef("def_01K0GCPSCC00000000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTRQ14SA72EACKH60TTE")
 	// installation is the typed installation metadata handle for the GCP Security Command Center definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// sccClient is the client ref for the GCP Security Command Center client used by this definition

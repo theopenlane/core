@@ -37,6 +37,14 @@ type CheckResult struct {
 	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// canonical id of the integration definition that created or last enriched the record
+	SourceDefinitionID string `json:"source_definition_id,omitempty"`
+	// integration definition version recorded when the record was created or last enriched
+	SourceDefinitionVersion string `json:"source_definition_version,omitempty"`
+	// stable identifier of the external system instance the record was sourced from
+	SourceInstanceID string `json:"source_instance_id,omitempty"`
+	// virtual subject id of the integration definition managing the record, empty when user controlled
+	ManagedBy string `json:"managed_by,omitempty"`
 	// current status of the control
 	Status enums.CheckStatus `json:"status,omitempty"`
 	// source that set the check result
@@ -49,7 +57,7 @@ type CheckResult struct {
 	Details *string `json:"details,omitempty"`
 	// external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name
 	ParentExternalID string `json:"parent_external_id,omitempty"`
-	// integration that owns this directory group
+	// integration that owns this check result
 	IntegrationID string `json:"integration_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CheckResultQuery when eager-loading is set.
@@ -149,7 +157,7 @@ func (*CheckResult) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case checkresult.FieldTags:
 			values[i] = new([]byte)
-		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
+		case checkresult.FieldID, checkresult.FieldCreatedBy, checkresult.FieldUpdatedBy, checkresult.FieldUpdatedByImpersonator, checkresult.FieldDeletedBy, checkresult.FieldSourceDefinitionID, checkresult.FieldSourceDefinitionVersion, checkresult.FieldSourceInstanceID, checkresult.FieldManagedBy, checkresult.FieldStatus, checkresult.FieldSource, checkresult.FieldExternalURI, checkresult.FieldDetails, checkresult.FieldParentExternalID, checkresult.FieldIntegrationID:
 			values[i] = new(sql.NullString)
 		case checkresult.FieldCreatedAt, checkresult.FieldUpdatedAt, checkresult.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -224,6 +232,30 @@ func (_m *CheckResult) assignValues(columns []string, values []any) error {
 				if err := json.Unmarshal(*value, &_m.Tags); err != nil {
 					return fmt.Errorf("unmarshal field tags: %w", err)
 				}
+			}
+		case checkresult.FieldSourceDefinitionID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_id", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionID = value.String
+			}
+		case checkresult.FieldSourceDefinitionVersion:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_definition_version", values[i])
+			} else if value.Valid {
+				_m.SourceDefinitionVersion = value.String
+			}
+		case checkresult.FieldSourceInstanceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_instance_id", values[i])
+			} else if value.Valid {
+				_m.SourceInstanceID = value.String
+			}
+		case checkresult.FieldManagedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field managed_by", values[i])
+			} else if value.Valid {
+				_m.ManagedBy = value.String
 			}
 		case checkresult.FieldStatus:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -360,6 +392,18 @@ func (_m *CheckResult) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_id=")
+	builder.WriteString(_m.SourceDefinitionID)
+	builder.WriteString(", ")
+	builder.WriteString("source_definition_version=")
+	builder.WriteString(_m.SourceDefinitionVersion)
+	builder.WriteString(", ")
+	builder.WriteString("source_instance_id=")
+	builder.WriteString(_m.SourceInstanceID)
+	builder.WriteString(", ")
+	builder.WriteString("managed_by=")
+	builder.WriteString(_m.ManagedBy)
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

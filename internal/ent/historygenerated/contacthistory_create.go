@@ -163,6 +163,62 @@ func (_c *ContactHistoryCreate) SetTags(v []string) *ContactHistoryCreate {
 	return _c
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_c *ContactHistoryCreate) SetSourceDefinitionID(v string) *ContactHistoryCreate {
+	_c.mutation.SetSourceDefinitionID(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableSourceDefinitionID(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionID(*v)
+	}
+	return _c
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_c *ContactHistoryCreate) SetSourceDefinitionVersion(v string) *ContactHistoryCreate {
+	_c.mutation.SetSourceDefinitionVersion(v)
+	return _c
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableSourceDefinitionVersion(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetSourceDefinitionVersion(*v)
+	}
+	return _c
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_c *ContactHistoryCreate) SetSourceInstanceID(v string) *ContactHistoryCreate {
+	_c.mutation.SetSourceInstanceID(v)
+	return _c
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableSourceInstanceID(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetSourceInstanceID(*v)
+	}
+	return _c
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_c *ContactHistoryCreate) SetManagedBy(v string) *ContactHistoryCreate {
+	_c.mutation.SetManagedBy(v)
+	return _c
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_c *ContactHistoryCreate) SetNillableManagedBy(v *string) *ContactHistoryCreate {
+	if v != nil {
+		_c.SetManagedBy(*v)
+	}
+	return _c
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_c *ContactHistoryCreate) SetOwnerID(v string) *ContactHistoryCreate {
 	_c.mutation.SetOwnerID(v)
@@ -506,6 +562,22 @@ func (_c *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(contacthistory.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(contacthistory.FieldSourceDefinitionID, field.TypeString, value)
+		_node.SourceDefinitionID = value
+	}
+	if value, ok := _c.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(contacthistory.FieldSourceDefinitionVersion, field.TypeString, value)
+		_node.SourceDefinitionVersion = value
+	}
+	if value, ok := _c.mutation.SourceInstanceID(); ok {
+		_spec.SetField(contacthistory.FieldSourceInstanceID, field.TypeString, value)
+		_node.SourceInstanceID = value
+	}
+	if value, ok := _c.mutation.ManagedBy(); ok {
+		_spec.SetField(contacthistory.FieldManagedBy, field.TypeString, value)
+		_node.ManagedBy = value
 	}
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(contacthistory.FieldOwnerID, field.TypeString, value)

@@ -27,6 +27,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			id
 			impact
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -51,6 +52,9 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -97,6 +101,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			id
 			impact
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -121,6 +126,9 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -167,6 +175,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			id
 			impact
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -191,6 +200,9 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -326,6 +338,7 @@ query GetFindingByID ($findingId: ID!) {
 		id
 		impact
 		internalNotes
+		managedBy
 		metadata
 		numericSeverity
 		open
@@ -350,6 +363,9 @@ query GetFindingByID ($findingId: ID!) {
 		securityLevel
 		severity
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceUpdatedAt
 		state
 		stepsToReproduce
@@ -493,6 +509,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			id
 			impact
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -517,6 +534,9 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -566,6 +586,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			id
 			impact
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -590,6 +611,9 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce
@@ -639,6 +663,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			id
 			impact
 			internalNotes
+			managedBy
 			metadata
 			numericSeverity
 			open
@@ -663,6 +688,9 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			securityLevel
 			severity
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceUpdatedAt
 			state
 			stepsToReproduce

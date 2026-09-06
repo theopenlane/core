@@ -123,11 +123,11 @@ var backfillRoutines = []backfillRoutine{
 		},
 	},
 	{
-		Name:    "integration-expiry",
+		Name:    "integration-provenance",
 		Version: "v1",
 		Enabled: false,
 		Run: func(ctx context.Context, deps backfillDeps) error {
-			backfillIntegrationExpiry(ctx, deps.Client)
+			backfillIntegrationProvenance(ctx, deps.Client)
 
 			return nil
 		},

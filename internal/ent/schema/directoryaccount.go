@@ -56,9 +56,8 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Comment("optional integration that owns this directory account when sourced by an integration").
 			Optional().
 			NotEmpty().
-			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration().Volatile(),
 			),
 		field.String("directory_sync_run_id").
 			Comment("optional sync run that produced this snapshot").
@@ -277,6 +276,7 @@ func (d DirectoryAccount) Mixin() []ent.Mixin {
 		prefix:            "DAC",
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{},
 			newObjectOwnedMixin[generated.DirectoryAccount](d,
 				withParents(IdentityHolder{}, Platform{}, Integration{}, DirectorySyncRun{}),
 				withOrganizationOwner(),
@@ -295,7 +295,6 @@ func (d DirectoryAccount) Edges() []ent.Edge {
 			fromSchema: d,
 			edgeSchema: Integration{},
 			field:      "integration_id",
-			immutable:  true,
 			comment:    "integration that owns this directory account",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),

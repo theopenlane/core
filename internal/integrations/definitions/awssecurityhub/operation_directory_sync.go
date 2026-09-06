@@ -3,6 +3,7 @@ package awssecurityhub
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	awssdk "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
@@ -22,6 +23,8 @@ type iamUserPayload struct {
 	ID string `json:"id"`
 	// Arn is the Amazon Resource Name for the user
 	Arn string `json:"arn"`
+	// AccountID is the AWS account identifier derived from the user's ARN
+	AccountID string `json:"account_id"`
 	// UserName is the friendly IAM username
 	UserName string `json:"userName"`
 	// Path is the IAM path prefix for the user
@@ -36,6 +39,8 @@ type iamGroupPayload struct {
 	ID string `json:"id"`
 	// Arn is the Amazon Resource Name for the group
 	Arn string `json:"arn"`
+	// AccountID is the AWS account identifier derived from the group's ARN
+	AccountID string `json:"account_id"`
 	// Name is the friendly IAM group name
 	Name string `json:"name"`
 	// Path is the IAM path prefix for the group
@@ -56,6 +61,8 @@ type iamMembershipPayload struct {
 	Group iamEntityRef `json:"group"`
 	// Member is the user side of the membership
 	Member iamEntityRef `json:"member"`
+	// AccountID is the AWS account identifier derived from the member's ARN
+	AccountID string `json:"account_id"`
 }
 
 // IngestHandle adapts IAM directory sync to the ingest operation registration boundary
@@ -142,8 +149,9 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 			}
 
 			envelope, err := providerkit.MarshalEnvelope(groupRef.ID+":"+memberRef.ID, iamMembershipPayload{
-				Group:  groupRef,
-				Member: memberRef,
+				Group:     groupRef,
+				Member:    memberRef,
+				AccountID: userPayload.AccountID,
 			}, ErrDirectorySyncPayloadEncode)
 			if err != nil {
 				return nil, err
@@ -173,10 +181,11 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 // iamUserToPayload maps an IAM User SDK type to a JSON-serializable payload struct
 func iamUserToPayload(user iamtypes.User) iamUserPayload {
 	payload := iamUserPayload{
-		ID:       awssdk.ToString(user.UserId),
-		Arn:      awssdk.ToString(user.Arn),
-		UserName: awssdk.ToString(user.UserName),
-		Path:     awssdk.ToString(user.Path),
+		ID:        awssdk.ToString(user.UserId),
+		Arn:       awssdk.ToString(user.Arn),
+		AccountID: arnAccountID(awssdk.ToString(user.Arn)),
+		UserName:  awssdk.ToString(user.UserName),
+		Path:      awssdk.ToString(user.Path),
 	}
 
 	if len(user.Tags) > 0 {
@@ -195,11 +204,28 @@ func iamUserToPayload(user iamtypes.User) iamUserPayload {
 // iamGroupToPayload maps an IAM Group SDK type to a JSON-serializable payload struct
 func iamGroupToPayload(group iamtypes.Group) iamGroupPayload {
 	return iamGroupPayload{
-		ID:   awssdk.ToString(group.GroupId),
-		Arn:  awssdk.ToString(group.Arn),
-		Name: awssdk.ToString(group.GroupName),
-		Path: awssdk.ToString(group.Path),
+		ID:        awssdk.ToString(group.GroupId),
+		Arn:       awssdk.ToString(group.Arn),
+		AccountID: arnAccountID(awssdk.ToString(group.Arn)),
+		Name:      awssdk.ToString(group.GroupName),
+		Path:      awssdk.ToString(group.Path),
 	}
+}
+
+// arnSegmentCount is the number of colon-separated segments in a full Amazon Resource Name
+const arnSegmentCount = 6
+
+// arnAccountIndex is the position of the account id segment in a colon-split Amazon Resource Name
+const arnAccountIndex = 4
+
+// arnAccountID extracts the account id segment from one Amazon Resource Name
+func arnAccountID(arn string) string {
+	parts := strings.Split(arn, ":")
+	if len(parts) < arnSegmentCount {
+		return ""
+	}
+
+	return parts[arnAccountIndex]
 }
 
 // listIAMUsers pages through all IAM users using Marker-based pagination and

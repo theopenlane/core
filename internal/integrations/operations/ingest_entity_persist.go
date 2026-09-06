@@ -2,10 +2,10 @@ package operations
 
 import (
 	"context"
-	"slices"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // persistEntityInput upserts one Entity record through the catalog-driven entityops upsert. The
@@ -21,13 +21,18 @@ func persistEntityInput(ctx context.Context, db *ent.Client, integration *ent.In
 		return "", ErrIngestUpsertKeyMissing
 	}
 
-	if createInput.EntitySourceTypeName == nil && integration.Kind != "" {
-		createInput.EntitySourceTypeName = &integration.Kind
+	id, changed, err := persistCatalogUpsert(ctx, db, entityops.SchemaEntity, ownerID, createInput)
+	if err != nil {
+		return "", err
 	}
 
-	if integration.ID != "" && !slices.Contains(createInput.IntegrationIDs, integration.ID) {
-		createInput.IntegrationIDs = append(createInput.IntegrationIDs, integration.ID)
+	if changed && integration.ID != "" {
+		if err := db.Entity.UpdateOneID(id).AddIntegrationIDs(integration.ID).Exec(entityops.WithEmissionVetoed(ctx)); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("entity integration link failed")
+
+			return id, wrapIngestPersistError(err)
+		}
 	}
 
-	return persistCatalogUpsert(ctx, db, entityops.SchemaEntity, ownerID, createInput)
+	return id, nil
 }

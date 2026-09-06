@@ -31,6 +31,7 @@ mutation CreateAsset ($input: CreateAssetInput!) {
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			name
 			observedAt
 			ownerID
@@ -41,7 +42,10 @@ mutation CreateAsset ($input: CreateAssetInput!) {
 			scopeName
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -87,6 +91,7 @@ mutation CreateBulkAsset ($input: [CreateAssetInput!]) {
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			name
 			observedAt
 			ownerID
@@ -97,7 +102,10 @@ mutation CreateBulkAsset ($input: [CreateAssetInput!]) {
 			scopeName
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -143,6 +151,7 @@ mutation CreateBulkCSVAsset ($input: Upload!) {
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			name
 			observedAt
 			ownerID
@@ -153,7 +162,10 @@ mutation CreateBulkCSVAsset ($input: Upload!) {
 			scopeName
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -219,6 +231,7 @@ query GetAllAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
 				internalOwnerUserID
+				managedBy
 				name
 				observedAt
 				ownerID
@@ -229,7 +242,10 @@ query GetAllAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				scopeName
 				securityTierID
 				securityTierName
+				sourceDefinitionID
+				sourceDefinitionVersion
 				sourceIdentifier
+				sourceInstanceID
 				sourcePlatformID
 				sourceType
 				systemInternalID
@@ -275,6 +291,7 @@ query GetAssetByID ($assetId: ID!) {
 		internalOwnerGroupID
 		internalOwnerIdentityHolderID
 		internalOwnerUserID
+		managedBy
 		name
 		observedAt
 		ownerID
@@ -285,7 +302,10 @@ query GetAssetByID ($assetId: ID!) {
 		scopeName
 		securityTierID
 		securityTierName
+		sourceDefinitionID
+		sourceDefinitionVersion
 		sourceIdentifier
+		sourceInstanceID
 		sourcePlatformID
 		sourceType
 		systemInternalID
@@ -338,6 +358,7 @@ query GetAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orde
 				internalOwnerGroupID
 				internalOwnerIdentityHolderID
 				internalOwnerUserID
+				managedBy
 				name
 				observedAt
 				ownerID
@@ -348,7 +369,10 @@ query GetAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orde
 				scopeName
 				securityTierID
 				securityTierName
+				sourceDefinitionID
+				sourceDefinitionVersion
 				sourceIdentifier
+				sourceInstanceID
 				sourcePlatformID
 				sourceType
 				systemInternalID
@@ -395,6 +419,7 @@ mutation UpdateAsset ($updateAssetId: ID!, $input: UpdateAssetInput!) {
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			name
 			observedAt
 			ownerID
@@ -405,7 +430,10 @@ mutation UpdateAsset ($updateAssetId: ID!, $input: UpdateAssetInput!) {
 			scopeName
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -451,6 +479,7 @@ mutation UpdateBulkAsset ($ids: [ID!]!, $input: UpdateAssetInput!) {
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			name
 			observedAt
 			ownerID
@@ -461,7 +490,10 @@ mutation UpdateBulkAsset ($ids: [ID!]!, $input: UpdateAssetInput!) {
 			scopeName
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourcePlatformID
 			sourceType
 			systemInternalID
@@ -510,6 +542,7 @@ mutation UpdateBulkCSVAsset ($input: Upload!) {
 			internalOwnerGroupID
 			internalOwnerIdentityHolderID
 			internalOwnerUserID
+			managedBy
 			name
 			observedAt
 			ownerID
@@ -520,7 +553,10 @@ mutation UpdateBulkCSVAsset ($input: Upload!) {
 			scopeName
 			securityTierID
 			securityTierName
+			sourceDefinitionID
+			sourceDefinitionVersion
 			sourceIdentifier
+			sourceInstanceID
 			sourcePlatformID
 			sourceType
 			systemInternalID

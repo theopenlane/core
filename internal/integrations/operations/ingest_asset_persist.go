@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/mail"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/user"
@@ -13,10 +12,6 @@ import (
 
 // persistAssetInput upserts one Asset record through the catalog-driven entityops upsert
 func persistAssetInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateAssetInput) (string, error) {
-	if createInput.SourceType == nil {
-		createInput.SourceType = &enums.SourceTypeImported
-	}
-
 	if createInput.IntegrationID == nil {
 		createInput.IntegrationID = &integration.ID
 	}
@@ -35,7 +30,9 @@ func persistAssetInput(ctx context.Context, db *ent.Client, integration *ent.Int
 		}
 	}
 
-	return persistCatalogUpsert(ctx, db, entityops.SchemaAsset, integration.OwnerID, createInput)
+	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaAsset, integration.OwnerID, createInput)
+
+	return id, err
 }
 
 // resolveInternalOwner resolves internal owner

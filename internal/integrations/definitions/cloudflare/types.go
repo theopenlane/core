@@ -9,6 +9,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the Cloudflare integration definition
 	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTR203WBDGGK7FCWF1HZ")
 	// installation is the typed installation metadata handle for the Cloudflare definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// cloudflareSchema is the credential schema for the Cloudflare integration definition

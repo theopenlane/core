@@ -19,6 +19,7 @@ import (
 func Builder(cfg *RuntimeEmailConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
+			VirtualUser: VirtualUser,
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Family:      "email",

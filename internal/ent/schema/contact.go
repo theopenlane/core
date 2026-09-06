@@ -112,7 +112,7 @@ func (Contact) Fields() []ent.Field {
 			Comment("integration that sourced this contact, when populated via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration().Volatile(),
 			),
 		field.Time("observed_at").
 			Comment("time when this contact was last observed by the source integration").
@@ -129,6 +129,7 @@ func (Contact) Fields() []ent.Field {
 func (c Contact) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{},
 			newOrgOwnedMixin(c),
 		},
 	}.getMixins(c)

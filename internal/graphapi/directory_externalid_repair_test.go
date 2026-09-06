@@ -12,6 +12,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+	openapi "github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
@@ -91,7 +92,7 @@ func TestDirectorySyncAdoptsLegacyScientificKeys(t *testing.T) {
 		SetDisplayName("sfunk").
 		SetOwnerID(orgUser.OrganizationID).
 		SetIntegrationID(integration.ID).
-		SetDirectoryInstanceID("sfunk-dev").
+		SetSourceInstanceID("sfunk-dev").
 		Save(ctx)
 	assert.NilError(t, err)
 
@@ -100,7 +101,7 @@ func TestDirectorySyncAdoptsLegacyScientificKeys(t *testing.T) {
 		SetDisplayName("meow").
 		SetOwnerID(orgUser.OrganizationID).
 		SetIntegrationID(integration.ID).
-		SetDirectoryInstanceID("sfunk-dev").
+		SetSourceInstanceID("sfunk-dev").
 		SetDirectorySyncRunID(priorRun.ID).
 		Save(ctx)
 	assert.NilError(t, err)
@@ -203,6 +204,7 @@ func TestDirectorySyncResolvesAccountsAcrossReinstall(t *testing.T) {
 		SetKind("github").
 		SetDefinitionID(def.ID).
 		SetOwnerID(orgUser.OrganizationID).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "sfunk-dev"}}).
 		Save(ctx)
 	assert.NilError(t, err)
 
@@ -219,18 +221,17 @@ func TestDirectorySyncResolvesAccountsAcrossReinstall(t *testing.T) {
 		SetDisplayName("sfunk").
 		SetOwnerID(orgUser.OrganizationID).
 		SetIntegrationID(oldIntegration.ID).
-		SetDirectoryInstanceID("sfunk-dev").
+		SetSourceInstanceID("sfunk-dev").
 		Save(ctx)
 	assert.NilError(t, err)
 
-	// the group upsert is integration scoped, so the old row stays behind and the new
-	// installation gets its own
+	// the group survives from the old installation the same way, keyed by owner + instance
 	oldGroup, err := suite.Client.DB.DirectoryGroup.Create().
 		SetExternalID("17146926").
 		SetDisplayName("meow").
 		SetOwnerID(orgUser.OrganizationID).
 		SetIntegrationID(oldIntegration.ID).
-		SetDirectoryInstanceID("sfunk-dev").
+		SetSourceInstanceID("sfunk-dev").
 		SetDirectorySyncRunID(priorRun.ID).
 		Save(ctx)
 	assert.NilError(t, err)
@@ -278,14 +279,19 @@ func TestDirectorySyncResolvesAccountsAcrossReinstall(t *testing.T) {
 
 	account, err := suite.Client.DB.DirectoryAccount.Get(ctx, seededAccount.ID)
 	assert.NilError(t, err)
-	assert.Check(t, is.Equal(oldIntegration.ID, account.IntegrationID), "adopted account keeps its original integration edge")
+	assert.Check(t, is.Equal(newIntegration.ID, account.IntegrationID), "adopted account repoints to the syncing installation")
 
-	// the new installation created its own group row
-	newGroup, err := suite.Client.DB.DirectoryGroup.Query().
-		Where(directorygroup.IntegrationID(newIntegration.ID)).
-		Only(ctx)
+	// the group upsert is instance scoped the same way, so the new installation adopts the
+	// old row instead of creating its own
+	groupCount, err := suite.Client.DB.DirectoryGroup.Query().
+		Where(directorygroup.OwnerID(orgUser.OrganizationID)).
+		Count(ctx)
 	assert.NilError(t, err)
-	assert.Check(t, is.Equal("17146926", newGroup.ExternalID))
+	assert.Check(t, is.Equal(1, groupCount), "reinstall must not duplicate the group")
+
+	group, err := suite.Client.DB.DirectoryGroup.Get(ctx, oldGroup.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Equal(newIntegration.ID, group.IntegrationID), "adopted group repoints to the syncing installation")
 
 	// this membership fails with "unresolved directory account reference" if the resolver
 	// scopes by the current integration id instead of owner + instance
@@ -294,10 +300,10 @@ func TestDirectorySyncResolvesAccountsAcrossReinstall(t *testing.T) {
 		Only(ctx)
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(seededAccount.ID, membership.DirectoryAccountID))
-	assert.Check(t, is.Equal(newGroup.ID, membership.DirectoryGroupID))
+	assert.Check(t, is.Equal(oldGroup.ID, membership.DirectoryGroupID))
 
 	(&th.Cleanup[*generated.DirectoryMembershipDeleteOne]{Client: suite.Client.DB.DirectoryMembership, ID: membership.ID}).MustDelete(ctx, t)
 	(&th.Cleanup[*generated.DirectoryAccountDeleteOne]{Client: suite.Client.DB.DirectoryAccount, ID: seededAccount.ID}).MustDelete(ctx, t)
-	(&th.Cleanup[*generated.DirectoryGroupDeleteOne]{Client: suite.Client.DB.DirectoryGroup, IDs: []string{oldGroup.ID, newGroup.ID}}).MustDelete(ctx, t)
+	(&th.Cleanup[*generated.DirectoryGroupDeleteOne]{Client: suite.Client.DB.DirectoryGroup, ID: oldGroup.ID}).MustDelete(ctx, t)
 	(&th.Cleanup[*generated.IntegrationDeleteOne]{Client: suite.Client.DB.Integration, IDs: []string{oldIntegration.ID, newIntegration.ID}}).MustDelete(ctx, t)
 }

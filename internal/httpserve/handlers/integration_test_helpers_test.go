@@ -4,11 +4,18 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/oklog/ulid/v2"
+
 	"github.com/theopenlane/core/v2/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
+
+// testVirtualUser mints a unique virtual actor identity for one test definition
+func testVirtualUser() types.VirtualUserRef {
+	return types.NewVirtualUserRef(ulid.Make().String())
+}
 
 // HelperTestHealthCheck is the config type for the helper test health check operation
 type HelperTestHealthCheck struct{}
@@ -48,6 +55,7 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg
 func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
+			VirtualUser:    testVirtualUser(),
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				DisplayName: "GitHub",

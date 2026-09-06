@@ -20,6 +20,7 @@ func Builder(cfg Config) registry.Builder {
 		app := App{Config: cfg}
 
 		return types.Definition{
+			VirtualUser: VirtualUser,
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Family:      "GitHub",

@@ -21,6 +21,7 @@ mutation CreateBulkCSVProcedure ($input: Upload!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -31,6 +32,9 @@ mutation CreateBulkCSVProcedure ($input: Upload!) {
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -76,6 +80,7 @@ mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -86,6 +91,9 @@ mutation CreateBulkProcedure ($input: [CreateProcedureInput!]) {
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -131,6 +139,7 @@ mutation CreateProcedure ($input: CreateProcedureInput!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -141,6 +150,9 @@ mutation CreateProcedure ($input: CreateProcedureInput!) {
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -307,6 +319,7 @@ query GetProcedureByID ($procedureId: ID!) {
 		id
 		improvementSuggestions
 		internalNotes
+		managedBy
 		managementMode
 		name
 		ownerID
@@ -317,6 +330,9 @@ query GetProcedureByID ($procedureId: ID!) {
 		revision
 		scopeID
 		scopeName
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		status
 		summary
 		systemInternalID
@@ -424,6 +440,7 @@ mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -434,6 +451,9 @@ mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -482,6 +502,7 @@ mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			name
 			ownerID
@@ -492,6 +513,9 @@ mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!
 			revision
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID

@@ -43,6 +43,7 @@ func TestIntegrationDisplayName(t *testing.T) {
 
 	reg := registry.New()
 	if err := reg.Register(types.Definition{
+		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{ID: "test-def", DisplayName: "Test Provider"},
 	}); err != nil {
 		t.Fatalf("registering definition: %v", err)

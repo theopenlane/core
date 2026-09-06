@@ -32,51 +32,29 @@ func legacyScientificKey(value string) (string, bool) {
 	return legacy, true
 }
 
-// findWithLegacyKeyAdoption runs the upsert lookup for one external id, retrying with the legacy
-// scientific notation form when the canonical form misses; a row found under the legacy key gets
-// its key repaired via the repair callback before it is returned, so the update path sees a row
-// that already carries the canonical key
-func findWithLegacyKeyAdoption[T any](ctx context.Context, externalID string, find func(context.Context, string) (T, error), repair func(context.Context, T) error) (T, error) {
-	existing, err := find(ctx, externalID)
-	if err == nil || !ent.IsNotFound(err) {
-		return existing, err
-	}
-
-	legacy, ok := legacyScientificKey(externalID)
-	if !ok {
-		return existing, err
-	}
-
-	adopted, legacyErr := find(ctx, legacy)
-	switch {
-	case ent.IsNotFound(legacyErr):
-		return existing, err
-	case legacyErr != nil:
-		return existing, legacyErr
-	}
-
-	if repairErr := repair(ctx, adopted); repairErr != nil {
-		return existing, repairErr
-	}
-
-	return adopted, nil
-}
-
 // persistCatalogUpsert marshals one prepared create input and persists it through the schema's
-// catalog-driven entityops upsert, mapping the entityops sentinels onto the ingest error classes.
+// catalog-driven entityops upsert, mapping the entityops sentinels onto the ingest error classes;
+// changed reports whether the upsert wrote the record rather than skipping it as unchanged.
 // Schemas whose lookup is not a single org-scoped key column keep persistRoundTripUpsert instead
-func persistCatalogUpsert(ctx context.Context, db *ent.Client, schema *entityops.Schema, ownerID string, createInput any) (string, error) {
+func persistCatalogUpsert(ctx context.Context, db *ent.Client, schema *entityops.Schema, ownerID string, createInput any) (string, bool, error) {
 	payload, err := json.Marshal(createInput)
 	if err != nil {
-		return "", fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
+		return "", false, fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
 	}
+
+	ctx = entityops.WithIngestNoopMark(ctx)
 
 	id, err := schema.Upsert(ctx, db, ownerID, payload)
 	switch {
 	case err == nil:
-		return id, nil
+		changed := !entityops.IngestNoopMarked(ctx)
+		if changed {
+			recordIngestChange(ctx)
+		}
+
+		return id, changed, nil
 	case errors.Is(err, entityops.ErrUpsertKeyMissing):
-		return "", ErrIngestUpsertKeyMissing
+		return "", false, ErrIngestUpsertKeyMissing
 	case errors.Is(err, entityops.ErrUpsertConflict):
 		// a row exists that the lookup key could not see, so log both the key and the record identity
 		lookupField, _ := schema.LookupField()
@@ -84,9 +62,9 @@ func persistCatalogUpsert(ctx context.Context, db *ent.Client, schema *entityops
 
 		logx.FromContext(ctx).Error().Err(err).Str(entityops.FieldSchema, schema.Snake).Str("lookup_field", lookupField.Name).Interface("lookup_value", doc[lookupField.InputKey]).Interface("record_name", doc["name"]).Msg("ingest upsert conflict: lookup key found no existing record but the insert violated a unique constraint")
 
-		return "", fmt.Errorf("%w: %w", ErrIngestUpsertConflict, err)
+		return "", false, fmt.Errorf("%w: %w", ErrIngestUpsertConflict, err)
 	default:
-		return "", wrapIngestPersistError(err)
+		return "", false, wrapIngestPersistError(err)
 	}
 }
 
@@ -111,7 +89,15 @@ func persistUpsert[Create any, Update any, Existing any](ctx context.Context, cr
 		// update existing record
 	case ent.IsNotFound(err):
 		id, createErr := create(ctx, createInput)
-		return id, wrapIngestPersistError(createErr)
+		if createErr != nil {
+			logx.FromContext(ctx).Error().Err(createErr).Msg("ingest upsert create failed")
+
+			return id, wrapIngestPersistError(createErr)
+		}
+
+		recordIngestChange(ctx)
+
+		return id, nil
 	default:
 		return "", wrapIngestPersistError(err)
 	}
@@ -121,7 +107,15 @@ func persistUpsert[Create any, Update any, Existing any](ctx context.Context, cr
 		return "", err
 	}
 
-	return existingID(existing), wrapIngestPersistError(update(ctx, existing, updateInput))
+	if err := update(ctx, existing, updateInput); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("ingest upsert update failed")
+
+		return existingID(existing), wrapIngestPersistError(err)
+	}
+
+	recordIngestChange(ctx)
+
+	return existingID(existing), nil
 }
 
 // persistRoundTripUpsert centralizes the common ingest upsert flow for schemas whose update input can be derived by round-tripping the create input

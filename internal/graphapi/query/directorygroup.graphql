@@ -20,6 +20,7 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			id
 			integrationID
 			lastSeenAt
+			managedBy
 			memberCount
 			metadata
 			observedAt
@@ -31,6 +32,9 @@ mutation CreateBulkCSVDirectoryGroup ($input: Upload!) {
 			removedAt
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -62,6 +66,7 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			id
 			integrationID
 			lastSeenAt
+			managedBy
 			memberCount
 			metadata
 			observedAt
@@ -73,6 +78,9 @@ mutation CreateBulkDirectoryGroup ($input: [CreateDirectoryGroupInput!]) {
 			removedAt
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -104,6 +112,7 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			id
 			integrationID
 			lastSeenAt
+			managedBy
 			memberCount
 			metadata
 			observedAt
@@ -115,6 +124,9 @@ mutation CreateDirectoryGroup ($input: CreateDirectoryGroupInput!) {
 			removedAt
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -188,6 +200,7 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		id
 		integrationID
 		lastSeenAt
+		managedBy
 		memberCount
 		metadata
 		observedAt
@@ -199,6 +212,9 @@ query GetDirectoryGroupByID ($directoryGroupId: ID!) {
 		removedAt
 		scopeID
 		scopeName
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceVersion
 		status
 		tags
@@ -267,6 +283,7 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			id
 			integrationID
 			lastSeenAt
+			managedBy
 			memberCount
 			metadata
 			observedAt
@@ -278,6 +295,9 @@ mutation UpdateDirectoryGroup ($updateDirectoryGroupId: ID!, $input: UpdateDirec
 			removedAt
 			scopeID
 			scopeName
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags

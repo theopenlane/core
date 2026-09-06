@@ -317,6 +317,7 @@ func (Entity) Fields() []ent.Field {
 func (e Entity) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{},
 			newObjectOwnedMixin[generated.Entity](e,
 				withParents(TrustCenterEntity{}, Platform{}, SystemDetail{}),
 				withOrganizationOwner(),
@@ -421,6 +422,8 @@ func (Entity) Indexes() []ent.Index {
 		index.Fields("name", ownerFieldName).
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("reviewed_by_user_id"),
+		index.Fields("external_id", ownerFieldName).
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

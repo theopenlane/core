@@ -16,7 +16,6 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyDirectoryAccountAvatarRemoteURL, Expr: `'avatar_url' in payload ? payload.avatar_url : ""`},
 	{Key: entityops.InputKeyDirectoryAccountMfaState, Expr: `dyn(payload.has_2fa ? "ENABLED" : "DISABLED")`},
 	{Key: entityops.InputKeyDirectoryAccountStatus, Expr: `dyn(payload.deleted ? "INACTIVE" : "ACTIVE")`},
-	{Key: entityops.InputKeyDirectoryAccountDirectoryInstanceID, Expr: `payload.team_id`},
 	{Key: entityops.InputKeyDirectoryAccountProfile, Expr: "payload"},
 	{Key: entityops.InputKeyDirectoryAccountAccountType, Expr: `payload.is_bot ? "SERVICE" : payload.is_external ? "GUEST" : "USER"`},
 })

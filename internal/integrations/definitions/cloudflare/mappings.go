@@ -15,7 +15,6 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyDirectoryAccountMfaState, Expr: `dyn('two_factor_enabled' in payload && payload.two_factor_enabled ? "ENABLED" : "DISABLED")`},
 	{Key: entityops.InputKeyDirectoryAccountStatus, Expr: `dyn('status' in payload && payload.status == "accepted" ? "ACTIVE" : "INACTIVE")`},
 	{Key: entityops.InputKeyDirectoryAccountProfile, Expr: "payload"},
-	{Key: entityops.InputKeyDirectoryAccountDirectoryInstanceID, Expr: `payload.account_id`},
 })
 
 // mapExprDirectoryGroup is the CEL mapping expression for Cloudflare groups and roles payloads mapped to DirectoryGroup

@@ -153,7 +153,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 
 	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
 
-	response, recordCount, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, ingestOptions)
+	response, ingestResult, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, ingestOptions)
 
 	if execErr != nil {
 		logx.FromContext(ctx).Error().Err(execErr).Msg("reconcile operation failed")
@@ -197,17 +197,18 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, execErr
 	}
 
-	logx.FromContext(ctx).Info().Int("records", recordCount).Msg("reconcile operation completed")
+	logx.FromContext(ctx).Info().Int("records", ingestResult.Attempted).Int("changed", ingestResult.Changed).Msg("reconcile operation completed")
 
 	if err := operations.CompleteRun(ctx, db, runRecord.ID, startedAt, operations.RunResult{
 		Status:  enums.IntegrationRunStatusSuccess,
 		Summary: "operation completed",
 		Metrics: map[string]any{
-			"records":  recordCount,
+			"records":  ingestResult.Attempted,
+			"changed":  ingestResult.Changed,
 			"response": jsonx.DecodeAnyOrNil(response),
 		},
 	}); err != nil {
-		return recordCount, err
+		return ingestResult.Changed, err
 	}
 
 	if outputErr := river.RecordOutput(ctx, reconcileOutput{
@@ -215,14 +216,14 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		DefinitionID:  src.DefinitionID,
 		Operation:     envelope.Operation,
 		RunID:         runRecord.ID,
-		Records:       recordCount,
+		Records:       ingestResult.Attempted,
 		Status:        enums.IntegrationRunStatusSuccess,
 		DurationMS:    time.Since(startedAt).Milliseconds(),
 	}); outputErr != nil {
-		return recordCount, outputErr
+		return ingestResult.Changed, outputErr
 	}
 
-	return recordCount, nil
+	return ingestResult.Changed, nil
 }
 
 // ExecuteOperation runs one integration operation inline without run tracking
@@ -379,11 +380,11 @@ func (r *Runtime) BuildClientForIntegration(ctx context.Context, integration *en
 
 // executeResolvedOperation executes the given operation with the input integration and registered Operation.
 // When integration is nil the client is resolved from the registry's runtime client.
-// Returns the response payload, the number of ingest records processed (0 for non-ingest operations), and any error
-func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, int, error) {
+// Returns the response payload, the ingest result (zero-valued for non-ingest operations), and any error
+func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent.Integration, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage, clientForce bool, ingestOptions operations.IngestOptions) (json.RawMessage, operations.IngestResult, error) {
 	client, credentials, _, err := r.resolveOperationClient(ctx, integration, operation, credentials, config, clientForce)
 	if err != nil {
-		return nil, 0, err
+		return nil, operations.IngestResult{}, err
 	}
 
 	var lastRunAt *time.Time
@@ -404,11 +405,11 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 	allowed, err := r.checkRateLimit(ctx, operation)
 	if err != nil {
-		return nil, 0, err
+		return nil, operations.IngestResult{}, err
 	}
 
 	if !allowed {
-		return nil, 0, ErrOperationRateLimited
+		return nil, operations.IngestResult{}, ErrOperationRateLimited
 	}
 
 	req := types.OperationRequest{
@@ -427,7 +428,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("ingest handle failed")
 
-			return nil, 0, err
+			return nil, operations.IngestResult{}, err
 		}
 
 		var totalEnvelopes int
@@ -444,22 +445,22 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 			Integration: integration,
 		}, operation.Name, operation.Ingest, payloadSets, ingestOptions)
 		if err != nil {
-			return nil, 0, err
+			return nil, operations.IngestResult{}, err
 		}
 
 		response, marshalErr := json.Marshal(result)
 		if marshalErr != nil {
-			return nil, 0, marshalErr
+			return nil, operations.IngestResult{}, marshalErr
 		}
-		return response, result.Attempted, nil
+		return response, result, nil
 	}
 
 	response, err := operation.Handle(ctx, req)
 	if err != nil {
-		return response, 0, err
+		return response, operations.IngestResult{}, err
 	}
 
-	return response, 0, nil
+	return response, operations.IngestResult{}, nil
 }
 
 // SeedReconcileJobs ensures every connected integration with reconcilable operations

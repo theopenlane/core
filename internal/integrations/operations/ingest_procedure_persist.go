@@ -9,5 +9,7 @@ import (
 
 // persistProcedureInput upserts one Procedure record through the catalog-driven entityops upsert
 func persistProcedureInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateProcedureInput) (string, error) {
-	return persistCatalogUpsert(ctx, db, entityops.SchemaProcedure, integration.OwnerID, createInput)
+	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaProcedure, integration.OwnerID, createInput)
+
+	return id, err
 }

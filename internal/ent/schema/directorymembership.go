@@ -50,9 +50,8 @@ func (DirectoryMembership) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration that owns this directory membership").
 			NotEmpty().
-			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration().Volatile(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory membership").
@@ -149,6 +148,7 @@ func (m DirectoryMembership) Mixin() []ent.Mixin {
 		excludeTags:       true,
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{},
 			newOrgOwnedMixin(m),
 			newCustomEnumMixin(m, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(m, withEnumFieldName("scope"), withGlobalEnum()),
@@ -164,7 +164,6 @@ func (m DirectoryMembership) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			required:   true,
-			immutable:  true,
 			comment:    "integration that owns this directory membership",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),

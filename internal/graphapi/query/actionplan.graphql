@@ -25,6 +25,7 @@ mutation CreateActionPlan ($input: CreateActionPlanInput!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			metadata
 			name
@@ -36,6 +37,9 @@ mutation CreateActionPlan ($input: CreateActionPlanInput!) {
 			reviewFrequency
 			revision
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -78,6 +82,7 @@ mutation CreateBulkActionPlan ($input: [CreateActionPlanInput!]) {
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			metadata
 			name
@@ -89,6 +94,9 @@ mutation CreateBulkActionPlan ($input: [CreateActionPlanInput!]) {
 			reviewFrequency
 			revision
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -131,6 +139,7 @@ mutation CreateBulkCSVActionPlan ($input: Upload!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			metadata
 			name
@@ -142,6 +151,9 @@ mutation CreateBulkCSVActionPlan ($input: Upload!) {
 			reviewFrequency
 			revision
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -188,6 +200,7 @@ query GetActionPlanByID ($actionPlanId: ID!) {
 		id
 		improvementSuggestions
 		internalNotes
+		managedBy
 		managementMode
 		metadata
 		name
@@ -199,6 +212,9 @@ query GetActionPlanByID ($actionPlanId: ID!) {
 		reviewFrequency
 		revision
 		source
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		status
 		summary
 		systemInternalID
@@ -288,6 +304,7 @@ mutation UpdateActionPlan ($updateActionPlanId: ID!, $input: UpdateActionPlanInp
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			metadata
 			name
@@ -299,6 +316,9 @@ mutation UpdateActionPlan ($updateActionPlanId: ID!, $input: UpdateActionPlanInp
 			reviewFrequency
 			revision
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID
@@ -341,6 +361,7 @@ mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
 			id
 			improvementSuggestions
 			internalNotes
+			managedBy
 			managementMode
 			metadata
 			name
@@ -352,6 +373,9 @@ mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
 			reviewFrequency
 			revision
 			source
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			summary
 			systemInternalID

@@ -79,11 +79,10 @@ func (CheckResult) Fields() []ent.Field {
 				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("integration_id").
-			Comment("integration that owns this directory group").
+			Comment("integration that owns this check result").
 			Optional().
-			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration().Volatile(),
 			),
 	}
 }
@@ -92,6 +91,7 @@ func (CheckResult) Fields() []ent.Field {
 func (c CheckResult) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{},
 			newObjectOwnedMixin[generated.CheckResult](c,
 				withParents(
 					Control{},
@@ -118,7 +118,6 @@ func (c CheckResult) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			required:   false,
-			immutable:  true,
 			comment:    "integration that owns this control health",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),

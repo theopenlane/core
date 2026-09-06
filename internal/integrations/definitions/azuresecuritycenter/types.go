@@ -8,6 +8,8 @@ import (
 var (
 	// definitionID is the stable identifier for the Azure Security Center integration definition
 	definitionID = types.NewDefinitionRef("def_01K0AZSECC000000000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTRVD76WXET3VS0WXNWB")
 	// installation is the typed installation metadata handle for the Azure Security Center definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// securityCenterSchema is the credential schema for the Azure Security Center integration definition

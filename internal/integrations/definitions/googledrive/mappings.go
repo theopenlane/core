@@ -10,5 +10,4 @@ var mapExprInternalPolicy = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyInternalPolicyName, Expr: `'name' in payload && payload.name != "" ? payload.name : "Untitled Policy"`},
 	{Key: entityops.InputKeyInternalPolicyExternalFileID, Expr: `'id' in payload ? payload.id : ""`},
 	{Key: entityops.InputKeyInternalPolicyManagementMode, Expr: `"INTEGRATION"`},
-	{Key: entityops.InputKeyInternalPolicyStatus, Expr: `"DRAFT"`},
 })

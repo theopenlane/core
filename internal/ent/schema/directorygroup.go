@@ -51,9 +51,8 @@ func (DirectoryGroup) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration that owns this directory group").
 			NotEmpty().
-			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration().Volatile(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory group").
@@ -199,6 +198,7 @@ func (g DirectoryGroup) Mixin() []ent.Mixin {
 		prefix:            "DRG",
 		excludeSoftDelete: true,
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{},
 			newOrgOwnedMixin(g),
 			newCustomEnumMixin(g, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(g, withEnumFieldName("scope"), withGlobalEnum()),
@@ -214,7 +214,6 @@ func (g DirectoryGroup) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			required:   true,
-			immutable:  true,
 			comment:    "integration that owns this directory group",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),

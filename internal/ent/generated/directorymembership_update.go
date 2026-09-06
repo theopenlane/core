@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/event"
+	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/workflowobjectref"
@@ -83,6 +84,86 @@ func (_u *DirectoryMembershipUpdate) SetNillableUpdatedByImpersonator(v *string)
 // ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
 func (_u *DirectoryMembershipUpdate) ClearUpdatedByImpersonator() *DirectoryMembershipUpdate {
 	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *DirectoryMembershipUpdate) SetSourceDefinitionID(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableSourceDefinitionID(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *DirectoryMembershipUpdate) ClearSourceDefinitionID() *DirectoryMembershipUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *DirectoryMembershipUpdate) SetSourceDefinitionVersion(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableSourceDefinitionVersion(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *DirectoryMembershipUpdate) ClearSourceDefinitionVersion() *DirectoryMembershipUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *DirectoryMembershipUpdate) SetSourceInstanceID(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableSourceInstanceID(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *DirectoryMembershipUpdate) ClearSourceInstanceID() *DirectoryMembershipUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *DirectoryMembershipUpdate) SetManagedBy(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableManagedBy(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *DirectoryMembershipUpdate) ClearManagedBy() *DirectoryMembershipUpdate {
+	_u.mutation.ClearManagedBy()
 	return _u
 }
 
@@ -183,6 +264,20 @@ func (_u *DirectoryMembershipUpdate) SetNillableScopeID(v *string) *DirectoryMem
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *DirectoryMembershipUpdate) ClearScopeID() *DirectoryMembershipUpdate {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *DirectoryMembershipUpdate) SetIntegrationID(v string) *DirectoryMembershipUpdate {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdate) SetNillableIntegrationID(v *string) *DirectoryMembershipUpdate {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
 	return _u
 }
 
@@ -393,6 +488,11 @@ func (_u *DirectoryMembershipUpdate) SetScope(v *CustomTypeEnum) *DirectoryMembe
 	return _u.SetScopeID(v.ID)
 }
 
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *DirectoryMembershipUpdate) SetIntegration(v *Integration) *DirectoryMembershipUpdate {
+	return _u.SetIntegrationID(v.ID)
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *DirectoryMembershipUpdate) AddEventIDs(ids ...string) *DirectoryMembershipUpdate {
 	_u.mutation.AddEventIDs(ids...)
@@ -443,6 +543,12 @@ func (_u *DirectoryMembershipUpdate) ClearEnvironment() *DirectoryMembershipUpda
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryMembershipUpdate) ClearScope() *DirectoryMembershipUpdate {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *DirectoryMembershipUpdate) ClearIntegration() *DirectoryMembershipUpdate {
+	_u.mutation.ClearIntegration()
 	return _u
 }
 
@@ -537,6 +643,11 @@ func (_u *DirectoryMembershipUpdate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.IntegrationID(); ok {
+		if err := directorymembership.IntegrationIDValidator(v); err != nil {
+			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.integration_id": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Role(); ok {
 		if err := directorymembership.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.role": %w`, err)}
@@ -598,6 +709,30 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(directorymembership.FieldUpdatedByImpersonator, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(directorymembership.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(directorymembership.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(directorymembership.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(directorymembership.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(directorymembership.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(directorymembership.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(directorymembership.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(directorymembership.FieldManagedBy, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)
@@ -751,6 +886,35 @@ func (_u *DirectoryMembershipUpdate) sqlSave(ctx context.Context) (_node int, er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorymembership.IntegrationTable,
+			Columns: []string{directorymembership.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorymembership.IntegrationTable,
+			Columns: []string{directorymembership.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -922,6 +1086,86 @@ func (_u *DirectoryMembershipUpdateOne) ClearUpdatedByImpersonator() *DirectoryM
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *DirectoryMembershipUpdateOne) SetSourceDefinitionID(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableSourceDefinitionID(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *DirectoryMembershipUpdateOne) ClearSourceDefinitionID() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *DirectoryMembershipUpdateOne) SetSourceDefinitionVersion(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableSourceDefinitionVersion(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *DirectoryMembershipUpdateOne) ClearSourceDefinitionVersion() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *DirectoryMembershipUpdateOne) SetSourceInstanceID(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableSourceInstanceID(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *DirectoryMembershipUpdateOne) ClearSourceInstanceID() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *DirectoryMembershipUpdateOne) SetManagedBy(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableManagedBy(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *DirectoryMembershipUpdateOne) ClearManagedBy() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *DirectoryMembershipUpdateOne) SetOwnerID(v string) *DirectoryMembershipUpdateOne {
 	_u.mutation.SetOwnerID(v)
@@ -1019,6 +1263,20 @@ func (_u *DirectoryMembershipUpdateOne) SetNillableScopeID(v *string) *Directory
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *DirectoryMembershipUpdateOne) ClearScopeID() *DirectoryMembershipUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetIntegrationID sets the "integration_id" field.
+func (_u *DirectoryMembershipUpdateOne) SetIntegrationID(v string) *DirectoryMembershipUpdateOne {
+	_u.mutation.SetIntegrationID(v)
+	return _u
+}
+
+// SetNillableIntegrationID sets the "integration_id" field if the given value is not nil.
+func (_u *DirectoryMembershipUpdateOne) SetNillableIntegrationID(v *string) *DirectoryMembershipUpdateOne {
+	if v != nil {
+		_u.SetIntegrationID(*v)
+	}
 	return _u
 }
 
@@ -1229,6 +1487,11 @@ func (_u *DirectoryMembershipUpdateOne) SetScope(v *CustomTypeEnum) *DirectoryMe
 	return _u.SetScopeID(v.ID)
 }
 
+// SetIntegration sets the "integration" edge to the Integration entity.
+func (_u *DirectoryMembershipUpdateOne) SetIntegration(v *Integration) *DirectoryMembershipUpdateOne {
+	return _u.SetIntegrationID(v.ID)
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *DirectoryMembershipUpdateOne) AddEventIDs(ids ...string) *DirectoryMembershipUpdateOne {
 	_u.mutation.AddEventIDs(ids...)
@@ -1279,6 +1542,12 @@ func (_u *DirectoryMembershipUpdateOne) ClearEnvironment() *DirectoryMembershipU
 // ClearScope clears the "scope" edge to the CustomTypeEnum entity.
 func (_u *DirectoryMembershipUpdateOne) ClearScope() *DirectoryMembershipUpdateOne {
 	_u.mutation.ClearScope()
+	return _u
+}
+
+// ClearIntegration clears the "integration" edge to the Integration entity.
+func (_u *DirectoryMembershipUpdateOne) ClearIntegration() *DirectoryMembershipUpdateOne {
+	_u.mutation.ClearIntegration()
 	return _u
 }
 
@@ -1386,6 +1655,11 @@ func (_u *DirectoryMembershipUpdateOne) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.owner_id": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.IntegrationID(); ok {
+		if err := directorymembership.IntegrationIDValidator(v); err != nil {
+			return &ValidationError{Name: "integration_id", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.integration_id": %w`, err)}
+		}
+	}
 	if v, ok := _u.mutation.Role(); ok {
 		if err := directorymembership.RoleValidator(v); err != nil {
 			return &ValidationError{Name: "role", err: fmt.Errorf(`generated: validator failed for field "DirectoryMembership.role": %w`, err)}
@@ -1464,6 +1738,30 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(directorymembership.FieldUpdatedByImpersonator, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(directorymembership.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(directorymembership.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(directorymembership.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(directorymembership.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(directorymembership.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(directorymembership.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(directorymembership.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(directorymembership.FieldManagedBy, field.TypeString)
 	}
 	if value, ok := _u.mutation.EnvironmentName(); ok {
 		_spec.SetField(directorymembership.FieldEnvironmentName, field.TypeString, value)
@@ -1617,6 +1915,35 @@ func (_u *DirectoryMembershipUpdateOne) sqlSave(ctx context.Context) (_node *Dir
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorymembership.IntegrationTable,
+			Columns: []string{directorymembership.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   directorymembership.IntegrationTable,
+			Columns: []string{directorymembership.IntegrationColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

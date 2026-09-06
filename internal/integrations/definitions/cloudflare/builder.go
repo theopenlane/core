@@ -22,6 +22,7 @@ import (
 func Builder(runtime *RuntimeConfig) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{
+			VirtualUser: VirtualUser,
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          DefinitionID.ID(),
 				Family:      "Cloudflare",

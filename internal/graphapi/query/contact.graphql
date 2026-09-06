@@ -10,9 +10,13 @@ mutation CreateBulkCSVContact ($input: Upload!) {
 			fullName
 			id
 			integrationID
+			managedBy
 			observedAt
 			ownerID
 			phoneNumber
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			title
@@ -34,9 +38,13 @@ mutation CreateBulkContact ($input: [CreateContactInput!]) {
 			fullName
 			id
 			integrationID
+			managedBy
 			observedAt
 			ownerID
 			phoneNumber
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			title
@@ -58,9 +66,13 @@ mutation CreateContact ($input: CreateContactInput!) {
 			fullName
 			id
 			integrationID
+			managedBy
 			observedAt
 			ownerID
 			phoneNumber
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			title
@@ -108,9 +120,13 @@ query GetContactByID ($contactId: ID!) {
 		fullName
 		id
 		integrationID
+		managedBy
 		observedAt
 		ownerID
 		phoneNumber
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		status
 		tags
 		title
@@ -153,9 +169,13 @@ mutation UpdateBulkContact ($ids: [ID!]!, $input: UpdateContactInput!) {
 			fullName
 			id
 			integrationID
+			managedBy
 			observedAt
 			ownerID
 			phoneNumber
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			title
@@ -180,9 +200,13 @@ mutation UpdateContact ($updateContactId: ID!, $input: UpdateContactInput!) {
 			fullName
 			id
 			integrationID
+			managedBy
 			observedAt
 			ownerID
 			phoneNumber
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			status
 			tags
 			title

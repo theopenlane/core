@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -14,19 +15,18 @@ import (
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // persistDirectoryAccountInput upserts one DirectoryAccount record using the ingest lookup key fields
 func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrationDef *ent.Integration, createInput ent.CreateDirectoryAccountInput) (string, error) {
 	if createInput.ExternalID == "" {
+		logx.FromContext(ctx).Error().Err(ErrIngestUpsertKeyMissing).Msg("directory account ingest missing external id")
+
 		return "", ErrIngestUpsertKeyMissing
 	}
 
 	createInput.PrimarySource = &integrationDef.PrimaryDirectory
-
-	if createInput.DirectoryName == nil && integrationDef.Name != "" {
-		createInput.DirectoryName = &integrationDef.Name
-	}
 
 	if hash := directoryProfileHash(createInput.Profile); hash != "" {
 		createInput.ProfileHash = &hash
@@ -34,62 +34,204 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 
 	now := time.Now()
 
-	// prefer directory instance so recreating integrations does
-	// not create a new directory account record, fall back to integration id
-	lookup := func(externalID string) []predicate.DirectoryAccount {
-		where := []predicate.DirectoryAccount{
-			directoryaccount.OwnerID(*createInput.OwnerID),
-			directoryaccount.ExternalID(externalID),
+	existing, found, err := findDirectoryAccountForIngest(ctx, db, createInput)
+	if err != nil {
+		if errors.Is(err, ErrIngestUpsertConflict) {
+			return "", err
 		}
 
-		if createInput.DirectoryInstanceID != nil && *createInput.DirectoryInstanceID != "" {
-			return append(where, directoryaccount.DirectoryInstanceID(*createInput.DirectoryInstanceID))
-		}
-
-		return append(where, directoryaccount.IntegrationID(*createInput.IntegrationID))
+		return "", wrapIngestPersistError(err)
 	}
 
-	return persistRoundTripUpsert(
-		ctx,
-		createInput,
-		func(ctx context.Context) (*ent.DirectoryAccount, error) {
-			return findWithLegacyKeyAdoption(ctx, createInput.ExternalID,
-				func(ctx context.Context, externalID string) (*ent.DirectoryAccount, error) {
-					return db.DirectoryAccount.Query().
-						Where(lookup(externalID)...).
-						Only(ctx)
-				},
-				// the row still carries the old scientific notation key, so fix it in place
-				// before the update proceeds (Modify because external_id is immutable)
-				func(ctx context.Context, account *ent.DirectoryAccount) error {
-					return db.DirectoryAccount.UpdateOneID(account.ID).
-						Modify(func(u *sql.UpdateBuilder) {
-							u.Set(directoryaccount.FieldExternalID, createInput.ExternalID)
-						}).
-						Exec(ctx)
-				},
-			)
-		},
-		func(ctx context.Context, input ent.CreateDirectoryAccountInput) (string, error) {
-			input.FirstSeenAt = &now
-			da, err := db.DirectoryAccount.Create().SetInput(input).Save(ctx)
-			if err != nil {
-				return "", err
-			}
-			return da.ID, nil
-		},
-		func(ctx context.Context, existing *ent.DirectoryAccount, input ent.UpdateDirectoryAccountInput) error {
-			if directoryAccountUnchanged(existing, input) {
-				return db.DirectoryAccount.UpdateOneID(existing.ID).
-					SetLastSeenAt(now).
-					Exec(entityops.WithEmissionVetoed(ctx))
-			}
+	if !found {
+		createInput.FirstSeenAt = &now
 
-			input.LastSeenAt = &now
-			return db.DirectoryAccount.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
-		},
-		func(da *ent.DirectoryAccount) string { return da.ID },
-	)
+		if createInput.DirectoryName == nil && integrationDef.Name != "" {
+			createInput.DirectoryName = &integrationDef.Name
+		}
+
+		da, createErr := db.DirectoryAccount.Create().SetInput(createInput).Save(ctx)
+		if createErr != nil {
+			logx.FromContext(ctx).Error().Err(createErr).Msg("directory account create failed")
+
+			return "", wrapIngestPersistError(createErr)
+		}
+
+		if batch := directorySyncBatchFromContext(ctx); batch != nil {
+			batch.addAccount(da, lookupScopeKey(lo.FromPtr(createInput.OwnerID), lo.FromPtr(createInput.SourceInstanceID), lo.FromPtr(createInput.IntegrationID)))
+		}
+
+		recordIngestChange(ctx)
+
+		return da.ID, nil
+	}
+
+	updateInput, err := roundTripUpdateInput[ent.CreateDirectoryAccountInput, ent.UpdateDirectoryAccountInput](createInput)
+	if err != nil {
+		return "", err
+	}
+
+	if entityops.DirectoryAccountIngestUnchanged(existing, updateInput) {
+		if batch := directorySyncBatchFromContext(ctx); batch != nil {
+			batch.seenAccountIDs = append(batch.seenAccountIDs, existing.ID)
+
+			return existing.ID, nil
+		}
+
+		if err := db.DirectoryAccount.UpdateOneID(existing.ID).
+			SetLastSeenAt(now).
+			Exec(entityops.WithEmissionVetoed(ctx)); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("directory account last seen update failed")
+
+			return existing.ID, wrapIngestPersistError(err)
+		}
+
+		return existing.ID, nil
+	}
+
+	updateInput.LastSeenAt = &now
+
+	if err := db.DirectoryAccount.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory account update failed")
+
+		return existing.ID, wrapIngestPersistError(err)
+	}
+
+	recordIngestChange(ctx)
+
+	return existing.ID, nil
+}
+
+// directoryAccountLookupPredicates prefers the directory instance, keeping the integration's not-yet-stamped rows findable
+func directoryAccountLookupPredicates(createInput ent.CreateDirectoryAccountInput, externalID string) []predicate.DirectoryAccount {
+	where := []predicate.DirectoryAccount{
+		directoryaccount.OwnerID(*createInput.OwnerID),
+		directoryaccount.ExternalID(externalID),
+	}
+
+	if createInput.SourceInstanceID != nil && *createInput.SourceInstanceID != "" {
+		return append(where, directoryaccount.Or(
+			directoryaccount.SourceInstanceID(*createInput.SourceInstanceID),
+			directoryaccount.And(directoryaccount.IntegrationID(*createInput.IntegrationID), directoryaccount.SourceInstanceIDIsNil()),
+		))
+	}
+
+	return append(where, directoryaccount.IntegrationID(*createInput.IntegrationID))
+}
+
+// findDirectoryAccountForIngest finds the existing row via the batch cache, falling back to the live lookup; found reports whether a row exists
+func findDirectoryAccountForIngest(ctx context.Context, db *ent.Client, createInput ent.CreateDirectoryAccountInput) (*ent.DirectoryAccount, bool, error) {
+	batch := directorySyncBatchFromContext(ctx)
+	if batch == nil {
+		return findDirectoryAccountLive(ctx, db, createInput)
+	}
+
+	scope, err := batch.accountScope(ctx, db, lookupScopeKey(lo.FromPtr(createInput.OwnerID), lo.FromPtr(createInput.SourceInstanceID), lo.FromPtr(createInput.IntegrationID)))
+	if err != nil {
+		return nil, false, err
+	}
+
+	if rows := scope.byExternalID[createInput.ExternalID]; len(rows) > 0 {
+		return chooseDirectoryAccountRow(ctx, rows, createInput)
+	}
+
+	legacy, ok := legacyScientificKey(createInput.ExternalID)
+	if !ok {
+		return nil, false, nil
+	}
+
+	rows := scope.byExternalID[legacy]
+	if len(rows) == 0 {
+		return nil, false, nil
+	}
+
+	row, found, err := chooseDirectoryAccountRow(ctx, rows, createInput)
+	if err != nil || !found {
+		return nil, found, err
+	}
+
+	if err := repairDirectoryAccountExternalID(ctx, db, row.ID, createInput.ExternalID); err != nil {
+		return nil, false, err
+	}
+
+	scope.byExternalID[createInput.ExternalID] = append(scope.byExternalID[createInput.ExternalID], row)
+
+	return row, true, nil
+}
+
+// chooseDirectoryAccountRow selects the account row a scoped lookup should use
+func chooseDirectoryAccountRow(ctx context.Context, rows []*ent.DirectoryAccount, createInput ent.CreateDirectoryAccountInput) (*ent.DirectoryAccount, bool, error) {
+	row, err := chooseScopedDirectoryRow(rows, func(r *ent.DirectoryAccount) bool {
+		return r.IntegrationID == lo.FromPtr(createInput.IntegrationID)
+	}, newestDirectoryAccount)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory account lookup conflict")
+
+		return nil, false, err
+	}
+
+	return row, true, nil
+}
+
+// findDirectoryAccountLive runs the per-record lookup with legacy key adoption; found reports
+// whether a row exists
+func findDirectoryAccountLive(ctx context.Context, db *ent.Client, createInput ent.CreateDirectoryAccountInput) (*ent.DirectoryAccount, bool, error) {
+	rows, err := db.DirectoryAccount.Query().
+		Where(directoryAccountLookupPredicates(createInput, createInput.ExternalID)...).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory account lookup failed")
+
+		return nil, false, err
+	}
+
+	if len(rows) > 0 {
+		return chooseDirectoryAccountRow(ctx, rows, createInput)
+	}
+
+	legacy, ok := legacyScientificKey(createInput.ExternalID)
+	if !ok {
+		return nil, false, nil
+	}
+
+	rows, err = db.DirectoryAccount.Query().
+		Where(directoryAccountLookupPredicates(createInput, legacy)...).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory account lookup failed")
+
+		return nil, false, err
+	}
+
+	if len(rows) == 0 {
+		return nil, false, nil
+	}
+
+	row, found, err := chooseDirectoryAccountRow(ctx, rows, createInput)
+	if err != nil || !found {
+		return nil, found, err
+	}
+
+	if err := repairDirectoryAccountExternalID(ctx, db, row.ID, createInput.ExternalID); err != nil {
+		return nil, false, err
+	}
+
+	return row, true, nil
+}
+
+// repairDirectoryAccountExternalID rewrites a legacy scientific notation key to the canonical form (Modify because external_id is immutable)
+func repairDirectoryAccountExternalID(ctx context.Context, db *ent.Client, accountID string, externalID string) error {
+	if err := db.DirectoryAccount.UpdateOneID(accountID).
+		Modify(func(u *sql.UpdateBuilder) {
+			u.Set(directoryaccount.FieldExternalID, externalID)
+		}).
+		Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory account legacy key repair failed")
+
+		return err
+	}
+
+	return nil
 }
 
 // directoryProfileHash returns the canonical hash of the normalized profile payload, or empty when
@@ -107,18 +249,4 @@ func directoryProfileHash(profile map[string]any) string {
 	sum := sha256.Sum256(raw)
 
 	return hex.EncodeToString(sum[:])
-}
-
-// directoryAccountUnchanged reports whether the incoming update carries no payload or
-// integration-derived changes for the existing row
-func directoryAccountUnchanged(existing *ent.DirectoryAccount, input ent.UpdateDirectoryAccountInput) bool {
-	if input.ProfileHash == nil || *input.ProfileHash == "" || existing.ProfileHash != *input.ProfileHash {
-		return false
-	}
-
-	if input.PrimarySource != nil && existing.PrimarySource != *input.PrimarySource {
-		return false
-	}
-
-	return input.DirectoryName == nil || lo.FromPtr(existing.DirectoryName) == *input.DirectoryName
 }

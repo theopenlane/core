@@ -2,74 +2,208 @@ package operations
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // persistDirectoryGroupInput upserts one DirectoryGroup record using the ingest lookup key fields
 func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateDirectoryGroupInput) (string, error) {
 	if createInput.ExternalID == "" {
-		return "", ErrIngestUpsertKeyMissing
-	}
+		logx.FromContext(ctx).Error().Err(ErrIngestUpsertKeyMissing).Msg("directory group ingest missing external id")
 
-	if createInput.DirectoryName == nil && integration.Name != "" {
-		createInput.DirectoryName = &integration.Name
+		return "", ErrIngestUpsertKeyMissing
 	}
 
 	if hash := directoryProfileHash(createInput.Profile); hash != "" {
 		createInput.ProfileHash = &hash
 	}
 
-	return persistRoundTripUpsert(
-		ctx,
-		createInput,
-		func(ctx context.Context) (*ent.DirectoryGroup, error) {
-			return findWithLegacyKeyAdoption(ctx, createInput.ExternalID,
-				func(ctx context.Context, externalID string) (*ent.DirectoryGroup, error) {
-					return db.DirectoryGroup.Query().
-						Where(directorygroup.IntegrationID(integration.ID)).
-						Where(directorygroup.ExternalID(externalID)).
-						Only(ctx)
-				},
-				// the row still carries the old scientific notation key, so fix it in place
-				// before the update proceeds (Modify because external_id is immutable)
-				func(ctx context.Context, group *ent.DirectoryGroup) error {
-					return db.DirectoryGroup.UpdateOneID(group.ID).
-						Modify(func(u *sql.UpdateBuilder) {
-							u.Set(directorygroup.FieldExternalID, createInput.ExternalID)
-						}).
-						Exec(ctx)
-				},
-			)
-		},
-		func(ctx context.Context, input ent.CreateDirectoryGroupInput) (string, error) {
-			dg, err := db.DirectoryGroup.Create().SetInput(input).Save(ctx)
-			if err != nil {
-				return "", err
-			}
-			return dg.ID, nil
-		},
-		func(ctx context.Context, existing *ent.DirectoryGroup, input ent.UpdateDirectoryGroupInput) error {
-			if directoryGroupUnchanged(existing, input) {
-				return nil
-			}
+	existing, found, err := findDirectoryGroupForIngest(ctx, db, createInput)
+	if err != nil {
+		if errors.Is(err, ErrIngestUpsertConflict) {
+			return "", err
+		}
 
-			return db.DirectoryGroup.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
-		},
-		func(dg *ent.DirectoryGroup) string { return dg.ID },
-	)
-}
-
-// directoryGroupUnchanged reports whether the incoming update carries no payload or
-// integration-derived changes for the existing row
-func directoryGroupUnchanged(existing *ent.DirectoryGroup, input ent.UpdateDirectoryGroupInput) bool {
-	if input.ProfileHash == nil || *input.ProfileHash == "" || existing.ProfileHash != *input.ProfileHash {
-		return false
+		return "", wrapIngestPersistError(err)
 	}
 
-	return input.DirectoryName == nil || lo.FromPtr(existing.DirectoryName) == *input.DirectoryName
+	if !found {
+		if createInput.DirectoryName == nil && integration.Name != "" {
+			createInput.DirectoryName = &integration.Name
+		}
+
+		dg, createErr := db.DirectoryGroup.Create().SetInput(createInput).Save(ctx)
+		if createErr != nil {
+			logx.FromContext(ctx).Error().Err(createErr).Msg("directory group create failed")
+
+			return "", wrapIngestPersistError(createErr)
+		}
+
+		if batch := directorySyncBatchFromContext(ctx); batch != nil {
+			batch.addGroup(dg, lookupScopeKey(lo.FromPtr(createInput.OwnerID), lo.FromPtr(createInput.SourceInstanceID), createInput.IntegrationID))
+		}
+
+		recordIngestChange(ctx)
+
+		return dg.ID, nil
+	}
+
+	updateInput, err := roundTripUpdateInput[ent.CreateDirectoryGroupInput, ent.UpdateDirectoryGroupInput](createInput)
+	if err != nil {
+		return "", err
+	}
+
+	if entityops.DirectoryGroupIngestUnchanged(existing, updateInput) {
+		return existing.ID, nil
+	}
+
+	if err := db.DirectoryGroup.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory group update failed")
+
+		return existing.ID, wrapIngestPersistError(err)
+	}
+
+	recordIngestChange(ctx)
+
+	return existing.ID, nil
+}
+
+// directoryGroupLookupPredicates prefers the directory instance, keeping the integration's not-yet-stamped rows findable
+func directoryGroupLookupPredicates(createInput ent.CreateDirectoryGroupInput, externalID string) []predicate.DirectoryGroup {
+	where := []predicate.DirectoryGroup{
+		directorygroup.OwnerID(*createInput.OwnerID),
+		directorygroup.ExternalID(externalID),
+	}
+
+	if createInput.SourceInstanceID != nil && *createInput.SourceInstanceID != "" {
+		return append(where, directorygroup.Or(
+			directorygroup.SourceInstanceID(*createInput.SourceInstanceID),
+			directorygroup.And(directorygroup.IntegrationID(createInput.IntegrationID), directorygroup.SourceInstanceIDIsNil()),
+		))
+	}
+
+	return append(where, directorygroup.IntegrationID(createInput.IntegrationID))
+}
+
+// findDirectoryGroupForIngest finds the existing row via the batch cache, falling back to the live lookup; found reports whether a row exists
+func findDirectoryGroupForIngest(ctx context.Context, db *ent.Client, createInput ent.CreateDirectoryGroupInput) (*ent.DirectoryGroup, bool, error) {
+	batch := directorySyncBatchFromContext(ctx)
+	if batch == nil {
+		return findDirectoryGroupLive(ctx, db, createInput)
+	}
+
+	scope, err := batch.groupScope(ctx, db, lookupScopeKey(lo.FromPtr(createInput.OwnerID), lo.FromPtr(createInput.SourceInstanceID), createInput.IntegrationID))
+	if err != nil {
+		return nil, false, err
+	}
+
+	if rows := scope.byExternalID[createInput.ExternalID]; len(rows) > 0 {
+		return chooseDirectoryGroupRow(ctx, rows, createInput)
+	}
+
+	legacy, ok := legacyScientificKey(createInput.ExternalID)
+	if !ok {
+		return nil, false, nil
+	}
+
+	rows := scope.byExternalID[legacy]
+	if len(rows) == 0 {
+		return nil, false, nil
+	}
+
+	row, found, err := chooseDirectoryGroupRow(ctx, rows, createInput)
+	if err != nil || !found {
+		return nil, found, err
+	}
+
+	if err := repairDirectoryGroupExternalID(ctx, db, row.ID, createInput.ExternalID); err != nil {
+		return nil, false, err
+	}
+
+	scope.byExternalID[createInput.ExternalID] = append(scope.byExternalID[createInput.ExternalID], row)
+
+	return row, true, nil
+}
+
+// chooseDirectoryGroupRow selects the group row a scoped lookup should use
+func chooseDirectoryGroupRow(ctx context.Context, rows []*ent.DirectoryGroup, createInput ent.CreateDirectoryGroupInput) (*ent.DirectoryGroup, bool, error) {
+	row, err := chooseScopedDirectoryRow(rows, func(r *ent.DirectoryGroup) bool {
+		return r.IntegrationID == createInput.IntegrationID
+	}, newestDirectoryGroup)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory group lookup conflict")
+
+		return nil, false, err
+	}
+
+	return row, true, nil
+}
+
+// findDirectoryGroupLive runs the per-record lookup with legacy key adoption; found reports
+// whether a row exists
+func findDirectoryGroupLive(ctx context.Context, db *ent.Client, createInput ent.CreateDirectoryGroupInput) (*ent.DirectoryGroup, bool, error) {
+	rows, err := db.DirectoryGroup.Query().
+		Where(directoryGroupLookupPredicates(createInput, createInput.ExternalID)...).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory group lookup failed")
+
+		return nil, false, err
+	}
+
+	if len(rows) > 0 {
+		return chooseDirectoryGroupRow(ctx, rows, createInput)
+	}
+
+	legacy, ok := legacyScientificKey(createInput.ExternalID)
+	if !ok {
+		return nil, false, nil
+	}
+
+	rows, err = db.DirectoryGroup.Query().
+		Where(directoryGroupLookupPredicates(createInput, legacy)...).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory group lookup failed")
+
+		return nil, false, err
+	}
+
+	if len(rows) == 0 {
+		return nil, false, nil
+	}
+
+	row, found, err := chooseDirectoryGroupRow(ctx, rows, createInput)
+	if err != nil || !found {
+		return nil, found, err
+	}
+
+	if err := repairDirectoryGroupExternalID(ctx, db, row.ID, createInput.ExternalID); err != nil {
+		return nil, false, err
+	}
+
+	return row, true, nil
+}
+
+// repairDirectoryGroupExternalID rewrites a legacy scientific notation key to the canonical form (Modify because external_id is immutable)
+func repairDirectoryGroupExternalID(ctx context.Context, db *ent.Client, groupID string, externalID string) error {
+	if err := db.DirectoryGroup.UpdateOneID(groupID).
+		Modify(func(u *sql.UpdateBuilder) {
+			u.Set(directorygroup.FieldExternalID, externalID)
+		}).
+		Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory group legacy key repair failed")
+
+		return err
+	}
+
+	return nil
 }

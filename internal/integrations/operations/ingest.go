@@ -60,6 +60,8 @@ type IngestResult struct {
 	Filtered int
 	// Succeeded is the combined successful handling count
 	Succeeded int
+	// Changed counts records that created, modified, or durably queued rows, excluding unchanged rows
+	Changed int
 	// Failed counts records that could not be imported
 	Failed int
 	// Failures lists each failed record with its cause
@@ -106,9 +108,9 @@ var directorySyncRunSchemas = map[string]struct{}{
 // failures are skipped and reported in the result, never the error
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) (IngestResult, error) {
 	result, err := applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
-		_, err := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
+		_, persistErr := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
 
-		return err
+		return persistErr
 	})
 
 	result.Persisted = result.Succeeded
@@ -133,6 +135,7 @@ func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string
 	})
 
 	result.Accepted = result.Succeeded
+	result.Changed = result.Accepted
 
 	return result, err
 }
@@ -162,6 +165,9 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	if directorySyncRunID != "" {
 		ctx = withDirectorySyncRunID(ctx, directorySyncRunID)
 	}
+
+	batch := newDirectorySyncBatch()
+	ctx = withDirectorySyncBatch(ctx, batch)
 
 	if directorySyncRunID != "" && directorySync && !options.SkipDirectorySyncRunFinalization {
 		defer func() {
@@ -247,6 +253,14 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		logx.FromContext(ctx).Warn().Int("failed", result.Failed).Int("attempted", result.Attempted).Msg("ingest skipped records that could not be imported")
 	}
 
+	result.Changed = batch.changed
+
+	if directorySync {
+		if err := flushDirectoryConfirmations(ctx, ic.DB, batch, directorySyncRunID); err != nil {
+			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
+		}
+	}
+
 	// only a fully-confirmed complete snapshot authorizes removal inference: a skipped record
 	// risks a false removal, and partial sources never carry full membership state
 	if directorySync && membershipSetSeen && membershipsComplete && !options.SkipDirectorySyncRunFinalization && result.Failed == 0 {
@@ -258,9 +272,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	return result, nil
 }
 
-// markUnconfirmedDirectoryMembershipsRemoved records the removal side of the sync delta by
-// stamping removed_at on active memberships for the integration that were not confirmed by
-// the completed sync run
+// markUnconfirmedDirectoryMembershipsRemoved stamps removed_at on the integration's active memberships whose last confirmation predates this run
 func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Client, integrationID string, runID string) error {
 	current, err := isCurrentDirectorySyncRun(ctx, db, runID)
 	if err != nil {
@@ -276,7 +288,7 @@ func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Cli
 			directorymembership.RemovedAtIsNil(),
 			directorymembership.Or(
 				directorymembership.LastConfirmedRunIDIsNil(),
-				directorymembership.LastConfirmedRunIDNEQ(runID),
+				directorymembership.LastConfirmedRunIDLT(runID),
 			)).
 		SetRemovedAt(time.Now()).
 		Save(ctx)

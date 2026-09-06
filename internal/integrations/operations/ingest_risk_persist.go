@@ -13,5 +13,7 @@ func persistRiskInput(ctx context.Context, db *ent.Client, integration *ent.Inte
 		createInput.IntegrationID = &integration.ID
 	}
 
-	return persistCatalogUpsert(ctx, db, entityops.SchemaRisk, integration.OwnerID, createInput)
+	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaRisk, integration.OwnerID, createInput)
+
+	return id, err
 }

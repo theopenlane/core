@@ -14,6 +14,8 @@ import (
 var (
 	// definitionID is the stable identifier for the OneDrive integration definition
 	definitionID = types.NewDefinitionRef("def_01K0ONEDRIVE00000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTRJZKWXVNN9A00RHSPT")
 	// installation is the typed installation metadata handle for the OneDrive definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// _, oneDriveCredential is the credential slot for OneDrive OAuth credentials

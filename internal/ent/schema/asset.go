@@ -3,8 +3,10 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -162,9 +164,8 @@ func (Asset) Fields() []ent.Field {
 		field.String("integration_id").
 			Comment("integration that discovered this asset, when sourced via integration ingest").
 			Optional().
-			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration().Volatile(),
 			),
 		field.Time("observed_at").
 			Comment("time when this asset was last observed by the source integration").
@@ -177,10 +178,19 @@ func (Asset) Fields() []ent.Field {
 	}
 }
 
+// Indexes of the Asset
+func (Asset) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("source_identifier", ownerFieldName).
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+	}
+}
+
 // Mixin of the Asset
 func (a Asset) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{},
 			newObjectOwnedMixin[generated.Asset](a,
 				withParents(Platform{}, Entity{}),
 				withOrganizationOwner(),
@@ -236,7 +246,6 @@ func (a Asset) Edges() []ent.Edge {
 			fromSchema: a,
 			edgeSchema: Integration{},
 			field:      "integration_id",
-			immutable:  true,
 			comment:    "integration that owns this asset",
 			annotations: []schema.Annotation{
 				accessmap.EdgeViewCheck(Organization{}.Name()),

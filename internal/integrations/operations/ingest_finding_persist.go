@@ -2,26 +2,31 @@ package operations
 
 import (
 	"context"
-	"slices"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // persistFindingInput upserts one Finding record through the catalog-driven entityops upsert
 func persistFindingInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateFindingInput) (string, error) {
-	if createInput.Source == nil && integration.Name != "" {
-		createInput.Source = &integration.Name
-	}
-
 	if createInput.Description != nil && *createInput.Description != "" {
 		normalized := normalizeDescription(*createInput.Description)
 		createInput.Description = &normalized
 	}
 
-	if !slices.Contains(createInput.IntegrationIDs, integration.ID) {
-		createInput.IntegrationIDs = append(createInput.IntegrationIDs, integration.ID)
+	id, changed, err := persistCatalogUpsert(ctx, db, entityops.SchemaFinding, integration.OwnerID, createInput)
+	if err != nil {
+		return "", err
 	}
 
-	return persistCatalogUpsert(ctx, db, entityops.SchemaFinding, integration.OwnerID, createInput)
+	if changed && integration.ID != "" {
+		if err := db.Finding.UpdateOneID(id).AddIntegrationIDs(integration.ID).Exec(entityops.WithEmissionVetoed(ctx)); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("finding integration link failed")
+
+			return id, wrapIngestPersistError(err)
+		}
+	}
+
+	return id, nil
 }

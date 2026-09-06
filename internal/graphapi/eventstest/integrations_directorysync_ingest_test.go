@@ -37,6 +37,7 @@ func directorySyncTestDefinition(defID string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
 	return integrationtypes.Definition{
+		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          defID,
 			DisplayName: "Directory Sync Test",
@@ -194,6 +195,7 @@ func TestDirectorySyncIngestProfileHashing(t *testing.T) {
 
 		assert.Check(t, is.Equal(1, result.Persisted))
 		assert.Check(t, is.Equal(0, result.Failed))
+		assert.Check(t, is.Equal(1, result.Changed), "a created row must count as changed")
 		assert.Check(t, is.Equal(int64(1), accountCreates.Load()))
 		assert.Check(t, is.Equal(int64(0), accountUpdates.Load()))
 
@@ -211,6 +213,7 @@ func TestDirectorySyncIngestProfileHashing(t *testing.T) {
 		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(1, result.Persisted))
+		assert.Check(t, is.Equal(0, result.Changed), "an unchanged payload must not count as changed")
 		assert.Check(t, is.Equal(int64(1), accountCreates.Load()))
 		assert.Check(t, is.Equal(int64(0), accountUpdates.Load()), "an unchanged payload must not emit an update mutation event")
 
@@ -229,6 +232,7 @@ func TestDirectorySyncIngestProfileHashing(t *testing.T) {
 		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(1, result.Persisted))
+		assert.Check(t, is.Equal(1, result.Changed), "a changed payload must count as changed")
 		assert.Check(t, is.Equal(int64(1), accountUpdates.Load()), "a changed payload must emit an update mutation event")
 
 		after := directoryAccountByExternalID(ctx, t, "dirhash-acct-1")

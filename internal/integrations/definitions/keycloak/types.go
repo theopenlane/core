@@ -9,6 +9,8 @@ import (
 var (
 	// definitionID is the stable identifier for the Keycloak integration definition
 	definitionID = types.NewDefinitionRef("def_01K0KEYCLOAK000000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTRVM5XPGVMEDNKX6SPX")
 	// integration is the typed installation metadata handle for the Keycloak definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
 	// keycloakCredentialSchema is the JSON schema for the Keycloak credential

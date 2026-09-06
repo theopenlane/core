@@ -19,6 +19,7 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			integrationID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -37,6 +38,9 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			stakeholderID
 			status
 			tags
@@ -76,6 +80,7 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			integrationID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -94,6 +99,9 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			stakeholderID
 			status
 			tags
@@ -133,6 +141,7 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			integrationID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -151,6 +160,9 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			stakeholderID
 			status
 			tags
@@ -235,6 +247,7 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				integrationID
 				lastReviewedAt
 				likelihood
+				managedBy
 				mitigatedAt
 				mitigation
 				mitigationJSON
@@ -253,6 +266,9 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				scopeID
 				scopeName
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				stakeholderID
 				status
 				tags
@@ -324,6 +340,7 @@ query GetRiskByID ($riskId: ID!) {
 		integrationID
 		lastReviewedAt
 		likelihood
+		managedBy
 		mitigatedAt
 		mitigation
 		mitigationJSON
@@ -342,6 +359,9 @@ query GetRiskByID ($riskId: ID!) {
 		scopeID
 		scopeName
 		score
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		stakeholderID
 		status
 		tags
@@ -420,6 +440,7 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				integrationID
 				lastReviewedAt
 				likelihood
+				managedBy
 				mitigatedAt
 				mitigation
 				mitigationJSON
@@ -438,6 +459,9 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				scopeID
 				scopeName
 				score
+				sourceDefinitionID
+				sourceDefinitionVersion
+				sourceInstanceID
 				stakeholderID
 				status
 				tags
@@ -510,6 +534,7 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			integrationID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -528,6 +553,9 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			stakeholderID
 			status
 			tags
@@ -570,6 +598,7 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			integrationID
 			lastReviewedAt
 			likelihood
+			managedBy
 			mitigatedAt
 			mitigation
 			mitigationJSON
@@ -588,6 +617,9 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			scopeID
 			scopeName
 			score
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			stakeholderID
 			status
 			tags

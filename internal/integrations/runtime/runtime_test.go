@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/oklog/ulid/v2"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/v2/internal/integrations/operations"
@@ -15,6 +16,11 @@ import (
 	"github.com/theopenlane/core/v2/internal/keystore"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
+
+// testVirtualUser mints a unique virtual actor identity for one test definition
+func testVirtualUser() types.VirtualUserRef {
+	return types.NewVirtualUserRef(ulid.Make().String())
+}
 
 func newTestGala(t *testing.T) *gala.Gala {
 	t.Helper()
@@ -43,6 +49,7 @@ func TestNewMinimalConfig(t *testing.T) {
 	g := newTestGala(t)
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
+		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          "test-def",
 			DisplayName: "Test",
@@ -65,6 +72,7 @@ func TestNewWithRegistryOverride(t *testing.T) {
 
 	reg := registry.New()
 	_ = reg.Register(types.Definition{
+		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          "test-def",
 			DisplayName: "Test",
@@ -135,6 +143,7 @@ func TestNewWithBuildersNoRegistry(t *testing.T) {
 	builder := registry.Builder(func() (types.Definition, error) {
 		called = true
 		return types.Definition{
+			VirtualUser:    testVirtualUser(),
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          "built-def",
 				DisplayName: "Built",

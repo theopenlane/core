@@ -21,6 +21,7 @@ func Builder(cfg Config) registry.Builder {
 			cfg.RedirectURL != ""
 
 		return types.Definition{
+			VirtualUser: VirtualUser,
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
 				Family:      "oidc",

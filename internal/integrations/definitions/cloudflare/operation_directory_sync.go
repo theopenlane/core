@@ -56,6 +56,8 @@ type cloudflareGroupPayload struct {
 	LastModifiedTime time.Time `json:"last_modified_time,omitempty"`
 	// CreatedTime is the timestamp the group was created from the source
 	CreatedTime time.Time `json:"created_time,omitempty"`
+	// AccountID is the Cloudflare account the group belongs to
+	AccountID string `json:"account_id"`
 	// Payload is the full profile from the source
 	Payload any `json:"payload"`
 }
@@ -66,6 +68,8 @@ type cloudflareGroupMemberPayload struct {
 	GroupID string `json:"group_id"`
 	// UserID is the clouldflare user id
 	UserID string `json:"user_id"`
+	// AccountID is the Cloudflare account the membership belongs to
+	AccountID string `json:"account_id"`
 	// Meta is metadata from the policy group
 	Meta any `json:"meta,omitempty"`
 	// Payload is the full profile from the source
@@ -122,6 +126,7 @@ func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindin
 	membershipEnvelopes := make([]types.MappingEnvelope, 0)
 
 	for _, group := range groups {
+		group.AccountID = meta.AccountID
 		resource := meta.AccountID + "/" + group.ID
 
 		envelope, err := providerkit.MarshalEnvelope(resource, group, ErrPayloadEncode)
@@ -138,6 +143,7 @@ func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindin
 		}
 
 		for _, membership := range member.Memberships {
+			membership.AccountID = meta.AccountID
 			resource := meta.AccountID + "/" + membership.GroupID + ":" + membership.UserID
 			envelope, err := providerkit.MarshalEnvelope(resource, membership, ErrPayloadEncode)
 			if err != nil {

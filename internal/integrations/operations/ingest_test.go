@@ -8,6 +8,7 @@ import (
 
 	"gotest.tools/v3/assert"
 
+	"github.com/oklog/ulid/v2"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -246,6 +247,7 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "nested filterExpr resolved via ConfigResolver",
 			config: json.RawMessage(`{"directorySync":{"filterExpr":"payload.is_external == false"}}`),
 			definition: types.Definition{
+				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{
 						Name:           "directory-sync",
@@ -261,6 +263,7 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "ConfigResolver section has no filterExpr falls back to flat",
 			config: json.RawMessage(`{"directorySync":{},"filterExpr":"resource == \"users\""}`),
 			definition: types.Definition{
+				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{
 						Name:           "directory-sync",
@@ -276,6 +279,7 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "ConfigResolver returns nil falls back to flat",
 			config: json.RawMessage(`{"filterExpr":"resource == \"users\""}`),
 			definition: types.Definition{
+				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{
 						Name:           "directory-sync",
@@ -291,6 +295,7 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "unknown operationName falls back to flat",
 			config: json.RawMessage(`{"filterExpr":"resource == \"groups\""}`),
 			definition: types.Definition{
+				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{Name: "other-op"},
 				},
@@ -303,6 +308,7 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "operation without ConfigResolver falls back to flat",
 			config: json.RawMessage(`{"filterExpr":"resource == \"assets\""}`),
 			definition: types.Definition{
+				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{Name: "asset-sync"},
 				},
@@ -315,6 +321,7 @@ func TestResolveInstallationFilterExpr(t *testing.T) {
 			name:   "ConfigResolver not used when operationName does not match",
 			config: json.RawMessage(`{"directorySync":{"filterExpr":"payload.type == \"user\""},"filterExpr":"resource == \"assets\""}`),
 			definition: types.Definition{
+				VirtualUser: testVirtualUser(),
 				Operations: []types.OperationRegistration{
 					{
 						Name:           "directory-sync",
@@ -421,6 +428,7 @@ func TestMapIngestRecord(t *testing.T) {
 	t.Parallel()
 
 	definition := types.Definition{
+		VirtualUser: testVirtualUser(),
 		Mappings: []types.MappingRegistration{
 			{
 				Schema:  "asset",
@@ -540,10 +548,16 @@ func TestWrapIngestPersistError(t *testing.T) {
 }
 
 // testDefinition builds a minimal definition with the given mappings registered in a registry
+// testVirtualUser mints a unique virtual actor identity for one test definition
+func testVirtualUser() types.VirtualUserRef {
+	return types.NewVirtualUserRef(ulid.Make().String())
+}
+
 func testDefinition(t *testing.T, mappings []types.MappingRegistration) (*registry.Registry, types.Definition) {
 	t.Helper()
 
 	def := types.Definition{
+		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          "test-def",
 			DisplayName: "Test",
@@ -834,6 +848,7 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	}
 
 	def := types.Definition{
+		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:     "test-def",
 			Active: true,
@@ -915,6 +930,7 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 	}
 
 	def := types.Definition{
+		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:     "test-def",
 			Active: true,

@@ -426,6 +426,22 @@ type ActionPlan implements Node @modules(names: ["compliance_module","policy_man
 	"""
 	revision: String
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the name of the action_plan
 	"""
 	name: String!
@@ -1307,6 +1323,62 @@ input ActionPlanWhereInput {
 	revisionNotNil: Boolean
 	revisionEqualFold: String
 	revisionContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	name field predicates
 	"""
@@ -3103,6 +3175,22 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
@@ -4082,6 +4170,62 @@ input AssetWhereInput {
 	updatedByImpersonatorNotNil: Boolean
 	updatedByImpersonatorEqualFold: String
 	updatedByImpersonatorContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -6568,6 +6712,22 @@ type CheckResult implements Node {
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	current status of the control
 	"""
 	status: CheckResultCheckStatus!
@@ -6592,7 +6752,7 @@ type CheckResult implements Node {
 	"""
 	parentExternalID: String
 	"""
-	integration that owns this directory group
+	integration that owns this check result
 	"""
 	integrationID: ID
 	blockedGroups(
@@ -6970,6 +7130,62 @@ input CheckResultWhereInput {
 	updatedByImpersonatorEqualFold: String
 	updatedByImpersonatorContainsFold: String
 	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
+	"""
 	status field predicates
 	"""
 	status: CheckResultCheckStatus
@@ -7196,6 +7412,22 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	the organization id that owns the object
 	"""
@@ -7618,6 +7850,62 @@ input ContactWhereInput {
 	updatedByImpersonatorNotNil: Boolean
 	updatedByImpersonatorEqualFold: String
 	updatedByImpersonatorContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -11730,6 +12018,22 @@ input CreateActionPlanInput {
 	"""
 	revision: String
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the name of the action_plan
 	"""
 	name: String!
@@ -12014,6 +12318,22 @@ input CreateAssetInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	the internal owner for the asset when no user, group, or identity holder is linked
 	"""
@@ -12347,6 +12667,22 @@ input CreateCheckResultInput {
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	current status of the control
 	"""
 	status: CheckResultCheckStatus
@@ -12386,6 +12722,22 @@ input CreateContactInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	the full name of the contact
 	"""
@@ -12873,6 +13225,22 @@ input CreateDirectoryAccountInput {
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the environment of the directory_account
 	"""
 	environmentName: String
@@ -13021,6 +13389,22 @@ input CreateDirectoryGroupInput {
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the environment of the directory_group
 	"""
 	environmentName: String
@@ -13117,6 +13501,22 @@ CreateDirectoryMembershipInput is used for create DirectoryMembership object.
 Input was generated by ent.
 """
 input CreateDirectoryMembershipInput {
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	the environment of the directory_membership
 	"""
@@ -13393,6 +13793,22 @@ input CreateEntityInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	the internal owner for the entity when no user, group, or identity holder is linked
 	"""
@@ -13939,6 +14355,22 @@ input CreateFindingInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	who reviewed the finding when no user, group, or identity holder is linked
 	"""
@@ -14487,6 +14919,22 @@ input CreateInternalPolicyInput {
 	revision of the object as a semver (e.g. v1.0.0), by default any update will bump the patch version, unless the revision_bump field is set
 	"""
 	revision: String
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
@@ -15608,6 +16056,22 @@ input CreateProcedureInput {
 	"""
 	revision: String
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the name of the procedure
 	"""
 	name: String!
@@ -16118,6 +16582,22 @@ input CreateRiskInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	the kind of the risk
 	"""
@@ -17598,6 +18078,22 @@ input CreateVulnerabilityInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
@@ -19518,6 +20014,22 @@ type DirectoryAccount implements Node {
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
@@ -20038,6 +20550,62 @@ input DirectoryAccountWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -20582,6 +21150,22 @@ type DirectoryGroup implements Node {
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: ID
@@ -21002,6 +21586,62 @@ input DirectoryGroupWhereInput {
 	displayIDEqualFold: String
 	displayIDContainsFold: String
 	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
+	"""
 	owner_id field predicates
 	"""
 	ownerID: ID
@@ -21347,6 +21987,22 @@ type DirectoryMembership implements Node {
 	a shortened prefixed id field to use as a human readable identifier
 	"""
 	displayID: String!
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
 	"""
 	the organization id that owns the object
 	"""
@@ -21698,6 +22354,62 @@ input DirectoryMembershipWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	environment_name field predicates
 	"""
@@ -24063,6 +24775,22 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
@@ -25769,6 +26497,62 @@ input EntityWhereInput {
 	updatedByImpersonatorNotNil: Boolean
 	updatedByImpersonatorEqualFold: String
 	updatedByImpersonatorContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -29787,6 +30571,22 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
@@ -31255,6 +32055,62 @@ input FindingWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -38522,6 +39378,22 @@ type InternalPolicy implements Node @modules(names: ["compliance_module","policy
 	"""
 	revision: String
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: ID
@@ -39540,6 +40412,62 @@ input InternalPolicyWhereInput {
 	revisionNotNil: Boolean
 	revisionEqualFold: String
 	revisionContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -59850,6 +60778,22 @@ type Procedure implements Node @modules(names: ["compliance_module","policy_mana
 	"""
 	revision: String
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the organization id that owns the object
 	"""
 	ownerID: ID
@@ -60642,6 +61586,62 @@ input ProcedureWhereInput {
 	revisionNotNil: Boolean
 	revisionEqualFold: String
 	revisionContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -70490,6 +71490,22 @@ type Risk implements Node @modules(names: ["compliance_module","risk_management_
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
@@ -71595,6 +72611,62 @@ input RiskWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""
@@ -84835,6 +85907,26 @@ input UpdateActionPlanInput {
 	revision: String
 	clearRevision: Boolean
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
+	"""
 	the name of the action_plan
 	"""
 	name: String
@@ -85134,6 +86226,26 @@ input UpdateAssetInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
+	"""
 	the internal owner for the asset when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
@@ -85340,6 +86452,8 @@ input UpdateAssetInput {
 	clearRemediations: Boolean
 	sourcePlatformID: ID
 	clearSourcePlatform: Boolean
+	integrationID: ID
+	clearIntegration: Boolean
 	addConnectedAssetIDs: [ID!]
 	removeConnectedAssetIDs: [ID!]
 	clearConnectedAssets: Boolean
@@ -85587,6 +86701,26 @@ input UpdateCheckResultInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
+	"""
 	current status of the control
 	"""
 	status: CheckResultCheckStatus
@@ -85629,6 +86763,8 @@ input UpdateCheckResultInput {
 	addFindingIDs: [ID!]
 	removeFindingIDs: [ID!]
 	clearFindings: Boolean
+	integrationID: ID
+	clearIntegration: Boolean
 }
 """
 UpdateContactInput is used for update Contact object.
@@ -85641,6 +86777,26 @@ input UpdateContactInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
 	"""
 	the full name of the contact
 	"""
@@ -86331,6 +87487,26 @@ input UpdateDirectoryAccountInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
+	"""
 	the environment of the directory_account
 	"""
 	environmentName: String
@@ -86481,6 +87657,8 @@ input UpdateDirectoryAccountInput {
 	clearEnvironment: Boolean
 	scopeID: ID
 	clearScope: Boolean
+	integrationID: ID
+	clearIntegration: Boolean
 	identityHolderID: ID
 	clearIdentityHolder: Boolean
 	avatarFileID: ID
@@ -86503,6 +87681,26 @@ input UpdateDirectoryGroupInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
 	"""
 	the environment of the directory_group
 	"""
@@ -86601,6 +87799,7 @@ input UpdateDirectoryGroupInput {
 	clearEnvironment: Boolean
 	scopeID: ID
 	clearScope: Boolean
+	integrationID: ID
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
@@ -86610,6 +87809,26 @@ UpdateDirectoryMembershipInput is used for update DirectoryMembership object.
 Input was generated by ent.
 """
 input UpdateDirectoryMembershipInput {
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
 	"""
 	the environment of the directory_membership
 	"""
@@ -86676,6 +87895,7 @@ input UpdateDirectoryMembershipInput {
 	clearEnvironment: Boolean
 	scopeID: ID
 	clearScope: Boolean
+	integrationID: ID
 	addEventIDs: [ID!]
 	removeEventIDs: [ID!]
 	clearEvents: Boolean
@@ -86968,6 +88188,26 @@ input UpdateEntityInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
 	"""
 	the internal owner for the entity when no user, group, or identity holder is linked
 	"""
@@ -87767,6 +89007,26 @@ input UpdateFindingInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
 	"""
 	who reviewed the finding when no user, group, or identity holder is linked
 	"""
@@ -88598,6 +89858,26 @@ input UpdateInternalPolicyInput {
 	"""
 	revision: String
 	clearRevision: Boolean
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
 	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
@@ -90267,6 +91547,26 @@ input UpdateProcedureInput {
 	revision: String
 	clearRevision: Boolean
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
+	"""
 	the name of the procedure
 	"""
 	name: String
@@ -91002,6 +92302,26 @@ input UpdateRiskInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
 	"""
 	the kind of the risk
 	"""
@@ -92994,6 +94314,26 @@ input UpdateVulnerabilityInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	clearSourceDefinitionID: Boolean
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	clearSourceDefinitionVersion: Boolean
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	clearSourceInstanceID: Boolean
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	clearManagedBy: Boolean
 	"""
 	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
@@ -95853,6 +97193,22 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	"""
 	tags: [String!]
 	"""
+	canonical id of the integration definition that created or last enriched the record
+	"""
+	sourceDefinitionID: String
+	"""
+	integration definition version recorded when the record was created or last enriched
+	"""
+	sourceDefinitionVersion: String
+	"""
+	stable identifier of the external system instance the record was sourced from
+	"""
+	sourceInstanceID: String
+	"""
+	virtual subject id of the integration definition managing the record, empty when user controlled
+	"""
+	managedBy: String
+	"""
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
@@ -96991,6 +98347,62 @@ input VulnerabilityWhereInput {
 	displayIDHasSuffix: String
 	displayIDEqualFold: String
 	displayIDContainsFold: String
+	"""
+	source_definition_id field predicates
+	"""
+	sourceDefinitionID: String
+	sourceDefinitionIDNEQ: String
+	sourceDefinitionIDIn: [String!]
+	sourceDefinitionIDNotIn: [String!]
+	sourceDefinitionIDContains: String
+	sourceDefinitionIDHasPrefix: String
+	sourceDefinitionIDHasSuffix: String
+	sourceDefinitionIDIsNil: Boolean
+	sourceDefinitionIDNotNil: Boolean
+	sourceDefinitionIDEqualFold: String
+	sourceDefinitionIDContainsFold: String
+	"""
+	source_definition_version field predicates
+	"""
+	sourceDefinitionVersion: String
+	sourceDefinitionVersionNEQ: String
+	sourceDefinitionVersionIn: [String!]
+	sourceDefinitionVersionNotIn: [String!]
+	sourceDefinitionVersionContains: String
+	sourceDefinitionVersionHasPrefix: String
+	sourceDefinitionVersionHasSuffix: String
+	sourceDefinitionVersionIsNil: Boolean
+	sourceDefinitionVersionNotNil: Boolean
+	sourceDefinitionVersionEqualFold: String
+	sourceDefinitionVersionContainsFold: String
+	"""
+	source_instance_id field predicates
+	"""
+	sourceInstanceID: String
+	sourceInstanceIDNEQ: String
+	sourceInstanceIDIn: [String!]
+	sourceInstanceIDNotIn: [String!]
+	sourceInstanceIDContains: String
+	sourceInstanceIDHasPrefix: String
+	sourceInstanceIDHasSuffix: String
+	sourceInstanceIDIsNil: Boolean
+	sourceInstanceIDNotNil: Boolean
+	sourceInstanceIDEqualFold: String
+	sourceInstanceIDContainsFold: String
+	"""
+	managed_by field predicates
+	"""
+	managedBy: String
+	managedByNEQ: String
+	managedByIn: [String!]
+	managedByNotIn: [String!]
+	managedByContains: String
+	managedByHasPrefix: String
+	managedByHasSuffix: String
+	managedByIsNil: Boolean
+	managedByNotNil: Boolean
+	managedByEqualFold: String
+	managedByContainsFold: String
 	"""
 	owner_id field predicates
 	"""

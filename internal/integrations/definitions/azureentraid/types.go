@@ -10,7 +10,9 @@ import (
 
 var (
 	// definitionID is the stable identifier for the Azure Entra ID integration definition
-	definitionID             = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	definitionID = types.NewDefinitionRef("def_01K0AZENTRA0000000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser              = types.NewVirtualUserRef("01VRTACTRZDG2SPAQF4KQSX5D9")
 	_, entraTenantCredential = providerkit.CredentialSchema[entraIDCred]()
 	// EntraCredential is the client ref for the Azure token credential used by the health check
 	entraCredential = types.NewClientRef[azcore.TokenCredential]()

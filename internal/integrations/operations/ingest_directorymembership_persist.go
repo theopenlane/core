@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
@@ -20,6 +21,8 @@ import (
 // persistDirectoryMembershipInput upserts one DirectoryMembership record using the ingest lookup key fields
 func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateDirectoryMembershipInput) (string, error) {
 	if createInput.DirectoryAccountID == "" || createInput.DirectoryGroupID == "" {
+		logx.FromContext(ctx).Error().Err(ErrIngestUpsertKeyMissing).Msg("directory membership ingest missing account or group reference")
+
 		return "", ErrIngestUpsertKeyMissing
 	}
 
@@ -31,66 +34,162 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 	now := time.Now()
 	runID := directorySyncRunIDFromContext(ctx)
 
-	// removed memberships are excluded from the lookup so a re-added membership starts a
-	// new episode row attributed to the sync run that observed the re-add
-	return persistRoundTripUpsert(
-		ctx,
-		resolvedInput,
-		func(ctx context.Context) (*ent.DirectoryMembership, error) {
-			return db.DirectoryMembership.Query().
-				Where(directorymembership.IntegrationID(integration.ID)).
-				Where(directorymembership.DirectoryAccountID(resolvedInput.DirectoryAccountID)).
-				Where(directorymembership.DirectoryGroupID(resolvedInput.DirectoryGroupID)).
-				Where(directorymembership.RemovedAtIsNil()).
-				Only(ctx)
-		},
-		func(ctx context.Context, input ent.CreateDirectoryMembershipInput) (string, error) {
-			input.FirstSeenAt = &now
-			input.LastSeenAt = &now
-			if runID != "" {
-				input.LastConfirmedRunID = &runID
-			}
+	existing, found, err := findDirectoryMembershipForIngest(ctx, db, integration.OwnerID, resolvedInput)
+	if err != nil {
+		return "", wrapIngestPersistError(err)
+	}
 
-			dm, err := db.DirectoryMembership.Create().SetInput(input).Save(ctx)
-			if err != nil {
-				return "", err
-			}
-			return dm.ID, nil
-		},
-		func(ctx context.Context, existing *ent.DirectoryMembership, input ent.UpdateDirectoryMembershipInput) error {
-			if runID == "" {
-				input.LastSeenAt = &now
+	if !found {
+		resolvedInput.FirstSeenAt = &now
+		resolvedInput.LastSeenAt = &now
 
-				return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
-			}
+		if resolvedInput.DirectoryName == nil && integration.Name != "" {
+			resolvedInput.DirectoryName = &integration.Name
+		}
 
-			if !directoryMembershipRunCanAdvance(existing.LastConfirmedRunID, runID) {
-				return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
-			}
+		if runID != "" {
+			resolvedInput.LastConfirmedRunID = &runID
+		}
 
-			input.LastSeenAt = &now
-			input.LastConfirmedRunID = &runID
-			update := db.DirectoryMembership.UpdateOneID(existing.ID).
-				SetInput(input).
-				Where(directorymembership.Or(
-					directorymembership.LastConfirmedRunIDIsNil(),
-					directorymembership.LastConfirmedRunIDLTE(runID),
-				))
-			if err := update.Exec(ctx); err == nil {
-				return nil
-			} else if !ent.IsNotFound(err) {
-				return err
-			}
+		dm, createErr := db.DirectoryMembership.Create().SetInput(resolvedInput).Save(ctx)
+		if createErr != nil {
+			logx.FromContext(ctx).Error().Err(createErr).Msg("directory membership create failed")
 
-			// A newer run won the guarded update. Preserve unrelated field changes,
-			// but do not move confirmation or last-seen timestamps backward.
-			input.LastSeenAt = nil
-			input.LastConfirmedRunID = nil
+			return "", wrapIngestPersistError(createErr)
+		}
 
-			return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
-		},
-		func(dm *ent.DirectoryMembership) string { return dm.ID },
-	)
+		if batch := directorySyncBatchFromContext(ctx); batch != nil {
+			batch.addMembership(dm)
+		}
+
+		recordIngestChange(ctx)
+
+		return dm.ID, nil
+	}
+
+	input, err := roundTripUpdateInput[ent.CreateDirectoryMembershipInput, ent.UpdateDirectoryMembershipInput](resolvedInput)
+	if err != nil {
+		return "", err
+	}
+
+	if entityops.DirectoryMembershipIngestUnchanged(existing, input) && directoryMembershipRunCanAdvance(existing.LastConfirmedRunID, runID) {
+		if batch := directorySyncBatchFromContext(ctx); batch != nil {
+			batch.confirmedMembershipIDs = append(batch.confirmedMembershipIDs, existing.ID)
+
+			return existing.ID, nil
+		}
+	}
+
+	return existing.ID, wrapIngestPersistError(updateDirectoryMembership(ctx, db, existing, input, runID, now))
+}
+
+// updateDirectoryMembership applies one membership update, advancing bookkeeping only when this run can still confirm the row
+func updateDirectoryMembership(ctx context.Context, db *ent.Client, existing *ent.DirectoryMembership, input ent.UpdateDirectoryMembershipInput, runID string, now time.Time) error {
+	if runID == "" {
+		input.LastSeenAt = &now
+
+		if err := db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("directory membership update failed")
+
+			return err
+		}
+
+		recordIngestChange(ctx)
+
+		return nil
+	}
+
+	if !directoryMembershipRunCanAdvance(existing.LastConfirmedRunID, runID) {
+		if err := db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("directory membership update failed")
+
+			return err
+		}
+
+		recordIngestChange(ctx)
+
+		return nil
+	}
+
+	input.LastSeenAt = &now
+	input.LastConfirmedRunID = &runID
+	update := db.DirectoryMembership.UpdateOneID(existing.ID).
+		SetInput(input).
+		Where(directorymembership.Or(
+			directorymembership.LastConfirmedRunIDIsNil(),
+			directorymembership.LastConfirmedRunIDLTE(runID),
+		))
+	err := update.Exec(ctx)
+
+	switch {
+	case err == nil:
+		recordIngestChange(ctx)
+
+		return nil
+	case !ent.IsNotFound(err):
+		logx.FromContext(ctx).Error().Err(err).Msg("directory membership update failed")
+
+		return err
+	}
+
+	// A newer run won the guarded update. Preserve unrelated field changes,
+	// but do not move confirmation or last-seen timestamps backward.
+	input.LastSeenAt = nil
+	input.LastConfirmedRunID = nil
+
+	if err := db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("directory membership update failed")
+
+		return err
+	}
+
+	recordIngestChange(ctx)
+
+	return nil
+}
+
+// findDirectoryMembershipForIngest finds the active row via the batch cache, falling back to the live lookup; found reports whether a row exists
+func findDirectoryMembershipForIngest(ctx context.Context, db *ent.Client, ownerID string, input ent.CreateDirectoryMembershipInput) (*ent.DirectoryMembership, bool, error) {
+	batch := directorySyncBatchFromContext(ctx)
+	if batch == nil {
+		return findDirectoryMembershipLive(ctx, db, input)
+	}
+
+	index, err := batch.membershipIndex(ctx, db, ownerID)
+	if err != nil {
+		return nil, false, err
+	}
+
+	rows := index[membershipKey{accountID: input.DirectoryAccountID, groupID: input.DirectoryGroupID}]
+
+	switch len(rows) {
+	case 0:
+		return nil, false, nil
+	case 1:
+		return rows[0], true, nil
+	default:
+		return findDirectoryMembershipLive(ctx, db, input)
+	}
+}
+
+// findDirectoryMembershipLive matches the active-pair uniqueness domain, excluding removed episode rows
+func findDirectoryMembershipLive(ctx context.Context, db *ent.Client, input ent.CreateDirectoryMembershipInput) (*ent.DirectoryMembership, bool, error) {
+	existing, err := db.DirectoryMembership.Query().
+		Where(directorymembership.DirectoryAccountID(input.DirectoryAccountID)).
+		Where(directorymembership.DirectoryGroupID(input.DirectoryGroupID)).
+		Where(directorymembership.RemovedAtIsNil()).
+		Only(ctx)
+
+	switch {
+	case err == nil:
+		return existing, true, nil
+	case ent.IsNotFound(err):
+		return nil, false, nil
+	default:
+		logx.FromContext(ctx).Error().Err(err).Msg("directory membership lookup failed")
+
+		return nil, false, err
+	}
 }
 
 func directoryMembershipRunCanAdvance(currentRunID *string, incomingRunID string) bool {
@@ -101,18 +200,14 @@ func directoryMembershipRunCanAdvance(currentRunID *string, incomingRunID string
 func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (ent.CreateDirectoryMembershipInput, error) {
 	ctx = logx.WithFields(ctx, map[string]any{"account_ref": input.DirectoryAccountID, "group_ref": input.DirectoryGroupID})
 
-	accountID, err := resolveDirectoryAccountID(ctx, db, integration, lo.FromPtr(input.DirectoryInstanceID), input.DirectoryAccountID)
+	accountID, err := resolveDirectoryAccountID(ctx, db, integration, lo.FromPtr(input.SourceInstanceID), input.DirectoryAccountID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unresolved directory account for membership")
 
 		return input, err
 	}
 
-	if input.DirectoryName == nil && integration.Name != "" {
-		input.DirectoryName = &integration.Name
-	}
-
-	groupID, err := resolveDirectoryGroupID(ctx, db, integration, input.DirectoryGroupID)
+	groupID, err := resolveDirectoryGroupID(ctx, db, integration, lo.FromPtr(input.SourceInstanceID), input.DirectoryGroupID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("unresolved directory group for membership")
 
@@ -134,9 +229,23 @@ func resolveDirectoryAccountID(ctx context.Context, db *ent.Client, integration 
 		return "", ErrIngestUpsertKeyMissing
 	}
 
+	if batch := directorySyncBatchFromContext(ctx); batch != nil {
+		id, ok, err := batch.resolveAccountFromCache(ctx, db, integration.OwnerID, instanceID, integration.ID, value)
+
+		switch {
+		case err != nil:
+			return "", err
+		case ok:
+			return id, nil
+		}
+	}
+
 	scope := directoryaccount.IntegrationID(integration.ID)
 	if instanceID != "" {
-		scope = directoryaccount.DirectoryInstanceID(instanceID)
+		scope = directoryaccount.Or(
+			directoryaccount.SourceInstanceID(instanceID),
+			directoryaccount.And(directoryaccount.IntegrationID(integration.ID), directoryaccount.SourceInstanceIDIsNil()),
+		)
 	}
 
 	account, err := db.DirectoryAccount.Query().
@@ -176,14 +285,33 @@ func resolveDirectoryAccountID(ctx context.Context, db *ent.Client, integration 
 }
 
 // resolveDirectoryGroupID resolves a directory group reference to its internal ID by checking primary key, external ID, and email
-func resolveDirectoryGroupID(ctx context.Context, db *ent.Client, integration *ent.Integration, value string) (string, error) {
+func resolveDirectoryGroupID(ctx context.Context, db *ent.Client, integration *ent.Integration, instanceID string, value string) (string, error) {
 	value = strings.TrimSpace(value)
 	if value == "" {
 		return "", ErrIngestUpsertKeyMissing
 	}
 
+	if batch := directorySyncBatchFromContext(ctx); batch != nil {
+		id, ok, err := batch.resolveGroupFromCache(ctx, db, integration.OwnerID, instanceID, integration.ID, value)
+
+		switch {
+		case err != nil:
+			return "", err
+		case ok:
+			return id, nil
+		}
+	}
+
+	scope := directorygroup.IntegrationID(integration.ID)
+	if instanceID != "" {
+		scope = directorygroup.Or(
+			directorygroup.SourceInstanceID(instanceID),
+			directorygroup.And(directorygroup.IntegrationID(integration.ID), directorygroup.SourceInstanceIDIsNil()),
+		)
+	}
+
 	group, err := db.DirectoryGroup.Query().
-		Where(directorygroup.ID(value), directorygroup.IntegrationID(integration.ID)).
+		Where(directorygroup.ID(value), directorygroup.OwnerID(integration.OwnerID)).
 		Only(ctx)
 	switch {
 	case err == nil:
@@ -203,7 +331,7 @@ func resolveDirectoryGroupID(ctx context.Context, db *ent.Client, integration *e
 	}
 
 	group, err = db.DirectoryGroup.Query().
-		Where(directorygroup.IntegrationID(integration.ID)).
+		Where(directorygroup.OwnerID(integration.OwnerID), scope).
 		Where(directorygroup.Or(refs...)).
 		Order(directorygroup.ByCreatedAt(sql.OrderDesc())).
 		First(ctx)

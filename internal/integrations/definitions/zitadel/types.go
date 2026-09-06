@@ -10,6 +10,8 @@ import (
 var (
 	// definitionID is the stable identifier for the Zitadel integration definition
 	definitionID = types.NewDefinitionRef("def_01K0ZITADEL000000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTR3PANHJQ6HPE0A5XEQ")
 	// integration is the typed installation metadata handle for the Zitadel definition
 	integration = types.NewInstallationRef(resolveInstallationMetadata)
 	// zitadelPATCredentialSchema is the JSON schema for the Zitadel PAT credential

@@ -138,7 +138,6 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyDirectoryAccountEmailAliases, Expr: `'EmailAliases' in payload && payload.EmailAliases != null ? payload.EmailAliases : []`},
 	{Key: entityops.InputKeyDirectoryAccountDisplayName, Expr: `payload.Name != "" ? payload.Name : payload.Login`},
 	{Key: entityops.InputKeyDirectoryAccountAvatarRemoteURL, Expr: `payload.AvatarURL`},
-	{Key: entityops.InputKeyDirectoryAccountDirectoryInstanceID, Expr: `payload.Org`},
 	{Key: entityops.InputKeyDirectoryAccountGivenName, Expr: `payload.GivenName`},
 	{Key: entityops.InputKeyDirectoryAccountFamilyName, Expr: `payload.FamilyName`},
 	{Key: entityops.InputKeyDirectoryAccountProfile, Expr: "payload"},
@@ -148,7 +147,6 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 var mapExprDirectoryGroup = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyDirectoryGroupExternalID, Expr: `payload.DatabaseID != 0 ? string(payload.DatabaseID) : payload.Slug`},
 	{Key: entityops.InputKeyDirectoryGroupDisplayName, Expr: `payload.Name != "" ? payload.Name : payload.Slug`},
-	{Key: entityops.InputKeyDirectoryGroupDirectoryInstanceID, Expr: `payload.Org`},
 	{Key: entityops.InputKeyDirectoryGroupClassification, Expr: `dyn("TEAM")`},
 	{Key: entityops.InputKeyDirectoryGroupStatus, Expr: `dyn("ACTIVE")`},
 	{Key: entityops.InputKeyDirectoryGroupProfile, Expr: "payload"},
@@ -158,7 +156,6 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyDirectoryMembershipDirectoryAccountID, Expr: `payload.Member.DatabaseID != 0 ? string(payload.Member.DatabaseID) : payload.Member.Login`},
 	{Key: entityops.InputKeyDirectoryMembershipDirectoryGroupID, Expr: `payload.Team.DatabaseID != 0 ? string(payload.Team.DatabaseID) : payload.Team.Slug`},
-	{Key: entityops.InputKeyDirectoryMembershipDirectoryInstanceID, Expr: `payload.Org`},
 	{Key: entityops.InputKeyDirectoryMembershipRole, Expr: `dyn(payload.Role != "" ? payload.Role : "MEMBER")`},
 	{Key: entityops.InputKeyDirectoryMembershipMetadata, Expr: "payload"},
 })

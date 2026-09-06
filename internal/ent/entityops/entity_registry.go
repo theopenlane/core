@@ -140,6 +140,9 @@ type Schema struct {
 	ProjectionType reflect.Type
 	// Ingest is present when this schema supports mapped integration ingestion
 	Ingest *IngestCapability
+	// unchanged reports whether a round-tripped ingest update carries no field changes for the
+	// marshaled row; present only for integration-mapped schemas with update inputs
+	unchanged func(row json.RawMessage, payload json.RawMessage) (bool, error)
 	// ConsoleRoute is present only when the schema explicitly declares a console route
 	ConsoleRoute *ConsoleRoute
 	// MentionSpec is present only when the schema explicitly declares mention scanning
@@ -679,7 +682,8 @@ func (s *Schema) LookupField() (FieldDescriptor, bool) {
 // record fails with ErrUpsertConflict rather than guessing. It composes the schema's catalog
 // closures, so unlike Create/Update/QueryByKey it needs no per-schema wiring. Schemas whose lookup
 // predicates are not a single org-scoped key column (integration-scoped lookups, multi-key
-// priority) keep hand-written persistence instead
+// priority) keep hand-written persistence instead. Updates carrying no field changes and no
+// injected edge links skip the write and mark the context no-op holder
 func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage) (string, error) {
 	ref := SchemaRef{Schema: s.Snake, Operation: refOpUpsert}
 
@@ -711,10 +715,59 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 			return "", logError(ctx, ref, ErrDecodeFailed, fmt.Errorf("%s row matching %s=%s has no id", s.Name, field.Name, value))
 		}
 
+		if s.unchanged != nil && !s.payloadCarriesEdgeKeys(payload) {
+			same, err := s.unchanged(rows[0], payload)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			if same {
+				markIngestNoop(ctx)
+
+				return id, nil
+			}
+		}
+
 		return id, s.Update(ctx, client, id, s.rekeyEdgesForUpdate(payload))
 	default:
 		return "", logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("%s lookup %s=%s matched %d records", s.Name, field.Name, value, len(rows)))
 	}
+}
+
+// payloadCarriesEdgeKeys reports whether the payload carries edge keys the update path would apply
+// but the change comparison cannot see: to-many add keys and edge-only unique keys. Unique edges
+// backed by a foreign-key column pass, since that column is compared as a regular field
+func (s *Schema) payloadCarriesEdgeKeys(payload json.RawMessage) bool {
+	doc, err := jsonx.Decode[map[string]json.RawMessage](payload)
+	if err != nil {
+		return true
+	}
+
+	for _, edge := range s.Edges {
+		if edge.AddField != "" {
+			if _, ok := doc[edge.CreateField]; ok {
+				return true
+			}
+
+			if _, ok := doc[edge.AddField]; ok {
+				return true
+			}
+
+			continue
+		}
+
+		if edge.Unique && edge.Field != "" {
+			continue
+		}
+
+		if edge.CreateField != "" {
+			if _, ok := doc[edge.CreateField]; ok {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 // rekeyEdgesForUpdate renames to-many edge keys in a create-input payload to their update-input add
@@ -876,12 +929,48 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "action_plan.ingest.requested"),
-			prepare: func(ctx context.Context, _ *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
 				ref := SchemaRef{Schema: "action_plan", Operation: refOpCreate}
 
 				input, err := jsonx.Decode[generated.CreateActionPlanInput](payload)
 				if err != nil {
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
+				}
+
+				if input.OwnerID != nil {
+					if err := actionplan.OwnerIDValidator(*input.OwnerID); err != nil {
+						logSanitizedIngestField(ctx, "action_plan", "owner_id", err)
+						input.OwnerID = nil
+					}
+				}
+
+				if input.Revision != nil {
+					if err := actionplan.RevisionValidator(*input.Revision); err != nil {
+						logSanitizedIngestField(ctx, "action_plan", "revision", err)
+						input.Revision = nil
+					}
+				}
+
+				if input.URL != nil {
+					if err := actionplan.URLValidator(*input.URL); err != nil {
+						logSanitizedIngestField(ctx, "action_plan", "url", err)
+						input.URL = nil
+					}
+				}
+
+				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
+					if input.OwnerID == nil && integration.OwnerID != "" {
+						input.OwnerID = &integration.OwnerID
+					}
 				}
 
 				prepared, err := json.Marshal(input)
@@ -891,6 +980,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.ActionPlan](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateActionPlanInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return ActionPlanIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaAssessment = &Schema{
@@ -1093,6 +1195,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
 					}
@@ -1108,6 +1219,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.Asset](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateAssetInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return AssetIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaCampaign = &Schema{
@@ -1310,6 +1434,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.IntegrationID == nil && integration.ID != "" {
 						input.IntegrationID = &integration.ID
 					}
@@ -1322,6 +1455,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.CheckResult](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateCheckResultInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return CheckResultIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaContact = &Schema{
@@ -1423,6 +1569,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.IntegrationID == nil && integration.ID != "" {
 						input.IntegrationID = &integration.ID
 					}
@@ -1438,6 +1593,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.Contact](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateContactInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return ContactIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaControl = &Schema{
@@ -1826,6 +1994,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
 					}
@@ -1844,6 +2021,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.DirectoryAccount](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateDirectoryAccountInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return DirectoryAccountIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaDirectoryGroup = &Schema{
@@ -1945,6 +2135,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.IntegrationID == "" {
 						input.IntegrationID = integration.ID
 					}
@@ -1963,6 +2162,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.DirectoryGroup](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateDirectoryGroupInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return DirectoryGroupIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaDirectoryMembership = &Schema{
@@ -2057,6 +2269,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.IntegrationID == "" {
 						input.IntegrationID = integration.ID
 					}
@@ -2072,6 +2293,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.DirectoryMembership](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateDirectoryMembershipInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return DirectoryMembershipIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaDirectorySyncRun = &Schema{
@@ -2390,6 +2624,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
 					}
@@ -2402,6 +2645,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.Entity](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateEntityInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return EntityIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaEntityType = &Schema{
@@ -2688,6 +2944,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
 					}
@@ -2700,6 +2965,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.Finding](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateFindingInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return FindingIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaFindingControl = &Schema{
@@ -3153,6 +3431,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
 					}
@@ -3165,6 +3452,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.InternalPolicy](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateInternalPolicyInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return InternalPolicyIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaInvite = &Schema{
@@ -3770,12 +4070,41 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "procedure.ingest.requested"),
-			prepare: func(ctx context.Context, _ *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
 				ref := SchemaRef{Schema: "procedure", Operation: refOpCreate}
 
 				input, err := jsonx.Decode[generated.CreateProcedureInput](payload)
 				if err != nil {
 					return nil, logError(ctx, ref, ErrDecodeFailed, err)
+				}
+
+				if input.Revision != nil {
+					if err := procedure.RevisionValidator(*input.Revision); err != nil {
+						logSanitizedIngestField(ctx, "procedure", "revision", err)
+						input.Revision = nil
+					}
+				}
+
+				if input.URL != nil {
+					if err := procedure.URLValidator(*input.URL); err != nil {
+						logSanitizedIngestField(ctx, "procedure", "url", err)
+						input.URL = nil
+					}
+				}
+
+				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
+					if input.OwnerID == nil && integration.OwnerID != "" {
+						input.OwnerID = &integration.OwnerID
+					}
 				}
 
 				prepared, err := json.Marshal(input)
@@ -3785,6 +4114,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.Procedure](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateProcedureInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return ProcedureIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaProgram = &Schema{
@@ -4074,6 +4416,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
 					}
@@ -4089,6 +4440,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.Risk](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateRiskInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return RiskIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaSLADefinition = &Schema{
@@ -4939,6 +5303,15 @@ var (
 				}
 
 				if integration != nil {
+					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
+						input.SourceDefinitionID = &integration.DefinitionID
+					}
+					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
+						input.SourceDefinitionVersion = &integration.DefinitionVersion
+					}
+					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
+						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
+					}
 					if input.OwnerID == nil && integration.OwnerID != "" {
 						input.OwnerID = &integration.OwnerID
 					}
@@ -4951,6 +5324,19 @@ var (
 
 				return prepared, nil
 			},
+		},
+		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
+			existing, err := jsonx.Decode[generated.Vulnerability](row)
+			if err != nil {
+				return false, err
+			}
+
+			input, err := jsonx.Decode[generated.UpdateVulnerabilityInput](payload)
+			if err != nil {
+				return false, err
+			}
+
+			return VulnerabilityIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaWebauthn = &Schema{
@@ -5180,53 +5566,57 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaActionPlan.Fields = []FieldDescriptor{
-		{Name: "action_plan_kind_id", Label: "ActionPlanKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "action_plan_kind_name", Label: "ActionPlanKindName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", Clearable: true},
-		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "blocked", Label: "Blocked", Type: "bool"},
-		{Name: "blocker_reason", Label: "BlockerReason", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "completed_at", Label: "CompletedAt", Type: "time.Time", Clearable: true},
-		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", Clearable: true},
+		{Name: "action_plan_kind_id", Label: "ActionPlanKindID", Type: "string", MatchKey: true, InputKey: "action_plan_kind_id", Clearable: true},
+		{Name: "action_plan_kind_name", Label: "ActionPlanKindName", Type: "string", MatchKey: true, InputKey: "action_plan_kind_name", Clearable: true},
+		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", InputKey: "approval_required", Clearable: true},
+		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, InputKey: "approver_id", Clearable: true},
+		{Name: "blocked", Label: "Blocked", Type: "bool", InputKey: "blocked"},
+		{Name: "blocker_reason", Label: "BlockerReason", Type: "string", MatchKey: true, InputKey: "blocker_reason", Clearable: true},
+		{Name: "completed_at", Label: "CompletedAt", Type: "time.Time", InputKey: "completed_at", Clearable: true},
+		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", InputKey: "control_suggestions", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, Clearable: true},
-		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string", Clearable: true},
-		{Name: "dismissed_improvement_suggestions", Label: "DismissedImprovementSuggestions", Type: "[]string", Clearable: true},
-		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", Clearable: true},
-		{Name: "due_date", Label: "DueDate", Type: "time.Time", Clearable: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
+		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "details", Clearable: true},
+		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, InputKey: "details_json", Clearable: true},
+		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string", InputKey: "dismissed_control_suggestions", Clearable: true},
+		{Name: "dismissed_improvement_suggestions", Label: "DismissedImprovementSuggestions", Type: "[]string", InputKey: "dismissed_improvement_suggestions", Clearable: true},
+		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", InputKey: "dismissed_tag_suggestions", Clearable: true},
+		{Name: "due_date", Label: "DueDate", Type: "time.Time", InputKey: "due_date", Clearable: true},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Clearable: true},
 		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", Clearable: true},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
-		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "priority", Label: "Priority", Type: "enums.Priority", Clearable: true},
-		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", Clearable: true},
-		{Name: "requires_approval", Label: "RequiresApproval", Type: "bool"},
-		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", Clearable: true},
-		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", Clearable: true},
-		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "source", Label: "Source", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
+		{Name: "priority", Label: "Priority", Type: "enums.Priority", InputKey: "priority", Clearable: true},
+		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Clearable: true},
+		{Name: "requires_approval", Label: "RequiresApproval", Type: "bool", InputKey: "requires_approval"},
+		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", InputKey: "review_due", Clearable: true},
+		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
+		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
+		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
+		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", InputKey: "tag_suggestions", Clearable: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
+		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title"},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "url", Label: "URL", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
 	}
 	SchemaAssessment.Fields = []FieldDescriptor{
@@ -5315,6 +5705,7 @@ func init() {
 		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Clearable: true},
 		{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "internal_owner_identity_holder_id", Clearable: true},
 		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
@@ -5325,8 +5716,11 @@ func init() {
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, InputKey: "security_tier_id", Clearable: true},
 		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
 		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", LookupKey: true, Clearable: true},
-		{Name: "source_platform_id", Label: "SourcePlatformID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_platform_id", Label: "SourcePlatformID", Type: "string", MatchKey: true, InputKey: "source_platform_id", Clearable: true},
 		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
@@ -5412,8 +5806,12 @@ func init() {
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
 		{Name: "last_observed_at", Label: "LastObservedAt", Type: "models.DateTime", InputKey: "last_observed_at", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id", LookupKey: true, Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.CheckStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
@@ -5431,9 +5829,13 @@ func init() {
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, InputKey: "full_name", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.UserStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title", Clearable: true},
@@ -5627,6 +6029,7 @@ func init() {
 		{Name: "last_login_at", Label: "LastLoginAt", Type: "time.Time", InputKey: "last_login_at", Clearable: true},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
 		{Name: "last_seen_ip", Label: "LastSeenIP", Type: "string", MatchKey: true, InputKey: "last_seen_ip", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "mfa_state", Label: "MfaState", Type: "enums.DirectoryAccountMFAState", InputKey: "mfa_state"},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
@@ -5642,6 +6045,9 @@ func init() {
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "secondary_key", Label: "SecondaryKey", Type: "string", MatchKey: true, InputKey: "secondary_key", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectoryAccountStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -5668,6 +6074,7 @@ func init() {
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "member_count", Label: "MemberCount", Type: "int", InputKey: "member_count", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
@@ -5679,6 +6086,9 @@ func init() {
 		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectoryGroupStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
@@ -5702,6 +6112,7 @@ func init() {
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
 		{Name: "last_confirmed_run_id", Label: "LastConfirmedRunID", Type: "string", MatchKey: true, InputKey: "last_confirmed_run_id", Clearable: true},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
@@ -5711,6 +6122,9 @@ func init() {
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
@@ -5838,7 +6252,7 @@ func init() {
 		{Name: "entity_security_questionnaire_status_name", Label: "EntitySecurityQuestionnaireStatusName", Type: "string", MatchKey: true, InputKey: "entity_security_questionnaire_status_name", Clearable: true},
 		{Name: "entity_source_type_id", Label: "EntitySourceTypeID", Type: "string", MatchKey: true, InputKey: "entity_source_type_id", Clearable: true},
 		{Name: "entity_source_type_name", Label: "EntitySourceTypeName", Type: "string", MatchKey: true, InputKey: "entity_source_type_name", Clearable: true},
-		{Name: "entity_type_id", Label: "EntityTypeID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "entity_type_id", Label: "EntityTypeID", Type: "string", MatchKey: true, InputKey: "entity_type_id", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
@@ -5849,10 +6263,11 @@ func init() {
 		{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "internal_owner_identity_holder_id", Clearable: true},
 		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
 		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", InputKey: "last_reviewed_at", Clearable: true},
-		{Name: "linked_asset_ids", Label: "LinkedAssetIds", Type: "[]string", Clearable: true},
+		{Name: "linked_asset_ids", Label: "LinkedAssetIds", Type: "[]string", InputKey: "linked_asset_ids", Clearable: true},
 		{Name: "links", Label: "Links", Type: "[]string", InputKey: "links", Clearable: true},
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Clearable: true},
 		{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true},
@@ -5872,6 +6287,9 @@ func init() {
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "soc2_period_end", Label: "Soc2PeriodEnd", Type: "models.DateTime", InputKey: "soc2_period_end", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "spend_currency", Label: "SpendCurrency", Type: "string", MatchKey: true, InputKey: "spend_currency", Clearable: true},
 		{Name: "sso_enforced", Label: "SSOEnforced", Type: "bool", InputKey: "sso_enforced", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.EntityStatus", InputKey: "status", Clearable: true},
@@ -6042,6 +6460,7 @@ func init() {
 		{Name: "finding_status_name", Label: "FindingStatusName", Type: "string", MatchKey: true, InputKey: "finding_status_name", Clearable: true},
 		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "numeric_severity", Label: "NumericSeverity", Type: "float64", InputKey: "numeric_severity", Clearable: true},
 		{Name: "open", Label: "Open", Type: "bool", WorkflowEligible: true, InputKey: "open", Clearable: true},
@@ -6066,6 +6485,9 @@ func init() {
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel", Clearable: true},
 		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true},
 		{Name: "state", Label: "State", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "state", Clearable: true},
 		{Name: "steps_to_reproduce", Label: "StepsToReproduce", Type: "[]string", InputKey: "steps_to_reproduce", Clearable: true},
@@ -6345,6 +6767,7 @@ func init() {
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "internal_policy_kind_id", Label: "InternalPolicyKindID", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_id", Clearable: true},
 		{Name: "internal_policy_kind_name", Label: "InternalPolicyKindName", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_name", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
@@ -6353,6 +6776,9 @@ func init() {
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -6799,47 +7225,51 @@ func init() {
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
 	}
 	SchemaProcedure.Fields = []FieldDescriptor{
-		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", Clearable: true},
-		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", Clearable: true},
+		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", InputKey: "approval_required", Clearable: true},
+		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, InputKey: "approver_id", Clearable: true},
+		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", InputKey: "control_suggestions", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
-		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, Clearable: true},
-		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string", Clearable: true},
-		{Name: "dismissed_improvement_suggestions", Label: "DismissedImprovementSuggestions", Type: "[]string", Clearable: true},
-		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", Clearable: true},
+		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "details", Clearable: true},
+		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, InputKey: "details_json", Clearable: true},
+		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string", InputKey: "dismissed_control_suggestions", Clearable: true},
+		{Name: "dismissed_improvement_suggestions", Label: "DismissedImprovementSuggestions", Type: "[]string", InputKey: "dismissed_improvement_suggestions", Clearable: true},
+		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string", InputKey: "dismissed_tag_suggestions", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
+		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents", Clearable: true},
 		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true, Clearable: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", Clearable: true},
-		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "procedure_kind_id", Label: "ProcedureKindID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "procedure_kind_name", Label: "ProcedureKindName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", Clearable: true},
-		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", Clearable: true},
-		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, Clearable: true},
+		{Name: "procedure_kind_id", Label: "ProcedureKindID", Type: "string", MatchKey: true, InputKey: "procedure_kind_id", Clearable: true},
+		{Name: "procedure_kind_name", Label: "ProcedureKindName", Type: "string", MatchKey: true, InputKey: "procedure_kind_name", Clearable: true},
+		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", InputKey: "review_due", Clearable: true},
+		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
+		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
+		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
+		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", Clearable: true},
-		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
+		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", InputKey: "tag_suggestions", Clearable: true},
+		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "url", Label: "URL", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
 		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
 	}
 	SchemaProgram.Fields = []FieldDescriptor{
@@ -6966,7 +7396,7 @@ func init() {
 		{Name: "business_costs_json", Label: "BusinessCostsJSON", Type: "[]interface {}", InputKey: "business_costs_json", Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
@@ -6981,6 +7411,7 @@ func init() {
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
 		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "last_reviewed_at", Clearable: true},
 		{Name: "likelihood", Label: "Likelihood", Type: "enums.RiskLikelihood", WorkflowEligible: true, InputKey: "likelihood", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "mitigated_at", Label: "MitigatedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "mitigated_at", Clearable: true},
 		{Name: "mitigation", Label: "Mitigation", Type: "string", MatchKey: true, InputKey: "mitigation", Clearable: true},
 		{Name: "mitigation_json", Label: "MitigationJSON", Type: "[]interface {}", InputKey: "mitigation_json", Clearable: true},
@@ -6999,7 +7430,10 @@ func init() {
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "score", Label: "Score", Type: "int", WorkflowEligible: true, InputKey: "score", Clearable: true},
-		{Name: "stakeholder_id", Label: "StakeholderID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "stakeholder_id", Label: "StakeholderID", Type: "string", MatchKey: true, InputKey: "stakeholder_id", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.RiskStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
@@ -7593,6 +8027,7 @@ func init() {
 		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact", Clearable: true},
 		{Name: "impacts", Label: "Impacts", Type: "[]string", InputKey: "impacts", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
 		{Name: "manifest_path", Label: "ManifestPath", Type: "string", MatchKey: true, InputKey: "manifest_path", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "open", Label: "Open", Type: "bool", WorkflowEligible: true, InputKey: "open", Clearable: true},
@@ -7616,6 +8051,9 @@ func init() {
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel", Clearable: true},
 		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
 		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},

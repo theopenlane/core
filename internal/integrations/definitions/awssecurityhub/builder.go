@@ -14,6 +14,7 @@ import (
 func Builder(cfg Config) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
+			VirtualUser: VirtualUser,
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID.ID(),
 				Family:      "Amazon Web Services",

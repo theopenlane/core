@@ -29,6 +29,7 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			lastLoginAt
 			lastSeenAt
 			lastSeenIP
+			managedBy
 			metadata
 			mfaState
 			observedAt
@@ -44,6 +45,9 @@ mutation CreateBulkCSVDirectoryAccount ($input: Upload!) {
 			scopeID
 			scopeName
 			secondaryKey
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -84,6 +88,7 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			lastLoginAt
 			lastSeenAt
 			lastSeenIP
+			managedBy
 			metadata
 			mfaState
 			observedAt
@@ -99,6 +104,9 @@ mutation CreateBulkDirectoryAccount ($input: [CreateDirectoryAccountInput!]) {
 			scopeID
 			scopeName
 			secondaryKey
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -139,6 +147,7 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			lastLoginAt
 			lastSeenAt
 			lastSeenIP
+			managedBy
 			metadata
 			mfaState
 			observedAt
@@ -154,6 +163,9 @@ mutation CreateDirectoryAccount ($input: CreateDirectoryAccountInput!) {
 			scopeID
 			scopeName
 			secondaryKey
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags
@@ -242,6 +254,7 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		lastLoginAt
 		lastSeenAt
 		lastSeenIP
+		managedBy
 		metadata
 		mfaState
 		observedAt
@@ -257,6 +270,9 @@ query GetDirectoryAccountByID ($directoryAccountId: ID!) {
 		scopeID
 		scopeName
 		secondaryKey
+		sourceDefinitionID
+		sourceDefinitionVersion
+		sourceInstanceID
 		sourceVersion
 		status
 		tags
@@ -340,6 +356,7 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			lastLoginAt
 			lastSeenAt
 			lastSeenIP
+			managedBy
 			metadata
 			mfaState
 			observedAt
@@ -355,6 +372,9 @@ mutation UpdateDirectoryAccount ($updateDirectoryAccountId: ID!, $input: UpdateD
 			scopeID
 			scopeName
 			secondaryKey
+			sourceDefinitionID
+			sourceDefinitionVersion
+			sourceInstanceID
 			sourceVersion
 			status
 			tags

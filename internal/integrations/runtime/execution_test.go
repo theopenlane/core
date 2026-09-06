@@ -51,6 +51,7 @@ func TestExecuteOperationValidConfigNoSchema(t *testing.T) {
 
 	called := false
 	_ = reg.Register(types.Definition{
+		VirtualUser:    testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID: "test-def",
 		},

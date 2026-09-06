@@ -9,6 +9,8 @@ import (
 var (
 	// DefinitionID is the stable identifier for the email integration definition
 	DefinitionID = types.NewDefinitionRef("def_01EMAILINT00000000000000001")
+	// VirtualUser is the virtual actor identity for records created by this definition's installations
+	VirtualUser = types.NewVirtualUserRef("01VRTACTRCWKFVDPV1PYCTCBYC")
 	// runtimeEmailSchema is the JSON schema and typed ref for the runtime email config
 	runtimeEmailSchema, runtimeEmailRef = providerkit.RuntimeSchema[RuntimeEmailConfig]()
 	// emailCredentialSchema is the JSON schema and typed credential ref for customer-provisioned email

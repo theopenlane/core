@@ -237,7 +237,7 @@ func (Finding) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("event_time"),
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 				entx.FieldWorkflowEligible(),
 			),
 		field.Time("reported_at").
@@ -256,7 +256,7 @@ func (Finding) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("external_uri").
 			Comment("link to the finding in the source system").
@@ -274,7 +274,7 @@ func (Finding) Fields() []ent.Field {
 			Comment("raw payload received from the integration for auditing and troubleshooting").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 	}
 }
@@ -386,6 +386,7 @@ func (f Finding) Mixin() []ent.Mixin {
 	return mixinConfig{
 		prefix: "FIND",
 		additionalMixins: []ent.Mixin{
+			ProvenanceMixin{},
 			newObjectOwnedMixin[generated.Finding](f,
 				withParents(
 					Program{},

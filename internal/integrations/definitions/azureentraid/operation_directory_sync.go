@@ -56,6 +56,8 @@ type directoryUserPayload struct {
 	EmployeeHireDate *time.Time `json:"employeeHireDate,omitempty"`
 	// EmployeeLeaveDateTime is the user's expected departure/end date
 	EmployeeLeaveDateTime *time.Time `json:"employeeLeaveDateTime,omitempty"`
+	// TenantID is the stable Azure tenant identifier stamped from installation metadata
+	TenantID string `json:"tenantId,omitempty"`
 }
 
 // directoryGroupPayload is the JSON-serializable representation of one Entra ID group
@@ -72,6 +74,8 @@ type directoryGroupPayload struct {
 	SecurityEnabled bool `json:"securityEnabled"`
 	// MailEnabled indicates whether the group is mail-enabled
 	MailEnabled bool `json:"mailEnabled"`
+	// TenantID is the stable Azure tenant identifier stamped from installation metadata
+	TenantID string `json:"tenantId,omitempty"`
 }
 
 // directoryEntityRef is a lightweight reference to a directory user or group
@@ -88,6 +92,8 @@ type directoryMembershipPayload struct {
 	Group directoryEntityRef `json:"group"`
 	// Member is the member side of the membership
 	Member directoryEntityRef `json:"member"`
+	// TenantID is the stable Azure tenant identifier stamped from installation metadata
+	TenantID string `json:"tenantId,omitempty"`
 }
 
 // DirectorySync collects Azure Entra ID directory users, groups, and memberships for ingest
@@ -97,15 +103,25 @@ type DirectorySync struct{}
 func (d DirectorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequest(entraClient, func(ctx context.Context, request types.OperationRequest, c *msgraphsdk.GraphServiceClient) ([]types.IngestPayloadSet, error) {
 		var cfg UserInput
+
+		var meta InstallationMetadata
+
 		if request.Integration != nil {
 			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &cfg)
+
+			if err := jsonx.UnmarshalIfPresent(request.Integration.InstallationMetadata.Attributes, &meta); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("azureentraid: installation metadata could not be decoded")
+
+				return nil, err
+			}
 		}
-		return d.Run(ctx, c, cfg)
+
+		return d.Run(ctx, c, cfg, meta.TenantID)
 	})
 }
 
 // Run collects Azure Entra ID directory users, groups, and memberships
-func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, cfg UserInput) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, cfg UserInput, tenantID string) ([]types.IngestPayloadSet, error) {
 	users, err := listEntraUsers(ctx, c)
 	if err != nil {
 		return nil, err
@@ -120,6 +136,7 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 		}
 
 		payload := userToPayload(user)
+		payload.TenantID = tenantID
 		resource := entraUserResource(payload)
 
 		envelope, err := providerkit.MarshalEnvelope(resource, payload, ErrPayloadEncode)
@@ -159,6 +176,7 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 
 	for _, group := range groups {
 		payload := groupToPayload(group)
+		payload.TenantID = tenantID
 		resource := entraGroupResource(payload)
 
 		envelope, err := providerkit.MarshalEnvelope(resource, payload, ErrPayloadEncode)
@@ -192,8 +210,9 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 			}
 
 			membershipEnvelope, err := providerkit.MarshalEnvelope(membershipResource, directoryMembershipPayload{
-				Group:  groupRef,
-				Member: memberRef,
+				Group:    groupRef,
+				Member:   memberRef,
+				TenantID: tenantID,
 			}, ErrPayloadEncode)
 			if err != nil {
 				return nil, err

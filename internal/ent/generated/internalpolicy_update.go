@@ -182,6 +182,86 @@ func (_u *InternalPolicyUpdate) ClearRevision() *InternalPolicyUpdate {
 	return _u
 }
 
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *InternalPolicyUpdate) SetSourceDefinitionID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableSourceDefinitionID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *InternalPolicyUpdate) ClearSourceDefinitionID() *InternalPolicyUpdate {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *InternalPolicyUpdate) SetSourceDefinitionVersion(v string) *InternalPolicyUpdate {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableSourceDefinitionVersion(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *InternalPolicyUpdate) ClearSourceDefinitionVersion() *InternalPolicyUpdate {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *InternalPolicyUpdate) SetSourceInstanceID(v string) *InternalPolicyUpdate {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableSourceInstanceID(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *InternalPolicyUpdate) ClearSourceInstanceID() *InternalPolicyUpdate {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *InternalPolicyUpdate) SetManagedBy(v string) *InternalPolicyUpdate {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *InternalPolicyUpdate) SetNillableManagedBy(v *string) *InternalPolicyUpdate {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *InternalPolicyUpdate) ClearManagedBy() *InternalPolicyUpdate {
+	_u.mutation.ClearManagedBy()
+	return _u
+}
+
 // SetOwnerID sets the "owner_id" field.
 func (_u *InternalPolicyUpdate) SetOwnerID(v string) *InternalPolicyUpdate {
 	_u.mutation.SetOwnerID(v)
@@ -1716,6 +1796,30 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
 	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(internalpolicy.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(internalpolicy.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(internalpolicy.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(internalpolicy.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(internalpolicy.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(internalpolicy.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(internalpolicy.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(internalpolicy.FieldManagedBy, field.TypeString)
+	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(internalpolicy.FieldSystemOwned, field.TypeBool)
 	}
@@ -3108,6 +3212,86 @@ func (_u *InternalPolicyUpdateOne) SetNillableRevision(v *string) *InternalPolic
 // ClearRevision clears the value of the "revision" field.
 func (_u *InternalPolicyUpdateOne) ClearRevision() *InternalPolicyUpdateOne {
 	_u.mutation.ClearRevision()
+	return _u
+}
+
+// SetSourceDefinitionID sets the "source_definition_id" field.
+func (_u *InternalPolicyUpdateOne) SetSourceDefinitionID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetSourceDefinitionID(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionID sets the "source_definition_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableSourceDefinitionID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionID(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionID clears the value of the "source_definition_id" field.
+func (_u *InternalPolicyUpdateOne) ClearSourceDefinitionID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearSourceDefinitionID()
+	return _u
+}
+
+// SetSourceDefinitionVersion sets the "source_definition_version" field.
+func (_u *InternalPolicyUpdateOne) SetSourceDefinitionVersion(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetSourceDefinitionVersion(v)
+	return _u
+}
+
+// SetNillableSourceDefinitionVersion sets the "source_definition_version" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableSourceDefinitionVersion(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetSourceDefinitionVersion(*v)
+	}
+	return _u
+}
+
+// ClearSourceDefinitionVersion clears the value of the "source_definition_version" field.
+func (_u *InternalPolicyUpdateOne) ClearSourceDefinitionVersion() *InternalPolicyUpdateOne {
+	_u.mutation.ClearSourceDefinitionVersion()
+	return _u
+}
+
+// SetSourceInstanceID sets the "source_instance_id" field.
+func (_u *InternalPolicyUpdateOne) SetSourceInstanceID(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetSourceInstanceID(v)
+	return _u
+}
+
+// SetNillableSourceInstanceID sets the "source_instance_id" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableSourceInstanceID(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetSourceInstanceID(*v)
+	}
+	return _u
+}
+
+// ClearSourceInstanceID clears the value of the "source_instance_id" field.
+func (_u *InternalPolicyUpdateOne) ClearSourceInstanceID() *InternalPolicyUpdateOne {
+	_u.mutation.ClearSourceInstanceID()
+	return _u
+}
+
+// SetManagedBy sets the "managed_by" field.
+func (_u *InternalPolicyUpdateOne) SetManagedBy(v string) *InternalPolicyUpdateOne {
+	_u.mutation.SetManagedBy(v)
+	return _u
+}
+
+// SetNillableManagedBy sets the "managed_by" field if the given value is not nil.
+func (_u *InternalPolicyUpdateOne) SetNillableManagedBy(v *string) *InternalPolicyUpdateOne {
+	if v != nil {
+		_u.SetManagedBy(*v)
+	}
+	return _u
+}
+
+// ClearManagedBy clears the value of the "managed_by" field.
+func (_u *InternalPolicyUpdateOne) ClearManagedBy() *InternalPolicyUpdateOne {
+	_u.mutation.ClearManagedBy()
 	return _u
 }
 
@@ -4674,6 +4858,30 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 	}
 	if _u.mutation.RevisionCleared() {
 		_spec.ClearField(internalpolicy.FieldRevision, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionID(); ok {
+		_spec.SetField(internalpolicy.FieldSourceDefinitionID, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionIDCleared() {
+		_spec.ClearField(internalpolicy.FieldSourceDefinitionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceDefinitionVersion(); ok {
+		_spec.SetField(internalpolicy.FieldSourceDefinitionVersion, field.TypeString, value)
+	}
+	if _u.mutation.SourceDefinitionVersionCleared() {
+		_spec.ClearField(internalpolicy.FieldSourceDefinitionVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceInstanceID(); ok {
+		_spec.SetField(internalpolicy.FieldSourceInstanceID, field.TypeString, value)
+	}
+	if _u.mutation.SourceInstanceIDCleared() {
+		_spec.ClearField(internalpolicy.FieldSourceInstanceID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ManagedBy(); ok {
+		_spec.SetField(internalpolicy.FieldManagedBy, field.TypeString, value)
+	}
+	if _u.mutation.ManagedByCleared() {
+		_spec.ClearField(internalpolicy.FieldManagedBy, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(internalpolicy.FieldSystemOwned, field.TypeBool)
