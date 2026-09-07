@@ -72,19 +72,25 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 
 // handleOrganizationSettingDomainsUpdated requests a scan for every current domain whenever
 // an organization's settings domains field changes
-func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityops.MutationPayload, rt *intruntime.Runtime) error {
+func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, payload entityops.MutationPayload, rt *intruntime.Runtime) error {
 	setting, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.OrganizationSetting.Get)
 	if err != nil || !ok {
 		return err
 	}
 
+	previousDomains, _ := payload.OldValue(organizationsetting.FieldDomains)
+	domains, ok := previousDomains.([]string)
+
+	// only apply the branding to the trustcenter by default on the first run
+	// if org settings has existing domains then no need to
+	applyBrandDesign := ok && len(domains) == 0
+
 	for idx, domain := range setting.Domains {
 		if err := dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID), domain), cloudflare.DomainScanRequest{
-			OrganizationID: setting.OrganizationID,
-			Domain:         domain,
-			GroupID:        string(inv.Envelope.ID),
-			// just pick out the first one to apply it's brand design to the trustcenters
-			ApplyBrandDesign: idx == 0,
+			OrganizationID:   setting.OrganizationID,
+			Domain:           domain,
+			GroupID:          string(inv.Envelope.ID),
+			ApplyBrandDesign: applyBrandDesign && idx == 0,
 		}); err != nil {
 			return err
 		}

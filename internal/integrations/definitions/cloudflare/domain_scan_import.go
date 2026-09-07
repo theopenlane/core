@@ -194,6 +194,10 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, brandDesign DomainScanImportBranding) (bool, error) {
 	return workflows.WithTx(ctx, client, nil, func(tx *generated.Tx) (bool, error) {
 		tc, err := tx.TrustCenter.Query().First(ctx)
+		if generated.IsNotFound(err) {
+			return false, nil
+		}
+
 		if err != nil {
 			return false, fmt.Errorf("could not find trustcenter for brand design: %w", err)
 		}
