@@ -557,7 +557,7 @@ func testDefinition(t *testing.T, mappings []types.MappingRegistration) (*regist
 	t.Helper()
 
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:          "test-def",
 			DisplayName: "Test",
@@ -848,7 +848,7 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	}
 
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:     "test-def",
 			Active: true,
@@ -930,7 +930,7 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 	}
 
 	def := types.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: types.DefinitionSpec{
 			ID:     "test-def",
 			Active: true,

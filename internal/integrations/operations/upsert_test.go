@@ -65,6 +65,10 @@ func TestPersistUpsert_CreatePath(t *testing.T) {
 		context.Background(),
 		input{Name: "new"},
 		func(in input) (input, error) { return in, nil },
+		func(any, input) (bool, error) {
+			t.Fatal("unchanged should not be called on create path")
+			return false, nil
+		},
 		func(context.Context) (any, error) {
 			return nil, &ent.NotFoundError{}
 		},
@@ -106,6 +110,7 @@ func TestPersistUpsert_UpdatePath(t *testing.T) {
 		context.Background(),
 		input{Name: "existing"},
 		func(in input) (input, error) { return in, nil },
+		func(string, input) (bool, error) { return false, nil },
 		func(context.Context) (string, error) {
 			return "existing-id", nil
 		},
@@ -137,6 +142,45 @@ func TestPersistUpsert_UpdatePath(t *testing.T) {
 	}
 }
 
+func TestPersistUpsert_UnchangedSkip(t *testing.T) {
+	t.Parallel()
+
+	type input struct {
+		Name string
+	}
+
+	id, err := persistUpsert(
+		context.Background(),
+		input{Name: "existing"},
+		func(in input) (input, error) { return in, nil },
+		func(existing string, in input) (bool, error) {
+			if existing != "existing-id" || in.Name != "existing" {
+				t.Fatalf("unchanged got existing=%q input=%+v", existing, in)
+			}
+			return true, nil
+		},
+		func(context.Context) (string, error) {
+			return "existing-id", nil
+		},
+		func(context.Context, input) (string, error) {
+			t.Fatal("create should not be called on unchanged path")
+			return "", nil
+		},
+		func(context.Context, string, input) error {
+			t.Fatal("update should not be called on unchanged path")
+			return nil
+		},
+		func(s string) string { return s },
+	)
+
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if id != "existing-id" {
+		t.Fatalf("expected id=%q, got %q", "existing-id", id)
+	}
+}
+
 func TestPersistUpsert_FindExistingError(t *testing.T) {
 	t.Parallel()
 
@@ -148,6 +192,7 @@ func TestPersistUpsert_FindExistingError(t *testing.T) {
 		context.Background(),
 		input{Name: "test"},
 		func(in input) (input, error) { return in, nil },
+		func(any, input) (bool, error) { return false, nil },
 		func(context.Context) (any, error) {
 			return nil, dbErr
 		},
@@ -178,6 +223,7 @@ func TestPersistUpsert_ToUpdateError(t *testing.T) {
 		context.Background(),
 		input{Name: "test"},
 		func(input) (input, error) { return input{}, toUpdateErr },
+		func(string, input) (bool, error) { return false, nil },
 		func(context.Context) (string, error) {
 			return "exists", nil
 		},
@@ -214,6 +260,7 @@ func TestPersistUpsert_CreateError(t *testing.T) {
 		context.Background(),
 		input{Name: "test"},
 		func(in input) (input, error) { return in, nil },
+		func(any, input) (bool, error) { return false, nil },
 		func(context.Context) (any, error) {
 			return nil, &ent.NotFoundError{}
 		},
@@ -247,6 +294,7 @@ func TestPersistRoundTripUpsert_CreatePath(t *testing.T) {
 	id, err := persistRoundTripUpsert(
 		context.Background(),
 		createInput{Name: "new"},
+		func(any, updateInput) (bool, error) { return false, nil },
 		func(context.Context) (any, error) {
 			return nil, &ent.NotFoundError{}
 		},
@@ -290,6 +338,7 @@ func TestPersistRoundTripUpsert_UpdatePath(t *testing.T) {
 	id, err := persistRoundTripUpsert(
 		context.Background(),
 		createInput{Name: "existing"},
+		func(string, updateInput) (bool, error) { return false, nil },
 		func(context.Context) (string, error) {
 			return "existing-id", nil
 		},
@@ -327,6 +376,7 @@ func TestPersistUpsert_UpdateError(t *testing.T) {
 		context.Background(),
 		input{Name: "test"},
 		func(in input) (input, error) { return in, nil },
+		func(string, input) (bool, error) { return false, nil },
 		func(context.Context) (string, error) {
 			return "exists", nil
 		},

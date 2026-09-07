@@ -39,6 +39,14 @@ func IngestNoopMarked(ctx context.Context) bool {
 	return ok && holder != nil && holder.noop
 }
 
+// timeEqualMicro reports whether two times denote the same microsecond instant, absorbing the
+// sub-microsecond precision the database cannot store
+func timeEqualMicro(a, b time.Time) bool {
+	d := a.Sub(b)
+
+	return d > -time.Microsecond && d < time.Microsecond
+}
+
 // ActionPlanIngestUnchanged reports whether a round-tripped ingest update carries no field
 // changes for the existing row; nil input fields never count as changes
 func ActionPlanIngestUnchanged(existing *generated.ActionPlan, input generated.UpdateActionPlanInput) bool {
@@ -55,7 +63,7 @@ func ActionPlanIngestUnchanged(existing *generated.ActionPlan, input generated.U
 		return false
 	case input.BlockerReason != nil && existing.BlockerReason != *input.BlockerReason:
 		return false
-	case input.CompletedAt != nil && (existing.CompletedAt == nil || !existing.CompletedAt.Equal(*input.CompletedAt)):
+	case input.CompletedAt != nil && (existing.CompletedAt == nil || !timeEqualMicro(*existing.CompletedAt, *input.CompletedAt)):
 		return false
 	case input.ControlSuggestions != nil && !reflect.DeepEqual(existing.ControlSuggestions, input.ControlSuggestions):
 		return false
@@ -73,7 +81,7 @@ func ActionPlanIngestUnchanged(existing *generated.ActionPlan, input generated.U
 		return false
 	case input.DismissedTagSuggestions != nil && !reflect.DeepEqual(existing.DismissedTagSuggestions, input.DismissedTagSuggestions):
 		return false
-	case input.DueDate != nil && !existing.DueDate.Equal(*input.DueDate):
+	case input.DueDate != nil && !timeEqualMicro(existing.DueDate, *input.DueDate):
 		return false
 	case input.ExternalContents != nil && (existing.ExternalContents == nil || *existing.ExternalContents != *input.ExternalContents):
 		return false
@@ -82,8 +90,6 @@ func ActionPlanIngestUnchanged(existing *generated.ActionPlan, input generated.U
 	case input.ImprovementSuggestions != nil && !reflect.DeepEqual(existing.ImprovementSuggestions, input.ImprovementSuggestions):
 		return false
 	case input.InternalNotes != nil && (existing.InternalNotes == nil || *existing.InternalNotes != *input.InternalNotes):
-		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
 		return false
 	case input.ManagementMode != nil && existing.ManagementMode != *input.ManagementMode:
 		return false
@@ -97,19 +103,13 @@ func ActionPlanIngestUnchanged(existing *generated.ActionPlan, input generated.U
 		return false
 	case input.RequiresApproval != nil && existing.RequiresApproval != *input.RequiresApproval:
 		return false
-	case input.ReviewDue != nil && !existing.ReviewDue.Equal(*input.ReviewDue):
+	case input.ReviewDue != nil && !timeEqualMicro(existing.ReviewDue, *input.ReviewDue):
 		return false
 	case input.ReviewFrequency != nil && existing.ReviewFrequency != *input.ReviewFrequency:
 		return false
 	case input.Revision != nil && existing.Revision != *input.Revision:
 		return false
 	case input.Source != nil && existing.Source != *input.Source:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.Status != nil && existing.Status != *input.Status:
 		return false
@@ -182,15 +182,13 @@ func AssetIngestUnchanged(existing *generated.Asset, input generated.UpdateAsset
 		return false
 	case input.InternalOwnerUserID != nil && existing.InternalOwnerUserID != *input.InternalOwnerUserID:
 		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
-		return false
 	case input.Name != nil && existing.Name != *input.Name:
 		return false
-	case input.ObservedAt != nil && (existing.ObservedAt == nil || !time.Time(*existing.ObservedAt).Equal(time.Time(*input.ObservedAt))):
+	case input.ObservedAt != nil && (existing.ObservedAt == nil || !timeEqualMicro(time.Time(*existing.ObservedAt), time.Time(*input.ObservedAt))):
 		return false
 	case input.PhysicalLocation != nil && existing.PhysicalLocation != *input.PhysicalLocation:
 		return false
-	case input.PurchaseDate != nil && (existing.PurchaseDate == nil || !time.Time(*existing.PurchaseDate).Equal(time.Time(*input.PurchaseDate))):
+	case input.PurchaseDate != nil && (existing.PurchaseDate == nil || !timeEqualMicro(time.Time(*existing.PurchaseDate), time.Time(*input.PurchaseDate))):
 		return false
 	case input.Region != nil && existing.Region != *input.Region:
 		return false
@@ -202,13 +200,7 @@ func AssetIngestUnchanged(existing *generated.Asset, input generated.UpdateAsset
 		return false
 	case input.SecurityTierName != nil && existing.SecurityTierName != *input.SecurityTierName:
 		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
 	case input.SourceIdentifier != nil && existing.SourceIdentifier != *input.SourceIdentifier:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.SourcePlatformID != nil && existing.SourcePlatformID != *input.SourcePlatformID:
 		return false
@@ -233,19 +225,11 @@ func CheckResultIngestUnchanged(existing *generated.CheckResult, input generated
 		return false
 	case input.ExternalURI != nil && existing.ExternalURI != *input.ExternalURI:
 		return false
-	case input.LastObservedAt != nil && (existing.LastObservedAt == nil || !time.Time(*existing.LastObservedAt).Equal(time.Time(*input.LastObservedAt))):
-		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
+	case input.LastObservedAt != nil && (existing.LastObservedAt == nil || !timeEqualMicro(time.Time(*existing.LastObservedAt), time.Time(*input.LastObservedAt))):
 		return false
 	case input.ParentExternalID != nil && existing.ParentExternalID != *input.ParentExternalID:
 		return false
 	case input.Source != nil && existing.Source != *input.Source:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.Status != nil && existing.Status != *input.Status:
 		return false
@@ -270,19 +254,11 @@ func ContactIngestUnchanged(existing *generated.Contact, input generated.UpdateC
 		return false
 	case input.FullName != nil && existing.FullName != *input.FullName:
 		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
-		return false
-	case input.ObservedAt != nil && (existing.ObservedAt == nil || !time.Time(*existing.ObservedAt).Equal(time.Time(*input.ObservedAt))):
+	case input.ObservedAt != nil && (existing.ObservedAt == nil || !timeEqualMicro(time.Time(*existing.ObservedAt), time.Time(*input.ObservedAt))):
 		return false
 	case input.OwnerID != nil && existing.OwnerID != *input.OwnerID:
 		return false
 	case input.PhoneNumber != nil && existing.PhoneNumber != *input.PhoneNumber:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.Status != nil && existing.Status != *input.Status:
 		return false
@@ -301,11 +277,11 @@ func DirectoryAccountIngestUnchanged(existing *generated.DirectoryAccount, input
 	switch {
 	case input.AccountType != nil && existing.AccountType != *input.AccountType:
 		return false
-	case input.AddedAt != nil && (existing.AddedAt == nil || !existing.AddedAt.Equal(*input.AddedAt)):
+	case input.AddedAt != nil && (existing.AddedAt == nil || !timeEqualMicro(*existing.AddedAt, *input.AddedAt)):
 		return false
 	case input.AvatarRemoteURL != nil && (existing.AvatarRemoteURL == nil || *existing.AvatarRemoteURL != *input.AvatarRemoteURL):
 		return false
-	case input.AvatarUpdatedAt != nil && (existing.AvatarUpdatedAt == nil || !existing.AvatarUpdatedAt.Equal(*input.AvatarUpdatedAt)):
+	case input.AvatarUpdatedAt != nil && (existing.AvatarUpdatedAt == nil || !timeEqualMicro(*existing.AvatarUpdatedAt, *input.AvatarUpdatedAt)):
 		return false
 	case input.CanonicalEmail != nil && (existing.CanonicalEmail == nil || *existing.CanonicalEmail != *input.CanonicalEmail):
 		return false
@@ -325,7 +301,7 @@ func DirectoryAccountIngestUnchanged(existing *generated.DirectoryAccount, input
 		return false
 	case input.FamilyName != nil && (existing.FamilyName == nil || *existing.FamilyName != *input.FamilyName):
 		return false
-	case input.FirstSeenAt != nil && (existing.FirstSeenAt == nil || !existing.FirstSeenAt.Equal(*input.FirstSeenAt)):
+	case input.FirstSeenAt != nil && (existing.FirstSeenAt == nil || !timeEqualMicro(*existing.FirstSeenAt, *input.FirstSeenAt)):
 		return false
 	case input.GivenName != nil && (existing.GivenName == nil || *existing.GivenName != *input.GivenName):
 		return false
@@ -333,13 +309,11 @@ func DirectoryAccountIngestUnchanged(existing *generated.DirectoryAccount, input
 		return false
 	case input.JobTitle != nil && (existing.JobTitle == nil || *existing.JobTitle != *input.JobTitle):
 		return false
-	case input.LastLoginAt != nil && (existing.LastLoginAt == nil || !existing.LastLoginAt.Equal(*input.LastLoginAt)):
+	case input.LastLoginAt != nil && (existing.LastLoginAt == nil || !timeEqualMicro(*existing.LastLoginAt, *input.LastLoginAt)):
 		return false
-	case input.LastSeenAt != nil && (existing.LastSeenAt == nil || !existing.LastSeenAt.Equal(*input.LastSeenAt)):
+	case input.LastSeenAt != nil && (existing.LastSeenAt == nil || !timeEqualMicro(*existing.LastSeenAt, *input.LastSeenAt)):
 		return false
 	case input.LastSeenIP != nil && (existing.LastSeenIP == nil || *existing.LastSeenIP != *input.LastSeenIP):
-		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
 		return false
 	case input.Metadata != nil && !reflect.DeepEqual(existing.Metadata, input.Metadata):
 		return false
@@ -355,19 +329,13 @@ func DirectoryAccountIngestUnchanged(existing *generated.DirectoryAccount, input
 		return false
 	case input.ProfileHash != nil && existing.ProfileHash != *input.ProfileHash:
 		return false
-	case input.RemovedAt != nil && (existing.RemovedAt == nil || !existing.RemovedAt.Equal(*input.RemovedAt)):
+	case input.RemovedAt != nil && (existing.RemovedAt == nil || !timeEqualMicro(*existing.RemovedAt, *input.RemovedAt)):
 		return false
 	case input.ScopeID != nil && existing.ScopeID != *input.ScopeID:
 		return false
 	case input.ScopeName != nil && existing.ScopeName != *input.ScopeName:
 		return false
 	case input.SecondaryKey != nil && (existing.SecondaryKey == nil || *existing.SecondaryKey != *input.SecondaryKey):
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.SourceVersion != nil && (existing.SourceVersion == nil || *existing.SourceVersion != *input.SourceVersion):
 		return false
@@ -384,7 +352,7 @@ func DirectoryAccountIngestUnchanged(existing *generated.DirectoryAccount, input
 // changes for the existing row; nil input fields never count as changes
 func DirectoryGroupIngestUnchanged(existing *generated.DirectoryGroup, input generated.UpdateDirectoryGroupInput) bool {
 	switch {
-	case input.AddedAt != nil && (existing.AddedAt == nil || !existing.AddedAt.Equal(*input.AddedAt)):
+	case input.AddedAt != nil && (existing.AddedAt == nil || !timeEqualMicro(*existing.AddedAt, *input.AddedAt)):
 		return false
 	case input.Classification != nil && existing.Classification != *input.Classification:
 		return false
@@ -402,11 +370,9 @@ func DirectoryGroupIngestUnchanged(existing *generated.DirectoryGroup, input gen
 		return false
 	case input.ExternalSharingAllowed != nil && existing.ExternalSharingAllowed != *input.ExternalSharingAllowed:
 		return false
-	case input.FirstSeenAt != nil && (existing.FirstSeenAt == nil || !existing.FirstSeenAt.Equal(*input.FirstSeenAt)):
+	case input.FirstSeenAt != nil && (existing.FirstSeenAt == nil || !timeEqualMicro(*existing.FirstSeenAt, *input.FirstSeenAt)):
 		return false
-	case input.LastSeenAt != nil && (existing.LastSeenAt == nil || !existing.LastSeenAt.Equal(*input.LastSeenAt)):
-		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
+	case input.LastSeenAt != nil && (existing.LastSeenAt == nil || !timeEqualMicro(*existing.LastSeenAt, *input.LastSeenAt)):
 		return false
 	case input.MemberCount != nil && existing.MemberCount != *input.MemberCount:
 		return false
@@ -418,17 +384,11 @@ func DirectoryGroupIngestUnchanged(existing *generated.DirectoryGroup, input gen
 		return false
 	case input.ProfileHash != nil && existing.ProfileHash != *input.ProfileHash:
 		return false
-	case input.RemovedAt != nil && (existing.RemovedAt == nil || !existing.RemovedAt.Equal(*input.RemovedAt)):
+	case input.RemovedAt != nil && (existing.RemovedAt == nil || !timeEqualMicro(*existing.RemovedAt, *input.RemovedAt)):
 		return false
 	case input.ScopeID != nil && existing.ScopeID != *input.ScopeID:
 		return false
 	case input.ScopeName != nil && existing.ScopeName != *input.ScopeName:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.SourceVersion != nil && (existing.SourceVersion == nil || *existing.SourceVersion != *input.SourceVersion):
 		return false
@@ -445,7 +405,7 @@ func DirectoryGroupIngestUnchanged(existing *generated.DirectoryGroup, input gen
 // changes for the existing row; nil input fields never count as changes
 func DirectoryMembershipIngestUnchanged(existing *generated.DirectoryMembership, input generated.UpdateDirectoryMembershipInput) bool {
 	switch {
-	case input.AddedAt != nil && (existing.AddedAt == nil || !existing.AddedAt.Equal(*input.AddedAt)):
+	case input.AddedAt != nil && (existing.AddedAt == nil || !timeEqualMicro(*existing.AddedAt, *input.AddedAt)):
 		return false
 	case input.DirectoryInstanceID != nil && (existing.DirectoryInstanceID == nil || *existing.DirectoryInstanceID != *input.DirectoryInstanceID):
 		return false
@@ -455,19 +415,17 @@ func DirectoryMembershipIngestUnchanged(existing *generated.DirectoryMembership,
 		return false
 	case input.EnvironmentName != nil && existing.EnvironmentName != *input.EnvironmentName:
 		return false
-	case input.FirstSeenAt != nil && (existing.FirstSeenAt == nil || !existing.FirstSeenAt.Equal(*input.FirstSeenAt)):
+	case input.FirstSeenAt != nil && (existing.FirstSeenAt == nil || !timeEqualMicro(*existing.FirstSeenAt, *input.FirstSeenAt)):
 		return false
 	case input.LastConfirmedRunID != nil && (existing.LastConfirmedRunID == nil || *existing.LastConfirmedRunID != *input.LastConfirmedRunID):
 		return false
-	case input.LastSeenAt != nil && (existing.LastSeenAt == nil || !existing.LastSeenAt.Equal(*input.LastSeenAt)):
-		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
+	case input.LastSeenAt != nil && (existing.LastSeenAt == nil || !timeEqualMicro(*existing.LastSeenAt, *input.LastSeenAt)):
 		return false
 	case input.Metadata != nil && !reflect.DeepEqual(existing.Metadata, input.Metadata):
 		return false
 	case input.OwnerID != nil && existing.OwnerID != *input.OwnerID:
 		return false
-	case input.RemovedAt != nil && (existing.RemovedAt == nil || !existing.RemovedAt.Equal(*input.RemovedAt)):
+	case input.RemovedAt != nil && (existing.RemovedAt == nil || !timeEqualMicro(*existing.RemovedAt, *input.RemovedAt)):
 		return false
 	case input.Role != nil && existing.Role != *input.Role:
 		return false
@@ -476,12 +434,6 @@ func DirectoryMembershipIngestUnchanged(existing *generated.DirectoryMembership,
 	case input.ScopeName != nil && existing.ScopeName != *input.ScopeName:
 		return false
 	case input.Source != nil && (existing.Source == nil || *existing.Source != *input.Source):
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	default:
 		return true
@@ -502,11 +454,11 @@ func EntityIngestUnchanged(existing *generated.Entity, input generated.UpdateEnt
 		return false
 	case input.BillingModel != nil && existing.BillingModel != *input.BillingModel:
 		return false
-	case input.ContractEndDate != nil && (existing.ContractEndDate == nil || !time.Time(*existing.ContractEndDate).Equal(time.Time(*input.ContractEndDate))):
+	case input.ContractEndDate != nil && (existing.ContractEndDate == nil || !timeEqualMicro(time.Time(*existing.ContractEndDate), time.Time(*input.ContractEndDate))):
 		return false
-	case input.ContractRenewalAt != nil && (existing.ContractRenewalAt == nil || !time.Time(*existing.ContractRenewalAt).Equal(time.Time(*input.ContractRenewalAt))):
+	case input.ContractRenewalAt != nil && (existing.ContractRenewalAt == nil || !timeEqualMicro(time.Time(*existing.ContractRenewalAt), time.Time(*input.ContractRenewalAt))):
 		return false
-	case input.ContractStartDate != nil && (existing.ContractStartDate == nil || !time.Time(*existing.ContractStartDate).Equal(time.Time(*input.ContractStartDate))):
+	case input.ContractStartDate != nil && (existing.ContractStartDate == nil || !timeEqualMicro(time.Time(*existing.ContractStartDate), time.Time(*input.ContractStartDate))):
 		return false
 	case input.Description != nil && existing.Description != *input.Description:
 		return false
@@ -544,7 +496,7 @@ func EntityIngestUnchanged(existing *generated.Entity, input generated.UpdateEnt
 		return false
 	case input.InternalOwnerUserID != nil && existing.InternalOwnerUserID != *input.InternalOwnerUserID:
 		return false
-	case input.LastReviewedAt != nil && (existing.LastReviewedAt == nil || !time.Time(*existing.LastReviewedAt).Equal(time.Time(*input.LastReviewedAt))):
+	case input.LastReviewedAt != nil && (existing.LastReviewedAt == nil || !timeEqualMicro(time.Time(*existing.LastReviewedAt), time.Time(*input.LastReviewedAt))):
 		return false
 	case input.LinkedAssetIds != nil && !reflect.DeepEqual(existing.LinkedAssetIds, input.LinkedAssetIds):
 		return false
@@ -552,17 +504,15 @@ func EntityIngestUnchanged(existing *generated.Entity, input generated.UpdateEnt
 		return false
 	case input.LogoRemoteURL != nil && (existing.LogoRemoteURL == nil || *existing.LogoRemoteURL != *input.LogoRemoteURL):
 		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
-		return false
 	case input.MfaEnforced != nil && existing.MfaEnforced != *input.MfaEnforced:
 		return false
 	case input.MfaSupported != nil && existing.MfaSupported != *input.MfaSupported:
 		return false
 	case input.Name != nil && existing.Name != *input.Name:
 		return false
-	case input.NextReviewAt != nil && (existing.NextReviewAt == nil || !time.Time(*existing.NextReviewAt).Equal(time.Time(*input.NextReviewAt))):
+	case input.NextReviewAt != nil && (existing.NextReviewAt == nil || !timeEqualMicro(time.Time(*existing.NextReviewAt), time.Time(*input.NextReviewAt))):
 		return false
-	case input.ObservedAt != nil && (existing.ObservedAt == nil || !time.Time(*existing.ObservedAt).Equal(time.Time(*input.ObservedAt))):
+	case input.ObservedAt != nil && (existing.ObservedAt == nil || !timeEqualMicro(time.Time(*existing.ObservedAt), time.Time(*input.ObservedAt))):
 		return false
 	case input.ProvidedServices != nil && !reflect.DeepEqual(existing.ProvidedServices, input.ProvidedServices):
 		return false
@@ -584,13 +534,7 @@ func EntityIngestUnchanged(existing *generated.Entity, input generated.UpdateEnt
 		return false
 	case input.ScopeName != nil && existing.ScopeName != *input.ScopeName:
 		return false
-	case input.Soc2PeriodEnd != nil && (existing.Soc2PeriodEnd == nil || !time.Time(*existing.Soc2PeriodEnd).Equal(time.Time(*input.Soc2PeriodEnd))):
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
+	case input.Soc2PeriodEnd != nil && (existing.Soc2PeriodEnd == nil || !timeEqualMicro(time.Time(*existing.Soc2PeriodEnd), time.Time(*input.Soc2PeriodEnd))):
 		return false
 	case input.SpendCurrency != nil && existing.SpendCurrency != *input.SpendCurrency:
 		return false
@@ -659,8 +603,6 @@ func FindingIngestUnchanged(existing *generated.Finding, input generated.UpdateF
 		return false
 	case input.InternalNotes != nil && (existing.InternalNotes == nil || *existing.InternalNotes != *input.InternalNotes):
 		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
-		return false
 	case input.Metadata != nil && !reflect.DeepEqual(existing.Metadata, input.Metadata):
 		return false
 	case input.NumericSeverity != nil && existing.NumericSeverity != *input.NumericSeverity:
@@ -681,7 +623,7 @@ func FindingIngestUnchanged(existing *generated.Finding, input generated.UpdateF
 		return false
 	case input.RemediationSLA != nil && existing.RemediationSLA != *input.RemediationSLA:
 		return false
-	case input.ReportedAt != nil && (existing.ReportedAt == nil || !time.Time(*existing.ReportedAt).Equal(time.Time(*input.ReportedAt))):
+	case input.ReportedAt != nil && (existing.ReportedAt == nil || !timeEqualMicro(time.Time(*existing.ReportedAt), time.Time(*input.ReportedAt))):
 		return false
 	case input.ResourceName != nil && existing.ResourceName != *input.ResourceName:
 		return false
@@ -700,12 +642,6 @@ func FindingIngestUnchanged(existing *generated.Finding, input generated.UpdateF
 	case input.Severity != nil && existing.Severity != *input.Severity:
 		return false
 	case input.Source != nil && existing.Source != *input.Source:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.State != nil && existing.State != *input.State:
 		return false
@@ -770,15 +706,13 @@ func InternalPolicyIngestUnchanged(existing *generated.InternalPolicy, input gen
 		return false
 	case input.InternalPolicyKindName != nil && existing.InternalPolicyKindName != *input.InternalPolicyKindName:
 		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
-		return false
 	case input.ManagementMode != nil && existing.ManagementMode != *input.ManagementMode:
 		return false
 	case input.Name != nil && existing.Name != *input.Name:
 		return false
 	case input.OwnerID != nil && existing.OwnerID != *input.OwnerID:
 		return false
-	case input.ReviewDue != nil && !existing.ReviewDue.Equal(*input.ReviewDue):
+	case input.ReviewDue != nil && !timeEqualMicro(existing.ReviewDue, *input.ReviewDue):
 		return false
 	case input.ReviewFrequency != nil && existing.ReviewFrequency != *input.ReviewFrequency:
 		return false
@@ -787,12 +721,6 @@ func InternalPolicyIngestUnchanged(existing *generated.InternalPolicy, input gen
 	case input.ScopeID != nil && existing.ScopeID != *input.ScopeID:
 		return false
 	case input.ScopeName != nil && existing.ScopeName != *input.ScopeName:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.Status != nil && existing.Status != *input.Status:
 		return false
@@ -845,8 +773,6 @@ func ProcedureIngestUnchanged(existing *generated.Procedure, input generated.Upd
 		return false
 	case input.InternalNotes != nil && (existing.InternalNotes == nil || *existing.InternalNotes != *input.InternalNotes):
 		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
-		return false
 	case input.ManagementMode != nil && existing.ManagementMode != *input.ManagementMode:
 		return false
 	case input.Name != nil && existing.Name != *input.Name:
@@ -857,7 +783,7 @@ func ProcedureIngestUnchanged(existing *generated.Procedure, input generated.Upd
 		return false
 	case input.ProcedureKindName != nil && existing.ProcedureKindName != *input.ProcedureKindName:
 		return false
-	case input.ReviewDue != nil && !existing.ReviewDue.Equal(*input.ReviewDue):
+	case input.ReviewDue != nil && !timeEqualMicro(existing.ReviewDue, *input.ReviewDue):
 		return false
 	case input.ReviewFrequency != nil && existing.ReviewFrequency != *input.ReviewFrequency:
 		return false
@@ -866,12 +792,6 @@ func ProcedureIngestUnchanged(existing *generated.Procedure, input generated.Upd
 	case input.ScopeID != nil && existing.ScopeID != *input.ScopeID:
 		return false
 	case input.ScopeName != nil && existing.ScopeName != *input.ScopeName:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.Status != nil && existing.Status != *input.Status:
 		return false
@@ -904,7 +824,7 @@ func RiskIngestUnchanged(existing *generated.Risk, input generated.UpdateRiskInp
 		return false
 	case input.DetailsJSON != nil && !reflect.DeepEqual(existing.DetailsJSON, input.DetailsJSON):
 		return false
-	case input.DueDate != nil && (existing.DueDate == nil || !time.Time(*existing.DueDate).Equal(time.Time(*input.DueDate))):
+	case input.DueDate != nil && (existing.DueDate == nil || !timeEqualMicro(time.Time(*existing.DueDate), time.Time(*input.DueDate))):
 		return false
 	case input.EnvironmentID != nil && existing.EnvironmentID != *input.EnvironmentID:
 		return false
@@ -916,13 +836,11 @@ func RiskIngestUnchanged(existing *generated.Risk, input generated.UpdateRiskInp
 		return false
 	case input.Impact != nil && existing.Impact != *input.Impact:
 		return false
-	case input.LastReviewedAt != nil && (existing.LastReviewedAt == nil || !time.Time(*existing.LastReviewedAt).Equal(time.Time(*input.LastReviewedAt))):
+	case input.LastReviewedAt != nil && (existing.LastReviewedAt == nil || !timeEqualMicro(time.Time(*existing.LastReviewedAt), time.Time(*input.LastReviewedAt))):
 		return false
 	case input.Likelihood != nil && existing.Likelihood != *input.Likelihood:
 		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
-		return false
-	case input.MitigatedAt != nil && (existing.MitigatedAt == nil || !time.Time(*existing.MitigatedAt).Equal(time.Time(*input.MitigatedAt))):
+	case input.MitigatedAt != nil && (existing.MitigatedAt == nil || !timeEqualMicro(time.Time(*existing.MitigatedAt), time.Time(*input.MitigatedAt))):
 		return false
 	case input.Mitigation != nil && existing.Mitigation != *input.Mitigation:
 		return false
@@ -930,9 +848,9 @@ func RiskIngestUnchanged(existing *generated.Risk, input generated.UpdateRiskInp
 		return false
 	case input.Name != nil && existing.Name != *input.Name:
 		return false
-	case input.NextReviewDueAt != nil && (existing.NextReviewDueAt == nil || !time.Time(*existing.NextReviewDueAt).Equal(time.Time(*input.NextReviewDueAt))):
+	case input.NextReviewDueAt != nil && (existing.NextReviewDueAt == nil || !timeEqualMicro(time.Time(*existing.NextReviewDueAt), time.Time(*input.NextReviewDueAt))):
 		return false
-	case input.ObservedAt != nil && (existing.ObservedAt == nil || !time.Time(*existing.ObservedAt).Equal(time.Time(*input.ObservedAt))):
+	case input.ObservedAt != nil && (existing.ObservedAt == nil || !timeEqualMicro(time.Time(*existing.ObservedAt), time.Time(*input.ObservedAt))):
 		return false
 	case input.ResidualScore != nil && existing.ResidualScore != *input.ResidualScore:
 		return false
@@ -955,12 +873,6 @@ func RiskIngestUnchanged(existing *generated.Risk, input generated.UpdateRiskInp
 	case input.ScopeName != nil && existing.ScopeName != *input.ScopeName:
 		return false
 	case input.Score != nil && existing.Score != *input.Score:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.StakeholderID != nil && existing.StakeholderID != *input.StakeholderID:
 		return false
@@ -985,7 +897,7 @@ func VulnerabilityIngestUnchanged(existing *generated.Vulnerability, input gener
 		return false
 	case input.AssignedToUserID != nil && existing.AssignedToUserID != *input.AssignedToUserID:
 		return false
-	case input.AutoDismissedAt != nil && (existing.AutoDismissedAt == nil || !time.Time(*existing.AutoDismissedAt).Equal(time.Time(*input.AutoDismissedAt))):
+	case input.AutoDismissedAt != nil && (existing.AutoDismissedAt == nil || !timeEqualMicro(time.Time(*existing.AutoDismissedAt), time.Time(*input.AutoDismissedAt))):
 		return false
 	case input.Blocking != nil && existing.Blocking != *input.Blocking:
 		return false
@@ -999,9 +911,9 @@ func VulnerabilityIngestUnchanged(existing *generated.Vulnerability, input gener
 		return false
 	case input.Description != nil && existing.Description != *input.Description:
 		return false
-	case input.DiscoveredAt != nil && (existing.DiscoveredAt == nil || !time.Time(*existing.DiscoveredAt).Equal(time.Time(*input.DiscoveredAt))):
+	case input.DiscoveredAt != nil && (existing.DiscoveredAt == nil || !timeEqualMicro(time.Time(*existing.DiscoveredAt), time.Time(*input.DiscoveredAt))):
 		return false
-	case input.DismissedAt != nil && (existing.DismissedAt == nil || !time.Time(*existing.DismissedAt).Equal(time.Time(*input.DismissedAt))):
+	case input.DismissedAt != nil && (existing.DismissedAt == nil || !timeEqualMicro(time.Time(*existing.DismissedAt), time.Time(*input.DismissedAt))):
 		return false
 	case input.DismissedComment != nil && existing.DismissedComment != *input.DismissedComment:
 		return false
@@ -1025,15 +937,13 @@ func VulnerabilityIngestUnchanged(existing *generated.Vulnerability, input gener
 		return false
 	case input.FixAvailable != nil && existing.FixAvailable != *input.FixAvailable:
 		return false
-	case input.FixedAt != nil && (existing.FixedAt == nil || !time.Time(*existing.FixedAt).Equal(time.Time(*input.FixedAt))):
+	case input.FixedAt != nil && (existing.FixedAt == nil || !timeEqualMicro(time.Time(*existing.FixedAt), time.Time(*input.FixedAt))):
 		return false
 	case input.Impact != nil && existing.Impact != *input.Impact:
 		return false
 	case input.Impacts != nil && !reflect.DeepEqual(existing.Impacts, input.Impacts):
 		return false
 	case input.InternalNotes != nil && (existing.InternalNotes == nil || *existing.InternalNotes != *input.InternalNotes):
-		return false
-	case input.ManagedBy != nil && existing.ManagedBy != *input.ManagedBy:
 		return false
 	case input.ManifestPath != nil && existing.ManifestPath != *input.ManifestPath:
 		return false
@@ -1051,7 +961,7 @@ func VulnerabilityIngestUnchanged(existing *generated.Vulnerability, input gener
 		return false
 	case input.Public != nil && existing.Public != *input.Public:
 		return false
-	case input.PublishedAt != nil && (existing.PublishedAt == nil || !time.Time(*existing.PublishedAt).Equal(time.Time(*input.PublishedAt))):
+	case input.PublishedAt != nil && (existing.PublishedAt == nil || !timeEqualMicro(time.Time(*existing.PublishedAt), time.Time(*input.PublishedAt))):
 		return false
 	case input.References != nil && !reflect.DeepEqual(existing.References, input.References):
 		return false
@@ -1072,12 +982,6 @@ func VulnerabilityIngestUnchanged(existing *generated.Vulnerability, input gener
 	case input.Severity != nil && existing.Severity != *input.Severity:
 		return false
 	case input.Source != nil && existing.Source != *input.Source:
-		return false
-	case input.SourceDefinitionID != nil && existing.SourceDefinitionID != *input.SourceDefinitionID:
-		return false
-	case input.SourceDefinitionVersion != nil && existing.SourceDefinitionVersion != *input.SourceDefinitionVersion:
-		return false
-	case input.SourceInstanceID != nil && existing.SourceInstanceID != *input.SourceInstanceID:
 		return false
 	case input.Summary != nil && existing.Summary != *input.Summary:
 		return false

@@ -80,9 +80,11 @@ func roundTripUpdateInput[Create any, Update any](createInput Create) (Update, e
 	return updateInput, nil
 }
 
-// persistUpsert centralizes the common ingest upsert flow while allowing schema-specific lookup and mutation logic
+// persistUpsert centralizes the common ingest upsert flow while allowing schema-specific lookup and mutation logic;
+// the unchanged gate skips the update write and the ingest change record when the round-tripped
+// input carries no field changes for the existing row
 // the function input signature is ugly and hard to read but the call sites are much cleaner
-func persistUpsert[Create any, Update any, Existing any](ctx context.Context, createInput Create, toUpdate func(Create) (Update, error), findExisting func(context.Context) (Existing, error), create func(context.Context, Create) (string, error), update func(context.Context, Existing, Update) error, existingID func(Existing) string) (string, error) {
+func persistUpsert[Create any, Update any, Existing any](ctx context.Context, createInput Create, toUpdate func(Create) (Update, error), unchanged func(Existing, Update) (bool, error), findExisting func(context.Context) (Existing, error), create func(context.Context, Create) (string, error), update func(context.Context, Existing, Update) error, existingID func(Existing) string) (string, error) {
 	existing, err := findExisting(ctx)
 	switch {
 	case err == nil:
@@ -107,6 +109,15 @@ func persistUpsert[Create any, Update any, Existing any](ctx context.Context, cr
 		return "", err
 	}
 
+	same, err := unchanged(existing, updateInput)
+	if err != nil {
+		return existingID(existing), wrapIngestPersistError(err)
+	}
+
+	if same {
+		return existingID(existing), nil
+	}
+
 	if err := update(ctx, existing, updateInput); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("ingest upsert update failed")
 
@@ -119,6 +130,6 @@ func persistUpsert[Create any, Update any, Existing any](ctx context.Context, cr
 }
 
 // persistRoundTripUpsert centralizes the common ingest upsert flow for schemas whose update input can be derived by round-tripping the create input
-func persistRoundTripUpsert[Create any, Update any, Existing any](ctx context.Context, createInput Create, findExisting func(context.Context) (Existing, error), create func(context.Context, Create) (string, error), update func(context.Context, Existing, Update) error, existingID func(Existing) string) (string, error) {
-	return persistUpsert(ctx, createInput, roundTripUpdateInput, findExisting, create, update, existingID)
+func persistRoundTripUpsert[Create any, Update any, Existing any](ctx context.Context, createInput Create, unchanged func(Existing, Update) (bool, error), findExisting func(context.Context) (Existing, error), create func(context.Context, Create) (string, error), update func(context.Context, Existing, Update) error, existingID func(Existing) string) (string, error) {
+	return persistUpsert(ctx, createInput, roundTripUpdateInput, unchanged, findExisting, create, update, existingID)
 }

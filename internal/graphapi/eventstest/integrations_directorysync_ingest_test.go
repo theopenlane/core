@@ -37,7 +37,7 @@ func directorySyncTestDefinition(defID string) integrationtypes.Definition {
 	passthrough := integrationtypes.MappingOverride{MapExpr: "payload"}
 
 	return integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          defID,
 			DisplayName: "Directory Sync Test",

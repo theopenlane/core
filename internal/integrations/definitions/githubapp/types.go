@@ -106,10 +106,13 @@ type InstallationMetadata struct {
 	OrganizationName string `json:"organizationName,omitempty"  jsonschema:"title=organization"`
 }
 
-// InstallationIdentity implements types.InstallationIdentifiable
+// InstallationIdentity implements types.InstallationIdentifiable. The organization name is the
+// instance identity because installation ids rotate on uninstall and reinstall, and reinstalling
+// into the same organization must resolve the directory records the prior installation created;
+// personal installations carry no organization and therefore no instance identity
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
-		ExternalID:   m.InstallationID,
+		ExternalID:   m.OrganizationName,
 		ExternalName: m.OrganizationName,
 	}
 }

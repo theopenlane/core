@@ -42,7 +42,7 @@ func minimalDefinition(id string) (integrationtypes.Definition, integrationtypes
 	clientRef := integrationtypes.NewClientRef[string]()
 
 	return integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          id,
 			DisplayName: "Test",
@@ -128,7 +128,7 @@ func TestRegistrySupportsMultipleClientsPerDefinition(t *testing.T) {
 	secondClient := integrationtypes.NewClientRef[int]()
 
 	definition := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_multi_client",
 			DisplayName: "Multi Client",
@@ -1229,7 +1229,7 @@ func TestRuntimeIntegrationRegistration(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_runtime",
 			DisplayName: "Runtime Test",
@@ -1275,7 +1275,7 @@ func TestRuntimeIntegrationNilConfig(t *testing.T) {
 	reg := New()
 
 	def := integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          "def_runtime_nocfg",
 			DisplayName: "Runtime No Config",

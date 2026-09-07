@@ -28,7 +28,7 @@ const linkTestOperationName = "findings.sync"
 // provider payload through unchanged and declares the supplied cross-object link rules
 func linkTestDefinition(defID string, links []integrationtypes.LinkRule) integrationtypes.Definition {
 	return integrationtypes.Definition{
-		VirtualUser:    testVirtualUser(),
+		VirtualUser: testVirtualUser(),
 		DefinitionSpec: integrationtypes.DefinitionSpec{
 			ID:          defID,
 			DisplayName: "Link Test",

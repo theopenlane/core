@@ -55,7 +55,7 @@ func (suite *HandlerTestSuite) withGitHubAppIntegrationRuntime(t *testing.T, cfg
 func githubTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			VirtualUser:    testVirtualUser(),
+			VirtualUser: testVirtualUser(),
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				DisplayName: "GitHub",

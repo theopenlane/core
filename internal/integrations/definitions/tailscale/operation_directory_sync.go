@@ -18,8 +18,6 @@ type tailscaleGroupPayload struct {
 	ID string `json:"id"`
 	// Name is the human-readable role label
 	Name string `json:"name"`
-	// TailnetID is the stable tailnet identifier the group belongs to
-	TailnetID string `json:"tailnetId"`
 }
 
 // tailscaleMembershipPayload is the envelope payload for one Tailscale role membership record
@@ -28,8 +26,6 @@ type tailscaleMembershipPayload struct {
 	GroupID string `json:"group_id"`
 	// UserID is the Tailscale user identifier
 	UserID string `json:"user_id"`
-	// TailnetID is the stable tailnet identifier the membership belongs to
-	TailnetID string `json:"tailnetId"`
 }
 
 // IngestHandle adapts Tailscale directory sync to the ingest operation registration boundary
@@ -75,11 +71,6 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		return payloadSets, nil
 	}
 
-	tailnetID := ""
-	if len(users) > 0 {
-		tailnetID = users[0].TailnetID
-	}
-
 	// Build role-based groups from the unique set of roles across all users
 	rolesSeen := make(map[tsclient.UserRole]struct{})
 	groupEnvelopes := make([]types.MappingEnvelope, 0)
@@ -96,9 +87,8 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 			rolesSeen[role] = struct{}{}
 
 			group := tailscaleGroupPayload{
-				ID:        string(role),
-				Name:      string(role),
-				TailnetID: tailnetID,
+				ID:   string(role),
+				Name: string(role),
 			}
 
 			envelope, err := providerkit.MarshalEnvelope(string(role), group, ErrPayloadEncode)
@@ -111,9 +101,8 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		}
 
 		membership := tailscaleMembershipPayload{
-			GroupID:   string(role),
-			UserID:    user.ID,
-			TailnetID: tailnetID,
+			GroupID: string(role),
+			UserID:  user.ID,
 		}
 
 		membershipKey := fmt.Sprintf("%s:%s", role, user.ID)
@@ -140,9 +129,8 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 	} else {
 		for groupName, members := range acl.Groups {
 			group := tailscaleGroupPayload{
-				ID:        groupName,
-				Name:      groupName,
-				TailnetID: tailnetID,
+				ID:   groupName,
+				Name: groupName,
 			}
 
 			groupEnvelope, err := providerkit.MarshalEnvelope(groupName, group, ErrPayloadEncode)
@@ -161,9 +149,8 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 				}
 
 				membership := tailscaleMembershipPayload{
-					GroupID:   groupName,
-					UserID:    userID,
-					TailnetID: tailnetID,
+					GroupID: groupName,
+					UserID:  userID,
 				}
 
 				membershipKey := fmt.Sprintf("%s:%s", groupName, userID)

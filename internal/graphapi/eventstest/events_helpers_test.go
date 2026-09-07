@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/oklog/ulid/v2"
 	emaildef "github.com/theopenlane/core/v2/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/v2/internal/workflows/engine"
 	mockprovider "github.com/theopenlane/newman/providers/mock"
-	"github.com/oklog/ulid/v2"
 
 	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"

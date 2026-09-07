@@ -254,6 +254,56 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 	return nil
 }
 
+// RefreshInstallationMetadata re-resolves and persists the installation's metadata from its
+// connected credential, so the stored display identity reflects the definition's current
+// resolution; installations without a connected credential or a metadata resolver keep their
+// stored metadata, as does an installation whose resolver reports none
+func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation *ent.Integration) error {
+	def, err := r.resolveDefinitionForInstallation(installation)
+	if err != nil {
+		return err
+	}
+
+	state, err := def.ProviderState(installation.ProviderState)
+	if err != nil {
+		return err
+	}
+
+	if state.CredentialRef == (types.CredentialSlotID{}) {
+		return nil
+	}
+
+	connection, err := def.ConnectionRegistration(state.CredentialRef)
+	if err != nil {
+		return err
+	}
+
+	if connection.Integration == nil {
+		return nil
+	}
+
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	bindings, err := r.loadCredentials(systemCtx, installation, connection.CredentialRefs)
+	if err != nil {
+		return err
+	}
+
+	metadata, ok, err := connection.Integration.Resolve(systemCtx, types.InstallationRequest{
+		Integration: installation,
+		Connection:  connection,
+		Credentials: bindings,
+		Config:      installation.Config,
+	})
+	if err != nil || !ok {
+		return err
+	}
+
+	metadata.Display.CredentialRef = state.CredentialRef.String()
+
+	return r.saveInstallationMetadata(systemCtx, installation, metadata)
+}
+
 // reconcileCredential validates, health-checks, and persists one credential for an installation
 func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Integration, def types.Definition, credentialRef types.CredentialSlotID, credential types.CredentialSet, installationInput json.RawMessage) error {
 	registration, err := def.CredentialRegistration(credentialRef)

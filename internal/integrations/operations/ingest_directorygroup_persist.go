@@ -62,6 +62,12 @@ func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration
 	}
 
 	if entityops.DirectoryGroupIngestUnchanged(existing, updateInput) {
+		if existing.IntegrationID != createInput.IntegrationID {
+			if err := relinkIngestIntegration(ctx, db, entityops.SchemaDirectoryGroup.Snake, existing.ID, createInput.IntegrationID); err != nil {
+				return existing.ID, wrapIngestPersistError(err)
+			}
+		}
+
 		return existing.ID, nil
 	}
 

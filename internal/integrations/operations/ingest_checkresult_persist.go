@@ -3,6 +3,7 @@ package operations
 import (
 	"context"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -30,6 +31,9 @@ func persistCheckResultInput(ctx context.Context, db *ent.Client, integration *e
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,
+		func(existing *ent.CheckResult, input ent.UpdateCheckResultInput) (bool, error) {
+			return entityops.CheckResultIngestUnchanged(existing, input), nil
+		},
 		func(ctx context.Context) (*ent.CheckResult, error) {
 			return db.CheckResult.Query().
 				Where(where...).

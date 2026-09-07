@@ -43,7 +43,7 @@ var (
 func webhookTestDefinitionBuilder(definitionID string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
-			VirtualUser:    testVirtualUser(),
+			VirtualUser: testVirtualUser(),
 			DefinitionSpec: types.DefinitionSpec{
 				ID:          definitionID,
 				DisplayName: "Webhook Test",

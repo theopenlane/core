@@ -26,8 +26,10 @@ mnemonic=$(printf '%s' "$name" | tr '[:lower:]' '[:upper:]' | tr -cd 'A-Z0-9' | 
 defid=$(printf 'def_01K0%s%0*d' "$mnemonic" $((22 - ${#mnemonic})) 1)
 
 # the virtual actor subject must strictly parse as a ULID: the 01VRTACTR prefix marks the
-# virtual-actor family and the remainder is random from the Crockford base32 alphabet
-vuid="01VRTACTR$(LC_ALL=C tr -dc '0123456789ABCDEFGHJKMNPQRSTVWXYZ' </dev/urandom | head -c 17)"
+# virtual-actor family and the remainder is random from the Crockford base32 alphabet; the
+# bounded read and cut keep every pipeline stage running to completion so SIGPIPE cannot
+# abort the script under pipefail
+vuid="01VRTACTR$(head -c 1000 /dev/urandom | LC_ALL=C tr -dc '0123456789ABCDEFGHJKMNPQRSTVWXYZ' | cut -c1-17)"
 
 mkdir -p "$dest"
 

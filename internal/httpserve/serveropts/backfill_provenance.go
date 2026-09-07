@@ -3,6 +3,7 @@ package serveropts
 import (
 	"context"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
@@ -21,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/risk"
 	"github.com/theopenlane/core/v2/internal/ent/generated/vulnerability"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
+	"github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
@@ -52,11 +54,16 @@ var provenanceStamps = []provenanceStamp{
 // backfillIntegrationProvenance stamps source_definition_id, source_definition_version, and
 // source_instance_id on existing integration-sourced records that predate the provenance fields.
 // Only rows with no provenance are written, the instance identity comes from the installation's
-// resolved metadata, and the writes run as the integration virtual actor with audit-log bypass
-func backfillIntegrationProvenance(ctx context.Context, dbClient *ent.Client) {
+// freshly re-resolved metadata, and the writes run as the integration virtual actor with
+// audit-log bypass
+func backfillIntegrationProvenance(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
 	ctx = entityops.WithEmissionVetoed(auth.EnsureIntegrationCaller(ctx, ""))
 
-	installations, err := dbClient.Integration.Query().All(ctx)
+	// oldest installation first, so records linked to multiple installations receive their
+	// provenance from the installation that has synced them longest
+	installations, err := dbClient.Integration.Query().
+		Order(integration.ByCreatedAt(sql.OrderAsc()), integration.ByID(sql.OrderAsc())).
+		All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query integrations for provenance stamping")
 
@@ -71,6 +78,17 @@ func backfillIntegrationProvenance(ctx context.Context, dbClient *ent.Client) {
 		}
 
 		installCtx := intobvs.WithInstallation(ctx, installation)
+
+		// the stored display identity may predate the definition's current identity resolution,
+		// so refresh it and skip the installation rather than stamping rows from a stale identity
+		if err := rt.RefreshInstallationMetadata(installCtx, installation); err != nil {
+			failed++
+
+			logx.FromContext(installCtx).Error().Err(err).Msg("backfill: metadata refresh failed; skipping provenance stamping for installation")
+
+			continue
+		}
+
 		instanceID := installation.InstallationMetadata.Display.ExternalID
 
 		for _, stamp := range provenanceStamps {

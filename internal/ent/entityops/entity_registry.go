@@ -683,7 +683,9 @@ func (s *Schema) LookupField() (FieldDescriptor, bool) {
 // closures, so unlike Create/Update/QueryByKey it needs no per-schema wiring. Schemas whose lookup
 // predicates are not a single org-scoped key column (integration-scoped lookups, multi-key
 // priority) keep hand-written persistence instead. Updates carrying no field changes and no
-// injected edge links skip the write and mark the context no-op holder
+// injected edge links skip the write and mark the context no-op holder, after converging the
+// managing definition's integration linkage and provenance through a vetoed bookkeeping write;
+// a definition that does not manage the row can never write its linkage or provenance
 func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage) (string, error) {
 	ref := SchemaRef{Schema: s.Snake, Operation: refOpUpsert}
 
@@ -722,13 +724,19 @@ func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID s
 			}
 
 			if same {
+				if delta := bookkeepingDelta(rows[0], payload); delta != nil {
+					if err := s.Update(WithEmissionVetoed(ctx), client, id, delta); err != nil {
+						return "", err
+					}
+				}
+
 				markIngestNoop(ctx)
 
 				return id, nil
 			}
 		}
 
-		return id, s.Update(ctx, client, id, s.rekeyEdgesForUpdate(payload))
+		return id, s.Update(ctx, client, id, s.rekeyEdgesForUpdate(stripForeignManagedColumns(rows[0], payload)))
 	default:
 		return "", logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("%s lookup %s=%s matched %d records", s.Name, field.Name, value, len(rows)))
 	}
@@ -792,6 +800,84 @@ func (s *Schema) rekeyEdgesForUpdate(payload json.RawMessage) json.RawMessage {
 			doc[edge.AddField] = raw
 			delete(doc, edge.CreateField)
 			changed = true
+		}
+
+		return changed
+	})
+}
+
+// relinkFieldNames are the volatile integration linkage columns the unchanged path still converges
+var relinkFieldNames = []string{"integration_id"}
+
+// provenanceFieldNames are the provenance columns only the record's managing definition may write
+var provenanceFieldNames = []string{"source_definition_id", "source_definition_version", "source_instance_id", "managed_by"}
+
+// managesRecord reports whether the payload's definition may write the row's linkage and
+// provenance: an unclaimed row is claimed by the first writing definition, and a claimed row is
+// writable only by the definition already recorded on it
+func managesRecord(row json.RawMessage, payload json.RawMessage) bool {
+	rowDefinition := lookupValue(row, "source_definition_id")
+
+	return rowDefinition == "" || rowDefinition == lookupValue(payload, "source_definition_id")
+}
+
+// bookkeepingDelta returns the linkage and provenance columns an unchanged row still needs to
+// converge on for its managing definition; nil means the row needs no bookkeeping write
+func bookkeepingDelta(row json.RawMessage, payload json.RawMessage) json.RawMessage {
+	if !managesRecord(row, payload) {
+		return nil
+	}
+
+	doc, err := jsonx.Decode[map[string]json.RawMessage](payload)
+	if err != nil {
+		return nil
+	}
+
+	delta := map[string]json.RawMessage{}
+
+	for _, name := range slices.Concat(relinkFieldNames, provenanceFieldNames) {
+		raw, ok := doc[name]
+		if !ok {
+			continue
+		}
+
+		value := lookupValue(payload, name)
+		if value == "" || value == lookupValue(row, name) {
+			continue
+		}
+
+		delta[name] = raw
+	}
+
+	if len(delta) == 0 {
+		return nil
+	}
+
+	encoded, err := json.Marshal(delta)
+	if err != nil {
+		return nil
+	}
+
+	return encoded
+}
+
+// stripForeignManagedColumns drops the linkage and provenance columns from an update payload when
+// another definition manages the row, so cross-definition enrichment updates real fields without
+// reassigning who the record belongs to
+func stripForeignManagedColumns(row json.RawMessage, payload json.RawMessage) json.RawMessage {
+	if managesRecord(row, payload) {
+		return payload
+	}
+
+	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		changed := false
+
+		for _, name := range slices.Concat(relinkFieldNames, provenanceFieldNames) {
+			if _, ok := doc[name]; ok {
+				delete(doc, name)
+
+				changed = true
+			}
 		}
 
 		return changed

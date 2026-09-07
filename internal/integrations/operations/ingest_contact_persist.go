@@ -3,6 +3,7 @@ package operations
 import (
 	"context"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 )
@@ -35,6 +36,22 @@ func persistContactInput(ctx context.Context, db *ent.Client, integration *ent.I
 	return persistRoundTripUpsert(
 		ctx,
 		createInput,
+		func(existing *ent.Contact, input ent.UpdateContactInput) (bool, error) {
+			if !entityops.ContactIngestUnchanged(existing, input) {
+				return false, nil
+			}
+
+			// contacts adopt across installations by owner-scoped lookup, so an unchanged row's
+			// integration linkage still converges through the relink path; a row another
+			// definition manages keeps its linkage
+			if existing.IntegrationID != integration.ID && (existing.SourceDefinitionID == "" || existing.SourceDefinitionID == integration.DefinitionID) {
+				if err := relinkIngestIntegration(ctx, db, entityops.SchemaContact.Snake, existing.ID, integration.ID); err != nil {
+					return false, err
+				}
+			}
+
+			return true, nil
+		},
 		func(ctx context.Context) (*ent.Contact, error) {
 			return q.Only(ctx)
 		},

@@ -74,6 +74,12 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 
 	if entityops.DirectoryMembershipIngestUnchanged(existing, input) && directoryMembershipRunCanAdvance(existing.LastConfirmedRunID, runID) {
 		if batch := directorySyncBatchFromContext(ctx); batch != nil {
+			if existing.IntegrationID != resolvedInput.IntegrationID {
+				if err := relinkIngestIntegration(ctx, db, entityops.SchemaDirectoryMembership.Snake, existing.ID, resolvedInput.IntegrationID); err != nil {
+					return existing.ID, wrapIngestPersistError(err)
+				}
+			}
+
 			batch.confirmedMembershipIDs = append(batch.confirmedMembershipIDs, existing.ID)
 
 			return existing.ID, nil

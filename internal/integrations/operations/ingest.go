@@ -255,6 +255,10 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 	result.Changed = batch.changed
 
+	if err := flushIngestRelinks(ctx, ic.DB, batch, ic.Integration.ID); err != nil {
+		return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
+	}
+
 	if directorySync {
 		if err := flushDirectoryConfirmations(ctx, ic.DB, batch, directorySyncRunID); err != nil {
 			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
@@ -264,27 +268,38 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	// only a fully-confirmed complete snapshot authorizes removal inference: a skipped record
 	// risks a false removal, and partial sources never carry full membership state
 	if directorySync && membershipSetSeen && membershipsComplete && !options.SkipDirectorySyncRunFinalization && result.Failed == 0 {
-		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
+		removed, err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, ic.Integration.InstallationMetadata.Display.ExternalID, directorySyncRunID)
+		if err != nil {
 			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
+
+		result.Changed += removed
 	}
 
 	return result, nil
 }
 
-// markUnconfirmedDirectoryMembershipsRemoved stamps removed_at on the integration's active memberships whose last confirmation predates this run
-func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Client, integrationID string, runID string) error {
+// markUnconfirmedDirectoryMembershipsRemoved stamps removed_at on the active memberships whose
+// last confirmation predates this run and reports how many were removed. The sweep covers rows the
+// installation owns plus rows adopted from the same source instance, so memberships that departed
+// while pointing at a prior installation of the same instance still converge to removed
+func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Client, integrationID string, instanceID string, runID string) (int, error) {
 	current, err := isCurrentDirectorySyncRun(ctx, db, runID)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	if !current {
 		logx.FromContext(ctx).Info().Str("directory_sync_run_id", runID).Msg("skipping membership removal for stale directory sync run")
-		return nil
+		return 0, nil
+	}
+
+	scope := directorymembership.IntegrationID(integrationID)
+	if instanceID != "" {
+		scope = directorymembership.Or(scope, directorymembership.SourceInstanceID(instanceID))
 	}
 
 	removed, err := db.DirectoryMembership.Update().
-		Where(directorymembership.IntegrationID(integrationID),
+		Where(scope,
 			directorymembership.RemovedAtIsNil(),
 			directorymembership.Or(
 				directorymembership.LastConfirmedRunIDIsNil(),
@@ -293,14 +308,14 @@ func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Cli
 		SetRemovedAt(time.Now()).
 		Save(ctx)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	if removed > 0 {
 		logx.FromContext(ctx).Info().Int("removed_count", removed).Str("directory_sync_run_id", runID).Msg("marked directory memberships removed after sync run comparison")
 	}
 
-	return nil
+	return removed, nil
 }
 
 // mapIngestRecord applies the resolved mapping's filters and map expression to one data envelope,

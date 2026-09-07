@@ -72,6 +72,12 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 	}
 
 	if entityops.DirectoryAccountIngestUnchanged(existing, updateInput) {
+		if existing.IntegrationID != lo.FromPtr(createInput.IntegrationID) {
+			if err := relinkIngestIntegration(ctx, db, entityops.SchemaDirectoryAccount.Snake, existing.ID, lo.FromPtr(createInput.IntegrationID)); err != nil {
+				return existing.ID, wrapIngestPersistError(err)
+			}
+		}
+
 		if batch := directorySyncBatchFromContext(ctx); batch != nil {
 			batch.seenAccountIDs = append(batch.seenAccountIDs, existing.ID)
 

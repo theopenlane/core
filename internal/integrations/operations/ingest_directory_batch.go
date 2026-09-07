@@ -53,6 +53,8 @@ type directorySyncBatch struct {
 	membershipIndexes      map[string]map[membershipKey][]*ent.DirectoryMembership
 	seenAccountIDs         []string
 	confirmedMembershipIDs []string
+	relinkIDs              map[string][]string
+	linkedIntegrationIDs   map[string]map[string]struct{}
 }
 
 var directorySyncBatchKey = contextx.NewKey[*directorySyncBatch]()
@@ -60,11 +62,13 @@ var directorySyncBatchKey = contextx.NewKey[*directorySyncBatch]()
 // newDirectorySyncBatch builds the empty batch state for one ingest pass
 func newDirectorySyncBatch() *directorySyncBatch {
 	return &directorySyncBatch{
-		accountScopes:     map[directoryScopeKey]*directoryAccountScope{},
-		ownerAccountIDs:   map[string]map[string]struct{}{},
-		groupScopes:       map[directoryScopeKey]*directoryGroupScope{},
-		ownerGroupIDs:     map[string]map[string]struct{}{},
-		membershipIndexes: map[string]map[membershipKey][]*ent.DirectoryMembership{},
+		accountScopes:        map[directoryScopeKey]*directoryAccountScope{},
+		ownerAccountIDs:      map[string]map[string]struct{}{},
+		groupScopes:          map[directoryScopeKey]*directoryGroupScope{},
+		ownerGroupIDs:        map[string]map[string]struct{}{},
+		membershipIndexes:    map[string]map[membershipKey][]*ent.DirectoryMembership{},
+		relinkIDs:            map[string][]string{},
+		linkedIntegrationIDs: map[string]map[string]struct{}{},
 	}
 }
 
