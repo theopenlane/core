@@ -1,12 +1,22 @@
 package domainscan
 
 import (
-	"encoding/json"
+	"net/url"
 
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
+
+	"github.com/theopenlane/core/v2/pkg/urlx"
 )
 
-// buildBranding combines the URL Scanner favicon with browser-rendered design tokens
+func formatFaviconURL(domain string) string {
+	host, err := urlx.NormalizeHostname(domain)
+	if err != nil {
+		return ""
+	}
+
+	return "https://www.google.com/s2/favicons?domain=" + url.QueryEscape(host) + "&sz=128"
+}
+
 func buildBranding(result *url_scanner.ScanGetResponse, profile *BrandDesignProfile) *Branding {
 	branding := &Branding{}
 	if profile != nil {
@@ -21,33 +31,11 @@ func buildBranding(result *url_scanner.ScanGetResponse, profile *BrandDesignProf
 		branding.SecondaryForegroundColor = profile.SecondaryForegroundColor
 	}
 
-	if result == nil {
-		if profile == nil || profile.IsEmpty() {
-			return nil
-		}
-
-		return branding
+	if result != nil {
+		branding.Favicon.URL = formatFaviconURL(result.Task.URL)
 	}
 
-	type pageData struct {
-		Favicon Favicon `json:"favicon"`
-	}
-
-	favicon := result.Page.JSON.RawJSON()
-	if favicon == "" {
-		if profile == nil || profile.IsEmpty() {
-			return nil
-		}
-
-		return branding
-	}
-
-	var page pageData
-	if err := json.Unmarshal([]byte(favicon), &page); err == nil && page.Favicon.Hash != "" {
-		branding.Favicon = page.Favicon
-	}
-
-	if branding.Favicon.Hash == "" && (profile == nil || profile.IsEmpty()) {
+	if branding.Favicon.URL == "" && (profile == nil || profile.IsEmpty()) {
 		return nil
 	}
 

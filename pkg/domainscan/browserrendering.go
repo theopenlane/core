@@ -119,6 +119,8 @@ func (c *Config) GetBrandingData(ctx context.Context, domain string) (*BrandDesi
 		return nil, err
 	}
 
+	branding.FaviconURL = formatFaviconURL(domain)
+
 	return branding, nil
 }
 
@@ -457,7 +459,6 @@ func buildBrandDesignProfileSchema() ResponseFormat {
 			// for some reson, required is needed to steer the llm to return these
 			Required: []string{
 				"logo_url",
-				"favicon_url",
 				"primary_color",
 				"font",
 				"foreground_color",
@@ -470,10 +471,6 @@ func buildBrandDesignProfileSchema() ResponseFormat {
 				"logo_url": {
 					Type:        "string",
 					Description: "The URL of the company logo shown in the header or navigation, or an empty string when unavailable",
-				},
-				"favicon_url": {
-					Type:        "string",
-					Description: "The URL of the site's favicon, or an empty string when unavailable",
 				},
 				"primary_color": {
 					Type:        "string",
