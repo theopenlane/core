@@ -35,13 +35,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       keycloakCredential.ID(),
-					Name:                "Keycloak Client Credentials",
-					Description:         "Configure Keycloak access using client credentials from your realm.",
-					CredentialRefs:      []types.CredentialSlotID{keycloakCredential.ID()},
-					ClientRefs:          []types.ClientID{keycloakClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         integration.Registration(),
+					CredentialRef:  keycloakCredential.ID(),
+					Name:           "Keycloak Client Credentials",
+					Description:    "Configure Keycloak access using client credentials from your realm.",
+					CredentialRefs: []types.CredentialSlotID{keycloakCredential.ID()},
+					ClientRefs:     []types.ClientID{keycloakClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: keycloakClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: integration.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: keycloakCredential.ID(),
 						Description:   "Removes the stored client credentials from Openlane. If the client is no longer needed, disable or delete it in your Keycloak admin console under Clients.",
@@ -57,16 +60,6 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:                healthCheckOperation.Name(),
-					Description:         "Call Keycloak realm API to verify client credentials and realm connectivity",
-					Topic:               definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:           keycloakClient.ID(),
-					Policy:              types.ExecutionPolicy{Inline: true},
-					ConfigSchema:        healthCheckSchema,
-					Handle:              HealthCheck{}.Handle(),
-					RequiredPermissions: []string{"view-realm"},
-				},
 				{
 					Name:                directorySyncOperation.Name(),
 					Description:         "Collect Keycloak realm users, groups, and memberships as directory accounts",

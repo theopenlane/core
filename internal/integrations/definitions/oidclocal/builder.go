@@ -43,12 +43,14 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       oidcCredential.ID(),
-					Name:                "Local Dex OIDC",
-					Description:         "Connect through the local Dex development provider to test integration OAuth callback flows end to end.",
-					CredentialRefs:      []types.CredentialSlotID{oidcCredential.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  oidcCredential.ID(),
+					Name:           "Local Dex OIDC",
+					Description:    "Connect through the local Dex development provider to test integration OAuth callback flows end to end.",
+					CredentialRefs: []types.CredentialSlotID{oidcCredential.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						Handle: HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[oidcLocalCred]{
 						CredentialRef: oidcCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -96,14 +98,6 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Validate the stored OIDC credential and return the resolved identity claims.",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				{
 					Name:         claimsInspectOperation.Name(),
 					Description:  "Return the raw OIDC ID token claims stored with the auth-managed credential.",

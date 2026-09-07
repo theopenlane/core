@@ -16,8 +16,6 @@ var (
 	authentikCredentialSchema, authentikCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// authentikClient is the client ref for the Authentik API client
 	authentikClient = types.NewClientRef[*authentikSDK.APIClient]()
-	// healthCheckSchema, healthCheckOperation is the operation ref for the health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )

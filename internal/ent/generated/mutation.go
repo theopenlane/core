@@ -116390,11 +116390,13 @@ type IntegrationMutation struct {
 	installation_metadata         *openapi.IntegrationInstallationMetadata
 	provider_state                *openapi.IntegrationProviderState
 	metadata                      *map[string]interface{}
+	health                        *models.IntegrationHealth
 	definition_id                 *string
 	definition_version            *string
 	definition_slug               *string
 	family                        *string
 	status                        *enums.IntegrationStatus
+	expires_at                    *time.Time
 	provider_metadata_snapshot    *map[string]interface{}
 	primary_directory             *bool
 	campaign_email                *bool
@@ -117859,6 +117861,55 @@ func (m *IntegrationMutation) ResetMetadata() {
 	delete(m.clearedFields, integration.FieldMetadata)
 }
 
+// SetHealth sets the "health" field.
+func (m *IntegrationMutation) SetHealth(mh models.IntegrationHealth) {
+	m.health = &mh
+}
+
+// Health returns the value of the "health" field in the mutation.
+func (m *IntegrationMutation) Health() (r models.IntegrationHealth, exists bool) {
+	v := m.health
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHealth returns the old "health" field's value of the Integration entity.
+// If the Integration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationMutation) OldHealth(ctx context.Context) (v models.IntegrationHealth, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHealth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHealth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHealth: %w", err)
+	}
+	return oldValue.Health, nil
+}
+
+// ClearHealth clears the value of the "health" field.
+func (m *IntegrationMutation) ClearHealth() {
+	m.health = nil
+	m.clearedFields[integration.FieldHealth] = struct{}{}
+}
+
+// HealthCleared returns if the "health" field was cleared in this mutation.
+func (m *IntegrationMutation) HealthCleared() bool {
+	_, ok := m.clearedFields[integration.FieldHealth]
+	return ok
+}
+
+// ResetHealth resets all changes to the "health" field.
+func (m *IntegrationMutation) ResetHealth() {
+	m.health = nil
+	delete(m.clearedFields, integration.FieldHealth)
+}
+
 // SetDefinitionID sets the "definition_id" field.
 func (m *IntegrationMutation) SetDefinitionID(s string) {
 	m.definition_id = &s
@@ -118089,6 +118140,55 @@ func (m *IntegrationMutation) OldStatus(ctx context.Context) (v enums.Integratio
 // ResetStatus resets all changes to the "status" field.
 func (m *IntegrationMutation) ResetStatus() {
 	m.status = nil
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (m *IntegrationMutation) SetExpiresAt(t time.Time) {
+	m.expires_at = &t
+}
+
+// ExpiresAt returns the value of the "expires_at" field in the mutation.
+func (m *IntegrationMutation) ExpiresAt() (r time.Time, exists bool) {
+	v := m.expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExpiresAt returns the old "expires_at" field's value of the Integration entity.
+// If the Integration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationMutation) OldExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExpiresAt: %w", err)
+	}
+	return oldValue.ExpiresAt, nil
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (m *IntegrationMutation) ClearExpiresAt() {
+	m.expires_at = nil
+	m.clearedFields[integration.FieldExpiresAt] = struct{}{}
+}
+
+// ExpiresAtCleared returns if the "expires_at" field was cleared in this mutation.
+func (m *IntegrationMutation) ExpiresAtCleared() bool {
+	_, ok := m.clearedFields[integration.FieldExpiresAt]
+	return ok
+}
+
+// ResetExpiresAt resets all changes to the "expires_at" field.
+func (m *IntegrationMutation) ResetExpiresAt() {
+	m.expires_at = nil
+	delete(m.clearedFields, integration.FieldExpiresAt)
 }
 
 // SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
@@ -119542,7 +119642,7 @@ func (m *IntegrationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IntegrationMutation) Fields() []string {
-	fields := make([]string, 0, 34)
+	fields := make([]string, 0, 36)
 	if m.created_at != nil {
 		fields = append(fields, integration.FieldCreatedAt)
 	}
@@ -119621,6 +119721,9 @@ func (m *IntegrationMutation) Fields() []string {
 	if m.metadata != nil {
 		fields = append(fields, integration.FieldMetadata)
 	}
+	if m.health != nil {
+		fields = append(fields, integration.FieldHealth)
+	}
 	if m.definition_id != nil {
 		fields = append(fields, integration.FieldDefinitionID)
 	}
@@ -119635,6 +119738,9 @@ func (m *IntegrationMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, integration.FieldStatus)
+	}
+	if m.expires_at != nil {
+		fields = append(fields, integration.FieldExpiresAt)
 	}
 	if m.provider_metadata_snapshot != nil {
 		fields = append(fields, integration.FieldProviderMetadataSnapshot)
@@ -119705,6 +119811,8 @@ func (m *IntegrationMutation) Field(name string) (ent.Value, bool) {
 		return m.ProviderState()
 	case integration.FieldMetadata:
 		return m.Metadata()
+	case integration.FieldHealth:
+		return m.Health()
 	case integration.FieldDefinitionID:
 		return m.DefinitionID()
 	case integration.FieldDefinitionVersion:
@@ -119715,6 +119823,8 @@ func (m *IntegrationMutation) Field(name string) (ent.Value, bool) {
 		return m.Family()
 	case integration.FieldStatus:
 		return m.Status()
+	case integration.FieldExpiresAt:
+		return m.ExpiresAt()
 	case integration.FieldProviderMetadataSnapshot:
 		return m.ProviderMetadataSnapshot()
 	case integration.FieldPrimaryDirectory:
@@ -119782,6 +119892,8 @@ func (m *IntegrationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldProviderState(ctx)
 	case integration.FieldMetadata:
 		return m.OldMetadata(ctx)
+	case integration.FieldHealth:
+		return m.OldHealth(ctx)
 	case integration.FieldDefinitionID:
 		return m.OldDefinitionID(ctx)
 	case integration.FieldDefinitionVersion:
@@ -119792,6 +119904,8 @@ func (m *IntegrationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldFamily(ctx)
 	case integration.FieldStatus:
 		return m.OldStatus(ctx)
+	case integration.FieldExpiresAt:
+		return m.OldExpiresAt(ctx)
 	case integration.FieldProviderMetadataSnapshot:
 		return m.OldProviderMetadataSnapshot(ctx)
 	case integration.FieldPrimaryDirectory:
@@ -119989,6 +120103,13 @@ func (m *IntegrationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMetadata(v)
 		return nil
+	case integration.FieldHealth:
+		v, ok := value.(models.IntegrationHealth)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHealth(v)
+		return nil
 	case integration.FieldDefinitionID:
 		v, ok := value.(string)
 		if !ok {
@@ -120023,6 +120144,13 @@ func (m *IntegrationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
+		return nil
+	case integration.FieldExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExpiresAt(v)
 		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		v, ok := value.(map[string]interface{})
@@ -120150,6 +120278,9 @@ func (m *IntegrationMutation) ClearedFields() []string {
 	if m.FieldCleared(integration.FieldMetadata) {
 		fields = append(fields, integration.FieldMetadata)
 	}
+	if m.FieldCleared(integration.FieldHealth) {
+		fields = append(fields, integration.FieldHealth)
+	}
 	if m.FieldCleared(integration.FieldDefinitionID) {
 		fields = append(fields, integration.FieldDefinitionID)
 	}
@@ -120161,6 +120292,9 @@ func (m *IntegrationMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(integration.FieldFamily) {
 		fields = append(fields, integration.FieldFamily)
+	}
+	if m.FieldCleared(integration.FieldExpiresAt) {
+		fields = append(fields, integration.FieldExpiresAt)
 	}
 	if m.FieldCleared(integration.FieldProviderMetadataSnapshot) {
 		fields = append(fields, integration.FieldProviderMetadataSnapshot)
@@ -120254,6 +120388,9 @@ func (m *IntegrationMutation) ClearField(name string) error {
 	case integration.FieldMetadata:
 		m.ClearMetadata()
 		return nil
+	case integration.FieldHealth:
+		m.ClearHealth()
+		return nil
 	case integration.FieldDefinitionID:
 		m.ClearDefinitionID()
 		return nil
@@ -120265,6 +120402,9 @@ func (m *IntegrationMutation) ClearField(name string) error {
 		return nil
 	case integration.FieldFamily:
 		m.ClearFamily()
+		return nil
+	case integration.FieldExpiresAt:
+		m.ClearExpiresAt()
 		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		m.ClearProviderMetadataSnapshot()
@@ -120355,6 +120495,9 @@ func (m *IntegrationMutation) ResetField(name string) error {
 	case integration.FieldMetadata:
 		m.ResetMetadata()
 		return nil
+	case integration.FieldHealth:
+		m.ResetHealth()
+		return nil
 	case integration.FieldDefinitionID:
 		m.ResetDefinitionID()
 		return nil
@@ -120369,6 +120512,9 @@ func (m *IntegrationMutation) ResetField(name string) error {
 		return nil
 	case integration.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case integration.FieldExpiresAt:
+		m.ResetExpiresAt()
 		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		m.ResetProviderMetadataSnapshot()

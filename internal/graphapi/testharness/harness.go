@@ -331,7 +331,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
-			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}),
+			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}, systemdef.IntegrationLifecycleConfig{}),
 			testint.Builder(),
 		},
 	})

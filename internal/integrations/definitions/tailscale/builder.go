@@ -37,13 +37,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       tailscaleCredential.ID(),
-					Name:                "Tailscale OAuth",
-					Description:         "Configure Tailscale access using an OAuth client scoped to your tailnet.",
-					CredentialRefs:      []types.CredentialSlotID{tailscaleCredential.ID()},
-					ClientRefs:          []types.ClientID{tailscaleClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  tailscaleCredential.ID(),
+					Name:           "Tailscale OAuth",
+					Description:    "Configure Tailscale access using an OAuth client scoped to your tailnet.",
+					CredentialRefs: []types.CredentialSlotID{tailscaleCredential.ID()},
+					ClientRefs:     []types.ClientID{tailscaleClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: tailscaleClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: tailscaleCredential.ID(),
 						Description:   "Removes the stored OAuth credentials from Openlane. If the client is no longer needed, revoke it in the Tailscale admin console.",
@@ -59,16 +62,6 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:                healthCheckOperation.Name(),
-					Description:         "Verify Tailscale OAuth credentials by listing tailnet users",
-					Topic:               definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:           tailscaleClient.ID(),
-					Policy:              types.ExecutionPolicy{Inline: true},
-					Handle:              HealthCheck{}.Handle(),
-					ConfigSchema:        healthCheckSchema,
-					RequiredPermissions: []string{"users:read"},
-				},
 				{
 					Name:           directorySyncOperation.Name(),
 					Description:    "Sync Tailscale users and role-based groups as directory accounts",

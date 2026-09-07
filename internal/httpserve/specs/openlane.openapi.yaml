@@ -602,8 +602,6 @@ components:
                                             type: object
                                         name:
                                             type: string
-                                        validationOperation:
-                                            type: string
                                     type: object
                                 type: array
                             credentialRegistrations:
@@ -3579,6 +3577,63 @@ paths:
             summary: DisconnectIntegration
             tags:
                 - Integrations
+    /v1/integrations/{integrationID}/health:
+        post:
+            description: Run the installation health assessment, recording connection and per-operation health
+            operationId: CheckIntegrationHealth
+            parameters:
+                - description: 'Path parameter: integrationID'
+                  in: path
+                  name: integrationID
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                    description: OK
+                "400":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: bad request
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Bad Request
+                "401":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: unauthorized
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Unauthorized
+                "500":
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        error: internal server error
+                                        success: false
+                            schema:
+                                $ref: '#/components/schemas/ErrorReply'
+                    description: Internal Server Error
+            security:
+                - bearer: []
+                - apiKey: []
+            summary: CheckIntegrationHealth
+            tags:
+                - Integrations
     /v1/integrations/{integrationID}/operations/run:
         post:
             description: Execute a provider operation using stored credentials
@@ -4824,7 +4879,7 @@ tags:
       name: Account Registration
     - description: Login
       name: Authentication
-    - description: ConfigureIntegrationProvider
+    - description: CheckIntegrationHealth
       name: Integrations
     - description: OrganizationInviteAccept
       name: Invites

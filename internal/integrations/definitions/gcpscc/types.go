@@ -21,8 +21,6 @@ var (
 	sccSchema, sccCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// workloadIdentitySchema is the credential schema for GCP workload identity federation
 	workloadIdentitySchema, workloadIdentityCredential = providerkit.CredentialSchema[WorkloadIdentityCredentialSchema]()
-	// healthCheckSchema is the operation schema for the GCP Security Command Center health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// findingsCollectSchema is the operation schema for the GCP Security Command Center findings collection operation
 	findingsCollectSchema, findingsCollectOperation = providerkit.OperationSchema[FindingsSync]()
 )

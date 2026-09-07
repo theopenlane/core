@@ -18902,6 +18902,8 @@ type Integration struct {
 	PlatformID *string `json:"platformID,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]any `json:"metadata,omitempty"`
+	// runtime health state recorded by health checks and reconcile failures
+	Health *models.IntegrationHealth `json:"health,omitempty"`
 	// the canonical definition identifier for the installation
 	DefinitionID *string `json:"definitionID,omitempty"`
 	// the definition version recorded for this installation
@@ -18912,6 +18914,8 @@ type Integration struct {
 	Family *string `json:"family,omitempty"`
 	// the lifecycle status of the installation
 	Status enums.IntegrationStatus `json:"status"`
+	// when a pending installation is considered abandoned and eligible for cleanup; cleared when the installation connects
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// snapshot of definition metadata captured on the installation
 	ProviderMetadataSnapshot map[string]any `json:"providerMetadataSnapshot,omitempty"`
 	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
@@ -19235,6 +19239,14 @@ type IntegrationWhereInput struct {
 	StatusNeq   *enums.IntegrationStatus  `json:"statusNEQ,omitempty"`
 	StatusIn    []enums.IntegrationStatus `json:"statusIn,omitempty"`
 	StatusNotIn []enums.IntegrationStatus `json:"statusNotIn,omitempty"`
+	// expires_at field predicates
+	ExpiresAt       *time.Time `json:"expiresAt,omitempty"`
+	ExpiresAtGt     *time.Time `json:"expiresAtGT,omitempty"`
+	ExpiresAtGte    *time.Time `json:"expiresAtGTE,omitempty"`
+	ExpiresAtLt     *time.Time `json:"expiresAtLT,omitempty"`
+	ExpiresAtLte    *time.Time `json:"expiresAtLTE,omitempty"`
+	ExpiresAtIsNil  *bool      `json:"expiresAtIsNil,omitempty"`
+	ExpiresAtNotNil *bool      `json:"expiresAtNotNil,omitempty"`
 	// primary_directory field predicates
 	PrimaryDirectory    *bool `json:"primaryDirectory,omitempty"`
 	PrimaryDirectoryNeq *bool `json:"primaryDirectoryNEQ,omitempty"`
@@ -48491,6 +48503,7 @@ const (
 	IntegrationOrderFieldDefinitionSlug    IntegrationOrderField = "definition_slug"
 	IntegrationOrderFieldFamily            IntegrationOrderField = "family"
 	IntegrationOrderFieldStatus            IntegrationOrderField = "status"
+	IntegrationOrderFieldExpiresAt         IntegrationOrderField = "expires_at"
 )
 
 var AllIntegrationOrderField = []IntegrationOrderField{
@@ -48504,11 +48517,12 @@ var AllIntegrationOrderField = []IntegrationOrderField{
 	IntegrationOrderFieldDefinitionSlug,
 	IntegrationOrderFieldFamily,
 	IntegrationOrderFieldStatus,
+	IntegrationOrderFieldExpiresAt,
 }
 
 func (e IntegrationOrderField) IsValid() bool {
 	switch e {
-	case IntegrationOrderFieldCreatedAt, IntegrationOrderFieldUpdatedAt, IntegrationOrderFieldName, IntegrationOrderFieldKind, IntegrationOrderFieldIntegrationType, IntegrationOrderFieldDefinitionID, IntegrationOrderFieldDefinitionVersion, IntegrationOrderFieldDefinitionSlug, IntegrationOrderFieldFamily, IntegrationOrderFieldStatus:
+	case IntegrationOrderFieldCreatedAt, IntegrationOrderFieldUpdatedAt, IntegrationOrderFieldName, IntegrationOrderFieldKind, IntegrationOrderFieldIntegrationType, IntegrationOrderFieldDefinitionID, IntegrationOrderFieldDefinitionVersion, IntegrationOrderFieldDefinitionSlug, IntegrationOrderFieldFamily, IntegrationOrderFieldStatus, IntegrationOrderFieldExpiresAt:
 		return true
 	}
 	return false

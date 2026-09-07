@@ -12973,6 +12973,10 @@ input IdentityHolderHistoryWhereInput {
 The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
 """
 scalar ImplementationGuidance
+"""
+The `IntegrationHealth` scalar type records the runtime health state of an installed integration, including the unhealthy reason, per-operation failure reasons, and the last successful health check time
+"""
+scalar IntegrationHealth
 type InternalPolicyHistory implements Node {
 	id: ID!
 	historyTime: Time!

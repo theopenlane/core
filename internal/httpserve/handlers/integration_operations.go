@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"errors"
-	"time"
 
 	echo "github.com/theopenlane/echox"
 
@@ -121,23 +120,6 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 			}
 
 			return h.BadRequest(ctx, err)
-		}
-
-		meta := integrationRef.Metadata
-		if meta == nil {
-			meta = map[string]any{}
-		}
-
-		meta["lastSuccessfulHealthCheck"] = time.Now().UTC().Format(time.RFC3339)
-
-		if err := h.IntegrationsRuntime.DB().Integration.UpdateOneID(integrationRef.ID).
-			SetMetadata(meta).Exec(queueCtx); err != nil {
-			logx.FromContext(requestCtx).Error().Err(err).Str("integrationID", integrationRef.ID).Msg("failed to persist health check timestamp")
-			// not failing the request at this point since the operation itself succeeded and this is just a best-effort update to the integration record
-		}
-
-		if err := h.IntegrationsRuntime.SeedReconcileJobsForInstallation(queueCtx, integrationRef); err != nil {
-			logx.FromContext(requestCtx).Warn().Err(err).Str("integrationID", integrationRef.ID).Msg("failed to seed missing reconcile jobs during health check")
 		}
 
 		return h.Success(ctx, RunIntegrationOperationResponse{

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
@@ -75,6 +76,8 @@ type Integration struct {
 	ProviderState openapi.IntegrationProviderState `json:"provider_state,omitempty"`
 	// additional metadata about the integration
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+	// runtime health state recorded by health checks and reconcile failures
+	Health models.IntegrationHealth `json:"health,omitempty"`
 	// the canonical definition identifier for the installation
 	DefinitionID string `json:"definition_id,omitempty"`
 	// the definition version recorded for this installation
@@ -85,6 +88,8 @@ type Integration struct {
 	Family string `json:"family,omitempty"`
 	// the lifecycle status of the installation
 	Status enums.IntegrationStatus `json:"status,omitempty"`
+	// when a pending installation is considered abandoned and eligible for cleanup; cleared when the installation connects
+	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// snapshot of definition metadata captured on the installation
 	ProviderMetadataSnapshot map[string]interface{} `json:"provider_metadata_snapshot,omitempty"`
 	// designates this integration as the authoritative directory source for identity holder enrichment and lifecycle derivation within its owner organization
@@ -430,13 +435,13 @@ func (*Integration) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldProviderMetadataSnapshot:
+		case integration.FieldTags, integration.FieldProviderMetadata, integration.FieldConfig, integration.FieldInstallationMetadata, integration.FieldProviderState, integration.FieldMetadata, integration.FieldHealth, integration.FieldProviderMetadataSnapshot:
 			values[i] = new([]byte)
 		case integration.FieldSystemOwned, integration.FieldPrimaryDirectory, integration.FieldCampaignEmail:
 			values[i] = new(sql.NullBool)
 		case integration.FieldID, integration.FieldCreatedBy, integration.FieldUpdatedBy, integration.FieldUpdatedByImpersonator, integration.FieldDeletedBy, integration.FieldOwnerID, integration.FieldInternalNotes, integration.FieldSystemInternalID, integration.FieldEnvironmentName, integration.FieldEnvironmentID, integration.FieldScopeName, integration.FieldScopeID, integration.FieldName, integration.FieldDescription, integration.FieldKind, integration.FieldIntegrationType, integration.FieldPlatformID, integration.FieldDefinitionID, integration.FieldDefinitionVersion, integration.FieldDefinitionSlug, integration.FieldFamily, integration.FieldStatus:
 			values[i] = new(sql.NullString)
-		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt:
+		case integration.FieldCreatedAt, integration.FieldUpdatedAt, integration.FieldDeletedAt, integration.FieldExpiresAt:
 			values[i] = new(sql.NullTime)
 		case integration.ForeignKeys[0]: // file_integrations
 			values[i] = new(sql.NullString)
@@ -634,6 +639,14 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
+		case integration.FieldHealth:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field health", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Health); err != nil {
+					return fmt.Errorf("unmarshal field health: %w", err)
+				}
+			}
 		case integration.FieldDefinitionID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field definition_id", values[i])
@@ -663,6 +676,13 @@ func (_m *Integration) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.IntegrationStatus(value.String)
+			}
+		case integration.FieldExpiresAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
+			} else if value.Valid {
+				_m.ExpiresAt = new(time.Time)
+				*_m.ExpiresAt = value.Time
 			}
 		case integration.FieldProviderMetadataSnapshot:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -948,6 +968,9 @@ func (_m *Integration) String() string {
 	builder.WriteString("metadata=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
+	builder.WriteString("health=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Health))
+	builder.WriteString(", ")
 	builder.WriteString("definition_id=")
 	builder.WriteString(_m.DefinitionID)
 	builder.WriteString(", ")
@@ -962,6 +985,11 @@ func (_m *Integration) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
+	builder.WriteString(", ")
+	if v := _m.ExpiresAt; v != nil {
+		builder.WriteString("expires_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
 	builder.WriteString(", ")
 	builder.WriteString("provider_metadata_snapshot=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ProviderMetadataSnapshot))

@@ -43,13 +43,16 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       oneDriveCredential.ID(),
-					Name:                "OneDrive OAuth",
-					Description:         "Connect your Microsoft account using OAuth to access OneDrive documents.",
-					CredentialRefs:      []types.CredentialSlotID{oneDriveCredential.ID()},
-					ClientRefs:          []types.ClientID{oneDriveClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  oneDriveCredential.ID(),
+					Name:           "OneDrive OAuth",
+					Description:    "Connect your Microsoft account using OAuth to access OneDrive documents.",
+					CredentialRefs: []types.CredentialSlotID{oneDriveCredential.ID()},
+					ClientRefs:     []types.ClientID{oneDriveClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: oneDriveClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[oneDriveCred]{
 						CredentialRef: oneDriveCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -88,15 +91,6 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Microsoft Graph /me/drive to verify OneDrive access",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    oneDriveClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				{
 					Name:         documentExportOperation.Name(),
 					Description:  "Download a OneDrive file and return its content",

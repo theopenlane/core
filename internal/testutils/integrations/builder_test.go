@@ -15,7 +15,7 @@ func TestBuilderRegistersAllSurfaces(t *testing.T) {
 	}
 
 	names := map[string]struct{}{}
-	for _, name := range []string{HealthOp.Name(), RepoSyncOp.Name(), ValidatedOp.Name(), RecurringOp.Name(), ExhaustingOp.Name(), UnresolvableOp.Name()} {
+	for _, name := range []string{RepoSyncOp.Name(), ValidatedOp.Name(), RecurringOp.Name(), ExhaustingOp.Name(), UnresolvableOp.Name()} {
 		if name == "" {
 			t.Fatal("operation registered under empty name")
 		}

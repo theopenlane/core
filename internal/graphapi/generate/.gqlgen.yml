@@ -137,6 +137,9 @@ models:
   CredentialSet:
     model:
       - github.com/theopenlane/core/common/models.CredentialSet
+  IntegrationHealth:
+    model:
+      - github.com/theopenlane/core/common/models.IntegrationHealth
   SearchContext:
     model:
       - github.com/theopenlane/core/common/models.SearchContext

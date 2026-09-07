@@ -14,7 +14,7 @@ func CleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {
 	t.Helper()
 
 	caller, _ := auth.CallerFromContext(ctx)
-	if caller == nil && caller.OrganizationID == "" {
+	if caller == nil || caller.OrganizationID == "" {
 		FailNow(t)
 	}
 

@@ -47,13 +47,16 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       workspaceCredential.ID(),
-					Name:                "Google Workspace OAuth",
-					Description:         "Connect your Google Workspace domain using OAuth.",
-					CredentialRefs:      []types.CredentialSlotID{workspaceCredential.ID()},
-					ClientRefs:          []types.ClientID{workspaceClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  workspaceCredential.ID(),
+					Name:           "Google Workspace OAuth",
+					Description:    "Connect your Google Workspace domain using OAuth.",
+					CredentialRefs: []types.CredentialSlotID{workspaceCredential.ID()},
+					ClientRefs:     []types.ClientID{workspaceClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: workspaceClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[googleWorkspaceCred]{
 						CredentialRef: workspaceCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -92,15 +95,6 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Google Admin SDK users.list to verify the workspace token",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    workspaceClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Google Workspace directory users, groups, and memberships and emit directory ingest envelopes",

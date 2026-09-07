@@ -30,8 +30,6 @@ var (
 	codeScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("code_scanning_alert")
 	// SecretScanningAlertWebhookEvent is the webhook event ref for secret scanning alert events
 	secretScanningAlertWebhookEvent = types.NewWebhookEventRef[githubWebhookEnvelope]("secret_scanning_alert")
-	// healthDefaultOperation is the operation ref for the GitHub App health check
-	healthCheckSchema, healthDefaultOperation = providerkit.OperationSchema[HealthCheck]()
 	// repositorySyncSchema is the operation schema for the GitHub repository sync operation
 	repositorySyncSchema, repositorySyncOperation = providerkit.OperationSchema[RepositorySync]()
 	// vulnerabilityCollectSchema is the operation schema for the GitHub vulnerability collection operation

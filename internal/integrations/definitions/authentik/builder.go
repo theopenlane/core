@@ -35,13 +35,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       authentikCredential.ID(),
-					Name:                "Authentik API Token",
-					Description:         "Configure Authentik access using an API token from your instance.",
-					CredentialRefs:      []types.CredentialSlotID{authentikCredential.ID()},
-					ClientRefs:          []types.ClientID{authentikClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         integration.Registration(),
+					CredentialRef:  authentikCredential.ID(),
+					Name:           "Authentik API Token",
+					Description:    "Configure Authentik access using an API token from your instance.",
+					CredentialRefs: []types.CredentialSlotID{authentikCredential.ID()},
+					ClientRefs:     []types.ClientID{authentikClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: authentikClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: integration.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: authentikCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Authentik admin panel under Directory > Tokens.",
@@ -57,15 +60,6 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Authentik API to verify token and instance connectivity",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    authentikClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				{
 					Name:                directorySyncOperation.Name(),
 					Description:         "Collect Authentik directory users, groups, and memberships as directory accounts",

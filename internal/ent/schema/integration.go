@@ -111,6 +111,12 @@ func (Integration) Fields() []ent.Field {
 			Annotations(
 				entgql.Skip(entgql.SkipWhereInput),
 			),
+		field.JSON("health", models.IntegrationHealth{}).
+			Comment("runtime health state recorded by health checks and reconcile failures").
+			Optional().
+			Annotations(
+				entgql.Skip(entgql.SkipWhereInput),
+			),
 		field.String("definition_id").
 			Comment("the canonical definition identifier for the installation").
 			Optional().
@@ -143,6 +149,13 @@ func (Integration) Fields() []ent.Field {
 			Default(enums.IntegrationStatusPending.String()).
 			Annotations(
 				entgql.OrderField("status"),
+			),
+		field.Time("expires_at").
+			Comment("when a pending installation is considered abandoned and eligible for cleanup; cleared when the installation connects").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("expires_at"),
 			),
 		field.JSON("provider_metadata_snapshot", map[string]any{}).
 			Comment("snapshot of definition metadata captured on the installation").

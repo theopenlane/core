@@ -121,6 +121,9 @@ type OperationRegistration struct {
 	RateLimit *RateLimitPolicy `json:"-"`
 	// Ingest declares the normalized schemas emitted by the operation
 	Ingest []IngestContract `json:"ingest,omitempty"`
+	// HealthCheck probes this operation's prerequisites under its own client; probe failures
+	// degrade the operation without stopping the rest of the installation
+	HealthCheck OperationHandler `json:"-"`
 	// Handle executes the operation; set for operations that do not produce ingest payloads
 	Handle OperationHandler `json:"-"`
 	// IngestHandle executes the operation and returns typed payload sets for the ingest pipeline,

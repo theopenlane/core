@@ -17084,6 +17084,33 @@ var (
 			}
 		},
 	}
+	// IntegrationOrderFieldExpiresAt orders Integration by expires_at.
+	IntegrationOrderFieldExpiresAt = &IntegrationOrderField{
+		Value: func(_m *Integration) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.ExpiresAt == nil {
+				return nil, nil
+			}
+			return _m.ExpiresAt, nil
+		},
+		column: integration.FieldExpiresAt,
+		toTerm: func(opts ...sql.OrderTermOption) integration.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return integration.ByExpiresAt(opts...)
+		},
+		toCursor: func(_m *Integration) Cursor {
+			if _m.ExpiresAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExpiresAt,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -17110,6 +17137,8 @@ func (f IntegrationOrderField) String() string {
 		str = "family"
 	case IntegrationOrderFieldStatus.column:
 		str = "status"
+	case IntegrationOrderFieldExpiresAt.column:
+		str = "expires_at"
 	}
 	return str
 }
@@ -17146,6 +17175,8 @@ func (f *IntegrationOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *IntegrationOrderFieldFamily
 	case "status":
 		*f = *IntegrationOrderFieldStatus
+	case "expires_at":
+		*f = *IntegrationOrderFieldExpiresAt
 	default:
 		return fmt.Errorf("%s is not a valid IntegrationOrderField", str)
 	}
