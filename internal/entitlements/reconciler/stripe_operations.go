@@ -65,6 +65,7 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 			},
 			Expand: []*string{stripe.String("data.schedule")},
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
+			Expand: []*string{stripe.String("data.schedule")},
 		})
 
 		for sub, err := range it.All(ctx) {
@@ -168,6 +169,7 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 			},
 			Expand: []*string{stripe.String("data.schedule")},
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
+			Expand: []*string{stripe.String("data.schedule")},
 		})
 		for sub, err := range it.All(ctx) {
 			if err != nil {
