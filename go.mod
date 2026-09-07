@@ -55,6 +55,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/google/cel-go v0.31.0
 	github.com/google/go-github/v88 v88.0.0
+	github.com/google/go-github/v90 v90.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/gqlgo/gqlgenc v0.38.2
@@ -233,7 +234,6 @@ require (
 	github.com/gofrs/flock v0.10.0 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/go-github/v90 v90.0.0 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
