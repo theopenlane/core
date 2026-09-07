@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // DomainScanRequest queues a domain scan for a single domain by creating a pending Scan record which
@@ -160,6 +161,9 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 
 		if cfg.BrandDesignOnly {
 			if err := saga.runBrandDesignScan(ctx, organizationID, scanRecord.ID, cfg.Domain, cfg.ApplyBrandDesign); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("scan_id", scanRecord.ID).Msg("domain scan: brand design scan failed")
+				saga.markDomainScanFailed(ctx, organizationID, scanRecord.ID)
+
 				return nil, err
 			}
 

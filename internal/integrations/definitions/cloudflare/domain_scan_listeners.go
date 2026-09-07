@@ -55,36 +55,30 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 		BrandDesignOnly: true,
 	})
 	if err != nil {
-		s.markDomainScanFailed(ctx, organizationID, scanID)
-
 		return err
 	}
 
 	response, err := s.services.ExecuteRuntimeOperation(ctx, DefinitionID.ID(), DomainScanEnrichmentOp.Name(), config)
 	if err != nil {
-		s.markDomainScanFailed(ctx, organizationID, scanID)
-
 		return err
 	}
 
 	var result DomainScanGatherEnrichmentResult
 	if err := json.Unmarshal(response, &result); err != nil {
-		s.markDomainScanFailed(ctx, organizationID, scanID)
-
 		return err
 	}
 
 	if result.Enrichment.Branding == nil {
-		s.markDomainScanFailed(ctx, organizationID, scanID)
+		logx.FromContext(ctx).Info().Msg("domain scan: no brand design found")
 
-		return nil
+		return s.services.DB().Scan.UpdateOneID(scanID).
+			SetStatus(enums.ScanStatusCompleted).
+			Exec(systemCtx)
 	}
 
 	if applyBrandDesign {
 		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(result.Enrichment.Branding)); err != nil {
-			s.markDomainScanFailed(ctx, organizationID, scanID)
-
-			return err
+			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 		}
 	}
 
@@ -109,8 +103,6 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 		SetStatus(enums.ScanStatusCompleted).
 		SetMetadata(metadata).
 		Exec(systemCtx); err != nil {
-		s.markDomainScanFailed(ctx, organizationID, scanID)
-
 		return err
 	}
 
@@ -356,15 +348,13 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 	}
 
 	if enrichment.Branding == nil {
-		s.markDomainScanFailed(ctx, organizationID, internalScanID)
+		logx.FromContext(ctx).Info().Msg("domain scan: no brand design found, skipping trust center update")
 
-		return ErrDomainScanBrandDesignMissing
+		return nil
 	}
 
 	if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(enrichment.Branding)); err != nil {
-		s.markDomainScanFailed(ctx, organizationID, internalScanID)
-
-		return err
+		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 	}
 
 	return nil
