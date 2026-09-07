@@ -65,7 +65,7 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 		).
 		WithOrganization().
 		Order(
-			organizationsetting.ByUpdatedAt(),
+			organizationsetting.ByPendingDeletionAt(),
 			organizationsetting.ByID(),
 		).
 		Limit(o.MaxDeletesPerRun).
