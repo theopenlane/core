@@ -55,6 +55,7 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 			organizationsetting.PendingDeletionAtNotNil(),
 			organizationsetting.PendingDeletionAtLTE(models.DateTime(time.Now())),
 			organizationsetting.HasOrganizationWith(
+				organization.DeletedAtIsNil(),
 				organization.IDNEQ(consts.SystemAdminOrgID),
 				organization.PersonalOrg(false),
 				organization.Not(
@@ -63,7 +64,10 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 			),
 		).
 		WithOrganization().
-		Order(organizationsetting.ByUpdatedAt()).
+		Order(
+			organizationsetting.ByUpdatedAt(),
+			organizationsetting.ByID(),
+		).
 		Limit(o.MaxDeletesPerRun).
 		All(systemCtx)
 	if err != nil {
@@ -71,11 +75,20 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 		return 0, err
 	}
 
+	logger.Info().
+		Int("selected_count", len(settings)).
+		Msg("organizations selected for deletion")
+
 	deletedOrgs := make([]string, 0, len(settings))
 
 	for _, setting := range settings {
 		org := setting.Edges.Organization
 		if org == nil {
+			logger.Warn().
+				Str("setting_id", setting.ID).
+				Str("organization_id", setting.OrganizationID).
+				Msg("organization selected for deletion could not be loaded")
+
 			continue
 		}
 
@@ -94,6 +107,7 @@ func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationReq
 	}
 
 	logger.Info().
+		Int("selected_count", len(settings)).
 		Int("count", len(deletedOrgs)).
 		Msg("organization deletion summary")
 
