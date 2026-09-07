@@ -55426,7 +55426,7 @@ input ImportDomainScanReviewFindingInput {
 }
 
 """
-brand design data gotten from the domain scan
+brand design data retrieved from the domain scan
 """
 input ImportDomainScanReviewBrandDesignInput {
     logoURL: String

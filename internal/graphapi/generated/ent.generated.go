@@ -4,7 +4,7 @@ package gqlgenerated
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
 	"errors"
 	"fmt"
 	"math"
@@ -86,8 +86,8 @@ type IdentityHolderResolver interface {
 }
 type IntegrationResolver interface {
 	WebhookURLs(ctx context.Context, obj *generated.Integration) (map[string]any, error)
-	Credentials(ctx context.Context, obj *generated.Integration) (json.RawMessage, error)
-	Config(ctx context.Context, obj *generated.Integration) (json.RawMessage, error)
+	Credentials(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
+	Config(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
 }
 type InternalPolicyResolver interface {
 	HasPendingWorkflow(ctx context.Context, obj *generated.InternalPolicy) (bool, error)
@@ -99896,8 +99896,8 @@ func (ec *executionContext) _Integration_credentials(ctx context.Context, field 
 			return ec.Resolvers.Integration().Credentials(ctx, obj)
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
-			return ec.marshalOJSON2encodingᚋjsonᚐRawMessage(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
+			return ec.marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx, selections, v)
 		},
 		true,
 		false,
@@ -99919,8 +99919,8 @@ func (ec *executionContext) _Integration_config(ctx context.Context, field graph
 			return ec.Resolvers.Integration().Config(ctx, obj)
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
-			return ec.marshalOJSON2encodingᚋjsonᚐRawMessage(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
+			return ec.marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx, selections, v)
 		},
 		true,
 		false,
@@ -468990,7 +468990,7 @@ func (ec *executionContext) unmarshalOInviteWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚐRawMessage(ctx context.Context, v any) (json.RawMessage, error) {
+func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx context.Context, v any) (jsontext.Value, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -468998,7 +468998,7 @@ func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚐRawMessage(ctx cont
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOJSON2encodingᚋjsonᚐRawMessage(ctx context.Context, sel ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
+func (ec *executionContext) marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx context.Context, sel ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

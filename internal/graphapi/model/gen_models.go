@@ -1929,7 +1929,7 @@ type ImportDomainScanReviewAssetInput struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
-// brand design data gotten from the domain scan
+// brand design data retrieved from the domain scan
 type ImportDomainScanReviewBrandDesignInput struct {
 	LogoURL                  *string `json:"logoURL,omitempty"`
 	FaviconURL               *string `json:"faviconURL,omitempty"`

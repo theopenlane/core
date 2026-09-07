@@ -4,7 +4,7 @@ package testclient
 
 import (
 	"bytes"
-	"encoding/json"
+	"encoding/json/jsontext"
 	"fmt"
 	"io"
 	"strconv"
@@ -18770,7 +18770,7 @@ type ImportDomainScanReviewAssetInput struct {
 	Categories []string `json:"categories,omitempty"`
 }
 
-// brand design data gotten from the domain scan
+// brand design data retrieved from the domain scan
 type ImportDomainScanReviewBrandDesignInput struct {
 	LogoURL                  *string `json:"logoURL,omitempty"`
 	FaviconURL               *string `json:"faviconURL,omitempty"`
@@ -18948,8 +18948,8 @@ type Integration struct {
 	Campaigns             *CampaignConnection             `json:"campaigns"`
 	Entities              *EntityConnection               `json:"entities"`
 	WebhookURLs           map[string]any                  `json:"webhookURLs,omitempty"`
-	Credentials           json.RawMessage                 `json:"credentials,omitempty"`
-	Config                json.RawMessage                 `json:"config,omitempty"`
+	Credentials           jsontext.Value                  `json:"credentials,omitempty"`
+	Config                jsontext.Value                  `json:"config,omitempty"`
 }
 
 func (Integration) IsNode() {}
