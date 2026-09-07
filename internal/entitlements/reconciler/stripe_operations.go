@@ -63,7 +63,6 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 			ListParams: stripe.ListParams{
 				Limit: stripe.Int64(defaultStripePageLimit),
 			},
-			Expand: []*string{stripe.String("data.schedule")},
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
 			Expand: []*string{stripe.String("data.schedule")},
 		})
@@ -167,7 +166,6 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 			ListParams: stripe.ListParams{
 				Limit: stripe.Int64(defaultStripePageLimit),
 			},
-			Expand: []*string{stripe.String("data.schedule")},
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
 			Expand: []*string{stripe.String("data.schedule")},
 		})
