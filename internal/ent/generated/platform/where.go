@@ -127,6 +127,11 @@ func InternalOwnerGroupID(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldEQ(FieldInternalOwnerGroupID, v))
 }
 
+// InternalOwnerIdentityHolderID applies equality check predicate on the "internal_owner_identity_holder_id" field. It's identical to InternalOwnerIdentityHolderIDEQ.
+func InternalOwnerIdentityHolderID(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // BusinessOwner applies equality check predicate on the "business_owner" field. It's identical to BusinessOwnerEQ.
 func BusinessOwner(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldEQ(FieldBusinessOwner, v))
@@ -140,6 +145,11 @@ func BusinessOwnerUserID(v string) predicate.Platform {
 // BusinessOwnerGroupID applies equality check predicate on the "business_owner_group_id" field. It's identical to BusinessOwnerGroupIDEQ.
 func BusinessOwnerGroupID(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldEQ(FieldBusinessOwnerGroupID, v))
+}
+
+// BusinessOwnerIdentityHolderID applies equality check predicate on the "business_owner_identity_holder_id" field. It's identical to BusinessOwnerIdentityHolderIDEQ.
+func BusinessOwnerIdentityHolderID(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEQ(FieldBusinessOwnerIdentityHolderID, v))
 }
 
 // TechnicalOwner applies equality check predicate on the "technical_owner" field. It's identical to TechnicalOwnerEQ.
@@ -157,6 +167,11 @@ func TechnicalOwnerGroupID(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldEQ(FieldTechnicalOwnerGroupID, v))
 }
 
+// TechnicalOwnerIdentityHolderID applies equality check predicate on the "technical_owner_identity_holder_id" field. It's identical to TechnicalOwnerIdentityHolderIDEQ.
+func TechnicalOwnerIdentityHolderID(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEQ(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
 // SecurityOwner applies equality check predicate on the "security_owner" field. It's identical to SecurityOwnerEQ.
 func SecurityOwner(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldEQ(FieldSecurityOwner, v))
@@ -170,6 +185,11 @@ func SecurityOwnerUserID(v string) predicate.Platform {
 // SecurityOwnerGroupID applies equality check predicate on the "security_owner_group_id" field. It's identical to SecurityOwnerGroupIDEQ.
 func SecurityOwnerGroupID(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldEQ(FieldSecurityOwnerGroupID, v))
+}
+
+// SecurityOwnerIdentityHolderID applies equality check predicate on the "security_owner_identity_holder_id" field. It's identical to SecurityOwnerIdentityHolderIDEQ.
+func SecurityOwnerIdentityHolderID(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEQ(FieldSecurityOwnerIdentityHolderID, v))
 }
 
 // PlatformKindName applies equality check predicate on the "platform_kind_name" field. It's identical to PlatformKindNameEQ.
@@ -1162,6 +1182,81 @@ func InternalOwnerGroupIDContainsFold(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
 }
 
+// InternalOwnerIdentityHolderIDEQ applies the EQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEQ(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNEQ(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldNEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIn applies the In predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIn(vs ...string) predicate.Platform {
+	return predicate.Platform(sql.FieldIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotIn(vs ...string) predicate.Platform {
+	return predicate.Platform(sql.FieldNotIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDGT applies the GT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGT(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldGT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDGTE applies the GTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGTE(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldGTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLT applies the LT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLT(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldLT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLTE applies the LTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLTE(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldLTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContains applies the Contains predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContains(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldContains(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasPrefix(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldHasPrefix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasSuffix(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldHasSuffix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIsNil() predicate.Platform {
+	return predicate.Platform(sql.FieldIsNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotNil() predicate.Platform {
+	return predicate.Platform(sql.FieldNotNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEqualFold(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEqualFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContainsFold(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldContainsFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // BusinessOwnerEQ applies the EQ predicate on the "business_owner" field.
 func BusinessOwnerEQ(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldEQ(FieldBusinessOwner, v))
@@ -1385,6 +1480,81 @@ func BusinessOwnerGroupIDEqualFold(v string) predicate.Platform {
 // BusinessOwnerGroupIDContainsFold applies the ContainsFold predicate on the "business_owner_group_id" field.
 func BusinessOwnerGroupIDContainsFold(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldContainsFold(FieldBusinessOwnerGroupID, v))
+}
+
+// BusinessOwnerIdentityHolderIDEQ applies the EQ predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDEQ(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEQ(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDNEQ(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldNEQ(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDIn applies the In predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDIn(vs ...string) predicate.Platform {
+	return predicate.Platform(sql.FieldIn(FieldBusinessOwnerIdentityHolderID, vs...))
+}
+
+// BusinessOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDNotIn(vs ...string) predicate.Platform {
+	return predicate.Platform(sql.FieldNotIn(FieldBusinessOwnerIdentityHolderID, vs...))
+}
+
+// BusinessOwnerIdentityHolderIDGT applies the GT predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDGT(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldGT(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDGTE applies the GTE predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDGTE(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldGTE(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDLT applies the LT predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDLT(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldLT(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDLTE applies the LTE predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDLTE(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldLTE(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDContains applies the Contains predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDContains(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldContains(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDHasPrefix(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldHasPrefix(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDHasSuffix(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldHasSuffix(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDIsNil() predicate.Platform {
+	return predicate.Platform(sql.FieldIsNull(FieldBusinessOwnerIdentityHolderID))
+}
+
+// BusinessOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDNotNil() predicate.Platform {
+	return predicate.Platform(sql.FieldNotNull(FieldBusinessOwnerIdentityHolderID))
+}
+
+// BusinessOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDEqualFold(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEqualFold(FieldBusinessOwnerIdentityHolderID, v))
+}
+
+// BusinessOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "business_owner_identity_holder_id" field.
+func BusinessOwnerIdentityHolderIDContainsFold(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldContainsFold(FieldBusinessOwnerIdentityHolderID, v))
 }
 
 // TechnicalOwnerEQ applies the EQ predicate on the "technical_owner" field.
@@ -1612,6 +1782,81 @@ func TechnicalOwnerGroupIDContainsFold(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldContainsFold(FieldTechnicalOwnerGroupID, v))
 }
 
+// TechnicalOwnerIdentityHolderIDEQ applies the EQ predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDEQ(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEQ(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDNEQ(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldNEQ(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDIn applies the In predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDIn(vs ...string) predicate.Platform {
+	return predicate.Platform(sql.FieldIn(FieldTechnicalOwnerIdentityHolderID, vs...))
+}
+
+// TechnicalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDNotIn(vs ...string) predicate.Platform {
+	return predicate.Platform(sql.FieldNotIn(FieldTechnicalOwnerIdentityHolderID, vs...))
+}
+
+// TechnicalOwnerIdentityHolderIDGT applies the GT predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDGT(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldGT(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDGTE applies the GTE predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDGTE(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldGTE(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDLT applies the LT predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDLT(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldLT(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDLTE applies the LTE predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDLTE(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldLTE(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDContains applies the Contains predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDContains(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldContains(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDHasPrefix(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldHasPrefix(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDHasSuffix(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldHasSuffix(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDIsNil() predicate.Platform {
+	return predicate.Platform(sql.FieldIsNull(FieldTechnicalOwnerIdentityHolderID))
+}
+
+// TechnicalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDNotNil() predicate.Platform {
+	return predicate.Platform(sql.FieldNotNull(FieldTechnicalOwnerIdentityHolderID))
+}
+
+// TechnicalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDEqualFold(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEqualFold(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
+// TechnicalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "technical_owner_identity_holder_id" field.
+func TechnicalOwnerIdentityHolderIDContainsFold(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldContainsFold(FieldTechnicalOwnerIdentityHolderID, v))
+}
+
 // SecurityOwnerEQ applies the EQ predicate on the "security_owner" field.
 func SecurityOwnerEQ(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldEQ(FieldSecurityOwner, v))
@@ -1835,6 +2080,81 @@ func SecurityOwnerGroupIDEqualFold(v string) predicate.Platform {
 // SecurityOwnerGroupIDContainsFold applies the ContainsFold predicate on the "security_owner_group_id" field.
 func SecurityOwnerGroupIDContainsFold(v string) predicate.Platform {
 	return predicate.Platform(sql.FieldContainsFold(FieldSecurityOwnerGroupID, v))
+}
+
+// SecurityOwnerIdentityHolderIDEQ applies the EQ predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDEQ(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEQ(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDNEQ(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldNEQ(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDIn applies the In predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDIn(vs ...string) predicate.Platform {
+	return predicate.Platform(sql.FieldIn(FieldSecurityOwnerIdentityHolderID, vs...))
+}
+
+// SecurityOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDNotIn(vs ...string) predicate.Platform {
+	return predicate.Platform(sql.FieldNotIn(FieldSecurityOwnerIdentityHolderID, vs...))
+}
+
+// SecurityOwnerIdentityHolderIDGT applies the GT predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDGT(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldGT(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDGTE applies the GTE predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDGTE(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldGTE(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDLT applies the LT predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDLT(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldLT(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDLTE applies the LTE predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDLTE(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldLTE(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDContains applies the Contains predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDContains(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldContains(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDHasPrefix(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldHasPrefix(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDHasSuffix(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldHasSuffix(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDIsNil() predicate.Platform {
+	return predicate.Platform(sql.FieldIsNull(FieldSecurityOwnerIdentityHolderID))
+}
+
+// SecurityOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDNotNil() predicate.Platform {
+	return predicate.Platform(sql.FieldNotNull(FieldSecurityOwnerIdentityHolderID))
+}
+
+// SecurityOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDEqualFold(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldEqualFold(FieldSecurityOwnerIdentityHolderID, v))
+}
+
+// SecurityOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "security_owner_identity_holder_id" field.
+func SecurityOwnerIdentityHolderIDContainsFold(v string) predicate.Platform {
+	return predicate.Platform(sql.FieldContainsFold(FieldSecurityOwnerIdentityHolderID, v))
 }
 
 // PlatformKindNameEQ applies the EQ predicate on the "platform_kind_name" field.
@@ -4350,6 +4670,29 @@ func HasInternalOwnerGroupWith(preds ...predicate.Group) predicate.Platform {
 	})
 }
 
+// HasInternalOwnerIdentityHolder applies the HasEdge predicate on the "internal_owner_identity_holder" edge.
+func HasInternalOwnerIdentityHolder() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerIdentityHolderWith applies the HasEdge predicate on the "internal_owner_identity_holder" edge with a given conditions (other predicates).
+func HasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newInternalOwnerIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasBusinessOwnerUser applies the HasEdge predicate on the "business_owner_user" edge.
 func HasBusinessOwnerUser() predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
@@ -4388,6 +4731,29 @@ func HasBusinessOwnerGroup() predicate.Platform {
 func HasBusinessOwnerGroupWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newBusinessOwnerGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasBusinessOwnerIdentityHolder applies the HasEdge predicate on the "business_owner_identity_holder" edge.
+func HasBusinessOwnerIdentityHolder() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, BusinessOwnerIdentityHolderTable, BusinessOwnerIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBusinessOwnerIdentityHolderWith applies the HasEdge predicate on the "business_owner_identity_holder" edge with a given conditions (other predicates).
+func HasBusinessOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newBusinessOwnerIdentityHolderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4442,6 +4808,29 @@ func HasTechnicalOwnerGroupWith(preds ...predicate.Group) predicate.Platform {
 	})
 }
 
+// HasTechnicalOwnerIdentityHolder applies the HasEdge predicate on the "technical_owner_identity_holder" edge.
+func HasTechnicalOwnerIdentityHolder() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, TechnicalOwnerIdentityHolderTable, TechnicalOwnerIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTechnicalOwnerIdentityHolderWith applies the HasEdge predicate on the "technical_owner_identity_holder" edge with a given conditions (other predicates).
+func HasTechnicalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newTechnicalOwnerIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasSecurityOwnerUser applies the HasEdge predicate on the "security_owner_user" edge.
 func HasSecurityOwnerUser() predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
@@ -4480,6 +4869,29 @@ func HasSecurityOwnerGroup() predicate.Platform {
 func HasSecurityOwnerGroupWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newSecurityOwnerGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasSecurityOwnerIdentityHolder applies the HasEdge predicate on the "security_owner_identity_holder" edge.
+func HasSecurityOwnerIdentityHolder() predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, SecurityOwnerIdentityHolderTable, SecurityOwnerIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSecurityOwnerIdentityHolderWith applies the HasEdge predicate on the "security_owner_identity_holder" edge with a given conditions (other predicates).
+func HasSecurityOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Platform {
+	return predicate.Platform(func(s *sql.Selector) {
+		step := newSecurityOwnerIdentityHolderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

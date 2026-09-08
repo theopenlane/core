@@ -219,6 +219,20 @@ func (_c *AssetHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *AssetH
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *AssetHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *AssetHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *AssetHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *AssetHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetAssetSubtypeName sets the "asset_subtype_name" field.
 func (_c *AssetHistoryCreate) SetAssetSubtypeName(v string) *AssetHistoryCreate {
 	_c.mutation.SetAssetSubtypeName(v)
@@ -963,6 +977,10 @@ func (_c *AssetHistoryCreate) createSpec() (*AssetHistory, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
 		_spec.SetField(assethistory.FieldInternalOwnerGroupID, field.TypeString, value)
 		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(assethistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.AssetSubtypeName(); ok {
 		_spec.SetField(assethistory.FieldAssetSubtypeName, field.TypeString, value)

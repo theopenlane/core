@@ -219,6 +219,20 @@ func (_c *EntityHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *Entit
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *EntityHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *EntityHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_c *EntityHistoryCreate) SetReviewedBy(v string) *EntityHistoryCreate {
 	_c.mutation.SetReviewedBy(v)
@@ -257,6 +271,20 @@ func (_c *EntityHistoryCreate) SetReviewedByGroupID(v string) *EntityHistoryCrea
 func (_c *EntityHistoryCreate) SetNillableReviewedByGroupID(v *string) *EntityHistoryCreate {
 	if v != nil {
 		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *EntityHistoryCreate) SetReviewedByIdentityHolderID(v string) *EntityHistoryCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *EntityHistoryCreate) SetNillableReviewedByIdentityHolderID(v *string) *EntityHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -1192,6 +1220,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_spec.SetField(entityhistory.FieldInternalOwnerGroupID, field.TypeString, value)
 		_node.InternalOwnerGroupID = value
 	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(entityhistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
+	}
 	if value, ok := _c.mutation.ReviewedBy(); ok {
 		_spec.SetField(entityhistory.FieldReviewedBy, field.TypeString, value)
 		_node.ReviewedBy = value
@@ -1203,6 +1235,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.ReviewedByGroupID(); ok {
 		_spec.SetField(entityhistory.FieldReviewedByGroupID, field.TypeString, value)
 		_node.ReviewedByGroupID = value
+	}
+	if value, ok := _c.mutation.ReviewedByIdentityHolderID(); ok {
+		_spec.SetField(entityhistory.FieldReviewedByIdentityHolderID, field.TypeString, value)
+		_node.ReviewedByIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.LastReviewedAt(); ok {
 		_spec.SetField(entityhistory.FieldLastReviewedAt, field.TypeTime, value)

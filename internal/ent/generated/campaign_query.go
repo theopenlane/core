@@ -37,43 +37,44 @@ import (
 // CampaignQuery is the builder for querying Campaign entities.
 type CampaignQuery struct {
 	config
-	ctx                          *QueryContext
-	order                        []campaign.OrderOption
-	inters                       []Interceptor
-	predicates                   []predicate.Campaign
-	withOwner                    *OrganizationQuery
-	withBlockedGroups            *GroupQuery
-	withEditors                  *GroupQuery
-	withViewers                  *GroupQuery
-	withInternalOwnerUser        *UserQuery
-	withInternalOwnerGroup       *GroupQuery
-	withAssessment               *AssessmentQuery
-	withTemplate                 *TemplateQuery
-	withIntegration              *IntegrationQuery
-	withEmailTemplate            *EmailTemplateQuery
-	withEntity                   *EntityQuery
-	withTrustCenter              *TrustCenterQuery
-	withCampaignTargets          *CampaignTargetQuery
-	withAssessmentResponses      *AssessmentResponseQuery
-	withContacts                 *ContactQuery
-	withUsers                    *UserQuery
-	withGroups                   *GroupQuery
-	withIdentityHolders          *IdentityHolderQuery
-	withControls                 *ControlQuery
-	withWorkflowObjectRefs       *WorkflowObjectRefQuery
-	loadTotal                    []func(context.Context, []*Campaign) error
-	modifiers                    []func(*sql.Selector)
-	withNamedBlockedGroups       map[string]*GroupQuery
-	withNamedEditors             map[string]*GroupQuery
-	withNamedViewers             map[string]*GroupQuery
-	withNamedCampaignTargets     map[string]*CampaignTargetQuery
-	withNamedAssessmentResponses map[string]*AssessmentResponseQuery
-	withNamedContacts            map[string]*ContactQuery
-	withNamedUsers               map[string]*UserQuery
-	withNamedGroups              map[string]*GroupQuery
-	withNamedIdentityHolders     map[string]*IdentityHolderQuery
-	withNamedControls            map[string]*ControlQuery
-	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
+	ctx                             *QueryContext
+	order                           []campaign.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.Campaign
+	withOwner                       *OrganizationQuery
+	withBlockedGroups               *GroupQuery
+	withEditors                     *GroupQuery
+	withViewers                     *GroupQuery
+	withInternalOwnerUser           *UserQuery
+	withInternalOwnerGroup          *GroupQuery
+	withInternalOwnerIdentityHolder *IdentityHolderQuery
+	withAssessment                  *AssessmentQuery
+	withTemplate                    *TemplateQuery
+	withIntegration                 *IntegrationQuery
+	withEmailTemplate               *EmailTemplateQuery
+	withEntity                      *EntityQuery
+	withTrustCenter                 *TrustCenterQuery
+	withCampaignTargets             *CampaignTargetQuery
+	withAssessmentResponses         *AssessmentResponseQuery
+	withContacts                    *ContactQuery
+	withUsers                       *UserQuery
+	withGroups                      *GroupQuery
+	withIdentityHolders             *IdentityHolderQuery
+	withControls                    *ControlQuery
+	withWorkflowObjectRefs          *WorkflowObjectRefQuery
+	loadTotal                       []func(context.Context, []*Campaign) error
+	modifiers                       []func(*sql.Selector)
+	withNamedBlockedGroups          map[string]*GroupQuery
+	withNamedEditors                map[string]*GroupQuery
+	withNamedViewers                map[string]*GroupQuery
+	withNamedCampaignTargets        map[string]*CampaignTargetQuery
+	withNamedAssessmentResponses    map[string]*AssessmentResponseQuery
+	withNamedContacts               map[string]*ContactQuery
+	withNamedUsers                  map[string]*UserQuery
+	withNamedGroups                 map[string]*GroupQuery
+	withNamedIdentityHolders        map[string]*IdentityHolderQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -235,6 +236,28 @@ func (_q *CampaignQuery) QueryInternalOwnerGroup() *GroupQuery {
 			sqlgraph.From(campaign.Table, campaign.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, campaign.InternalOwnerGroupTable, campaign.InternalOwnerGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder chains the current query on the "internal_owner_identity_holder" edge.
+func (_q *CampaignQuery) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, campaign.InternalOwnerIdentityHolderTable, campaign.InternalOwnerIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -737,31 +760,32 @@ func (_q *CampaignQuery) Clone() *CampaignQuery {
 		return nil
 	}
 	return &CampaignQuery{
-		config:                  _q.config,
-		ctx:                     _q.ctx.Clone(),
-		order:                   append([]campaign.OrderOption{}, _q.order...),
-		inters:                  append([]Interceptor{}, _q.inters...),
-		predicates:              append([]predicate.Campaign{}, _q.predicates...),
-		withOwner:               _q.withOwner.Clone(),
-		withBlockedGroups:       _q.withBlockedGroups.Clone(),
-		withEditors:             _q.withEditors.Clone(),
-		withViewers:             _q.withViewers.Clone(),
-		withInternalOwnerUser:   _q.withInternalOwnerUser.Clone(),
-		withInternalOwnerGroup:  _q.withInternalOwnerGroup.Clone(),
-		withAssessment:          _q.withAssessment.Clone(),
-		withTemplate:            _q.withTemplate.Clone(),
-		withIntegration:         _q.withIntegration.Clone(),
-		withEmailTemplate:       _q.withEmailTemplate.Clone(),
-		withEntity:              _q.withEntity.Clone(),
-		withTrustCenter:         _q.withTrustCenter.Clone(),
-		withCampaignTargets:     _q.withCampaignTargets.Clone(),
-		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
-		withContacts:            _q.withContacts.Clone(),
-		withUsers:               _q.withUsers.Clone(),
-		withGroups:              _q.withGroups.Clone(),
-		withIdentityHolders:     _q.withIdentityHolders.Clone(),
-		withControls:            _q.withControls.Clone(),
-		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
+		config:                          _q.config,
+		ctx:                             _q.ctx.Clone(),
+		order:                           append([]campaign.OrderOption{}, _q.order...),
+		inters:                          append([]Interceptor{}, _q.inters...),
+		predicates:                      append([]predicate.Campaign{}, _q.predicates...),
+		withOwner:                       _q.withOwner.Clone(),
+		withBlockedGroups:               _q.withBlockedGroups.Clone(),
+		withEditors:                     _q.withEditors.Clone(),
+		withViewers:                     _q.withViewers.Clone(),
+		withInternalOwnerUser:           _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:          _q.withInternalOwnerGroup.Clone(),
+		withInternalOwnerIdentityHolder: _q.withInternalOwnerIdentityHolder.Clone(),
+		withAssessment:                  _q.withAssessment.Clone(),
+		withTemplate:                    _q.withTemplate.Clone(),
+		withIntegration:                 _q.withIntegration.Clone(),
+		withEmailTemplate:               _q.withEmailTemplate.Clone(),
+		withEntity:                      _q.withEntity.Clone(),
+		withTrustCenter:                 _q.withTrustCenter.Clone(),
+		withCampaignTargets:             _q.withCampaignTargets.Clone(),
+		withAssessmentResponses:         _q.withAssessmentResponses.Clone(),
+		withContacts:                    _q.withContacts.Clone(),
+		withUsers:                       _q.withUsers.Clone(),
+		withGroups:                      _q.withGroups.Clone(),
+		withIdentityHolders:             _q.withIdentityHolders.Clone(),
+		withControls:                    _q.withControls.Clone(),
+		withWorkflowObjectRefs:          _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -832,6 +856,17 @@ func (_q *CampaignQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *Camp
 		opt(query)
 	}
 	_q.withInternalOwnerGroup = query
+	return _q
+}
+
+// WithInternalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CampaignQuery) WithInternalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *CampaignQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerIdentityHolder = query
 	return _q
 }
 
@@ -1073,13 +1108,14 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 	var (
 		nodes       = []*Campaign{}
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [21]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withInternalOwnerUser != nil,
 			_q.withInternalOwnerGroup != nil,
+			_q.withInternalOwnerIdentityHolder != nil,
 			_q.withAssessment != nil,
 			_q.withTemplate != nil,
 			_q.withIntegration != nil,
@@ -1153,6 +1189,12 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 	if query := _q.withInternalOwnerGroup; query != nil {
 		if err := _q.loadInternalOwnerGroup(ctx, query, nodes, nil,
 			func(n *Campaign, e *Group) { n.Edges.InternalOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerIdentityHolder; query != nil {
+		if err := _q.loadInternalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *Campaign, e *IdentityHolder) { n.Edges.InternalOwnerIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1600,6 +1642,35 @@ func (_q *CampaignQuery) loadInternalOwnerGroup(ctx context.Context, query *Grou
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "internal_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *CampaignQuery) loadInternalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Campaign)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2214,6 +2285,9 @@ func (_q *CampaignQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withInternalOwnerGroup != nil {
 			_spec.Node.AddColumnOnce(campaign.FieldInternalOwnerGroupID)
+		}
+		if _q.withInternalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(campaign.FieldInternalOwnerIdentityHolderID)
 		}
 		if _q.withAssessment != nil {
 			_spec.Node.AddColumnOnce(campaign.FieldAssessmentID)

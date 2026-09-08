@@ -52,12 +52,16 @@ const (
 	FieldReviewedByUserID = "reviewed_by_user_id"
 	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
 	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldReviewedByIdentityHolderID holds the string denoting the reviewed_by_identity_holder_id field in the database.
+	FieldReviewedByIdentityHolderID = "reviewed_by_identity_holder_id"
 	// FieldAssignedTo holds the string denoting the assigned_to field in the database.
 	FieldAssignedTo = "assigned_to"
 	// FieldAssignedToUserID holds the string denoting the assigned_to_user_id field in the database.
 	FieldAssignedToUserID = "assigned_to_user_id"
 	// FieldAssignedToGroupID holds the string denoting the assigned_to_group_id field in the database.
 	FieldAssignedToGroupID = "assigned_to_group_id"
+	// FieldAssignedToIdentityHolderID holds the string denoting the assigned_to_identity_holder_id field in the database.
+	FieldAssignedToIdentityHolderID = "assigned_to_identity_holder_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -175,9 +179,11 @@ var Columns = []string{
 	FieldReviewedBy,
 	FieldReviewedByUserID,
 	FieldReviewedByGroupID,
+	FieldReviewedByIdentityHolderID,
 	FieldAssignedTo,
 	FieldAssignedToUserID,
 	FieldAssignedToGroupID,
+	FieldAssignedToIdentityHolderID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -377,6 +383,11 @@ func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
 }
 
+// ByReviewedByIdentityHolderID orders the results by the reviewed_by_identity_holder_id field.
+func ByReviewedByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByIdentityHolderID, opts...).ToFunc()
+}
+
 // ByAssignedTo orders the results by the assigned_to field.
 func ByAssignedTo(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssignedTo, opts...).ToFunc()
@@ -390,6 +401,11 @@ func ByAssignedToUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByAssignedToGroupID orders the results by the assigned_to_group_id field.
 func ByAssignedToGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssignedToGroupID, opts...).ToFunc()
+}
+
+// ByAssignedToIdentityHolderID orders the results by the assigned_to_identity_holder_id field.
+func ByAssignedToIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToIdentityHolderID, opts...).ToFunc()
 }
 
 // BySystemOwned orders the results by the system_owned field.

@@ -199,6 +199,20 @@ func (_c *AssetCreate) SetNillableInternalOwnerGroupID(v *string) *AssetCreate {
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *AssetCreate) SetInternalOwnerIdentityHolderID(v string) *AssetCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *AssetCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *AssetCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetAssetSubtypeName sets the "asset_subtype_name" field.
 func (_c *AssetCreate) SetAssetSubtypeName(v string) *AssetCreate {
 	_c.mutation.SetAssetSubtypeName(v)
@@ -787,6 +801,11 @@ func (_c *AssetCreate) SetInternalOwnerUser(v *User) *AssetCreate {
 // SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
 func (_c *AssetCreate) SetInternalOwnerGroup(v *Group) *AssetCreate {
 	return _c.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *AssetCreate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *AssetCreate {
+	return _c.SetInternalOwnerIdentityHolderID(v.ID)
 }
 
 // SetAssetSubtype sets the "asset_subtype" edge to the CustomTypeEnum entity.
@@ -1461,6 +1480,23 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.InternalOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.AssetSubtypeIDs(); len(nodes) > 0 {

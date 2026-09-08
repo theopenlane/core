@@ -210,6 +210,20 @@ func (_c *PlatformCreate) SetNillableInternalOwnerGroupID(v *string) *PlatformCr
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *PlatformCreate) SetInternalOwnerIdentityHolderID(v string) *PlatformCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *PlatformCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *PlatformCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetBusinessOwner sets the "business_owner" field.
 func (_c *PlatformCreate) SetBusinessOwner(v string) *PlatformCreate {
 	_c.mutation.SetBusinessOwner(v)
@@ -248,6 +262,20 @@ func (_c *PlatformCreate) SetBusinessOwnerGroupID(v string) *PlatformCreate {
 func (_c *PlatformCreate) SetNillableBusinessOwnerGroupID(v *string) *PlatformCreate {
 	if v != nil {
 		_c.SetBusinessOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field.
+func (_c *PlatformCreate) SetBusinessOwnerIdentityHolderID(v string) *PlatformCreate {
+	_c.mutation.SetBusinessOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field if the given value is not nil.
+func (_c *PlatformCreate) SetNillableBusinessOwnerIdentityHolderID(v *string) *PlatformCreate {
+	if v != nil {
+		_c.SetBusinessOwnerIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -294,6 +322,20 @@ func (_c *PlatformCreate) SetNillableTechnicalOwnerGroupID(v *string) *PlatformC
 	return _c
 }
 
+// SetTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field.
+func (_c *PlatformCreate) SetTechnicalOwnerIdentityHolderID(v string) *PlatformCreate {
+	_c.mutation.SetTechnicalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field if the given value is not nil.
+func (_c *PlatformCreate) SetNillableTechnicalOwnerIdentityHolderID(v *string) *PlatformCreate {
+	if v != nil {
+		_c.SetTechnicalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetSecurityOwner sets the "security_owner" field.
 func (_c *PlatformCreate) SetSecurityOwner(v string) *PlatformCreate {
 	_c.mutation.SetSecurityOwner(v)
@@ -332,6 +374,20 @@ func (_c *PlatformCreate) SetSecurityOwnerGroupID(v string) *PlatformCreate {
 func (_c *PlatformCreate) SetNillableSecurityOwnerGroupID(v *string) *PlatformCreate {
 	if v != nil {
 		_c.SetSecurityOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field.
+func (_c *PlatformCreate) SetSecurityOwnerIdentityHolderID(v string) *PlatformCreate {
+	_c.mutation.SetSecurityOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field if the given value is not nil.
+func (_c *PlatformCreate) SetNillableSecurityOwnerIdentityHolderID(v *string) *PlatformCreate {
+	if v != nil {
+		_c.SetSecurityOwnerIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -898,6 +954,11 @@ func (_c *PlatformCreate) SetInternalOwnerGroup(v *Group) *PlatformCreate {
 	return _c.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *PlatformCreate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *PlatformCreate {
+	return _c.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetBusinessOwnerUser sets the "business_owner_user" edge to the User entity.
 func (_c *PlatformCreate) SetBusinessOwnerUser(v *User) *PlatformCreate {
 	return _c.SetBusinessOwnerUserID(v.ID)
@@ -906,6 +967,11 @@ func (_c *PlatformCreate) SetBusinessOwnerUser(v *User) *PlatformCreate {
 // SetBusinessOwnerGroup sets the "business_owner_group" edge to the Group entity.
 func (_c *PlatformCreate) SetBusinessOwnerGroup(v *Group) *PlatformCreate {
 	return _c.SetBusinessOwnerGroupID(v.ID)
+}
+
+// SetBusinessOwnerIdentityHolder sets the "business_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *PlatformCreate) SetBusinessOwnerIdentityHolder(v *IdentityHolder) *PlatformCreate {
+	return _c.SetBusinessOwnerIdentityHolderID(v.ID)
 }
 
 // SetTechnicalOwnerUser sets the "technical_owner_user" edge to the User entity.
@@ -918,6 +984,11 @@ func (_c *PlatformCreate) SetTechnicalOwnerGroup(v *Group) *PlatformCreate {
 	return _c.SetTechnicalOwnerGroupID(v.ID)
 }
 
+// SetTechnicalOwnerIdentityHolder sets the "technical_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *PlatformCreate) SetTechnicalOwnerIdentityHolder(v *IdentityHolder) *PlatformCreate {
+	return _c.SetTechnicalOwnerIdentityHolderID(v.ID)
+}
+
 // SetSecurityOwnerUser sets the "security_owner_user" edge to the User entity.
 func (_c *PlatformCreate) SetSecurityOwnerUser(v *User) *PlatformCreate {
 	return _c.SetSecurityOwnerUserID(v.ID)
@@ -926,6 +997,11 @@ func (_c *PlatformCreate) SetSecurityOwnerUser(v *User) *PlatformCreate {
 // SetSecurityOwnerGroup sets the "security_owner_group" edge to the Group entity.
 func (_c *PlatformCreate) SetSecurityOwnerGroup(v *Group) *PlatformCreate {
 	return _c.SetSecurityOwnerGroupID(v.ID)
+}
+
+// SetSecurityOwnerIdentityHolder sets the "security_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *PlatformCreate) SetSecurityOwnerIdentityHolder(v *IdentityHolder) *PlatformCreate {
+	return _c.SetSecurityOwnerIdentityHolderID(v.ID)
 }
 
 // SetPlatformKind sets the "platform_kind" edge to the CustomTypeEnum entity.
@@ -1777,6 +1853,23 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 		_node.InternalOwnerGroupID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.InternalOwnerIdentityHolderTable,
+			Columns: []string{platform.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.BusinessOwnerUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1809,6 +1902,23 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.BusinessOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.BusinessOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.BusinessOwnerIdentityHolderTable,
+			Columns: []string{platform.BusinessOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.BusinessOwnerIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TechnicalOwnerUserIDs(); len(nodes) > 0 {
@@ -1845,6 +1955,23 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 		_node.TechnicalOwnerGroupID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.TechnicalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.TechnicalOwnerIdentityHolderTable,
+			Columns: []string{platform.TechnicalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.TechnicalOwnerIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.SecurityOwnerUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1877,6 +2004,23 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.SecurityOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SecurityOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.SecurityOwnerIdentityHolderTable,
+			Columns: []string{platform.SecurityOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.SecurityOwnerIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.PlatformKindIDs(); len(nodes) > 0 {

@@ -20,6 +20,7 @@ mutation CreateBulkCSVIdentityHolder ($input: Upload!) {
 			identityHolderType
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			isActive
 			isOpenlaneUser
@@ -64,6 +65,7 @@ mutation CreateBulkIdentityHolder ($input: [CreateIdentityHolderInput!]) {
 			identityHolderType
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			isActive
 			isOpenlaneUser
@@ -108,6 +110,7 @@ mutation CreateIdentityHolder ($input: CreateIdentityHolderInput!) {
 			identityHolderType
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			isActive
 			isOpenlaneUser
@@ -165,6 +168,7 @@ query GetAllIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: C
 				identityHolderType
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				isActive
 				isOpenlaneUser
@@ -233,6 +237,7 @@ query GetIdentityHolderByID ($identityHolderId: ID!) {
 		identityHolderType
 		internalOwner
 		internalOwnerGroupID
+		internalOwnerIdentityHolderID
 		internalOwnerUserID
 		isActive
 		isOpenlaneUser
@@ -374,6 +379,7 @@ query GetIdentityHolders ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				identityHolderType
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				isActive
 				isOpenlaneUser
@@ -429,6 +435,7 @@ mutation UpdateIdentityHolder ($updateIdentityHolderId: ID!, $input: UpdateIdent
 			identityHolderType
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			isActive
 			isOpenlaneUser

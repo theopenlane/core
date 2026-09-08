@@ -42,12 +42,16 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
 	FieldReviewedBy = "reviewed_by"
 	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
 	FieldReviewedByUserID = "reviewed_by_user_id"
 	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
 	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldReviewedByIdentityHolderID holds the string denoting the reviewed_by_identity_holder_id field in the database.
+	FieldReviewedByIdentityHolderID = "reviewed_by_identity_holder_id"
 	// FieldLastReviewedAt holds the string denoting the last_reviewed_at field in the database.
 	FieldLastReviewedAt = "last_reviewed_at"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -160,10 +164,14 @@ const (
 	EdgeInternalOwnerUser = "internal_owner_user"
 	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
 	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeInternalOwnerIdentityHolder holds the string denoting the internal_owner_identity_holder edge name in mutations.
+	EdgeInternalOwnerIdentityHolder = "internal_owner_identity_holder"
 	// EdgeReviewedByUser holds the string denoting the reviewed_by_user edge name in mutations.
 	EdgeReviewedByUser = "reviewed_by_user"
 	// EdgeReviewedByGroup holds the string denoting the reviewed_by_group edge name in mutations.
 	EdgeReviewedByGroup = "reviewed_by_group"
+	// EdgeReviewedByIdentityHolder holds the string denoting the reviewed_by_identity_holder edge name in mutations.
+	EdgeReviewedByIdentityHolder = "reviewed_by_identity_holder"
 	// EdgeEntityRelationshipState holds the string denoting the entity_relationship_state edge name in mutations.
 	EdgeEntityRelationshipState = "entity_relationship_state"
 	// EdgeEntitySecurityQuestionnaireStatus holds the string denoting the entity_security_questionnaire_status edge name in mutations.
@@ -261,6 +269,13 @@ const (
 	InternalOwnerGroupInverseTable = "groups"
 	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
 	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// InternalOwnerIdentityHolderTable is the table that holds the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderTable = "entities"
+	// InternalOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	InternalOwnerIdentityHolderInverseTable = "identity_holders"
+	// InternalOwnerIdentityHolderColumn is the table column denoting the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderColumn = "internal_owner_identity_holder_id"
 	// ReviewedByUserTable is the table that holds the reviewed_by_user relation/edge.
 	ReviewedByUserTable = "entities"
 	// ReviewedByUserInverseTable is the table name for the User entity.
@@ -275,6 +290,13 @@ const (
 	ReviewedByGroupInverseTable = "groups"
 	// ReviewedByGroupColumn is the table column denoting the reviewed_by_group relation/edge.
 	ReviewedByGroupColumn = "reviewed_by_group_id"
+	// ReviewedByIdentityHolderTable is the table that holds the reviewed_by_identity_holder relation/edge.
+	ReviewedByIdentityHolderTable = "entities"
+	// ReviewedByIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	ReviewedByIdentityHolderInverseTable = "identity_holders"
+	// ReviewedByIdentityHolderColumn is the table column denoting the reviewed_by_identity_holder relation/edge.
+	ReviewedByIdentityHolderColumn = "reviewed_by_identity_holder_id"
 	// EntityRelationshipStateTable is the table that holds the entity_relationship_state relation/edge.
 	EntityRelationshipStateTable = "entities"
 	// EntityRelationshipStateInverseTable is the table name for the CustomTypeEnum entity.
@@ -478,9 +500,11 @@ var Columns = []string{
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldReviewedBy,
 	FieldReviewedByUserID,
 	FieldReviewedByGroupID,
+	FieldReviewedByIdentityHolderID,
 	FieldLastReviewedAt,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -778,6 +802,11 @@ func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // ByReviewedBy orders the results by the reviewed_by field.
 func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
@@ -791,6 +820,11 @@ func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
 func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByReviewedByIdentityHolderID orders the results by the reviewed_by_identity_holder_id field.
+func ByReviewedByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByIdentityHolderID, opts...).ToFunc()
 }
 
 // ByLastReviewedAt orders the results by the last_reviewed_at field.
@@ -1067,6 +1101,13 @@ func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderO
 	}
 }
 
+// ByInternalOwnerIdentityHolderField orders the results by internal_owner_identity_holder field.
+func ByInternalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByReviewedByUserField orders the results by reviewed_by_user field.
 func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1078,6 +1119,13 @@ func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOptio
 func ByReviewedByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newReviewedByGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByIdentityHolderField orders the results by reviewed_by_identity_holder field.
+func ByReviewedByIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByIdentityHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1514,6 +1562,13 @@ func newInternalOwnerGroupStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
 	)
 }
+func newInternalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+	)
+}
 func newReviewedByUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1526,6 +1581,13 @@ func newReviewedByGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ReviewedByGroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+	)
+}
+func newReviewedByIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByIdentityHolderTable, ReviewedByIdentityHolderColumn),
 	)
 }
 func newEntityRelationshipStateStep() *sqlgraph.Step {

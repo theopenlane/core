@@ -1627,7 +1627,7 @@ type AssetHistory implements Node {
   """
   ownerID: String
   """
-  the internal owner for the asset when no user or group is linked
+  the internal owner for the asset when no user, group, or identity holder is linked
   """
   internalOwner: String
   """
@@ -1638,6 +1638,10 @@ type AssetHistory implements Node {
   the internal owner group id for the asset
   """
   internalOwnerGroupID: String
+  """
+  the internal owner identity holder id for the asset
+  """
+  internalOwnerIdentityHolderID: String
   """
   the subtype of the asset
   """
@@ -2043,6 +2047,20 @@ input AssetHistoryWhereInput {
   internalOwnerGroupIDNotNil: Boolean
   internalOwnerGroupIDEqualFold: String
   internalOwnerGroupIDContainsFold: String
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: String
+  internalOwnerIdentityHolderIDNEQ: String
+  internalOwnerIdentityHolderIDIn: [String!]
+  internalOwnerIdentityHolderIDNotIn: [String!]
+  internalOwnerIdentityHolderIDContains: String
+  internalOwnerIdentityHolderIDHasPrefix: String
+  internalOwnerIdentityHolderIDHasSuffix: String
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: String
+  internalOwnerIdentityHolderIDContainsFold: String
   """
   asset_subtype_name field predicates
   """
@@ -2535,7 +2553,7 @@ type CampaignHistory implements Node {
   """
   ownerID: String
   """
-  the internal owner for the campaign when no user or group is linked
+  the internal owner for the campaign when no user, group, or identity holder is linked
   """
   internalOwner: String
   """
@@ -2546,6 +2564,10 @@ type CampaignHistory implements Node {
   the internal owner group id for the campaign
   """
   internalOwnerGroupID: String
+  """
+  the internal owner identity holder id for the campaign
+  """
+  internalOwnerIdentityHolderID: String
   """
   internal marker field for workflow eligibility, not exposed in API
   """
@@ -2950,6 +2972,20 @@ input CampaignHistoryWhereInput {
   internalOwnerGroupIDNotNil: Boolean
   internalOwnerGroupIDEqualFold: String
   internalOwnerGroupIDContainsFold: String
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: String
+  internalOwnerIdentityHolderIDNEQ: String
+  internalOwnerIdentityHolderIDIn: [String!]
+  internalOwnerIdentityHolderIDNotIn: [String!]
+  internalOwnerIdentityHolderIDContains: String
+  internalOwnerIdentityHolderIDHasPrefix: String
+  internalOwnerIdentityHolderIDHasSuffix: String
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: String
+  internalOwnerIdentityHolderIDContainsFold: String
   """
   workflow_eligible_marker field predicates
   """
@@ -7085,7 +7121,7 @@ type EntityHistory implements Node {
   """
   ownerID: String
   """
-  the internal owner for the entity when no user or group is linked
+  the internal owner for the entity when no user, group, or identity holder is linked
   """
   internalOwner: String
   """
@@ -7097,7 +7133,11 @@ type EntityHistory implements Node {
   """
   internalOwnerGroupID: String
   """
-  who reviewed the entity when no user or group is linked
+  the internal owner identity holder id for the entity
+  """
+  internalOwnerIdentityHolderID: String
+  """
+  who reviewed the entity when no user, group, or identity holder is linked
   """
   reviewedBy: String
   """
@@ -7108,6 +7148,10 @@ type EntityHistory implements Node {
   the group id that reviewed the entity
   """
   reviewedByGroupID: String
+  """
+  the identity holder id that reviewed the entity
+  """
+  reviewedByIdentityHolderID: String
   """
   when the entity was last reviewed
   """
@@ -7602,6 +7646,20 @@ input EntityHistoryWhereInput {
   internalOwnerGroupIDEqualFold: String
   internalOwnerGroupIDContainsFold: String
   """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: String
+  internalOwnerIdentityHolderIDNEQ: String
+  internalOwnerIdentityHolderIDIn: [String!]
+  internalOwnerIdentityHolderIDNotIn: [String!]
+  internalOwnerIdentityHolderIDContains: String
+  internalOwnerIdentityHolderIDHasPrefix: String
+  internalOwnerIdentityHolderIDHasSuffix: String
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: String
+  internalOwnerIdentityHolderIDContainsFold: String
+  """
   reviewed_by field predicates
   """
   reviewedBy: String
@@ -7643,6 +7701,20 @@ input EntityHistoryWhereInput {
   reviewedByGroupIDNotNil: Boolean
   reviewedByGroupIDEqualFold: String
   reviewedByGroupIDContainsFold: String
+  """
+  reviewed_by_identity_holder_id field predicates
+  """
+  reviewedByIdentityHolderID: String
+  reviewedByIdentityHolderIDNEQ: String
+  reviewedByIdentityHolderIDIn: [String!]
+  reviewedByIdentityHolderIDNotIn: [String!]
+  reviewedByIdentityHolderIDContains: String
+  reviewedByIdentityHolderIDHasPrefix: String
+  reviewedByIdentityHolderIDHasSuffix: String
+  reviewedByIdentityHolderIDIsNil: Boolean
+  reviewedByIdentityHolderIDNotNil: Boolean
+  reviewedByIdentityHolderIDEqualFold: String
+  reviewedByIdentityHolderIDContainsFold: String
   """
   last_reviewed_at field predicates
   """
@@ -9957,7 +10029,7 @@ type FindingHistory implements Node {
   """
   ownerID: String
   """
-  who reviewed the finding when no user or group is linked
+  who reviewed the finding when no user, group, or identity holder is linked
   """
   reviewedBy: String
   """
@@ -9969,7 +10041,11 @@ type FindingHistory implements Node {
   """
   reviewedByGroupID: String
   """
-  who the finding is assigned to when no user or group is linked
+  the identity holder id that reviewed the finding
+  """
+  reviewedByIdentityHolderID: String
+  """
+  who the finding is assigned to when no user, group, or identity holder is linked
   """
   assignedTo: String
   """
@@ -9980,6 +10056,10 @@ type FindingHistory implements Node {
   the group id assigned to the finding
   """
   assignedToGroupID: String
+  """
+  the identity holder id assigned to the finding
+  """
+  assignedToIdentityHolderID: String
   """
   indicates if the record is owned by the the openlane system and not by an organization
   """
@@ -10422,6 +10502,20 @@ input FindingHistoryWhereInput {
   reviewedByGroupIDEqualFold: String
   reviewedByGroupIDContainsFold: String
   """
+  reviewed_by_identity_holder_id field predicates
+  """
+  reviewedByIdentityHolderID: String
+  reviewedByIdentityHolderIDNEQ: String
+  reviewedByIdentityHolderIDIn: [String!]
+  reviewedByIdentityHolderIDNotIn: [String!]
+  reviewedByIdentityHolderIDContains: String
+  reviewedByIdentityHolderIDHasPrefix: String
+  reviewedByIdentityHolderIDHasSuffix: String
+  reviewedByIdentityHolderIDIsNil: Boolean
+  reviewedByIdentityHolderIDNotNil: Boolean
+  reviewedByIdentityHolderIDEqualFold: String
+  reviewedByIdentityHolderIDContainsFold: String
+  """
   assigned_to field predicates
   """
   assignedTo: String
@@ -10463,6 +10557,20 @@ input FindingHistoryWhereInput {
   assignedToGroupIDNotNil: Boolean
   assignedToGroupIDEqualFold: String
   assignedToGroupIDContainsFold: String
+  """
+  assigned_to_identity_holder_id field predicates
+  """
+  assignedToIdentityHolderID: String
+  assignedToIdentityHolderIDNEQ: String
+  assignedToIdentityHolderIDIn: [String!]
+  assignedToIdentityHolderIDNotIn: [String!]
+  assignedToIdentityHolderIDContains: String
+  assignedToIdentityHolderIDHasPrefix: String
+  assignedToIdentityHolderIDHasSuffix: String
+  assignedToIdentityHolderIDIsNil: Boolean
+  assignedToIdentityHolderIDNotNil: Boolean
+  assignedToIdentityHolderIDEqualFold: String
+  assignedToIdentityHolderIDContainsFold: String
   """
   system_owned field predicates
   """
@@ -12201,7 +12309,7 @@ type IdentityHolderHistory implements Node {
   """
   ownerID: String
   """
-  the internal owner for the identity holder when no user or group is linked
+  the internal owner for the identity holder when no user, group, or identity holder is linked
   """
   internalOwner: String
   """
@@ -12212,6 +12320,10 @@ type IdentityHolderHistory implements Node {
   the internal owner group id for the identity holder
   """
   internalOwnerGroupID: String
+  """
+  the internal owner identity holder id for the identity holder
+  """
+  internalOwnerIdentityHolderID: String
   """
   the environment of the identity_holder
   """
@@ -12590,6 +12702,20 @@ input IdentityHolderHistoryWhereInput {
   internalOwnerGroupIDNotNil: Boolean
   internalOwnerGroupIDEqualFold: String
   internalOwnerGroupIDContainsFold: String
+  """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: String
+  internalOwnerIdentityHolderIDNEQ: String
+  internalOwnerIdentityHolderIDIn: [String!]
+  internalOwnerIdentityHolderIDNotIn: [String!]
+  internalOwnerIdentityHolderIDContains: String
+  internalOwnerIdentityHolderIDHasPrefix: String
+  internalOwnerIdentityHolderIDHasSuffix: String
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: String
+  internalOwnerIdentityHolderIDContainsFold: String
   """
   environment_name field predicates
   """
@@ -17190,7 +17316,7 @@ type PlatformHistory implements Node {
   """
   ownerID: String
   """
-  the internal owner for the platform when no user or group is linked
+  the internal owner for the platform when no user, group, or identity holder is linked
   """
   internalOwner: String
   """
@@ -17202,7 +17328,11 @@ type PlatformHistory implements Node {
   """
   internalOwnerGroupID: String
   """
-  business owner for the platform when no user or group is linked
+  the internal owner identity holder id for the platform
+  """
+  internalOwnerIdentityHolderID: String
+  """
+  business owner for the platform when no user, group, or identity holder is linked
   """
   businessOwner: String
   """
@@ -17214,7 +17344,11 @@ type PlatformHistory implements Node {
   """
   businessOwnerGroupID: String
   """
-  technical owner for the platform when no user or group is linked
+  the business owner identity holder id for the platform
+  """
+  businessOwnerIdentityHolderID: String
+  """
+  technical owner for the platform when no user, group, or identity holder is linked
   """
   technicalOwner: String
   """
@@ -17226,7 +17360,11 @@ type PlatformHistory implements Node {
   """
   technicalOwnerGroupID: String
   """
-  security owner for the platform when no user or group is linked
+  the technical owner identity holder id for the platform
+  """
+  technicalOwnerIdentityHolderID: String
+  """
+  security owner for the platform when no user, group, or identity holder is linked
   """
   securityOwner: String
   """
@@ -17237,6 +17375,10 @@ type PlatformHistory implements Node {
   the security owner group id for the platform
   """
   securityOwnerGroupID: String
+  """
+  the security owner identity holder id for the platform
+  """
+  securityOwnerIdentityHolderID: String
   """
   the kind of the platform
   """
@@ -17651,6 +17793,20 @@ input PlatformHistoryWhereInput {
   internalOwnerGroupIDEqualFold: String
   internalOwnerGroupIDContainsFold: String
   """
+  internal_owner_identity_holder_id field predicates
+  """
+  internalOwnerIdentityHolderID: String
+  internalOwnerIdentityHolderIDNEQ: String
+  internalOwnerIdentityHolderIDIn: [String!]
+  internalOwnerIdentityHolderIDNotIn: [String!]
+  internalOwnerIdentityHolderIDContains: String
+  internalOwnerIdentityHolderIDHasPrefix: String
+  internalOwnerIdentityHolderIDHasSuffix: String
+  internalOwnerIdentityHolderIDIsNil: Boolean
+  internalOwnerIdentityHolderIDNotNil: Boolean
+  internalOwnerIdentityHolderIDEqualFold: String
+  internalOwnerIdentityHolderIDContainsFold: String
+  """
   business_owner field predicates
   """
   businessOwner: String
@@ -17692,6 +17848,20 @@ input PlatformHistoryWhereInput {
   businessOwnerGroupIDNotNil: Boolean
   businessOwnerGroupIDEqualFold: String
   businessOwnerGroupIDContainsFold: String
+  """
+  business_owner_identity_holder_id field predicates
+  """
+  businessOwnerIdentityHolderID: String
+  businessOwnerIdentityHolderIDNEQ: String
+  businessOwnerIdentityHolderIDIn: [String!]
+  businessOwnerIdentityHolderIDNotIn: [String!]
+  businessOwnerIdentityHolderIDContains: String
+  businessOwnerIdentityHolderIDHasPrefix: String
+  businessOwnerIdentityHolderIDHasSuffix: String
+  businessOwnerIdentityHolderIDIsNil: Boolean
+  businessOwnerIdentityHolderIDNotNil: Boolean
+  businessOwnerIdentityHolderIDEqualFold: String
+  businessOwnerIdentityHolderIDContainsFold: String
   """
   technical_owner field predicates
   """
@@ -17735,6 +17905,20 @@ input PlatformHistoryWhereInput {
   technicalOwnerGroupIDEqualFold: String
   technicalOwnerGroupIDContainsFold: String
   """
+  technical_owner_identity_holder_id field predicates
+  """
+  technicalOwnerIdentityHolderID: String
+  technicalOwnerIdentityHolderIDNEQ: String
+  technicalOwnerIdentityHolderIDIn: [String!]
+  technicalOwnerIdentityHolderIDNotIn: [String!]
+  technicalOwnerIdentityHolderIDContains: String
+  technicalOwnerIdentityHolderIDHasPrefix: String
+  technicalOwnerIdentityHolderIDHasSuffix: String
+  technicalOwnerIdentityHolderIDIsNil: Boolean
+  technicalOwnerIdentityHolderIDNotNil: Boolean
+  technicalOwnerIdentityHolderIDEqualFold: String
+  technicalOwnerIdentityHolderIDContainsFold: String
+  """
   security_owner field predicates
   """
   securityOwner: String
@@ -17776,6 +17960,20 @@ input PlatformHistoryWhereInput {
   securityOwnerGroupIDNotNil: Boolean
   securityOwnerGroupIDEqualFold: String
   securityOwnerGroupIDContainsFold: String
+  """
+  security_owner_identity_holder_id field predicates
+  """
+  securityOwnerIdentityHolderID: String
+  securityOwnerIdentityHolderIDNEQ: String
+  securityOwnerIdentityHolderIDIn: [String!]
+  securityOwnerIdentityHolderIDNotIn: [String!]
+  securityOwnerIdentityHolderIDContains: String
+  securityOwnerIdentityHolderIDHasPrefix: String
+  securityOwnerIdentityHolderIDHasSuffix: String
+  securityOwnerIdentityHolderIDIsNil: Boolean
+  securityOwnerIdentityHolderIDNotNil: Boolean
+  securityOwnerIdentityHolderIDEqualFold: String
+  securityOwnerIdentityHolderIDContainsFold: String
   """
   platform_kind_name field predicates
   """
@@ -31691,7 +31889,7 @@ type VulnerabilityHistory implements Node {
   """
   ownerID: String
   """
-  who reviewed the vulnerability when no user or group is linked
+  who reviewed the vulnerability when no user, group, or identity holder is linked
   """
   reviewedBy: String
   """
@@ -31703,7 +31901,11 @@ type VulnerabilityHistory implements Node {
   """
   reviewedByGroupID: String
   """
-  who the vulnerability is assigned to when no user or group is linked
+  the identity holder id that reviewed the vulnerability
+  """
+  reviewedByIdentityHolderID: String
+  """
+  who the vulnerability is assigned to when no user, group, or identity holder is linked
   """
   assignedTo: String
   """
@@ -31714,6 +31916,10 @@ type VulnerabilityHistory implements Node {
   the group id assigned to the vulnerability
   """
   assignedToGroupID: String
+  """
+  the identity holder id assigned to the vulnerability
+  """
+  assignedToIdentityHolderID: String
   """
   indicates if the record is owned by the the openlane system and not by an organization
   """
@@ -32176,6 +32382,20 @@ input VulnerabilityHistoryWhereInput {
   reviewedByGroupIDEqualFold: String
   reviewedByGroupIDContainsFold: String
   """
+  reviewed_by_identity_holder_id field predicates
+  """
+  reviewedByIdentityHolderID: String
+  reviewedByIdentityHolderIDNEQ: String
+  reviewedByIdentityHolderIDIn: [String!]
+  reviewedByIdentityHolderIDNotIn: [String!]
+  reviewedByIdentityHolderIDContains: String
+  reviewedByIdentityHolderIDHasPrefix: String
+  reviewedByIdentityHolderIDHasSuffix: String
+  reviewedByIdentityHolderIDIsNil: Boolean
+  reviewedByIdentityHolderIDNotNil: Boolean
+  reviewedByIdentityHolderIDEqualFold: String
+  reviewedByIdentityHolderIDContainsFold: String
+  """
   assigned_to field predicates
   """
   assignedTo: String
@@ -32217,6 +32437,20 @@ input VulnerabilityHistoryWhereInput {
   assignedToGroupIDNotNil: Boolean
   assignedToGroupIDEqualFold: String
   assignedToGroupIDContainsFold: String
+  """
+  assigned_to_identity_holder_id field predicates
+  """
+  assignedToIdentityHolderID: String
+  assignedToIdentityHolderIDNEQ: String
+  assignedToIdentityHolderIDIn: [String!]
+  assignedToIdentityHolderIDNotIn: [String!]
+  assignedToIdentityHolderIDContains: String
+  assignedToIdentityHolderIDHasPrefix: String
+  assignedToIdentityHolderIDHasSuffix: String
+  assignedToIdentityHolderIDIsNil: Boolean
+  assignedToIdentityHolderIDNotNil: Boolean
+  assignedToIdentityHolderIDEqualFold: String
+  assignedToIdentityHolderIDContainsFold: String
   """
   system_owned field predicates
   """

@@ -118,7 +118,7 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 	if r.includeInternalOwner {
 		fields = append(fields,
 			field.String("internal_owner").
-				Comment(fmt.Sprintf("the internal owner for the %s when no user or group is linked", label)).
+				Comment(fmt.Sprintf("the internal owner for the %s when no user, group, or identity holder is linked", label)).
 				Optional().
 				Annotations(
 					entgql.OrderField("internal_owner"),
@@ -136,13 +136,19 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				Annotations(
 					entx.CSVRef().FromColumn("InternalOwnerGroupName").MatchOn("name"),
 				),
+			field.String("internal_owner_identity_holder_id").
+				Comment(fmt.Sprintf("the internal owner identity holder id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("InternalOwnerIdentityHolderEmail").MatchOn("email"),
+				),
 		)
 	}
 
 	if r.includeBusinessOwner {
 		fields = append(fields,
 			field.String("business_owner").
-				Comment(fmt.Sprintf("business owner for the %s when no user or group is linked", label)).
+				Comment(fmt.Sprintf("business owner for the %s when no user, group, or identity holder is linked", label)).
 				Optional().
 				Annotations(
 					entgql.OrderField("business_owner"),
@@ -159,13 +165,19 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				Annotations(
 					entx.CSVRef().FromColumn("BusinessOwnerGroupName").MatchOn("name"),
 				),
+			field.String("business_owner_identity_holder_id").
+				Comment(fmt.Sprintf("the business owner identity holder id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("BusinessOwnerIdentityHolderEmail").MatchOn("email"),
+				),
 		)
 	}
 
 	if r.includeTechnicalOwner {
 		fields = append(fields,
 			field.String("technical_owner").
-				Comment(fmt.Sprintf("technical owner for the %s when no user or group is linked", label)).
+				Comment(fmt.Sprintf("technical owner for the %s when no user, group, or identity holder is linked", label)).
 				Optional().
 				Annotations(
 					entgql.OrderField("technical_owner"),
@@ -182,13 +194,19 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				Annotations(
 					entx.CSVRef().FromColumn("TechnicalOwnerGroupName").MatchOn("name"),
 				),
+			field.String("technical_owner_identity_holder_id").
+				Comment(fmt.Sprintf("the technical owner identity holder id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("TechnicalOwnerIdentityHolderEmail").MatchOn("email"),
+				),
 		)
 	}
 
 	if r.includeSecurityOwner {
 		fields = append(fields,
 			field.String("security_owner").
-				Comment(fmt.Sprintf("security owner for the %s when no user or group is linked", label)).
+				Comment(fmt.Sprintf("security owner for the %s when no user, group, or identity holder is linked", label)).
 				Optional().
 				Annotations(
 					entgql.OrderField("security_owner"),
@@ -205,12 +223,18 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				Annotations(
 					entx.CSVRef().FromColumn("SecurityOwnerGroupName").MatchOn("name"),
 				),
+			field.String("security_owner_identity_holder_id").
+				Comment(fmt.Sprintf("the security owner identity holder id for the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("SecurityOwnerIdentityHolderEmail").MatchOn("email"),
+				),
 		)
 	}
 
 	if r.includeReviewedBy {
 		reviewedByField := field.String("reviewed_by").
-			Comment(fmt.Sprintf("who reviewed the %s when no user or group is linked", label)).
+			Comment(fmt.Sprintf("who reviewed the %s when no user, group, or identity holder is linked", label)).
 			Optional()
 		if r.reviewedByOrderField {
 			reviewedByField = reviewedByField.Annotations(entgql.OrderField("reviewed_by"))
@@ -230,12 +254,18 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				Annotations(
 					entx.CSVRef().FromColumn("ReviewedByGroupName").MatchOn("name"),
 				),
+			field.String("reviewed_by_identity_holder_id").
+				Comment(fmt.Sprintf("the identity holder id that reviewed the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("ReviewedByIdentityHolderEmail").MatchOn("email"),
+				),
 		)
 	}
 
 	if r.includeAssignedTo {
 		assignedToField := field.String("assigned_to").
-			Comment(fmt.Sprintf("who the %s is assigned to when no user or group is linked", label)).
+			Comment(fmt.Sprintf("who the %s is assigned to when no user, group, or identity holder is linked", label)).
 			Optional()
 		if r.assignedToOrderField {
 			assignedToField = assignedToField.Annotations(entgql.OrderField("assigned_to"))
@@ -254,6 +284,12 @@ func (r ResponsibilityMixin) Fields() []ent.Field {
 				Optional().
 				Annotations(
 					entx.CSVRef().FromColumn("AssignedToGroupName").MatchOn("name"),
+				),
+			field.String("assigned_to_identity_holder_id").
+				Comment(fmt.Sprintf("the identity holder id assigned to the %s", label)).
+				Optional().
+				Annotations(
+					entx.CSVRef().FromColumn("AssignedToIdentityHolderEmail").MatchOn("email"),
 				),
 		)
 	}
@@ -314,6 +350,15 @@ func (r ResponsibilityMixin) Edges() []ent.Edge {
 					check(Group{}.Name()),
 				},
 			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "internal_owner_identity_holder",
+				t:          IdentityHolder.Type,
+				field:      "internal_owner_identity_holder_id",
+				annotations: []schema.Annotation{
+					check(IdentityHolder{}.Name()),
+				},
+			}),
 		)
 	}
 
@@ -335,6 +380,15 @@ func (r ResponsibilityMixin) Edges() []ent.Edge {
 				field:      "business_owner_group_id",
 				annotations: []schema.Annotation{
 					check(Group{}.Name()),
+				},
+			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "business_owner_identity_holder",
+				t:          IdentityHolder.Type,
+				field:      "business_owner_identity_holder_id",
+				annotations: []schema.Annotation{
+					check(IdentityHolder{}.Name()),
 				},
 			}),
 		)
@@ -360,6 +414,15 @@ func (r ResponsibilityMixin) Edges() []ent.Edge {
 					check(Group{}.Name()),
 				},
 			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "technical_owner_identity_holder",
+				t:          IdentityHolder.Type,
+				field:      "technical_owner_identity_holder_id",
+				annotations: []schema.Annotation{
+					check(IdentityHolder{}.Name()),
+				},
+			}),
 		)
 	}
 
@@ -381,6 +444,15 @@ func (r ResponsibilityMixin) Edges() []ent.Edge {
 				field:      "security_owner_group_id",
 				annotations: []schema.Annotation{
 					check(Group{}.Name()),
+				},
+			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "security_owner_identity_holder",
+				t:          IdentityHolder.Type,
+				field:      "security_owner_identity_holder_id",
+				annotations: []schema.Annotation{
+					check(IdentityHolder{}.Name()),
 				},
 			}),
 		)
@@ -406,6 +478,15 @@ func (r ResponsibilityMixin) Edges() []ent.Edge {
 					check(Group{}.Name()),
 				},
 			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "reviewed_by_identity_holder",
+				t:          IdentityHolder.Type,
+				field:      "reviewed_by_identity_holder_id",
+				annotations: []schema.Annotation{
+					check(IdentityHolder{}.Name()),
+				},
+			}),
 		)
 	}
 
@@ -427,6 +508,15 @@ func (r ResponsibilityMixin) Edges() []ent.Edge {
 				field:      "assigned_to_group_id",
 				annotations: []schema.Annotation{
 					check(Group{}.Name()),
+				},
+			}),
+			uniqueEdgeTo(&edgeDefinition{
+				fromSchema: r.schemaType,
+				name:       "assigned_to_identity_holder",
+				t:          IdentityHolder.Type,
+				field:      "assigned_to_identity_holder_id",
+				annotations: []schema.Annotation{
+					check(IdentityHolder{}.Name()),
 				},
 			}),
 		)

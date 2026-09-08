@@ -223,6 +223,26 @@ func (_u *PlatformUpdate) ClearInternalOwnerGroupID() *PlatformUpdate {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *PlatformUpdate) SetInternalOwnerIdentityHolderID(v string) *PlatformUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *PlatformUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *PlatformUpdate) ClearInternalOwnerIdentityHolderID() *PlatformUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetBusinessOwner sets the "business_owner" field.
 func (_u *PlatformUpdate) SetBusinessOwner(v string) *PlatformUpdate {
 	_u.mutation.SetBusinessOwner(v)
@@ -280,6 +300,26 @@ func (_u *PlatformUpdate) SetNillableBusinessOwnerGroupID(v *string) *PlatformUp
 // ClearBusinessOwnerGroupID clears the value of the "business_owner_group_id" field.
 func (_u *PlatformUpdate) ClearBusinessOwnerGroupID() *PlatformUpdate {
 	_u.mutation.ClearBusinessOwnerGroupID()
+	return _u
+}
+
+// SetBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field.
+func (_u *PlatformUpdate) SetBusinessOwnerIdentityHolderID(v string) *PlatformUpdate {
+	_u.mutation.SetBusinessOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableBusinessOwnerIdentityHolderID(v *string) *PlatformUpdate {
+	if v != nil {
+		_u.SetBusinessOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearBusinessOwnerIdentityHolderID clears the value of the "business_owner_identity_holder_id" field.
+func (_u *PlatformUpdate) ClearBusinessOwnerIdentityHolderID() *PlatformUpdate {
+	_u.mutation.ClearBusinessOwnerIdentityHolderID()
 	return _u
 }
 
@@ -343,6 +383,26 @@ func (_u *PlatformUpdate) ClearTechnicalOwnerGroupID() *PlatformUpdate {
 	return _u
 }
 
+// SetTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field.
+func (_u *PlatformUpdate) SetTechnicalOwnerIdentityHolderID(v string) *PlatformUpdate {
+	_u.mutation.SetTechnicalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableTechnicalOwnerIdentityHolderID(v *string) *PlatformUpdate {
+	if v != nil {
+		_u.SetTechnicalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearTechnicalOwnerIdentityHolderID clears the value of the "technical_owner_identity_holder_id" field.
+func (_u *PlatformUpdate) ClearTechnicalOwnerIdentityHolderID() *PlatformUpdate {
+	_u.mutation.ClearTechnicalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetSecurityOwner sets the "security_owner" field.
 func (_u *PlatformUpdate) SetSecurityOwner(v string) *PlatformUpdate {
 	_u.mutation.SetSecurityOwner(v)
@@ -400,6 +460,26 @@ func (_u *PlatformUpdate) SetNillableSecurityOwnerGroupID(v *string) *PlatformUp
 // ClearSecurityOwnerGroupID clears the value of the "security_owner_group_id" field.
 func (_u *PlatformUpdate) ClearSecurityOwnerGroupID() *PlatformUpdate {
 	_u.mutation.ClearSecurityOwnerGroupID()
+	return _u
+}
+
+// SetSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field.
+func (_u *PlatformUpdate) SetSecurityOwnerIdentityHolderID(v string) *PlatformUpdate {
+	_u.mutation.SetSecurityOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field if the given value is not nil.
+func (_u *PlatformUpdate) SetNillableSecurityOwnerIdentityHolderID(v *string) *PlatformUpdate {
+	if v != nil {
+		_u.SetSecurityOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearSecurityOwnerIdentityHolderID clears the value of the "security_owner_identity_holder_id" field.
+func (_u *PlatformUpdate) ClearSecurityOwnerIdentityHolderID() *PlatformUpdate {
+	_u.mutation.ClearSecurityOwnerIdentityHolderID()
 	return _u
 }
 
@@ -1159,6 +1239,11 @@ func (_u *PlatformUpdate) SetInternalOwnerGroup(v *Group) *PlatformUpdate {
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *PlatformUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetBusinessOwnerUser sets the "business_owner_user" edge to the User entity.
 func (_u *PlatformUpdate) SetBusinessOwnerUser(v *User) *PlatformUpdate {
 	return _u.SetBusinessOwnerUserID(v.ID)
@@ -1167,6 +1252,11 @@ func (_u *PlatformUpdate) SetBusinessOwnerUser(v *User) *PlatformUpdate {
 // SetBusinessOwnerGroup sets the "business_owner_group" edge to the Group entity.
 func (_u *PlatformUpdate) SetBusinessOwnerGroup(v *Group) *PlatformUpdate {
 	return _u.SetBusinessOwnerGroupID(v.ID)
+}
+
+// SetBusinessOwnerIdentityHolder sets the "business_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdate) SetBusinessOwnerIdentityHolder(v *IdentityHolder) *PlatformUpdate {
+	return _u.SetBusinessOwnerIdentityHolderID(v.ID)
 }
 
 // SetTechnicalOwnerUser sets the "technical_owner_user" edge to the User entity.
@@ -1179,6 +1269,11 @@ func (_u *PlatformUpdate) SetTechnicalOwnerGroup(v *Group) *PlatformUpdate {
 	return _u.SetTechnicalOwnerGroupID(v.ID)
 }
 
+// SetTechnicalOwnerIdentityHolder sets the "technical_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdate) SetTechnicalOwnerIdentityHolder(v *IdentityHolder) *PlatformUpdate {
+	return _u.SetTechnicalOwnerIdentityHolderID(v.ID)
+}
+
 // SetSecurityOwnerUser sets the "security_owner_user" edge to the User entity.
 func (_u *PlatformUpdate) SetSecurityOwnerUser(v *User) *PlatformUpdate {
 	return _u.SetSecurityOwnerUserID(v.ID)
@@ -1187,6 +1282,11 @@ func (_u *PlatformUpdate) SetSecurityOwnerUser(v *User) *PlatformUpdate {
 // SetSecurityOwnerGroup sets the "security_owner_group" edge to the Group entity.
 func (_u *PlatformUpdate) SetSecurityOwnerGroup(v *Group) *PlatformUpdate {
 	return _u.SetSecurityOwnerGroupID(v.ID)
+}
+
+// SetSecurityOwnerIdentityHolder sets the "security_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdate) SetSecurityOwnerIdentityHolder(v *IdentityHolder) *PlatformUpdate {
+	return _u.SetSecurityOwnerIdentityHolderID(v.ID)
 }
 
 // SetPlatformKind sets the "platform_kind" edge to the CustomTypeEnum entity.
@@ -1704,6 +1804,12 @@ func (_u *PlatformUpdate) ClearInternalOwnerGroup() *PlatformUpdate {
 	return _u
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdate) ClearInternalOwnerIdentityHolder() *PlatformUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
+}
+
 // ClearBusinessOwnerUser clears the "business_owner_user" edge to the User entity.
 func (_u *PlatformUpdate) ClearBusinessOwnerUser() *PlatformUpdate {
 	_u.mutation.ClearBusinessOwnerUser()
@@ -1713,6 +1819,12 @@ func (_u *PlatformUpdate) ClearBusinessOwnerUser() *PlatformUpdate {
 // ClearBusinessOwnerGroup clears the "business_owner_group" edge to the Group entity.
 func (_u *PlatformUpdate) ClearBusinessOwnerGroup() *PlatformUpdate {
 	_u.mutation.ClearBusinessOwnerGroup()
+	return _u
+}
+
+// ClearBusinessOwnerIdentityHolder clears the "business_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdate) ClearBusinessOwnerIdentityHolder() *PlatformUpdate {
+	_u.mutation.ClearBusinessOwnerIdentityHolder()
 	return _u
 }
 
@@ -1728,6 +1840,12 @@ func (_u *PlatformUpdate) ClearTechnicalOwnerGroup() *PlatformUpdate {
 	return _u
 }
 
+// ClearTechnicalOwnerIdentityHolder clears the "technical_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdate) ClearTechnicalOwnerIdentityHolder() *PlatformUpdate {
+	_u.mutation.ClearTechnicalOwnerIdentityHolder()
+	return _u
+}
+
 // ClearSecurityOwnerUser clears the "security_owner_user" edge to the User entity.
 func (_u *PlatformUpdate) ClearSecurityOwnerUser() *PlatformUpdate {
 	_u.mutation.ClearSecurityOwnerUser()
@@ -1737,6 +1855,12 @@ func (_u *PlatformUpdate) ClearSecurityOwnerUser() *PlatformUpdate {
 // ClearSecurityOwnerGroup clears the "security_owner_group" edge to the Group entity.
 func (_u *PlatformUpdate) ClearSecurityOwnerGroup() *PlatformUpdate {
 	_u.mutation.ClearSecurityOwnerGroup()
+	return _u
+}
+
+// ClearSecurityOwnerIdentityHolder clears the "security_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdate) ClearSecurityOwnerIdentityHolder() *PlatformUpdate {
+	_u.mutation.ClearSecurityOwnerIdentityHolder()
 	return _u
 }
 
@@ -2840,6 +2964,35 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.InternalOwnerIdentityHolderTable,
+			Columns: []string{platform.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.InternalOwnerIdentityHolderTable,
+			Columns: []string{platform.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.BusinessOwnerUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2891,6 +3044,35 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.BusinessOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.BusinessOwnerIdentityHolderTable,
+			Columns: []string{platform.BusinessOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BusinessOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.BusinessOwnerIdentityHolderTable,
+			Columns: []string{platform.BusinessOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -2956,6 +3138,35 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TechnicalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.TechnicalOwnerIdentityHolderTable,
+			Columns: []string{platform.TechnicalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TechnicalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.TechnicalOwnerIdentityHolderTable,
+			Columns: []string{platform.TechnicalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.SecurityOwnerUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3007,6 +3218,35 @@ func (_u *PlatformUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SecurityOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.SecurityOwnerIdentityHolderTable,
+			Columns: []string{platform.SecurityOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SecurityOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.SecurityOwnerIdentityHolderTable,
+			Columns: []string{platform.SecurityOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -4637,6 +4877,26 @@ func (_u *PlatformUpdateOne) ClearInternalOwnerGroupID() *PlatformUpdateOne {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *PlatformUpdateOne) SetInternalOwnerIdentityHolderID(v string) *PlatformUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *PlatformUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *PlatformUpdateOne) ClearInternalOwnerIdentityHolderID() *PlatformUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetBusinessOwner sets the "business_owner" field.
 func (_u *PlatformUpdateOne) SetBusinessOwner(v string) *PlatformUpdateOne {
 	_u.mutation.SetBusinessOwner(v)
@@ -4694,6 +4954,26 @@ func (_u *PlatformUpdateOne) SetNillableBusinessOwnerGroupID(v *string) *Platfor
 // ClearBusinessOwnerGroupID clears the value of the "business_owner_group_id" field.
 func (_u *PlatformUpdateOne) ClearBusinessOwnerGroupID() *PlatformUpdateOne {
 	_u.mutation.ClearBusinessOwnerGroupID()
+	return _u
+}
+
+// SetBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field.
+func (_u *PlatformUpdateOne) SetBusinessOwnerIdentityHolderID(v string) *PlatformUpdateOne {
+	_u.mutation.SetBusinessOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableBusinessOwnerIdentityHolderID(v *string) *PlatformUpdateOne {
+	if v != nil {
+		_u.SetBusinessOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearBusinessOwnerIdentityHolderID clears the value of the "business_owner_identity_holder_id" field.
+func (_u *PlatformUpdateOne) ClearBusinessOwnerIdentityHolderID() *PlatformUpdateOne {
+	_u.mutation.ClearBusinessOwnerIdentityHolderID()
 	return _u
 }
 
@@ -4757,6 +5037,26 @@ func (_u *PlatformUpdateOne) ClearTechnicalOwnerGroupID() *PlatformUpdateOne {
 	return _u
 }
 
+// SetTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field.
+func (_u *PlatformUpdateOne) SetTechnicalOwnerIdentityHolderID(v string) *PlatformUpdateOne {
+	_u.mutation.SetTechnicalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableTechnicalOwnerIdentityHolderID(v *string) *PlatformUpdateOne {
+	if v != nil {
+		_u.SetTechnicalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearTechnicalOwnerIdentityHolderID clears the value of the "technical_owner_identity_holder_id" field.
+func (_u *PlatformUpdateOne) ClearTechnicalOwnerIdentityHolderID() *PlatformUpdateOne {
+	_u.mutation.ClearTechnicalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetSecurityOwner sets the "security_owner" field.
 func (_u *PlatformUpdateOne) SetSecurityOwner(v string) *PlatformUpdateOne {
 	_u.mutation.SetSecurityOwner(v)
@@ -4814,6 +5114,26 @@ func (_u *PlatformUpdateOne) SetNillableSecurityOwnerGroupID(v *string) *Platfor
 // ClearSecurityOwnerGroupID clears the value of the "security_owner_group_id" field.
 func (_u *PlatformUpdateOne) ClearSecurityOwnerGroupID() *PlatformUpdateOne {
 	_u.mutation.ClearSecurityOwnerGroupID()
+	return _u
+}
+
+// SetSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field.
+func (_u *PlatformUpdateOne) SetSecurityOwnerIdentityHolderID(v string) *PlatformUpdateOne {
+	_u.mutation.SetSecurityOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field if the given value is not nil.
+func (_u *PlatformUpdateOne) SetNillableSecurityOwnerIdentityHolderID(v *string) *PlatformUpdateOne {
+	if v != nil {
+		_u.SetSecurityOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearSecurityOwnerIdentityHolderID clears the value of the "security_owner_identity_holder_id" field.
+func (_u *PlatformUpdateOne) ClearSecurityOwnerIdentityHolderID() *PlatformUpdateOne {
+	_u.mutation.ClearSecurityOwnerIdentityHolderID()
 	return _u
 }
 
@@ -5573,6 +5893,11 @@ func (_u *PlatformUpdateOne) SetInternalOwnerGroup(v *Group) *PlatformUpdateOne 
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *PlatformUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetBusinessOwnerUser sets the "business_owner_user" edge to the User entity.
 func (_u *PlatformUpdateOne) SetBusinessOwnerUser(v *User) *PlatformUpdateOne {
 	return _u.SetBusinessOwnerUserID(v.ID)
@@ -5581,6 +5906,11 @@ func (_u *PlatformUpdateOne) SetBusinessOwnerUser(v *User) *PlatformUpdateOne {
 // SetBusinessOwnerGroup sets the "business_owner_group" edge to the Group entity.
 func (_u *PlatformUpdateOne) SetBusinessOwnerGroup(v *Group) *PlatformUpdateOne {
 	return _u.SetBusinessOwnerGroupID(v.ID)
+}
+
+// SetBusinessOwnerIdentityHolder sets the "business_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdateOne) SetBusinessOwnerIdentityHolder(v *IdentityHolder) *PlatformUpdateOne {
+	return _u.SetBusinessOwnerIdentityHolderID(v.ID)
 }
 
 // SetTechnicalOwnerUser sets the "technical_owner_user" edge to the User entity.
@@ -5593,6 +5923,11 @@ func (_u *PlatformUpdateOne) SetTechnicalOwnerGroup(v *Group) *PlatformUpdateOne
 	return _u.SetTechnicalOwnerGroupID(v.ID)
 }
 
+// SetTechnicalOwnerIdentityHolder sets the "technical_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdateOne) SetTechnicalOwnerIdentityHolder(v *IdentityHolder) *PlatformUpdateOne {
+	return _u.SetTechnicalOwnerIdentityHolderID(v.ID)
+}
+
 // SetSecurityOwnerUser sets the "security_owner_user" edge to the User entity.
 func (_u *PlatformUpdateOne) SetSecurityOwnerUser(v *User) *PlatformUpdateOne {
 	return _u.SetSecurityOwnerUserID(v.ID)
@@ -5601,6 +5936,11 @@ func (_u *PlatformUpdateOne) SetSecurityOwnerUser(v *User) *PlatformUpdateOne {
 // SetSecurityOwnerGroup sets the "security_owner_group" edge to the Group entity.
 func (_u *PlatformUpdateOne) SetSecurityOwnerGroup(v *Group) *PlatformUpdateOne {
 	return _u.SetSecurityOwnerGroupID(v.ID)
+}
+
+// SetSecurityOwnerIdentityHolder sets the "security_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdateOne) SetSecurityOwnerIdentityHolder(v *IdentityHolder) *PlatformUpdateOne {
+	return _u.SetSecurityOwnerIdentityHolderID(v.ID)
 }
 
 // SetPlatformKind sets the "platform_kind" edge to the CustomTypeEnum entity.
@@ -6118,6 +6458,12 @@ func (_u *PlatformUpdateOne) ClearInternalOwnerGroup() *PlatformUpdateOne {
 	return _u
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdateOne) ClearInternalOwnerIdentityHolder() *PlatformUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
+}
+
 // ClearBusinessOwnerUser clears the "business_owner_user" edge to the User entity.
 func (_u *PlatformUpdateOne) ClearBusinessOwnerUser() *PlatformUpdateOne {
 	_u.mutation.ClearBusinessOwnerUser()
@@ -6127,6 +6473,12 @@ func (_u *PlatformUpdateOne) ClearBusinessOwnerUser() *PlatformUpdateOne {
 // ClearBusinessOwnerGroup clears the "business_owner_group" edge to the Group entity.
 func (_u *PlatformUpdateOne) ClearBusinessOwnerGroup() *PlatformUpdateOne {
 	_u.mutation.ClearBusinessOwnerGroup()
+	return _u
+}
+
+// ClearBusinessOwnerIdentityHolder clears the "business_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdateOne) ClearBusinessOwnerIdentityHolder() *PlatformUpdateOne {
+	_u.mutation.ClearBusinessOwnerIdentityHolder()
 	return _u
 }
 
@@ -6142,6 +6494,12 @@ func (_u *PlatformUpdateOne) ClearTechnicalOwnerGroup() *PlatformUpdateOne {
 	return _u
 }
 
+// ClearTechnicalOwnerIdentityHolder clears the "technical_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdateOne) ClearTechnicalOwnerIdentityHolder() *PlatformUpdateOne {
+	_u.mutation.ClearTechnicalOwnerIdentityHolder()
+	return _u
+}
+
 // ClearSecurityOwnerUser clears the "security_owner_user" edge to the User entity.
 func (_u *PlatformUpdateOne) ClearSecurityOwnerUser() *PlatformUpdateOne {
 	_u.mutation.ClearSecurityOwnerUser()
@@ -6151,6 +6509,12 @@ func (_u *PlatformUpdateOne) ClearSecurityOwnerUser() *PlatformUpdateOne {
 // ClearSecurityOwnerGroup clears the "security_owner_group" edge to the Group entity.
 func (_u *PlatformUpdateOne) ClearSecurityOwnerGroup() *PlatformUpdateOne {
 	_u.mutation.ClearSecurityOwnerGroup()
+	return _u
+}
+
+// ClearSecurityOwnerIdentityHolder clears the "security_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *PlatformUpdateOne) ClearSecurityOwnerIdentityHolder() *PlatformUpdateOne {
+	_u.mutation.ClearSecurityOwnerIdentityHolder()
 	return _u
 }
 
@@ -7284,6 +7648,35 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.InternalOwnerIdentityHolderTable,
+			Columns: []string{platform.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.InternalOwnerIdentityHolderTable,
+			Columns: []string{platform.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.BusinessOwnerUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -7335,6 +7728,35 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.BusinessOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.BusinessOwnerIdentityHolderTable,
+			Columns: []string{platform.BusinessOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.BusinessOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.BusinessOwnerIdentityHolderTable,
+			Columns: []string{platform.BusinessOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -7400,6 +7822,35 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TechnicalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.TechnicalOwnerIdentityHolderTable,
+			Columns: []string{platform.TechnicalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TechnicalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.TechnicalOwnerIdentityHolderTable,
+			Columns: []string{platform.TechnicalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.SecurityOwnerUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -7451,6 +7902,35 @@ func (_u *PlatformUpdateOne) sqlSave(ctx context.Context) (_node *Platform, err 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.SecurityOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.SecurityOwnerIdentityHolderTable,
+			Columns: []string{platform.SecurityOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.SecurityOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   platform.SecurityOwnerIdentityHolderTable,
+			Columns: []string{platform.SecurityOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

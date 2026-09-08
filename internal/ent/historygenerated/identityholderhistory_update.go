@@ -109,6 +109,9 @@ func (_u *IdentityHolderHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(identityholderhistory.FieldInternalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(identityholderhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(identityholderhistory.FieldEnvironmentName, field.TypeString)
 	}
@@ -301,6 +304,9 @@ func (_u *IdentityHolderHistoryUpdateOne) sqlSave(ctx context.Context) (_node *I
 	}
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(identityholderhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(identityholderhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(identityholderhistory.FieldEnvironmentName, field.TypeString)

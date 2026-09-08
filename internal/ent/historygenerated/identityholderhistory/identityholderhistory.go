@@ -52,6 +52,8 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
 	FieldEnvironmentName = "environment_name"
 	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
@@ -127,6 +129,7 @@ var Columns = []string{
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldEnvironmentName,
 	FieldEnvironmentID,
 	FieldScopeName,
@@ -309,6 +312,11 @@ func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
 func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
 }
 
 // ByEnvironmentName orders the results by the environment_name field.
