@@ -122,6 +122,11 @@ func InternalOwnerGroupID(v string) predicate.Asset {
 	return predicate.Asset(sql.FieldEQ(FieldInternalOwnerGroupID, v))
 }
 
+// InternalOwnerIdentityHolderID applies equality check predicate on the "internal_owner_identity_holder_id" field. It's identical to InternalOwnerIdentityHolderIDEQ.
+func InternalOwnerIdentityHolderID(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // AssetSubtypeName applies equality check predicate on the "asset_subtype_name" field. It's identical to AssetSubtypeNameEQ.
 func AssetSubtypeName(v string) predicate.Asset {
 	return predicate.Asset(sql.FieldEQ(FieldAssetSubtypeName, v))
@@ -1055,6 +1060,81 @@ func InternalOwnerGroupIDEqualFold(v string) predicate.Asset {
 // InternalOwnerGroupIDContainsFold applies the ContainsFold predicate on the "internal_owner_group_id" field.
 func InternalOwnerGroupIDContainsFold(v string) predicate.Asset {
 	return predicate.Asset(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerIdentityHolderIDEQ applies the EQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEQ(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNEQ(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldNEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIn applies the In predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIn(vs ...string) predicate.Asset {
+	return predicate.Asset(sql.FieldIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotIn(vs ...string) predicate.Asset {
+	return predicate.Asset(sql.FieldNotIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDGT applies the GT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGT(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldGT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDGTE applies the GTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGTE(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldGTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLT applies the LT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLT(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldLT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLTE applies the LTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLTE(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldLTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContains applies the Contains predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContains(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldContains(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasPrefix(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldHasPrefix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasSuffix(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldHasSuffix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIsNil() predicate.Asset {
+	return predicate.Asset(sql.FieldIsNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotNil() predicate.Asset {
+	return predicate.Asset(sql.FieldNotNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEqualFold(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldEqualFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContainsFold(v string) predicate.Asset {
+	return predicate.Asset(sql.FieldContainsFold(FieldInternalOwnerIdentityHolderID, v))
 }
 
 // AssetSubtypeNameEQ applies the EQ predicate on the "asset_subtype_name" field.
@@ -3687,6 +3767,29 @@ func HasInternalOwnerGroup() predicate.Asset {
 func HasInternalOwnerGroupWith(preds ...predicate.Group) predicate.Asset {
 	return predicate.Asset(func(s *sql.Selector) {
 		step := newInternalOwnerGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasInternalOwnerIdentityHolder applies the HasEdge predicate on the "internal_owner_identity_holder" edge.
+func HasInternalOwnerIdentityHolder() predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerIdentityHolderWith applies the HasEdge predicate on the "internal_owner_identity_holder" edge with a given conditions (other predicates).
+func HasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := newInternalOwnerIdentityHolderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

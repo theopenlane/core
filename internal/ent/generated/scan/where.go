@@ -137,6 +137,11 @@ func ReviewedByGroupID(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldReviewedByGroupID, v))
 }
 
+// ReviewedByIdentityHolderID applies equality check predicate on the "reviewed_by_identity_holder_id" field. It's identical to ReviewedByIdentityHolderIDEQ.
+func ReviewedByIdentityHolderID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
 // AssignedTo applies equality check predicate on the "assigned_to" field. It's identical to AssignedToEQ.
 func AssignedTo(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldAssignedTo, v))
@@ -150,6 +155,11 @@ func AssignedToUserID(v string) predicate.Scan {
 // AssignedToGroupID applies equality check predicate on the "assigned_to_group_id" field. It's identical to AssignedToGroupIDEQ.
 func AssignedToGroupID(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldAssignedToGroupID, v))
+}
+
+// AssignedToIdentityHolderID applies equality check predicate on the "assigned_to_identity_holder_id" field. It's identical to AssignedToIdentityHolderIDEQ.
+func AssignedToIdentityHolderID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldAssignedToIdentityHolderID, v))
 }
 
 // EnvironmentName applies equality check predicate on the "environment_name" field. It's identical to EnvironmentNameEQ.
@@ -1142,6 +1152,81 @@ func ReviewedByGroupIDContainsFold(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldContainsFold(FieldReviewedByGroupID, v))
 }
 
+// ReviewedByIdentityHolderIDEQ applies the EQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDNEQ applies the NEQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIn applies the In predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDNotIn applies the NotIn predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDGT applies the GT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDGTE applies the GTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLT applies the LT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLTE applies the LTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContains applies the Contains predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIsNil applies the IsNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDNotNil applies the NotNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDEqualFold applies the EqualFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContainsFold applies the ContainsFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldReviewedByIdentityHolderID, v))
+}
+
 // AssignedToEQ applies the EQ predicate on the "assigned_to" field.
 func AssignedToEQ(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldAssignedTo, v))
@@ -1365,6 +1450,81 @@ func AssignedToGroupIDEqualFold(v string) predicate.Scan {
 // AssignedToGroupIDContainsFold applies the ContainsFold predicate on the "assigned_to_group_id" field.
 func AssignedToGroupIDContainsFold(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldContainsFold(FieldAssignedToGroupID, v))
+}
+
+// AssignedToIdentityHolderIDEQ applies the EQ predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDNEQ applies the NEQ predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDIn applies the In predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldAssignedToIdentityHolderID, vs...))
+}
+
+// AssignedToIdentityHolderIDNotIn applies the NotIn predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldAssignedToIdentityHolderID, vs...))
+}
+
+// AssignedToIdentityHolderIDGT applies the GT predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDGTE applies the GTE predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDLT applies the LT predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDLTE applies the LTE predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDContains applies the Contains predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDIsNil applies the IsNil predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldAssignedToIdentityHolderID))
+}
+
+// AssignedToIdentityHolderIDNotNil applies the NotNil predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldAssignedToIdentityHolderID))
+}
+
+// AssignedToIdentityHolderIDEqualFold applies the EqualFold predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDContainsFold applies the ContainsFold predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldAssignedToIdentityHolderID, v))
 }
 
 // EnvironmentNameEQ applies the EQ predicate on the "environment_name" field.
@@ -2407,6 +2567,29 @@ func HasReviewedByGroupWith(preds ...predicate.Group) predicate.Scan {
 	})
 }
 
+// HasReviewedByIdentityHolder applies the HasEdge predicate on the "reviewed_by_identity_holder" edge.
+func HasReviewedByIdentityHolder() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByIdentityHolderTable, ReviewedByIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByIdentityHolderWith applies the HasEdge predicate on the "reviewed_by_identity_holder" edge with a given conditions (other predicates).
+func HasReviewedByIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newReviewedByIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasAssignedToUser applies the HasEdge predicate on the "assigned_to_user" edge.
 func HasAssignedToUser() predicate.Scan {
 	return predicate.Scan(func(s *sql.Selector) {
@@ -2445,6 +2628,29 @@ func HasAssignedToGroup() predicate.Scan {
 func HasAssignedToGroupWith(preds ...predicate.Group) predicate.Scan {
 	return predicate.Scan(func(s *sql.Selector) {
 		step := newAssignedToGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssignedToIdentityHolder applies the HasEdge predicate on the "assigned_to_identity_holder" edge.
+func HasAssignedToIdentityHolder() predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, AssignedToIdentityHolderTable, AssignedToIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssignedToIdentityHolderWith applies the HasEdge predicate on the "assigned_to_identity_holder" edge with a given conditions (other predicates).
+func HasAssignedToIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Scan {
+	return predicate.Scan(func(s *sql.Selector) {
+		step := newAssignedToIdentityHolderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

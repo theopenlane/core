@@ -44,89 +44,93 @@ import (
 // PlatformQuery is the builder for querying Platform entities.
 type PlatformQuery struct {
 	config
-	ctx                            *QueryContext
-	order                          []platform.OrderOption
-	inters                         []Interceptor
-	predicates                     []predicate.Platform
-	withOwner                      *OrganizationQuery
-	withBlockedGroups              *GroupQuery
-	withEditors                    *GroupQuery
-	withViewers                    *GroupQuery
-	withInternalOwnerUser          *UserQuery
-	withInternalOwnerGroup         *GroupQuery
-	withBusinessOwnerUser          *UserQuery
-	withBusinessOwnerGroup         *GroupQuery
-	withTechnicalOwnerUser         *UserQuery
-	withTechnicalOwnerGroup        *GroupQuery
-	withSecurityOwnerUser          *UserQuery
-	withSecurityOwnerGroup         *GroupQuery
-	withPlatformKind               *CustomTypeEnumQuery
-	withPlatformDataClassification *CustomTypeEnumQuery
-	withEnvironment                *CustomTypeEnumQuery
-	withScope                      *CustomTypeEnumQuery
-	withAccessModel                *CustomTypeEnumQuery
-	withEncryptionStatus           *CustomTypeEnumQuery
-	withSecurityTier               *CustomTypeEnumQuery
-	withCriticality                *CustomTypeEnumQuery
-	withAssets                     *AssetQuery
-	withEntities                   *EntityQuery
-	withEvidence                   *EvidenceQuery
-	withFiles                      *FileQuery
-	withArchitectureDiagrams       *FileQuery
-	withDataFlowDiagrams           *FileQuery
-	withTrustBoundaryDiagrams      *FileQuery
-	withRisks                      *RiskQuery
-	withControls                   *ControlQuery
-	withAssessments                *AssessmentQuery
-	withScans                      *ScanQuery
-	withTasks                      *TaskQuery
-	withIdentityHolders            *IdentityHolderQuery
-	withIntegrations               *IntegrationQuery
-	withDirectorySyncRuns          *DirectorySyncRunQuery
-	withDirectoryAccounts          *DirectoryAccountQuery
-	withDirectoryGroups            *DirectoryGroupQuery
-	withDirectoryMemberships       *DirectoryMembershipQuery
-	withWorkflowObjectRefs         *WorkflowObjectRefQuery
-	withSourceAssets               *AssetQuery
-	withSourceEntities             *EntityQuery
-	withOutOfScopeAssets           *AssetQuery
-	withOutOfScopeVendors          *EntityQuery
-	withApplicableFrameworks       *StandardQuery
-	withGeneratedScans             *ScanQuery
-	withPlatformOwner              *UserQuery
-	withSystemDetails              *SystemDetailQuery
-	withFKs                        bool
-	loadTotal                      []func(context.Context, []*Platform) error
-	modifiers                      []func(*sql.Selector)
-	withNamedBlockedGroups         map[string]*GroupQuery
-	withNamedEditors               map[string]*GroupQuery
-	withNamedViewers               map[string]*GroupQuery
-	withNamedAssets                map[string]*AssetQuery
-	withNamedEntities              map[string]*EntityQuery
-	withNamedEvidence              map[string]*EvidenceQuery
-	withNamedFiles                 map[string]*FileQuery
-	withNamedArchitectureDiagrams  map[string]*FileQuery
-	withNamedDataFlowDiagrams      map[string]*FileQuery
-	withNamedTrustBoundaryDiagrams map[string]*FileQuery
-	withNamedRisks                 map[string]*RiskQuery
-	withNamedControls              map[string]*ControlQuery
-	withNamedAssessments           map[string]*AssessmentQuery
-	withNamedScans                 map[string]*ScanQuery
-	withNamedTasks                 map[string]*TaskQuery
-	withNamedIdentityHolders       map[string]*IdentityHolderQuery
-	withNamedIntegrations          map[string]*IntegrationQuery
-	withNamedDirectorySyncRuns     map[string]*DirectorySyncRunQuery
-	withNamedDirectoryAccounts     map[string]*DirectoryAccountQuery
-	withNamedDirectoryGroups       map[string]*DirectoryGroupQuery
-	withNamedDirectoryMemberships  map[string]*DirectoryMembershipQuery
-	withNamedWorkflowObjectRefs    map[string]*WorkflowObjectRefQuery
-	withNamedSourceAssets          map[string]*AssetQuery
-	withNamedSourceEntities        map[string]*EntityQuery
-	withNamedOutOfScopeAssets      map[string]*AssetQuery
-	withNamedOutOfScopeVendors     map[string]*EntityQuery
-	withNamedApplicableFrameworks  map[string]*StandardQuery
-	withNamedGeneratedScans        map[string]*ScanQuery
-	withNamedSystemDetails         map[string]*SystemDetailQuery
+	ctx                              *QueryContext
+	order                            []platform.OrderOption
+	inters                           []Interceptor
+	predicates                       []predicate.Platform
+	withOwner                        *OrganizationQuery
+	withBlockedGroups                *GroupQuery
+	withEditors                      *GroupQuery
+	withViewers                      *GroupQuery
+	withInternalOwnerUser            *UserQuery
+	withInternalOwnerGroup           *GroupQuery
+	withInternalOwnerIdentityHolder  *IdentityHolderQuery
+	withBusinessOwnerUser            *UserQuery
+	withBusinessOwnerGroup           *GroupQuery
+	withBusinessOwnerIdentityHolder  *IdentityHolderQuery
+	withTechnicalOwnerUser           *UserQuery
+	withTechnicalOwnerGroup          *GroupQuery
+	withTechnicalOwnerIdentityHolder *IdentityHolderQuery
+	withSecurityOwnerUser            *UserQuery
+	withSecurityOwnerGroup           *GroupQuery
+	withSecurityOwnerIdentityHolder  *IdentityHolderQuery
+	withPlatformKind                 *CustomTypeEnumQuery
+	withPlatformDataClassification   *CustomTypeEnumQuery
+	withEnvironment                  *CustomTypeEnumQuery
+	withScope                        *CustomTypeEnumQuery
+	withAccessModel                  *CustomTypeEnumQuery
+	withEncryptionStatus             *CustomTypeEnumQuery
+	withSecurityTier                 *CustomTypeEnumQuery
+	withCriticality                  *CustomTypeEnumQuery
+	withAssets                       *AssetQuery
+	withEntities                     *EntityQuery
+	withEvidence                     *EvidenceQuery
+	withFiles                        *FileQuery
+	withArchitectureDiagrams         *FileQuery
+	withDataFlowDiagrams             *FileQuery
+	withTrustBoundaryDiagrams        *FileQuery
+	withRisks                        *RiskQuery
+	withControls                     *ControlQuery
+	withAssessments                  *AssessmentQuery
+	withScans                        *ScanQuery
+	withTasks                        *TaskQuery
+	withIdentityHolders              *IdentityHolderQuery
+	withIntegrations                 *IntegrationQuery
+	withDirectorySyncRuns            *DirectorySyncRunQuery
+	withDirectoryAccounts            *DirectoryAccountQuery
+	withDirectoryGroups              *DirectoryGroupQuery
+	withDirectoryMemberships         *DirectoryMembershipQuery
+	withWorkflowObjectRefs           *WorkflowObjectRefQuery
+	withSourceAssets                 *AssetQuery
+	withSourceEntities               *EntityQuery
+	withOutOfScopeAssets             *AssetQuery
+	withOutOfScopeVendors            *EntityQuery
+	withApplicableFrameworks         *StandardQuery
+	withGeneratedScans               *ScanQuery
+	withPlatformOwner                *UserQuery
+	withSystemDetails                *SystemDetailQuery
+	withFKs                          bool
+	loadTotal                        []func(context.Context, []*Platform) error
+	modifiers                        []func(*sql.Selector)
+	withNamedBlockedGroups           map[string]*GroupQuery
+	withNamedEditors                 map[string]*GroupQuery
+	withNamedViewers                 map[string]*GroupQuery
+	withNamedAssets                  map[string]*AssetQuery
+	withNamedEntities                map[string]*EntityQuery
+	withNamedEvidence                map[string]*EvidenceQuery
+	withNamedFiles                   map[string]*FileQuery
+	withNamedArchitectureDiagrams    map[string]*FileQuery
+	withNamedDataFlowDiagrams        map[string]*FileQuery
+	withNamedTrustBoundaryDiagrams   map[string]*FileQuery
+	withNamedRisks                   map[string]*RiskQuery
+	withNamedControls                map[string]*ControlQuery
+	withNamedAssessments             map[string]*AssessmentQuery
+	withNamedScans                   map[string]*ScanQuery
+	withNamedTasks                   map[string]*TaskQuery
+	withNamedIdentityHolders         map[string]*IdentityHolderQuery
+	withNamedIntegrations            map[string]*IntegrationQuery
+	withNamedDirectorySyncRuns       map[string]*DirectorySyncRunQuery
+	withNamedDirectoryAccounts       map[string]*DirectoryAccountQuery
+	withNamedDirectoryGroups         map[string]*DirectoryGroupQuery
+	withNamedDirectoryMemberships    map[string]*DirectoryMembershipQuery
+	withNamedWorkflowObjectRefs      map[string]*WorkflowObjectRefQuery
+	withNamedSourceAssets            map[string]*AssetQuery
+	withNamedSourceEntities          map[string]*EntityQuery
+	withNamedOutOfScopeAssets        map[string]*AssetQuery
+	withNamedOutOfScopeVendors       map[string]*EntityQuery
+	withNamedApplicableFrameworks    map[string]*StandardQuery
+	withNamedGeneratedScans          map[string]*ScanQuery
+	withNamedSystemDetails           map[string]*SystemDetailQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -295,6 +299,28 @@ func (_q *PlatformQuery) QueryInternalOwnerGroup() *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerIdentityHolder chains the current query on the "internal_owner_identity_holder" edge.
+func (_q *PlatformQuery) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.InternalOwnerIdentityHolderTable, platform.InternalOwnerIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryBusinessOwnerUser chains the current query on the "business_owner_user" edge.
 func (_q *PlatformQuery) QueryBusinessOwnerUser() *UserQuery {
 	query := (&UserClient{config: _q.config}).Query()
@@ -332,6 +358,28 @@ func (_q *PlatformQuery) QueryBusinessOwnerGroup() *GroupQuery {
 			sqlgraph.From(platform.Table, platform.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.BusinessOwnerGroupTable, platform.BusinessOwnerGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryBusinessOwnerIdentityHolder chains the current query on the "business_owner_identity_holder" edge.
+func (_q *PlatformQuery) QueryBusinessOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.BusinessOwnerIdentityHolderTable, platform.BusinessOwnerIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -383,6 +431,28 @@ func (_q *PlatformQuery) QueryTechnicalOwnerGroup() *GroupQuery {
 	return query
 }
 
+// QueryTechnicalOwnerIdentityHolder chains the current query on the "technical_owner_identity_holder" edge.
+func (_q *PlatformQuery) QueryTechnicalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.TechnicalOwnerIdentityHolderTable, platform.TechnicalOwnerIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QuerySecurityOwnerUser chains the current query on the "security_owner_user" edge.
 func (_q *PlatformQuery) QuerySecurityOwnerUser() *UserQuery {
 	query := (&UserClient{config: _q.config}).Query()
@@ -420,6 +490,28 @@ func (_q *PlatformQuery) QuerySecurityOwnerGroup() *GroupQuery {
 			sqlgraph.From(platform.Table, platform.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityOwnerGroupTable, platform.SecurityOwnerGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySecurityOwnerIdentityHolder chains the current query on the "security_owner_identity_holder" edge.
+func (_q *PlatformQuery) QuerySecurityOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(platform.Table, platform.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, platform.SecurityOwnerIdentityHolderTable, platform.SecurityOwnerIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -1384,58 +1476,62 @@ func (_q *PlatformQuery) Clone() *PlatformQuery {
 		return nil
 	}
 	return &PlatformQuery{
-		config:                         _q.config,
-		ctx:                            _q.ctx.Clone(),
-		order:                          append([]platform.OrderOption{}, _q.order...),
-		inters:                         append([]Interceptor{}, _q.inters...),
-		predicates:                     append([]predicate.Platform{}, _q.predicates...),
-		withOwner:                      _q.withOwner.Clone(),
-		withBlockedGroups:              _q.withBlockedGroups.Clone(),
-		withEditors:                    _q.withEditors.Clone(),
-		withViewers:                    _q.withViewers.Clone(),
-		withInternalOwnerUser:          _q.withInternalOwnerUser.Clone(),
-		withInternalOwnerGroup:         _q.withInternalOwnerGroup.Clone(),
-		withBusinessOwnerUser:          _q.withBusinessOwnerUser.Clone(),
-		withBusinessOwnerGroup:         _q.withBusinessOwnerGroup.Clone(),
-		withTechnicalOwnerUser:         _q.withTechnicalOwnerUser.Clone(),
-		withTechnicalOwnerGroup:        _q.withTechnicalOwnerGroup.Clone(),
-		withSecurityOwnerUser:          _q.withSecurityOwnerUser.Clone(),
-		withSecurityOwnerGroup:         _q.withSecurityOwnerGroup.Clone(),
-		withPlatformKind:               _q.withPlatformKind.Clone(),
-		withPlatformDataClassification: _q.withPlatformDataClassification.Clone(),
-		withEnvironment:                _q.withEnvironment.Clone(),
-		withScope:                      _q.withScope.Clone(),
-		withAccessModel:                _q.withAccessModel.Clone(),
-		withEncryptionStatus:           _q.withEncryptionStatus.Clone(),
-		withSecurityTier:               _q.withSecurityTier.Clone(),
-		withCriticality:                _q.withCriticality.Clone(),
-		withAssets:                     _q.withAssets.Clone(),
-		withEntities:                   _q.withEntities.Clone(),
-		withEvidence:                   _q.withEvidence.Clone(),
-		withFiles:                      _q.withFiles.Clone(),
-		withArchitectureDiagrams:       _q.withArchitectureDiagrams.Clone(),
-		withDataFlowDiagrams:           _q.withDataFlowDiagrams.Clone(),
-		withTrustBoundaryDiagrams:      _q.withTrustBoundaryDiagrams.Clone(),
-		withRisks:                      _q.withRisks.Clone(),
-		withControls:                   _q.withControls.Clone(),
-		withAssessments:                _q.withAssessments.Clone(),
-		withScans:                      _q.withScans.Clone(),
-		withTasks:                      _q.withTasks.Clone(),
-		withIdentityHolders:            _q.withIdentityHolders.Clone(),
-		withIntegrations:               _q.withIntegrations.Clone(),
-		withDirectorySyncRuns:          _q.withDirectorySyncRuns.Clone(),
-		withDirectoryAccounts:          _q.withDirectoryAccounts.Clone(),
-		withDirectoryGroups:            _q.withDirectoryGroups.Clone(),
-		withDirectoryMemberships:       _q.withDirectoryMemberships.Clone(),
-		withWorkflowObjectRefs:         _q.withWorkflowObjectRefs.Clone(),
-		withSourceAssets:               _q.withSourceAssets.Clone(),
-		withSourceEntities:             _q.withSourceEntities.Clone(),
-		withOutOfScopeAssets:           _q.withOutOfScopeAssets.Clone(),
-		withOutOfScopeVendors:          _q.withOutOfScopeVendors.Clone(),
-		withApplicableFrameworks:       _q.withApplicableFrameworks.Clone(),
-		withGeneratedScans:             _q.withGeneratedScans.Clone(),
-		withPlatformOwner:              _q.withPlatformOwner.Clone(),
-		withSystemDetails:              _q.withSystemDetails.Clone(),
+		config:                           _q.config,
+		ctx:                              _q.ctx.Clone(),
+		order:                            append([]platform.OrderOption{}, _q.order...),
+		inters:                           append([]Interceptor{}, _q.inters...),
+		predicates:                       append([]predicate.Platform{}, _q.predicates...),
+		withOwner:                        _q.withOwner.Clone(),
+		withBlockedGroups:                _q.withBlockedGroups.Clone(),
+		withEditors:                      _q.withEditors.Clone(),
+		withViewers:                      _q.withViewers.Clone(),
+		withInternalOwnerUser:            _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:           _q.withInternalOwnerGroup.Clone(),
+		withInternalOwnerIdentityHolder:  _q.withInternalOwnerIdentityHolder.Clone(),
+		withBusinessOwnerUser:            _q.withBusinessOwnerUser.Clone(),
+		withBusinessOwnerGroup:           _q.withBusinessOwnerGroup.Clone(),
+		withBusinessOwnerIdentityHolder:  _q.withBusinessOwnerIdentityHolder.Clone(),
+		withTechnicalOwnerUser:           _q.withTechnicalOwnerUser.Clone(),
+		withTechnicalOwnerGroup:          _q.withTechnicalOwnerGroup.Clone(),
+		withTechnicalOwnerIdentityHolder: _q.withTechnicalOwnerIdentityHolder.Clone(),
+		withSecurityOwnerUser:            _q.withSecurityOwnerUser.Clone(),
+		withSecurityOwnerGroup:           _q.withSecurityOwnerGroup.Clone(),
+		withSecurityOwnerIdentityHolder:  _q.withSecurityOwnerIdentityHolder.Clone(),
+		withPlatformKind:                 _q.withPlatformKind.Clone(),
+		withPlatformDataClassification:   _q.withPlatformDataClassification.Clone(),
+		withEnvironment:                  _q.withEnvironment.Clone(),
+		withScope:                        _q.withScope.Clone(),
+		withAccessModel:                  _q.withAccessModel.Clone(),
+		withEncryptionStatus:             _q.withEncryptionStatus.Clone(),
+		withSecurityTier:                 _q.withSecurityTier.Clone(),
+		withCriticality:                  _q.withCriticality.Clone(),
+		withAssets:                       _q.withAssets.Clone(),
+		withEntities:                     _q.withEntities.Clone(),
+		withEvidence:                     _q.withEvidence.Clone(),
+		withFiles:                        _q.withFiles.Clone(),
+		withArchitectureDiagrams:         _q.withArchitectureDiagrams.Clone(),
+		withDataFlowDiagrams:             _q.withDataFlowDiagrams.Clone(),
+		withTrustBoundaryDiagrams:        _q.withTrustBoundaryDiagrams.Clone(),
+		withRisks:                        _q.withRisks.Clone(),
+		withControls:                     _q.withControls.Clone(),
+		withAssessments:                  _q.withAssessments.Clone(),
+		withScans:                        _q.withScans.Clone(),
+		withTasks:                        _q.withTasks.Clone(),
+		withIdentityHolders:              _q.withIdentityHolders.Clone(),
+		withIntegrations:                 _q.withIntegrations.Clone(),
+		withDirectorySyncRuns:            _q.withDirectorySyncRuns.Clone(),
+		withDirectoryAccounts:            _q.withDirectoryAccounts.Clone(),
+		withDirectoryGroups:              _q.withDirectoryGroups.Clone(),
+		withDirectoryMemberships:         _q.withDirectoryMemberships.Clone(),
+		withWorkflowObjectRefs:           _q.withWorkflowObjectRefs.Clone(),
+		withSourceAssets:                 _q.withSourceAssets.Clone(),
+		withSourceEntities:               _q.withSourceEntities.Clone(),
+		withOutOfScopeAssets:             _q.withOutOfScopeAssets.Clone(),
+		withOutOfScopeVendors:            _q.withOutOfScopeVendors.Clone(),
+		withApplicableFrameworks:         _q.withApplicableFrameworks.Clone(),
+		withGeneratedScans:               _q.withGeneratedScans.Clone(),
+		withPlatformOwner:                _q.withPlatformOwner.Clone(),
+		withSystemDetails:                _q.withSystemDetails.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1509,6 +1605,17 @@ func (_q *PlatformQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *Plat
 	return _q
 }
 
+// WithInternalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithInternalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *PlatformQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerIdentityHolder = query
+	return _q
+}
+
 // WithBusinessOwnerUser tells the query-builder to eager-load the nodes that are connected to
 // the "business_owner_user" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *PlatformQuery) WithBusinessOwnerUser(opts ...func(*UserQuery)) *PlatformQuery {
@@ -1528,6 +1635,17 @@ func (_q *PlatformQuery) WithBusinessOwnerGroup(opts ...func(*GroupQuery)) *Plat
 		opt(query)
 	}
 	_q.withBusinessOwnerGroup = query
+	return _q
+}
+
+// WithBusinessOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "business_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithBusinessOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *PlatformQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withBusinessOwnerIdentityHolder = query
 	return _q
 }
 
@@ -1553,6 +1671,17 @@ func (_q *PlatformQuery) WithTechnicalOwnerGroup(opts ...func(*GroupQuery)) *Pla
 	return _q
 }
 
+// WithTechnicalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "technical_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithTechnicalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *PlatformQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTechnicalOwnerIdentityHolder = query
+	return _q
+}
+
 // WithSecurityOwnerUser tells the query-builder to eager-load the nodes that are connected to
 // the "security_owner_user" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *PlatformQuery) WithSecurityOwnerUser(opts ...func(*UserQuery)) *PlatformQuery {
@@ -1572,6 +1701,17 @@ func (_q *PlatformQuery) WithSecurityOwnerGroup(opts ...func(*GroupQuery)) *Plat
 		opt(query)
 	}
 	_q.withSecurityOwnerGroup = query
+	return _q
+}
+
+// WithSecurityOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "security_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *PlatformQuery) WithSecurityOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *PlatformQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSecurityOwnerIdentityHolder = query
 	return _q
 }
 
@@ -2045,19 +2185,23 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 		nodes       = []*Platform{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [47]bool{
+		loadedTypes = [51]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withInternalOwnerUser != nil,
 			_q.withInternalOwnerGroup != nil,
+			_q.withInternalOwnerIdentityHolder != nil,
 			_q.withBusinessOwnerUser != nil,
 			_q.withBusinessOwnerGroup != nil,
+			_q.withBusinessOwnerIdentityHolder != nil,
 			_q.withTechnicalOwnerUser != nil,
 			_q.withTechnicalOwnerGroup != nil,
+			_q.withTechnicalOwnerIdentityHolder != nil,
 			_q.withSecurityOwnerUser != nil,
 			_q.withSecurityOwnerGroup != nil,
+			_q.withSecurityOwnerIdentityHolder != nil,
 			_q.withPlatformKind != nil,
 			_q.withPlatformDataClassification != nil,
 			_q.withEnvironment != nil,
@@ -2158,6 +2302,12 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			return nil, err
 		}
 	}
+	if query := _q.withInternalOwnerIdentityHolder; query != nil {
+		if err := _q.loadInternalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *Platform, e *IdentityHolder) { n.Edges.InternalOwnerIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withBusinessOwnerUser; query != nil {
 		if err := _q.loadBusinessOwnerUser(ctx, query, nodes, nil,
 			func(n *Platform, e *User) { n.Edges.BusinessOwnerUser = e }); err != nil {
@@ -2167,6 +2317,12 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 	if query := _q.withBusinessOwnerGroup; query != nil {
 		if err := _q.loadBusinessOwnerGroup(ctx, query, nodes, nil,
 			func(n *Platform, e *Group) { n.Edges.BusinessOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withBusinessOwnerIdentityHolder; query != nil {
+		if err := _q.loadBusinessOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *Platform, e *IdentityHolder) { n.Edges.BusinessOwnerIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2182,6 +2338,12 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 			return nil, err
 		}
 	}
+	if query := _q.withTechnicalOwnerIdentityHolder; query != nil {
+		if err := _q.loadTechnicalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *Platform, e *IdentityHolder) { n.Edges.TechnicalOwnerIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withSecurityOwnerUser; query != nil {
 		if err := _q.loadSecurityOwnerUser(ctx, query, nodes, nil,
 			func(n *Platform, e *User) { n.Edges.SecurityOwnerUser = e }); err != nil {
@@ -2191,6 +2353,12 @@ func (_q *PlatformQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pla
 	if query := _q.withSecurityOwnerGroup; query != nil {
 		if err := _q.loadSecurityOwnerGroup(ctx, query, nodes, nil,
 			func(n *Platform, e *Group) { n.Edges.SecurityOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSecurityOwnerIdentityHolder; query != nil {
+		if err := _q.loadSecurityOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *Platform, e *IdentityHolder) { n.Edges.SecurityOwnerIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2919,6 +3087,35 @@ func (_q *PlatformQuery) loadInternalOwnerGroup(ctx context.Context, query *Grou
 	}
 	return nil
 }
+func (_q *PlatformQuery) loadInternalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Platform)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *PlatformQuery) loadBusinessOwnerUser(ctx context.Context, query *UserQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Platform)
@@ -2970,6 +3167,35 @@ func (_q *PlatformQuery) loadBusinessOwnerGroup(ctx context.Context, query *Grou
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "business_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadBusinessOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Platform)
+	for i := range nodes {
+		fk := nodes[i].BusinessOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "business_owner_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -3035,6 +3261,35 @@ func (_q *PlatformQuery) loadTechnicalOwnerGroup(ctx context.Context, query *Gro
 	}
 	return nil
 }
+func (_q *PlatformQuery) loadTechnicalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Platform)
+	for i := range nodes {
+		fk := nodes[i].TechnicalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "technical_owner_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *PlatformQuery) loadSecurityOwnerUser(ctx context.Context, query *UserQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Platform)
@@ -3086,6 +3341,35 @@ func (_q *PlatformQuery) loadSecurityOwnerGroup(ctx context.Context, query *Grou
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "security_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *PlatformQuery) loadSecurityOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Platform, init func(*Platform), assign func(*Platform, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Platform)
+	for i := range nodes {
+		fk := nodes[i].SecurityOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "security_owner_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -4644,11 +4928,17 @@ func (_q *PlatformQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withInternalOwnerGroup != nil {
 			_spec.Node.AddColumnOnce(platform.FieldInternalOwnerGroupID)
 		}
+		if _q.withInternalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(platform.FieldInternalOwnerIdentityHolderID)
+		}
 		if _q.withBusinessOwnerUser != nil {
 			_spec.Node.AddColumnOnce(platform.FieldBusinessOwnerUserID)
 		}
 		if _q.withBusinessOwnerGroup != nil {
 			_spec.Node.AddColumnOnce(platform.FieldBusinessOwnerGroupID)
+		}
+		if _q.withBusinessOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(platform.FieldBusinessOwnerIdentityHolderID)
 		}
 		if _q.withTechnicalOwnerUser != nil {
 			_spec.Node.AddColumnOnce(platform.FieldTechnicalOwnerUserID)
@@ -4656,11 +4946,17 @@ func (_q *PlatformQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withTechnicalOwnerGroup != nil {
 			_spec.Node.AddColumnOnce(platform.FieldTechnicalOwnerGroupID)
 		}
+		if _q.withTechnicalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(platform.FieldTechnicalOwnerIdentityHolderID)
+		}
 		if _q.withSecurityOwnerUser != nil {
 			_spec.Node.AddColumnOnce(platform.FieldSecurityOwnerUserID)
 		}
 		if _q.withSecurityOwnerGroup != nil {
 			_spec.Node.AddColumnOnce(platform.FieldSecurityOwnerGroupID)
+		}
+		if _q.withSecurityOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(platform.FieldSecurityOwnerIdentityHolderID)
 		}
 		if _q.withPlatformKind != nil {
 			_spec.Node.AddColumnOnce(platform.FieldPlatformKindID)

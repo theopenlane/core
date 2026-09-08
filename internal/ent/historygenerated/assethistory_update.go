@@ -109,6 +109,9 @@ func (_u *AssetHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(assethistory.FieldInternalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(assethistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.AssetSubtypeNameCleared() {
 		_spec.ClearField(assethistory.FieldAssetSubtypeName, field.TypeString)
 	}
@@ -343,6 +346,9 @@ func (_u *AssetHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssetHisto
 	}
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(assethistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(assethistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.AssetSubtypeNameCleared() {
 		_spec.ClearField(assethistory.FieldAssetSubtypeName, field.TypeString)

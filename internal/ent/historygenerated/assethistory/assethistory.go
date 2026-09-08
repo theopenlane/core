@@ -50,6 +50,8 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldAssetSubtypeName holds the string denoting the asset_subtype_name field in the database.
 	FieldAssetSubtypeName = "asset_subtype_name"
 	// FieldAssetSubtypeID holds the string denoting the asset_subtype_id field in the database.
@@ -148,6 +150,7 @@ var Columns = []string{
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldAssetSubtypeName,
 	FieldAssetSubtypeID,
 	FieldAssetDataClassificationName,
@@ -333,6 +336,11 @@ func ByInternalOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByInternalOwnerGroupID orders the results by the internal_owner_group_id field.
 func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
+}
+
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
 }
 
 // ByAssetSubtypeName orders the results by the asset_subtype_name field.

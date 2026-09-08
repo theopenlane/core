@@ -5,6 +5,7 @@ mutation CreateBulkCSVPlatform ($input: Upload!) {
 			accessModelName
 			businessOwner
 			businessOwnerGroupID
+			businessOwnerIdentityHolderID
 			businessOwnerUserID
 			businessPurpose
 			containsPii
@@ -26,6 +27,7 @@ mutation CreateBulkCSVPlatform ($input: Upload!) {
 			id
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			metadata
 			name
@@ -43,6 +45,7 @@ mutation CreateBulkCSVPlatform ($input: Upload!) {
 			scopeStatement
 			securityOwner
 			securityOwnerGroupID
+			securityOwnerIdentityHolderID
 			securityOwnerUserID
 			securityTierID
 			securityTierName
@@ -52,6 +55,7 @@ mutation CreateBulkCSVPlatform ($input: Upload!) {
 			tags
 			technicalOwner
 			technicalOwnerGroupID
+			technicalOwnerIdentityHolderID
 			technicalOwnerUserID
 			trustBoundaryDescription
 			updatedAt
@@ -68,6 +72,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 			accessModelName
 			businessOwner
 			businessOwnerGroupID
+			businessOwnerIdentityHolderID
 			businessOwnerUserID
 			businessPurpose
 			containsPii
@@ -89,6 +94,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 			id
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			metadata
 			name
@@ -106,6 +112,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 			scopeStatement
 			securityOwner
 			securityOwnerGroupID
+			securityOwnerIdentityHolderID
 			securityOwnerUserID
 			securityTierID
 			securityTierName
@@ -115,6 +122,7 @@ mutation CreateBulkPlatform ($input: [CreatePlatformInput!]) {
 			tags
 			technicalOwner
 			technicalOwnerGroupID
+			technicalOwnerIdentityHolderID
 			technicalOwnerUserID
 			trustBoundaryDescription
 			updatedAt
@@ -298,6 +306,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				accessModelName
 				businessOwner
 				businessOwnerGroupID
+				businessOwnerIdentityHolderID
 				businessOwnerUserID
 				businessPurpose
 				containsPii
@@ -319,6 +328,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				id
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				metadata
 				name
@@ -336,6 +346,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				scopeStatement
 				securityOwner
 				securityOwnerGroupID
+				securityOwnerIdentityHolderID
 				securityOwnerUserID
 				securityTierID
 				securityTierName
@@ -345,6 +356,7 @@ query GetAllPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				tags
 				technicalOwner
 				technicalOwnerGroupID
+				technicalOwnerIdentityHolderID
 				technicalOwnerUserID
 				trustBoundaryDescription
 				updatedAt
@@ -401,6 +413,7 @@ query GetPlatformByID ($platformId: ID!) {
 		accessModelName
 		businessOwner
 		businessOwnerGroupID
+		businessOwnerIdentityHolderID
 		businessOwnerUserID
 		businessPurpose
 		containsPii
@@ -422,6 +435,7 @@ query GetPlatformByID ($platformId: ID!) {
 		id
 		internalOwner
 		internalOwnerGroupID
+		internalOwnerIdentityHolderID
 		internalOwnerUserID
 		metadata
 		name
@@ -439,6 +453,7 @@ query GetPlatformByID ($platformId: ID!) {
 		scopeStatement
 		securityOwner
 		securityOwnerGroupID
+		securityOwnerIdentityHolderID
 		securityOwnerUserID
 		securityTierID
 		securityTierName
@@ -448,6 +463,7 @@ query GetPlatformByID ($platformId: ID!) {
 		tags
 		technicalOwner
 		technicalOwnerGroupID
+		technicalOwnerIdentityHolderID
 		technicalOwnerUserID
 		trustBoundaryDescription
 		updatedAt
@@ -501,6 +517,7 @@ query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				accessModelName
 				businessOwner
 				businessOwnerGroupID
+				businessOwnerIdentityHolderID
 				businessOwnerUserID
 				businessPurpose
 				containsPii
@@ -522,6 +539,7 @@ query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				id
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				metadata
 				name
@@ -539,6 +557,7 @@ query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				scopeStatement
 				securityOwner
 				securityOwnerGroupID
+				securityOwnerIdentityHolderID
 				securityOwnerUserID
 				securityTierID
 				securityTierName
@@ -548,6 +567,7 @@ query GetPlatforms ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				tags
 				technicalOwner
 				technicalOwnerGroupID
+				technicalOwnerIdentityHolderID
 				technicalOwnerUserID
 				trustBoundaryDescription
 				updatedAt

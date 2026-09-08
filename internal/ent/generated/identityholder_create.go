@@ -207,6 +207,20 @@ func (_c *IdentityHolderCreate) SetNillableInternalOwnerGroupID(v *string) *Iden
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *IdentityHolderCreate) SetInternalOwnerIdentityHolderID(v string) *IdentityHolderCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *IdentityHolderCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *IdentityHolderCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_c *IdentityHolderCreate) SetEnvironmentName(v string) *IdentityHolderCreate {
 	_c.mutation.SetEnvironmentName(v)
@@ -611,6 +625,11 @@ func (_c *IdentityHolderCreate) SetInternalOwnerUser(v *User) *IdentityHolderCre
 // SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
 func (_c *IdentityHolderCreate) SetInternalOwnerGroup(v *Group) *IdentityHolderCreate {
 	return _c.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *IdentityHolderCreate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *IdentityHolderCreate {
+	return _c.SetInternalOwnerIdentityHolderID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -1306,6 +1325,23 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.InternalOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   identityholder.InternalOwnerIdentityHolderTable,
+			Columns: []string{identityholder.InternalOwnerIdentityHolderColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {

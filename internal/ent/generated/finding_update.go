@@ -225,6 +225,26 @@ func (_u *FindingUpdate) ClearReviewedByGroupID() *FindingUpdate {
 	return _u
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *FindingUpdate) SetReviewedByIdentityHolderID(v string) *FindingUpdate {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableReviewedByIdentityHolderID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *FindingUpdate) ClearReviewedByIdentityHolderID() *FindingUpdate {
+	_u.mutation.ClearReviewedByIdentityHolderID()
+	return _u
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (_u *FindingUpdate) SetAssignedTo(v string) *FindingUpdate {
 	_u.mutation.SetAssignedTo(v)
@@ -282,6 +302,26 @@ func (_u *FindingUpdate) SetNillableAssignedToGroupID(v *string) *FindingUpdate 
 // ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
 func (_u *FindingUpdate) ClearAssignedToGroupID() *FindingUpdate {
 	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (_u *FindingUpdate) SetAssignedToIdentityHolderID(v string) *FindingUpdate {
+	_u.mutation.SetAssignedToIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field if the given value is not nil.
+func (_u *FindingUpdate) SetNillableAssignedToIdentityHolderID(v *string) *FindingUpdate {
+	if v != nil {
+		_u.SetAssignedToIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToIdentityHolderID clears the value of the "assigned_to_identity_holder_id" field.
+func (_u *FindingUpdate) ClearAssignedToIdentityHolderID() *FindingUpdate {
+	_u.mutation.ClearAssignedToIdentityHolderID()
 	return _u
 }
 
@@ -1248,6 +1288,11 @@ func (_u *FindingUpdate) SetReviewedByGroup(v *Group) *FindingUpdate {
 	return _u.SetReviewedByGroupID(v.ID)
 }
 
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdate) SetReviewedByIdentityHolder(v *IdentityHolder) *FindingUpdate {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
+}
+
 // SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
 func (_u *FindingUpdate) SetAssignedToUser(v *User) *FindingUpdate {
 	return _u.SetAssignedToUserID(v.ID)
@@ -1256,6 +1301,11 @@ func (_u *FindingUpdate) SetAssignedToUser(v *User) *FindingUpdate {
 // SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
 func (_u *FindingUpdate) SetAssignedToGroup(v *Group) *FindingUpdate {
 	return _u.SetAssignedToGroupID(v.ID)
+}
+
+// SetAssignedToIdentityHolder sets the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdate) SetAssignedToIdentityHolder(v *IdentityHolder) *FindingUpdate {
+	return _u.SetAssignedToIdentityHolderID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -1632,6 +1682,12 @@ func (_u *FindingUpdate) ClearReviewedByGroup() *FindingUpdate {
 	return _u
 }
 
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdate) ClearReviewedByIdentityHolder() *FindingUpdate {
+	_u.mutation.ClearReviewedByIdentityHolder()
+	return _u
+}
+
 // ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
 func (_u *FindingUpdate) ClearAssignedToUser() *FindingUpdate {
 	_u.mutation.ClearAssignedToUser()
@@ -1641,6 +1697,12 @@ func (_u *FindingUpdate) ClearAssignedToUser() *FindingUpdate {
 // ClearAssignedToGroup clears the "assigned_to_group" edge to the Group entity.
 func (_u *FindingUpdate) ClearAssignedToGroup() *FindingUpdate {
 	_u.mutation.ClearAssignedToGroup()
+	return _u
+}
+
+// ClearAssignedToIdentityHolder clears the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdate) ClearAssignedToIdentityHolder() *FindingUpdate {
+	_u.mutation.ClearAssignedToIdentityHolder()
 	return _u
 }
 
@@ -2655,6 +2717,35 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByIdentityHolderTable,
+			Columns: []string{finding.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByIdentityHolderTable,
+			Columns: []string{finding.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssignedToUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2706,6 +2797,35 @@ func (_u *FindingUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToIdentityHolderTable,
+			Columns: []string{finding.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToIdentityHolderTable,
+			Columns: []string{finding.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3913,6 +4033,26 @@ func (_u *FindingUpdateOne) ClearReviewedByGroupID() *FindingUpdateOne {
 	return _u
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *FindingUpdateOne) SetReviewedByIdentityHolderID(v string) *FindingUpdateOne {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableReviewedByIdentityHolderID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *FindingUpdateOne) ClearReviewedByIdentityHolderID() *FindingUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolderID()
+	return _u
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (_u *FindingUpdateOne) SetAssignedTo(v string) *FindingUpdateOne {
 	_u.mutation.SetAssignedTo(v)
@@ -3970,6 +4110,26 @@ func (_u *FindingUpdateOne) SetNillableAssignedToGroupID(v *string) *FindingUpda
 // ClearAssignedToGroupID clears the value of the "assigned_to_group_id" field.
 func (_u *FindingUpdateOne) ClearAssignedToGroupID() *FindingUpdateOne {
 	_u.mutation.ClearAssignedToGroupID()
+	return _u
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (_u *FindingUpdateOne) SetAssignedToIdentityHolderID(v string) *FindingUpdateOne {
+	_u.mutation.SetAssignedToIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field if the given value is not nil.
+func (_u *FindingUpdateOne) SetNillableAssignedToIdentityHolderID(v *string) *FindingUpdateOne {
+	if v != nil {
+		_u.SetAssignedToIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearAssignedToIdentityHolderID clears the value of the "assigned_to_identity_holder_id" field.
+func (_u *FindingUpdateOne) ClearAssignedToIdentityHolderID() *FindingUpdateOne {
+	_u.mutation.ClearAssignedToIdentityHolderID()
 	return _u
 }
 
@@ -4936,6 +5096,11 @@ func (_u *FindingUpdateOne) SetReviewedByGroup(v *Group) *FindingUpdateOne {
 	return _u.SetReviewedByGroupID(v.ID)
 }
 
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdateOne) SetReviewedByIdentityHolder(v *IdentityHolder) *FindingUpdateOne {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
+}
+
 // SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
 func (_u *FindingUpdateOne) SetAssignedToUser(v *User) *FindingUpdateOne {
 	return _u.SetAssignedToUserID(v.ID)
@@ -4944,6 +5109,11 @@ func (_u *FindingUpdateOne) SetAssignedToUser(v *User) *FindingUpdateOne {
 // SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
 func (_u *FindingUpdateOne) SetAssignedToGroup(v *Group) *FindingUpdateOne {
 	return _u.SetAssignedToGroupID(v.ID)
+}
+
+// SetAssignedToIdentityHolder sets the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdateOne) SetAssignedToIdentityHolder(v *IdentityHolder) *FindingUpdateOne {
+	return _u.SetAssignedToIdentityHolderID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -5320,6 +5490,12 @@ func (_u *FindingUpdateOne) ClearReviewedByGroup() *FindingUpdateOne {
 	return _u
 }
 
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdateOne) ClearReviewedByIdentityHolder() *FindingUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolder()
+	return _u
+}
+
 // ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
 func (_u *FindingUpdateOne) ClearAssignedToUser() *FindingUpdateOne {
 	_u.mutation.ClearAssignedToUser()
@@ -5329,6 +5505,12 @@ func (_u *FindingUpdateOne) ClearAssignedToUser() *FindingUpdateOne {
 // ClearAssignedToGroup clears the "assigned_to_group" edge to the Group entity.
 func (_u *FindingUpdateOne) ClearAssignedToGroup() *FindingUpdateOne {
 	_u.mutation.ClearAssignedToGroup()
+	return _u
+}
+
+// ClearAssignedToIdentityHolder clears the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_u *FindingUpdateOne) ClearAssignedToIdentityHolder() *FindingUpdateOne {
+	_u.mutation.ClearAssignedToIdentityHolder()
 	return _u
 }
 
@@ -6373,6 +6555,35 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByIdentityHolderTable,
+			Columns: []string{finding.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByIdentityHolderTable,
+			Columns: []string{finding.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssignedToUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -6424,6 +6635,35 @@ func (_u *FindingUpdateOne) sqlSave(ctx context.Context) (_node *Finding, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssignedToIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToIdentityHolderTable,
+			Columns: []string{finding.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssignedToIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToIdentityHolderTable,
+			Columns: []string{finding.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

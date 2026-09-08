@@ -212,6 +212,20 @@ func (_c *FindingCreate) SetNillableReviewedByGroupID(v *string) *FindingCreate 
 	return _c
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *FindingCreate) SetReviewedByIdentityHolderID(v string) *FindingCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableReviewedByIdentityHolderID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (_c *FindingCreate) SetAssignedTo(v string) *FindingCreate {
 	_c.mutation.SetAssignedTo(v)
@@ -250,6 +264,20 @@ func (_c *FindingCreate) SetAssignedToGroupID(v string) *FindingCreate {
 func (_c *FindingCreate) SetNillableAssignedToGroupID(v *string) *FindingCreate {
 	if v != nil {
 		_c.SetAssignedToGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (_c *FindingCreate) SetAssignedToIdentityHolderID(v string) *FindingCreate {
+	_c.mutation.SetAssignedToIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableAssignedToIdentityHolderID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetAssignedToIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -915,6 +943,11 @@ func (_c *FindingCreate) SetReviewedByGroup(v *Group) *FindingCreate {
 	return _c.SetReviewedByGroupID(v.ID)
 }
 
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_c *FindingCreate) SetReviewedByIdentityHolder(v *IdentityHolder) *FindingCreate {
+	return _c.SetReviewedByIdentityHolderID(v.ID)
+}
+
 // SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
 func (_c *FindingCreate) SetAssignedToUser(v *User) *FindingCreate {
 	return _c.SetAssignedToUserID(v.ID)
@@ -923,6 +956,11 @@ func (_c *FindingCreate) SetAssignedToUser(v *User) *FindingCreate {
 // SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
 func (_c *FindingCreate) SetAssignedToGroup(v *Group) *FindingCreate {
 	return _c.SetAssignedToGroupID(v.ID)
+}
+
+// SetAssignedToIdentityHolder sets the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_c *FindingCreate) SetAssignedToIdentityHolder(v *IdentityHolder) *FindingCreate {
+	return _c.SetAssignedToIdentityHolderID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -1695,6 +1733,23 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_node.ReviewedByGroupID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByIdentityHolderTable,
+			Columns: []string{finding.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.AssignedToUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1727,6 +1782,23 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.AssignedToGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssignedToIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToIdentityHolderTable,
+			Columns: []string{finding.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssignedToIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {

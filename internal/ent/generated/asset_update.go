@@ -217,6 +217,26 @@ func (_u *AssetUpdate) ClearInternalOwnerGroupID() *AssetUpdate {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *AssetUpdate) SetInternalOwnerIdentityHolderID(v string) *AssetUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *AssetUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *AssetUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *AssetUpdate) ClearInternalOwnerIdentityHolderID() *AssetUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetAssetSubtypeName sets the "asset_subtype_name" field.
 func (_u *AssetUpdate) SetAssetSubtypeName(v string) *AssetUpdate {
 	_u.mutation.SetAssetSubtypeName(v)
@@ -979,6 +999,11 @@ func (_u *AssetUpdate) SetInternalOwnerGroup(v *Group) *AssetUpdate {
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *AssetUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *AssetUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetAssetSubtype sets the "asset_subtype" edge to the CustomTypeEnum entity.
 func (_u *AssetUpdate) SetAssetSubtype(v *CustomTypeEnum) *AssetUpdate {
 	return _u.SetAssetSubtypeID(v.ID)
@@ -1326,6 +1351,12 @@ func (_u *AssetUpdate) ClearInternalOwnerUser() *AssetUpdate {
 // ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
 func (_u *AssetUpdate) ClearInternalOwnerGroup() *AssetUpdate {
 	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *AssetUpdate) ClearInternalOwnerIdentityHolder() *AssetUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -2186,6 +2217,35 @@ func (_u *AssetUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3321,6 +3381,26 @@ func (_u *AssetUpdateOne) ClearInternalOwnerGroupID() *AssetUpdateOne {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *AssetUpdateOne) SetInternalOwnerIdentityHolderID(v string) *AssetUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *AssetUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *AssetUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *AssetUpdateOne) ClearInternalOwnerIdentityHolderID() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetAssetSubtypeName sets the "asset_subtype_name" field.
 func (_u *AssetUpdateOne) SetAssetSubtypeName(v string) *AssetUpdateOne {
 	_u.mutation.SetAssetSubtypeName(v)
@@ -4083,6 +4163,11 @@ func (_u *AssetUpdateOne) SetInternalOwnerGroup(v *Group) *AssetUpdateOne {
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *AssetUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *AssetUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetAssetSubtype sets the "asset_subtype" edge to the CustomTypeEnum entity.
 func (_u *AssetUpdateOne) SetAssetSubtype(v *CustomTypeEnum) *AssetUpdateOne {
 	return _u.SetAssetSubtypeID(v.ID)
@@ -4430,6 +4515,12 @@ func (_u *AssetUpdateOne) ClearInternalOwnerUser() *AssetUpdateOne {
 // ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
 func (_u *AssetUpdateOne) ClearInternalOwnerGroup() *AssetUpdateOne {
 	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *AssetUpdateOne) ClearInternalOwnerIdentityHolder() *AssetUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -5320,6 +5411,35 @@ func (_u *AssetUpdateOne) sqlSave(ctx context.Context) (_node *Asset, err error)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   asset.InternalOwnerIdentityHolderTable,
+			Columns: []string{asset.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

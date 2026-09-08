@@ -225,6 +225,20 @@ func (_c *CampaignHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *Cam
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *CampaignHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *CampaignHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *CampaignHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *CampaignHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *CampaignHistoryCreate) SetWorkflowEligibleMarker(v bool) *CampaignHistoryCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -886,6 +900,10 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
 		_spec.SetField(campaignhistory.FieldInternalOwnerGroupID, field.TypeString, value)
 		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(campaignhistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
 		_spec.SetField(campaignhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)

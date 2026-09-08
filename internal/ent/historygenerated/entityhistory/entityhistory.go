@@ -50,12 +50,16 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
 	FieldReviewedBy = "reviewed_by"
 	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
 	FieldReviewedByUserID = "reviewed_by_user_id"
 	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
 	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldReviewedByIdentityHolderID holds the string denoting the reviewed_by_identity_holder_id field in the database.
+	FieldReviewedByIdentityHolderID = "reviewed_by_identity_holder_id"
 	// FieldLastReviewedAt holds the string denoting the last_reviewed_at field in the database.
 	FieldLastReviewedAt = "last_reviewed_at"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
@@ -180,9 +184,11 @@ var Columns = []string{
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldReviewedBy,
 	FieldReviewedByUserID,
 	FieldReviewedByGroupID,
+	FieldReviewedByIdentityHolderID,
 	FieldLastReviewedAt,
 	FieldSystemOwned,
 	FieldInternalNotes,
@@ -413,6 +419,11 @@ func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // ByReviewedBy orders the results by the reviewed_by field.
 func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
@@ -426,6 +437,11 @@ func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
 func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByReviewedByIdentityHolderID orders the results by the reviewed_by_identity_holder_id field.
+func ByReviewedByIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByIdentityHolderID, opts...).ToFunc()
 }
 
 // ByLastReviewedAt orders the results by the last_reviewed_at field.

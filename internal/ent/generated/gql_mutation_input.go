@@ -1277,66 +1277,67 @@ func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *As
 
 // CreateAssetInput represents a mutation input for creating assets.
 type CreateAssetInput struct {
-	Tags                        []string          `json:"tags,omitempty"`
-	InternalOwner               *string           `json:"internal_owner,omitempty"`
-	AssetSubtypeName            *string           `json:"asset_subtype_name,omitempty"`
-	AssetDataClassificationName *string           `json:"asset_data_classification_name,omitempty"`
-	EnvironmentName             *string           `json:"environment_name,omitempty"`
-	ScopeName                   *string           `json:"scope_name,omitempty"`
-	AccessModelName             *string           `json:"access_model_name,omitempty"`
-	EncryptionStatusName        *string           `json:"encryption_status_name,omitempty"`
-	SecurityTierName            *string           `json:"security_tier_name,omitempty"`
-	CriticalityName             *string           `json:"criticality_name,omitempty"`
-	InternalNotes               *string           `json:"internal_notes,omitempty"`
-	SystemInternalID            *string           `json:"system_internal_id,omitempty"`
-	AssetType                   *enums.AssetType  `json:"asset_type,omitempty"`
-	Name                        string            `json:"name,omitempty"`
-	DisplayName                 *string           `json:"display_name,omitempty"`
-	Description                 *string           `json:"description,omitempty"`
-	Identifier                  *string           `json:"identifier,omitempty"`
-	Website                     *string           `json:"website,omitempty"`
-	PhysicalLocation            *string           `json:"physical_location,omitempty"`
-	Region                      *string           `json:"region,omitempty"`
-	ContainsPii                 *bool             `json:"contains_pii,omitempty"`
-	SourceType                  *enums.SourceType `json:"source_type,omitempty"`
-	SourceIdentifier            *string           `json:"source_identifier,omitempty"`
-	CostCenter                  *string           `json:"cost_center,omitempty"`
-	EstimatedMonthlyCost        *float64          `json:"estimated_monthly_cost,omitempty"`
-	PurchaseDate                *models.DateTime  `json:"purchase_date,omitempty"`
-	Cpe                         *string           `json:"cpe,omitempty"`
-	Categories                  []string          `json:"categories,omitempty"`
-	ObservedAt                  *models.DateTime  `json:"observed_at,omitempty"`
-	OwnerID                     *string           `json:"owner_id,omitempty"`
-	BlockedGroupIDs             []string          `json:"blocked_group_ids,omitempty"`
-	EditorIDs                   []string          `json:"editor_ids,omitempty"`
-	ViewerIDs                   []string          `json:"viewer_ids,omitempty"`
-	InternalOwnerUserID         *string           `json:"internal_owner_user_id,omitempty"`
-	InternalOwnerGroupID        *string           `json:"internal_owner_group_id,omitempty"`
-	AssetSubtypeID              *string           `json:"asset_subtype_id,omitempty"`
-	AssetDataClassificationID   *string           `json:"asset_data_classification_id,omitempty"`
-	EnvironmentID               *string           `json:"environment_id,omitempty"`
-	ScopeID                     *string           `json:"scope_id,omitempty"`
-	AccessModelID               *string           `json:"access_model_id,omitempty"`
-	EncryptionStatusID          *string           `json:"encryption_status_id,omitempty"`
-	SecurityTierID              *string           `json:"security_tier_id,omitempty"`
-	CriticalityID               *string           `json:"criticality_id,omitempty"`
-	ScanIDs                     []string          `json:"scan_ids,omitempty"`
-	EntityIDs                   []string          `json:"entity_ids,omitempty"`
-	PlatformIDs                 []string          `json:"platform_ids,omitempty"`
-	SystemDetailIDs             []string          `json:"system_detail_ids,omitempty"`
-	OutOfScopePlatformIDs       []string          `json:"out_of_scope_platform_ids,omitempty"`
-	IdentityHolderIDs           []string          `json:"identity_holder_ids,omitempty"`
-	ControlIDs                  []string          `json:"control_ids,omitempty"`
-	SubcontrolIDs               []string          `json:"subcontrol_ids,omitempty"`
-	InternalPolicyIDs           []string          `json:"internal_policy_ids,omitempty"`
-	FindingIDs                  []string          `json:"finding_ids,omitempty"`
-	VulnerabilityIDs            []string          `json:"vulnerability_ids,omitempty"`
-	ReviewIDs                   []string          `json:"review_ids,omitempty"`
-	RemediationIDs              []string          `json:"remediation_ids,omitempty"`
-	SourcePlatformID            *string           `json:"source_platform_id,omitempty"`
-	IntegrationID               *string           `json:"integration_id,omitempty"`
-	ConnectedAssetIDs           []string          `json:"connected_asset_ids,omitempty"`
-	ConnectedFromIDs            []string          `json:"connected_from_ids,omitempty"`
+	Tags                          []string          `json:"tags,omitempty"`
+	InternalOwner                 *string           `json:"internal_owner,omitempty"`
+	AssetSubtypeName              *string           `json:"asset_subtype_name,omitempty"`
+	AssetDataClassificationName   *string           `json:"asset_data_classification_name,omitempty"`
+	EnvironmentName               *string           `json:"environment_name,omitempty"`
+	ScopeName                     *string           `json:"scope_name,omitempty"`
+	AccessModelName               *string           `json:"access_model_name,omitempty"`
+	EncryptionStatusName          *string           `json:"encryption_status_name,omitempty"`
+	SecurityTierName              *string           `json:"security_tier_name,omitempty"`
+	CriticalityName               *string           `json:"criticality_name,omitempty"`
+	InternalNotes                 *string           `json:"internal_notes,omitempty"`
+	SystemInternalID              *string           `json:"system_internal_id,omitempty"`
+	AssetType                     *enums.AssetType  `json:"asset_type,omitempty"`
+	Name                          string            `json:"name,omitempty"`
+	DisplayName                   *string           `json:"display_name,omitempty"`
+	Description                   *string           `json:"description,omitempty"`
+	Identifier                    *string           `json:"identifier,omitempty"`
+	Website                       *string           `json:"website,omitempty"`
+	PhysicalLocation              *string           `json:"physical_location,omitempty"`
+	Region                        *string           `json:"region,omitempty"`
+	ContainsPii                   *bool             `json:"contains_pii,omitempty"`
+	SourceType                    *enums.SourceType `json:"source_type,omitempty"`
+	SourceIdentifier              *string           `json:"source_identifier,omitempty"`
+	CostCenter                    *string           `json:"cost_center,omitempty"`
+	EstimatedMonthlyCost          *float64          `json:"estimated_monthly_cost,omitempty"`
+	PurchaseDate                  *models.DateTime  `json:"purchase_date,omitempty"`
+	Cpe                           *string           `json:"cpe,omitempty"`
+	Categories                    []string          `json:"categories,omitempty"`
+	ObservedAt                    *models.DateTime  `json:"observed_at,omitempty"`
+	OwnerID                       *string           `json:"owner_id,omitempty"`
+	BlockedGroupIDs               []string          `json:"blocked_group_ids,omitempty"`
+	EditorIDs                     []string          `json:"editor_ids,omitempty"`
+	ViewerIDs                     []string          `json:"viewer_ids,omitempty"`
+	InternalOwnerUserID           *string           `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID          *string           `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID *string           `json:"internal_owner_identity_holder_id,omitempty"`
+	AssetSubtypeID                *string           `json:"asset_subtype_id,omitempty"`
+	AssetDataClassificationID     *string           `json:"asset_data_classification_id,omitempty"`
+	EnvironmentID                 *string           `json:"environment_id,omitempty"`
+	ScopeID                       *string           `json:"scope_id,omitempty"`
+	AccessModelID                 *string           `json:"access_model_id,omitempty"`
+	EncryptionStatusID            *string           `json:"encryption_status_id,omitempty"`
+	SecurityTierID                *string           `json:"security_tier_id,omitempty"`
+	CriticalityID                 *string           `json:"criticality_id,omitempty"`
+	ScanIDs                       []string          `json:"scan_ids,omitempty"`
+	EntityIDs                     []string          `json:"entity_ids,omitempty"`
+	PlatformIDs                   []string          `json:"platform_ids,omitempty"`
+	SystemDetailIDs               []string          `json:"system_detail_ids,omitempty"`
+	OutOfScopePlatformIDs         []string          `json:"out_of_scope_platform_ids,omitempty"`
+	IdentityHolderIDs             []string          `json:"identity_holder_ids,omitempty"`
+	ControlIDs                    []string          `json:"control_ids,omitempty"`
+	SubcontrolIDs                 []string          `json:"subcontrol_ids,omitempty"`
+	InternalPolicyIDs             []string          `json:"internal_policy_ids,omitempty"`
+	FindingIDs                    []string          `json:"finding_ids,omitempty"`
+	VulnerabilityIDs              []string          `json:"vulnerability_ids,omitempty"`
+	ReviewIDs                     []string          `json:"review_ids,omitempty"`
+	RemediationIDs                []string          `json:"remediation_ids,omitempty"`
+	SourcePlatformID              *string           `json:"source_platform_id,omitempty"`
+	IntegrationID                 *string           `json:"integration_id,omitempty"`
+	ConnectedAssetIDs             []string          `json:"connected_asset_ids,omitempty"`
+	ConnectedFromIDs              []string          `json:"connected_from_ids,omitempty"`
 }
 
 // Mutate applies the CreateAssetInput on the AssetMutation builder.
@@ -1443,6 +1444,9 @@ func (i *CreateAssetInput) Mutate(m *AssetMutation) {
 	}
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
+	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
 	}
 	if v := i.AssetSubtypeID; v != nil {
 		m.SetAssetSubtypeID(*v)
@@ -1599,6 +1603,8 @@ type UpdateAssetInput struct {
 	InternalOwnerUserID              *string `json:"internal_owner_user_id,omitempty"`
 	ClearInternalOwnerGroup          bool
 	InternalOwnerGroupID             *string `json:"internal_owner_group_id,omitempty"`
+	ClearInternalOwnerIdentityHolder bool
+	InternalOwnerIdentityHolderID    *string `json:"internal_owner_identity_holder_id,omitempty"`
 	ClearAssetSubtype                bool
 	AssetSubtypeID                   *string `json:"asset_subtype_id,omitempty"`
 	ClearAssetDataClassification     bool
@@ -1876,6 +1882,12 @@ func (i *UpdateAssetInput) Mutate(m *AssetMutation) {
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
 	}
+	if i.ClearInternalOwnerIdentityHolder {
+		m.ClearInternalOwnerIdentityHolder()
+	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
+	}
 	if i.ClearAssetSubtype {
 		m.ClearAssetSubtype()
 	}
@@ -2081,51 +2093,52 @@ func (c *AssetUpdateOne) SetInput(i UpdateAssetInput) *AssetUpdateOne {
 
 // CreateCampaignInput represents a mutation input for creating campaigns.
 type CreateCampaignInput struct {
-	Tags                   []string               `json:"tags,omitempty"`
-	InternalOwner          *string                `json:"internal_owner,omitempty"`
-	WorkflowEligibleMarker *bool                  `json:"workflow_eligible_marker,omitempty"`
-	Name                   string                 `json:"name,omitempty"`
-	Description            *string                `json:"description,omitempty"`
-	CampaignType           *enums.CampaignType    `json:"campaign_type,omitempty"`
-	Status                 *enums.CampaignStatus  `json:"status,omitempty"`
-	IsActive               *bool                  `json:"is_active,omitempty"`
-	ScheduledAt            *models.DateTime       `json:"scheduled_at,omitempty"`
-	LaunchedAt             *models.DateTime       `json:"launched_at,omitempty"`
-	CompletedAt            *models.DateTime       `json:"completed_at,omitempty"`
-	DueDate                *models.DateTime       `json:"due_date,omitempty"`
-	IsRecurring            *bool                  `json:"is_recurring,omitempty"`
-	RecurrenceFrequency    *enums.Frequency       `json:"recurrence_frequency,omitempty"`
-	RecurrenceInterval     *int                   `json:"recurrence_interval,omitempty"`
-	RecurrenceTimezone     *string                `json:"recurrence_timezone,omitempty"`
-	RecurrenceCron         *models.Cron           `json:"recurrence_cron,omitempty"`
-	LastRunAt              *models.DateTime       `json:"last_run_at,omitempty"`
-	NextRunAt              *models.DateTime       `json:"next_run_at,omitempty"`
-	RecurrenceEndAt        *models.DateTime       `json:"recurrence_end_at,omitempty"`
-	RecipientCount         *int                   `json:"recipient_count,omitempty"`
-	ResendCount            *int                   `json:"resend_count,omitempty"`
-	LastResentAt           *models.DateTime       `json:"last_resent_at,omitempty"`
-	Metadata               map[string]interface{} `json:"metadata,omitempty"`
-	EmailBrandingID        *string                `json:"email_branding_id,omitempty"`
-	OwnerID                *string                `json:"owner_id,omitempty"`
-	BlockedGroupIDs        []string               `json:"blocked_group_ids,omitempty"`
-	EditorIDs              []string               `json:"editor_ids,omitempty"`
-	ViewerIDs              []string               `json:"viewer_ids,omitempty"`
-	InternalOwnerUserID    *string                `json:"internal_owner_user_id,omitempty"`
-	InternalOwnerGroupID   *string                `json:"internal_owner_group_id,omitempty"`
-	AssessmentID           *string                `json:"assessment_id,omitempty"`
-	TemplateID             *string                `json:"template_id,omitempty"`
-	IntegrationID          *string                `json:"integration_id,omitempty"`
-	EmailTemplateID        *string                `json:"email_template_id,omitempty"`
-	EntityID               *string                `json:"entity_id,omitempty"`
-	TrustCenterID          *string                `json:"trust_center_id,omitempty"`
-	CampaignTargetIDs      []string               `json:"campaign_target_ids,omitempty"`
-	AssessmentResponseIDs  []string               `json:"assessment_response_ids,omitempty"`
-	ContactIDs             []string               `json:"contact_ids,omitempty"`
-	UserIDs                []string               `json:"user_ids,omitempty"`
-	GroupIDs               []string               `json:"group_ids,omitempty"`
-	IdentityHolderIDs      []string               `json:"identity_holder_ids,omitempty"`
-	ControlIDs             []string               `json:"control_ids,omitempty"`
-	WorkflowObjectRefIDs   []string               `json:"workflow_object_ref_ids,omitempty"`
+	Tags                          []string               `json:"tags,omitempty"`
+	InternalOwner                 *string                `json:"internal_owner,omitempty"`
+	WorkflowEligibleMarker        *bool                  `json:"workflow_eligible_marker,omitempty"`
+	Name                          string                 `json:"name,omitempty"`
+	Description                   *string                `json:"description,omitempty"`
+	CampaignType                  *enums.CampaignType    `json:"campaign_type,omitempty"`
+	Status                        *enums.CampaignStatus  `json:"status,omitempty"`
+	IsActive                      *bool                  `json:"is_active,omitempty"`
+	ScheduledAt                   *models.DateTime       `json:"scheduled_at,omitempty"`
+	LaunchedAt                    *models.DateTime       `json:"launched_at,omitempty"`
+	CompletedAt                   *models.DateTime       `json:"completed_at,omitempty"`
+	DueDate                       *models.DateTime       `json:"due_date,omitempty"`
+	IsRecurring                   *bool                  `json:"is_recurring,omitempty"`
+	RecurrenceFrequency           *enums.Frequency       `json:"recurrence_frequency,omitempty"`
+	RecurrenceInterval            *int                   `json:"recurrence_interval,omitempty"`
+	RecurrenceTimezone            *string                `json:"recurrence_timezone,omitempty"`
+	RecurrenceCron                *models.Cron           `json:"recurrence_cron,omitempty"`
+	LastRunAt                     *models.DateTime       `json:"last_run_at,omitempty"`
+	NextRunAt                     *models.DateTime       `json:"next_run_at,omitempty"`
+	RecurrenceEndAt               *models.DateTime       `json:"recurrence_end_at,omitempty"`
+	RecipientCount                *int                   `json:"recipient_count,omitempty"`
+	ResendCount                   *int                   `json:"resend_count,omitempty"`
+	LastResentAt                  *models.DateTime       `json:"last_resent_at,omitempty"`
+	Metadata                      map[string]interface{} `json:"metadata,omitempty"`
+	EmailBrandingID               *string                `json:"email_branding_id,omitempty"`
+	OwnerID                       *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs               []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs                     []string               `json:"editor_ids,omitempty"`
+	ViewerIDs                     []string               `json:"viewer_ids,omitempty"`
+	InternalOwnerUserID           *string                `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID          *string                `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID *string                `json:"internal_owner_identity_holder_id,omitempty"`
+	AssessmentID                  *string                `json:"assessment_id,omitempty"`
+	TemplateID                    *string                `json:"template_id,omitempty"`
+	IntegrationID                 *string                `json:"integration_id,omitempty"`
+	EmailTemplateID               *string                `json:"email_template_id,omitempty"`
+	EntityID                      *string                `json:"entity_id,omitempty"`
+	TrustCenterID                 *string                `json:"trust_center_id,omitempty"`
+	CampaignTargetIDs             []string               `json:"campaign_target_ids,omitempty"`
+	AssessmentResponseIDs         []string               `json:"assessment_response_ids,omitempty"`
+	ContactIDs                    []string               `json:"contact_ids,omitempty"`
+	UserIDs                       []string               `json:"user_ids,omitempty"`
+	GroupIDs                      []string               `json:"group_ids,omitempty"`
+	IdentityHolderIDs             []string               `json:"identity_holder_ids,omitempty"`
+	ControlIDs                    []string               `json:"control_ids,omitempty"`
+	WorkflowObjectRefIDs          []string               `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateCampaignInput on the CampaignMutation builder.
@@ -2221,6 +2234,9 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
 	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
+	}
 	if v := i.AssessmentID; v != nil {
 		m.SetAssessmentID(*v)
 	}
@@ -2273,101 +2289,103 @@ func (c *CampaignCreate) SetInput(i CreateCampaignInput) *CampaignCreate {
 
 // UpdateCampaignInput represents a mutation input for updating campaigns.
 type UpdateCampaignInput struct {
-	ClearTags                   bool
-	Tags                        []string `json:"tags,omitempty"`
-	AppendTags                  []string
-	ClearInternalOwner          bool
-	InternalOwner               *string `json:"internal_owner,omitempty"`
-	ClearWorkflowEligibleMarker bool
-	WorkflowEligibleMarker      *bool   `json:"workflow_eligible_marker,omitempty"`
-	Name                        *string `json:"name,omitempty"`
-	ClearDescription            bool
-	Description                 *string               `json:"description,omitempty"`
-	CampaignType                *enums.CampaignType   `json:"campaign_type,omitempty"`
-	Status                      *enums.CampaignStatus `json:"status,omitempty"`
-	IsActive                    *bool                 `json:"is_active,omitempty"`
-	ClearScheduledAt            bool
-	ScheduledAt                 *models.DateTime `json:"scheduled_at,omitempty"`
-	ClearLaunchedAt             bool
-	LaunchedAt                  *models.DateTime `json:"launched_at,omitempty"`
-	ClearCompletedAt            bool
-	CompletedAt                 *models.DateTime `json:"completed_at,omitempty"`
-	ClearDueDate                bool
-	DueDate                     *models.DateTime `json:"due_date,omitempty"`
-	IsRecurring                 *bool            `json:"is_recurring,omitempty"`
-	ClearRecurrenceFrequency    bool
-	RecurrenceFrequency         *enums.Frequency `json:"recurrence_frequency,omitempty"`
-	ClearRecurrenceInterval     bool
-	RecurrenceInterval          *int `json:"recurrence_interval,omitempty"`
-	ClearRecurrenceTimezone     bool
-	RecurrenceTimezone          *string `json:"recurrence_timezone,omitempty"`
-	ClearRecurrenceCron         bool
-	RecurrenceCron              *models.Cron `json:"recurrence_cron,omitempty"`
-	ClearLastRunAt              bool
-	LastRunAt                   *models.DateTime `json:"last_run_at,omitempty"`
-	ClearNextRunAt              bool
-	NextRunAt                   *models.DateTime `json:"next_run_at,omitempty"`
-	ClearRecurrenceEndAt        bool
-	RecurrenceEndAt             *models.DateTime `json:"recurrence_end_at,omitempty"`
-	ClearRecipientCount         bool
-	RecipientCount              *int `json:"recipient_count,omitempty"`
-	ClearResendCount            bool
-	ResendCount                 *int `json:"resend_count,omitempty"`
-	ClearLastResentAt           bool
-	LastResentAt                *models.DateTime `json:"last_resent_at,omitempty"`
-	ClearMetadata               bool
-	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
-	ClearEmailBrandingID        bool
-	EmailBrandingID             *string `json:"email_branding_id,omitempty"`
-	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
-	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
-	ClearEditors                bool
-	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
-	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
-	ClearViewers                bool
-	AddViewerIDs                []string `json:"add_viewer_ids,omitempty"`
-	RemoveViewerIDs             []string `json:"remove_viewer_ids,omitempty"`
-	ClearInternalOwnerUser      bool
-	InternalOwnerUserID         *string `json:"internal_owner_user_id,omitempty"`
-	ClearInternalOwnerGroup     bool
-	InternalOwnerGroupID        *string `json:"internal_owner_group_id,omitempty"`
-	ClearAssessment             bool
-	AssessmentID                *string `json:"assessment_id,omitempty"`
-	ClearTemplate               bool
-	TemplateID                  *string `json:"template_id,omitempty"`
-	ClearIntegration            bool
-	IntegrationID               *string `json:"integration_id,omitempty"`
-	ClearEmailTemplate          bool
-	EmailTemplateID             *string `json:"email_template_id,omitempty"`
-	ClearEntity                 bool
-	EntityID                    *string `json:"entity_id,omitempty"`
-	ClearTrustCenter            bool
-	TrustCenterID               *string `json:"trust_center_id,omitempty"`
-	ClearCampaignTargets        bool
-	AddCampaignTargetIDs        []string `json:"add_campaign_target_ids,omitempty"`
-	RemoveCampaignTargetIDs     []string `json:"remove_campaign_target_ids,omitempty"`
-	ClearAssessmentResponses    bool
-	AddAssessmentResponseIDs    []string `json:"add_assessment_response_ids,omitempty"`
-	RemoveAssessmentResponseIDs []string `json:"remove_assessment_response_ids,omitempty"`
-	ClearContacts               bool
-	AddContactIDs               []string `json:"add_contact_ids,omitempty"`
-	RemoveContactIDs            []string `json:"remove_contact_ids,omitempty"`
-	ClearUsers                  bool
-	AddUserIDs                  []string `json:"add_user_ids,omitempty"`
-	RemoveUserIDs               []string `json:"remove_user_ids,omitempty"`
-	ClearGroups                 bool
-	AddGroupIDs                 []string `json:"add_group_ids,omitempty"`
-	RemoveGroupIDs              []string `json:"remove_group_ids,omitempty"`
-	ClearIdentityHolders        bool
-	AddIdentityHolderIDs        []string `json:"add_identity_holder_ids,omitempty"`
-	RemoveIdentityHolderIDs     []string `json:"remove_identity_holder_ids,omitempty"`
-	ClearControls               bool
-	AddControlIDs               []string `json:"add_control_ids,omitempty"`
-	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
-	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
-	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
+	ClearTags                        bool
+	Tags                             []string `json:"tags,omitempty"`
+	AppendTags                       []string
+	ClearInternalOwner               bool
+	InternalOwner                    *string `json:"internal_owner,omitempty"`
+	ClearWorkflowEligibleMarker      bool
+	WorkflowEligibleMarker           *bool   `json:"workflow_eligible_marker,omitempty"`
+	Name                             *string `json:"name,omitempty"`
+	ClearDescription                 bool
+	Description                      *string               `json:"description,omitempty"`
+	CampaignType                     *enums.CampaignType   `json:"campaign_type,omitempty"`
+	Status                           *enums.CampaignStatus `json:"status,omitempty"`
+	IsActive                         *bool                 `json:"is_active,omitempty"`
+	ClearScheduledAt                 bool
+	ScheduledAt                      *models.DateTime `json:"scheduled_at,omitempty"`
+	ClearLaunchedAt                  bool
+	LaunchedAt                       *models.DateTime `json:"launched_at,omitempty"`
+	ClearCompletedAt                 bool
+	CompletedAt                      *models.DateTime `json:"completed_at,omitempty"`
+	ClearDueDate                     bool
+	DueDate                          *models.DateTime `json:"due_date,omitempty"`
+	IsRecurring                      *bool            `json:"is_recurring,omitempty"`
+	ClearRecurrenceFrequency         bool
+	RecurrenceFrequency              *enums.Frequency `json:"recurrence_frequency,omitempty"`
+	ClearRecurrenceInterval          bool
+	RecurrenceInterval               *int `json:"recurrence_interval,omitempty"`
+	ClearRecurrenceTimezone          bool
+	RecurrenceTimezone               *string `json:"recurrence_timezone,omitempty"`
+	ClearRecurrenceCron              bool
+	RecurrenceCron                   *models.Cron `json:"recurrence_cron,omitempty"`
+	ClearLastRunAt                   bool
+	LastRunAt                        *models.DateTime `json:"last_run_at,omitempty"`
+	ClearNextRunAt                   bool
+	NextRunAt                        *models.DateTime `json:"next_run_at,omitempty"`
+	ClearRecurrenceEndAt             bool
+	RecurrenceEndAt                  *models.DateTime `json:"recurrence_end_at,omitempty"`
+	ClearRecipientCount              bool
+	RecipientCount                   *int `json:"recipient_count,omitempty"`
+	ClearResendCount                 bool
+	ResendCount                      *int `json:"resend_count,omitempty"`
+	ClearLastResentAt                bool
+	LastResentAt                     *models.DateTime `json:"last_resent_at,omitempty"`
+	ClearMetadata                    bool
+	Metadata                         map[string]interface{} `json:"metadata,omitempty"`
+	ClearEmailBrandingID             bool
+	EmailBrandingID                  *string `json:"email_branding_id,omitempty"`
+	ClearBlockedGroups               bool
+	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
+	ClearEditors                     bool
+	AddEditorIDs                     []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                  []string `json:"remove_editor_ids,omitempty"`
+	ClearViewers                     bool
+	AddViewerIDs                     []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs                  []string `json:"remove_viewer_ids,omitempty"`
+	ClearInternalOwnerUser           bool
+	InternalOwnerUserID              *string `json:"internal_owner_user_id,omitempty"`
+	ClearInternalOwnerGroup          bool
+	InternalOwnerGroupID             *string `json:"internal_owner_group_id,omitempty"`
+	ClearInternalOwnerIdentityHolder bool
+	InternalOwnerIdentityHolderID    *string `json:"internal_owner_identity_holder_id,omitempty"`
+	ClearAssessment                  bool
+	AssessmentID                     *string `json:"assessment_id,omitempty"`
+	ClearTemplate                    bool
+	TemplateID                       *string `json:"template_id,omitempty"`
+	ClearIntegration                 bool
+	IntegrationID                    *string `json:"integration_id,omitempty"`
+	ClearEmailTemplate               bool
+	EmailTemplateID                  *string `json:"email_template_id,omitempty"`
+	ClearEntity                      bool
+	EntityID                         *string `json:"entity_id,omitempty"`
+	ClearTrustCenter                 bool
+	TrustCenterID                    *string `json:"trust_center_id,omitempty"`
+	ClearCampaignTargets             bool
+	AddCampaignTargetIDs             []string `json:"add_campaign_target_ids,omitempty"`
+	RemoveCampaignTargetIDs          []string `json:"remove_campaign_target_ids,omitempty"`
+	ClearAssessmentResponses         bool
+	AddAssessmentResponseIDs         []string `json:"add_assessment_response_ids,omitempty"`
+	RemoveAssessmentResponseIDs      []string `json:"remove_assessment_response_ids,omitempty"`
+	ClearContacts                    bool
+	AddContactIDs                    []string `json:"add_contact_ids,omitempty"`
+	RemoveContactIDs                 []string `json:"remove_contact_ids,omitempty"`
+	ClearUsers                       bool
+	AddUserIDs                       []string `json:"add_user_ids,omitempty"`
+	RemoveUserIDs                    []string `json:"remove_user_ids,omitempty"`
+	ClearGroups                      bool
+	AddGroupIDs                      []string `json:"add_group_ids,omitempty"`
+	RemoveGroupIDs                   []string `json:"remove_group_ids,omitempty"`
+	ClearIdentityHolders             bool
+	AddIdentityHolderIDs             []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs          []string `json:"remove_identity_holder_ids,omitempty"`
+	ClearControls                    bool
+	AddControlIDs                    []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                 []string `json:"remove_control_ids,omitempty"`
+	ClearWorkflowObjectRefs          bool
+	AddWorkflowObjectRefIDs          []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs       []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateCampaignInput on the CampaignMutation builder.
@@ -2548,6 +2566,12 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
+	}
+	if i.ClearInternalOwnerIdentityHolder {
+		m.ClearInternalOwnerIdentityHolder()
+	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
 	}
 	if i.ClearAssessment {
 		m.ClearAssessment()
@@ -7535,8 +7559,10 @@ type CreateEntityInput struct {
 	EditorIDs                             []string               `json:"editor_ids,omitempty"`
 	InternalOwnerUserID                   *string                `json:"internal_owner_user_id,omitempty"`
 	InternalOwnerGroupID                  *string                `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID         *string                `json:"internal_owner_identity_holder_id,omitempty"`
 	ReviewedByUserID                      *string                `json:"reviewed_by_user_id,omitempty"`
 	ReviewedByGroupID                     *string                `json:"reviewed_by_group_id,omitempty"`
+	ReviewedByIdentityHolderID            *string                `json:"reviewed_by_identity_holder_id,omitempty"`
 	EntityRelationshipStateID             *string                `json:"entity_relationship_state_id,omitempty"`
 	EntitySecurityQuestionnaireStatusID   *string                `json:"entity_security_questionnaire_status_id,omitempty"`
 	EntitySourceTypeID                    *string                `json:"entity_source_type_id,omitempty"`
@@ -7723,11 +7749,17 @@ func (i *CreateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
 	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
+	}
 	if v := i.ReviewedByUserID; v != nil {
 		m.SetReviewedByUserID(*v)
 	}
 	if v := i.ReviewedByGroupID; v != nil {
 		m.SetReviewedByGroupID(*v)
+	}
+	if v := i.ReviewedByIdentityHolderID; v != nil {
+		m.SetReviewedByIdentityHolderID(*v)
 	}
 	if v := i.EntityRelationshipStateID; v != nil {
 		m.SetEntityRelationshipStateID(*v)
@@ -7941,10 +7973,14 @@ type UpdateEntityInput struct {
 	InternalOwnerUserID                        *string `json:"internal_owner_user_id,omitempty"`
 	ClearInternalOwnerGroup                    bool
 	InternalOwnerGroupID                       *string `json:"internal_owner_group_id,omitempty"`
+	ClearInternalOwnerIdentityHolder           bool
+	InternalOwnerIdentityHolderID              *string `json:"internal_owner_identity_holder_id,omitempty"`
 	ClearReviewedByUser                        bool
 	ReviewedByUserID                           *string `json:"reviewed_by_user_id,omitempty"`
 	ClearReviewedByGroup                       bool
 	ReviewedByGroupID                          *string `json:"reviewed_by_group_id,omitempty"`
+	ClearReviewedByIdentityHolder              bool
+	ReviewedByIdentityHolderID                 *string `json:"reviewed_by_identity_holder_id,omitempty"`
 	ClearEntityRelationshipState               bool
 	EntityRelationshipStateID                  *string `json:"entity_relationship_state_id,omitempty"`
 	ClearEntitySecurityQuestionnaireStatus     bool
@@ -8356,6 +8392,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
 	}
+	if i.ClearInternalOwnerIdentityHolder {
+		m.ClearInternalOwnerIdentityHolder()
+	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
+	}
 	if i.ClearReviewedByUser {
 		m.ClearReviewedByUser()
 	}
@@ -8367,6 +8409,12 @@ func (i *UpdateEntityInput) Mutate(m *EntityMutation) {
 	}
 	if v := i.ReviewedByGroupID; v != nil {
 		m.SetReviewedByGroupID(*v)
+	}
+	if i.ClearReviewedByIdentityHolder {
+		m.ClearReviewedByIdentityHolder()
+	}
+	if v := i.ReviewedByIdentityHolderID; v != nil {
+		m.SetReviewedByIdentityHolderID(*v)
 	}
 	if i.ClearEntityRelationshipState {
 		m.ClearEntityRelationshipState()
@@ -10219,79 +10267,81 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 
 // CreateFindingInput represents a mutation input for creating findings.
 type CreateFindingInput struct {
-	Tags                   []string               `json:"tags,omitempty"`
-	ReviewedBy             *string                `json:"reviewed_by,omitempty"`
-	AssignedTo             *string                `json:"assigned_to,omitempty"`
-	InternalNotes          *string                `json:"internal_notes,omitempty"`
-	SystemInternalID       *string                `json:"system_internal_id,omitempty"`
-	EnvironmentName        *string                `json:"environment_name,omitempty"`
-	ScopeName              *string                `json:"scope_name,omitempty"`
-	FindingStatusName      *string                `json:"finding_status_name,omitempty"`
-	WorkflowEligibleMarker *bool                  `json:"workflow_eligible_marker,omitempty"`
-	ExternalID             *string                `json:"external_id,omitempty"`
-	ExternalOwnerID        *string                `json:"external_owner_id,omitempty"`
-	Source                 *string                `json:"source,omitempty"`
-	ResourceName           *string                `json:"resource_name,omitempty"`
-	DisplayName            *string                `json:"display_name,omitempty"`
-	State                  *string                `json:"state,omitempty"`
-	Category               *string                `json:"category,omitempty"`
-	Categories             []string               `json:"categories,omitempty"`
-	FindingClass           *string                `json:"finding_class,omitempty"`
-	Severity               *string                `json:"severity,omitempty"`
-	NumericSeverity        *float64               `json:"numeric_severity,omitempty"`
-	Score                  *float64               `json:"score,omitempty"`
-	Impact                 *float64               `json:"impact,omitempty"`
-	Exploitability         *float64               `json:"exploitability,omitempty"`
-	Priority               *string                `json:"priority,omitempty"`
-	Open                   *bool                  `json:"open,omitempty"`
-	BlocksProduction       *bool                  `json:"blocks_production,omitempty"`
-	Production             *bool                  `json:"production,omitempty"`
-	Public                 *bool                  `json:"public,omitempty"`
-	Validated              *bool                  `json:"validated,omitempty"`
-	AssessmentID           *string                `json:"assessment_id,omitempty"`
-	Description            *string                `json:"description,omitempty"`
-	Recommendation         *string                `json:"recommendation,omitempty"`
-	RecommendedActions     *string                `json:"recommended_actions,omitempty"`
-	References             []string               `json:"references,omitempty"`
-	StepsToReproduce       []string               `json:"steps_to_reproduce,omitempty"`
-	Targets                []string               `json:"targets,omitempty"`
-	TargetDetails          map[string]interface{} `json:"target_details,omitempty"`
-	Vector                 *string                `json:"vector,omitempty"`
-	RemediationSLA         *int                   `json:"remediation_sla,omitempty"`
-	EventTime              *models.DateTime       `json:"event_time,omitempty"`
-	ReportedAt             *models.DateTime       `json:"reported_at,omitempty"`
-	SourceUpdatedAt        *models.DateTime       `json:"source_updated_at,omitempty"`
-	ExternalURI            *string                `json:"external_uri,omitempty"`
-	Metadata               map[string]interface{} `json:"metadata,omitempty"`
-	RawPayload             map[string]interface{} `json:"raw_payload,omitempty"`
-	OwnerID                *string                `json:"owner_id,omitempty"`
-	BlockedGroupIDs        []string               `json:"blocked_group_ids,omitempty"`
-	EditorIDs              []string               `json:"editor_ids,omitempty"`
-	ReviewedByUserID       *string                `json:"reviewed_by_user_id,omitempty"`
-	ReviewedByGroupID      *string                `json:"reviewed_by_group_id,omitempty"`
-	AssignedToUserID       *string                `json:"assigned_to_user_id,omitempty"`
-	AssignedToGroupID      *string                `json:"assigned_to_group_id,omitempty"`
-	EnvironmentID          *string                `json:"environment_id,omitempty"`
-	ScopeID                *string                `json:"scope_id,omitempty"`
-	FindingStatusID        *string                `json:"finding_status_id,omitempty"`
-	IntegrationIDs         []string               `json:"integration_ids,omitempty"`
-	VulnerabilityIDs       []string               `json:"vulnerability_ids,omitempty"`
-	ActionPlanIDs          []string               `json:"action_plan_ids,omitempty"`
-	SubcontrolIDs          []string               `json:"subcontrol_ids,omitempty"`
-	RiskIDs                []string               `json:"risk_ids,omitempty"`
-	ProgramIDs             []string               `json:"program_ids,omitempty"`
-	AssetIDs               []string               `json:"asset_ids,omitempty"`
-	EntityIDs              []string               `json:"entity_ids,omitempty"`
-	ScanIDs                []string               `json:"scan_ids,omitempty"`
-	TaskIDs                []string               `json:"task_ids,omitempty"`
-	DirectoryAccountIDs    []string               `json:"directory_account_ids,omitempty"`
-	IdentityHolderIDs      []string               `json:"identity_holder_ids,omitempty"`
-	RemediationIDs         []string               `json:"remediation_ids,omitempty"`
-	ReviewIDs              []string               `json:"review_ids,omitempty"`
-	CommentIDs             []string               `json:"comment_ids,omitempty"`
-	FileIDs                []string               `json:"file_ids,omitempty"`
-	WorkflowObjectRefIDs   []string               `json:"workflow_object_ref_ids,omitempty"`
-	CheckResultIDs         []string               `json:"check_result_ids,omitempty"`
+	Tags                       []string               `json:"tags,omitempty"`
+	ReviewedBy                 *string                `json:"reviewed_by,omitempty"`
+	AssignedTo                 *string                `json:"assigned_to,omitempty"`
+	InternalNotes              *string                `json:"internal_notes,omitempty"`
+	SystemInternalID           *string                `json:"system_internal_id,omitempty"`
+	EnvironmentName            *string                `json:"environment_name,omitempty"`
+	ScopeName                  *string                `json:"scope_name,omitempty"`
+	FindingStatusName          *string                `json:"finding_status_name,omitempty"`
+	WorkflowEligibleMarker     *bool                  `json:"workflow_eligible_marker,omitempty"`
+	ExternalID                 *string                `json:"external_id,omitempty"`
+	ExternalOwnerID            *string                `json:"external_owner_id,omitempty"`
+	Source                     *string                `json:"source,omitempty"`
+	ResourceName               *string                `json:"resource_name,omitempty"`
+	DisplayName                *string                `json:"display_name,omitempty"`
+	State                      *string                `json:"state,omitempty"`
+	Category                   *string                `json:"category,omitempty"`
+	Categories                 []string               `json:"categories,omitempty"`
+	FindingClass               *string                `json:"finding_class,omitempty"`
+	Severity                   *string                `json:"severity,omitempty"`
+	NumericSeverity            *float64               `json:"numeric_severity,omitempty"`
+	Score                      *float64               `json:"score,omitempty"`
+	Impact                     *float64               `json:"impact,omitempty"`
+	Exploitability             *float64               `json:"exploitability,omitempty"`
+	Priority                   *string                `json:"priority,omitempty"`
+	Open                       *bool                  `json:"open,omitempty"`
+	BlocksProduction           *bool                  `json:"blocks_production,omitempty"`
+	Production                 *bool                  `json:"production,omitempty"`
+	Public                     *bool                  `json:"public,omitempty"`
+	Validated                  *bool                  `json:"validated,omitempty"`
+	AssessmentID               *string                `json:"assessment_id,omitempty"`
+	Description                *string                `json:"description,omitempty"`
+	Recommendation             *string                `json:"recommendation,omitempty"`
+	RecommendedActions         *string                `json:"recommended_actions,omitempty"`
+	References                 []string               `json:"references,omitempty"`
+	StepsToReproduce           []string               `json:"steps_to_reproduce,omitempty"`
+	Targets                    []string               `json:"targets,omitempty"`
+	TargetDetails              map[string]interface{} `json:"target_details,omitempty"`
+	Vector                     *string                `json:"vector,omitempty"`
+	RemediationSLA             *int                   `json:"remediation_sla,omitempty"`
+	EventTime                  *models.DateTime       `json:"event_time,omitempty"`
+	ReportedAt                 *models.DateTime       `json:"reported_at,omitempty"`
+	SourceUpdatedAt            *models.DateTime       `json:"source_updated_at,omitempty"`
+	ExternalURI                *string                `json:"external_uri,omitempty"`
+	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
+	RawPayload                 map[string]interface{} `json:"raw_payload,omitempty"`
+	OwnerID                    *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs            []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs                  []string               `json:"editor_ids,omitempty"`
+	ReviewedByUserID           *string                `json:"reviewed_by_user_id,omitempty"`
+	ReviewedByGroupID          *string                `json:"reviewed_by_group_id,omitempty"`
+	ReviewedByIdentityHolderID *string                `json:"reviewed_by_identity_holder_id,omitempty"`
+	AssignedToUserID           *string                `json:"assigned_to_user_id,omitempty"`
+	AssignedToGroupID          *string                `json:"assigned_to_group_id,omitempty"`
+	AssignedToIdentityHolderID *string                `json:"assigned_to_identity_holder_id,omitempty"`
+	EnvironmentID              *string                `json:"environment_id,omitempty"`
+	ScopeID                    *string                `json:"scope_id,omitempty"`
+	FindingStatusID            *string                `json:"finding_status_id,omitempty"`
+	IntegrationIDs             []string               `json:"integration_ids,omitempty"`
+	VulnerabilityIDs           []string               `json:"vulnerability_ids,omitempty"`
+	ActionPlanIDs              []string               `json:"action_plan_ids,omitempty"`
+	SubcontrolIDs              []string               `json:"subcontrol_ids,omitempty"`
+	RiskIDs                    []string               `json:"risk_ids,omitempty"`
+	ProgramIDs                 []string               `json:"program_ids,omitempty"`
+	AssetIDs                   []string               `json:"asset_ids,omitempty"`
+	EntityIDs                  []string               `json:"entity_ids,omitempty"`
+	ScanIDs                    []string               `json:"scan_ids,omitempty"`
+	TaskIDs                    []string               `json:"task_ids,omitempty"`
+	DirectoryAccountIDs        []string               `json:"directory_account_ids,omitempty"`
+	IdentityHolderIDs          []string               `json:"identity_holder_ids,omitempty"`
+	RemediationIDs             []string               `json:"remediation_ids,omitempty"`
+	ReviewIDs                  []string               `json:"review_ids,omitempty"`
+	CommentIDs                 []string               `json:"comment_ids,omitempty"`
+	FileIDs                    []string               `json:"file_ids,omitempty"`
+	WorkflowObjectRefIDs       []string               `json:"workflow_object_ref_ids,omitempty"`
+	CheckResultIDs             []string               `json:"check_result_ids,omitempty"`
 }
 
 // Mutate applies the CreateFindingInput on the FindingMutation builder.
@@ -10446,11 +10496,17 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.ReviewedByGroupID; v != nil {
 		m.SetReviewedByGroupID(*v)
 	}
+	if v := i.ReviewedByIdentityHolderID; v != nil {
+		m.SetReviewedByIdentityHolderID(*v)
+	}
 	if v := i.AssignedToUserID; v != nil {
 		m.SetAssignedToUserID(*v)
 	}
 	if v := i.AssignedToGroupID; v != nil {
 		m.SetAssignedToGroupID(*v)
+	}
+	if v := i.AssignedToIdentityHolderID; v != nil {
+		m.SetAssignedToIdentityHolderID(*v)
 	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
@@ -10525,175 +10581,179 @@ func (c *FindingCreate) SetInput(i CreateFindingInput) *FindingCreate {
 
 // UpdateFindingInput represents a mutation input for updating findings.
 type UpdateFindingInput struct {
-	ClearTags                   bool
-	Tags                        []string `json:"tags,omitempty"`
-	AppendTags                  []string
-	ClearReviewedBy             bool
-	ReviewedBy                  *string `json:"reviewed_by,omitempty"`
-	ClearAssignedTo             bool
-	AssignedTo                  *string `json:"assigned_to,omitempty"`
-	ClearInternalNotes          bool
-	InternalNotes               *string `json:"internal_notes,omitempty"`
-	ClearSystemInternalID       bool
-	SystemInternalID            *string `json:"system_internal_id,omitempty"`
-	ClearEnvironmentName        bool
-	EnvironmentName             *string `json:"environment_name,omitempty"`
-	ClearScopeName              bool
-	ScopeName                   *string `json:"scope_name,omitempty"`
-	ClearFindingStatusName      bool
-	FindingStatusName           *string `json:"finding_status_name,omitempty"`
-	ClearWorkflowEligibleMarker bool
-	WorkflowEligibleMarker      *bool `json:"workflow_eligible_marker,omitempty"`
-	ClearExternalID             bool
-	ExternalID                  *string `json:"external_id,omitempty"`
-	ClearExternalOwnerID        bool
-	ExternalOwnerID             *string `json:"external_owner_id,omitempty"`
-	ClearSource                 bool
-	Source                      *string `json:"source,omitempty"`
-	ClearResourceName           bool
-	ResourceName                *string `json:"resource_name,omitempty"`
-	ClearDisplayName            bool
-	DisplayName                 *string `json:"display_name,omitempty"`
-	ClearState                  bool
-	State                       *string `json:"state,omitempty"`
-	ClearCategory               bool
-	Category                    *string `json:"category,omitempty"`
-	ClearCategories             bool
-	Categories                  []string `json:"categories,omitempty"`
-	AppendCategories            []string
-	ClearFindingClass           bool
-	FindingClass                *string `json:"finding_class,omitempty"`
-	ClearSeverity               bool
-	Severity                    *string `json:"severity,omitempty"`
-	ClearNumericSeverity        bool
-	NumericSeverity             *float64 `json:"numeric_severity,omitempty"`
-	ClearScore                  bool
-	Score                       *float64 `json:"score,omitempty"`
-	ClearImpact                 bool
-	Impact                      *float64 `json:"impact,omitempty"`
-	ClearExploitability         bool
-	Exploitability              *float64 `json:"exploitability,omitempty"`
-	ClearPriority               bool
-	Priority                    *string `json:"priority,omitempty"`
-	ClearOpen                   bool
-	Open                        *bool `json:"open,omitempty"`
-	ClearBlocksProduction       bool
-	BlocksProduction            *bool `json:"blocks_production,omitempty"`
-	ClearProduction             bool
-	Production                  *bool `json:"production,omitempty"`
-	ClearPublic                 bool
-	Public                      *bool `json:"public,omitempty"`
-	ClearValidated              bool
-	Validated                   *bool `json:"validated,omitempty"`
-	ClearAssessmentID           bool
-	AssessmentID                *string `json:"assessment_id,omitempty"`
-	ClearDescription            bool
-	Description                 *string `json:"description,omitempty"`
-	ClearRecommendation         bool
-	Recommendation              *string `json:"recommendation,omitempty"`
-	ClearRecommendedActions     bool
-	RecommendedActions          *string `json:"recommended_actions,omitempty"`
-	ClearReferences             bool
-	References                  []string `json:"references,omitempty"`
-	AppendReferences            []string
-	ClearStepsToReproduce       bool
-	StepsToReproduce            []string `json:"steps_to_reproduce,omitempty"`
-	AppendStepsToReproduce      []string
-	ClearTargets                bool
-	Targets                     []string `json:"targets,omitempty"`
-	AppendTargets               []string
-	ClearTargetDetails          bool
-	TargetDetails               map[string]interface{} `json:"target_details,omitempty"`
-	ClearVector                 bool
-	Vector                      *string `json:"vector,omitempty"`
-	ClearRemediationSLA         bool
-	RemediationSLA              *int `json:"remediation_sla,omitempty"`
-	ClearEventTime              bool
-	EventTime                   *models.DateTime `json:"event_time,omitempty"`
-	ClearReportedAt             bool
-	ReportedAt                  *models.DateTime `json:"reported_at,omitempty"`
-	ClearSourceUpdatedAt        bool
-	SourceUpdatedAt             *models.DateTime `json:"source_updated_at,omitempty"`
-	ClearExternalURI            bool
-	ExternalURI                 *string `json:"external_uri,omitempty"`
-	ClearMetadata               bool
-	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
-	ClearRawPayload             bool
-	RawPayload                  map[string]interface{} `json:"raw_payload,omitempty"`
-	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
-	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
-	ClearEditors                bool
-	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
-	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
-	ClearReviewedByUser         bool
-	ReviewedByUserID            *string `json:"reviewed_by_user_id,omitempty"`
-	ClearReviewedByGroup        bool
-	ReviewedByGroupID           *string `json:"reviewed_by_group_id,omitempty"`
-	ClearAssignedToUser         bool
-	AssignedToUserID            *string `json:"assigned_to_user_id,omitempty"`
-	ClearAssignedToGroup        bool
-	AssignedToGroupID           *string `json:"assigned_to_group_id,omitempty"`
-	ClearEnvironment            bool
-	EnvironmentID               *string `json:"environment_id,omitempty"`
-	ClearScope                  bool
-	ScopeID                     *string `json:"scope_id,omitempty"`
-	ClearFindingStatus          bool
-	FindingStatusID             *string `json:"finding_status_id,omitempty"`
-	ClearIntegrations           bool
-	AddIntegrationIDs           []string `json:"add_integration_ids,omitempty"`
-	RemoveIntegrationIDs        []string `json:"remove_integration_ids,omitempty"`
-	ClearVulnerabilities        bool
-	AddVulnerabilityIDs         []string `json:"add_vulnerability_ids,omitempty"`
-	RemoveVulnerabilityIDs      []string `json:"remove_vulnerability_ids,omitempty"`
-	ClearActionPlans            bool
-	AddActionPlanIDs            []string `json:"add_action_plan_ids,omitempty"`
-	RemoveActionPlanIDs         []string `json:"remove_action_plan_ids,omitempty"`
-	ClearSubcontrols            bool
-	AddSubcontrolIDs            []string `json:"add_subcontrol_ids,omitempty"`
-	RemoveSubcontrolIDs         []string `json:"remove_subcontrol_ids,omitempty"`
-	ClearRisks                  bool
-	AddRiskIDs                  []string `json:"add_risk_ids,omitempty"`
-	RemoveRiskIDs               []string `json:"remove_risk_ids,omitempty"`
-	ClearPrograms               bool
-	AddProgramIDs               []string `json:"add_program_ids,omitempty"`
-	RemoveProgramIDs            []string `json:"remove_program_ids,omitempty"`
-	ClearAssets                 bool
-	AddAssetIDs                 []string `json:"add_asset_ids,omitempty"`
-	RemoveAssetIDs              []string `json:"remove_asset_ids,omitempty"`
-	ClearEntities               bool
-	AddEntityIDs                []string `json:"add_entity_ids,omitempty"`
-	RemoveEntityIDs             []string `json:"remove_entity_ids,omitempty"`
-	ClearScans                  bool
-	AddScanIDs                  []string `json:"add_scan_ids,omitempty"`
-	RemoveScanIDs               []string `json:"remove_scan_ids,omitempty"`
-	ClearTasks                  bool
-	AddTaskIDs                  []string `json:"add_task_ids,omitempty"`
-	RemoveTaskIDs               []string `json:"remove_task_ids,omitempty"`
-	ClearDirectoryAccounts      bool
-	AddDirectoryAccountIDs      []string `json:"add_directory_account_ids,omitempty"`
-	RemoveDirectoryAccountIDs   []string `json:"remove_directory_account_ids,omitempty"`
-	ClearIdentityHolders        bool
-	AddIdentityHolderIDs        []string `json:"add_identity_holder_ids,omitempty"`
-	RemoveIdentityHolderIDs     []string `json:"remove_identity_holder_ids,omitempty"`
-	ClearRemediations           bool
-	AddRemediationIDs           []string `json:"add_remediation_ids,omitempty"`
-	RemoveRemediationIDs        []string `json:"remove_remediation_ids,omitempty"`
-	ClearReviews                bool
-	AddReviewIDs                []string `json:"add_review_ids,omitempty"`
-	RemoveReviewIDs             []string `json:"remove_review_ids,omitempty"`
-	ClearComments               bool
-	AddCommentIDs               []string `json:"add_comment_ids,omitempty"`
-	RemoveCommentIDs            []string `json:"remove_comment_ids,omitempty"`
-	ClearFiles                  bool
-	AddFileIDs                  []string `json:"add_file_ids,omitempty"`
-	RemoveFileIDs               []string `json:"remove_file_ids,omitempty"`
-	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
-	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
-	ClearCheckResults           bool
-	AddCheckResultIDs           []string `json:"add_check_result_ids,omitempty"`
-	RemoveCheckResultIDs        []string `json:"remove_check_result_ids,omitempty"`
+	ClearTags                     bool
+	Tags                          []string `json:"tags,omitempty"`
+	AppendTags                    []string
+	ClearReviewedBy               bool
+	ReviewedBy                    *string `json:"reviewed_by,omitempty"`
+	ClearAssignedTo               bool
+	AssignedTo                    *string `json:"assigned_to,omitempty"`
+	ClearInternalNotes            bool
+	InternalNotes                 *string `json:"internal_notes,omitempty"`
+	ClearSystemInternalID         bool
+	SystemInternalID              *string `json:"system_internal_id,omitempty"`
+	ClearEnvironmentName          bool
+	EnvironmentName               *string `json:"environment_name,omitempty"`
+	ClearScopeName                bool
+	ScopeName                     *string `json:"scope_name,omitempty"`
+	ClearFindingStatusName        bool
+	FindingStatusName             *string `json:"finding_status_name,omitempty"`
+	ClearWorkflowEligibleMarker   bool
+	WorkflowEligibleMarker        *bool `json:"workflow_eligible_marker,omitempty"`
+	ClearExternalID               bool
+	ExternalID                    *string `json:"external_id,omitempty"`
+	ClearExternalOwnerID          bool
+	ExternalOwnerID               *string `json:"external_owner_id,omitempty"`
+	ClearSource                   bool
+	Source                        *string `json:"source,omitempty"`
+	ClearResourceName             bool
+	ResourceName                  *string `json:"resource_name,omitempty"`
+	ClearDisplayName              bool
+	DisplayName                   *string `json:"display_name,omitempty"`
+	ClearState                    bool
+	State                         *string `json:"state,omitempty"`
+	ClearCategory                 bool
+	Category                      *string `json:"category,omitempty"`
+	ClearCategories               bool
+	Categories                    []string `json:"categories,omitempty"`
+	AppendCategories              []string
+	ClearFindingClass             bool
+	FindingClass                  *string `json:"finding_class,omitempty"`
+	ClearSeverity                 bool
+	Severity                      *string `json:"severity,omitempty"`
+	ClearNumericSeverity          bool
+	NumericSeverity               *float64 `json:"numeric_severity,omitempty"`
+	ClearScore                    bool
+	Score                         *float64 `json:"score,omitempty"`
+	ClearImpact                   bool
+	Impact                        *float64 `json:"impact,omitempty"`
+	ClearExploitability           bool
+	Exploitability                *float64 `json:"exploitability,omitempty"`
+	ClearPriority                 bool
+	Priority                      *string `json:"priority,omitempty"`
+	ClearOpen                     bool
+	Open                          *bool `json:"open,omitempty"`
+	ClearBlocksProduction         bool
+	BlocksProduction              *bool `json:"blocks_production,omitempty"`
+	ClearProduction               bool
+	Production                    *bool `json:"production,omitempty"`
+	ClearPublic                   bool
+	Public                        *bool `json:"public,omitempty"`
+	ClearValidated                bool
+	Validated                     *bool `json:"validated,omitempty"`
+	ClearAssessmentID             bool
+	AssessmentID                  *string `json:"assessment_id,omitempty"`
+	ClearDescription              bool
+	Description                   *string `json:"description,omitempty"`
+	ClearRecommendation           bool
+	Recommendation                *string `json:"recommendation,omitempty"`
+	ClearRecommendedActions       bool
+	RecommendedActions            *string `json:"recommended_actions,omitempty"`
+	ClearReferences               bool
+	References                    []string `json:"references,omitempty"`
+	AppendReferences              []string
+	ClearStepsToReproduce         bool
+	StepsToReproduce              []string `json:"steps_to_reproduce,omitempty"`
+	AppendStepsToReproduce        []string
+	ClearTargets                  bool
+	Targets                       []string `json:"targets,omitempty"`
+	AppendTargets                 []string
+	ClearTargetDetails            bool
+	TargetDetails                 map[string]interface{} `json:"target_details,omitempty"`
+	ClearVector                   bool
+	Vector                        *string `json:"vector,omitempty"`
+	ClearRemediationSLA           bool
+	RemediationSLA                *int `json:"remediation_sla,omitempty"`
+	ClearEventTime                bool
+	EventTime                     *models.DateTime `json:"event_time,omitempty"`
+	ClearReportedAt               bool
+	ReportedAt                    *models.DateTime `json:"reported_at,omitempty"`
+	ClearSourceUpdatedAt          bool
+	SourceUpdatedAt               *models.DateTime `json:"source_updated_at,omitempty"`
+	ClearExternalURI              bool
+	ExternalURI                   *string `json:"external_uri,omitempty"`
+	ClearMetadata                 bool
+	Metadata                      map[string]interface{} `json:"metadata,omitempty"`
+	ClearRawPayload               bool
+	RawPayload                    map[string]interface{} `json:"raw_payload,omitempty"`
+	ClearBlockedGroups            bool
+	AddBlockedGroupIDs            []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs         []string `json:"remove_blocked_group_ids,omitempty"`
+	ClearEditors                  bool
+	AddEditorIDs                  []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs               []string `json:"remove_editor_ids,omitempty"`
+	ClearReviewedByUser           bool
+	ReviewedByUserID              *string `json:"reviewed_by_user_id,omitempty"`
+	ClearReviewedByGroup          bool
+	ReviewedByGroupID             *string `json:"reviewed_by_group_id,omitempty"`
+	ClearReviewedByIdentityHolder bool
+	ReviewedByIdentityHolderID    *string `json:"reviewed_by_identity_holder_id,omitempty"`
+	ClearAssignedToUser           bool
+	AssignedToUserID              *string `json:"assigned_to_user_id,omitempty"`
+	ClearAssignedToGroup          bool
+	AssignedToGroupID             *string `json:"assigned_to_group_id,omitempty"`
+	ClearAssignedToIdentityHolder bool
+	AssignedToIdentityHolderID    *string `json:"assigned_to_identity_holder_id,omitempty"`
+	ClearEnvironment              bool
+	EnvironmentID                 *string `json:"environment_id,omitempty"`
+	ClearScope                    bool
+	ScopeID                       *string `json:"scope_id,omitempty"`
+	ClearFindingStatus            bool
+	FindingStatusID               *string `json:"finding_status_id,omitempty"`
+	ClearIntegrations             bool
+	AddIntegrationIDs             []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs          []string `json:"remove_integration_ids,omitempty"`
+	ClearVulnerabilities          bool
+	AddVulnerabilityIDs           []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs        []string `json:"remove_vulnerability_ids,omitempty"`
+	ClearActionPlans              bool
+	AddActionPlanIDs              []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs           []string `json:"remove_action_plan_ids,omitempty"`
+	ClearSubcontrols              bool
+	AddSubcontrolIDs              []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs           []string `json:"remove_subcontrol_ids,omitempty"`
+	ClearRisks                    bool
+	AddRiskIDs                    []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                 []string `json:"remove_risk_ids,omitempty"`
+	ClearPrograms                 bool
+	AddProgramIDs                 []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs              []string `json:"remove_program_ids,omitempty"`
+	ClearAssets                   bool
+	AddAssetIDs                   []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                []string `json:"remove_asset_ids,omitempty"`
+	ClearEntities                 bool
+	AddEntityIDs                  []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs               []string `json:"remove_entity_ids,omitempty"`
+	ClearScans                    bool
+	AddScanIDs                    []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                 []string `json:"remove_scan_ids,omitempty"`
+	ClearTasks                    bool
+	AddTaskIDs                    []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                 []string `json:"remove_task_ids,omitempty"`
+	ClearDirectoryAccounts        bool
+	AddDirectoryAccountIDs        []string `json:"add_directory_account_ids,omitempty"`
+	RemoveDirectoryAccountIDs     []string `json:"remove_directory_account_ids,omitempty"`
+	ClearIdentityHolders          bool
+	AddIdentityHolderIDs          []string `json:"add_identity_holder_ids,omitempty"`
+	RemoveIdentityHolderIDs       []string `json:"remove_identity_holder_ids,omitempty"`
+	ClearRemediations             bool
+	AddRemediationIDs             []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs          []string `json:"remove_remediation_ids,omitempty"`
+	ClearReviews                  bool
+	AddReviewIDs                  []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs               []string `json:"remove_review_ids,omitempty"`
+	ClearComments                 bool
+	AddCommentIDs                 []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs              []string `json:"remove_comment_ids,omitempty"`
+	ClearFiles                    bool
+	AddFileIDs                    []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                 []string `json:"remove_file_ids,omitempty"`
+	ClearWorkflowObjectRefs       bool
+	AddWorkflowObjectRefIDs       []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs    []string `json:"remove_workflow_object_ref_ids,omitempty"`
+	ClearCheckResults             bool
+	AddCheckResultIDs             []string `json:"add_check_result_ids,omitempty"`
+	RemoveCheckResultIDs          []string `json:"remove_check_result_ids,omitempty"`
 }
 
 // Mutate applies the UpdateFindingInput on the FindingMutation builder.
@@ -11013,6 +11073,12 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.ReviewedByGroupID; v != nil {
 		m.SetReviewedByGroupID(*v)
 	}
+	if i.ClearReviewedByIdentityHolder {
+		m.ClearReviewedByIdentityHolder()
+	}
+	if v := i.ReviewedByIdentityHolderID; v != nil {
+		m.SetReviewedByIdentityHolderID(*v)
+	}
 	if i.ClearAssignedToUser {
 		m.ClearAssignedToUser()
 	}
@@ -11024,6 +11090,12 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.AssignedToGroupID; v != nil {
 		m.SetAssignedToGroupID(*v)
+	}
+	if i.ClearAssignedToIdentityHolder {
+		m.ClearAssignedToIdentityHolder()
+	}
+	if v := i.AssignedToIdentityHolderID; v != nil {
+		m.SetAssignedToIdentityHolderID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -12679,56 +12751,57 @@ func (c *HushUpdateOne) SetInput(i UpdateHushInput) *HushUpdateOne {
 
 // CreateIdentityHolderInput represents a mutation input for creating identityholders.
 type CreateIdentityHolderInput struct {
-	Tags                   []string                  `json:"tags,omitempty"`
-	InternalOwner          *string                   `json:"internal_owner,omitempty"`
-	EnvironmentName        *string                   `json:"environment_name,omitempty"`
-	ScopeName              *string                   `json:"scope_name,omitempty"`
-	WorkflowEligibleMarker *bool                     `json:"workflow_eligible_marker,omitempty"`
-	FullName               string                    `json:"full_name,omitempty"`
-	Email                  string                    `json:"email,omitempty"`
-	AlternateEmail         *string                   `json:"alternate_email,omitempty"`
-	EmailAliases           []string                  `json:"email_aliases,omitempty"`
-	PhoneNumber            *string                   `json:"phone_number,omitempty"`
-	IsOpenlaneUser         *bool                     `json:"is_openlane_user,omitempty"`
-	IdentityHolderType     *enums.IdentityHolderType `json:"identity_holder_type,omitempty"`
-	Status                 *enums.UserStatus         `json:"status,omitempty"`
-	IsActive               *bool                     `json:"is_active,omitempty"`
-	Title                  *string                   `json:"title,omitempty"`
-	Department             *string                   `json:"department,omitempty"`
-	Team                   *string                   `json:"team,omitempty"`
-	Location               *string                   `json:"location,omitempty"`
-	StartDate              *models.DateTime          `json:"start_date,omitempty"`
-	EndDate                *models.DateTime          `json:"end_date,omitempty"`
-	ExternalUserID         *string                   `json:"external_user_id,omitempty"`
-	ExternalReferenceID    *string                   `json:"external_reference_id,omitempty"`
-	Metadata               map[string]interface{}    `json:"metadata,omitempty"`
-	AvatarRemoteURL        *string                   `json:"avatar_remote_url,omitempty"`
-	OwnerID                *string                   `json:"owner_id,omitempty"`
-	BlockedGroupIDs        []string                  `json:"blocked_group_ids,omitempty"`
-	EditorIDs              []string                  `json:"editor_ids,omitempty"`
-	ViewerIDs              []string                  `json:"viewer_ids,omitempty"`
-	InternalOwnerUserID    *string                   `json:"internal_owner_user_id,omitempty"`
-	InternalOwnerGroupID   *string                   `json:"internal_owner_group_id,omitempty"`
-	EnvironmentID          *string                   `json:"environment_id,omitempty"`
-	ScopeID                *string                   `json:"scope_id,omitempty"`
-	EmployerID             *string                   `json:"employer_id,omitempty"`
-	AssessmentResponseIDs  []string                  `json:"assessment_response_ids,omitempty"`
-	AssessmentIDs          []string                  `json:"assessment_ids,omitempty"`
-	TemplateIDs            []string                  `json:"template_ids,omitempty"`
-	AssetIDs               []string                  `json:"asset_ids,omitempty"`
-	EntityIDs              []string                  `json:"entity_ids,omitempty"`
-	DirectoryAccountIDs    []string                  `json:"directory_account_ids,omitempty"`
-	ControlIDs             []string                  `json:"control_ids,omitempty"`
-	SubcontrolIDs          []string                  `json:"subcontrol_ids,omitempty"`
-	PlatformIDs            []string                  `json:"platform_ids,omitempty"`
-	CampaignIDs            []string                  `json:"campaign_ids,omitempty"`
-	TaskIDs                []string                  `json:"task_ids,omitempty"`
-	FileIDs                []string                  `json:"file_ids,omitempty"`
-	FindingIDs             []string                  `json:"finding_ids,omitempty"`
-	WorkflowObjectRefIDs   []string                  `json:"workflow_object_ref_ids,omitempty"`
-	AccessPlatformIDs      []string                  `json:"access_platform_ids,omitempty"`
-	UserID                 *string                   `json:"user_id,omitempty"`
-	InternalPolicyIDs      []string                  `json:"internal_policy_ids,omitempty"`
+	Tags                          []string                  `json:"tags,omitempty"`
+	InternalOwner                 *string                   `json:"internal_owner,omitempty"`
+	EnvironmentName               *string                   `json:"environment_name,omitempty"`
+	ScopeName                     *string                   `json:"scope_name,omitempty"`
+	WorkflowEligibleMarker        *bool                     `json:"workflow_eligible_marker,omitempty"`
+	FullName                      string                    `json:"full_name,omitempty"`
+	Email                         string                    `json:"email,omitempty"`
+	AlternateEmail                *string                   `json:"alternate_email,omitempty"`
+	EmailAliases                  []string                  `json:"email_aliases,omitempty"`
+	PhoneNumber                   *string                   `json:"phone_number,omitempty"`
+	IsOpenlaneUser                *bool                     `json:"is_openlane_user,omitempty"`
+	IdentityHolderType            *enums.IdentityHolderType `json:"identity_holder_type,omitempty"`
+	Status                        *enums.UserStatus         `json:"status,omitempty"`
+	IsActive                      *bool                     `json:"is_active,omitempty"`
+	Title                         *string                   `json:"title,omitempty"`
+	Department                    *string                   `json:"department,omitempty"`
+	Team                          *string                   `json:"team,omitempty"`
+	Location                      *string                   `json:"location,omitempty"`
+	StartDate                     *models.DateTime          `json:"start_date,omitempty"`
+	EndDate                       *models.DateTime          `json:"end_date,omitempty"`
+	ExternalUserID                *string                   `json:"external_user_id,omitempty"`
+	ExternalReferenceID           *string                   `json:"external_reference_id,omitempty"`
+	Metadata                      map[string]interface{}    `json:"metadata,omitempty"`
+	AvatarRemoteURL               *string                   `json:"avatar_remote_url,omitempty"`
+	OwnerID                       *string                   `json:"owner_id,omitempty"`
+	BlockedGroupIDs               []string                  `json:"blocked_group_ids,omitempty"`
+	EditorIDs                     []string                  `json:"editor_ids,omitempty"`
+	ViewerIDs                     []string                  `json:"viewer_ids,omitempty"`
+	InternalOwnerUserID           *string                   `json:"internal_owner_user_id,omitempty"`
+	InternalOwnerGroupID          *string                   `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID *string                   `json:"internal_owner_identity_holder_id,omitempty"`
+	EnvironmentID                 *string                   `json:"environment_id,omitempty"`
+	ScopeID                       *string                   `json:"scope_id,omitempty"`
+	EmployerID                    *string                   `json:"employer_id,omitempty"`
+	AssessmentResponseIDs         []string                  `json:"assessment_response_ids,omitempty"`
+	AssessmentIDs                 []string                  `json:"assessment_ids,omitempty"`
+	TemplateIDs                   []string                  `json:"template_ids,omitempty"`
+	AssetIDs                      []string                  `json:"asset_ids,omitempty"`
+	EntityIDs                     []string                  `json:"entity_ids,omitempty"`
+	DirectoryAccountIDs           []string                  `json:"directory_account_ids,omitempty"`
+	ControlIDs                    []string                  `json:"control_ids,omitempty"`
+	SubcontrolIDs                 []string                  `json:"subcontrol_ids,omitempty"`
+	PlatformIDs                   []string                  `json:"platform_ids,omitempty"`
+	CampaignIDs                   []string                  `json:"campaign_ids,omitempty"`
+	TaskIDs                       []string                  `json:"task_ids,omitempty"`
+	FileIDs                       []string                  `json:"file_ids,omitempty"`
+	FindingIDs                    []string                  `json:"finding_ids,omitempty"`
+	WorkflowObjectRefIDs          []string                  `json:"workflow_object_ref_ids,omitempty"`
+	AccessPlatformIDs             []string                  `json:"access_platform_ids,omitempty"`
+	UserID                        *string                   `json:"user_id,omitempty"`
+	InternalPolicyIDs             []string                  `json:"internal_policy_ids,omitempty"`
 }
 
 // Mutate applies the CreateIdentityHolderInput on the IdentityHolderMutation builder.
@@ -12819,6 +12892,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
 	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
+	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
 	}
@@ -12889,120 +12965,122 @@ func (c *IdentityHolderCreate) SetInput(i CreateIdentityHolderInput) *IdentityHo
 
 // UpdateIdentityHolderInput represents a mutation input for updating identityholders.
 type UpdateIdentityHolderInput struct {
-	ClearTags                   bool
-	Tags                        []string `json:"tags,omitempty"`
-	AppendTags                  []string
-	ClearInternalOwner          bool
-	InternalOwner               *string `json:"internal_owner,omitempty"`
-	ClearEnvironmentName        bool
-	EnvironmentName             *string `json:"environment_name,omitempty"`
-	ClearScopeName              bool
-	ScopeName                   *string `json:"scope_name,omitempty"`
-	ClearWorkflowEligibleMarker bool
-	WorkflowEligibleMarker      *bool   `json:"workflow_eligible_marker,omitempty"`
-	FullName                    *string `json:"full_name,omitempty"`
-	Email                       *string `json:"email,omitempty"`
-	ClearAlternateEmail         bool
-	AlternateEmail              *string `json:"alternate_email,omitempty"`
-	ClearEmailAliases           bool
-	EmailAliases                []string `json:"email_aliases,omitempty"`
-	AppendEmailAliases          []string
-	ClearPhoneNumber            bool
-	PhoneNumber                 *string `json:"phone_number,omitempty"`
-	ClearIsOpenlaneUser         bool
-	IsOpenlaneUser              *bool                     `json:"is_openlane_user,omitempty"`
-	IdentityHolderType          *enums.IdentityHolderType `json:"identity_holder_type,omitempty"`
-	Status                      *enums.UserStatus         `json:"status,omitempty"`
-	IsActive                    *bool                     `json:"is_active,omitempty"`
-	ClearTitle                  bool
-	Title                       *string `json:"title,omitempty"`
-	ClearDepartment             bool
-	Department                  *string `json:"department,omitempty"`
-	ClearTeam                   bool
-	Team                        *string `json:"team,omitempty"`
-	ClearLocation               bool
-	Location                    *string `json:"location,omitempty"`
-	ClearStartDate              bool
-	StartDate                   *models.DateTime `json:"start_date,omitempty"`
-	ClearEndDate                bool
-	EndDate                     *models.DateTime `json:"end_date,omitempty"`
-	ClearExternalUserID         bool
-	ExternalUserID              *string `json:"external_user_id,omitempty"`
-	ClearExternalReferenceID    bool
-	ExternalReferenceID         *string `json:"external_reference_id,omitempty"`
-	ClearMetadata               bool
-	Metadata                    map[string]interface{} `json:"metadata,omitempty"`
-	ClearAvatarRemoteURL        bool
-	AvatarRemoteURL             *string `json:"avatar_remote_url,omitempty"`
-	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string `json:"add_blocked_group_ids,omitempty"`
-	RemoveBlockedGroupIDs       []string `json:"remove_blocked_group_ids,omitempty"`
-	ClearEditors                bool
-	AddEditorIDs                []string `json:"add_editor_ids,omitempty"`
-	RemoveEditorIDs             []string `json:"remove_editor_ids,omitempty"`
-	ClearViewers                bool
-	AddViewerIDs                []string `json:"add_viewer_ids,omitempty"`
-	RemoveViewerIDs             []string `json:"remove_viewer_ids,omitempty"`
-	ClearInternalOwnerUser      bool
-	InternalOwnerUserID         *string `json:"internal_owner_user_id,omitempty"`
-	ClearInternalOwnerGroup     bool
-	InternalOwnerGroupID        *string `json:"internal_owner_group_id,omitempty"`
-	ClearEnvironment            bool
-	EnvironmentID               *string `json:"environment_id,omitempty"`
-	ClearScope                  bool
-	ScopeID                     *string `json:"scope_id,omitempty"`
-	ClearEmployer               bool
-	EmployerID                  *string `json:"employer_id,omitempty"`
-	ClearAssessmentResponses    bool
-	AddAssessmentResponseIDs    []string `json:"add_assessment_response_ids,omitempty"`
-	RemoveAssessmentResponseIDs []string `json:"remove_assessment_response_ids,omitempty"`
-	ClearAssessments            bool
-	AddAssessmentIDs            []string `json:"add_assessment_ids,omitempty"`
-	RemoveAssessmentIDs         []string `json:"remove_assessment_ids,omitempty"`
-	ClearTemplates              bool
-	AddTemplateIDs              []string `json:"add_template_ids,omitempty"`
-	RemoveTemplateIDs           []string `json:"remove_template_ids,omitempty"`
-	ClearAssets                 bool
-	AddAssetIDs                 []string `json:"add_asset_ids,omitempty"`
-	RemoveAssetIDs              []string `json:"remove_asset_ids,omitempty"`
-	ClearEntities               bool
-	AddEntityIDs                []string `json:"add_entity_ids,omitempty"`
-	RemoveEntityIDs             []string `json:"remove_entity_ids,omitempty"`
-	ClearDirectoryAccounts      bool
-	AddDirectoryAccountIDs      []string `json:"add_directory_account_ids,omitempty"`
-	RemoveDirectoryAccountIDs   []string `json:"remove_directory_account_ids,omitempty"`
-	ClearControls               bool
-	AddControlIDs               []string `json:"add_control_ids,omitempty"`
-	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
-	ClearSubcontrols            bool
-	AddSubcontrolIDs            []string `json:"add_subcontrol_ids,omitempty"`
-	RemoveSubcontrolIDs         []string `json:"remove_subcontrol_ids,omitempty"`
-	ClearPlatforms              bool
-	AddPlatformIDs              []string `json:"add_platform_ids,omitempty"`
-	RemovePlatformIDs           []string `json:"remove_platform_ids,omitempty"`
-	ClearCampaigns              bool
-	AddCampaignIDs              []string `json:"add_campaign_ids,omitempty"`
-	RemoveCampaignIDs           []string `json:"remove_campaign_ids,omitempty"`
-	ClearTasks                  bool
-	AddTaskIDs                  []string `json:"add_task_ids,omitempty"`
-	RemoveTaskIDs               []string `json:"remove_task_ids,omitempty"`
-	ClearFiles                  bool
-	AddFileIDs                  []string `json:"add_file_ids,omitempty"`
-	RemoveFileIDs               []string `json:"remove_file_ids,omitempty"`
-	ClearFindings               bool
-	AddFindingIDs               []string `json:"add_finding_ids,omitempty"`
-	RemoveFindingIDs            []string `json:"remove_finding_ids,omitempty"`
-	ClearWorkflowObjectRefs     bool
-	AddWorkflowObjectRefIDs     []string `json:"add_workflow_object_ref_ids,omitempty"`
-	RemoveWorkflowObjectRefIDs  []string `json:"remove_workflow_object_ref_ids,omitempty"`
-	ClearAccessPlatforms        bool
-	AddAccessPlatformIDs        []string `json:"add_access_platform_ids,omitempty"`
-	RemoveAccessPlatformIDs     []string `json:"remove_access_platform_ids,omitempty"`
-	ClearUser                   bool
-	UserID                      *string `json:"user_id,omitempty"`
-	ClearInternalPolicies       bool
-	AddInternalPolicyIDs        []string `json:"add_internal_policy_ids,omitempty"`
-	RemoveInternalPolicyIDs     []string `json:"remove_internal_policy_ids,omitempty"`
+	ClearTags                        bool
+	Tags                             []string `json:"tags,omitempty"`
+	AppendTags                       []string
+	ClearInternalOwner               bool
+	InternalOwner                    *string `json:"internal_owner,omitempty"`
+	ClearEnvironmentName             bool
+	EnvironmentName                  *string `json:"environment_name,omitempty"`
+	ClearScopeName                   bool
+	ScopeName                        *string `json:"scope_name,omitempty"`
+	ClearWorkflowEligibleMarker      bool
+	WorkflowEligibleMarker           *bool   `json:"workflow_eligible_marker,omitempty"`
+	FullName                         *string `json:"full_name,omitempty"`
+	Email                            *string `json:"email,omitempty"`
+	ClearAlternateEmail              bool
+	AlternateEmail                   *string `json:"alternate_email,omitempty"`
+	ClearEmailAliases                bool
+	EmailAliases                     []string `json:"email_aliases,omitempty"`
+	AppendEmailAliases               []string
+	ClearPhoneNumber                 bool
+	PhoneNumber                      *string `json:"phone_number,omitempty"`
+	ClearIsOpenlaneUser              bool
+	IsOpenlaneUser                   *bool                     `json:"is_openlane_user,omitempty"`
+	IdentityHolderType               *enums.IdentityHolderType `json:"identity_holder_type,omitempty"`
+	Status                           *enums.UserStatus         `json:"status,omitempty"`
+	IsActive                         *bool                     `json:"is_active,omitempty"`
+	ClearTitle                       bool
+	Title                            *string `json:"title,omitempty"`
+	ClearDepartment                  bool
+	Department                       *string `json:"department,omitempty"`
+	ClearTeam                        bool
+	Team                             *string `json:"team,omitempty"`
+	ClearLocation                    bool
+	Location                         *string `json:"location,omitempty"`
+	ClearStartDate                   bool
+	StartDate                        *models.DateTime `json:"start_date,omitempty"`
+	ClearEndDate                     bool
+	EndDate                          *models.DateTime `json:"end_date,omitempty"`
+	ClearExternalUserID              bool
+	ExternalUserID                   *string `json:"external_user_id,omitempty"`
+	ClearExternalReferenceID         bool
+	ExternalReferenceID              *string `json:"external_reference_id,omitempty"`
+	ClearMetadata                    bool
+	Metadata                         map[string]interface{} `json:"metadata,omitempty"`
+	ClearAvatarRemoteURL             bool
+	AvatarRemoteURL                  *string `json:"avatar_remote_url,omitempty"`
+	ClearBlockedGroups               bool
+	AddBlockedGroupIDs               []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs            []string `json:"remove_blocked_group_ids,omitempty"`
+	ClearEditors                     bool
+	AddEditorIDs                     []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                  []string `json:"remove_editor_ids,omitempty"`
+	ClearViewers                     bool
+	AddViewerIDs                     []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs                  []string `json:"remove_viewer_ids,omitempty"`
+	ClearInternalOwnerUser           bool
+	InternalOwnerUserID              *string `json:"internal_owner_user_id,omitempty"`
+	ClearInternalOwnerGroup          bool
+	InternalOwnerGroupID             *string `json:"internal_owner_group_id,omitempty"`
+	ClearInternalOwnerIdentityHolder bool
+	InternalOwnerIdentityHolderID    *string `json:"internal_owner_identity_holder_id,omitempty"`
+	ClearEnvironment                 bool
+	EnvironmentID                    *string `json:"environment_id,omitempty"`
+	ClearScope                       bool
+	ScopeID                          *string `json:"scope_id,omitempty"`
+	ClearEmployer                    bool
+	EmployerID                       *string `json:"employer_id,omitempty"`
+	ClearAssessmentResponses         bool
+	AddAssessmentResponseIDs         []string `json:"add_assessment_response_ids,omitempty"`
+	RemoveAssessmentResponseIDs      []string `json:"remove_assessment_response_ids,omitempty"`
+	ClearAssessments                 bool
+	AddAssessmentIDs                 []string `json:"add_assessment_ids,omitempty"`
+	RemoveAssessmentIDs              []string `json:"remove_assessment_ids,omitempty"`
+	ClearTemplates                   bool
+	AddTemplateIDs                   []string `json:"add_template_ids,omitempty"`
+	RemoveTemplateIDs                []string `json:"remove_template_ids,omitempty"`
+	ClearAssets                      bool
+	AddAssetIDs                      []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                   []string `json:"remove_asset_ids,omitempty"`
+	ClearEntities                    bool
+	AddEntityIDs                     []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs                  []string `json:"remove_entity_ids,omitempty"`
+	ClearDirectoryAccounts           bool
+	AddDirectoryAccountIDs           []string `json:"add_directory_account_ids,omitempty"`
+	RemoveDirectoryAccountIDs        []string `json:"remove_directory_account_ids,omitempty"`
+	ClearControls                    bool
+	AddControlIDs                    []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                 []string `json:"remove_control_ids,omitempty"`
+	ClearSubcontrols                 bool
+	AddSubcontrolIDs                 []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs              []string `json:"remove_subcontrol_ids,omitempty"`
+	ClearPlatforms                   bool
+	AddPlatformIDs                   []string `json:"add_platform_ids,omitempty"`
+	RemovePlatformIDs                []string `json:"remove_platform_ids,omitempty"`
+	ClearCampaigns                   bool
+	AddCampaignIDs                   []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs                []string `json:"remove_campaign_ids,omitempty"`
+	ClearTasks                       bool
+	AddTaskIDs                       []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                    []string `json:"remove_task_ids,omitempty"`
+	ClearFiles                       bool
+	AddFileIDs                       []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                    []string `json:"remove_file_ids,omitempty"`
+	ClearFindings                    bool
+	AddFindingIDs                    []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                 []string `json:"remove_finding_ids,omitempty"`
+	ClearWorkflowObjectRefs          bool
+	AddWorkflowObjectRefIDs          []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs       []string `json:"remove_workflow_object_ref_ids,omitempty"`
+	ClearAccessPlatforms             bool
+	AddAccessPlatformIDs             []string `json:"add_access_platform_ids,omitempty"`
+	RemoveAccessPlatformIDs          []string `json:"remove_access_platform_ids,omitempty"`
+	ClearUser                        bool
+	UserID                           *string `json:"user_id,omitempty"`
+	ClearInternalPolicies            bool
+	AddInternalPolicyIDs             []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs          []string `json:"remove_internal_policy_ids,omitempty"`
 }
 
 // Mutate applies the UpdateIdentityHolderInput on the IdentityHolderMutation builder.
@@ -13180,6 +13258,12 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
+	}
+	if i.ClearInternalOwnerIdentityHolder {
+		m.ClearInternalOwnerIdentityHolder()
+	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -18875,12 +18959,16 @@ type CreatePlatformInput struct {
 	ViewerIDs                      []string               `json:"viewer_ids,omitempty"`
 	InternalOwnerUserID            *string                `json:"internal_owner_user_id,omitempty"`
 	InternalOwnerGroupID           *string                `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID  *string                `json:"internal_owner_identity_holder_id,omitempty"`
 	BusinessOwnerUserID            *string                `json:"business_owner_user_id,omitempty"`
 	BusinessOwnerGroupID           *string                `json:"business_owner_group_id,omitempty"`
+	BusinessOwnerIdentityHolderID  *string                `json:"business_owner_identity_holder_id,omitempty"`
 	TechnicalOwnerUserID           *string                `json:"technical_owner_user_id,omitempty"`
 	TechnicalOwnerGroupID          *string                `json:"technical_owner_group_id,omitempty"`
+	TechnicalOwnerIdentityHolderID *string                `json:"technical_owner_identity_holder_id,omitempty"`
 	SecurityOwnerUserID            *string                `json:"security_owner_user_id,omitempty"`
 	SecurityOwnerGroupID           *string                `json:"security_owner_group_id,omitempty"`
+	SecurityOwnerIdentityHolderID  *string                `json:"security_owner_identity_holder_id,omitempty"`
 	PlatformKindID                 *string                `json:"platform_kind_id,omitempty"`
 	PlatformDataClassificationID   *string                `json:"platform_data_classification_id,omitempty"`
 	EnvironmentID                  *string                `json:"environment_id,omitempty"`
@@ -19031,11 +19119,17 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
 	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
+	}
 	if v := i.BusinessOwnerUserID; v != nil {
 		m.SetBusinessOwnerUserID(*v)
 	}
 	if v := i.BusinessOwnerGroupID; v != nil {
 		m.SetBusinessOwnerGroupID(*v)
+	}
+	if v := i.BusinessOwnerIdentityHolderID; v != nil {
+		m.SetBusinessOwnerIdentityHolderID(*v)
 	}
 	if v := i.TechnicalOwnerUserID; v != nil {
 		m.SetTechnicalOwnerUserID(*v)
@@ -19043,11 +19137,17 @@ func (i *CreatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.TechnicalOwnerGroupID; v != nil {
 		m.SetTechnicalOwnerGroupID(*v)
 	}
+	if v := i.TechnicalOwnerIdentityHolderID; v != nil {
+		m.SetTechnicalOwnerIdentityHolderID(*v)
+	}
 	if v := i.SecurityOwnerUserID; v != nil {
 		m.SetSecurityOwnerUserID(*v)
 	}
 	if v := i.SecurityOwnerGroupID; v != nil {
 		m.SetSecurityOwnerGroupID(*v)
+	}
+	if v := i.SecurityOwnerIdentityHolderID; v != nil {
+		m.SetSecurityOwnerIdentityHolderID(*v)
 	}
 	if v := i.PlatformKindID; v != nil {
 		m.SetPlatformKindID(*v)
@@ -19236,18 +19336,26 @@ type UpdatePlatformInput struct {
 	InternalOwnerUserID                 *string `json:"internal_owner_user_id,omitempty"`
 	ClearInternalOwnerGroup             bool
 	InternalOwnerGroupID                *string `json:"internal_owner_group_id,omitempty"`
+	ClearInternalOwnerIdentityHolder    bool
+	InternalOwnerIdentityHolderID       *string `json:"internal_owner_identity_holder_id,omitempty"`
 	ClearBusinessOwnerUser              bool
 	BusinessOwnerUserID                 *string `json:"business_owner_user_id,omitempty"`
 	ClearBusinessOwnerGroup             bool
 	BusinessOwnerGroupID                *string `json:"business_owner_group_id,omitempty"`
+	ClearBusinessOwnerIdentityHolder    bool
+	BusinessOwnerIdentityHolderID       *string `json:"business_owner_identity_holder_id,omitempty"`
 	ClearTechnicalOwnerUser             bool
 	TechnicalOwnerUserID                *string `json:"technical_owner_user_id,omitempty"`
 	ClearTechnicalOwnerGroup            bool
 	TechnicalOwnerGroupID               *string `json:"technical_owner_group_id,omitempty"`
+	ClearTechnicalOwnerIdentityHolder   bool
+	TechnicalOwnerIdentityHolderID      *string `json:"technical_owner_identity_holder_id,omitempty"`
 	ClearSecurityOwnerUser              bool
 	SecurityOwnerUserID                 *string `json:"security_owner_user_id,omitempty"`
 	ClearSecurityOwnerGroup             bool
 	SecurityOwnerGroupID                *string `json:"security_owner_group_id,omitempty"`
+	ClearSecurityOwnerIdentityHolder    bool
+	SecurityOwnerIdentityHolderID       *string `json:"security_owner_identity_holder_id,omitempty"`
 	ClearPlatformKind                   bool
 	PlatformKindID                      *string `json:"platform_kind_id,omitempty"`
 	ClearPlatformDataClassification     bool
@@ -19570,6 +19678,12 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.InternalOwnerGroupID; v != nil {
 		m.SetInternalOwnerGroupID(*v)
 	}
+	if i.ClearInternalOwnerIdentityHolder {
+		m.ClearInternalOwnerIdentityHolder()
+	}
+	if v := i.InternalOwnerIdentityHolderID; v != nil {
+		m.SetInternalOwnerIdentityHolderID(*v)
+	}
 	if i.ClearBusinessOwnerUser {
 		m.ClearBusinessOwnerUser()
 	}
@@ -19581,6 +19695,12 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.BusinessOwnerGroupID; v != nil {
 		m.SetBusinessOwnerGroupID(*v)
+	}
+	if i.ClearBusinessOwnerIdentityHolder {
+		m.ClearBusinessOwnerIdentityHolder()
+	}
+	if v := i.BusinessOwnerIdentityHolderID; v != nil {
+		m.SetBusinessOwnerIdentityHolderID(*v)
 	}
 	if i.ClearTechnicalOwnerUser {
 		m.ClearTechnicalOwnerUser()
@@ -19594,6 +19714,12 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	if v := i.TechnicalOwnerGroupID; v != nil {
 		m.SetTechnicalOwnerGroupID(*v)
 	}
+	if i.ClearTechnicalOwnerIdentityHolder {
+		m.ClearTechnicalOwnerIdentityHolder()
+	}
+	if v := i.TechnicalOwnerIdentityHolderID; v != nil {
+		m.SetTechnicalOwnerIdentityHolderID(*v)
+	}
 	if i.ClearSecurityOwnerUser {
 		m.ClearSecurityOwnerUser()
 	}
@@ -19605,6 +19731,12 @@ func (i *UpdatePlatformInput) Mutate(m *PlatformMutation) {
 	}
 	if v := i.SecurityOwnerGroupID; v != nil {
 		m.SetSecurityOwnerGroupID(*v)
+	}
+	if i.ClearSecurityOwnerIdentityHolder {
+		m.ClearSecurityOwnerIdentityHolder()
+	}
+	if v := i.SecurityOwnerIdentityHolderID; v != nil {
+		m.SetSecurityOwnerIdentityHolderID(*v)
 	}
 	if i.ClearPlatformKind {
 		m.ClearPlatformKind()
@@ -23394,8 +23526,10 @@ type CreateScanInput struct {
 	EditorIDs                  []string               `json:"editor_ids,omitempty"`
 	ReviewedByUserID           *string                `json:"reviewed_by_user_id,omitempty"`
 	ReviewedByGroupID          *string                `json:"reviewed_by_group_id,omitempty"`
+	ReviewedByIdentityHolderID *string                `json:"reviewed_by_identity_holder_id,omitempty"`
 	AssignedToUserID           *string                `json:"assigned_to_user_id,omitempty"`
 	AssignedToGroupID          *string                `json:"assigned_to_group_id,omitempty"`
+	AssignedToIdentityHolderID *string                `json:"assigned_to_identity_holder_id,omitempty"`
 	EnvironmentID              *string                `json:"environment_id,omitempty"`
 	ScopeID                    *string                `json:"scope_id,omitempty"`
 	AssetIDs                   []string               `json:"asset_ids,omitempty"`
@@ -23478,11 +23612,17 @@ func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.ReviewedByGroupID; v != nil {
 		m.SetReviewedByGroupID(*v)
 	}
+	if v := i.ReviewedByIdentityHolderID; v != nil {
+		m.SetReviewedByIdentityHolderID(*v)
+	}
 	if v := i.AssignedToUserID; v != nil {
 		m.SetAssignedToUserID(*v)
 	}
 	if v := i.AssignedToGroupID; v != nil {
 		m.SetAssignedToGroupID(*v)
+	}
+	if v := i.AssignedToIdentityHolderID; v != nil {
+		m.SetAssignedToIdentityHolderID(*v)
 	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
@@ -23586,10 +23726,14 @@ type UpdateScanInput struct {
 	ReviewedByUserID                 *string `json:"reviewed_by_user_id,omitempty"`
 	ClearReviewedByGroup             bool
 	ReviewedByGroupID                *string `json:"reviewed_by_group_id,omitempty"`
+	ClearReviewedByIdentityHolder    bool
+	ReviewedByIdentityHolderID       *string `json:"reviewed_by_identity_holder_id,omitempty"`
 	ClearAssignedToUser              bool
 	AssignedToUserID                 *string `json:"assigned_to_user_id,omitempty"`
 	ClearAssignedToGroup             bool
 	AssignedToGroupID                *string `json:"assigned_to_group_id,omitempty"`
+	ClearAssignedToIdentityHolder    bool
+	AssignedToIdentityHolderID       *string `json:"assigned_to_identity_holder_id,omitempty"`
 	ClearEnvironment                 bool
 	EnvironmentID                    *string `json:"environment_id,omitempty"`
 	ClearScope                       bool
@@ -23763,6 +23907,12 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	if v := i.ReviewedByGroupID; v != nil {
 		m.SetReviewedByGroupID(*v)
 	}
+	if i.ClearReviewedByIdentityHolder {
+		m.ClearReviewedByIdentityHolder()
+	}
+	if v := i.ReviewedByIdentityHolderID; v != nil {
+		m.SetReviewedByIdentityHolderID(*v)
+	}
 	if i.ClearAssignedToUser {
 		m.ClearAssignedToUser()
 	}
@@ -23774,6 +23924,12 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if v := i.AssignedToGroupID; v != nil {
 		m.SetAssignedToGroupID(*v)
+	}
+	if i.ClearAssignedToIdentityHolder {
+		m.ClearAssignedToIdentityHolder()
+	}
+	if v := i.AssignedToIdentityHolderID; v != nil {
+		m.SetAssignedToIdentityHolderID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()
@@ -29461,83 +29617,85 @@ func (c *VendorScoringConfigUpdateOne) SetInput(i UpdateVendorScoringConfigInput
 
 // CreateVulnerabilityInput represents a mutation input for creating vulnerabilities.
 type CreateVulnerabilityInput struct {
-	Tags                    []string               `json:"tags,omitempty"`
-	ReviewedBy              *string                `json:"reviewed_by,omitempty"`
-	AssignedTo              *string                `json:"assigned_to,omitempty"`
-	InternalNotes           *string                `json:"internal_notes,omitempty"`
-	SystemInternalID        *string                `json:"system_internal_id,omitempty"`
-	EnvironmentName         *string                `json:"environment_name,omitempty"`
-	ScopeName               *string                `json:"scope_name,omitempty"`
-	VulnerabilityStatusName *string                `json:"vulnerability_status_name,omitempty"`
-	WorkflowEligibleMarker  *bool                  `json:"workflow_eligible_marker,omitempty"`
-	ExternalOwnerID         *string                `json:"external_owner_id,omitempty"`
-	ExternalID              string                 `json:"external_id,omitempty"`
-	CveID                   *string                `json:"cve_id,omitempty"`
-	Source                  *string                `json:"source,omitempty"`
-	DisplayName             *string                `json:"display_name,omitempty"`
-	Category                *string                `json:"category,omitempty"`
-	Severity                *string                `json:"severity,omitempty"`
-	Score                   *float64               `json:"score,omitempty"`
-	Impact                  *float64               `json:"impact,omitempty"`
-	Exploitability          *float64               `json:"exploitability,omitempty"`
-	Priority                *string                `json:"priority,omitempty"`
-	Summary                 *string                `json:"summary,omitempty"`
-	Description             *string                `json:"description,omitempty"`
-	Vector                  *string                `json:"vector,omitempty"`
-	RemediationSLA          *int                   `json:"remediation_sla,omitempty"`
-	Open                    *bool                  `json:"open,omitempty"`
-	Blocking                *bool                  `json:"blocking,omitempty"`
-	Production              *bool                  `json:"production,omitempty"`
-	Public                  *bool                  `json:"public,omitempty"`
-	Validated               *bool                  `json:"validated,omitempty"`
-	References              []string               `json:"references,omitempty"`
-	Impacts                 []string               `json:"impacts,omitempty"`
-	CweIds                  []string               `json:"cwe_ids,omitempty"`
-	VulnerableVersionRange  *string                `json:"vulnerable_version_range,omitempty"`
-	FirstPatchedVersion     *string                `json:"first_patched_version,omitempty"`
-	FixAvailable            *bool                  `json:"fix_available,omitempty"`
-	PackageName             *string                `json:"package_name,omitempty"`
-	PackageEcosystem        *string                `json:"package_ecosystem,omitempty"`
-	ManifestPath            *string                `json:"manifest_path,omitempty"`
-	DependencyScope         *string                `json:"dependency_scope,omitempty"`
-	PublishedAt             *models.DateTime       `json:"published_at,omitempty"`
-	DiscoveredAt            *models.DateTime       `json:"discovered_at,omitempty"`
-	SourceUpdatedAt         *models.DateTime       `json:"source_updated_at,omitempty"`
-	DismissedAt             *models.DateTime       `json:"dismissed_at,omitempty"`
-	DismissedReason         *string                `json:"dismissed_reason,omitempty"`
-	DismissedComment        *string                `json:"dismissed_comment,omitempty"`
-	FixedAt                 *models.DateTime       `json:"fixed_at,omitempty"`
-	AutoDismissedAt         *models.DateTime       `json:"auto_dismissed_at,omitempty"`
-	ExternalURI             *string                `json:"external_uri,omitempty"`
-	Metadata                map[string]interface{} `json:"metadata,omitempty"`
-	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
-	OwnerID                 *string                `json:"owner_id,omitempty"`
-	BlockedGroupIDs         []string               `json:"blocked_group_ids,omitempty"`
-	EditorIDs               []string               `json:"editor_ids,omitempty"`
-	ViewerIDs               []string               `json:"viewer_ids,omitempty"`
-	ReviewedByUserID        *string                `json:"reviewed_by_user_id,omitempty"`
-	ReviewedByGroupID       *string                `json:"reviewed_by_group_id,omitempty"`
-	AssignedToUserID        *string                `json:"assigned_to_user_id,omitempty"`
-	AssignedToGroupID       *string                `json:"assigned_to_group_id,omitempty"`
-	EnvironmentID           *string                `json:"environment_id,omitempty"`
-	ScopeID                 *string                `json:"scope_id,omitempty"`
-	VulnerabilityStatusID   *string                `json:"vulnerability_status_id,omitempty"`
-	IntegrationIDs          []string               `json:"integration_ids,omitempty"`
-	FindingIDs              []string               `json:"finding_ids,omitempty"`
-	ActionPlanIDs           []string               `json:"action_plan_ids,omitempty"`
-	ControlIDs              []string               `json:"control_ids,omitempty"`
-	SubcontrolIDs           []string               `json:"subcontrol_ids,omitempty"`
-	RiskIDs                 []string               `json:"risk_ids,omitempty"`
-	ProgramIDs              []string               `json:"program_ids,omitempty"`
-	AssetIDs                []string               `json:"asset_ids,omitempty"`
-	EntityIDs               []string               `json:"entity_ids,omitempty"`
-	ScanIDs                 []string               `json:"scan_ids,omitempty"`
-	TaskIDs                 []string               `json:"task_ids,omitempty"`
-	RemediationIDs          []string               `json:"remediation_ids,omitempty"`
-	ReviewIDs               []string               `json:"review_ids,omitempty"`
-	CommentIDs              []string               `json:"comment_ids,omitempty"`
-	FileIDs                 []string               `json:"file_ids,omitempty"`
-	WorkflowObjectRefIDs    []string               `json:"workflow_object_ref_ids,omitempty"`
+	Tags                       []string               `json:"tags,omitempty"`
+	ReviewedBy                 *string                `json:"reviewed_by,omitempty"`
+	AssignedTo                 *string                `json:"assigned_to,omitempty"`
+	InternalNotes              *string                `json:"internal_notes,omitempty"`
+	SystemInternalID           *string                `json:"system_internal_id,omitempty"`
+	EnvironmentName            *string                `json:"environment_name,omitempty"`
+	ScopeName                  *string                `json:"scope_name,omitempty"`
+	VulnerabilityStatusName    *string                `json:"vulnerability_status_name,omitempty"`
+	WorkflowEligibleMarker     *bool                  `json:"workflow_eligible_marker,omitempty"`
+	ExternalOwnerID            *string                `json:"external_owner_id,omitempty"`
+	ExternalID                 string                 `json:"external_id,omitempty"`
+	CveID                      *string                `json:"cve_id,omitempty"`
+	Source                     *string                `json:"source,omitempty"`
+	DisplayName                *string                `json:"display_name,omitempty"`
+	Category                   *string                `json:"category,omitempty"`
+	Severity                   *string                `json:"severity,omitempty"`
+	Score                      *float64               `json:"score,omitempty"`
+	Impact                     *float64               `json:"impact,omitempty"`
+	Exploitability             *float64               `json:"exploitability,omitempty"`
+	Priority                   *string                `json:"priority,omitempty"`
+	Summary                    *string                `json:"summary,omitempty"`
+	Description                *string                `json:"description,omitempty"`
+	Vector                     *string                `json:"vector,omitempty"`
+	RemediationSLA             *int                   `json:"remediation_sla,omitempty"`
+	Open                       *bool                  `json:"open,omitempty"`
+	Blocking                   *bool                  `json:"blocking,omitempty"`
+	Production                 *bool                  `json:"production,omitempty"`
+	Public                     *bool                  `json:"public,omitempty"`
+	Validated                  *bool                  `json:"validated,omitempty"`
+	References                 []string               `json:"references,omitempty"`
+	Impacts                    []string               `json:"impacts,omitempty"`
+	CweIds                     []string               `json:"cwe_ids,omitempty"`
+	VulnerableVersionRange     *string                `json:"vulnerable_version_range,omitempty"`
+	FirstPatchedVersion        *string                `json:"first_patched_version,omitempty"`
+	FixAvailable               *bool                  `json:"fix_available,omitempty"`
+	PackageName                *string                `json:"package_name,omitempty"`
+	PackageEcosystem           *string                `json:"package_ecosystem,omitempty"`
+	ManifestPath               *string                `json:"manifest_path,omitempty"`
+	DependencyScope            *string                `json:"dependency_scope,omitempty"`
+	PublishedAt                *models.DateTime       `json:"published_at,omitempty"`
+	DiscoveredAt               *models.DateTime       `json:"discovered_at,omitempty"`
+	SourceUpdatedAt            *models.DateTime       `json:"source_updated_at,omitempty"`
+	DismissedAt                *models.DateTime       `json:"dismissed_at,omitempty"`
+	DismissedReason            *string                `json:"dismissed_reason,omitempty"`
+	DismissedComment           *string                `json:"dismissed_comment,omitempty"`
+	FixedAt                    *models.DateTime       `json:"fixed_at,omitempty"`
+	AutoDismissedAt            *models.DateTime       `json:"auto_dismissed_at,omitempty"`
+	ExternalURI                *string                `json:"external_uri,omitempty"`
+	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
+	RawPayload                 map[string]interface{} `json:"raw_payload,omitempty"`
+	OwnerID                    *string                `json:"owner_id,omitempty"`
+	BlockedGroupIDs            []string               `json:"blocked_group_ids,omitempty"`
+	EditorIDs                  []string               `json:"editor_ids,omitempty"`
+	ViewerIDs                  []string               `json:"viewer_ids,omitempty"`
+	ReviewedByUserID           *string                `json:"reviewed_by_user_id,omitempty"`
+	ReviewedByGroupID          *string                `json:"reviewed_by_group_id,omitempty"`
+	ReviewedByIdentityHolderID *string                `json:"reviewed_by_identity_holder_id,omitempty"`
+	AssignedToUserID           *string                `json:"assigned_to_user_id,omitempty"`
+	AssignedToGroupID          *string                `json:"assigned_to_group_id,omitempty"`
+	AssignedToIdentityHolderID *string                `json:"assigned_to_identity_holder_id,omitempty"`
+	EnvironmentID              *string                `json:"environment_id,omitempty"`
+	ScopeID                    *string                `json:"scope_id,omitempty"`
+	VulnerabilityStatusID      *string                `json:"vulnerability_status_id,omitempty"`
+	IntegrationIDs             []string               `json:"integration_ids,omitempty"`
+	FindingIDs                 []string               `json:"finding_ids,omitempty"`
+	ActionPlanIDs              []string               `json:"action_plan_ids,omitempty"`
+	ControlIDs                 []string               `json:"control_ids,omitempty"`
+	SubcontrolIDs              []string               `json:"subcontrol_ids,omitempty"`
+	RiskIDs                    []string               `json:"risk_ids,omitempty"`
+	ProgramIDs                 []string               `json:"program_ids,omitempty"`
+	AssetIDs                   []string               `json:"asset_ids,omitempty"`
+	EntityIDs                  []string               `json:"entity_ids,omitempty"`
+	ScanIDs                    []string               `json:"scan_ids,omitempty"`
+	TaskIDs                    []string               `json:"task_ids,omitempty"`
+	RemediationIDs             []string               `json:"remediation_ids,omitempty"`
+	ReviewIDs                  []string               `json:"review_ids,omitempty"`
+	CommentIDs                 []string               `json:"comment_ids,omitempty"`
+	FileIDs                    []string               `json:"file_ids,omitempty"`
+	WorkflowObjectRefIDs       []string               `json:"workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the CreateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -29708,11 +29866,17 @@ func (i *CreateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ReviewedByGroupID; v != nil {
 		m.SetReviewedByGroupID(*v)
 	}
+	if v := i.ReviewedByIdentityHolderID; v != nil {
+		m.SetReviewedByIdentityHolderID(*v)
+	}
 	if v := i.AssignedToUserID; v != nil {
 		m.SetAssignedToUserID(*v)
 	}
 	if v := i.AssignedToGroupID; v != nil {
 		m.SetAssignedToGroupID(*v)
+	}
+	if v := i.AssignedToIdentityHolderID; v != nil {
+		m.SetAssignedToIdentityHolderID(*v)
 	}
 	if v := i.EnvironmentID; v != nil {
 		m.SetEnvironmentID(*v)
@@ -29781,180 +29945,184 @@ func (c *VulnerabilityCreate) SetInput(i CreateVulnerabilityInput) *Vulnerabilit
 
 // UpdateVulnerabilityInput represents a mutation input for updating vulnerabilities.
 type UpdateVulnerabilityInput struct {
-	ClearTags                    bool
-	Tags                         []string `json:"tags,omitempty"`
-	AppendTags                   []string
-	ClearReviewedBy              bool
-	ReviewedBy                   *string `json:"reviewed_by,omitempty"`
-	ClearAssignedTo              bool
-	AssignedTo                   *string `json:"assigned_to,omitempty"`
-	ClearInternalNotes           bool
-	InternalNotes                *string `json:"internal_notes,omitempty"`
-	ClearSystemInternalID        bool
-	SystemInternalID             *string `json:"system_internal_id,omitempty"`
-	ClearEnvironmentName         bool
-	EnvironmentName              *string `json:"environment_name,omitempty"`
-	ClearScopeName               bool
-	ScopeName                    *string `json:"scope_name,omitempty"`
-	ClearVulnerabilityStatusName bool
-	VulnerabilityStatusName      *string `json:"vulnerability_status_name,omitempty"`
-	ClearWorkflowEligibleMarker  bool
-	WorkflowEligibleMarker       *bool `json:"workflow_eligible_marker,omitempty"`
-	ClearExternalOwnerID         bool
-	ExternalOwnerID              *string `json:"external_owner_id,omitempty"`
-	ExternalID                   *string `json:"external_id,omitempty"`
-	ClearCveID                   bool
-	CveID                        *string `json:"cve_id,omitempty"`
-	ClearSource                  bool
-	Source                       *string `json:"source,omitempty"`
-	ClearDisplayName             bool
-	DisplayName                  *string `json:"display_name,omitempty"`
-	ClearCategory                bool
-	Category                     *string `json:"category,omitempty"`
-	ClearSeverity                bool
-	Severity                     *string `json:"severity,omitempty"`
-	ClearScore                   bool
-	Score                        *float64 `json:"score,omitempty"`
-	ClearImpact                  bool
-	Impact                       *float64 `json:"impact,omitempty"`
-	ClearExploitability          bool
-	Exploitability               *float64 `json:"exploitability,omitempty"`
-	ClearPriority                bool
-	Priority                     *string `json:"priority,omitempty"`
-	ClearSummary                 bool
-	Summary                      *string `json:"summary,omitempty"`
-	ClearDescription             bool
-	Description                  *string `json:"description,omitempty"`
-	ClearVector                  bool
-	Vector                       *string `json:"vector,omitempty"`
-	ClearRemediationSLA          bool
-	RemediationSLA               *int `json:"remediation_sla,omitempty"`
-	ClearOpen                    bool
-	Open                         *bool `json:"open,omitempty"`
-	ClearBlocking                bool
-	Blocking                     *bool `json:"blocking,omitempty"`
-	ClearProduction              bool
-	Production                   *bool `json:"production,omitempty"`
-	ClearPublic                  bool
-	Public                       *bool `json:"public,omitempty"`
-	ClearValidated               bool
-	Validated                    *bool `json:"validated,omitempty"`
-	ClearReferences              bool
-	References                   []string `json:"references,omitempty"`
-	AppendReferences             []string
-	ClearImpacts                 bool
-	Impacts                      []string `json:"impacts,omitempty"`
-	AppendImpacts                []string
-	ClearCweIds                  bool
-	CweIds                       []string `json:"cwe_ids,omitempty"`
-	AppendCweIds                 []string
-	ClearVulnerableVersionRange  bool
-	VulnerableVersionRange       *string `json:"vulnerable_version_range,omitempty"`
-	ClearFirstPatchedVersion     bool
-	FirstPatchedVersion          *string `json:"first_patched_version,omitempty"`
-	ClearFixAvailable            bool
-	FixAvailable                 *bool `json:"fix_available,omitempty"`
-	ClearPackageName             bool
-	PackageName                  *string `json:"package_name,omitempty"`
-	ClearPackageEcosystem        bool
-	PackageEcosystem             *string `json:"package_ecosystem,omitempty"`
-	ClearManifestPath            bool
-	ManifestPath                 *string `json:"manifest_path,omitempty"`
-	ClearDependencyScope         bool
-	DependencyScope              *string `json:"dependency_scope,omitempty"`
-	ClearPublishedAt             bool
-	PublishedAt                  *models.DateTime `json:"published_at,omitempty"`
-	ClearDiscoveredAt            bool
-	DiscoveredAt                 *models.DateTime `json:"discovered_at,omitempty"`
-	ClearSourceUpdatedAt         bool
-	SourceUpdatedAt              *models.DateTime `json:"source_updated_at,omitempty"`
-	ClearDismissedAt             bool
-	DismissedAt                  *models.DateTime `json:"dismissed_at,omitempty"`
-	ClearDismissedReason         bool
-	DismissedReason              *string `json:"dismissed_reason,omitempty"`
-	ClearDismissedComment        bool
-	DismissedComment             *string `json:"dismissed_comment,omitempty"`
-	ClearFixedAt                 bool
-	FixedAt                      *models.DateTime `json:"fixed_at,omitempty"`
-	ClearAutoDismissedAt         bool
-	AutoDismissedAt              *models.DateTime `json:"auto_dismissed_at,omitempty"`
-	ClearExternalURI             bool
-	ExternalURI                  *string `json:"external_uri,omitempty"`
-	ClearMetadata                bool
-	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
-	ClearRawPayload              bool
-	RawPayload                   map[string]interface{} `json:"raw_payload,omitempty"`
-	ClearBlockedGroups           bool
-	AddBlockedGroupIDs           []string `json:"add_blocked_group_ids,omitempty"`
-	RemoveBlockedGroupIDs        []string `json:"remove_blocked_group_ids,omitempty"`
-	ClearEditors                 bool
-	AddEditorIDs                 []string `json:"add_editor_ids,omitempty"`
-	RemoveEditorIDs              []string `json:"remove_editor_ids,omitempty"`
-	ClearViewers                 bool
-	AddViewerIDs                 []string `json:"add_viewer_ids,omitempty"`
-	RemoveViewerIDs              []string `json:"remove_viewer_ids,omitempty"`
-	ClearReviewedByUser          bool
-	ReviewedByUserID             *string `json:"reviewed_by_user_id,omitempty"`
-	ClearReviewedByGroup         bool
-	ReviewedByGroupID            *string `json:"reviewed_by_group_id,omitempty"`
-	ClearAssignedToUser          bool
-	AssignedToUserID             *string `json:"assigned_to_user_id,omitempty"`
-	ClearAssignedToGroup         bool
-	AssignedToGroupID            *string `json:"assigned_to_group_id,omitempty"`
-	ClearEnvironment             bool
-	EnvironmentID                *string `json:"environment_id,omitempty"`
-	ClearScope                   bool
-	ScopeID                      *string `json:"scope_id,omitempty"`
-	ClearVulnerabilityStatus     bool
-	VulnerabilityStatusID        *string `json:"vulnerability_status_id,omitempty"`
-	ClearIntegrations            bool
-	AddIntegrationIDs            []string `json:"add_integration_ids,omitempty"`
-	RemoveIntegrationIDs         []string `json:"remove_integration_ids,omitempty"`
-	ClearFindings                bool
-	AddFindingIDs                []string `json:"add_finding_ids,omitempty"`
-	RemoveFindingIDs             []string `json:"remove_finding_ids,omitempty"`
-	ClearActionPlans             bool
-	AddActionPlanIDs             []string `json:"add_action_plan_ids,omitempty"`
-	RemoveActionPlanIDs          []string `json:"remove_action_plan_ids,omitempty"`
-	ClearControls                bool
-	AddControlIDs                []string `json:"add_control_ids,omitempty"`
-	RemoveControlIDs             []string `json:"remove_control_ids,omitempty"`
-	ClearSubcontrols             bool
-	AddSubcontrolIDs             []string `json:"add_subcontrol_ids,omitempty"`
-	RemoveSubcontrolIDs          []string `json:"remove_subcontrol_ids,omitempty"`
-	ClearRisks                   bool
-	AddRiskIDs                   []string `json:"add_risk_ids,omitempty"`
-	RemoveRiskIDs                []string `json:"remove_risk_ids,omitempty"`
-	ClearPrograms                bool
-	AddProgramIDs                []string `json:"add_program_ids,omitempty"`
-	RemoveProgramIDs             []string `json:"remove_program_ids,omitempty"`
-	ClearAssets                  bool
-	AddAssetIDs                  []string `json:"add_asset_ids,omitempty"`
-	RemoveAssetIDs               []string `json:"remove_asset_ids,omitempty"`
-	ClearEntities                bool
-	AddEntityIDs                 []string `json:"add_entity_ids,omitempty"`
-	RemoveEntityIDs              []string `json:"remove_entity_ids,omitempty"`
-	ClearScans                   bool
-	AddScanIDs                   []string `json:"add_scan_ids,omitempty"`
-	RemoveScanIDs                []string `json:"remove_scan_ids,omitempty"`
-	ClearTasks                   bool
-	AddTaskIDs                   []string `json:"add_task_ids,omitempty"`
-	RemoveTaskIDs                []string `json:"remove_task_ids,omitempty"`
-	ClearRemediations            bool
-	AddRemediationIDs            []string `json:"add_remediation_ids,omitempty"`
-	RemoveRemediationIDs         []string `json:"remove_remediation_ids,omitempty"`
-	ClearReviews                 bool
-	AddReviewIDs                 []string `json:"add_review_ids,omitempty"`
-	RemoveReviewIDs              []string `json:"remove_review_ids,omitempty"`
-	ClearComments                bool
-	AddCommentIDs                []string `json:"add_comment_ids,omitempty"`
-	RemoveCommentIDs             []string `json:"remove_comment_ids,omitempty"`
-	ClearFiles                   bool
-	AddFileIDs                   []string `json:"add_file_ids,omitempty"`
-	RemoveFileIDs                []string `json:"remove_file_ids,omitempty"`
-	ClearWorkflowObjectRefs      bool
-	AddWorkflowObjectRefIDs      []string `json:"add_workflow_object_ref_ids,omitempty"`
-	RemoveWorkflowObjectRefIDs   []string `json:"remove_workflow_object_ref_ids,omitempty"`
+	ClearTags                     bool
+	Tags                          []string `json:"tags,omitempty"`
+	AppendTags                    []string
+	ClearReviewedBy               bool
+	ReviewedBy                    *string `json:"reviewed_by,omitempty"`
+	ClearAssignedTo               bool
+	AssignedTo                    *string `json:"assigned_to,omitempty"`
+	ClearInternalNotes            bool
+	InternalNotes                 *string `json:"internal_notes,omitempty"`
+	ClearSystemInternalID         bool
+	SystemInternalID              *string `json:"system_internal_id,omitempty"`
+	ClearEnvironmentName          bool
+	EnvironmentName               *string `json:"environment_name,omitempty"`
+	ClearScopeName                bool
+	ScopeName                     *string `json:"scope_name,omitempty"`
+	ClearVulnerabilityStatusName  bool
+	VulnerabilityStatusName       *string `json:"vulnerability_status_name,omitempty"`
+	ClearWorkflowEligibleMarker   bool
+	WorkflowEligibleMarker        *bool `json:"workflow_eligible_marker,omitempty"`
+	ClearExternalOwnerID          bool
+	ExternalOwnerID               *string `json:"external_owner_id,omitempty"`
+	ExternalID                    *string `json:"external_id,omitempty"`
+	ClearCveID                    bool
+	CveID                         *string `json:"cve_id,omitempty"`
+	ClearSource                   bool
+	Source                        *string `json:"source,omitempty"`
+	ClearDisplayName              bool
+	DisplayName                   *string `json:"display_name,omitempty"`
+	ClearCategory                 bool
+	Category                      *string `json:"category,omitempty"`
+	ClearSeverity                 bool
+	Severity                      *string `json:"severity,omitempty"`
+	ClearScore                    bool
+	Score                         *float64 `json:"score,omitempty"`
+	ClearImpact                   bool
+	Impact                        *float64 `json:"impact,omitempty"`
+	ClearExploitability           bool
+	Exploitability                *float64 `json:"exploitability,omitempty"`
+	ClearPriority                 bool
+	Priority                      *string `json:"priority,omitempty"`
+	ClearSummary                  bool
+	Summary                       *string `json:"summary,omitempty"`
+	ClearDescription              bool
+	Description                   *string `json:"description,omitempty"`
+	ClearVector                   bool
+	Vector                        *string `json:"vector,omitempty"`
+	ClearRemediationSLA           bool
+	RemediationSLA                *int `json:"remediation_sla,omitempty"`
+	ClearOpen                     bool
+	Open                          *bool `json:"open,omitempty"`
+	ClearBlocking                 bool
+	Blocking                      *bool `json:"blocking,omitempty"`
+	ClearProduction               bool
+	Production                    *bool `json:"production,omitempty"`
+	ClearPublic                   bool
+	Public                        *bool `json:"public,omitempty"`
+	ClearValidated                bool
+	Validated                     *bool `json:"validated,omitempty"`
+	ClearReferences               bool
+	References                    []string `json:"references,omitempty"`
+	AppendReferences              []string
+	ClearImpacts                  bool
+	Impacts                       []string `json:"impacts,omitempty"`
+	AppendImpacts                 []string
+	ClearCweIds                   bool
+	CweIds                        []string `json:"cwe_ids,omitempty"`
+	AppendCweIds                  []string
+	ClearVulnerableVersionRange   bool
+	VulnerableVersionRange        *string `json:"vulnerable_version_range,omitempty"`
+	ClearFirstPatchedVersion      bool
+	FirstPatchedVersion           *string `json:"first_patched_version,omitempty"`
+	ClearFixAvailable             bool
+	FixAvailable                  *bool `json:"fix_available,omitempty"`
+	ClearPackageName              bool
+	PackageName                   *string `json:"package_name,omitempty"`
+	ClearPackageEcosystem         bool
+	PackageEcosystem              *string `json:"package_ecosystem,omitempty"`
+	ClearManifestPath             bool
+	ManifestPath                  *string `json:"manifest_path,omitempty"`
+	ClearDependencyScope          bool
+	DependencyScope               *string `json:"dependency_scope,omitempty"`
+	ClearPublishedAt              bool
+	PublishedAt                   *models.DateTime `json:"published_at,omitempty"`
+	ClearDiscoveredAt             bool
+	DiscoveredAt                  *models.DateTime `json:"discovered_at,omitempty"`
+	ClearSourceUpdatedAt          bool
+	SourceUpdatedAt               *models.DateTime `json:"source_updated_at,omitempty"`
+	ClearDismissedAt              bool
+	DismissedAt                   *models.DateTime `json:"dismissed_at,omitempty"`
+	ClearDismissedReason          bool
+	DismissedReason               *string `json:"dismissed_reason,omitempty"`
+	ClearDismissedComment         bool
+	DismissedComment              *string `json:"dismissed_comment,omitempty"`
+	ClearFixedAt                  bool
+	FixedAt                       *models.DateTime `json:"fixed_at,omitempty"`
+	ClearAutoDismissedAt          bool
+	AutoDismissedAt               *models.DateTime `json:"auto_dismissed_at,omitempty"`
+	ClearExternalURI              bool
+	ExternalURI                   *string `json:"external_uri,omitempty"`
+	ClearMetadata                 bool
+	Metadata                      map[string]interface{} `json:"metadata,omitempty"`
+	ClearRawPayload               bool
+	RawPayload                    map[string]interface{} `json:"raw_payload,omitempty"`
+	ClearBlockedGroups            bool
+	AddBlockedGroupIDs            []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs         []string `json:"remove_blocked_group_ids,omitempty"`
+	ClearEditors                  bool
+	AddEditorIDs                  []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs               []string `json:"remove_editor_ids,omitempty"`
+	ClearViewers                  bool
+	AddViewerIDs                  []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs               []string `json:"remove_viewer_ids,omitempty"`
+	ClearReviewedByUser           bool
+	ReviewedByUserID              *string `json:"reviewed_by_user_id,omitempty"`
+	ClearReviewedByGroup          bool
+	ReviewedByGroupID             *string `json:"reviewed_by_group_id,omitempty"`
+	ClearReviewedByIdentityHolder bool
+	ReviewedByIdentityHolderID    *string `json:"reviewed_by_identity_holder_id,omitempty"`
+	ClearAssignedToUser           bool
+	AssignedToUserID              *string `json:"assigned_to_user_id,omitempty"`
+	ClearAssignedToGroup          bool
+	AssignedToGroupID             *string `json:"assigned_to_group_id,omitempty"`
+	ClearAssignedToIdentityHolder bool
+	AssignedToIdentityHolderID    *string `json:"assigned_to_identity_holder_id,omitempty"`
+	ClearEnvironment              bool
+	EnvironmentID                 *string `json:"environment_id,omitempty"`
+	ClearScope                    bool
+	ScopeID                       *string `json:"scope_id,omitempty"`
+	ClearVulnerabilityStatus      bool
+	VulnerabilityStatusID         *string `json:"vulnerability_status_id,omitempty"`
+	ClearIntegrations             bool
+	AddIntegrationIDs             []string `json:"add_integration_ids,omitempty"`
+	RemoveIntegrationIDs          []string `json:"remove_integration_ids,omitempty"`
+	ClearFindings                 bool
+	AddFindingIDs                 []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs              []string `json:"remove_finding_ids,omitempty"`
+	ClearActionPlans              bool
+	AddActionPlanIDs              []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs           []string `json:"remove_action_plan_ids,omitempty"`
+	ClearControls                 bool
+	AddControlIDs                 []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs              []string `json:"remove_control_ids,omitempty"`
+	ClearSubcontrols              bool
+	AddSubcontrolIDs              []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs           []string `json:"remove_subcontrol_ids,omitempty"`
+	ClearRisks                    bool
+	AddRiskIDs                    []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                 []string `json:"remove_risk_ids,omitempty"`
+	ClearPrograms                 bool
+	AddProgramIDs                 []string `json:"add_program_ids,omitempty"`
+	RemoveProgramIDs              []string `json:"remove_program_ids,omitempty"`
+	ClearAssets                   bool
+	AddAssetIDs                   []string `json:"add_asset_ids,omitempty"`
+	RemoveAssetIDs                []string `json:"remove_asset_ids,omitempty"`
+	ClearEntities                 bool
+	AddEntityIDs                  []string `json:"add_entity_ids,omitempty"`
+	RemoveEntityIDs               []string `json:"remove_entity_ids,omitempty"`
+	ClearScans                    bool
+	AddScanIDs                    []string `json:"add_scan_ids,omitempty"`
+	RemoveScanIDs                 []string `json:"remove_scan_ids,omitempty"`
+	ClearTasks                    bool
+	AddTaskIDs                    []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                 []string `json:"remove_task_ids,omitempty"`
+	ClearRemediations             bool
+	AddRemediationIDs             []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs          []string `json:"remove_remediation_ids,omitempty"`
+	ClearReviews                  bool
+	AddReviewIDs                  []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs               []string `json:"remove_review_ids,omitempty"`
+	ClearComments                 bool
+	AddCommentIDs                 []string `json:"add_comment_ids,omitempty"`
+	RemoveCommentIDs              []string `json:"remove_comment_ids,omitempty"`
+	ClearFiles                    bool
+	AddFileIDs                    []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                 []string `json:"remove_file_ids,omitempty"`
+	ClearWorkflowObjectRefs       bool
+	AddWorkflowObjectRefIDs       []string `json:"add_workflow_object_ref_ids,omitempty"`
+	RemoveWorkflowObjectRefIDs    []string `json:"remove_workflow_object_ref_ids,omitempty"`
 }
 
 // Mutate applies the UpdateVulnerabilityInput on the VulnerabilityMutation builder.
@@ -30307,6 +30475,12 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	if v := i.ReviewedByGroupID; v != nil {
 		m.SetReviewedByGroupID(*v)
 	}
+	if i.ClearReviewedByIdentityHolder {
+		m.ClearReviewedByIdentityHolder()
+	}
+	if v := i.ReviewedByIdentityHolderID; v != nil {
+		m.SetReviewedByIdentityHolderID(*v)
+	}
 	if i.ClearAssignedToUser {
 		m.ClearAssignedToUser()
 	}
@@ -30318,6 +30492,12 @@ func (i *UpdateVulnerabilityInput) Mutate(m *VulnerabilityMutation) {
 	}
 	if v := i.AssignedToGroupID; v != nil {
 		m.SetAssignedToGroupID(*v)
+	}
+	if i.ClearAssignedToIdentityHolder {
+		m.ClearAssignedToIdentityHolder()
+	}
+	if v := i.AssignedToIdentityHolderID; v != nil {
+		m.SetAssignedToIdentityHolderID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

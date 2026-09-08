@@ -41,57 +41,58 @@ import (
 // IdentityHolderQuery is the builder for querying IdentityHolder entities.
 type IdentityHolderQuery struct {
 	config
-	ctx                          *QueryContext
-	order                        []identityholder.OrderOption
-	inters                       []Interceptor
-	predicates                   []predicate.IdentityHolder
-	withOwner                    *OrganizationQuery
-	withBlockedGroups            *GroupQuery
-	withEditors                  *GroupQuery
-	withViewers                  *GroupQuery
-	withInternalOwnerUser        *UserQuery
-	withInternalOwnerGroup       *GroupQuery
-	withEnvironment              *CustomTypeEnumQuery
-	withScope                    *CustomTypeEnumQuery
-	withEmployer                 *EntityQuery
-	withAssessmentResponses      *AssessmentResponseQuery
-	withAssessments              *AssessmentQuery
-	withTemplates                *TemplateQuery
-	withAssets                   *AssetQuery
-	withEntities                 *EntityQuery
-	withDirectoryAccounts        *DirectoryAccountQuery
-	withControls                 *ControlQuery
-	withSubcontrols              *SubcontrolQuery
-	withPlatforms                *PlatformQuery
-	withCampaigns                *CampaignQuery
-	withTasks                    *TaskQuery
-	withFiles                    *FileQuery
-	withFindings                 *FindingQuery
-	withWorkflowObjectRefs       *WorkflowObjectRefQuery
-	withAccessPlatforms          *PlatformQuery
-	withUser                     *UserQuery
-	withInternalPolicies         *InternalPolicyQuery
-	loadTotal                    []func(context.Context, []*IdentityHolder) error
-	modifiers                    []func(*sql.Selector)
-	withNamedBlockedGroups       map[string]*GroupQuery
-	withNamedEditors             map[string]*GroupQuery
-	withNamedViewers             map[string]*GroupQuery
-	withNamedAssessmentResponses map[string]*AssessmentResponseQuery
-	withNamedAssessments         map[string]*AssessmentQuery
-	withNamedTemplates           map[string]*TemplateQuery
-	withNamedAssets              map[string]*AssetQuery
-	withNamedEntities            map[string]*EntityQuery
-	withNamedDirectoryAccounts   map[string]*DirectoryAccountQuery
-	withNamedControls            map[string]*ControlQuery
-	withNamedSubcontrols         map[string]*SubcontrolQuery
-	withNamedPlatforms           map[string]*PlatformQuery
-	withNamedCampaigns           map[string]*CampaignQuery
-	withNamedTasks               map[string]*TaskQuery
-	withNamedFiles               map[string]*FileQuery
-	withNamedFindings            map[string]*FindingQuery
-	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
-	withNamedAccessPlatforms     map[string]*PlatformQuery
-	withNamedInternalPolicies    map[string]*InternalPolicyQuery
+	ctx                             *QueryContext
+	order                           []identityholder.OrderOption
+	inters                          []Interceptor
+	predicates                      []predicate.IdentityHolder
+	withOwner                       *OrganizationQuery
+	withBlockedGroups               *GroupQuery
+	withEditors                     *GroupQuery
+	withViewers                     *GroupQuery
+	withInternalOwnerUser           *UserQuery
+	withInternalOwnerGroup          *GroupQuery
+	withInternalOwnerIdentityHolder *IdentityHolderQuery
+	withEnvironment                 *CustomTypeEnumQuery
+	withScope                       *CustomTypeEnumQuery
+	withEmployer                    *EntityQuery
+	withAssessmentResponses         *AssessmentResponseQuery
+	withAssessments                 *AssessmentQuery
+	withTemplates                   *TemplateQuery
+	withAssets                      *AssetQuery
+	withEntities                    *EntityQuery
+	withDirectoryAccounts           *DirectoryAccountQuery
+	withControls                    *ControlQuery
+	withSubcontrols                 *SubcontrolQuery
+	withPlatforms                   *PlatformQuery
+	withCampaigns                   *CampaignQuery
+	withTasks                       *TaskQuery
+	withFiles                       *FileQuery
+	withFindings                    *FindingQuery
+	withWorkflowObjectRefs          *WorkflowObjectRefQuery
+	withAccessPlatforms             *PlatformQuery
+	withUser                        *UserQuery
+	withInternalPolicies            *InternalPolicyQuery
+	loadTotal                       []func(context.Context, []*IdentityHolder) error
+	modifiers                       []func(*sql.Selector)
+	withNamedBlockedGroups          map[string]*GroupQuery
+	withNamedEditors                map[string]*GroupQuery
+	withNamedViewers                map[string]*GroupQuery
+	withNamedAssessmentResponses    map[string]*AssessmentResponseQuery
+	withNamedAssessments            map[string]*AssessmentQuery
+	withNamedTemplates              map[string]*TemplateQuery
+	withNamedAssets                 map[string]*AssetQuery
+	withNamedEntities               map[string]*EntityQuery
+	withNamedDirectoryAccounts      map[string]*DirectoryAccountQuery
+	withNamedControls               map[string]*ControlQuery
+	withNamedSubcontrols            map[string]*SubcontrolQuery
+	withNamedPlatforms              map[string]*PlatformQuery
+	withNamedCampaigns              map[string]*CampaignQuery
+	withNamedTasks                  map[string]*TaskQuery
+	withNamedFiles                  map[string]*FileQuery
+	withNamedFindings               map[string]*FindingQuery
+	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
+	withNamedAccessPlatforms        map[string]*PlatformQuery
+	withNamedInternalPolicies       map[string]*InternalPolicyQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -253,6 +254,28 @@ func (_q *IdentityHolderQuery) QueryInternalOwnerGroup() *GroupQuery {
 			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.InternalOwnerGroupTable, identityholder.InternalOwnerGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalOwnerIdentityHolder chains the current query on the "internal_owner_identity_holder" edge.
+func (_q *IdentityHolderQuery) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.O2O, false, identityholder.InternalOwnerIdentityHolderTable, identityholder.InternalOwnerIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -887,37 +910,38 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		return nil
 	}
 	return &IdentityHolderQuery{
-		config:                  _q.config,
-		ctx:                     _q.ctx.Clone(),
-		order:                   append([]identityholder.OrderOption{}, _q.order...),
-		inters:                  append([]Interceptor{}, _q.inters...),
-		predicates:              append([]predicate.IdentityHolder{}, _q.predicates...),
-		withOwner:               _q.withOwner.Clone(),
-		withBlockedGroups:       _q.withBlockedGroups.Clone(),
-		withEditors:             _q.withEditors.Clone(),
-		withViewers:             _q.withViewers.Clone(),
-		withInternalOwnerUser:   _q.withInternalOwnerUser.Clone(),
-		withInternalOwnerGroup:  _q.withInternalOwnerGroup.Clone(),
-		withEnvironment:         _q.withEnvironment.Clone(),
-		withScope:               _q.withScope.Clone(),
-		withEmployer:            _q.withEmployer.Clone(),
-		withAssessmentResponses: _q.withAssessmentResponses.Clone(),
-		withAssessments:         _q.withAssessments.Clone(),
-		withTemplates:           _q.withTemplates.Clone(),
-		withAssets:              _q.withAssets.Clone(),
-		withEntities:            _q.withEntities.Clone(),
-		withDirectoryAccounts:   _q.withDirectoryAccounts.Clone(),
-		withControls:            _q.withControls.Clone(),
-		withSubcontrols:         _q.withSubcontrols.Clone(),
-		withPlatforms:           _q.withPlatforms.Clone(),
-		withCampaigns:           _q.withCampaigns.Clone(),
-		withTasks:               _q.withTasks.Clone(),
-		withFiles:               _q.withFiles.Clone(),
-		withFindings:            _q.withFindings.Clone(),
-		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
-		withAccessPlatforms:     _q.withAccessPlatforms.Clone(),
-		withUser:                _q.withUser.Clone(),
-		withInternalPolicies:    _q.withInternalPolicies.Clone(),
+		config:                          _q.config,
+		ctx:                             _q.ctx.Clone(),
+		order:                           append([]identityholder.OrderOption{}, _q.order...),
+		inters:                          append([]Interceptor{}, _q.inters...),
+		predicates:                      append([]predicate.IdentityHolder{}, _q.predicates...),
+		withOwner:                       _q.withOwner.Clone(),
+		withBlockedGroups:               _q.withBlockedGroups.Clone(),
+		withEditors:                     _q.withEditors.Clone(),
+		withViewers:                     _q.withViewers.Clone(),
+		withInternalOwnerUser:           _q.withInternalOwnerUser.Clone(),
+		withInternalOwnerGroup:          _q.withInternalOwnerGroup.Clone(),
+		withInternalOwnerIdentityHolder: _q.withInternalOwnerIdentityHolder.Clone(),
+		withEnvironment:                 _q.withEnvironment.Clone(),
+		withScope:                       _q.withScope.Clone(),
+		withEmployer:                    _q.withEmployer.Clone(),
+		withAssessmentResponses:         _q.withAssessmentResponses.Clone(),
+		withAssessments:                 _q.withAssessments.Clone(),
+		withTemplates:                   _q.withTemplates.Clone(),
+		withAssets:                      _q.withAssets.Clone(),
+		withEntities:                    _q.withEntities.Clone(),
+		withDirectoryAccounts:           _q.withDirectoryAccounts.Clone(),
+		withControls:                    _q.withControls.Clone(),
+		withSubcontrols:                 _q.withSubcontrols.Clone(),
+		withPlatforms:                   _q.withPlatforms.Clone(),
+		withCampaigns:                   _q.withCampaigns.Clone(),
+		withTasks:                       _q.withTasks.Clone(),
+		withFiles:                       _q.withFiles.Clone(),
+		withFindings:                    _q.withFindings.Clone(),
+		withWorkflowObjectRefs:          _q.withWorkflowObjectRefs.Clone(),
+		withAccessPlatforms:             _q.withAccessPlatforms.Clone(),
+		withUser:                        _q.withUser.Clone(),
+		withInternalPolicies:            _q.withInternalPolicies.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -988,6 +1012,17 @@ func (_q *IdentityHolderQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery))
 		opt(query)
 	}
 	_q.withInternalOwnerGroup = query
+	return _q
+}
+
+// WithInternalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithInternalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerIdentityHolder = query
 	return _q
 }
 
@@ -1295,13 +1330,14 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IdentityHolder{}
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [27]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withViewers != nil,
 			_q.withInternalOwnerUser != nil,
 			_q.withInternalOwnerGroup != nil,
+			_q.withInternalOwnerIdentityHolder != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withEmployer != nil,
@@ -1381,6 +1417,12 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withInternalOwnerGroup; query != nil {
 		if err := _q.loadInternalOwnerGroup(ctx, query, nodes, nil,
 			func(n *IdentityHolder, e *Group) { n.Edges.InternalOwnerGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withInternalOwnerIdentityHolder; query != nil {
+		if err := _q.loadInternalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *IdentityHolder, e *IdentityHolder) { n.Edges.InternalOwnerIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1842,6 +1884,35 @@ func (_q *IdentityHolderQuery) loadInternalOwnerGroup(ctx context.Context, query
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "internal_owner_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *IdentityHolderQuery) loadInternalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*IdentityHolder)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2859,6 +2930,9 @@ func (_q *IdentityHolderQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withInternalOwnerGroup != nil {
 			_spec.Node.AddColumnOnce(identityholder.FieldInternalOwnerGroupID)
+		}
+		if _q.withInternalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(identityholder.FieldInternalOwnerIdentityHolderID)
 		}
 		if _q.withEnvironment != nil {
 			_spec.Node.AddColumnOnce(identityholder.FieldEnvironmentID)

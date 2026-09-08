@@ -203,6 +203,20 @@ func (_c *CampaignCreate) SetNillableInternalOwnerGroupID(v *string) *CampaignCr
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *CampaignCreate) SetInternalOwnerIdentityHolderID(v string) *CampaignCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *CampaignCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *CampaignCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_c *CampaignCreate) SetWorkflowEligibleMarker(v bool) *CampaignCreate {
 	_c.mutation.SetWorkflowEligibleMarker(v)
@@ -665,6 +679,11 @@ func (_c *CampaignCreate) SetInternalOwnerUser(v *User) *CampaignCreate {
 // SetInternalOwnerGroup sets the "internal_owner_group" edge to the Group entity.
 func (_c *CampaignCreate) SetInternalOwnerGroup(v *Group) *CampaignCreate {
 	return _c.SetInternalOwnerGroupID(v.ID)
+}
+
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *CampaignCreate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *CampaignCreate {
+	return _c.SetInternalOwnerIdentityHolderID(v.ID)
 }
 
 // SetAssessment sets the "assessment" edge to the Assessment entity.
@@ -1242,6 +1261,23 @@ func (_c *CampaignCreate) createSpec() (*Campaign, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.InternalOwnerGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   campaign.InternalOwnerIdentityHolderTable,
+			Columns: []string{campaign.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.AssessmentIDs(); len(nodes) > 0 {

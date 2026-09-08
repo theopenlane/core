@@ -227,6 +227,26 @@ func (_u *EntityUpdate) ClearInternalOwnerGroupID() *EntityUpdate {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *EntityUpdate) SetInternalOwnerIdentityHolderID(v string) *EntityUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *EntityUpdate) ClearInternalOwnerIdentityHolderID() *EntityUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_u *EntityUpdate) SetReviewedBy(v string) *EntityUpdate {
 	_u.mutation.SetReviewedBy(v)
@@ -284,6 +304,26 @@ func (_u *EntityUpdate) SetNillableReviewedByGroupID(v *string) *EntityUpdate {
 // ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
 func (_u *EntityUpdate) ClearReviewedByGroupID() *EntityUpdate {
 	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *EntityUpdate) SetReviewedByIdentityHolderID(v string) *EntityUpdate {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *EntityUpdate) SetNillableReviewedByIdentityHolderID(v *string) *EntityUpdate {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *EntityUpdate) ClearReviewedByIdentityHolderID() *EntityUpdate {
+	_u.mutation.ClearReviewedByIdentityHolderID()
 	return _u
 }
 
@@ -1337,6 +1377,11 @@ func (_u *EntityUpdate) SetInternalOwnerGroup(v *Group) *EntityUpdate {
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *EntityUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
 func (_u *EntityUpdate) SetReviewedByUser(v *User) *EntityUpdate {
 	return _u.SetReviewedByUserID(v.ID)
@@ -1345,6 +1390,11 @@ func (_u *EntityUpdate) SetReviewedByUser(v *User) *EntityUpdate {
 // SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
 func (_u *EntityUpdate) SetReviewedByGroup(v *Group) *EntityUpdate {
 	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdate) SetReviewedByIdentityHolder(v *IdentityHolder) *EntityUpdate {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
 }
 
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -1816,6 +1866,12 @@ func (_u *EntityUpdate) ClearInternalOwnerGroup() *EntityUpdate {
 	return _u
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdate) ClearInternalOwnerIdentityHolder() *EntityUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
+}
+
 // ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
 func (_u *EntityUpdate) ClearReviewedByUser() *EntityUpdate {
 	_u.mutation.ClearReviewedByUser()
@@ -1825,6 +1881,12 @@ func (_u *EntityUpdate) ClearReviewedByUser() *EntityUpdate {
 // ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
 func (_u *EntityUpdate) ClearReviewedByGroup() *EntityUpdate {
 	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdate) ClearReviewedByIdentityHolder() *EntityUpdate {
+	_u.mutation.ClearReviewedByIdentityHolder()
 	return _u
 }
 
@@ -3010,6 +3072,35 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ReviewedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -3061,6 +3152,35 @@ func (_u *EntityUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -4588,6 +4708,26 @@ func (_u *EntityUpdateOne) ClearInternalOwnerGroupID() *EntityUpdateOne {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *EntityUpdateOne) SetInternalOwnerIdentityHolderID(v string) *EntityUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *EntityUpdateOne) ClearInternalOwnerIdentityHolderID() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_u *EntityUpdateOne) SetReviewedBy(v string) *EntityUpdateOne {
 	_u.mutation.SetReviewedBy(v)
@@ -4645,6 +4785,26 @@ func (_u *EntityUpdateOne) SetNillableReviewedByGroupID(v *string) *EntityUpdate
 // ClearReviewedByGroupID clears the value of the "reviewed_by_group_id" field.
 func (_u *EntityUpdateOne) ClearReviewedByGroupID() *EntityUpdateOne {
 	_u.mutation.ClearReviewedByGroupID()
+	return _u
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_u *EntityUpdateOne) SetReviewedByIdentityHolderID(v string) *EntityUpdateOne {
+	_u.mutation.SetReviewedByIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_u *EntityUpdateOne) SetNillableReviewedByIdentityHolderID(v *string) *EntityUpdateOne {
+	if v != nil {
+		_u.SetReviewedByIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (_u *EntityUpdateOne) ClearReviewedByIdentityHolderID() *EntityUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolderID()
 	return _u
 }
 
@@ -5698,6 +5858,11 @@ func (_u *EntityUpdateOne) SetInternalOwnerGroup(v *Group) *EntityUpdateOne {
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *EntityUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
 func (_u *EntityUpdateOne) SetReviewedByUser(v *User) *EntityUpdateOne {
 	return _u.SetReviewedByUserID(v.ID)
@@ -5706,6 +5871,11 @@ func (_u *EntityUpdateOne) SetReviewedByUser(v *User) *EntityUpdateOne {
 // SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
 func (_u *EntityUpdateOne) SetReviewedByGroup(v *Group) *EntityUpdateOne {
 	return _u.SetReviewedByGroupID(v.ID)
+}
+
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdateOne) SetReviewedByIdentityHolder(v *IdentityHolder) *EntityUpdateOne {
+	return _u.SetReviewedByIdentityHolderID(v.ID)
 }
 
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -6177,6 +6347,12 @@ func (_u *EntityUpdateOne) ClearInternalOwnerGroup() *EntityUpdateOne {
 	return _u
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdateOne) ClearInternalOwnerIdentityHolder() *EntityUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
+	return _u
+}
+
 // ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
 func (_u *EntityUpdateOne) ClearReviewedByUser() *EntityUpdateOne {
 	_u.mutation.ClearReviewedByUser()
@@ -6186,6 +6362,12 @@ func (_u *EntityUpdateOne) ClearReviewedByUser() *EntityUpdateOne {
 // ClearReviewedByGroup clears the "reviewed_by_group" edge to the Group entity.
 func (_u *EntityUpdateOne) ClearReviewedByGroup() *EntityUpdateOne {
 	_u.mutation.ClearReviewedByGroup()
+	return _u
+}
+
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_u *EntityUpdateOne) ClearReviewedByIdentityHolder() *EntityUpdateOne {
+	_u.mutation.ClearReviewedByIdentityHolder()
 	return _u
 }
 
@@ -7401,6 +7583,35 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ReviewedByUserCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -7452,6 +7663,35 @@ func (_u *EntityUpdateOne) sqlSave(ctx context.Context) (_node *Entity, err erro
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ReviewedByIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
