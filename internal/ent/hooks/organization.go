@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/v2/internal/ent/generated/orgsubscription"
+	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/v2/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
@@ -344,6 +345,8 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 		if err != nil {
 			return ctx, err
 		}
+	} else if err := createDefaultTrustCenter(ctx, orgCreated, m.Client()); err != nil {
+		return ctx, err
 	}
 
 	if err := createDefaultSLADefinitions(ctx, orgCreated.ID, m.Client()); err != nil {
@@ -360,6 +363,29 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 	}
 
 	return ctx, nil
+}
+
+// createDefaultTrustCenter creates a trust center for a new org when the entitlement manager is
+// disabled, since the stripe webhook that normally creates it on module purchase never fires
+func createDefaultTrustCenter(ctx context.Context, orgCreated *generated.Organization, client *generated.Client) error {
+	// use a fresh caller without the org creation bypass capabilities so the trust center hooks
+	// and interceptors scope to this org, and set the owner explicitly rather than relying on the
+	// owner hook, which skips service callers
+	tcCtx := auth.WithCaller(ctx, &auth.Caller{
+		SubjectID:          orgCreated.CreatedBy,
+		OrganizationID:     orgCreated.ID,
+		OrganizationIDs:    []string{orgCreated.ID},
+		AuthenticationType: auth.JWTAuthentication,
+	})
+	tcCtx = privacy.DecisionContext(tcCtx, privacy.Allow)
+
+	if err := client.TrustCenter.Create().SetOwnerID(orgCreated.ID).Exec(tcCtx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating default trust center")
+
+		return err
+	}
+
+	return nil
 }
 
 const (

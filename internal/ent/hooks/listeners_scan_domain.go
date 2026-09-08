@@ -15,6 +15,7 @@ import (
 	intruntime "github.com/theopenlane/core/v2/internal/integrations/runtime"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/gala"
+	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
 // init registers the domain scan listeners so gala setup picks them up automatically
@@ -83,7 +84,9 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, payload e
 
 	// only apply the branding to the trustcenter by default on the first run
 	// if org settings has existing domains then no need to
-	applyBrandDesign := ok && len(domains) == 0
+	applyBrandDesign := domains == nil || (ok && len(domains) == 0)
+
+	logx.FromContext(inv.Context).Debug().Bool("applyBrandDesign", applyBrandDesign).Int("num_domains", len(domains)).Int("num_setting_domains", len(setting.Domains)).Bool("ok str", ok).Msg("HERE: applyBrandDesign setting")
 
 	for idx, domain := range setting.Domains {
 		if err := dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID), domain), cloudflare.DomainScanRequest{
