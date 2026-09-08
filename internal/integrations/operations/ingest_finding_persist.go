@@ -11,15 +11,19 @@ import (
 )
 
 // persistFindingInput upserts one Finding record through the catalog-driven entityops upsert
-func persistFindingInput(ctx context.Context, db *ent.Client, installation *ent.Integration, createInput ent.CreateFindingInput) (string, error) {
+func persistFindingInput(ctx context.Context, db *ent.Client, installation *ent.Integration, createInput ent.CreateFindingInput) (string, bool, bool, error) {
 	if createInput.Description != nil && *createInput.Description != "" {
 		normalized := normalizeDescription(*createInput.Description)
 		createInput.Description = &normalized
 	}
 
-	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaFinding, installation.OwnerID, createInput)
+	id, changed, managed, err := persistCatalogUpsert(ctx, db, entityops.SchemaFinding, installation.OwnerID, installation, createInput)
 	if err != nil {
-		return "", err
+		return "", false, false, err
+	}
+
+	if !managed {
+		return id, changed, managed, nil
 	}
 
 	if err := ensureIngestIntegrationLink(ctx, entityops.SchemaFinding.Snake, id, installation.ID,
@@ -35,8 +39,8 @@ func persistFindingInput(ctx context.Context, db *ent.Client, installation *ent.
 	); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("finding integration link failed")
 
-		return id, wrapIngestPersistError(err)
+		return id, changed, managed, wrapIngestPersistError(err)
 	}
 
-	return id, nil
+	return id, changed, managed, nil
 }

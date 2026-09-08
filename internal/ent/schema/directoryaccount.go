@@ -57,7 +57,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Optional().
 			NotEmpty().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration().Volatile(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.String("directory_sync_run_id").
 			Comment("optional sync run that produced this snapshot").
@@ -208,7 +208,10 @@ func (DirectoryAccount) Fields() []ent.Field {
 		field.Time("last_login_at").
 			Comment("timestamp of the most recent login reported by the provider").
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.IntegrationMappingField().Volatile(),
+			),
 		field.Time("first_seen_at").
 			Comment("time this account was first observed by Openlane from directory ingest").
 			Optional().
@@ -221,7 +224,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
-				entx.IntegrationMappingField(),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.Time("added_at").
 			Comment("provider-reported time the account was added or provisioned in the source directory").

@@ -112,7 +112,7 @@ func (Contact) Fields() []ent.Field {
 			Comment("integration that sourced this contact, when populated via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration().Volatile(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.Time("observed_at").
 			Comment("time when this contact was last observed by the source integration").

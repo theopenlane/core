@@ -46,7 +46,10 @@ func (ProvenanceMixin) Fields() []ent.Field {
 			),
 		field.String("managed_by").
 			Comment("virtual subject id of the integration definition managing the record, empty when user controlled").
-			Optional(),
+			Optional().
+			Annotations(
+				entx.IntegrationMappingField().FromIntegration(),
+			),
 	}
 }
 

@@ -14,6 +14,7 @@ import (
 	"sync"
 	"time"
 
+	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
@@ -91,16 +92,19 @@ type IngestRequest struct {
 type IngestIntegrationResolver func(context.Context, *generated.Client, gala.OperationContext) (*generated.Integration, error)
 
 // IngestPersist is the type-erased persistence operation bound to a schema at startup.
-type IngestPersist func(context.Context, *generated.Client, *generated.Integration, json.RawMessage) (string, error)
+type IngestPersist func(context.Context, *generated.Client, *generated.Integration, json.RawMessage) (id string, changed bool, managed bool, err error)
 
 // TypedIngestPersist is the typed persistence operation adapted by BindIngest.
-type TypedIngestPersist[T any] func(context.Context, *generated.Client, *generated.Integration, T) (string, error)
+type TypedIngestPersist[T any] func(context.Context, *generated.Client, *generated.Integration, T) (id string, changed bool, managed bool, err error)
 
 // IngestCapability is the schema's single asynchronous ingest control surface.
 type IngestCapability struct {
 	Topic   gala.Topic[IngestRequest]
 	prepare func(context.Context, *generated.Integration, json.RawMessage) (json.RawMessage, error)
 	persist IngestPersist
+	// buildUpdate reconstructs the resolved row as its concrete entity for cached old-value reads and
+	// binds the ingest payload as an update mutation, returning the mutation with its save closure
+	buildUpdate func(context.Context, *generated.Client, json.RawMessage, json.RawMessage) (ent.Mutation, func(context.Context) error, error)
 }
 
 // Schema is the runtime representation of a registered entity schema. It carries the schema
@@ -140,9 +144,6 @@ type Schema struct {
 	ProjectionType reflect.Type
 	// Ingest is present when this schema supports mapped integration ingestion
 	Ingest *IngestCapability
-	// unchanged reports whether a round-tripped ingest update carries no field changes for the
-	// marshaled row; present only for integration-mapped schemas with update inputs
-	unchanged func(row json.RawMessage, payload json.RawMessage) (bool, error)
 	// ConsoleRoute is present only when the schema explicitly declares a console route
 	ConsoleRoute *ConsoleRoute
 	// MentionSpec is present only when the schema explicitly declares mention scanning
@@ -166,10 +167,10 @@ func BindIngest[T any](schema *Schema, persist TypedIngestPersist[T]) error {
 		return fmt.Errorf("%w: %s persistence already bound", ErrIngestMisconfigured, schema.Name)
 	}
 
-	schema.Ingest.persist = func(ctx context.Context, client *generated.Client, integration *generated.Integration, payload json.RawMessage) (string, error) {
+	schema.Ingest.persist = func(ctx context.Context, client *generated.Client, integration *generated.Integration, payload json.RawMessage) (string, bool, bool, error) {
 		decoded, err := jsonx.Decode[T](payload)
 		if err != nil {
-			return "", logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpCreate}, ErrDecodeFailed, err)
+			return "", false, false, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpCreate}, ErrDecodeFailed, err)
 		}
 
 		return persist(ctx, client, integration, decoded)
@@ -253,30 +254,34 @@ func (s *Schema) EmitIngest(ctx context.Context, runtime *gala.Gala, headers gal
 
 // PersistIngest prepares and persists one mapped record synchronously through the schema's bound
 // persistence, sharing the preparation the durable ingest consumer applies
-func (s *Schema) PersistIngest(ctx context.Context, client *generated.Client, integration *generated.Integration, payload json.RawMessage) (string, error) {
+func (s *Schema) PersistIngest(ctx context.Context, client *generated.Client, integration *generated.Integration, payload json.RawMessage) (id string, changed bool, managed bool, err error) {
 	if s == nil || s.Ingest == nil {
-		return "", ErrIngestUnsupported
+		return "", false, false, ErrIngestUnsupported
 	}
 
 	if s.Ingest.persist == nil {
-		return "", fmt.Errorf("%w: %s persistence not bound", ErrIngestMisconfigured, s.Name)
+		return "", false, false, fmt.Errorf("%w: %s persistence not bound", ErrIngestMisconfigured, s.Name)
 	}
 
 	// the split runs before prepare: prepare round-trips the payload through the typed create
 	// input, which drops through-edge keys the input struct cannot carry
 	payload, throughIDs := splitThroughEdgeIDs(s, payload)
 
-	payload, err := s.Ingest.prepare(ctx, integration, payload)
+	payload, err = s.Ingest.prepare(ctx, integration, payload)
 	if err != nil {
-		return "", err
+		return "", false, false, err
 	}
 
-	id, err := s.Ingest.persist(ctx, client, integration, payload)
+	id, changed, managed, err = s.Ingest.persist(ctx, client, integration, payload)
 	if err != nil {
-		return "", err
+		return id, changed, managed, err
 	}
 
-	return id, applyThroughEdgeIDs(ctx, client, s, id, throughIDs)
+	if !managed {
+		return id, false, false, nil
+	}
+
+	return id, changed, managed, applyThroughEdgeIDs(ctx, client, s, id, throughIDs)
 }
 
 // logSanitizedIngestField records one optional mapped field dropped by ingest preparation because
@@ -324,9 +329,13 @@ func (s *Schema) handleIngest(ctx context.Context, client *generated.Client, res
 		throughIDs[edge] = append(throughIDs[edge], ids...)
 	}
 
-	id, err := s.Ingest.persist(ctx, client, integration, payload)
+	id, _, managed, err := s.Ingest.persist(ctx, client, integration, payload)
 	if err != nil {
 		return logPersistError(ctx, ref, ErrPersistFailed, err)
+	}
+
+	if !managed {
+		return nil
 	}
 
 	if err := applyThroughEdgeIDs(ctx, client, s, id, throughIDs); err != nil {
@@ -422,6 +431,9 @@ func (s *Schema) SoftDeletes() bool {
 
 // MatchKeyField reports whether field is a declared match-key column for this schema
 func (s *Schema) MatchKeyField(field string) bool {
+	if field == "id" {
+		return true
+	}
 	for _, f := range s.Fields {
 		if f.MatchKey && f.Name == field {
 			return true
@@ -676,106 +688,171 @@ func (s *Schema) LookupField() (FieldDescriptor, bool) {
 	return found, count == 1
 }
 
-// Upsert persists one create-input payload by the schema's lookup key: the payload's lookup value
-// is matched against existing org-scoped records via the indexed key query, updating the single
-// match or creating the record when none exists, and returns the entity id. Matching more than one
-// record fails with ErrUpsertConflict rather than guessing. It composes the schema's catalog
-// closures, so unlike Create/Update/QueryByKey it needs no per-schema wiring. Schemas whose lookup
-// predicates are not a single org-scoped key column (integration-scoped lookups, multi-key
-// priority) keep hand-written persistence instead. Updates carrying no field changes and no
-// injected edge links skip the write and mark the context no-op holder, after converging the
-// managing definition's integration linkage and provenance through a vetoed bookkeeping write;
-// a definition that does not manage the row can never write its linkage or provenance
-func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage) (string, error) {
+// Upsert persists through the ingest capability using a stock or previously resolved match
+// An explicit empty row set means create; omitted matches use the schema lookup key
+func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage, matched ...[]json.RawMessage) (id string, changed bool, managed bool, err error) {
 	ref := SchemaRef{Schema: s.Snake, Operation: refOpUpsert}
 
-	field, ok := s.LookupField()
-	if !ok {
-		return "", logError(ctx, ref, ErrUpsertUnsupported, fmt.Errorf("%s does not define exactly one lookup key", s.Name))
+	if s.Create == nil || s.Ingest == nil || s.Ingest.buildUpdate == nil {
+		return "", false, false, logError(ctx, ref, ErrUpsertUnsupported, nil)
 	}
 
-	if s.Create == nil || s.Update == nil || s.QueryByKey == nil {
-		return "", logError(ctx, ref, ErrUpsertUnsupported, fmt.Errorf("%s does not support catalog create, update, and key queries", s.Name))
+	if len(matched) > 1 {
+		return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("multiple match sets supplied for %s", s.Name))
 	}
 
-	value := lookupValue(payload, field.InputKey)
-	if value == "" {
-		return "", ErrUpsertKeyMissing
-	}
-
-	rows, err := s.QueryByKey(ctx, client, ownerID, field.Name, []string{value})
-	if err != nil {
-		return "", err
+	var rows []json.RawMessage
+	if len(matched) == 1 {
+		rows = matched[0]
+	} else {
+		field, ok := s.LookupField()
+		if !ok || s.QueryByKey == nil {
+			return "", false, false, logError(ctx, ref, ErrUpsertUnsupported, fmt.Errorf("%s has no stock lookup", s.Name))
+		}
+		value := lookupValue(payload, field.InputKey)
+		if value == "" {
+			return "", false, false, ErrUpsertKeyMissing
+		}
+		rows, err = s.QueryByKey(ctx, client, ownerID, field.Name, []string{value})
+		if err != nil {
+			return "", false, false, err
+		}
 	}
 
 	switch len(rows) {
 	case 0:
-		return s.Create(ctx, client, payload)
+		id, err = s.Create(ctx, client, payload)
+		return id, err == nil, err == nil, err
 	case 1:
-		id := entityID(rows[0])
-		if id == "" {
-			return "", logError(ctx, ref, ErrDecodeFailed, fmt.Errorf("%s row matching %s=%s has no id", s.Name, field.Name, value))
+		id = entityID(rows[0])
+		if id == "" || lookupValue(rows[0], "owner_id") != ownerID {
+			return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("invalid or cross-organization match for %s", s.Name))
 		}
-
-		if s.unchanged != nil && !s.payloadCarriesEdgeKeys(payload) {
-			same, err := s.unchanged(rows[0], payload)
-			if err != nil {
-				return "", logError(ctx, ref, ErrDecodeFailed, err)
-			}
-
-			if same {
-				if delta := bookkeepingDelta(rows[0], payload); delta != nil {
-					if err := s.Update(WithEmissionVetoed(ctx), client, id, delta); err != nil {
-						return "", err
-					}
-				}
-
-				markIngestNoop(ctx)
-
-				return id, nil
-			}
-		}
-
-		return id, s.Update(ctx, client, id, s.rekeyEdgesForUpdate(stripForeignManagedColumns(rows[0], payload)))
+		changed, managed, err = s.applyIngestUpdate(ctx, client, rows[0], payload)
+		return id, changed, managed, err
 	default:
-		return "", logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("%s lookup %s=%s matched %d records", s.Name, field.Name, value, len(rows)))
+		return "", false, false, logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("%s lookup matched %d records", s.Name, len(rows)))
 	}
 }
 
-// payloadCarriesEdgeKeys reports whether the payload carries edge keys the update path would apply
-// but the change comparison cannot see: to-many add keys and edge-only unique keys. Unique edges
-// backed by a foreign-key column pass, since that column is compared as a regular field
-func (s *Schema) payloadCarriesEdgeKeys(payload json.RawMessage) bool {
-	doc, err := jsonx.Decode[map[string]json.RawMessage](payload)
+// pruneIngestFields removes unchanged assignments before hooks or storage see the mutation. A field
+// marked Volatile never triggers a write on its own: when only volatile fields differ and no edge
+// changed, they are dropped so an idle re-sync writes nothing and emits no event; they still ride
+// along when a material field or edge changed
+func (s *Schema) pruneIngestFields(ctx context.Context, mutation ent.Mutation) (ChangeSet, error) {
+	var volatile []string
+
+	material := false
+
+	for _, name := range NormalizeStrings(append(mutation.Fields(), mutation.ClearedFields()...)) {
+		field, ok := s.FieldByName(name)
+		if !ok {
+			return ChangeSet{}, fmt.Errorf("%w: %s.%s", ErrFieldNotFound, s.Name, name)
+		}
+
+		old, err := mutation.OldField(ctx, name)
+		if err != nil {
+			return ChangeSet{}, err
+		}
+
+		proposed, _ := mutation.Field(name)
+		if field.Equal(old, proposed) {
+			if err := mutation.ResetField(name); err != nil {
+				return ChangeSet{}, err
+			}
+
+			continue
+		}
+
+		if field.Volatile {
+			volatile = append(volatile, name)
+
+			continue
+		}
+
+		material = true
+	}
+
+	set := ChangeSetFromMutation(mutation)
+	if material || len(set.ChangedEdges) > 0 {
+		return set, nil
+	}
+
+	for _, name := range volatile {
+		if err := mutation.ResetField(name); err != nil {
+			return ChangeSet{}, err
+		}
+	}
+
+	return ChangeSetFromMutation(mutation), nil
+}
+
+// IngestChangeSet computes the pruned update delta for a resolved row without writing it, so callers
+// that add their own bookkeeping fields can decide whether provider data actually changed
+func (s *Schema) IngestChangeSet(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ChangeSet, error) {
+	if s.Ingest == nil || s.Ingest.buildUpdate == nil {
+		return ChangeSet{}, ErrUpsertUnsupported
+	}
+
+	mutation, _, err := s.Ingest.buildUpdate(ctx, client, row, s.rekeyEdgesForUpdate(payload))
 	if err != nil {
+		return ChangeSet{}, err
+	}
+
+	return s.pruneIngestFields(ctx, mutation)
+}
+
+// managerFieldName is the provenance column recording which definition manages a record
+const managerFieldName = "source_definition_id"
+
+// ingestManagesRecord reports whether the payload's definition may write the row: an unclaimed row is
+// claimed by the first writing definition, a claimed row is writable only by the definition already
+// recorded on it, and a payload carrying no definition identity writes normally
+func ingestManagesRecord(row json.RawMessage, payload json.RawMessage) bool {
+	payloadDefinition := lookupValue(payload, managerFieldName)
+	if payloadDefinition == "" {
 		return true
 	}
 
-	for _, edge := range s.Edges {
-		if edge.AddField != "" {
-			if _, ok := doc[edge.CreateField]; ok {
-				return true
-			}
+	rowDefinition := lookupValue(row, managerFieldName)
 
-			if _, ok := doc[edge.AddField]; ok {
-				return true
-			}
+	return rowDefinition == "" || rowDefinition == payloadDefinition
+}
 
-			continue
-		}
+// applyIngestUpdate applies the shared ingest write decision to one resolved row: a row managed by a
+// different definition is read-only, an unchanged payload writes nothing, and a real field or link
+// delta is pruned to its changed fields and edges before a single update. changed reports whether a
+// write occurred; managed reports whether this payload's definition may write the row
+func (s *Schema) applyIngestUpdate(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (changed bool, managed bool, err error) {
+	if !ingestManagesRecord(row, payload) {
+		return false, false, nil
+	}
 
-		if edge.Unique && edge.Field != "" {
-			continue
-		}
+	rekeyed, throughIDs := splitThroughEdgeIDs(s, s.rekeyEdgesForUpdate(payload))
 
-		if edge.CreateField != "" {
-			if _, ok := doc[edge.CreateField]; ok {
-				return true
-			}
+	mutation, save, err := s.Ingest.buildUpdate(ctx, client, row, rekeyed)
+	if err != nil {
+		return false, true, err
+	}
+
+	changes, err := s.pruneIngestFields(ctx, mutation)
+	if err != nil {
+		return false, true, err
+	}
+
+	if !changes.Empty() {
+		if err := save(ctx); err != nil {
+			return false, true, err
 		}
 	}
 
-	return false
+	if len(throughIDs) > 0 {
+		if err := applyThroughEdgeIDs(ctx, client, s, entityID(row), throughIDs); err != nil {
+			return false, true, err
+		}
+	}
+
+	return !changes.Empty() || len(throughIDs) > 0, true, nil
 }
 
 // rekeyEdgesForUpdate renames to-many edge keys in a create-input payload to their update-input add
@@ -800,84 +877,6 @@ func (s *Schema) rekeyEdgesForUpdate(payload json.RawMessage) json.RawMessage {
 			doc[edge.AddField] = raw
 			delete(doc, edge.CreateField)
 			changed = true
-		}
-
-		return changed
-	})
-}
-
-// relinkFieldNames are the volatile integration linkage columns the unchanged path still converges
-var relinkFieldNames = []string{"integration_id"}
-
-// provenanceFieldNames are the provenance columns only the record's managing definition may write
-var provenanceFieldNames = []string{"source_definition_id", "source_definition_version", "source_instance_id", "managed_by"}
-
-// managesRecord reports whether the payload's definition may write the row's linkage and
-// provenance: an unclaimed row is claimed by the first writing definition, and a claimed row is
-// writable only by the definition already recorded on it
-func managesRecord(row json.RawMessage, payload json.RawMessage) bool {
-	rowDefinition := lookupValue(row, "source_definition_id")
-
-	return rowDefinition == "" || rowDefinition == lookupValue(payload, "source_definition_id")
-}
-
-// bookkeepingDelta returns the linkage and provenance columns an unchanged row still needs to
-// converge on for its managing definition; nil means the row needs no bookkeeping write
-func bookkeepingDelta(row json.RawMessage, payload json.RawMessage) json.RawMessage {
-	if !managesRecord(row, payload) {
-		return nil
-	}
-
-	doc, err := jsonx.Decode[map[string]json.RawMessage](payload)
-	if err != nil {
-		return nil
-	}
-
-	delta := map[string]json.RawMessage{}
-
-	for _, name := range slices.Concat(relinkFieldNames, provenanceFieldNames) {
-		raw, ok := doc[name]
-		if !ok {
-			continue
-		}
-
-		value := lookupValue(payload, name)
-		if value == "" || value == lookupValue(row, name) {
-			continue
-		}
-
-		delta[name] = raw
-	}
-
-	if len(delta) == 0 {
-		return nil
-	}
-
-	encoded, err := json.Marshal(delta)
-	if err != nil {
-		return nil
-	}
-
-	return encoded
-}
-
-// stripForeignManagedColumns drops the linkage and provenance columns from an update payload when
-// another definition manages the row, so cross-definition enrichment updates real fields without
-// reassigning who the record belongs to
-func stripForeignManagedColumns(row json.RawMessage, payload json.RawMessage) json.RawMessage {
-	if managesRecord(row, payload) {
-		return payload
-	}
-
-	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
-		changed := false
-
-		for _, name := range slices.Concat(relinkFieldNames, provenanceFieldNames) {
-			if _, ok := doc[name]; ok {
-				delete(doc, name)
-
-				changed = true
-			}
 		}
 
 		return changed
@@ -1015,70 +1014,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "action_plan.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "action_plan", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateActionPlanInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.OwnerID != nil {
-					if err := actionplan.OwnerIDValidator(*input.OwnerID); err != nil {
-						logSanitizedIngestField(ctx, "action_plan", "owner_id", err)
-						input.OwnerID = nil
-					}
-				}
-
-				if input.Revision != nil {
-					if err := actionplan.RevisionValidator(*input.Revision); err != nil {
-						logSanitizedIngestField(ctx, "action_plan", "revision", err)
-						input.Revision = nil
-					}
-				}
-
-				if input.URL != nil {
-					if err := actionplan.URLValidator(*input.URL); err != nil {
-						logSanitizedIngestField(ctx, "action_plan", "url", err)
-						input.URL = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.ActionPlan](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateActionPlanInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return ActionPlanIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaAssessment = &Schema{
@@ -1258,66 +1193,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "asset.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "asset", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateAssetInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.DisplayName != nil {
-					if err := asset.DisplayNameValidator(*input.DisplayName); err != nil {
-						logSanitizedIngestField(ctx, "asset", "display_name", err)
-						input.DisplayName = nil
-					}
-				}
-
-				if input.OwnerID != nil {
-					if err := asset.OwnerIDValidator(*input.OwnerID); err != nil {
-						logSanitizedIngestField(ctx, "asset", "owner_id", err)
-						input.OwnerID = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-					if input.IntegrationID == nil && integration.ID != "" {
-						input.IntegrationID = &integration.ID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.Asset](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateAssetInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return AssetIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaCampaign = &Schema{
@@ -1511,49 +1386,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "check_result.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "check_result", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateCheckResultInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.IntegrationID == nil && integration.ID != "" {
-						input.IntegrationID = &integration.ID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.CheckResult](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateCheckResultInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return CheckResultIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaContact = &Schema{
@@ -1632,66 +1464,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "contact.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "contact", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateContactInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.FullName != nil {
-					if err := contact.FullNameValidator(*input.FullName); err != nil {
-						logSanitizedIngestField(ctx, "contact", "full_name", err)
-						input.FullName = nil
-					}
-				}
-
-				if input.PhoneNumber != nil {
-					if err := contact.PhoneNumberValidator(*input.PhoneNumber); err != nil {
-						logSanitizedIngestField(ctx, "contact", "phone_number", err)
-						input.PhoneNumber = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.IntegrationID == nil && integration.ID != "" {
-						input.IntegrationID = &integration.ID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.Contact](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateContactInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return ContactIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaControl = &Schema{
@@ -2022,104 +1794,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "directory_account.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "directory_account", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateDirectoryAccountInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.AvatarRemoteURL != nil {
-					if err := directoryaccount.AvatarRemoteURLValidator(*input.AvatarRemoteURL); err != nil {
-						logSanitizedIngestField(ctx, "directory_account", "avatar_remote_url", err)
-						input.AvatarRemoteURL = nil
-					}
-				}
-
-				if input.DirectorySyncRunID != nil {
-					if err := directoryaccount.DirectorySyncRunIDValidator(*input.DirectorySyncRunID); err != nil {
-						logSanitizedIngestField(ctx, "directory_account", "directory_sync_run_id", err)
-						input.DirectorySyncRunID = nil
-					}
-				}
-
-				if input.EmailAliases != nil {
-					if err := directoryaccount.EmailAliasesValidator(input.EmailAliases); err != nil {
-						logSanitizedIngestField(ctx, "directory_account", "email_aliases", err)
-						input.EmailAliases = nil
-					}
-				}
-
-				if input.IntegrationID != nil {
-					if err := directoryaccount.IntegrationIDValidator(*input.IntegrationID); err != nil {
-						logSanitizedIngestField(ctx, "directory_account", "integration_id", err)
-						input.IntegrationID = nil
-					}
-				}
-
-				if input.OwnerID != nil {
-					if err := directoryaccount.OwnerIDValidator(*input.OwnerID); err != nil {
-						logSanitizedIngestField(ctx, "directory_account", "owner_id", err)
-						input.OwnerID = nil
-					}
-				}
-
-				if input.PhoneNumber != nil {
-					if err := directoryaccount.PhoneNumberValidator(*input.PhoneNumber); err != nil {
-						logSanitizedIngestField(ctx, "directory_account", "phone_number", err)
-						input.PhoneNumber = nil
-					}
-				}
-
-				if input.PlatformID != nil {
-					if err := directoryaccount.PlatformIDValidator(*input.PlatformID); err != nil {
-						logSanitizedIngestField(ctx, "directory_account", "platform_id", err)
-						input.PlatformID = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-					if input.IntegrationID == nil && integration.ID != "" {
-						input.IntegrationID = &integration.ID
-					}
-					if input.PlatformID == nil && integration.PlatformID != "" {
-						input.PlatformID = &integration.PlatformID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.DirectoryAccount](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateDirectoryAccountInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return DirectoryAccountIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaDirectoryGroup = &Schema{
@@ -2198,69 +1872,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "directory_group.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "directory_group", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateDirectoryGroupInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.Email != nil {
-					if err := directorygroup.EmailValidator(*input.Email); err != nil {
-						logSanitizedIngestField(ctx, "directory_group", "email", err)
-						input.Email = nil
-					}
-				}
-
-				if input.PlatformID != nil {
-					if err := directorygroup.PlatformIDValidator(*input.PlatformID); err != nil {
-						logSanitizedIngestField(ctx, "directory_group", "platform_id", err)
-						input.PlatformID = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.IntegrationID == "" {
-						input.IntegrationID = integration.ID
-					}
-					if input.PlatformID == nil && integration.PlatformID != "" {
-						input.PlatformID = &integration.PlatformID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.DirectoryGroup](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateDirectoryGroupInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return DirectoryGroupIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaDirectoryMembership = &Schema{
@@ -2339,59 +1950,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "directory_membership.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "directory_membership", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateDirectoryMembershipInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.PlatformID != nil {
-					if err := directorymembership.PlatformIDValidator(*input.PlatformID); err != nil {
-						logSanitizedIngestField(ctx, "directory_membership", "platform_id", err)
-						input.PlatformID = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.IntegrationID == "" {
-						input.IntegrationID = integration.ID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.DirectoryMembership](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateDirectoryMembershipInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return DirectoryMembershipIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaDirectorySyncRun = &Schema{
@@ -2652,98 +2210,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "entity.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "entity", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateEntityInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.DisplayName != nil {
-					if err := entity.DisplayNameValidator(*input.DisplayName); err != nil {
-						logSanitizedIngestField(ctx, "entity", "display_name", err)
-						input.DisplayName = nil
-					}
-				}
-
-				if input.Domains != nil {
-					if err := entity.DomainsValidator(input.Domains); err != nil {
-						logSanitizedIngestField(ctx, "entity", "domains", err)
-						input.Domains = nil
-					}
-				}
-
-				if input.Links != nil {
-					if err := entity.LinksValidator(input.Links); err != nil {
-						logSanitizedIngestField(ctx, "entity", "links", err)
-						input.Links = nil
-					}
-				}
-
-				if input.LogoRemoteURL != nil {
-					if err := entity.LogoRemoteURLValidator(*input.LogoRemoteURL); err != nil {
-						logSanitizedIngestField(ctx, "entity", "logo_remote_url", err)
-						input.LogoRemoteURL = nil
-					}
-				}
-
-				if input.Name != nil {
-					if err := entity.NameValidator(*input.Name); err != nil {
-						logSanitizedIngestField(ctx, "entity", "name", err)
-						input.Name = nil
-					}
-				}
-
-				if input.OwnerID != nil {
-					if err := entity.OwnerIDValidator(*input.OwnerID); err != nil {
-						logSanitizedIngestField(ctx, "entity", "owner_id", err)
-						input.OwnerID = nil
-					}
-				}
-
-				if input.StatusPageURL != nil {
-					if err := entity.StatusPageURLValidator(*input.StatusPageURL); err != nil {
-						logSanitizedIngestField(ctx, "entity", "status_page_url", err)
-						input.StatusPageURL = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.Entity](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateEntityInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return EntityIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaEntityType = &Schema{
@@ -3014,56 +2480,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "finding.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "finding", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateFindingInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.OwnerID != nil {
-					if err := finding.OwnerIDValidator(*input.OwnerID); err != nil {
-						logSanitizedIngestField(ctx, "finding", "owner_id", err)
-						input.OwnerID = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.Finding](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateFindingInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return FindingIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaFindingControl = &Schema{
@@ -3494,63 +2910,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "internal_policy.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "internal_policy", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateInternalPolicyInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.Revision != nil {
-					if err := internalpolicy.RevisionValidator(*input.Revision); err != nil {
-						logSanitizedIngestField(ctx, "internal_policy", "revision", err)
-						input.Revision = nil
-					}
-				}
-
-				if input.URL != nil {
-					if err := internalpolicy.URLValidator(*input.URL); err != nil {
-						logSanitizedIngestField(ctx, "internal_policy", "url", err)
-						input.URL = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.InternalPolicy](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateInternalPolicyInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return InternalPolicyIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaInvite = &Schema{
@@ -4156,63 +3515,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "procedure.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "procedure", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateProcedureInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.Revision != nil {
-					if err := procedure.RevisionValidator(*input.Revision); err != nil {
-						logSanitizedIngestField(ctx, "procedure", "revision", err)
-						input.Revision = nil
-					}
-				}
-
-				if input.URL != nil {
-					if err := procedure.URLValidator(*input.URL); err != nil {
-						logSanitizedIngestField(ctx, "procedure", "url", err)
-						input.URL = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.Procedure](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateProcedureInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return ProcedureIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaProgram = &Schema{
@@ -4486,59 +3788,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "risk.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "risk", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateRiskInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.OwnerID != nil {
-					if err := risk.OwnerIDValidator(*input.OwnerID); err != nil {
-						logSanitizedIngestField(ctx, "risk", "owner_id", err)
-						input.OwnerID = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-					if input.IntegrationID == nil && integration.ID != "" {
-						input.IntegrationID = &integration.ID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.Risk](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateRiskInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return RiskIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaSLADefinition = &Schema{
@@ -5373,56 +4622,6 @@ var (
 		},
 		Ingest: &IngestCapability{
 			Topic: gala.NamespacedTopic[IngestRequest](IngestTopics, "vulnerability.ingest.requested"),
-			prepare: func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
-				ref := SchemaRef{Schema: "vulnerability", Operation: refOpCreate}
-
-				input, err := jsonx.Decode[generated.CreateVulnerabilityInput](payload)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrDecodeFailed, err)
-				}
-
-				if input.OwnerID != nil {
-					if err := vulnerability.OwnerIDValidator(*input.OwnerID); err != nil {
-						logSanitizedIngestField(ctx, "vulnerability", "owner_id", err)
-						input.OwnerID = nil
-					}
-				}
-
-				if integration != nil {
-					if input.SourceDefinitionID == nil && integration.DefinitionID != "" {
-						input.SourceDefinitionID = &integration.DefinitionID
-					}
-					if input.SourceDefinitionVersion == nil && integration.DefinitionVersion != "" {
-						input.SourceDefinitionVersion = &integration.DefinitionVersion
-					}
-					if input.SourceInstanceID == nil && integration.InstallationMetadata.Display.ExternalID != "" {
-						input.SourceInstanceID = &integration.InstallationMetadata.Display.ExternalID
-					}
-					if input.OwnerID == nil && integration.OwnerID != "" {
-						input.OwnerID = &integration.OwnerID
-					}
-				}
-
-				prepared, err := json.Marshal(input)
-				if err != nil {
-					return nil, logError(ctx, ref, ErrMarshalFailed, err)
-				}
-
-				return prepared, nil
-			},
-		},
-		unchanged: func(row json.RawMessage, payload json.RawMessage) (bool, error) {
-			existing, err := jsonx.Decode[generated.Vulnerability](row)
-			if err != nil {
-				return false, err
-			}
-
-			input, err := jsonx.Decode[generated.UpdateVulnerabilityInput](payload)
-			if err != nil {
-				return false, err
-			}
-
-			return VulnerabilityIngestUnchanged(&existing, input), nil
 		},
 	}
 	SchemaWebauthn = &Schema{
@@ -5630,16 +4829,16 @@ var (
 // init wires cross-schema edge references after all Schema vars are initialized
 func init() {
 	SchemaAPIToken.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time", Clearable: true},
 		{Name: "is_active", Label: "IsActive", Type: "bool", Clearable: true},
 		{Name: "last_used_at", Label: "LastUsedAt", Type: "time.Time", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "revoked_at", Label: "RevokedAt", Type: "time.Time", Clearable: true},
 		{Name: "revoked_by", Label: "RevokedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "revoked_reason", Label: "RevokedReason", Type: "string", MatchKey: true, Clearable: true},
@@ -5647,8 +4846,8 @@ func init() {
 		{Name: "sso_authorizations", Label: "SSOAuthorizations", Type: "models.SSOAuthorizationMap", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "token", Label: "Token", Type: "string", MatchKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaActionPlan.Fields = []FieldDescriptor{
@@ -5660,11 +4859,11 @@ func init() {
 		{Name: "blocker_reason", Label: "BlockerReason", Type: "string", MatchKey: true, InputKey: "blocker_reason", Clearable: true},
 		{Name: "completed_at", Label: "CompletedAt", Type: "time.Time", InputKey: "completed_at", Clearable: true},
 		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", InputKey: "control_suggestions", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, InputKey: "details_json", Clearable: true},
@@ -5677,11 +4876,11 @@ func init() {
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "priority", Label: "Priority", Type: "enums.Priority", InputKey: "priority", Clearable: true},
 		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Clearable: true},
 		{Name: "requires_approval", Label: "RequiresApproval", Type: "bool", InputKey: "requires_approval"},
@@ -5689,9 +4888,9 @@ func init() {
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -5699,42 +4898,42 @@ func init() {
 		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", InputKey: "tag_suggestions", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaAssessment.Fields = []FieldDescriptor{
 		{Name: "assessment_type", Label: "AssessmentType", Type: "enums.AssessmentType"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "jsonconfig", Label: "Jsonconfig", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "response_due_duration", Label: "ResponseDueDuration", Type: "int64", WorkflowEligible: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "template_id", Label: "TemplateID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaAssessmentResponse.Fields = []FieldDescriptor{
 		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true},
 		{Name: "assigned_at", Label: "AssignedAt", Type: "time.Time"},
 		{Name: "campaign_id", Label: "CampaignID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "completed_at", Label: "CompletedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "document_data_id", Label: "DocumentDataID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "due_date", Label: "DueDate", Type: "time.Time", WorkflowEligible: true, Clearable: true},
@@ -5750,14 +4949,14 @@ func init() {
 		{Name: "is_draft", Label: "IsDraft", Type: "bool"},
 		{Name: "is_test", Label: "IsTest", Type: "bool"},
 		{Name: "last_email_event_at", Label: "LastEmailEventAt", Type: "time.Time", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "send_attempts", Label: "SendAttempts", Type: "int"},
 		{Name: "started_at", Label: "StartedAt", Type: "time.Time"},
 		{Name: "status", Label: "Status", Type: "enums.AssessmentResponseStatus"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaAsset.Fields = []FieldDescriptor{
 		{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true, InputKey: "access_model_id", Clearable: true},
@@ -5771,12 +4970,12 @@ func init() {
 		{Name: "contains_pii", Label: "ContainsPii", Type: "bool", InputKey: "contains_pii", Clearable: true},
 		{Name: "cost_center", Label: "CostCenter", Type: "string", MatchKey: true, InputKey: "cost_center", Clearable: true},
 		{Name: "cpe", Label: "Cpe", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, InputKey: "criticality_id", Clearable: true},
 		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, InputKey: "criticality_name", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, InputKey: "encryption_status_id", Clearable: true},
@@ -5785,16 +4984,16 @@ func init() {
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
 		{Name: "estimated_monthly_cost", Label: "EstimatedMonthlyCost", Type: "float64", InputKey: "estimated_monthly_cost", Clearable: true},
 		{Name: "identifier", Label: "Identifier", Type: "string", MatchKey: true, InputKey: "identifier", Clearable: true},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner", Clearable: true},
 		{Name: "internal_owner_group_id", Label: "InternalOwnerGroupID", Type: "string", MatchKey: true, InputKey: "internal_owner_group_id", Clearable: true},
 		{Name: "internal_owner_identity_holder_id", Label: "InternalOwnerIdentityHolderID", Type: "string", MatchKey: true, InputKey: "internal_owner_identity_holder_id", Clearable: true},
 		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, InputKey: "internal_owner_user_id", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name"},
-		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
+		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true, Volatile: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true, InputKey: "physical_location", Clearable: true},
 		{Name: "purchase_date", Label: "PurchaseDate", Type: "models.DateTime", InputKey: "purchase_date", Clearable: true},
 		{Name: "region", Label: "Region", Type: "string", MatchKey: true, InputKey: "region", Clearable: true},
@@ -5802,17 +5001,17 @@ func init() {
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, InputKey: "security_tier_id", Clearable: true},
 		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", LookupKey: true, Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_platform_id", Label: "SourcePlatformID", Type: "string", MatchKey: true, InputKey: "source_platform_id", Clearable: true},
 		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "website", Label: "Website", Type: "string", MatchKey: true, InputKey: "website", Clearable: true},
 	}
@@ -5820,10 +5019,10 @@ func init() {
 		{Name: "assessment_id", Label: "AssessmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "campaign_type", Label: "CampaignType", Type: "enums.CampaignType"},
 		{Name: "completed_at", Label: "CompletedAt", Type: "models.DateTime", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due_date", Label: "DueDate", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
@@ -5843,7 +5042,7 @@ func init() {
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
 		{Name: "next_run_at", Label: "NextRunAt", Type: "models.DateTime", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "recipient_count", Label: "RecipientCount", Type: "int", WorkflowEligible: true, Clearable: true},
 		{Name: "recurrence_cron", Label: "RecurrenceCron", Type: "models.Cron", Clearable: true},
 		{Name: "recurrence_end_at", Label: "RecurrenceEndAt", Type: "models.DateTime", Clearable: true},
@@ -5856,77 +5055,77 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "template_id", Label: "TemplateID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaCampaignTarget.Fields = []FieldDescriptor{
 		{Name: "campaign_id", Label: "CampaignID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "completed_at", Label: "CompletedAt", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
 		{Name: "contact_id", Label: "ContactID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "group_id", Label: "GroupID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "sent_at", Label: "SentAt", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.AssessmentResponseStatus", WorkflowEligible: true},
 		{Name: "subscriber_id", Label: "SubscriberID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaCheckResult.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri", Clearable: true},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "last_observed_at", Label: "LastObservedAt", Type: "models.DateTime", InputKey: "last_observed_at", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id", LookupKey: true, Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.CheckStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaContact.Fields = []FieldDescriptor{
 		{Name: "address", Label: "Address", Type: "string", MatchKey: true, InputKey: "address", Clearable: true},
 		{Name: "company", Label: "Company", Type: "string", MatchKey: true, InputKey: "company", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", LookupKey: true, Clearable: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, InputKey: "full_name", Clearable: true},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.UserStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, InputKey: "title", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaControl.Fields = []FieldDescriptor{
@@ -5940,11 +5139,11 @@ func init() {
 		{Name: "control_kind_name", Label: "ControlKindName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "control_questions", Label: "ControlQuestions", Type: "[]string", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "description_json", Label: "DescriptionJSON", Type: "[]interface {}", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
@@ -5959,7 +5158,7 @@ func init() {
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "is_trust_center_control", Label: "IsTrustCenterControl", Type: "bool", Clearable: true},
 		{Name: "mapped_categories", Label: "MappedCategories", Type: "[]string", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "public_representation", Label: "PublicRepresentation", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "ref_code", Label: "RefCode", Type: "string", MatchKey: true, WebhookPayload: true},
 		{Name: "reference_framework", Label: "ReferenceFramework", Type: "string", MatchKey: true, Clearable: true},
@@ -5980,27 +5179,27 @@ func init() {
 		{Name: "testing_procedures", Label: "TestingProcedures", Type: "[]models.TestingProcedures", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", WorkflowEligible: true, MatchKey: true, DisplayKey: true, Clearable: true, WebhookPayload: true},
 		{Name: "trust_center_visibility", Label: "TrustCenterVisibility", Type: "enums.TrustCenterControlVisibility", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaControlImplementation.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", Clearable: true},
 		{Name: "implementation_date", Label: "ImplementationDate", Type: "time.Time", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "verification_date", Label: "VerificationDate", Type: "time.Time", Clearable: true},
 		{Name: "verified", Label: "Verified", Type: "bool", Clearable: true},
@@ -6008,16 +5207,16 @@ func init() {
 	SchemaControlObjective.Fields = []FieldDescriptor{
 		{Name: "category", Label: "Category", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "control_objective_type", Label: "ControlObjectiveType", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "desired_outcome", Label: "DesiredOutcome", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "desired_outcome_json", Label: "DesiredOutcomeJSON", Type: "[]interface {}", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "source", Label: "Source", Type: "enums.ControlSource", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ObjectiveStatus", Clearable: true},
@@ -6025,46 +5224,46 @@ func init() {
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaCustomDomain.Fields = []FieldDescriptor{
 		{Name: "cname_record", Label: "CnameRecord", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "dns_verification_id", Label: "DNSVerificationID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "domain_type", Label: "DomainType", Type: "enums.CustomDomainType"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "mappable_domain_id", Label: "MappableDomainID", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaCustomTypeEnum.Fields = []FieldDescriptor{
 		{Name: "color", Label: "Color", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "field", Label: "Field", Type: "string", MatchKey: true},
 		{Name: "icon", Label: "Icon", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
 		{Name: "object_type", Label: "ObjectType", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaDNSVerification.Fields = []FieldDescriptor{
@@ -6072,19 +5271,19 @@ func init() {
 		{Name: "acme_challenge_status", Label: "AcmeChallengeStatus", Type: "enums.SSLVerificationStatus"},
 		{Name: "acme_challenge_status_reason", Label: "AcmeChallengeStatusReason", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "cloudflare_hostname_id", Label: "CloudflareHostnameID", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "dns_txt_record", Label: "DNSTxtRecord", Type: "string", MatchKey: true},
 		{Name: "dns_txt_value", Label: "DNSTxtValue", Type: "string", MatchKey: true},
 		{Name: "dns_verification_status", Label: "DNSVerificationStatus", Type: "enums.DNSVerificationStatus"},
 		{Name: "dns_verification_status_reason", Label: "DNSVerificationStatusReason", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "expected_acme_challenge_value", Label: "ExpectedAcmeChallengeValue", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaDirectoryAccount.Fields = []FieldDescriptor{
@@ -6094,8 +5293,8 @@ func init() {
 		{Name: "avatar_remote_url", Label: "AvatarRemoteURL", Type: "string", MatchKey: true, InputKey: "avatar_remote_url", Clearable: true},
 		{Name: "avatar_updated_at", Label: "AvatarUpdatedAt", Type: "time.Time", InputKey: "avatar_updated_at", Clearable: true},
 		{Name: "canonical_email", Label: "CanonicalEmail", Type: "string", MatchKey: true, InputKey: "canonical_email", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "department", Label: "Department", Type: "string", MatchKey: true, InputKey: "department", Clearable: true},
 		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Clearable: true},
 		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Clearable: true},
@@ -6110,19 +5309,19 @@ func init() {
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
 		{Name: "given_name", Label: "GivenName", Type: "string", MatchKey: true, InputKey: "given_name", Clearable: true},
 		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true, InputKey: "identity_holder_id", Clearable: true},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "job_title", Label: "JobTitle", Type: "string", MatchKey: true, InputKey: "job_title", Clearable: true},
-		{Name: "last_login_at", Label: "LastLoginAt", Type: "time.Time", InputKey: "last_login_at", Clearable: true},
-		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
+		{Name: "last_login_at", Label: "LastLoginAt", Type: "time.Time", InputKey: "last_login_at", Clearable: true, Volatile: true},
+		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true, Volatile: true},
 		{Name: "last_seen_ip", Label: "LastSeenIP", Type: "string", MatchKey: true, InputKey: "last_seen_ip", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "mfa_state", Label: "MfaState", Type: "enums.DirectoryAccountMFAState", InputKey: "mfa_state"},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
 		{Name: "organization_unit", Label: "OrganizationUnit", Type: "string", MatchKey: true, InputKey: "organization_unit", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, InputKey: "phone_number", Clearable: true},
-		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, InputKey: "platform_id", Clearable: true},
+		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "primary_source", Label: "PrimarySource", Type: "bool", InputKey: "primary_source"},
 		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true},
 		{Name: "profile_hash", Label: "ProfileHash", Type: "string", MatchKey: true, InputKey: "profile_hash"},
@@ -6131,21 +5330,21 @@ func init() {
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "secondary_key", Label: "SecondaryKey", Type: "string", MatchKey: true, InputKey: "secondary_key", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectoryAccountStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaDirectoryGroup.Fields = []FieldDescriptor{
 		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at", Clearable: true},
 		{Name: "classification", Label: "Classification", Type: "enums.DirectoryGroupClassification", InputKey: "classification"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Clearable: true},
 		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name", Clearable: true},
@@ -6158,34 +5357,34 @@ func init() {
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "external_sharing_allowed", Label: "ExternalSharingAllowed", Type: "bool", InputKey: "external_sharing_allowed", Clearable: true},
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "member_count", Label: "MemberCount", Type: "int", InputKey: "member_count", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, InputKey: "platform_id", Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "profile", Label: "Profile", Type: "map[string]interface {}", InputKey: "profile", Clearable: true},
 		{Name: "profile_hash", Label: "ProfileHash", Type: "string", MatchKey: true, InputKey: "profile_hash"},
 		{Name: "raw_profile_file_id", Label: "RawProfileFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source_version", Label: "SourceVersion", Type: "string", MatchKey: true, InputKey: "source_version", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectoryGroupStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaDirectoryMembership.Fields = []FieldDescriptor{
 		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true, InputKey: "directory_account_id", LookupKey: true},
 		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true, InputKey: "directory_group_id", LookupKey: true},
 		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id", Clearable: true},
@@ -6195,30 +5394,30 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at", Clearable: true},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "last_confirmed_run_id", Label: "LastConfirmedRunID", Type: "string", MatchKey: true, InputKey: "last_confirmed_run_id", Clearable: true},
 		{Name: "last_seen_at", Label: "LastSeenAt", Type: "time.Time", InputKey: "last_seen_at", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "time.Time", InputKey: "observed_at"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, InputKey: "platform_id", Clearable: true},
 		{Name: "removed_at", Label: "RemovedAt", Type: "time.Time", InputKey: "removed_at", Clearable: true},
 		{Name: "role", Label: "Role", Type: "enums.DirectoryMembershipRole", InputKey: "role", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaDirectorySyncRun.Fields = []FieldDescriptor{
 		{Name: "completed_at", Label: "CompletedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "delta_count", Label: "DeltaCount", Type: "int"},
 		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
@@ -6227,7 +5426,7 @@ func init() {
 		{Name: "error", Label: "Error", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "full_count", Label: "FullCount", Type: "int"},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "raw_manifest_file_id", Label: "RawManifestFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
@@ -6236,47 +5435,47 @@ func init() {
 		{Name: "started_at", Label: "StartedAt", Type: "time.Time"},
 		{Name: "stats", Label: "Stats", Type: "map[string]interface {}", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.DirectorySyncRunStatus"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaDiscussion.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "is_resolved", Label: "IsResolved", Type: "bool"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaDocumentData.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "data", Label: "Data", Type: "map[string]interface {}"},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "template_id", Label: "TemplateID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaEmailTemplate.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
 		{Name: "body_template", Label: "BodyTemplate", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "defaults", Label: "Defaults", Type: "map[string]interface {}", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "format", Label: "Format", Type: "enums.NotificationTemplateFormat", Clearable: true},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true},
@@ -6286,7 +5485,7 @@ func init() {
 		{Name: "locale", Label: "Locale", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "preheader_template", Label: "PreheaderTemplate", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "subject_template", Label: "SubjectTemplate", Type: "string", MatchKey: true, Clearable: true},
@@ -6296,25 +5495,25 @@ func init() {
 		{Name: "text_template", Label: "TextTemplate", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "version", Label: "Version", Type: "int"},
 		{Name: "workflow_definition_id", Label: "WorkflowDefinitionID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaEmailVerificationToken.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "secret", Label: "Secret", Type: "[]byte", Clearable: true},
 		{Name: "token", Label: "Token", Type: "string", MatchKey: true},
 		{Name: "ttl", Label: "TTL", Type: "time.Time", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaEntity.Fields = []FieldDescriptor{
 		{Name: "aliases", Label: "Aliases", Type: "[]string", InputKey: "aliases", Clearable: true},
@@ -6325,10 +5524,10 @@ func init() {
 		{Name: "contract_end_date", Label: "ContractEndDate", Type: "models.DateTime", InputKey: "contract_end_date", Clearable: true},
 		{Name: "contract_renewal_at", Label: "ContractRenewalAt", Type: "models.DateTime", InputKey: "contract_renewal_at", Clearable: true},
 		{Name: "contract_start_date", Label: "ContractStartDate", Type: "models.DateTime", InputKey: "contract_start_date", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "domains", Label: "Domains", Type: "[]string", InputKey: "domains", Clearable: true},
@@ -6353,13 +5552,13 @@ func init() {
 		{Name: "links", Label: "Links", Type: "[]string", InputKey: "links", Clearable: true},
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, InputKey: "logo_remote_url", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "mfa_enforced", Label: "MfaEnforced", Type: "bool", InputKey: "mfa_enforced", Clearable: true},
 		{Name: "mfa_supported", Label: "MfaSupported", Type: "bool", InputKey: "mfa_supported", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", Clearable: true},
 		{Name: "next_review_at", Label: "NextReviewAt", Type: "models.DateTime", InputKey: "next_review_at", Clearable: true},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "provided_services", Label: "ProvidedServices", Type: "[]string", InputKey: "provided_services", Clearable: true},
 		{Name: "renewal_risk", Label: "RenewalRisk", Type: "string", MatchKey: true, InputKey: "renewal_risk", Clearable: true},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
@@ -6373,9 +5572,9 @@ func init() {
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "soc2_period_end", Label: "Soc2PeriodEnd", Type: "models.DateTime", InputKey: "soc2_period_end", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "spend_currency", Label: "SpendCurrency", Type: "string", MatchKey: true, InputKey: "spend_currency", Clearable: true},
 		{Name: "sso_enforced", Label: "SSOEnforced", Type: "bool", InputKey: "sso_enforced", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.EntityStatus", InputKey: "status", Clearable: true},
@@ -6385,45 +5584,45 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "termination_notice_days", Label: "TerminationNoticeDays", Type: "int", InputKey: "termination_notice_days", Clearable: true},
 		{Name: "tier", Label: "Tier", Type: "enums.VendorTier", InputKey: "tier", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "vendor_metadata", Label: "VendorMetadata", Type: "map[string]interface {}", InputKey: "vendor_metadata", Clearable: true},
 	}
 	SchemaEntityType.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaEvent.Fields = []FieldDescriptor{
 		{Name: "correlation_id", Label: "CorrelationID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "event_id", Label: "EventID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "event_type", Label: "EventType", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaEvidence.Fields = []FieldDescriptor{
 		{Name: "auditor_reference_id", Label: "AuditorReferenceID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "collection_procedure", Label: "CollectionProcedure", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "creation_date", Label: "CreationDate", Type: "models.DateTime", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
@@ -6431,7 +5630,7 @@ func init() {
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "is_automated", Label: "IsAutomated", Type: "bool", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, DisplayKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "renewal_date", Label: "RenewalDate", Type: "models.DateTime", Clearable: true},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
@@ -6439,17 +5638,17 @@ func init() {
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.EvidenceStatus", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaExport.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "error_message", Label: "ErrorMessage", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "export_metadata", Label: "ExportMetadata", Type: "models.ExportMetadata", Clearable: true},
 		{Name: "export_type", Label: "ExportType", Type: "enums.ExportType"},
@@ -6457,11 +5656,11 @@ func init() {
 		{Name: "filters", Label: "Filters", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "format", Label: "Format", Type: "enums.ExportFormat"},
 		{Name: "mode", Label: "Mode", Type: "enums.ExportMode"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "requestor_id", Label: "RequestorID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ExportStatus"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaFile.Fields = []FieldDescriptor{
@@ -6469,10 +5668,10 @@ func init() {
 		{Name: "category_id", Label: "CategoryID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "category_name", Label: "CategoryName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "category_type", Label: "CategoryType", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "detected_content_type", Label: "DetectedContentType", Type: "string", MatchKey: true},
 		{Name: "detected_mime_type", Label: "DetectedMimeType", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
@@ -6498,24 +5697,24 @@ func init() {
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "uri", Label: "URI", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaFileDownloadToken.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
+		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "secret", Label: "Secret", Type: "[]byte", Clearable: true},
 		{Name: "token", Label: "Token", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "ttl", Label: "TTL", Type: "time.Time", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaFinding.Fields = []FieldDescriptor{
@@ -6527,16 +5726,16 @@ func init() {
 		{Name: "blocks_production", Label: "BlocksProduction", Type: "bool", WorkflowEligible: true, InputKey: "blocks_production", Clearable: true},
 		{Name: "categories", Label: "Categories", Type: "[]string", InputKey: "categories", Clearable: true},
 		{Name: "category", Label: "Category", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "category", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true, InputKey: "display_name", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id", Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name", Clearable: true},
-		{Name: "event_time", Label: "EventTime", Type: "models.DateTime", WorkflowEligible: true, InputKey: "event_time", Clearable: true},
+		{Name: "event_time", Label: "EventTime", Type: "models.DateTime", WorkflowEligible: true, InputKey: "event_time", Clearable: true, Volatile: true},
 		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability", Clearable: true},
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id", Clearable: true},
@@ -6546,15 +5745,15 @@ func init() {
 		{Name: "finding_status_name", Label: "FindingStatusName", Type: "string", MatchKey: true, InputKey: "finding_status_name", Clearable: true},
 		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "numeric_severity", Label: "NumericSeverity", Type: "float64", InputKey: "numeric_severity", Clearable: true},
 		{Name: "open", Label: "Open", Type: "bool", WorkflowEligible: true, InputKey: "open", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "priority", Label: "Priority", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "priority", Clearable: true},
 		{Name: "production", Label: "Production", Type: "bool", WorkflowEligible: true, InputKey: "production", Clearable: true},
 		{Name: "public", Label: "Public", Type: "bool", WorkflowEligible: true, InputKey: "public", Clearable: true},
-		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Clearable: true},
+		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Clearable: true, Volatile: true},
 		{Name: "recommendation", Label: "Recommendation", Type: "string", MatchKey: true, InputKey: "recommendation", Clearable: true},
 		{Name: "recommended_actions", Label: "RecommendedActions", Type: "string", MatchKey: true, InputKey: "recommended_actions", Clearable: true},
 		{Name: "references", Label: "References", Type: "[]string", InputKey: "references", Clearable: true},
@@ -6571,10 +5770,10 @@ func init() {
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel", Clearable: true},
 		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
-		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true, Volatile: true},
 		{Name: "state", Label: "State", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "state", Clearable: true},
 		{Name: "steps_to_reproduce", Label: "StepsToReproduce", Type: "[]string", InputKey: "steps_to_reproduce", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
@@ -6582,36 +5781,36 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
 		{Name: "target_details", Label: "TargetDetails", Type: "map[string]interface {}", InputKey: "target_details", Clearable: true},
 		{Name: "targets", Label: "Targets", Type: "[]string", InputKey: "targets", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "validated", Label: "Validated", Type: "bool", WorkflowEligible: true, InputKey: "validated", Clearable: true},
 		{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector", Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaFindingControl.Fields = []FieldDescriptor{
 		{Name: "control_id", Label: "ControlID", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "discovered_at", Label: "DiscoveredAt", Type: "models.DateTime", Clearable: true},
 		{Name: "external_control_id", Label: "ExternalControlID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "external_standard", Label: "ExternalStandard", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "external_standard_version", Label: "ExternalStandardVersion", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "finding_id", Label: "FindingID", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaGroup.Fields = []FieldDescriptor{
 		{Name: "avatar_local_file_id", Label: "AvatarLocalFileID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true},
@@ -6622,46 +5821,46 @@ func init() {
 		{Name: "oscal_contact_uuids", Label: "OscalContactUuids", Type: "[]string", Clearable: true},
 		{Name: "oscal_party_uuid", Label: "OscalPartyUUID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "oscal_role", Label: "OscalRole", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "scim_active", Label: "ScimActive", Type: "bool", Clearable: true},
 		{Name: "scim_display_name", Label: "ScimDisplayName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scim_external_id", Label: "ScimExternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scim_group_mailing", Label: "ScimGroupMailing", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaGroupMembership.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "group_id", Label: "GroupID", Type: "string", MatchKey: true},
 		{Name: "role", Label: "Role", Type: "enums.Role"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 	}
 	SchemaGroupSetting.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "group_id", Label: "GroupID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "join_policy", Label: "JoinPolicy", Type: "enums.JoinPolicy"},
 		{Name: "sync_to_github", Label: "SyncToGithub", Type: "bool", Clearable: true},
 		{Name: "sync_to_slack", Label: "SyncToSlack", Type: "bool", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "visibility", Label: "Visibility", Type: "enums.Visibility"},
 	}
 	SchemaHush.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "credential_set", Label: "CredentialSet", Type: "models.CredentialSet", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
@@ -6669,22 +5868,22 @@ func init() {
 		{Name: "last_used_at", Label: "LastUsedAt", Type: "time.Time", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "secret_name", Label: "SecretName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "secret_value", Label: "SecretValue", Type: "string", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaIdentityHolder.Fields = []FieldDescriptor{
 		{Name: "alternate_email", Label: "AlternateEmail", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "avatar_remote_url", Label: "AvatarRemoteURL", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "department", Label: "Department", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
@@ -6705,7 +5904,7 @@ func init() {
 		{Name: "is_openlane_user", Label: "IsOpenlaneUser", Type: "bool", Clearable: true},
 		{Name: "location", Label: "Location", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
@@ -6714,27 +5913,27 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "team", Label: "Team", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaImpersonationEvent.Fields = []FieldDescriptor{
 		{Name: "action", Label: "Action", Type: "enums.ImpersonationAction"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "impersonation_type", Label: "ImpersonationType", Type: "enums.ImpersonationType"},
 		{Name: "ip_address", Label: "IPAddress", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true},
+		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "reason", Label: "Reason", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scopes", Label: "Scopes", Type: "[]string", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "target_user_id", Label: "TargetUserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_agent", Label: "UserAgent", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
@@ -6742,13 +5941,13 @@ func init() {
 	SchemaIntegration.Fields = []FieldDescriptor{
 		{Name: "campaign_email", Label: "CampaignEmail", Type: "bool"},
 		{Name: "config", Label: "Config", Type: "openapi.IntegrationConfig", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "definition_id", Label: "DefinitionID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "definition_slug", Label: "DefinitionSlug", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "definition_version", Label: "DefinitionVersion", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
@@ -6761,7 +5960,7 @@ func init() {
 		{Name: "kind", Label: "Kind", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "primary_directory", Label: "PrimaryDirectory", Type: "bool"},
 		{Name: "provider_metadata", Label: "ProviderMetadata", Type: "openapi.IntegrationProviderMetadata", Clearable: true},
@@ -6773,16 +5972,16 @@ func init() {
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaIntegrationRun.Fields = []FieldDescriptor{
 		{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "duration_ms", Label: "DurationMs", Type: "int", Clearable: true},
 		{Name: "error", Label: "Error", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "event_id", Label: "EventID", Type: "string", MatchKey: true, Clearable: true},
@@ -6793,23 +5992,23 @@ func init() {
 		{Name: "operation_config", Label: "OperationConfig", Type: "map[string]interface {}", Clearable: true},
 		{Name: "operation_kind", Label: "OperationKind", Type: "enums.IntegrationOperationKind", Clearable: true},
 		{Name: "operation_name", Label: "OperationName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "request_file_id", Label: "RequestFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "response_file_id", Label: "ResponseFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "run_type", Label: "RunType", Type: "enums.IntegrationRunType", Clearable: true},
 		{Name: "started_at", Label: "StartedAt", Type: "time.Time"},
 		{Name: "status", Label: "Status", Type: "enums.IntegrationRunStatus"},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaIntegrationWebhook.Fields = []FieldDescriptor{
 		{Name: "allowed_events", Label: "AllowedEvents", Type: "[]string", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "endpoint_id", Label: "EndpointID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "endpoint_url", Label: "EndpointURL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "external_event_id", Label: "ExternalEventID", Type: "string", MatchKey: true, Clearable: true},
@@ -6820,23 +6019,23 @@ func init() {
 		{Name: "last_delivery_status", Label: "LastDeliveryStatus", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "provider", Label: "Provider", Type: "string", MatchKey: true},
 		{Name: "secret_token", Label: "SecretToken", Type: "string", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.IntegrationWebhookStatus"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaInternalPolicy.Fields = []FieldDescriptor{
 		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", InputKey: "approval_required", Clearable: true},
 		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, InputKey: "approver_id", Clearable: true},
 		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", InputKey: "control_suggestions", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, InputKey: "details_json", Clearable: true},
 		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string", InputKey: "dismissed_control_suggestions", Clearable: true},
@@ -6853,37 +6052,37 @@ func init() {
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
 		{Name: "internal_policy_kind_id", Label: "InternalPolicyKindID", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_id", Clearable: true},
 		{Name: "internal_policy_kind_name", Label: "InternalPolicyKindName", Type: "string", MatchKey: true, InputKey: "internal_policy_kind_name", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", InputKey: "review_due", Clearable: true},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", InputKey: "review_frequency", Clearable: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", InputKey: "tag_suggestions", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaInvite.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "expires", Label: "Expires", Type: "time.Time", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "ownership_transfer", Label: "OwnershipTransfer", Type: "bool", Clearable: true},
 		{Name: "recipient", Label: "Recipient", Type: "string", MatchKey: true},
 		{Name: "requestor_id", Label: "RequestorID", Type: "string", MatchKey: true, Clearable: true},
@@ -6893,94 +6092,94 @@ func init() {
 		{Name: "sso_exempt", Label: "SSOExempt", Type: "bool", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.InviteStatus"},
 		{Name: "token", Label: "Token", Type: "string"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaMappableDomain.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "zone_id", Label: "ZoneID", Type: "string", MatchKey: true},
 	}
 	SchemaMappedControl.Fields = []FieldDescriptor{
 		{Name: "confidence", Label: "Confidence", Type: "int", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "mapping_type", Label: "MappingType", Type: "enums.MappingType"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "relation", Label: "Relation", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "source", Label: "Source", Type: "enums.MappingSource", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaNarrative.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaNote.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "discussion_id", Label: "DiscussionID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "is_edited", Label: "IsEdited", Type: "bool"},
 		{Name: "note_ref", Label: "NoteRef", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "notified_at", Label: "NotifiedAt", Type: "time.Time", Clearable: true},
 		{Name: "notify_subscribers", Label: "NotifySubscribers", Type: "bool", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "text", Label: "Text", Type: "string", MatchKey: true},
 		{Name: "text_json", Label: "TextJSON", Type: "[]interface {}", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, DisplayKey: true, Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaNotification.Fields = []FieldDescriptor{
 		{Name: "body", Label: "Body", Type: "string", MatchKey: true},
 		{Name: "channels", Label: "Channels", Type: "[]enums.Channel", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "data", Label: "Data", Type: "map[string]interface {}", Clearable: true},
 		{Name: "notification_type", Label: "NotificationType", Type: "enums.NotificationType"},
 		{Name: "object_type", Label: "ObjectType", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "read_at", Label: "ReadAt", Type: "models.DateTime", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "template_id", Label: "TemplateID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
 		{Name: "topic", Label: "Topic", Type: "enums.NotificationTopic", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "review-domain-scan", Expression: "value == \"DOMAIN_SCAN\"", Trigger: "createOnly"}}},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 	}
@@ -6988,10 +6187,10 @@ func init() {
 		{Name: "cadence", Label: "Cadence", Type: "enums.NotificationCadence"},
 		{Name: "channel", Label: "Channel", Type: "enums.Channel"},
 		{Name: "config", Label: "Config", Type: "map[string]interface {}", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "destination", Label: "Destination", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "enabled", Label: "Enabled", Type: "bool"},
 		{Name: "is_default", Label: "IsDefault", Type: "bool"},
@@ -6999,7 +6198,7 @@ func init() {
 		{Name: "last_used_at", Label: "LastUsedAt", Type: "time.Time", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "mute_until", Label: "MuteUntil", Type: "time.Time", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "priority", Label: "Priority", Type: "enums.Priority", Clearable: true},
 		{Name: "provider", Label: "Provider", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "quiet_hours_end", Label: "QuietHoursEnd", Type: "string", MatchKey: true, Clearable: true},
@@ -7009,8 +6208,8 @@ func init() {
 		{Name: "timezone", Label: "Timezone", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "topic_overrides", Label: "TopicOverrides", Type: "map[string]interface {}", Clearable: true},
 		{Name: "topic_patterns", Label: "TopicPatterns", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 		{Name: "verified_at", Label: "VerifiedAt", Type: "time.Time", Clearable: true},
@@ -7020,11 +6219,11 @@ func init() {
 		{Name: "blocks", Label: "Blocks", Type: "map[string]interface {}", Clearable: true},
 		{Name: "body_template", Label: "BodyTemplate", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "channel", Label: "Channel", Type: "enums.Channel", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "defaults", Label: "Defaults", Type: "map[string]interface {}", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "destinations", Label: "Destinations", Type: "[]string", Clearable: true},
 		{Name: "email_template_id", Label: "EmailTemplateID", Type: "string", MatchKey: true, Clearable: true},
@@ -7036,7 +6235,7 @@ func init() {
 		{Name: "locale", Label: "Locale", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "subject_template", Label: "SubjectTemplate", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
@@ -7045,8 +6244,8 @@ func init() {
 		{Name: "title_template", Label: "TitleTemplate", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "topic_pattern", Label: "TopicPattern", Type: "string", MatchKey: true},
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "version", Label: "Version", Type: "int"},
 		{Name: "workflow_definition_id", Label: "WorkflowDefinitionID", Type: "string", MatchKey: true, Clearable: true},
@@ -7059,13 +6258,13 @@ func init() {
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "demo_requested", Label: "DemoRequested", Type: "bool", Clearable: true, TaskRules: []TaskRuleDescriptor{{RuleID: "demo-requested", Expression: "value == true", Trigger: "createOnly"}}},
 		{Name: "domains", Label: "Domains", Type: "[]string", Clearable: true},
-		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_details", Label: "UserDetails", Type: "map[string]interface {}", Clearable: true},
 	}
 	SchemaOrgMembership.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "role", Label: "Role", Type: "enums.Role"},
 		{Name: "sso_exempt", Label: "SSOExempt", Type: "bool", Clearable: true},
 		{Name: "sso_exempt_granted_at", Label: "SSOExemptGrantedAt", Type: "models.DateTime", Clearable: true},
@@ -7075,90 +6274,90 @@ func init() {
 		{Name: "tfa_enforced_at", Label: "TfaEnforcedAt", Type: "models.DateTime", Clearable: true},
 		{Name: "tfa_enforced_by", Label: "TfaEnforcedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tfa_enforced_reason", Label: "TfaEnforcedReason", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 	}
 	SchemaOrgModule.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "module", Label: "Module", Type: "models.OrgModule"},
 		{Name: "module_lookup_key", Label: "ModuleLookupKey", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "price", Label: "Price", Type: "models.Price", Clearable: true},
 		{Name: "price_id", Label: "PriceID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "stripe_price_id", Label: "StripePriceID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "subscription_id", Label: "SubscriptionID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "visibility", Label: "Visibility", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaOrgPrice.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "price", Label: "Price", Type: "models.Price", Clearable: true},
 		{Name: "product_id", Label: "ProductID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "stripe_price_id", Label: "StripePriceID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "subscription_id", Label: "SubscriptionID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaOrgProduct.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "module", Label: "Module", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "price_id", Label: "PriceID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "status", Label: "Status", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "stripe_product_id", Label: "StripeProductID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "subscription_id", Label: "SubscriptionID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaOrgSubscription.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "days_until_due", Label: "DaysUntilDue", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "stripe_subscription_id", Label: "StripeSubscriptionID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "stripe_subscription_status", Label: "StripeSubscriptionStatus", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "trial_expires_at", Label: "TrialExpiresAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaOrganization.Fields = []FieldDescriptor{
 		{Name: "avatar_local_file_id", Label: "AvatarLocalFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "avatar_remote_url", Label: "AvatarRemoteURL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "avatar_updated_at", Label: "AvatarUpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
@@ -7167,8 +6366,8 @@ func init() {
 		{Name: "slug_name", Label: "SlugName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "stripe_customer_id", Label: "StripeCustomerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaOrganizationSetting.Fields = []FieldDescriptor{
@@ -7181,10 +6380,10 @@ func init() {
 		{Name: "billing_notifications_enabled", Label: "BillingNotificationsEnabled", Type: "bool"},
 		{Name: "billing_phone", Label: "BillingPhone", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "compliance_webhook_token", Label: "ComplianceWebhookToken", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "domains", Label: "Domains", Type: "[]string", Clearable: true},
 		{Name: "geo_location", Label: "GeoLocation", Type: "enums.Region", Clearable: true},
 		{Name: "identity_provider", Label: "IdentityProvider", Type: "enums.SSOProvider", Clearable: true},
@@ -7198,7 +6397,7 @@ func init() {
 		{Name: "jit_allowed_email_domains", Label: "JitAllowedEmailDomains", Type: "[]string", Clearable: true},
 		{Name: "multifactor_auth_enforced", Label: "MultifactorAuthEnforced", Type: "bool", Clearable: true},
 		{Name: "oidc_discovery_endpoint", Label: "OidcDiscoveryEndpoint", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "payment_method_added", Label: "PaymentMethodAdded", Type: "bool"},
 		{Name: "pending_deletion_at", Label: "PendingDeletionAt", Type: "models.DateTime", Clearable: true},
 		{Name: "saml_cert", Label: "SamlCert", Type: "string", MatchKey: true, Clearable: true},
@@ -7207,34 +6406,34 @@ func init() {
 		{Name: "sso_exempt_domains", Label: "SSOExemptDomains", Type: "[]string", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "tax_identifier", Label: "TaxIdentifier", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaPasswordResetToken.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "secret", Label: "Secret", Type: "[]byte", Clearable: true},
 		{Name: "token", Label: "Token", Type: "string", MatchKey: true},
 		{Name: "ttl", Label: "TTL", Type: "time.Time", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaPersonalAccessToken.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "expires_at", Label: "ExpiresAt", Type: "time.Time", Clearable: true},
 		{Name: "is_active", Label: "IsActive", Type: "bool", Clearable: true},
 		{Name: "last_used_at", Label: "LastUsedAt", Type: "time.Time", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "revoked_at", Label: "RevokedAt", Type: "time.Time", Clearable: true},
 		{Name: "revoked_by", Label: "RevokedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "revoked_reason", Label: "RevokedReason", Type: "string", MatchKey: true, Clearable: true},
@@ -7242,8 +6441,8 @@ func init() {
 		{Name: "sso_authorizations", Label: "SSOAuthorizations", Type: "models.SSOAuthorizationMap", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "token", Label: "Token", Type: "string", MatchKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaPlatform.Fields = []FieldDescriptor{
@@ -7256,13 +6455,13 @@ func init() {
 		{Name: "business_purpose", Label: "BusinessPurpose", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "contains_pii", Label: "ContainsPii", Type: "bool", WorkflowEligible: true, Clearable: true},
 		{Name: "cost_center", Label: "CostCenter", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "criticality_id", Label: "CriticalityID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "criticality_name", Label: "CriticalityName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "data_flow_summary", Label: "DataFlowSummary", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "encryption_status_id", Label: "EncryptionStatusID", Type: "string", MatchKey: true, Clearable: true},
@@ -7278,7 +6477,7 @@ func init() {
 		{Name: "internal_owner_user_id", Label: "InternalOwnerUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "physical_location", Label: "PhysicalLocation", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "platform_data_classification_id", Label: "PlatformDataClassificationID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "platform_data_classification_name", Label: "PlatformDataClassificationName", Type: "string", MatchKey: true, Clearable: true},
@@ -7305,20 +6504,20 @@ func init() {
 		{Name: "technical_owner_identity_holder_id", Label: "TechnicalOwnerIdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "technical_owner_user_id", Label: "TechnicalOwnerUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_boundary_description", Label: "TrustBoundaryDescription", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaProcedure.Fields = []FieldDescriptor{
 		{Name: "approval_required", Label: "ApprovalRequired", Type: "bool", InputKey: "approval_required", Clearable: true},
 		{Name: "approver_id", Label: "ApproverID", Type: "string", MatchKey: true, InputKey: "approver_id", Clearable: true},
 		{Name: "control_suggestions", Label: "ControlSuggestions", Type: "[]string", InputKey: "control_suggestions", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", WorkflowEligible: true, InputKey: "details_json", Clearable: true},
 		{Name: "dismissed_control_suggestions", Label: "DismissedControlSuggestions", Type: "[]string", InputKey: "dismissed_control_suggestions", Clearable: true},
@@ -7332,10 +6531,10 @@ func init() {
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "management_mode", Label: "ManagementMode", Type: "enums.DocumentManagementMode", InputKey: "management_mode", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "procedure_kind_id", Label: "ProcedureKindID", Type: "string", MatchKey: true, InputKey: "procedure_kind_id", Clearable: true},
 		{Name: "procedure_kind_name", Label: "ProcedureKindName", Type: "string", MatchKey: true, InputKey: "procedure_kind_name", Clearable: true},
 		{Name: "review_due", Label: "ReviewDue", Type: "time.Time", InputKey: "review_due", Clearable: true},
@@ -7343,20 +6542,20 @@ func init() {
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, InputKey: "revision", Clearable: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "status", Label: "Status", Type: "enums.DocumentStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tag_suggestions", Label: "TagSuggestions", Type: "[]string", InputKey: "tag_suggestions", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, InputKey: "url", Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaProgram.Fields = []FieldDescriptor{
 		{Name: "audit_firm", Label: "AuditFirm", Type: "string", MatchKey: true, Clearable: true},
@@ -7365,10 +6564,10 @@ func init() {
 		{Name: "auditor_read_comments", Label: "AuditorReadComments", Type: "bool"},
 		{Name: "auditor_ready", Label: "AuditorReady", Type: "bool"},
 		{Name: "auditor_write_comments", Label: "AuditorWriteComments", Type: "bool"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "end_date", Label: "EndDate", Type: "time.Time", Clearable: true},
@@ -7379,33 +6578,33 @@ func init() {
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
 		{Name: "observation_period_end_date", Label: "ObservationPeriodEndDate", Type: "time.Time", Clearable: true},
 		{Name: "observation_period_start_date", Label: "ObservationPeriodStartDate", Type: "time.Time", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "program_kind_id", Label: "ProgramKindID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "program_kind_name", Label: "ProgramKindName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "program_owner_id", Label: "ProgramOwnerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "start_date", Label: "StartDate", Type: "time.Time", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.ProgramStatus"},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaProgramMembership.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "program_id", Label: "ProgramID", Type: "string", MatchKey: true},
 		{Name: "role", Label: "Role", Type: "enums.Role"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
 	}
 	SchemaRemediation.Fields = []FieldDescriptor{
 		{Name: "completed_at", Label: "CompletedAt", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due_at", Label: "DueAt", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
@@ -7419,7 +6618,7 @@ func init() {
 		{Name: "intent", Label: "Intent", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "owner_reference", Label: "OwnerReference", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "pr_generated_at", Label: "PrGeneratedAt", Type: "models.DateTime", Clearable: true},
 		{Name: "pull_request_uri", Label: "PullRequestURI", Type: "string", MatchKey: true, Clearable: true},
@@ -7435,20 +6634,20 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "ticket_reference", Label: "TicketReference", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaReview.Fields = []FieldDescriptor{
 		{Name: "approved", Label: "Approved", Type: "bool", Clearable: true},
 		{Name: "approved_at", Label: "ApprovedAt", Type: "models.DateTime", Clearable: true},
 		{Name: "category", Label: "Category", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "classification", Label: "Classification", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
@@ -7457,7 +6656,7 @@ func init() {
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", Clearable: true},
 		{Name: "reported_at", Label: "ReportedAt", Type: "models.DateTime", Clearable: true},
 		{Name: "reporter", Label: "Reporter", Type: "string", MatchKey: true, Clearable: true},
@@ -7473,18 +6672,18 @@ func init() {
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaRisk.Fields = []FieldDescriptor{
 		{Name: "business_costs", Label: "BusinessCosts", Type: "string", MatchKey: true, InputKey: "business_costs", Clearable: true},
 		{Name: "business_costs_json", Label: "BusinessCostsJSON", Type: "[]interface {}", InputKey: "business_costs_json", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, InputKey: "delegate_id", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, InputKey: "details", Clearable: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", InputKey: "details_json", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
@@ -7494,17 +6693,17 @@ func init() {
 		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true, Clearable: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid", Clearable: true},
 		{Name: "impact", Label: "Impact", Type: "enums.RiskImpact", WorkflowEligible: true, InputKey: "impact", Clearable: true},
-		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id", Clearable: true},
+		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "last_reviewed_at", Label: "LastReviewedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "last_reviewed_at", Clearable: true},
 		{Name: "likelihood", Label: "Likelihood", Type: "enums.RiskLikelihood", WorkflowEligible: true, InputKey: "likelihood", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "mitigated_at", Label: "MitigatedAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "mitigated_at", Clearable: true},
 		{Name: "mitigation", Label: "Mitigation", Type: "string", MatchKey: true, InputKey: "mitigation", Clearable: true},
 		{Name: "mitigation_json", Label: "MitigationJSON", Type: "[]interface {}", InputKey: "mitigation_json", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true, InputKey: "name", DisplayKey: true},
 		{Name: "next_review_due_at", Label: "NextReviewDueAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "next_review_due_at", Clearable: true},
-		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
+		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at", Clearable: true, Volatile: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "residual_score", Label: "ResidualScore", Type: "int", WorkflowEligible: true, InputKey: "residual_score", Clearable: true},
 		{Name: "review_frequency", Label: "ReviewFrequency", Type: "enums.Frequency", WorkflowEligible: true, InputKey: "review_frequency", Clearable: true},
 		{Name: "review_required", Label: "ReviewRequired", Type: "bool", WorkflowEligible: true, InputKey: "review_required", Clearable: true},
@@ -7516,29 +6715,29 @@ func init() {
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, InputKey: "scope_id", Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name", Clearable: true},
 		{Name: "score", Label: "Score", Type: "int", WorkflowEligible: true, InputKey: "score", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "stakeholder_id", Label: "StakeholderID", Type: "string", MatchKey: true, InputKey: "stakeholder_id", Clearable: true},
 		{Name: "status", Label: "Status", Type: "enums.RiskStatus", WorkflowEligible: true, InputKey: "status", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaSLADefinition.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel"},
 		{Name: "sla_days", Label: "SLADays", Type: "int"},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaScan.Fields = []FieldDescriptor{
@@ -7546,10 +6745,10 @@ func init() {
 		{Name: "assigned_to_group_id", Label: "AssignedToGroupID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "assigned_to_identity_holder_id", Label: "AssignedToIdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "assigned_to_user_id", Label: "AssignedToUserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "discovered_vulnerability_ids", Label: "DiscoveredVulnerabilityIds", Type: "[]string", Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
@@ -7557,7 +6756,7 @@ func init() {
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "next_scan_run_at", Label: "NextScanRunAt", Type: "models.DateTime", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "performed_by", Label: "PerformedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "performed_by_group_id", Label: "PerformedByGroupID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "performed_by_user_id", Label: "PerformedByUserID", Type: "string", MatchKey: true, Clearable: true},
@@ -7575,15 +6774,15 @@ func init() {
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "target", Label: "Target", Type: "string", MatchKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaStandard.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "domains", Label: "Domains", Type: "[]string", Clearable: true},
 		{Name: "framework", Label: "Framework", Type: "string", MatchKey: true, Clearable: true},
@@ -7595,7 +6794,7 @@ func init() {
 		{Name: "link", Label: "Link", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "revision", Label: "Revision", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "short_name", Label: "ShortName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "standard_type", Label: "StandardType", Type: "string", MatchKey: true, Clearable: true},
@@ -7603,8 +6802,8 @@ func init() {
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "version", Label: "Version", Type: "string", MatchKey: true, Clearable: true},
 	}
@@ -7618,11 +6817,11 @@ func init() {
 		{Name: "control_id", Label: "ControlID", Type: "string", MatchKey: true},
 		{Name: "control_owner_id", Label: "ControlOwnerID", Type: "string", WorkflowEligible: true, MatchKey: true, Clearable: true},
 		{Name: "control_questions", Label: "ControlQuestions", Type: "[]string", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "delegate_id", Label: "DelegateID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "description_json", Label: "DescriptionJSON", Type: "[]interface {}", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
@@ -7634,7 +6833,7 @@ func init() {
 		{Name: "implementation_status", Label: "ImplementationStatus", Type: "enums.ControlImplementationStatus", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "mapped_categories", Label: "MappedCategories", Type: "[]string", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "public_representation", Label: "PublicRepresentation", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "ref_code", Label: "RefCode", Type: "string", MatchKey: true},
 		{Name: "reference_framework", Label: "ReferenceFramework", Type: "string", MatchKey: true, Clearable: true},
@@ -7653,38 +6852,38 @@ func init() {
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "testing_procedures", Label: "TestingProcedures", Type: "[]models.TestingProcedures", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", WorkflowEligible: true, MatchKey: true, DisplayKey: true, Clearable: true, WebhookPayload: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaSubprocessor.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "logo_remote_url", Label: "LogoRemoteURL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaSubscriber.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
 		{Name: "contact_id", Label: "ContactID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "phone_number", Label: "PhoneNumber", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "secret", Label: "Secret", Type: "[]byte", Clearable: true},
 		{Name: "send_attempts", Label: "SendAttempts", Type: "int"},
@@ -7693,8 +6892,8 @@ func init() {
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "ttl", Label: "TTL", Type: "time.Time", Clearable: true},
 		{Name: "unsubscribed", Label: "Unsubscribed", Type: "bool"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "verified_email", Label: "VerifiedEmail", Type: "bool"},
@@ -7702,66 +6901,66 @@ func init() {
 	}
 	SchemaSystemDetail.Fields = []FieldDescriptor{
 		{Name: "authorization_boundary", Label: "AuthorizationBoundary", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "last_reviewed", Label: "LastReviewed", Type: "models.DateTime", Clearable: true},
 		{Name: "oscal_metadata_json", Label: "OscalMetadataJSON", Type: "map[string]interface {}", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "revision_history", Label: "RevisionHistory", Type: "[]interface {}", Clearable: true},
 		{Name: "sensitivity_level", Label: "SensitivityLevel", Type: "enums.SystemSensitivityLevel", Clearable: true},
 		{Name: "system_name", Label: "SystemName", Type: "string", MatchKey: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "version", Label: "Version", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTFASetting.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "email_otp_allowed", Label: "EmailOtpAllowed", Type: "bool", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "phone_otp_allowed", Label: "PhoneOtpAllowed", Type: "bool", Clearable: true},
 		{Name: "recovery_codes", Label: "RecoveryCodes", Type: "[]string", Clearable: true},
 		{Name: "tfa_secret", Label: "TfaSecret", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "totp_allowed", Label: "TotpAllowed", Type: "bool", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "verified", Label: "Verified", Type: "bool"},
 	}
 	SchemaTagDefinition.Fields = []FieldDescriptor{
 		{Name: "aliases", Label: "Aliases", Type: "[]string", Clearable: true},
 		{Name: "color", Label: "Color", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "slug", Label: "Slug", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTask.Fields = []FieldDescriptor{
 		{Name: "assignee_id", Label: "AssigneeID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "assigner_id", Label: "AssignerID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "completed", Label: "Completed", Type: "models.DateTime", WorkflowEligible: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "details", Label: "Details", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "details_json", Label: "DetailsJSON", Type: "[]interface {}", Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
@@ -7774,7 +6973,7 @@ func init() {
 		{Name: "is_suggested", Label: "IsSuggested", Type: "bool"},
 		{Name: "is_template", Label: "IsTemplate", Type: "bool"},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "parent_task_id", Label: "ParentTaskID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "priority", Label: "Priority", Type: "int"},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
@@ -7787,16 +6986,16 @@ func init() {
 		{Name: "task_kind_id", Label: "TaskKindID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "task_kind_name", Label: "TaskKindName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, DisplayKey: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaTemplate.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, Clearable: true},
@@ -7804,7 +7003,7 @@ func init() {
 		{Name: "jsonconfig", Label: "Jsonconfig", Type: "map[string]interface {}"},
 		{Name: "kind", Label: "Kind", Type: "enums.TemplateKind", Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, Clearable: true},
@@ -7814,17 +7013,17 @@ func init() {
 		{Name: "transform_configuration", Label: "TransformConfiguration", Type: "models.TemplateProjectionConfig", Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "uischema", Label: "Uischema", Type: "map[string]interface {}", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenter.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "custom_domain_id", Label: "CustomDomainID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "pirsch_access_link", Label: "PirschAccessLink", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "pirsch_domain_id", Label: "PirschDomainID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "pirsch_identification_code", Label: "PirschIdentificationCode", Type: "string", MatchKey: true, Clearable: true},
@@ -7833,27 +7032,27 @@ func init() {
 		{Name: "slug", Label: "Slug", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "subprocessor_url", Label: "SubprocessorURL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterCompliance.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterDoc.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "original_file_id", Label: "OriginalFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "standard_id", Label: "StandardID", Type: "string", MatchKey: true, Clearable: true},
@@ -7862,40 +7061,40 @@ func init() {
 		{Name: "trust_center_doc_kind_id", Label: "TrustCenterDocKindID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_doc_kind_name", Label: "TrustCenterDocKindName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "visibility", Label: "Visibility", Type: "enums.TrustCenterDocumentVisibility", Clearable: true},
 		{Name: "watermark_status", Label: "WatermarkStatus", Type: "enums.WatermarkStatus", Clearable: true},
 		{Name: "watermarking_enabled", Label: "WatermarkingEnabled", Type: "bool", Clearable: true},
 	}
 	SchemaTrustCenterEntity.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "entity_type_id", Label: "EntityTypeID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "logo_file_id", Label: "LogoFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "url", Label: "URL", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterFAQ.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_order", Label: "DisplayOrder", Type: "int", Clearable: true},
 		{Name: "note_id", Label: "NoteID", Type: "string", MatchKey: true},
 		{Name: "reference_link", Label: "ReferenceLink", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_faq_kind_id", Label: "TrustCenterFaqKindID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_faq_kind_name", Label: "TrustCenterFaqKindName", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterNDARequest.Fields = []FieldDescriptor{
@@ -7903,10 +7102,10 @@ func init() {
 		{Name: "approved_at", Label: "ApprovedAt", Type: "models.DateTime", Clearable: true},
 		{Name: "approved_by_user_id", Label: "ApprovedByUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "company_name", Label: "CompanyName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "document_data_id", Label: "DocumentDataID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true, Clearable: true},
@@ -7917,8 +7116,8 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.TrustCenterNDARequestStatus", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterSetting.Fields = []FieldDescriptor{
@@ -7928,10 +7127,10 @@ func init() {
 		{Name: "company_description", Label: "CompanyDescription", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "company_domain", Label: "CompanyDomain", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "company_name", Label: "CompanyName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "environment", Label: "Environment", Type: "enums.TrustCenterEnvironment", Clearable: true},
 		{Name: "favicon_local_file_id", Label: "FaviconLocalFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "favicon_remote_url", Label: "FaviconRemoteURL", Type: "string", MatchKey: true, Clearable: true},
@@ -7954,41 +7153,41 @@ func init() {
 		{Name: "theme_mode", Label: "ThemeMode", Type: "enums.TrustCenterThemeMode", Clearable: true},
 		{Name: "title", Label: "Title", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterSubprocessor.Fields = []FieldDescriptor{
 		{Name: "countries", Label: "Countries", Type: "[]string", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "subprocessor_id", Label: "SubprocessorID", Type: "string", MatchKey: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_subprocessor_kind_id", Label: "TrustCenterSubprocessorKindID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_subprocessor_kind_name", Label: "TrustCenterSubprocessorKindName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaTrustCenterWatermarkConfig.Fields = []FieldDescriptor{
 		{Name: "color", Label: "Color", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "font", Label: "Font", Type: "enums.Font", Clearable: true},
 		{Name: "font_size", Label: "FontSize", Type: "float64", Clearable: true},
 		{Name: "is_enabled", Label: "IsEnabled", Type: "bool", Clearable: true},
 		{Name: "logo_id", Label: "LogoID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "opacity", Label: "Opacity", Type: "float64", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "rotation", Label: "Rotation", Type: "float64", Clearable: true},
 		{Name: "text", Label: "Text", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "trust_center_id", Label: "TrustCenterID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaUser.Fields = []FieldDescriptor{
@@ -7996,10 +7195,10 @@ func init() {
 		{Name: "avatar_local_file_id", Label: "AvatarLocalFileID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "avatar_remote_url", Label: "AvatarRemoteURL", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "avatar_updated_at", Label: "AvatarUpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true},
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true},
@@ -8016,17 +7215,17 @@ func init() {
 		{Name: "scim_username", Label: "ScimUsername", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "sub", Label: "Sub", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 	}
 	SchemaUserSetting.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "delegate_end_at", Label: "DelegateEndAt", Type: "time.Time", Clearable: true},
 		{Name: "delegate_start_at", Label: "DelegateStartAt", Type: "time.Time", Clearable: true},
 		{Name: "delegate_user_id", Label: "DelegateUserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "email_confirmed", Label: "EmailConfirmed", Type: "bool"},
 		{Name: "is_tfa_enabled", Label: "IsTfaEnabled", Type: "bool", Clearable: true},
 		{Name: "is_webauthn_allowed", Label: "IsWebauthnAllowed", Type: "bool", Clearable: true},
@@ -8036,8 +7235,8 @@ func init() {
 		{Name: "status", Label: "Status", Type: "enums.UserStatus"},
 		{Name: "suspended_at", Label: "SuspendedAt", Type: "time.Time", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true, Clearable: true},
 	}
@@ -8045,38 +7244,38 @@ func init() {
 		{Name: "answer", Label: "Answer", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "answer_type", Label: "AnswerType", Type: "enums.VendorScoringAnswerType"},
 		{Name: "assessment_response_id", Label: "AssessmentResponseID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "entity_id", Label: "EntityID", Type: "string", MatchKey: true},
 		{Name: "impact", Label: "Impact", Type: "enums.VendorRiskImpact"},
 		{Name: "likelihood", Label: "Likelihood", Type: "enums.VendorRiskLikelihood"},
 		{Name: "notes", Label: "Notes", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "question_category", Label: "QuestionCategory", Type: "enums.VendorScoringCategory"},
 		{Name: "question_description", Label: "QuestionDescription", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "question_key", Label: "QuestionKey", Type: "string", MatchKey: true},
 		{Name: "question_name", Label: "QuestionName", Type: "string", MatchKey: true},
 		{Name: "score", Label: "Score", Type: "float64"},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "vendor_scoring_config_id", Label: "VendorScoringConfigID", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaVendorScoringConfig.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "questions", Label: "Questions", Type: "models.VendorScoringQuestionsConfig"},
 		{Name: "risk_thresholds", Label: "RiskThresholds", Type: "models.RiskThresholdsConfig"},
 		{Name: "scoring_mode", Label: "ScoringMode", Type: "enums.VendorScoringMode"},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 	}
 	SchemaVulnerability.Fields = []FieldDescriptor{
@@ -8087,12 +7286,12 @@ func init() {
 		{Name: "auto_dismissed_at", Label: "AutoDismissedAt", Type: "models.DateTime", InputKey: "auto_dismissed_at", Clearable: true},
 		{Name: "blocking", Label: "Blocking", Type: "bool", WorkflowEligible: true, InputKey: "blocking", Clearable: true},
 		{Name: "category", Label: "Category", Type: "string", MatchKey: true, InputKey: "category", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "cve_id", Label: "CveID", Type: "string", MatchKey: true, InputKey: "cve_id", Clearable: true},
 		{Name: "cwe_ids", Label: "CweIds", Type: "[]string", InputKey: "cwe_ids", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "dependency_scope", Label: "DependencyScope", Type: "string", MatchKey: true, InputKey: "dependency_scope", Clearable: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, InputKey: "description", Clearable: true},
 		{Name: "discovered_at", Label: "DiscoveredAt", Type: "models.DateTime", WorkflowEligible: true, InputKey: "discovered_at", Clearable: true},
@@ -8113,18 +7312,18 @@ func init() {
 		{Name: "impact", Label: "Impact", Type: "float64", InputKey: "impact", Clearable: true},
 		{Name: "impacts", Label: "Impacts", Type: "[]string", InputKey: "impacts", Clearable: true},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes", Clearable: true},
-		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, InputKey: "managed_by", Clearable: true},
+		{Name: "managed_by", Label: "ManagedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "manifest_path", Label: "ManifestPath", Type: "string", MatchKey: true, InputKey: "manifest_path", Clearable: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", InputKey: "metadata", Clearable: true},
 		{Name: "open", Label: "Open", Type: "bool", WorkflowEligible: true, InputKey: "open", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, InputKey: "owner_id", Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "package_ecosystem", Label: "PackageEcosystem", Type: "string", MatchKey: true, InputKey: "package_ecosystem", Clearable: true},
 		{Name: "package_name", Label: "PackageName", Type: "string", MatchKey: true, InputKey: "package_name", Clearable: true},
 		{Name: "priority", Label: "Priority", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "priority", Clearable: true},
 		{Name: "production", Label: "Production", Type: "bool", WorkflowEligible: true, InputKey: "production", Clearable: true},
 		{Name: "public", Label: "Public", Type: "bool", WorkflowEligible: true, InputKey: "public", Clearable: true},
 		{Name: "published_at", Label: "PublishedAt", Type: "models.DateTime", InputKey: "published_at", Clearable: true},
-		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Clearable: true},
+		{Name: "raw_payload", Label: "RawPayload", Type: "map[string]interface {}", InputKey: "raw_payload", Clearable: true, Volatile: true},
 		{Name: "references", Label: "References", Type: "[]string", InputKey: "references", Clearable: true},
 		{Name: "remediation_sla", Label: "RemediationSLA", Type: "int", WorkflowEligible: true, InputKey: "remediation_sla", Clearable: true},
 		{Name: "reviewed_by", Label: "ReviewedBy", Type: "string", MatchKey: true, InputKey: "reviewed_by", Clearable: true},
@@ -8137,39 +7336,39 @@ func init() {
 		{Name: "security_level", Label: "SecurityLevel", Type: "enums.SecurityLevel", Clearable: true},
 		{Name: "severity", Label: "Severity", Type: "string", WorkflowEligible: true, MatchKey: true, InputKey: "severity", Clearable: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source", Clearable: true},
-		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, InputKey: "source_definition_id", Clearable: true},
-		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, InputKey: "source_definition_version", Clearable: true},
-		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, InputKey: "source_instance_id", Clearable: true},
-		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true},
+		{Name: "source_definition_id", Label: "SourceDefinitionID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_definition_version", Label: "SourceDefinitionVersion", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_instance_id", Label: "SourceInstanceID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "source_updated_at", Label: "SourceUpdatedAt", Type: "models.DateTime", InputKey: "source_updated_at", Clearable: true, Volatile: true},
 		{Name: "summary", Label: "Summary", Type: "string", MatchKey: true, InputKey: "summary", Clearable: true},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id", Clearable: true},
 		{Name: "system_owned", Label: "SystemOwned", Type: "bool", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "validated", Label: "Validated", Type: "bool", WorkflowEligible: true, InputKey: "validated", Clearable: true},
 		{Name: "vector", Label: "Vector", Type: "string", MatchKey: true, InputKey: "vector", Clearable: true},
 		{Name: "vulnerability_status_id", Label: "VulnerabilityStatusID", Type: "string", MatchKey: true, InputKey: "vulnerability_status_id", Clearable: true},
 		{Name: "vulnerability_status_name", Label: "VulnerabilityStatusName", Type: "string", MatchKey: true, InputKey: "vulnerability_status_name", Clearable: true},
 		{Name: "vulnerable_version_range", Label: "VulnerableVersionRange", Type: "string", MatchKey: true, InputKey: "vulnerable_version_range", Clearable: true},
-		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true},
+		{Name: "workflow_eligible_marker", Label: "WorkflowEligibleMarker", Type: "bool", Clearable: true, SystemControlled: true},
 	}
 	SchemaWebauthn.Fields = []FieldDescriptor{
 		{Name: "aaguid", Label: "Aaguid", Type: "*models.AAGUID"},
 		{Name: "attestation_type", Label: "AttestationType", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "backup_eligible", Label: "BackupEligible", Type: "bool"},
 		{Name: "backup_state", Label: "BackupState", Type: "bool"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "credential_id", Label: "CredentialID", Type: "[]byte", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, SystemControlled: true},
 		{Name: "public_key", Label: "PublicKey", Type: "[]byte", Clearable: true},
 		{Name: "sign_count", Label: "SignCount", Type: "int32"},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "transports", Label: "Transports", Type: "[]string"},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "user_present", Label: "UserPresent", Type: "bool"},
 		{Name: "user_verified", Label: "UserVerified", Type: "bool"},
 	}
@@ -8178,11 +7377,11 @@ func init() {
 		{Name: "actor_user_id", Label: "ActorUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "approval_metadata", Label: "ApprovalMetadata", Type: "models.WorkflowAssignmentApproval", Clearable: true},
 		{Name: "assignment_key", Label: "AssignmentKey", Type: "string", MatchKey: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "decided_at", Label: "DecidedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "due_at", Label: "DueAt", Type: "time.Time", Clearable: true},
 		{Name: "invalidation_metadata", Label: "InvalidationMetadata", Type: "models.WorkflowAssignmentInvalidation", Clearable: true},
@@ -8190,31 +7389,31 @@ func init() {
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}", Clearable: true},
 		{Name: "notes", Label: "Notes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "outcome_metadata", Label: "OutcomeMetadata", Type: "models.AssignmentOutcome", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "rejection_metadata", Label: "RejectionMetadata", Type: "models.WorkflowAssignmentRejection", Clearable: true},
 		{Name: "required", Label: "Required", Type: "bool"},
 		{Name: "role", Label: "Role", Type: "string", MatchKey: true},
 		{Name: "status", Label: "Status", Type: "enums.WorkflowAssignmentStatus"},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
 	SchemaWorkflowAssignmentTarget.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "resolver_key", Label: "ResolverKey", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "target_group_id", Label: "TargetGroupID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "target_type", Label: "TargetType", Type: "enums.WorkflowTargetType"},
 		{Name: "target_user_id", Label: "TargetUserID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_assignment_id", Label: "WorkflowAssignmentID", Type: "string", MatchKey: true},
 	}
@@ -8224,18 +7423,18 @@ func init() {
 		{Name: "approval_fields", Label: "ApprovalFields", Type: "[]string", Clearable: true},
 		{Name: "approval_submission_mode", Label: "ApprovalSubmissionMode", Type: "enums.WorkflowApprovalSubmissionMode", Clearable: true},
 		{Name: "cooldown_seconds", Label: "CooldownSeconds", Type: "int"},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "definition_json", Label: "DefinitionJSON", Type: "models.WorkflowDefinitionDocument", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "description", Label: "Description", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "draft", Label: "Draft", Type: "bool"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "is_default", Label: "IsDefault", Type: "bool"},
 		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "published_at", Label: "PublishedAt", Type: "time.Time", Clearable: true},
 		{Name: "revision", Label: "Revision", Type: "int"},
 		{Name: "schema_type", Label: "SchemaType", Type: "string", MatchKey: true},
@@ -8245,23 +7444,23 @@ func init() {
 		{Name: "tracked_fields", Label: "TrackedFields", Type: "[]string", Clearable: true},
 		{Name: "trigger_fields", Label: "TriggerFields", Type: "[]string", Clearable: true},
 		{Name: "trigger_operations", Label: "TriggerOperations", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_kind", Label: "WorkflowKind", Type: "enums.WorkflowKind"},
 	}
 	SchemaWorkflowEvent.Fields = []FieldDescriptor{
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "event_type", Label: "EventType", Type: "enums.WorkflowEventType"},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "payload", Label: "Payload", Type: "models.WorkflowEventPayload", Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
@@ -8273,12 +7472,12 @@ func init() {
 		{Name: "campaign_target_id", Label: "CampaignTargetID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "context", Label: "Context", Type: "models.WorkflowInstanceContext", Clearable: true},
 		{Name: "control_id", Label: "ControlID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "current_action_index", Label: "CurrentActionIndex", Type: "int"},
 		{Name: "definition_snapshot", Label: "DefinitionSnapshot", Type: "models.WorkflowDefinitionDocument", Clearable: true},
-		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},
-		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "display_id", Label: "DisplayID", Type: "string", MatchKey: true},
 		{Name: "evidence_id", Label: "EvidenceID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "finding_id", Label: "FindingID", Type: "string", MatchKey: true, Clearable: true},
@@ -8286,7 +7485,7 @@ func init() {
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_policy_id", Label: "InternalPolicyID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "last_evaluated_at", Label: "LastEvaluatedAt", Type: "time.Time", Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "procedure_id", Label: "ProcedureID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "remediation_id", Label: "RemediationID", Type: "string", MatchKey: true, Clearable: true},
@@ -8295,8 +7494,8 @@ func init() {
 		{Name: "subcontrol_id", Label: "SubcontrolID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
 		{Name: "task_id", Label: "TaskID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "vulnerability_id", Label: "VulnerabilityID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_definition_id", Label: "WorkflowDefinitionID", Type: "string", MatchKey: true},
@@ -8309,8 +7508,8 @@ func init() {
 		{Name: "campaign_id", Label: "CampaignID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "campaign_target_id", Label: "CampaignTargetID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "control_id", Label: "ControlID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "directory_membership_id", Label: "DirectoryMembershipID", Type: "string", MatchKey: true, Clearable: true},
@@ -8319,15 +7518,15 @@ func init() {
 		{Name: "finding_id", Label: "FindingID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "identity_holder_id", Label: "IdentityHolderID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "internal_policy_id", Label: "InternalPolicyID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "platform_id", Label: "PlatformID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "procedure_id", Label: "ProcedureID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "remediation_id", Label: "RemediationID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "risk_id", Label: "RiskID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "subcontrol_id", Label: "SubcontrolID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "task_id", Label: "TaskID", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "vulnerability_id", Label: "VulnerabilityID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
@@ -8335,10 +7534,10 @@ func init() {
 	SchemaWorkflowProposal.Fields = []FieldDescriptor{
 		{Name: "approved_hash", Label: "ApprovedHash", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "changes", Label: "Changes", Type: "map[string]interface {}", Clearable: true},
-		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
-		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "domain_key", Label: "DomainKey", Type: "string", MatchKey: true},
-		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "proposed_changes", Label: "ProposedChanges", Type: "models.WorkflowProposedChanges", Clearable: true},
 		{Name: "proposed_hash", Label: "ProposedHash", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "revision", Label: "Revision", Type: "int"},
@@ -8346,8 +7545,8 @@ func init() {
 		{Name: "submitted_at", Label: "SubmittedAt", Type: "time.Time", Clearable: true},
 		{Name: "submitted_by_user_id", Label: "SubmittedByUserID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "tags", Label: "Tags", Type: "[]string", Clearable: true},
-		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true},
-		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time", Clearable: true, SystemControlled: true},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true, Clearable: true, SystemControlled: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "workflow_object_ref_id", Label: "WorkflowObjectRefID", Type: "string", MatchKey: true},
 	}
@@ -20220,6 +19419,704 @@ func init() {
 		}
 
 		return results, nil
+	}
+	SchemaActionPlan.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateActionPlanInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := actionplan.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "action_plan", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+
+		if input.Revision != nil {
+			if err := actionplan.RevisionValidator(*input.Revision); err != nil {
+				logSanitizedIngestField(ctx, "action_plan", "revision", err)
+				input.Revision = nil
+			}
+		}
+
+		if input.URL != nil {
+			if err := actionplan.URLValidator(*input.URL); err != nil {
+				logSanitizedIngestField(ctx, "action_plan", "url", err)
+				input.URL = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaAsset.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "asset", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateAssetInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.DisplayName != nil {
+			if err := asset.DisplayNameValidator(*input.DisplayName); err != nil {
+				logSanitizedIngestField(ctx, "asset", "display_name", err)
+				input.DisplayName = nil
+			}
+		}
+
+		if input.OwnerID != nil {
+			if err := asset.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "asset", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaCheckResult.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "check_result", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateCheckResultInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaContact.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "contact", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateContactInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.FullName != nil {
+			if err := contact.FullNameValidator(*input.FullName); err != nil {
+				logSanitizedIngestField(ctx, "contact", "full_name", err)
+				input.FullName = nil
+			}
+		}
+
+		if input.PhoneNumber != nil {
+			if err := contact.PhoneNumberValidator(*input.PhoneNumber); err != nil {
+				logSanitizedIngestField(ctx, "contact", "phone_number", err)
+				input.PhoneNumber = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaDirectoryAccount.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateDirectoryAccountInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.AvatarRemoteURL != nil {
+			if err := directoryaccount.AvatarRemoteURLValidator(*input.AvatarRemoteURL); err != nil {
+				logSanitizedIngestField(ctx, "directory_account", "avatar_remote_url", err)
+				input.AvatarRemoteURL = nil
+			}
+		}
+
+		if input.DirectorySyncRunID != nil {
+			if err := directoryaccount.DirectorySyncRunIDValidator(*input.DirectorySyncRunID); err != nil {
+				logSanitizedIngestField(ctx, "directory_account", "directory_sync_run_id", err)
+				input.DirectorySyncRunID = nil
+			}
+		}
+
+		if input.EmailAliases != nil {
+			if err := directoryaccount.EmailAliasesValidator(input.EmailAliases); err != nil {
+				logSanitizedIngestField(ctx, "directory_account", "email_aliases", err)
+				input.EmailAliases = nil
+			}
+		}
+
+		if input.IntegrationID != nil {
+			if err := directoryaccount.IntegrationIDValidator(*input.IntegrationID); err != nil {
+				logSanitizedIngestField(ctx, "directory_account", "integration_id", err)
+				input.IntegrationID = nil
+			}
+		}
+
+		if input.OwnerID != nil {
+			if err := directoryaccount.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "directory_account", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+
+		if input.PhoneNumber != nil {
+			if err := directoryaccount.PhoneNumberValidator(*input.PhoneNumber); err != nil {
+				logSanitizedIngestField(ctx, "directory_account", "phone_number", err)
+				input.PhoneNumber = nil
+			}
+		}
+
+		if input.PlatformID != nil {
+			if err := directoryaccount.PlatformIDValidator(*input.PlatformID); err != nil {
+				logSanitizedIngestField(ctx, "directory_account", "platform_id", err)
+				input.PlatformID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaDirectoryGroup.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateDirectoryGroupInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.Email != nil {
+			if err := directorygroup.EmailValidator(*input.Email); err != nil {
+				logSanitizedIngestField(ctx, "directory_group", "email", err)
+				input.Email = nil
+			}
+		}
+
+		if input.PlatformID != nil {
+			if err := directorygroup.PlatformIDValidator(*input.PlatformID); err != nil {
+				logSanitizedIngestField(ctx, "directory_group", "platform_id", err)
+				input.PlatformID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaDirectoryMembership.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateDirectoryMembershipInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.PlatformID != nil {
+			if err := directorymembership.PlatformIDValidator(*input.PlatformID); err != nil {
+				logSanitizedIngestField(ctx, "directory_membership", "platform_id", err)
+				input.PlatformID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaEntity.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateEntityInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.DisplayName != nil {
+			if err := entity.DisplayNameValidator(*input.DisplayName); err != nil {
+				logSanitizedIngestField(ctx, "entity", "display_name", err)
+				input.DisplayName = nil
+			}
+		}
+
+		if input.Domains != nil {
+			if err := entity.DomainsValidator(input.Domains); err != nil {
+				logSanitizedIngestField(ctx, "entity", "domains", err)
+				input.Domains = nil
+			}
+		}
+
+		if input.Links != nil {
+			if err := entity.LinksValidator(input.Links); err != nil {
+				logSanitizedIngestField(ctx, "entity", "links", err)
+				input.Links = nil
+			}
+		}
+
+		if input.LogoRemoteURL != nil {
+			if err := entity.LogoRemoteURLValidator(*input.LogoRemoteURL); err != nil {
+				logSanitizedIngestField(ctx, "entity", "logo_remote_url", err)
+				input.LogoRemoteURL = nil
+			}
+		}
+
+		if input.Name != nil {
+			if err := entity.NameValidator(*input.Name); err != nil {
+				logSanitizedIngestField(ctx, "entity", "name", err)
+				input.Name = nil
+			}
+		}
+
+		if input.OwnerID != nil {
+			if err := entity.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "entity", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+
+		if input.StatusPageURL != nil {
+			if err := entity.StatusPageURLValidator(*input.StatusPageURL); err != nil {
+				logSanitizedIngestField(ctx, "entity", "status_page_url", err)
+				input.StatusPageURL = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaFinding.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "finding", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateFindingInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := finding.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "finding", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaInternalPolicy.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateInternalPolicyInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.Revision != nil {
+			if err := internalpolicy.RevisionValidator(*input.Revision); err != nil {
+				logSanitizedIngestField(ctx, "internal_policy", "revision", err)
+				input.Revision = nil
+			}
+		}
+
+		if input.URL != nil {
+			if err := internalpolicy.URLValidator(*input.URL); err != nil {
+				logSanitizedIngestField(ctx, "internal_policy", "url", err)
+				input.URL = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaProcedure.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "procedure", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateProcedureInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.Revision != nil {
+			if err := procedure.RevisionValidator(*input.Revision); err != nil {
+				logSanitizedIngestField(ctx, "procedure", "revision", err)
+				input.Revision = nil
+			}
+		}
+
+		if input.URL != nil {
+			if err := procedure.URLValidator(*input.URL); err != nil {
+				logSanitizedIngestField(ctx, "procedure", "url", err)
+				input.URL = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaRisk.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "risk", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateRiskInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := risk.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "risk", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaVulnerability.Ingest.prepare = func(ctx context.Context, integration *generated.Integration, payload json.RawMessage) (json.RawMessage, error) {
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpCreate}
+
+		input, err := jsonx.Decode[generated.CreateVulnerabilityInput](payload)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		if input.OwnerID != nil {
+			if err := vulnerability.OwnerIDValidator(*input.OwnerID); err != nil {
+				logSanitizedIngestField(ctx, "vulnerability", "owner_id", err)
+				input.OwnerID = nil
+			}
+		}
+		prepared, err := json.Marshal(input)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrMarshalFailed, err)
+		}
+
+		return prepared, nil
+	}
+	SchemaActionPlan.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.ActionPlan](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateActionPlanInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.ActionPlan.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaAsset.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "asset", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Asset](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateAssetInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Asset.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaCheckResult.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "check_result", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.CheckResult](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateCheckResultInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.CheckResult.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaContact.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "contact", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Contact](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateContactInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Contact.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaDirectoryAccount.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.DirectoryAccount](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateDirectoryAccountInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.DirectoryAccount.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaDirectoryGroup.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.DirectoryGroup](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateDirectoryGroupInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.DirectoryGroup.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaDirectoryMembership.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.DirectoryMembership](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateDirectoryMembershipInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.DirectoryMembership.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaEntity.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "entity", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Entity](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateEntityInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Entity.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaFinding.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "finding", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Finding](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateFindingInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Finding.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaInternalPolicy.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.InternalPolicy](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateInternalPolicyInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.InternalPolicy.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaProcedure.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "procedure", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Procedure](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateProcedureInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Procedure.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaRisk.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "risk", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Risk](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateRiskInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Risk.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
+	}
+	SchemaVulnerability.Ingest.buildUpdate = func(ctx context.Context, client *generated.Client, row json.RawMessage, payload json.RawMessage) (ent.Mutation, func(context.Context) error, error) {
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpUpdate}
+
+		existing, err := jsonx.Decode[generated.Vulnerability](row)
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		input, err := jsonx.Decode[generated.UpdateVulnerabilityInput](applyClears(payload))
+		if err != nil {
+			return nil, nil, logError(ctx, ref, ErrDecodeFailed, err)
+		}
+
+		update := client.Vulnerability.UpdateOne(&existing).SetInput(input)
+
+		return update.Mutation(), func(ctx context.Context) error {
+			if err := update.Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		}, nil
 	}
 
 	// through edges are linked by creating join entity rows — one per target, each with its own

@@ -63,7 +63,7 @@ func (Risk) Fields() []ent.Field {
 			Comment("integration that surfaced this risk, when sourced via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration().Volatile(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.Time("observed_at").
 			Comment("time when this risk was last observed by the source integration").
@@ -72,6 +72,7 @@ func (Risk) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("observed_at"),
+				entx.IntegrationMappingField().Volatile(),
 			),
 		field.String("external_uuid").
 			Comment("stable external UUID for deterministic OSCAL export and round-tripping").

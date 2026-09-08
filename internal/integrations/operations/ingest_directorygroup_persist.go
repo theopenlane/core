@@ -15,11 +15,16 @@ import (
 )
 
 // persistDirectoryGroupInput upserts one DirectoryGroup record using the ingest lookup key fields
-func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateDirectoryGroupInput) (string, error) {
+func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateDirectoryGroupInput) (string, bool, bool, error) {
 	if createInput.ExternalID == "" {
 		logx.FromContext(ctx).Error().Err(ErrIngestUpsertKeyMissing).Msg("directory group ingest missing external id")
 
-		return "", ErrIngestUpsertKeyMissing
+		return "", false, false, ErrIngestUpsertKeyMissing
+	}
+
+	createInput, err := stampDirectoryProvenance(createInput, integration)
+	if err != nil {
+		return "", false, false, wrapIngestPersistError(err)
 	}
 
 	if hash := directoryProfileHash(createInput.Profile); hash != "" {
@@ -29,10 +34,10 @@ func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration
 	existing, found, err := findDirectoryGroupForIngest(ctx, db, createInput)
 	if err != nil {
 		if errors.Is(err, ErrIngestUpsertConflict) {
-			return "", err
+			return "", false, false, err
 		}
 
-		return "", wrapIngestPersistError(err)
+		return "", false, false, wrapIngestPersistError(err)
 	}
 
 	if !found {
@@ -44,7 +49,7 @@ func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration
 		if createErr != nil {
 			logx.FromContext(ctx).Error().Err(createErr).Msg("directory group create failed")
 
-			return "", wrapIngestPersistError(createErr)
+			return "", false, false, wrapIngestPersistError(createErr)
 		}
 
 		if batch := directorySyncBatchFromContext(ctx); batch != nil {
@@ -53,33 +58,38 @@ func persistDirectoryGroupInput(ctx context.Context, db *ent.Client, integration
 
 		recordIngestChange(ctx)
 
-		return dg.ID, nil
+		return dg.ID, true, true, nil
+	}
+
+	changes, err := directoryChangeSet(ctx, db, entityops.SchemaDirectoryGroup, existing, createInput)
+	if err != nil {
+		return "", false, false, wrapIngestPersistError(err)
+	}
+
+	if changes.Empty() {
+		if existing.IntegrationID != createInput.IntegrationID {
+			if err := relinkIngestIntegration(ctx, db, entityops.SchemaDirectoryGroup.Snake, existing.ID, createInput.IntegrationID); err != nil {
+				return existing.ID, false, false, wrapIngestPersistError(err)
+			}
+		}
+
+		return existing.ID, false, true, nil
 	}
 
 	updateInput, err := roundTripUpdateInput[ent.CreateDirectoryGroupInput, ent.UpdateDirectoryGroupInput](createInput)
 	if err != nil {
-		return "", err
-	}
-
-	if entityops.DirectoryGroupIngestUnchanged(existing, updateInput) {
-		if existing.IntegrationID != createInput.IntegrationID {
-			if err := relinkIngestIntegration(ctx, db, entityops.SchemaDirectoryGroup.Snake, existing.ID, createInput.IntegrationID); err != nil {
-				return existing.ID, wrapIngestPersistError(err)
-			}
-		}
-
-		return existing.ID, nil
+		return "", false, false, err
 	}
 
 	if err := db.DirectoryGroup.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("directory group update failed")
 
-		return existing.ID, wrapIngestPersistError(err)
+		return existing.ID, false, false, wrapIngestPersistError(err)
 	}
 
 	recordIngestChange(ctx)
 
-	return existing.ID, nil
+	return existing.ID, true, true, nil
 }
 
 // directoryGroupLookupPredicates prefers the directory instance, keeping the integration's not-yet-stamped rows findable

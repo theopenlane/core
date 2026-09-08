@@ -2,6 +2,7 @@ package operations
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"github.com/samber/lo"
@@ -87,6 +88,23 @@ func recordIngestChange(ctx context.Context) {
 	if batch := directorySyncBatchFromContext(ctx); batch != nil {
 		batch.changed++
 	}
+}
+
+// directoryChangeSet computes the provider-field delta between a resolved directory row and its
+// prepared create input, honoring the schema's volatile-field exclusions so a locally set
+// confirmation timestamp does not by itself count as a change
+func directoryChangeSet(ctx context.Context, db *ent.Client, schema *entityops.Schema, existing any, createInput any) (entityops.ChangeSet, error) {
+	row, err := json.Marshal(existing)
+	if err != nil {
+		return entityops.ChangeSet{}, err
+	}
+
+	payload, err := json.Marshal(createInput)
+	if err != nil {
+		return entityops.ChangeSet{}, err
+	}
+
+	return schema.IngestChangeSet(ctx, db, row, payload)
 }
 
 // lookupScopeKey derives the lookup scope for one record's owner, instance, and integration

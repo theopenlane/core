@@ -6,33 +6,33 @@ import (
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for Keycloak user payloads mapped to DirectoryAccount
-var mapExprDirectoryAccount = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyDirectoryAccountExternalID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: entityops.InputKeyDirectoryAccountCanonicalEmail, Expr: `'email' in payload && payload.email != "" ? payload.email : ""`},
-	{Key: entityops.InputKeyDirectoryAccountDisplayName, Expr: `'username' in payload ? payload.username : ""`},
-	{Key: entityops.InputKeyDirectoryAccountGivenName, Expr: `'firstName' in payload ? payload.firstName : ""`},
-	{Key: entityops.InputKeyDirectoryAccountFamilyName, Expr: `'lastName' in payload ? payload.lastName : ""`},
-	{Key: entityops.InputKeyDirectoryAccountStatus, Expr: `dyn('enabled' in payload ? (payload.enabled ? "ACTIVE" : "INACTIVE") : "INACTIVE")`},
-	{Key: entityops.InputKeyDirectoryAccountAccountType, Expr: `dyn('serviceAccountClientId' in payload && payload.serviceAccountClientId != "" ? "SERVICE" : "USER")`},
-	{Key: entityops.InputKeyDirectoryAccountAddedAt, Expr: `'createdTimestamp' in payload ? timestamp(int(payload.createdTimestamp) / 1000) : null`},
-	{Key: entityops.InputKeyDirectoryAccountMetadata, Expr: `'attributes' in payload ? payload.attributes : {}`},
-	{Key: entityops.InputKeyDirectoryAccountProfile, Expr: "payload"},
-	{Key: entityops.InputKeyDirectoryAccountLastSeenAt, Expr: `'lastLogin' in payload && payload.lastLogin != null ? timestamp(int(payload.lastLogin) / 1000) : null`},
-})
+var mapExprDirectoryAccount = providerkit.CelMapExpr(
+	entityops.DirectoryAccountFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
+	entityops.DirectoryAccountFields.CanonicalEmail.Expr(`'email' in payload && payload.email != "" ? payload.email : ""`),
+	entityops.DirectoryAccountFields.DisplayName.Expr(`'username' in payload ? payload.username : ""`),
+	entityops.DirectoryAccountFields.GivenName.Expr(`'firstName' in payload ? payload.firstName : ""`),
+	entityops.DirectoryAccountFields.FamilyName.Expr(`'lastName' in payload ? payload.lastName : ""`),
+	entityops.DirectoryAccountFields.Status.Expr(`dyn('enabled' in payload ? (payload.enabled ? "ACTIVE" : "INACTIVE") : "INACTIVE")`),
+	entityops.DirectoryAccountFields.AccountType.Expr(`dyn('serviceAccountClientId' in payload && payload.serviceAccountClientId != "" ? "SERVICE" : "USER")`),
+	entityops.DirectoryAccountFields.AddedAt.Expr(`'createdTimestamp' in payload ? timestamp(int(payload.createdTimestamp) / 1000) : null`),
+	entityops.DirectoryAccountFields.Metadata.Expr(`'attributes' in payload ? payload.attributes : {}`),
+	entityops.DirectoryAccountFields.Profile.Expr("payload"),
+	entityops.DirectoryAccountFields.LastSeenAt.Expr(`'lastLogin' in payload && payload.lastLogin != null ? timestamp(int(payload.lastLogin) / 1000) : null`),
+)
 
 // mapExprDirectoryGroup is the CEL mapping expression for Keycloak group payloads mapped to DirectoryGroup
-var mapExprDirectoryGroup = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyDirectoryGroupExternalID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: entityops.InputKeyDirectoryGroupDisplayName, Expr: `'name' in payload ? payload.name : ""`},
-	{Key: entityops.InputKeyDirectoryGroupStatus, Expr: `dyn("ACTIVE")`},
-	{Key: entityops.InputKeyDirectoryGroupMetadata, Expr: `'attributes' in payload ? payload.attributes : {}`},
-	{Key: entityops.InputKeyDirectoryGroupProfile, Expr: "payload"},
-})
+var mapExprDirectoryGroup = providerkit.CelMapExpr(
+	entityops.DirectoryGroupFields.ExternalID.Expr(`'id' in payload ? payload.id : ""`),
+	entityops.DirectoryGroupFields.DisplayName.Expr(`'name' in payload ? payload.name : ""`),
+	entityops.DirectoryGroupFields.Status.Expr(`dyn("ACTIVE")`),
+	entityops.DirectoryGroupFields.Metadata.Expr(`'attributes' in payload ? payload.attributes : {}`),
+	entityops.DirectoryGroupFields.Profile.Expr("payload"),
+)
 
 // mapExprDirectoryMembership is the CEL mapping expression for Keycloak membership payloads mapped to DirectoryMembership
-var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntry{
-	{Key: entityops.InputKeyDirectoryMembershipDirectoryAccountID, Expr: `'id' in payload ? payload.id : ""`},
-	{Key: entityops.InputKeyDirectoryMembershipDirectoryGroupID, Expr: `resource != "" ? resource : ""`},
-	{Key: entityops.InputKeyDirectoryMembershipRole, Expr: `dyn("MEMBER")`},
-	{Key: entityops.InputKeyDirectoryMembershipMetadata, Expr: "payload"},
-})
+var mapExprDirectoryMembership = providerkit.CelMapExpr(
+	entityops.DirectoryMembershipFields.DirectoryAccountID.Expr(`'id' in payload ? payload.id : ""`),
+	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`resource != "" ? resource : ""`),
+	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
+	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
+)

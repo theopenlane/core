@@ -8,12 +8,10 @@ import (
 )
 
 // persistRiskInput upserts one Risk record through the catalog-driven entityops upsert
-func persistRiskInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateRiskInput) (string, error) {
+func persistRiskInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateRiskInput) (string, bool, bool, error) {
 	if createInput.IntegrationID == nil {
 		createInput.IntegrationID = &integration.ID
 	}
 
-	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaRisk, integration.OwnerID, createInput)
-
-	return id, err
+	return persistCatalogUpsert(ctx, db, entityops.SchemaRisk, integration.OwnerID, integration, createInput)
 }

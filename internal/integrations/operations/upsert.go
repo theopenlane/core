@@ -1,6 +1,7 @@
 package operations
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -32,29 +33,90 @@ func legacyScientificKey(value string) (string, bool) {
 	return legacy, true
 }
 
-// persistCatalogUpsert marshals one prepared create input and persists it through the schema's
-// catalog-driven entityops upsert, mapping the entityops sentinels onto the ingest error classes;
-// changed reports whether the upsert wrote the record rather than skipping it as unchanged.
-// Schemas whose lookup is not a single org-scoped key column keep persistRoundTripUpsert instead
-func persistCatalogUpsert(ctx context.Context, db *ent.Client, schema *entityops.Schema, ownerID string, createInput any) (string, bool, error) {
-	payload, err := json.Marshal(createInput)
-	if err != nil {
-		return "", false, fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
+// provenanceDefaults maps each trusted provenance column to its integration-derived value
+func provenanceDefaults(integration *ent.Integration) map[string]string {
+	return map[string]string{
+		"owner_id":                  integration.OwnerID,
+		"integration_id":            integration.ID,
+		"platform_id":               integration.PlatformID,
+		"source_definition_id":      integration.DefinitionID,
+		"source_definition_version": integration.DefinitionVersion,
+		"source_instance_id":        integration.InstallationMetadata.Display.ExternalID,
+	}
+}
+
+// stampProvenance fills the trusted integration-derived columns onto a prepared ingest payload,
+// leaving any value the payload already carries; provenance and ownership come from the resolved
+// integration rather than from provider-mapped overrides
+func stampProvenance(payload json.RawMessage, integration *ent.Integration) json.RawMessage {
+	if integration == nil {
+		return payload
 	}
 
-	ctx = entityops.WithIngestNoopMark(ctx)
+	return jsonx.EditObject(payload, func(doc map[string]json.RawMessage) bool {
+		changed := false
 
-	id, err := schema.Upsert(ctx, db, ownerID, payload)
+		for key, value := range provenanceDefaults(integration) {
+			if value == "" {
+				continue
+			}
+
+			if raw, ok := doc[key]; ok && !jsonx.IsEmptyRawMessage(raw) && !bytes.Equal(bytes.TrimSpace(raw), []byte(`""`)) {
+				continue
+			}
+
+			encoded, err := json.Marshal(value)
+			if err != nil {
+				continue
+			}
+
+			doc[key] = encoded
+			changed = true
+		}
+
+		return changed
+	})
+}
+
+// stampDirectoryProvenance stamps the trusted integration-derived columns onto a typed directory
+// create input, since the directory persist paths build and read the input before reaching the
+// shared upsert helpers that stamp everything else
+func stampDirectoryProvenance[T any](input T, integration *ent.Integration) (T, error) {
+	payload, err := json.Marshal(input)
+	if err != nil {
+		return input, err
+	}
+
+	var stamped T
+	if err := json.Unmarshal(stampProvenance(payload, integration), &stamped); err != nil {
+		return input, err
+	}
+
+	return stamped, nil
+}
+
+// persistCatalogUpsert marshals one prepared create input, stamps the trusted provenance columns, and
+// persists it through the schema's catalog-driven entityops upsert; changed reports whether the
+// upsert wrote the record rather than skipping it as unchanged, and managed reports whether this
+// installation's definition manages the record
+func persistCatalogUpsert(ctx context.Context, db *ent.Client, schema *entityops.Schema, ownerID string, integration *ent.Integration, createInput any) (string, bool, bool, error) {
+	payload, err := json.Marshal(createInput)
+	if err != nil {
+		return "", false, false, fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
+	}
+
+	payload = stampProvenance(payload, integration)
+
+	id, changed, managed, err := schema.Upsert(ctx, db, ownerID, payload)
 	switch {
 	case err == nil:
-		changed := !entityops.IngestNoopMarked(ctx)
 		if changed {
 			recordIngestChange(ctx)
 		}
 
-		return id, changed, nil
+		return id, changed, managed, nil
 	case errors.Is(err, entityops.ErrUpsertKeyMissing):
-		return "", false, ErrIngestUpsertKeyMissing
+		return "", false, false, ErrIngestUpsertKeyMissing
 	case errors.Is(err, entityops.ErrUpsertConflict):
 		// a row exists that the lookup key could not see, so log both the key and the record identity
 		lookupField, _ := schema.LookupField()
@@ -62,9 +124,9 @@ func persistCatalogUpsert(ctx context.Context, db *ent.Client, schema *entityops
 
 		logx.FromContext(ctx).Error().Err(err).Str(entityops.FieldSchema, schema.Snake).Str("lookup_field", lookupField.Name).Interface("lookup_value", doc[lookupField.InputKey]).Interface("record_name", doc["name"]).Msg("ingest upsert conflict: lookup key found no existing record but the insert violated a unique constraint")
 
-		return "", false, fmt.Errorf("%w: %w", ErrIngestUpsertConflict, err)
+		return "", false, false, fmt.Errorf("%w: %w", ErrIngestUpsertConflict, err)
 	default:
-		return "", false, wrapIngestPersistError(err)
+		return "", false, false, wrapIngestPersistError(err)
 	}
 }
 
@@ -80,56 +142,44 @@ func roundTripUpdateInput[Create any, Update any](createInput Create) (Update, e
 	return updateInput, nil
 }
 
-// persistUpsert centralizes the common ingest upsert flow while allowing schema-specific lookup and mutation logic;
-// the unchanged gate skips the update write and the ingest change record when the round-tripped
-// input carries no field changes for the existing row
-// the function input signature is ugly and hard to read but the call sites are much cleaner
-func persistUpsert[Create any, Update any, Existing any](ctx context.Context, createInput Create, toUpdate func(Create) (Update, error), unchanged func(Existing, Update) (bool, error), findExisting func(context.Context) (Existing, error), create func(context.Context, Create) (string, error), update func(context.Context, Existing, Update) error, existingID func(Existing) string) (string, error) {
-	existing, err := findExisting(ctx)
+// persistLookupUpsert persists one prepared create input against a schema-specific lookup, routing a
+// found row through the shared ingest upsert decision and an absent row through the catalog create
+func persistLookupUpsert[Existing any](ctx context.Context, db *ent.Client, schema *entityops.Schema, integration *ent.Integration, createInput any, find func(context.Context) (Existing, error)) (string, bool, bool, error) {
+	payload, err := json.Marshal(createInput)
+	if err != nil {
+		return "", false, false, fmt.Errorf("%w: %w", ErrIngestMappedDocumentInvalid, err)
+	}
+
+	payload = stampProvenance(payload, integration)
+
+	existing, err := find(ctx)
 	switch {
 	case err == nil:
-		// update existing record
-	case ent.IsNotFound(err):
-		id, createErr := create(ctx, createInput)
-		if createErr != nil {
-			logx.FromContext(ctx).Error().Err(createErr).Msg("ingest upsert create failed")
+		row, marshalErr := json.Marshal(existing)
+		if marshalErr != nil {
+			return "", false, false, fmt.Errorf("%w: %w", ErrIngestPersistFailed, marshalErr)
+		}
 
-			return id, wrapIngestPersistError(createErr)
+		id, changed, managed, upsertErr := schema.Upsert(ctx, db, integration.OwnerID, payload, []json.RawMessage{row})
+		if upsertErr != nil {
+			return "", false, false, wrapIngestPersistError(upsertErr)
+		}
+
+		if changed {
+			recordIngestChange(ctx)
+		}
+
+		return id, changed, managed, nil
+	case ent.IsNotFound(err):
+		id, createErr := schema.Create(ctx, db, payload)
+		if createErr != nil {
+			return "", false, false, wrapIngestPersistError(createErr)
 		}
 
 		recordIngestChange(ctx)
 
-		return id, nil
+		return id, true, true, nil
 	default:
-		return "", wrapIngestPersistError(err)
+		return "", false, false, wrapIngestPersistError(err)
 	}
-
-	updateInput, err := toUpdate(createInput)
-	if err != nil {
-		return "", err
-	}
-
-	same, err := unchanged(existing, updateInput)
-	if err != nil {
-		return existingID(existing), wrapIngestPersistError(err)
-	}
-
-	if same {
-		return existingID(existing), nil
-	}
-
-	if err := update(ctx, existing, updateInput); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("ingest upsert update failed")
-
-		return existingID(existing), wrapIngestPersistError(err)
-	}
-
-	recordIngestChange(ctx)
-
-	return existingID(existing), nil
-}
-
-// persistRoundTripUpsert centralizes the common ingest upsert flow for schemas whose update input can be derived by round-tripping the create input
-func persistRoundTripUpsert[Create any, Update any, Existing any](ctx context.Context, createInput Create, unchanged func(Existing, Update) (bool, error), findExisting func(context.Context) (Existing, error), create func(context.Context, Create) (string, error), update func(context.Context, Existing, Update) error, existingID func(Existing) string) (string, error) {
-	return persistUpsert(ctx, createInput, roundTripUpdateInput, unchanged, findExisting, create, update, existingID)
 }

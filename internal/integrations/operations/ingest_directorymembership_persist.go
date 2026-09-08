@@ -19,16 +19,21 @@ import (
 )
 
 // persistDirectoryMembershipInput upserts one DirectoryMembership record using the ingest lookup key fields
-func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateDirectoryMembershipInput) (string, error) {
+func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateDirectoryMembershipInput) (string, bool, bool, error) {
 	if createInput.DirectoryAccountID == "" || createInput.DirectoryGroupID == "" {
 		logx.FromContext(ctx).Error().Err(ErrIngestUpsertKeyMissing).Msg("directory membership ingest missing account or group reference")
 
-		return "", ErrIngestUpsertKeyMissing
+		return "", false, false, ErrIngestUpsertKeyMissing
+	}
+
+	createInput, err := stampDirectoryProvenance(createInput, integration)
+	if err != nil {
+		return "", false, false, wrapIngestPersistError(err)
 	}
 
 	resolvedInput, err := resolveDirectoryMembershipInput(ctx, db, integration, createInput)
 	if err != nil {
-		return "", err
+		return "", false, false, err
 	}
 
 	now := time.Now()
@@ -36,7 +41,7 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 
 	existing, found, err := findDirectoryMembershipForIngest(ctx, db, integration.OwnerID, resolvedInput)
 	if err != nil {
-		return "", wrapIngestPersistError(err)
+		return "", false, false, wrapIngestPersistError(err)
 	}
 
 	if !found {
@@ -55,7 +60,7 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 		if createErr != nil {
 			logx.FromContext(ctx).Error().Err(createErr).Msg("directory membership create failed")
 
-			return "", wrapIngestPersistError(createErr)
+			return "", false, false, wrapIngestPersistError(createErr)
 		}
 
 		if batch := directorySyncBatchFromContext(ctx); batch != nil {
@@ -64,29 +69,38 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 
 		recordIngestChange(ctx)
 
-		return dm.ID, nil
+		return dm.ID, true, true, nil
 	}
 
 	input, err := roundTripUpdateInput[ent.CreateDirectoryMembershipInput, ent.UpdateDirectoryMembershipInput](resolvedInput)
 	if err != nil {
-		return "", err
+		return "", false, false, err
 	}
 
-	if entityops.DirectoryMembershipIngestUnchanged(existing, input) && directoryMembershipRunCanAdvance(existing.LastConfirmedRunID, runID) {
+	changes, err := directoryChangeSet(ctx, db, entityops.SchemaDirectoryMembership, existing, resolvedInput)
+	if err != nil {
+		return "", false, false, wrapIngestPersistError(err)
+	}
+
+	if changes.Empty() && directoryMembershipRunCanAdvance(existing.LastConfirmedRunID, runID) {
 		if batch := directorySyncBatchFromContext(ctx); batch != nil {
 			if existing.IntegrationID != resolvedInput.IntegrationID {
 				if err := relinkIngestIntegration(ctx, db, entityops.SchemaDirectoryMembership.Snake, existing.ID, resolvedInput.IntegrationID); err != nil {
-					return existing.ID, wrapIngestPersistError(err)
+					return existing.ID, false, false, wrapIngestPersistError(err)
 				}
 			}
 
 			batch.confirmedMembershipIDs = append(batch.confirmedMembershipIDs, existing.ID)
 
-			return existing.ID, nil
+			return existing.ID, false, true, nil
 		}
 	}
 
-	return existing.ID, wrapIngestPersistError(updateDirectoryMembership(ctx, db, existing, input, runID, now))
+	if err := updateDirectoryMembership(ctx, db, existing, input, runID, now); err != nil {
+		return existing.ID, false, false, wrapIngestPersistError(err)
+	}
+
+	return existing.ID, true, true, nil
 }
 
 // updateDirectoryMembership applies one membership update, advancing bookkeeping only when this run can still confirm the row

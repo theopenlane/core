@@ -2,9 +2,12 @@ package operations
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"strings"
 	"testing"
 
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 )
 
@@ -52,345 +55,53 @@ func TestRoundTripUpdateInput(t *testing.T) {
 	})
 }
 
-func TestPersistUpsert_CreatePath(t *testing.T) {
+func TestPersistLookupUpsert(t *testing.T) {
 	t.Parallel()
+
+	type fakeRow struct {
+		ID string `json:"id"`
+	}
 
 	type input struct {
-		Name string
-	}
-
-	created := false
-
-	id, err := persistUpsert(
-		context.Background(),
-		input{Name: "new"},
-		func(in input) (input, error) { return in, nil },
-		func(any, input) (bool, error) {
-			t.Fatal("unchanged should not be called on create path")
-			return false, nil
-		},
-		func(context.Context) (any, error) {
-			return nil, &ent.NotFoundError{}
-		},
-		func(_ context.Context, in input) (string, error) {
-			created = true
-			if in.Name != "new" {
-				t.Fatalf("create input Name=%q, want %q", in.Name, "new")
-			}
-			return "new-id", nil
-		},
-		func(context.Context, any, input) error {
-			t.Fatal("update should not be called on create path")
-			return nil
-		},
-		func(a any) string { return "" },
-	)
-
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !created {
-		t.Fatal("expected create to be called")
-	}
-	if id != "new-id" {
-		t.Fatalf("expected id=%q, got %q", "new-id", id)
-	}
-}
-
-func TestPersistUpsert_UpdatePath(t *testing.T) {
-	t.Parallel()
-
-	type input struct {
-		Name string
-	}
-
-	updated := false
-
-	id, err := persistUpsert(
-		context.Background(),
-		input{Name: "existing"},
-		func(in input) (input, error) { return in, nil },
-		func(string, input) (bool, error) { return false, nil },
-		func(context.Context) (string, error) {
-			return "existing-id", nil
-		},
-		func(context.Context, input) (string, error) {
-			t.Fatal("create should not be called on update path")
-			return "", nil
-		},
-		func(_ context.Context, existing string, in input) error {
-			updated = true
-			if existing != "existing-id" {
-				t.Fatalf("existing=%q, want %q", existing, "existing-id")
-			}
-			if in.Name != "existing" {
-				t.Fatalf("update input Name=%q, want %q", in.Name, "existing")
-			}
-			return nil
-		},
-		func(s string) string { return s },
-	)
-
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !updated {
-		t.Fatal("expected update to be called")
-	}
-	if id != "existing-id" {
-		t.Fatalf("expected id=%q, got %q", "existing-id", id)
-	}
-}
-
-func TestPersistUpsert_UnchangedSkip(t *testing.T) {
-	t.Parallel()
-
-	type input struct {
-		Name string
-	}
-
-	id, err := persistUpsert(
-		context.Background(),
-		input{Name: "existing"},
-		func(in input) (input, error) { return in, nil },
-		func(existing string, in input) (bool, error) {
-			if existing != "existing-id" || in.Name != "existing" {
-				t.Fatalf("unchanged got existing=%q input=%+v", existing, in)
-			}
-			return true, nil
-		},
-		func(context.Context) (string, error) {
-			return "existing-id", nil
-		},
-		func(context.Context, input) (string, error) {
-			t.Fatal("create should not be called on unchanged path")
-			return "", nil
-		},
-		func(context.Context, string, input) error {
-			t.Fatal("update should not be called on unchanged path")
-			return nil
-		},
-		func(s string) string { return s },
-	)
-
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if id != "existing-id" {
-		t.Fatalf("expected id=%q, got %q", "existing-id", id)
-	}
-}
-
-func TestPersistUpsert_FindExistingError(t *testing.T) {
-	t.Parallel()
-
-	type input struct{ Name string }
-
-	dbErr := errors.New("database connection lost")
-
-	_, err := persistUpsert(
-		context.Background(),
-		input{Name: "test"},
-		func(in input) (input, error) { return in, nil },
-		func(any, input) (bool, error) { return false, nil },
-		func(context.Context) (any, error) {
-			return nil, dbErr
-		},
-		func(context.Context, input) (string, error) {
-			t.Fatal("create should not be called")
-			return "", nil
-		},
-		func(context.Context, any, input) error {
-			t.Fatal("update should not be called")
-			return nil
-		},
-		func(a any) string { return "" },
-	)
-
-	if !errors.Is(err, ErrIngestPersistFailed) {
-		t.Fatalf("expected ErrIngestPersistFailed, got %v", err)
-	}
-}
-
-func TestPersistUpsert_ToUpdateError(t *testing.T) {
-	t.Parallel()
-
-	type input struct{ Name string }
-
-	toUpdateErr := errors.New("conversion failed")
-
-	_, err := persistUpsert(
-		context.Background(),
-		input{Name: "test"},
-		func(input) (input, error) { return input{}, toUpdateErr },
-		func(string, input) (bool, error) { return false, nil },
-		func(context.Context) (string, error) {
-			return "exists", nil
-		},
-		func(context.Context, input) (string, error) {
-			t.Fatal("create should not be called")
-			return "", nil
-		},
-		func(context.Context, string, input) error {
-			t.Fatal("update should not be called")
-			return nil
-		},
-		func(s string) string { return s },
-	)
-
-	if !errors.Is(err, toUpdateErr) {
-		t.Fatalf("expected toUpdateErr, got %v", err)
-	}
-}
-
-// stubValidationError wraps a bare ValidationError so log stringification is safe while
-// errors.As still classifies the chain as a validation failure
-type stubValidationError struct{ inner error }
-
-func (e stubValidationError) Error() string { return "validation failed" }
-
-func (e stubValidationError) Unwrap() error { return e.inner }
-
-func TestPersistUpsert_CreateError(t *testing.T) {
-	t.Parallel()
-
-	type input struct{ Name string }
-
-	_, err := persistUpsert(
-		context.Background(),
-		input{Name: "test"},
-		func(in input) (input, error) { return in, nil },
-		func(any, input) (bool, error) { return false, nil },
-		func(context.Context) (any, error) {
-			return nil, &ent.NotFoundError{}
-		},
-		func(context.Context, input) (string, error) {
-			return "", stubValidationError{inner: &ent.ValidationError{Name: "name"}}
-		},
-		func(context.Context, any, input) error {
-			t.Fatal("update should not be called")
-			return nil
-		},
-		func(a any) string { return "" },
-	)
-
-	if !errors.Is(err, ErrIngestMappedDocumentInvalid) {
-		t.Fatalf("expected ErrIngestMappedDocumentInvalid, got %v", err)
-	}
-}
-
-func TestPersistRoundTripUpsert_CreatePath(t *testing.T) {
-	t.Parallel()
-
-	type createInput struct {
-		Name string `json:"name"`
-	}
-	type updateInput struct {
 		Name string `json:"name"`
 	}
 
-	created := false
+	integration := &ent.Integration{OwnerID: "org-1"}
 
-	id, err := persistRoundTripUpsert(
-		context.Background(),
-		createInput{Name: "new"},
-		func(any, updateInput) (bool, error) { return false, nil },
-		func(context.Context) (any, error) {
-			return nil, &ent.NotFoundError{}
-		},
-		func(_ context.Context, in createInput) (string, error) {
-			created = true
-			if in.Name != "new" {
-				t.Fatalf("input Name=%q, want %q", in.Name, "new")
-			}
-			return "new-id", nil
-		},
-		func(context.Context, any, updateInput) error {
-			t.Fatal("update should not be called")
-			return nil
-		},
-		func(a any) string { return "" },
-	)
+	t.Run("absent rows route through the catalog create", func(t *testing.T) {
+		t.Parallel()
 
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !created {
-		t.Fatal("expected create to be called")
-	}
-	if id != "new-id" {
-		t.Fatalf("expected id=%q, got %q", "new-id", id)
-	}
-}
+		schema := &entityops.Schema{
+			SchemaDescriptor: entityops.SchemaDescriptor{Name: "Widget", Snake: "widget"},
+			Create: func(_ context.Context, _ *ent.Client, payload json.RawMessage) (string, error) {
+				if !strings.Contains(string(payload), `"name":"x"`) {
+					t.Fatalf("expected the create payload, got %s", payload)
+				}
+				return "new-id", nil
+			},
+		}
 
-func TestPersistRoundTripUpsert_UpdatePath(t *testing.T) {
-	t.Parallel()
+		id, _, _, err := persistLookupUpsert(context.Background(), nil, schema, integration, input{Name: "x"}, func(context.Context) (fakeRow, error) {
+			return fakeRow{}, &ent.NotFoundError{}
+		})
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if id != "new-id" {
+			t.Fatalf("expected id=new-id, got %q", id)
+		}
+	})
 
-	type createInput struct {
-		Name string `json:"name"`
-	}
-	type updateInput struct {
-		Name string `json:"name"`
-	}
+	t.Run("lookup failures wrap as persist errors", func(t *testing.T) {
+		t.Parallel()
 
-	updated := false
+		schema := &entityops.Schema{SchemaDescriptor: entityops.SchemaDescriptor{Name: "Widget", Snake: "widget"}}
 
-	id, err := persistRoundTripUpsert(
-		context.Background(),
-		createInput{Name: "existing"},
-		func(string, updateInput) (bool, error) { return false, nil },
-		func(context.Context) (string, error) {
-			return "existing-id", nil
-		},
-		func(context.Context, createInput) (string, error) {
-			t.Fatal("create should not be called")
-			return "", nil
-		},
-		func(_ context.Context, existing string, in updateInput) error {
-			updated = true
-			if in.Name != "existing" {
-				t.Fatalf("update input Name=%q, want %q", in.Name, "existing")
-			}
-			return nil
-		},
-		func(s string) string { return s },
-	)
-
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	if !updated {
-		t.Fatal("expected update to be called")
-	}
-	if id != "existing-id" {
-		t.Fatalf("expected id=%q, got %q", "existing-id", id)
-	}
-}
-
-func TestPersistUpsert_UpdateError(t *testing.T) {
-	t.Parallel()
-
-	type input struct{ Name string }
-
-	_, err := persistUpsert(
-		context.Background(),
-		input{Name: "test"},
-		func(in input) (input, error) { return in, nil },
-		func(string, input) (bool, error) { return false, nil },
-		func(context.Context) (string, error) {
-			return "exists", nil
-		},
-		func(context.Context, input) (string, error) {
-			t.Fatal("create should not be called")
-			return "", nil
-		},
-		func(_ context.Context, _ string, _ input) error {
-			return &ent.ConstraintError{}
-		},
-		func(s string) string { return s },
-	)
-
-	if !errors.Is(err, ErrIngestUpsertConflict) {
-		t.Fatalf("expected ErrIngestUpsertConflict, got %v", err)
-	}
+		_, _, _, err := persistLookupUpsert(context.Background(), nil, schema, integration, input{Name: "x"}, func(context.Context) (fakeRow, error) {
+			return fakeRow{}, errors.New("connection lost")
+		})
+		if !errors.Is(err, ErrIngestPersistFailed) {
+			t.Fatalf("expected ErrIngestPersistFailed, got %v", err)
+		}
+	})
 }

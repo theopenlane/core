@@ -11,7 +11,7 @@ import (
 )
 
 // persistAssetInput upserts one Asset record through the catalog-driven entityops upsert
-func persistAssetInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateAssetInput) (string, error) {
+func persistAssetInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateAssetInput) (string, bool, bool, error) {
 	if createInput.IntegrationID == nil {
 		createInput.IntegrationID = &integration.ID
 	}
@@ -30,9 +30,7 @@ func persistAssetInput(ctx context.Context, db *ent.Client, integration *ent.Int
 		}
 	}
 
-	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaAsset, integration.OwnerID, createInput)
-
-	return id, err
+	return persistCatalogUpsert(ctx, db, entityops.SchemaAsset, integration.OwnerID, integration, createInput)
 }
 
 // resolveInternalOwner resolves internal owner

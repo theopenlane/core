@@ -279,10 +279,9 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	return result, nil
 }
 
-// markUnconfirmedDirectoryMembershipsRemoved stamps removed_at on the active memberships whose
-// last confirmation predates this run and reports how many were removed. The sweep covers rows the
-// installation owns plus rows adopted from the same source instance, so memberships that departed
-// while pointing at a prior installation of the same instance still converge to removed
+// markUnconfirmedDirectoryMembershipsRemoved stamps removed_at on the installation's and the
+// source instance's active memberships whose last confirmation predates this run, reporting how
+// many were removed
 func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Client, integrationID string, instanceID string, runID string) (int, error) {
 	current, err := isCurrentDirectorySyncRun(ctx, db, runID)
 	if err != nil {

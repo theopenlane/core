@@ -6,7 +6,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/theopenlane/entx"
@@ -110,8 +112,76 @@ type FieldDescriptor struct {
 	Clearable bool `json:"clearable,omitempty"`
 	// WebhookPayload reports whether workflow webhook enrichment includes this field
 	WebhookPayload bool `json:"webhookPayload,omitempty"`
+	// SystemControlled excludes the field from provider mappings
+	SystemControlled bool `json:"systemControlled,omitempty"`
+	// Volatile excludes the field from triggering an ingest change; it rides along on material changes
+	Volatile bool `json:"volatile,omitempty"`
 	// TaskRules are suggested-task rules declared on this field via entx.FieldTaskRule
 	TaskRules []TaskRuleDescriptor `json:"taskRules,omitempty"`
+}
+
+// MappingEntry is one field-to-expression binding declared by an integration mapping
+type MappingEntry struct {
+	// Key is the field's ingest input key
+	Key string
+	// Expr is the CEL expression producing the field's value
+	Expr string
+}
+
+// Expr binds a CEL expression to the field for integration mapping registration
+func (d FieldDescriptor) Expr(expr string) MappingEntry {
+	return MappingEntry{Key: d.InputKey, Expr: expr}
+}
+
+// Equal compares typed mutation values using the field's existing type information
+func (d FieldDescriptor) Equal(old, proposed any) bool {
+	unwrap := func(value any) any {
+		v := reflect.ValueOf(value)
+		for v.IsValid() && (v.Kind() == reflect.Pointer || v.Kind() == reflect.Interface) {
+			if v.IsNil() {
+				return nil
+			}
+			v = v.Elem()
+		}
+		if !v.IsValid() {
+			return nil
+		}
+		if (v.Kind() == reflect.Slice || v.Kind() == reflect.Map) && v.IsNil() {
+			return nil
+		}
+		return v.Interface()
+	}
+	old, proposed = unwrap(old), unwrap(proposed)
+	if old == nil || proposed == nil {
+		return old == nil && proposed == nil
+	}
+	if d.Type == "time.Time" || d.Type == "models.DateTime" {
+		a, b := reflect.ValueOf(old), reflect.ValueOf(proposed)
+		typ := reflect.TypeFor[time.Time]()
+		if a.CanConvert(typ) && b.CanConvert(typ) {
+			return a.Convert(typ).Interface().(time.Time).Truncate(time.Microsecond).
+				Equal(b.Convert(typ).Interface().(time.Time).Truncate(time.Microsecond))
+		}
+	}
+	if reflect.DeepEqual(old, proposed) {
+		return true
+	}
+	a, err := json.Marshal(old)
+	if err != nil {
+		return false
+	}
+	b, err := json.Marshal(proposed)
+	if err != nil {
+		return false
+	}
+	var av, bv any
+	ad, bd := json.NewDecoder(strings.NewReader(string(a))), json.NewDecoder(strings.NewReader(string(b)))
+	ad.UseNumber()
+	bd.UseNumber()
+	if ad.Decode(&av) != nil || bd.Decode(&bv) != nil {
+		return false
+	}
+	return reflect.DeepEqual(av, bv)
 }
 
 // TaskRuleDescriptor describes one suggested-task trigger: a CEL condition plus the RuleID a

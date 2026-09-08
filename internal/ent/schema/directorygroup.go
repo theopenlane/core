@@ -52,7 +52,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			Comment("integration that owns this directory group").
 			NotEmpty().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration().Volatile(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory group").

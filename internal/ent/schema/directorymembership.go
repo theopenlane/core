@@ -51,7 +51,7 @@ func (DirectoryMembership) Fields() []ent.Field {
 			Comment("integration that owns this directory membership").
 			NotEmpty().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration().Volatile(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory membership").

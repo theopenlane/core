@@ -53,6 +53,11 @@ func ChangeSetFromMutation(mutation ent.Mutation) ChangeSet {
 	return set
 }
 
+// Empty reports whether the change set carries no field, clear, or catalog edge change
+func (set ChangeSet) Empty() bool {
+	return len(set.ChangedFields) == 0 && len(set.ChangedEdges) == 0
+}
+
 // Clone returns a copy of the change set and its map-backed values
 func (set ChangeSet) Clone() ChangeSet {
 	return ChangeSet{

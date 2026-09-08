@@ -54,17 +54,17 @@ func bindIngestPersistence() error {
 			func() error { return entityops.BindIngest(entityops.SchemaCheckResult, persistCheckResultInput) },
 			func() error { return entityops.BindIngest(entityops.SchemaContact, persistContactInput) },
 			func() error {
-				return entityops.BindIngest(entityops.SchemaDirectoryAccount, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryAccountInput) (string, error) {
+				return entityops.BindIngest(entityops.SchemaDirectoryAccount, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryAccountInput) (string, bool, bool, error) {
 					return persistDirectoryAccountInput(ctx, db, integration, prepareDirectoryAccountInput(ctx, input))
 				})
 			},
 			func() error {
-				return entityops.BindIngest(entityops.SchemaDirectoryGroup, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryGroupInput) (string, error) {
+				return entityops.BindIngest(entityops.SchemaDirectoryGroup, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryGroupInput) (string, bool, bool, error) {
 					return persistDirectoryGroupInput(ctx, db, integration, prepareDirectoryGroupInput(ctx, input))
 				})
 			},
 			func() error {
-				return entityops.BindIngest(entityops.SchemaDirectoryMembership, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (string, error) {
+				return entityops.BindIngest(entityops.SchemaDirectoryMembership, func(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (string, bool, bool, error) {
 					return persistDirectoryMembershipInput(ctx, db, integration, prepareDirectoryMembershipInput(ctx, input))
 				})
 			},
@@ -125,7 +125,9 @@ func persistMappedRecord(ctx context.Context, db *ent.Client, integration *ent.I
 		return "", err
 	}
 
-	return target.PersistIngest(ctx, db, integration, payload)
+	id, _, _, err := target.PersistIngest(ctx, db, integration, payload)
+
+	return id, err
 }
 
 func buildIngestOperationContext(integration *ent.Integration, options IngestOptions) gala.OperationContext {

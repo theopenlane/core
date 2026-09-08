@@ -8,8 +8,6 @@ import (
 )
 
 // persistActionPlanInput upserts one ActionPlan record through the catalog-driven entityops upsert
-func persistActionPlanInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateActionPlanInput) (string, error) {
-	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaActionPlan, integration.OwnerID, createInput)
-
-	return id, err
+func persistActionPlanInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateActionPlanInput) (string, bool, bool, error) {
+	return persistCatalogUpsert(ctx, db, entityops.SchemaActionPlan, integration.OwnerID, integration, createInput)
 }

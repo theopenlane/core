@@ -19,11 +19,16 @@ import (
 )
 
 // persistDirectoryAccountInput upserts one DirectoryAccount record using the ingest lookup key fields
-func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrationDef *ent.Integration, createInput ent.CreateDirectoryAccountInput) (string, error) {
+func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrationDef *ent.Integration, createInput ent.CreateDirectoryAccountInput) (string, bool, bool, error) {
 	if createInput.ExternalID == "" {
 		logx.FromContext(ctx).Error().Err(ErrIngestUpsertKeyMissing).Msg("directory account ingest missing external id")
 
-		return "", ErrIngestUpsertKeyMissing
+		return "", false, false, ErrIngestUpsertKeyMissing
+	}
+
+	createInput, err := stampDirectoryProvenance(createInput, integrationDef)
+	if err != nil {
+		return "", false, false, wrapIngestPersistError(err)
 	}
 
 	createInput.PrimarySource = &integrationDef.PrimaryDirectory
@@ -37,10 +42,10 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 	existing, found, err := findDirectoryAccountForIngest(ctx, db, createInput)
 	if err != nil {
 		if errors.Is(err, ErrIngestUpsertConflict) {
-			return "", err
+			return "", false, false, err
 		}
 
-		return "", wrapIngestPersistError(err)
+		return "", false, false, wrapIngestPersistError(err)
 	}
 
 	if !found {
@@ -54,7 +59,7 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 		if createErr != nil {
 			logx.FromContext(ctx).Error().Err(createErr).Msg("directory account create failed")
 
-			return "", wrapIngestPersistError(createErr)
+			return "", false, false, wrapIngestPersistError(createErr)
 		}
 
 		if batch := directorySyncBatchFromContext(ctx); batch != nil {
@@ -63,25 +68,25 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 
 		recordIngestChange(ctx)
 
-		return da.ID, nil
+		return da.ID, true, true, nil
 	}
 
-	updateInput, err := roundTripUpdateInput[ent.CreateDirectoryAccountInput, ent.UpdateDirectoryAccountInput](createInput)
+	changes, err := directoryChangeSet(ctx, db, entityops.SchemaDirectoryAccount, existing, createInput)
 	if err != nil {
-		return "", err
+		return "", false, false, wrapIngestPersistError(err)
 	}
 
-	if entityops.DirectoryAccountIngestUnchanged(existing, updateInput) {
+	if changes.Empty() {
 		if existing.IntegrationID != lo.FromPtr(createInput.IntegrationID) {
 			if err := relinkIngestIntegration(ctx, db, entityops.SchemaDirectoryAccount.Snake, existing.ID, lo.FromPtr(createInput.IntegrationID)); err != nil {
-				return existing.ID, wrapIngestPersistError(err)
+				return existing.ID, false, false, wrapIngestPersistError(err)
 			}
 		}
 
 		if batch := directorySyncBatchFromContext(ctx); batch != nil {
 			batch.seenAccountIDs = append(batch.seenAccountIDs, existing.ID)
 
-			return existing.ID, nil
+			return existing.ID, false, true, nil
 		}
 
 		if err := db.DirectoryAccount.UpdateOneID(existing.ID).
@@ -89,10 +94,15 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 			Exec(entityops.WithEmissionVetoed(ctx)); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("directory account last seen update failed")
 
-			return existing.ID, wrapIngestPersistError(err)
+			return existing.ID, false, false, wrapIngestPersistError(err)
 		}
 
-		return existing.ID, nil
+		return existing.ID, false, true, nil
+	}
+
+	updateInput, err := roundTripUpdateInput[ent.CreateDirectoryAccountInput, ent.UpdateDirectoryAccountInput](createInput)
+	if err != nil {
+		return "", false, false, err
 	}
 
 	updateInput.LastSeenAt = &now
@@ -100,12 +110,12 @@ func persistDirectoryAccountInput(ctx context.Context, db *ent.Client, integrati
 	if err := db.DirectoryAccount.UpdateOneID(existing.ID).SetInput(updateInput).Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("directory account update failed")
 
-		return existing.ID, wrapIngestPersistError(err)
+		return existing.ID, false, false, wrapIngestPersistError(err)
 	}
 
 	recordIngestChange(ctx)
 
-	return existing.ID, nil
+	return existing.ID, true, true, nil
 }
 
 // directoryAccountLookupPredicates prefers the directory instance, keeping the integration's not-yet-stamped rows findable

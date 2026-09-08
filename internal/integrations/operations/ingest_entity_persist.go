@@ -13,19 +13,23 @@ import (
 // persistEntityInput upserts one Entity record through the catalog-driven entityops upsert. The
 // payload's owner takes priority over the integration owner so direct callers (questionnaire
 // transform) can target the organization they resolved
-func persistEntityInput(ctx context.Context, db *ent.Client, installation *ent.Integration, createInput ent.CreateEntityInput) (string, error) {
+func persistEntityInput(ctx context.Context, db *ent.Client, installation *ent.Integration, createInput ent.CreateEntityInput) (string, bool, bool, error) {
 	ownerID := installation.OwnerID
 	if createInput.OwnerID != nil && *createInput.OwnerID != "" {
 		ownerID = *createInput.OwnerID
 	}
 
 	if ownerID == "" {
-		return "", ErrIngestUpsertKeyMissing
+		return "", false, false, ErrIngestUpsertKeyMissing
 	}
 
-	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaEntity, ownerID, createInput)
+	id, changed, managed, err := persistCatalogUpsert(ctx, db, entityops.SchemaEntity, ownerID, installation, createInput)
 	if err != nil {
-		return "", err
+		return "", false, false, err
+	}
+
+	if !managed {
+		return id, changed, managed, nil
 	}
 
 	if err := ensureIngestIntegrationLink(ctx, entityops.SchemaEntity.Snake, id, installation.ID,
@@ -41,8 +45,8 @@ func persistEntityInput(ctx context.Context, db *ent.Client, installation *ent.I
 	); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("entity integration link failed")
 
-		return id, wrapIngestPersistError(err)
+		return id, changed, managed, wrapIngestPersistError(err)
 	}
 
-	return id, nil
+	return id, changed, managed, nil
 }

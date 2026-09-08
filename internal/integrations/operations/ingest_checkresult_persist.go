@@ -6,13 +6,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
-	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
 )
 
 // persistCheckResultInput upserts one CheckResult record using the ingest lookup key fields
-func persistCheckResultInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateCheckResultInput) (string, error) {
+func persistCheckResultInput(ctx context.Context, db *ent.Client, integration *ent.Integration, createInput ent.CreateCheckResultInput) (string, bool, bool, error) {
 	if createInput.ParentExternalID == nil {
-		return "", ErrIngestUpsertKeyMissing
+		return "", false, false, ErrIngestUpsertKeyMissing
 	}
 
 	if createInput.Source == "" && integration.Name != "" {
@@ -23,32 +22,11 @@ func persistCheckResultInput(ctx context.Context, db *ent.Client, integration *e
 		createInput.IntegrationID = &integration.ID
 	}
 
-	where := []predicate.CheckResult{
-		checkresult.ParentExternalID(*createInput.ParentExternalID),
-		checkresult.IntegrationID(*createInput.IntegrationID),
-	}
+	q := db.CheckResult.Query().
+		Where(
+			checkresult.ParentExternalID(*createInput.ParentExternalID),
+			checkresult.IntegrationID(*createInput.IntegrationID),
+		)
 
-	return persistRoundTripUpsert(
-		ctx,
-		createInput,
-		func(existing *ent.CheckResult, input ent.UpdateCheckResultInput) (bool, error) {
-			return entityops.CheckResultIngestUnchanged(existing, input), nil
-		},
-		func(ctx context.Context) (*ent.CheckResult, error) {
-			return db.CheckResult.Query().
-				Where(where...).
-				Only(ctx)
-		},
-		func(ctx context.Context, input ent.CreateCheckResultInput) (string, error) {
-			cr, err := db.CheckResult.Create().SetInput(input).Save(ctx)
-			if err != nil {
-				return "", err
-			}
-			return cr.ID, nil
-		},
-		func(ctx context.Context, existing *ent.CheckResult, input ent.UpdateCheckResultInput) error {
-			return db.CheckResult.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
-		},
-		func(cr *ent.CheckResult) string { return cr.ID },
-	)
+	return persistLookupUpsert(ctx, db, entityops.SchemaCheckResult, integration, createInput, q.Only)
 }

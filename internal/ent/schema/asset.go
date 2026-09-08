@@ -165,7 +165,7 @@ func (Asset) Fields() []ent.Field {
 			Comment("integration that discovered this asset, when sourced via integration ingest").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration().Volatile(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.Time("observed_at").
 			Comment("time when this asset was last observed by the source integration").
@@ -174,6 +174,7 @@ func (Asset) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("observed_at"),
+				entx.IntegrationMappingField().Volatile(),
 			),
 	}
 }

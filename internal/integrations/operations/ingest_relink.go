@@ -7,21 +7,15 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/v2/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// ingestRelinkAppliers converges adopted rows onto the syncing installation for the hand-written
-// persistence paths, one conditional bulk update per schema; catalog-upsert schemas converge
-// through the registry's bookkeeping write instead. The integration_id inequality guard keeps
-// steady-state syncs write-free
+// ingestRelinkAppliers converges adopted directory rows onto the syncing installation in
+// conditional bulk updates; every other schema converges through the shared ingest apply
 var ingestRelinkAppliers = map[string]func(context.Context, *ent.Client, []string, string) error{
-	entityops.SchemaContact.Snake: func(ctx context.Context, db *ent.Client, ids []string, integrationID string) error {
-		return db.Contact.Update().Where(contact.IDIn(ids...), contact.IntegrationIDNEQ(integrationID)).SetIntegrationID(integrationID).Exec(ctx)
-	},
 	entityops.SchemaDirectoryAccount.Snake: func(ctx context.Context, db *ent.Client, ids []string, integrationID string) error {
 		return db.DirectoryAccount.Update().Where(directoryaccount.IDIn(ids...), directoryaccount.IntegrationIDNEQ(integrationID)).SetIntegrationID(integrationID).Exec(ctx)
 	},

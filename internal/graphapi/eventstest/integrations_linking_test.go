@@ -135,8 +135,8 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		{
 			TargetSchema: entityops.SchemaControl.Name,
 			TargetField:  control.FieldRefCode,
-			SourceField:  entityops.InputKeyFindingCategory,
-			SourceList:   entityops.InputKeyFindingCategories,
+			SourceField:  entityops.FindingFields.Category.InputKey,
+			SourceList:   entityops.FindingFields.Categories.InputKey,
 		},
 	}
 
@@ -222,13 +222,13 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 			{
 				TargetSchema: entityops.SchemaControl.Name,
 				TargetField:  control.FieldRefCode,
-				SourceField:  entityops.InputKeyFindingCategory,
+				SourceField:  entityops.FindingFields.Category.InputKey,
 			},
 			{
 				TargetSchema: entityops.SchemaControl.Name,
 				Edge:         "controls",
 				TargetField:  control.FieldRefCode,
-				SourceList:   entityops.InputKeyFindingCategories,
+				SourceList:   entityops.FindingFields.Categories.InputKey,
 			},
 		})
 

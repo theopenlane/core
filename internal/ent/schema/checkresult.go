@@ -82,7 +82,7 @@ func (CheckResult) Fields() []ent.Field {
 			Comment("integration that owns this check result").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().FromIntegration().Volatile(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 	}
 }

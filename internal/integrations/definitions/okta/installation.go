@@ -9,8 +9,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 )
 
-// resolveInstallationMetadata derives Okta tenant metadata from the persisted credential,
-// resolving the immutable org id from the org settings API
+// resolveInstallationMetadata derives Okta tenant metadata from the persisted credential and the org settings API
 func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
 	cred, _, err := oktaCredential.Resolve(req.Credentials)
 	if err != nil {

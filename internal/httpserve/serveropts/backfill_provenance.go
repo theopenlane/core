@@ -59,8 +59,6 @@ var provenanceStamps = []provenanceStamp{
 func backfillIntegrationProvenance(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
 	ctx = entityops.WithEmissionVetoed(auth.EnsureIntegrationCaller(ctx, ""))
 
-	// oldest installation first, so records linked to multiple installations receive their
-	// provenance from the installation that has synced them longest
 	installations, err := dbClient.Integration.Query().
 		Order(integration.ByCreatedAt(sql.OrderAsc()), integration.ByID(sql.OrderAsc())).
 		All(ctx)
@@ -79,8 +77,6 @@ func backfillIntegrationProvenance(ctx context.Context, dbClient *ent.Client, rt
 
 		installCtx := intobvs.WithInstallation(ctx, installation)
 
-		// the stored display identity may predate the definition's current identity resolution,
-		// so refresh it and skip the installation rather than stamping rows from a stale identity
 		if err := rt.RefreshInstallationMetadata(installCtx, installation); err != nil {
 			failed++
 

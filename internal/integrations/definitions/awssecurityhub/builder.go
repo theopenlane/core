@@ -205,8 +205,8 @@ func Builder(cfg Config) registry.Builder {
 							{
 								TargetSchema: entityops.SchemaControl.Name,
 								TargetField:  control.FieldRefCode,
-								SourceField:  entityops.InputKeyFindingCategory,
-								SourceList:   entityops.InputKeyFindingCategories,
+								SourceField:  entityops.FindingFields.Category.InputKey,
+								SourceList:   entityops.FindingFields.Categories.InputKey,
 							},
 						},
 					},

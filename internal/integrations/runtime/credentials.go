@@ -255,9 +255,8 @@ func (r *Runtime) saveInstallationMetadata(ctx context.Context, installation *en
 }
 
 // RefreshInstallationMetadata re-resolves and persists the installation's metadata from its
-// connected credential, so the stored display identity reflects the definition's current
-// resolution; installations without a connected credential or a metadata resolver keep their
-// stored metadata, as does an installation whose resolver reports none
+// connected credential; installations without a connected credential or metadata resolver, or
+// whose resolver reports none, keep their stored metadata
 func (r *Runtime) RefreshInstallationMetadata(ctx context.Context, installation *ent.Integration) error {
 	def, err := r.resolveDefinitionForInstallation(installation)
 	if err != nil {

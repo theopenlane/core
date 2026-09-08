@@ -50,9 +50,7 @@ type InstallationMetadata struct {
 	OrgID string `json:"orgId,omitempty" jsonschema:"title=Org ID"`
 }
 
-// InstallationIdentity implements types.InstallationIdentifiable. The immutable org id is the
-// instance identity because org URLs change with renames and custom domains; metadata resolved
-// before the org id was collected falls back to the org URL until its next refresh
+// InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	externalID := m.OrgID
 	if externalID == "" {

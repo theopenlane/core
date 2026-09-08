@@ -11,10 +11,14 @@ import (
 )
 
 // persistInternalPolicyInput upserts one InternalPolicy record through the catalog-driven entityops upsert
-func persistInternalPolicyInput(ctx context.Context, db *ent.Client, installation *ent.Integration, createInput ent.CreateInternalPolicyInput) (string, error) {
-	id, _, err := persistCatalogUpsert(ctx, db, entityops.SchemaInternalPolicy, installation.OwnerID, createInput)
+func persistInternalPolicyInput(ctx context.Context, db *ent.Client, installation *ent.Integration, createInput ent.CreateInternalPolicyInput) (string, bool, bool, error) {
+	id, changed, managed, err := persistCatalogUpsert(ctx, db, entityops.SchemaInternalPolicy, installation.OwnerID, installation, createInput)
 	if err != nil {
-		return "", err
+		return "", false, false, err
+	}
+
+	if !managed {
+		return id, changed, managed, nil
 	}
 
 	if err := ensureIngestIntegrationLink(ctx, entityops.SchemaInternalPolicy.Snake, id, installation.ID,
@@ -30,8 +34,8 @@ func persistInternalPolicyInput(ctx context.Context, db *ent.Client, installatio
 	); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("internal policy integration link failed")
 
-		return id, wrapIngestPersistError(err)
+		return id, changed, managed, wrapIngestPersistError(err)
 	}
 
-	return id, nil
+	return id, changed, managed, nil
 }
