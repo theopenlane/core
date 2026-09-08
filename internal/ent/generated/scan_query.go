@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/predicate"
@@ -38,51 +39,53 @@ import (
 // ScanQuery is the builder for querying Scan entities.
 type ScanQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []scan.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.Scan
-	withOwner                *OrganizationQuery
-	withBlockedGroups        *GroupQuery
-	withEditors              *GroupQuery
-	withReviewedByUser       *UserQuery
-	withReviewedByGroup      *GroupQuery
-	withAssignedToUser       *UserQuery
-	withAssignedToGroup      *GroupQuery
-	withEnvironment          *CustomTypeEnumQuery
-	withScope                *CustomTypeEnumQuery
-	withAssets               *AssetQuery
-	withEntities             *EntityQuery
-	withEvidence             *EvidenceQuery
-	withFiles                *FileQuery
-	withRemediations         *RemediationQuery
-	withActionPlans          *ActionPlanQuery
-	withTasks                *TaskQuery
-	withPlatforms            *PlatformQuery
-	withVulnerabilities      *VulnerabilityQuery
-	withControls             *ControlQuery
-	withSubcontrols          *SubcontrolQuery
-	withFindings             *FindingQuery
-	withGeneratedByPlatform  *PlatformQuery
-	withPerformedByUser      *UserQuery
-	withPerformedByGroup     *GroupQuery
-	withFKs                  bool
-	loadTotal                []func(context.Context, []*Scan) error
-	modifiers                []func(*sql.Selector)
-	withNamedBlockedGroups   map[string]*GroupQuery
-	withNamedEditors         map[string]*GroupQuery
-	withNamedAssets          map[string]*AssetQuery
-	withNamedEntities        map[string]*EntityQuery
-	withNamedEvidence        map[string]*EvidenceQuery
-	withNamedFiles           map[string]*FileQuery
-	withNamedRemediations    map[string]*RemediationQuery
-	withNamedActionPlans     map[string]*ActionPlanQuery
-	withNamedTasks           map[string]*TaskQuery
-	withNamedPlatforms       map[string]*PlatformQuery
-	withNamedVulnerabilities map[string]*VulnerabilityQuery
-	withNamedControls        map[string]*ControlQuery
-	withNamedSubcontrols     map[string]*SubcontrolQuery
-	withNamedFindings        map[string]*FindingQuery
+	ctx                          *QueryContext
+	order                        []scan.OrderOption
+	inters                       []Interceptor
+	predicates                   []predicate.Scan
+	withOwner                    *OrganizationQuery
+	withBlockedGroups            *GroupQuery
+	withEditors                  *GroupQuery
+	withReviewedByUser           *UserQuery
+	withReviewedByGroup          *GroupQuery
+	withReviewedByIdentityHolder *IdentityHolderQuery
+	withAssignedToUser           *UserQuery
+	withAssignedToGroup          *GroupQuery
+	withAssignedToIdentityHolder *IdentityHolderQuery
+	withEnvironment              *CustomTypeEnumQuery
+	withScope                    *CustomTypeEnumQuery
+	withAssets                   *AssetQuery
+	withEntities                 *EntityQuery
+	withEvidence                 *EvidenceQuery
+	withFiles                    *FileQuery
+	withRemediations             *RemediationQuery
+	withActionPlans              *ActionPlanQuery
+	withTasks                    *TaskQuery
+	withPlatforms                *PlatformQuery
+	withVulnerabilities          *VulnerabilityQuery
+	withControls                 *ControlQuery
+	withSubcontrols              *SubcontrolQuery
+	withFindings                 *FindingQuery
+	withGeneratedByPlatform      *PlatformQuery
+	withPerformedByUser          *UserQuery
+	withPerformedByGroup         *GroupQuery
+	withFKs                      bool
+	loadTotal                    []func(context.Context, []*Scan) error
+	modifiers                    []func(*sql.Selector)
+	withNamedBlockedGroups       map[string]*GroupQuery
+	withNamedEditors             map[string]*GroupQuery
+	withNamedAssets              map[string]*AssetQuery
+	withNamedEntities            map[string]*EntityQuery
+	withNamedEvidence            map[string]*EvidenceQuery
+	withNamedFiles               map[string]*FileQuery
+	withNamedRemediations        map[string]*RemediationQuery
+	withNamedActionPlans         map[string]*ActionPlanQuery
+	withNamedTasks               map[string]*TaskQuery
+	withNamedPlatforms           map[string]*PlatformQuery
+	withNamedVulnerabilities     map[string]*VulnerabilityQuery
+	withNamedControls            map[string]*ControlQuery
+	withNamedSubcontrols         map[string]*SubcontrolQuery
+	withNamedFindings            map[string]*FindingQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -229,6 +232,28 @@ func (_q *ScanQuery) QueryReviewedByGroup() *GroupQuery {
 	return query
 }
 
+// QueryReviewedByIdentityHolder chains the current query on the "reviewed_by_identity_holder" edge.
+func (_q *ScanQuery) QueryReviewedByIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.ReviewedByIdentityHolderTable, scan.ReviewedByIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAssignedToUser chains the current query on the "assigned_to_user" edge.
 func (_q *ScanQuery) QueryAssignedToUser() *UserQuery {
 	query := (&UserClient{config: _q.config}).Query()
@@ -266,6 +291,28 @@ func (_q *ScanQuery) QueryAssignedToGroup() *GroupQuery {
 			sqlgraph.From(scan.Table, scan.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToGroupTable, scan.AssignedToGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignedToIdentityHolder chains the current query on the "assigned_to_identity_holder" edge.
+func (_q *ScanQuery) QueryAssignedToIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scan.Table, scan.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, scan.AssignedToIdentityHolderTable, scan.AssignedToIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -834,35 +881,37 @@ func (_q *ScanQuery) Clone() *ScanQuery {
 		return nil
 	}
 	return &ScanQuery{
-		config:                  _q.config,
-		ctx:                     _q.ctx.Clone(),
-		order:                   append([]scan.OrderOption{}, _q.order...),
-		inters:                  append([]Interceptor{}, _q.inters...),
-		predicates:              append([]predicate.Scan{}, _q.predicates...),
-		withOwner:               _q.withOwner.Clone(),
-		withBlockedGroups:       _q.withBlockedGroups.Clone(),
-		withEditors:             _q.withEditors.Clone(),
-		withReviewedByUser:      _q.withReviewedByUser.Clone(),
-		withReviewedByGroup:     _q.withReviewedByGroup.Clone(),
-		withAssignedToUser:      _q.withAssignedToUser.Clone(),
-		withAssignedToGroup:     _q.withAssignedToGroup.Clone(),
-		withEnvironment:         _q.withEnvironment.Clone(),
-		withScope:               _q.withScope.Clone(),
-		withAssets:              _q.withAssets.Clone(),
-		withEntities:            _q.withEntities.Clone(),
-		withEvidence:            _q.withEvidence.Clone(),
-		withFiles:               _q.withFiles.Clone(),
-		withRemediations:        _q.withRemediations.Clone(),
-		withActionPlans:         _q.withActionPlans.Clone(),
-		withTasks:               _q.withTasks.Clone(),
-		withPlatforms:           _q.withPlatforms.Clone(),
-		withVulnerabilities:     _q.withVulnerabilities.Clone(),
-		withControls:            _q.withControls.Clone(),
-		withSubcontrols:         _q.withSubcontrols.Clone(),
-		withFindings:            _q.withFindings.Clone(),
-		withGeneratedByPlatform: _q.withGeneratedByPlatform.Clone(),
-		withPerformedByUser:     _q.withPerformedByUser.Clone(),
-		withPerformedByGroup:    _q.withPerformedByGroup.Clone(),
+		config:                       _q.config,
+		ctx:                          _q.ctx.Clone(),
+		order:                        append([]scan.OrderOption{}, _q.order...),
+		inters:                       append([]Interceptor{}, _q.inters...),
+		predicates:                   append([]predicate.Scan{}, _q.predicates...),
+		withOwner:                    _q.withOwner.Clone(),
+		withBlockedGroups:            _q.withBlockedGroups.Clone(),
+		withEditors:                  _q.withEditors.Clone(),
+		withReviewedByUser:           _q.withReviewedByUser.Clone(),
+		withReviewedByGroup:          _q.withReviewedByGroup.Clone(),
+		withReviewedByIdentityHolder: _q.withReviewedByIdentityHolder.Clone(),
+		withAssignedToUser:           _q.withAssignedToUser.Clone(),
+		withAssignedToGroup:          _q.withAssignedToGroup.Clone(),
+		withAssignedToIdentityHolder: _q.withAssignedToIdentityHolder.Clone(),
+		withEnvironment:              _q.withEnvironment.Clone(),
+		withScope:                    _q.withScope.Clone(),
+		withAssets:                   _q.withAssets.Clone(),
+		withEntities:                 _q.withEntities.Clone(),
+		withEvidence:                 _q.withEvidence.Clone(),
+		withFiles:                    _q.withFiles.Clone(),
+		withRemediations:             _q.withRemediations.Clone(),
+		withActionPlans:              _q.withActionPlans.Clone(),
+		withTasks:                    _q.withTasks.Clone(),
+		withPlatforms:                _q.withPlatforms.Clone(),
+		withVulnerabilities:          _q.withVulnerabilities.Clone(),
+		withControls:                 _q.withControls.Clone(),
+		withSubcontrols:              _q.withSubcontrols.Clone(),
+		withFindings:                 _q.withFindings.Clone(),
+		withGeneratedByPlatform:      _q.withGeneratedByPlatform.Clone(),
+		withPerformedByUser:          _q.withPerformedByUser.Clone(),
+		withPerformedByGroup:         _q.withPerformedByGroup.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -925,6 +974,17 @@ func (_q *ScanQuery) WithReviewedByGroup(opts ...func(*GroupQuery)) *ScanQuery {
 	return _q
 }
 
+// WithReviewedByIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithReviewedByIdentityHolder(opts ...func(*IdentityHolderQuery)) *ScanQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByIdentityHolder = query
+	return _q
+}
+
 // WithAssignedToUser tells the query-builder to eager-load the nodes that are connected to
 // the "assigned_to_user" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ScanQuery) WithAssignedToUser(opts ...func(*UserQuery)) *ScanQuery {
@@ -944,6 +1004,17 @@ func (_q *ScanQuery) WithAssignedToGroup(opts ...func(*GroupQuery)) *ScanQuery {
 		opt(query)
 	}
 	_q.withAssignedToGroup = query
+	return _q
+}
+
+// WithAssignedToIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "assigned_to_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScanQuery) WithAssignedToIdentityHolder(opts ...func(*IdentityHolderQuery)) *ScanQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssignedToIdentityHolder = query
 	return _q
 }
 
@@ -1219,14 +1290,16 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 		nodes       = []*Scan{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [26]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withReviewedByUser != nil,
 			_q.withReviewedByGroup != nil,
+			_q.withReviewedByIdentityHolder != nil,
 			_q.withAssignedToUser != nil,
 			_q.withAssignedToGroup != nil,
+			_q.withAssignedToIdentityHolder != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withAssets != nil,
@@ -1302,6 +1375,12 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 			return nil, err
 		}
 	}
+	if query := _q.withReviewedByIdentityHolder; query != nil {
+		if err := _q.loadReviewedByIdentityHolder(ctx, query, nodes, nil,
+			func(n *Scan, e *IdentityHolder) { n.Edges.ReviewedByIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withAssignedToUser; query != nil {
 		if err := _q.loadAssignedToUser(ctx, query, nodes, nil,
 			func(n *Scan, e *User) { n.Edges.AssignedToUser = e }); err != nil {
@@ -1311,6 +1390,12 @@ func (_q *ScanQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Scan, e
 	if query := _q.withAssignedToGroup; query != nil {
 		if err := _q.loadAssignedToGroup(ctx, query, nodes, nil,
 			func(n *Scan, e *Group) { n.Edges.AssignedToGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssignedToIdentityHolder; query != nil {
+		if err := _q.loadAssignedToIdentityHolder(ctx, query, nodes, nil,
+			func(n *Scan, e *IdentityHolder) { n.Edges.AssignedToIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1743,6 +1828,35 @@ func (_q *ScanQuery) loadReviewedByGroup(ctx context.Context, query *GroupQuery,
 	}
 	return nil
 }
+func (_q *ScanQuery) loadReviewedByIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *ScanQuery) loadAssignedToUser(ctx context.Context, query *UserQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Scan)
@@ -1794,6 +1908,35 @@ func (_q *ScanQuery) loadAssignedToGroup(ctx context.Context, query *GroupQuery,
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "assigned_to_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *ScanQuery) loadAssignedToIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Scan, init func(*Scan), assign func(*Scan, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Scan)
+	for i := range nodes {
+		fk := nodes[i].AssignedToIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assigned_to_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -2716,11 +2859,17 @@ func (_q *ScanQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withReviewedByGroup != nil {
 			_spec.Node.AddColumnOnce(scan.FieldReviewedByGroupID)
 		}
+		if _q.withReviewedByIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(scan.FieldReviewedByIdentityHolderID)
+		}
 		if _q.withAssignedToUser != nil {
 			_spec.Node.AddColumnOnce(scan.FieldAssignedToUserID)
 		}
 		if _q.withAssignedToGroup != nil {
 			_spec.Node.AddColumnOnce(scan.FieldAssignedToGroupID)
+		}
+		if _q.withAssignedToIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(scan.FieldAssignedToIdentityHolderID)
 		}
 		if _q.withEnvironment != nil {
 			_spec.Node.AddColumnOnce(scan.FieldEnvironmentID)

@@ -57,8 +57,10 @@ type EntityQuery struct {
 	withEditors                           *GroupQuery
 	withInternalOwnerUser                 *UserQuery
 	withInternalOwnerGroup                *GroupQuery
+	withInternalOwnerIdentityHolder       *IdentityHolderQuery
 	withReviewedByUser                    *UserQuery
 	withReviewedByGroup                   *GroupQuery
+	withReviewedByIdentityHolder          *IdentityHolderQuery
 	withEntityRelationshipState           *CustomTypeEnumQuery
 	withEntitySecurityQuestionnaireStatus *CustomTypeEnumQuery
 	withEntitySourceType                  *CustomTypeEnumQuery
@@ -267,6 +269,28 @@ func (_q *EntityQuery) QueryInternalOwnerGroup() *GroupQuery {
 	return query
 }
 
+// QueryInternalOwnerIdentityHolder chains the current query on the "internal_owner_identity_holder" edge.
+func (_q *EntityQuery) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.InternalOwnerIdentityHolderTable, entity.InternalOwnerIdentityHolderColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryReviewedByUser chains the current query on the "reviewed_by_user" edge.
 func (_q *EntityQuery) QueryReviewedByUser() *UserQuery {
 	query := (&UserClient{config: _q.config}).Query()
@@ -304,6 +328,28 @@ func (_q *EntityQuery) QueryReviewedByGroup() *GroupQuery {
 			sqlgraph.From(entity.Table, entity.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByGroupTable, entity.ReviewedByGroupColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByIdentityHolder chains the current query on the "reviewed_by_identity_holder" edge.
+func (_q *EntityQuery) QueryReviewedByIdentityHolder() *IdentityHolderQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(entity.Table, entity.FieldID, selector),
+			sqlgraph.To(identityholder.Table, identityholder.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, entity.ReviewedByIdentityHolderTable, entity.ReviewedByIdentityHolderColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -1212,8 +1258,10 @@ func (_q *EntityQuery) Clone() *EntityQuery {
 		withEditors:                           _q.withEditors.Clone(),
 		withInternalOwnerUser:                 _q.withInternalOwnerUser.Clone(),
 		withInternalOwnerGroup:                _q.withInternalOwnerGroup.Clone(),
+		withInternalOwnerIdentityHolder:       _q.withInternalOwnerIdentityHolder.Clone(),
 		withReviewedByUser:                    _q.withReviewedByUser.Clone(),
 		withReviewedByGroup:                   _q.withReviewedByGroup.Clone(),
+		withReviewedByIdentityHolder:          _q.withReviewedByIdentityHolder.Clone(),
 		withEntityRelationshipState:           _q.withEntityRelationshipState.Clone(),
 		withEntitySecurityQuestionnaireStatus: _q.withEntitySecurityQuestionnaireStatus.Clone(),
 		withEntitySourceType:                  _q.withEntitySourceType.Clone(),
@@ -1308,6 +1356,17 @@ func (_q *EntityQuery) WithInternalOwnerGroup(opts ...func(*GroupQuery)) *Entity
 	return _q
 }
 
+// WithInternalOwnerIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "internal_owner_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithInternalOwnerIdentityHolder(opts ...func(*IdentityHolderQuery)) *EntityQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalOwnerIdentityHolder = query
+	return _q
+}
+
 // WithReviewedByUser tells the query-builder to eager-load the nodes that are connected to
 // the "reviewed_by_user" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *EntityQuery) WithReviewedByUser(opts ...func(*UserQuery)) *EntityQuery {
@@ -1327,6 +1386,17 @@ func (_q *EntityQuery) WithReviewedByGroup(opts ...func(*GroupQuery)) *EntityQue
 		opt(query)
 	}
 	_q.withReviewedByGroup = query
+	return _q
+}
+
+// WithReviewedByIdentityHolder tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_identity_holder" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EntityQuery) WithReviewedByIdentityHolder(opts ...func(*IdentityHolderQuery)) *EntityQuery {
+	query := (&IdentityHolderClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByIdentityHolder = query
 	return _q
 }
 
@@ -1767,14 +1837,16 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 		nodes       = []*Entity{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [39]bool{
+		loadedTypes = [41]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withInternalOwnerUser != nil,
 			_q.withInternalOwnerGroup != nil,
+			_q.withInternalOwnerIdentityHolder != nil,
 			_q.withReviewedByUser != nil,
 			_q.withReviewedByGroup != nil,
+			_q.withReviewedByIdentityHolder != nil,
 			_q.withEntityRelationshipState != nil,
 			_q.withEntitySecurityQuestionnaireStatus != nil,
 			_q.withEntitySourceType != nil,
@@ -1865,6 +1937,12 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 			return nil, err
 		}
 	}
+	if query := _q.withInternalOwnerIdentityHolder; query != nil {
+		if err := _q.loadInternalOwnerIdentityHolder(ctx, query, nodes, nil,
+			func(n *Entity, e *IdentityHolder) { n.Edges.InternalOwnerIdentityHolder = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withReviewedByUser; query != nil {
 		if err := _q.loadReviewedByUser(ctx, query, nodes, nil,
 			func(n *Entity, e *User) { n.Edges.ReviewedByUser = e }); err != nil {
@@ -1874,6 +1952,12 @@ func (_q *EntityQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Entit
 	if query := _q.withReviewedByGroup; query != nil {
 		if err := _q.loadReviewedByGroup(ctx, query, nodes, nil,
 			func(n *Entity, e *Group) { n.Edges.ReviewedByGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByIdentityHolder; query != nil {
+		if err := _q.loadReviewedByIdentityHolder(ctx, query, nodes, nil,
+			func(n *Entity, e *IdentityHolder) { n.Edges.ReviewedByIdentityHolder = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2504,6 +2588,35 @@ func (_q *EntityQuery) loadInternalOwnerGroup(ctx context.Context, query *GroupQ
 	}
 	return nil
 }
+func (_q *EntityQuery) loadInternalOwnerIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].InternalOwnerIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "internal_owner_identity_holder_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *EntityQuery) loadReviewedByUser(ctx context.Context, query *UserQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Entity)
@@ -2555,6 +2668,35 @@ func (_q *EntityQuery) loadReviewedByGroup(ctx context.Context, query *GroupQuer
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "reviewed_by_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *EntityQuery) loadReviewedByIdentityHolder(ctx context.Context, query *IdentityHolderQuery, nodes []*Entity, init func(*Entity), assign func(*Entity, *IdentityHolder)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Entity)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByIdentityHolderID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(identityholder.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_identity_holder_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -4148,11 +4290,17 @@ func (_q *EntityQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withInternalOwnerGroup != nil {
 			_spec.Node.AddColumnOnce(entity.FieldInternalOwnerGroupID)
 		}
+		if _q.withInternalOwnerIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(entity.FieldInternalOwnerIdentityHolderID)
+		}
 		if _q.withReviewedByUser != nil {
 			_spec.Node.AddColumnOnce(entity.FieldReviewedByUserID)
 		}
 		if _q.withReviewedByGroup != nil {
 			_spec.Node.AddColumnOnce(entity.FieldReviewedByGroupID)
+		}
+		if _q.withReviewedByIdentityHolder != nil {
+			_spec.Node.AddColumnOnce(entity.FieldReviewedByIdentityHolderID)
 		}
 		if _q.withEntityRelationshipState != nil {
 			_spec.Node.AddColumnOnce(entity.FieldEntityRelationshipStateID)

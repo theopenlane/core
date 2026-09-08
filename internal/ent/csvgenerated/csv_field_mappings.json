@@ -42,6 +42,11 @@
       "isSlice": false
     },
     {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "InternalOwnerUserEmail",
       "targetField": "InternalOwnerUserID",
       "isSlice": false
@@ -66,6 +71,11 @@
     {
       "csvColumn": "InternalOwnerGroupName",
       "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
       "isSlice": false
     },
     {
@@ -149,6 +159,11 @@
       "isSlice": false
     },
     {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "InternalOwnerUserEmail",
       "targetField": "InternalOwnerUserID",
       "isSlice": false
@@ -156,6 +171,11 @@
     {
       "csvColumn": "ReviewedByGroupName",
       "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByIdentityHolderEmail",
+      "targetField": "ReviewedByIdentityHolderID",
       "isSlice": false
     },
     {
@@ -178,6 +198,11 @@
       "isSlice": false
     },
     {
+      "csvColumn": "AssignedToIdentityHolderEmail",
+      "targetField": "AssignedToIdentityHolderID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "AssignedToUserEmail",
       "targetField": "AssignedToUserID",
       "isSlice": false
@@ -185,6 +210,11 @@
     {
       "csvColumn": "ReviewedByGroupName",
       "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByIdentityHolderEmail",
+      "targetField": "ReviewedByIdentityHolderID",
       "isSlice": false
     },
     {
@@ -207,6 +237,11 @@
     {
       "csvColumn": "InternalOwnerGroupName",
       "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
       "isSlice": false
     },
     {
@@ -239,6 +274,11 @@
       "isSlice": false
     },
     {
+      "csvColumn": "BusinessOwnerIdentityHolderEmail",
+      "targetField": "BusinessOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "BusinessOwnerUserEmail",
       "targetField": "BusinessOwnerUserID",
       "isSlice": false
@@ -246,6 +286,11 @@
     {
       "csvColumn": "InternalOwnerGroupName",
       "targetField": "InternalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "InternalOwnerIdentityHolderEmail",
+      "targetField": "InternalOwnerIdentityHolderID",
       "isSlice": false
     },
     {
@@ -274,6 +319,11 @@
       "isSlice": false
     },
     {
+      "csvColumn": "SecurityOwnerIdentityHolderEmail",
+      "targetField": "SecurityOwnerIdentityHolderID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "SecurityOwnerUserEmail",
       "targetField": "SecurityOwnerUserID",
       "isSlice": false
@@ -296,6 +346,11 @@
     {
       "csvColumn": "TechnicalOwnerGroupName",
       "targetField": "TechnicalOwnerGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "TechnicalOwnerIdentityHolderEmail",
+      "targetField": "TechnicalOwnerIdentityHolderID",
       "isSlice": false
     },
     {
@@ -396,6 +451,11 @@
       "isSlice": false
     },
     {
+      "csvColumn": "AssignedToIdentityHolderEmail",
+      "targetField": "AssignedToIdentityHolderID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "AssignedToUserEmail",
       "targetField": "AssignedToUserID",
       "isSlice": false
@@ -418,6 +478,11 @@
     {
       "csvColumn": "ReviewedByGroupName",
       "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByIdentityHolderEmail",
+      "targetField": "ReviewedByIdentityHolderID",
       "isSlice": false
     },
     {
@@ -499,6 +564,11 @@
       "isSlice": false
     },
     {
+      "csvColumn": "AssignedToIdentityHolderEmail",
+      "targetField": "AssignedToIdentityHolderID",
+      "isSlice": false
+    },
+    {
       "csvColumn": "AssignedToUserEmail",
       "targetField": "AssignedToUserID",
       "isSlice": false
@@ -511,6 +581,11 @@
     {
       "csvColumn": "ReviewedByGroupName",
       "targetField": "ReviewedByGroupID",
+      "isSlice": false
+    },
+    {
+      "csvColumn": "ReviewedByIdentityHolderEmail",
+      "targetField": "ReviewedByIdentityHolderID",
       "isSlice": false
     },
     {

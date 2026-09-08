@@ -29,6 +29,7 @@ mutation CreateAsset ($input: CreateAssetInput!) {
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			name
 			observedAt
@@ -84,6 +85,7 @@ mutation CreateBulkAsset ($input: [CreateAssetInput!]) {
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			name
 			observedAt
@@ -139,6 +141,7 @@ mutation CreateBulkCSVAsset ($input: Upload!) {
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			name
 			observedAt
@@ -214,6 +217,7 @@ query GetAllAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				internalNotes
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				name
 				observedAt
@@ -269,6 +273,7 @@ query GetAssetByID ($assetId: ID!) {
 		internalNotes
 		internalOwner
 		internalOwnerGroupID
+		internalOwnerIdentityHolderID
 		internalOwnerUserID
 		name
 		observedAt
@@ -331,6 +336,7 @@ query GetAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orde
 				internalNotes
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				name
 				observedAt
@@ -387,6 +393,7 @@ mutation UpdateAsset ($updateAssetId: ID!, $input: UpdateAssetInput!) {
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			name
 			observedAt
@@ -442,6 +449,7 @@ mutation UpdateBulkAsset ($ids: [ID!]!, $input: UpdateAssetInput!) {
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			name
 			observedAt
@@ -500,6 +508,7 @@ mutation UpdateBulkCSVAsset ($input: Upload!) {
 			internalNotes
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			name
 			observedAt

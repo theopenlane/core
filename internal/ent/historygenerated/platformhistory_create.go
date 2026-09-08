@@ -225,6 +225,20 @@ func (_c *PlatformHistoryCreate) SetNillableInternalOwnerGroupID(v *string) *Pla
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *PlatformHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *PlatformHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *PlatformHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *PlatformHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetBusinessOwner sets the "business_owner" field.
 func (_c *PlatformHistoryCreate) SetBusinessOwner(v string) *PlatformHistoryCreate {
 	_c.mutation.SetBusinessOwner(v)
@@ -263,6 +277,20 @@ func (_c *PlatformHistoryCreate) SetBusinessOwnerGroupID(v string) *PlatformHist
 func (_c *PlatformHistoryCreate) SetNillableBusinessOwnerGroupID(v *string) *PlatformHistoryCreate {
 	if v != nil {
 		_c.SetBusinessOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field.
+func (_c *PlatformHistoryCreate) SetBusinessOwnerIdentityHolderID(v string) *PlatformHistoryCreate {
+	_c.mutation.SetBusinessOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field if the given value is not nil.
+func (_c *PlatformHistoryCreate) SetNillableBusinessOwnerIdentityHolderID(v *string) *PlatformHistoryCreate {
+	if v != nil {
+		_c.SetBusinessOwnerIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -309,6 +337,20 @@ func (_c *PlatformHistoryCreate) SetNillableTechnicalOwnerGroupID(v *string) *Pl
 	return _c
 }
 
+// SetTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field.
+func (_c *PlatformHistoryCreate) SetTechnicalOwnerIdentityHolderID(v string) *PlatformHistoryCreate {
+	_c.mutation.SetTechnicalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field if the given value is not nil.
+func (_c *PlatformHistoryCreate) SetNillableTechnicalOwnerIdentityHolderID(v *string) *PlatformHistoryCreate {
+	if v != nil {
+		_c.SetTechnicalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetSecurityOwner sets the "security_owner" field.
 func (_c *PlatformHistoryCreate) SetSecurityOwner(v string) *PlatformHistoryCreate {
 	_c.mutation.SetSecurityOwner(v)
@@ -347,6 +389,20 @@ func (_c *PlatformHistoryCreate) SetSecurityOwnerGroupID(v string) *PlatformHist
 func (_c *PlatformHistoryCreate) SetNillableSecurityOwnerGroupID(v *string) *PlatformHistoryCreate {
 	if v != nil {
 		_c.SetSecurityOwnerGroupID(*v)
+	}
+	return _c
+}
+
+// SetSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field.
+func (_c *PlatformHistoryCreate) SetSecurityOwnerIdentityHolderID(v string) *PlatformHistoryCreate {
+	_c.mutation.SetSecurityOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field if the given value is not nil.
+func (_c *PlatformHistoryCreate) SetNillableSecurityOwnerIdentityHolderID(v *string) *PlatformHistoryCreate {
+	if v != nil {
+		_c.SetSecurityOwnerIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -1075,6 +1131,10 @@ func (_c *PlatformHistoryCreate) createSpec() (*PlatformHistory, *sqlgraph.Creat
 		_spec.SetField(platformhistory.FieldInternalOwnerGroupID, field.TypeString, value)
 		_node.InternalOwnerGroupID = value
 	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(platformhistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
+	}
 	if value, ok := _c.mutation.BusinessOwner(); ok {
 		_spec.SetField(platformhistory.FieldBusinessOwner, field.TypeString, value)
 		_node.BusinessOwner = value
@@ -1086,6 +1146,10 @@ func (_c *PlatformHistoryCreate) createSpec() (*PlatformHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.BusinessOwnerGroupID(); ok {
 		_spec.SetField(platformhistory.FieldBusinessOwnerGroupID, field.TypeString, value)
 		_node.BusinessOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.BusinessOwnerIdentityHolderID(); ok {
+		_spec.SetField(platformhistory.FieldBusinessOwnerIdentityHolderID, field.TypeString, value)
+		_node.BusinessOwnerIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.TechnicalOwner(); ok {
 		_spec.SetField(platformhistory.FieldTechnicalOwner, field.TypeString, value)
@@ -1099,6 +1163,10 @@ func (_c *PlatformHistoryCreate) createSpec() (*PlatformHistory, *sqlgraph.Creat
 		_spec.SetField(platformhistory.FieldTechnicalOwnerGroupID, field.TypeString, value)
 		_node.TechnicalOwnerGroupID = value
 	}
+	if value, ok := _c.mutation.TechnicalOwnerIdentityHolderID(); ok {
+		_spec.SetField(platformhistory.FieldTechnicalOwnerIdentityHolderID, field.TypeString, value)
+		_node.TechnicalOwnerIdentityHolderID = value
+	}
 	if value, ok := _c.mutation.SecurityOwner(); ok {
 		_spec.SetField(platformhistory.FieldSecurityOwner, field.TypeString, value)
 		_node.SecurityOwner = value
@@ -1110,6 +1178,10 @@ func (_c *PlatformHistoryCreate) createSpec() (*PlatformHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.SecurityOwnerGroupID(); ok {
 		_spec.SetField(platformhistory.FieldSecurityOwnerGroupID, field.TypeString, value)
 		_node.SecurityOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.SecurityOwnerIdentityHolderID(); ok {
+		_spec.SetField(platformhistory.FieldSecurityOwnerIdentityHolderID, field.TypeString, value)
+		_node.SecurityOwnerIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.PlatformKindName(); ok {
 		_spec.SetField(platformhistory.FieldPlatformKindName, field.TypeString, value)

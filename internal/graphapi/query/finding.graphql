@@ -4,6 +4,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -42,6 +43,7 @@ mutation CreateBulkCSVFinding ($input: Upload!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -72,6 +74,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -110,6 +113,7 @@ mutation CreateBulkFinding ($input: [CreateFindingInput!]) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -140,6 +144,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -178,6 +183,7 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -297,6 +303,7 @@ query GetFindingByID ($findingId: ID!) {
 		assessmentID
 		assignedTo
 		assignedToGroupID
+		assignedToIdentityHolderID
 		assignedToUserID
 		blocksProduction
 		categories
@@ -335,6 +342,7 @@ query GetFindingByID ($findingId: ID!) {
 		resourceName
 		reviewedBy
 		reviewedByGroupID
+		reviewedByIdentityHolderID
 		reviewedByUserID
 		scopeID
 		scopeName
@@ -462,6 +470,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -500,6 +509,7 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -533,6 +543,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -571,6 +582,7 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName
@@ -604,6 +616,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			assessmentID
 			assignedTo
 			assignedToGroupID
+			assignedToIdentityHolderID
 			assignedToUserID
 			blocksProduction
 			categories
@@ -642,6 +655,7 @@ mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {
 			resourceName
 			reviewedBy
 			reviewedByGroupID
+			reviewedByIdentityHolderID
 			reviewedByUserID
 			scopeID
 			scopeName

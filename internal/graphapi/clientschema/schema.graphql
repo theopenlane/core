@@ -3107,7 +3107,7 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
 	"""
 	ownerID: ID
 	"""
-	the internal owner for the asset when no user or group is linked
+	the internal owner for the asset when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
@@ -3118,6 +3118,10 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
 	the internal owner group id for the asset
 	"""
 	internalOwnerGroupID: ID
+	"""
+	the internal owner identity holder id for the asset
+	"""
+	internalOwnerIdentityHolderID: ID
 	"""
 	the subtype of the asset
 	"""
@@ -3363,6 +3367,7 @@ type Asset implements Node @modules(names: ["entity_management_module","complian
 	): GroupConnection!
 	internalOwnerUser: User
 	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	assetSubtype: CustomTypeEnum
 	assetDataClassification: CustomTypeEnum
 	environment: CustomTypeEnum
@@ -4134,6 +4139,20 @@ input AssetWhereInput {
 	internalOwnerGroupIDEqualFold: ID
 	internalOwnerGroupIDContainsFold: ID
 	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
+	"""
 	asset_subtype_name field predicates
 	"""
 	assetSubtypeName: String
@@ -4629,6 +4648,11 @@ input AssetWhereInput {
 	hasInternalOwnerGroup: Boolean
 	hasInternalOwnerGroupWith: [GroupWhereInput!]
 	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
 	asset_subtype edge predicates
 	"""
 	hasAssetSubtype: Boolean
@@ -4798,7 +4822,7 @@ type Campaign implements Node @modules(names: ["compliance_module","trust_center
 	"""
 	ownerID: ID
 	"""
-	the internal owner for the campaign when no user or group is linked
+	the internal owner for the campaign when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
@@ -4809,6 +4833,10 @@ type Campaign implements Node @modules(names: ["compliance_module","trust_center
 	the internal owner group id for the campaign
 	"""
 	internalOwnerGroupID: ID
+	"""
+	the internal owner identity holder id for the campaign
+	"""
+	internalOwnerIdentityHolderID: ID
 	"""
 	internal marker field for workflow eligibility, not exposed in API
 	"""
@@ -5021,6 +5049,7 @@ type Campaign implements Node @modules(names: ["compliance_module","trust_center
 	): GroupConnection!
 	internalOwnerUser: User
 	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	assessment: Assessment
 	template: Template
 	integration: Integration
@@ -6101,6 +6130,20 @@ input CampaignWhereInput {
 	internalOwnerGroupIDEqualFold: ID
 	internalOwnerGroupIDContainsFold: ID
 	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
+	"""
 	workflow_eligible_marker field predicates
 	"""
 	workflowEligibleMarker: Boolean
@@ -6421,6 +6464,11 @@ input CampaignWhereInput {
 	"""
 	hasInternalOwnerGroup: Boolean
 	hasInternalOwnerGroupWith: [GroupWhereInput!]
+	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	assessment edge predicates
 	"""
@@ -11967,7 +12015,7 @@ input CreateAssetInput {
 	"""
 	tags: [String!]
 	"""
-	the internal owner for the asset when no user or group is linked
+	the internal owner for the asset when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
@@ -12081,6 +12129,7 @@ input CreateAssetInput {
 	viewerIDs: [ID!]
 	internalOwnerUserID: ID
 	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	assetSubtypeID: ID
 	assetDataClassificationID: ID
 	environmentID: ID
@@ -12117,7 +12166,7 @@ input CreateCampaignInput {
 	"""
 	tags: [String!]
 	"""
-	the internal owner for the campaign when no user or group is linked
+	the internal owner for the campaign when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
@@ -12218,6 +12267,7 @@ input CreateCampaignInput {
 	viewerIDs: [ID!]
 	internalOwnerUserID: ID
 	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	assessmentID: ID
 	templateID: ID
 	integrationID: ID
@@ -13344,11 +13394,11 @@ input CreateEntityInput {
 	"""
 	tags: [String!]
 	"""
-	the internal owner for the entity when no user or group is linked
+	the internal owner for the entity when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
-	who reviewed the entity when no user or group is linked
+	who reviewed the entity when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	"""
@@ -13524,8 +13574,10 @@ input CreateEntityInput {
 	editorIDs: [ID!]
 	internalOwnerUserID: ID
 	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	reviewedByUserID: ID
 	reviewedByGroupID: ID
+	reviewedByIdentityHolderID: ID
 	entityRelationshipStateID: ID
 	entitySecurityQuestionnaireStatusID: ID
 	entitySourceTypeID: ID
@@ -13888,11 +13940,11 @@ input CreateFindingInput {
 	"""
 	tags: [String!]
 	"""
-	who reviewed the finding when no user or group is linked
+	who reviewed the finding when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	"""
-	who the finding is assigned to when no user or group is linked
+	who the finding is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	"""
@@ -14068,8 +14120,10 @@ input CreateFindingInput {
 	editorIDs: [ID!]
 	reviewedByUserID: ID
 	reviewedByGroupID: ID
+	reviewedByIdentityHolderID: ID
 	assignedToUserID: ID
 	assignedToGroupID: ID
+	assignedToIdentityHolderID: ID
 	environmentID: ID
 	scopeID: ID
 	findingStatusID: ID
@@ -14301,7 +14355,7 @@ input CreateIdentityHolderInput {
 	"""
 	tags: [String!]
 	"""
-	the internal owner for the identity holder when no user or group is linked
+	the internal owner for the identity holder when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
@@ -14398,6 +14452,7 @@ input CreateIdentityHolderInput {
 	viewerIDs: [ID!]
 	internalOwnerUserID: ID
 	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	environmentID: ID
 	scopeID: ID
 	employerID: ID
@@ -15365,19 +15420,19 @@ input CreatePlatformInput {
 	"""
 	tags: [String!]
 	"""
-	the internal owner for the platform when no user or group is linked
+	the internal owner for the platform when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
-	business owner for the platform when no user or group is linked
+	business owner for the platform when no user, group, or identity holder is linked
 	"""
 	businessOwner: String
 	"""
-	technical owner for the platform when no user or group is linked
+	technical owner for the platform when no user, group, or identity holder is linked
 	"""
 	technicalOwner: String
 	"""
-	security owner for the platform when no user or group is linked
+	security owner for the platform when no user, group, or identity holder is linked
 	"""
 	securityOwner: String
 	"""
@@ -15494,12 +15549,16 @@ input CreatePlatformInput {
 	viewerIDs: [ID!]
 	internalOwnerUserID: ID
 	internalOwnerGroupID: ID
+	internalOwnerIdentityHolderID: ID
 	businessOwnerUserID: ID
 	businessOwnerGroupID: ID
+	businessOwnerIdentityHolderID: ID
 	technicalOwnerUserID: ID
 	technicalOwnerGroupID: ID
+	technicalOwnerIdentityHolderID: ID
 	securityOwnerUserID: ID
 	securityOwnerGroupID: ID
+	securityOwnerIdentityHolderID: ID
 	platformKindID: ID
 	platformDataClassificationID: ID
 	environmentID: ID
@@ -16232,11 +16291,11 @@ input CreateScanInput {
 	"""
 	systemInternalID: String @readOnly
 	"""
-	who reviewed the scan when no user or group is linked
+	who reviewed the scan when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	"""
-	who the scan is assigned to when no user or group is linked
+	who the scan is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	"""
@@ -16288,8 +16347,10 @@ input CreateScanInput {
 	editorIDs: [ID!]
 	reviewedByUserID: ID
 	reviewedByGroupID: ID
+	reviewedByIdentityHolderID: ID
 	assignedToUserID: ID
 	assignedToGroupID: ID
+	assignedToIdentityHolderID: ID
 	environmentID: ID
 	scopeID: ID
 	assetIDs: [ID!]
@@ -17538,11 +17599,11 @@ input CreateVulnerabilityInput {
 	"""
 	tags: [String!]
 	"""
-	who reviewed the vulnerability when no user or group is linked
+	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	"""
-	who the vulnerability is assigned to when no user or group is linked
+	who the vulnerability is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	"""
@@ -17739,8 +17800,10 @@ input CreateVulnerabilityInput {
 	viewerIDs: [ID!]
 	reviewedByUserID: ID
 	reviewedByGroupID: ID
+	reviewedByIdentityHolderID: ID
 	assignedToUserID: ID
 	assignedToGroupID: ID
+	assignedToIdentityHolderID: ID
 	environmentID: ID
 	scopeID: ID
 	vulnerabilityStatusID: ID
@@ -24004,7 +24067,7 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	ownerID: ID
 	"""
-	the internal owner for the entity when no user or group is linked
+	the internal owner for the entity when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
@@ -24016,7 +24079,11 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	"""
 	internalOwnerGroupID: ID
 	"""
-	who reviewed the entity when no user or group is linked
+	the internal owner identity holder id for the entity
+	"""
+	internalOwnerIdentityHolderID: ID
+	"""
+	who reviewed the entity when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	"""
@@ -24027,6 +24094,10 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	the group id that reviewed the entity
 	"""
 	reviewedByGroupID: ID
+	"""
+	the identity holder id that reviewed the entity
+	"""
+	reviewedByIdentityHolderID: ID
 	"""
 	when the entity was last reviewed
 	"""
@@ -24296,8 +24367,10 @@ type Entity implements Node @modules(names: ["entity_management_module","complia
 	): GroupConnection!
 	internalOwnerUser: User
 	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	reviewedByUser: User
 	reviewedByGroup: Group
+	reviewedByIdentityHolder: IdentityHolder
 	entityRelationshipState: CustomTypeEnum
 	entitySecurityQuestionnaireStatus: CustomTypeEnum
 	entitySourceType: CustomTypeEnum
@@ -25753,6 +25826,20 @@ input EntityWhereInput {
 	internalOwnerGroupIDEqualFold: ID
 	internalOwnerGroupIDContainsFold: ID
 	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
+	"""
 	reviewed_by field predicates
 	"""
 	reviewedBy: String
@@ -25794,6 +25881,20 @@ input EntityWhereInput {
 	reviewedByGroupIDNotNil: Boolean
 	reviewedByGroupIDEqualFold: ID
 	reviewedByGroupIDContainsFold: ID
+	"""
+	reviewed_by_identity_holder_id field predicates
+	"""
+	reviewedByIdentityHolderID: ID
+	reviewedByIdentityHolderIDNEQ: ID
+	reviewedByIdentityHolderIDIn: [ID!]
+	reviewedByIdentityHolderIDNotIn: [ID!]
+	reviewedByIdentityHolderIDContains: ID
+	reviewedByIdentityHolderIDHasPrefix: ID
+	reviewedByIdentityHolderIDHasSuffix: ID
+	reviewedByIdentityHolderIDIsNil: Boolean
+	reviewedByIdentityHolderIDNotNil: Boolean
+	reviewedByIdentityHolderIDEqualFold: ID
+	reviewedByIdentityHolderIDContainsFold: ID
 	"""
 	last_reviewed_at field predicates
 	"""
@@ -26348,6 +26449,11 @@ input EntityWhereInput {
 	hasInternalOwnerGroup: Boolean
 	hasInternalOwnerGroupWith: [GroupWhereInput!]
 	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
 	reviewed_by_user edge predicates
 	"""
 	hasReviewedByUser: Boolean
@@ -26357,6 +26463,11 @@ input EntityWhereInput {
 	"""
 	hasReviewedByGroup: Boolean
 	hasReviewedByGroupWith: [GroupWhereInput!]
+	"""
+	reviewed_by_identity_holder edge predicates
+	"""
+	hasReviewedByIdentityHolder: Boolean
+	hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	entity_relationship_state edge predicates
 	"""
@@ -29680,7 +29791,7 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	"""
 	ownerID: ID
 	"""
-	who reviewed the finding when no user or group is linked
+	who reviewed the finding when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	"""
@@ -29692,7 +29803,11 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	"""
 	reviewedByGroupID: ID
 	"""
-	who the finding is assigned to when no user or group is linked
+	the identity holder id that reviewed the finding
+	"""
+	reviewedByIdentityHolderID: ID
+	"""
+	who the finding is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	"""
@@ -29703,6 +29818,10 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	the group id assigned to the finding
 	"""
 	assignedToGroupID: ID
+	"""
+	the identity holder id assigned to the finding
+	"""
+	assignedToIdentityHolderID: ID
 	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
@@ -29956,8 +30075,10 @@ type Finding implements Node @modules(names: ["vulnerability_management_module",
 	): GroupConnection!
 	reviewedByUser: User
 	reviewedByGroup: Group
+	reviewedByIdentityHolder: IdentityHolder
 	assignedToUser: User
 	assignedToGroup: Group
+	assignedToIdentityHolder: IdentityHolder
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	findingStatus: CustomTypeEnum
@@ -31191,6 +31312,20 @@ input FindingWhereInput {
 	reviewedByGroupIDEqualFold: ID
 	reviewedByGroupIDContainsFold: ID
 	"""
+	reviewed_by_identity_holder_id field predicates
+	"""
+	reviewedByIdentityHolderID: ID
+	reviewedByIdentityHolderIDNEQ: ID
+	reviewedByIdentityHolderIDIn: [ID!]
+	reviewedByIdentityHolderIDNotIn: [ID!]
+	reviewedByIdentityHolderIDContains: ID
+	reviewedByIdentityHolderIDHasPrefix: ID
+	reviewedByIdentityHolderIDHasSuffix: ID
+	reviewedByIdentityHolderIDIsNil: Boolean
+	reviewedByIdentityHolderIDNotNil: Boolean
+	reviewedByIdentityHolderIDEqualFold: ID
+	reviewedByIdentityHolderIDContainsFold: ID
+	"""
 	assigned_to field predicates
 	"""
 	assignedTo: String
@@ -31232,6 +31367,20 @@ input FindingWhereInput {
 	assignedToGroupIDNotNil: Boolean
 	assignedToGroupIDEqualFold: ID
 	assignedToGroupIDContainsFold: ID
+	"""
+	assigned_to_identity_holder_id field predicates
+	"""
+	assignedToIdentityHolderID: ID
+	assignedToIdentityHolderIDNEQ: ID
+	assignedToIdentityHolderIDIn: [ID!]
+	assignedToIdentityHolderIDNotIn: [ID!]
+	assignedToIdentityHolderIDContains: ID
+	assignedToIdentityHolderIDHasPrefix: ID
+	assignedToIdentityHolderIDHasSuffix: ID
+	assignedToIdentityHolderIDIsNil: Boolean
+	assignedToIdentityHolderIDNotNil: Boolean
+	assignedToIdentityHolderIDEqualFold: ID
+	assignedToIdentityHolderIDContainsFold: ID
 	"""
 	system_owned field predicates
 	"""
@@ -31745,6 +31894,11 @@ input FindingWhereInput {
 	hasReviewedByGroup: Boolean
 	hasReviewedByGroupWith: [GroupWhereInput!]
 	"""
+	reviewed_by_identity_holder edge predicates
+	"""
+	hasReviewedByIdentityHolder: Boolean
+	hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
 	assigned_to_user edge predicates
 	"""
 	hasAssignedToUser: Boolean
@@ -31754,6 +31908,11 @@ input FindingWhereInput {
 	"""
 	hasAssignedToGroup: Boolean
 	hasAssignedToGroupWith: [GroupWhereInput!]
+	"""
+	assigned_to_identity_holder edge predicates
+	"""
+	hasAssignedToIdentityHolder: Boolean
+	hasAssignedToIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	environment edge predicates
 	"""
@@ -35400,7 +35559,7 @@ type IdentityHolder implements Node @modules(names: ["compliance_module","regist
 	"""
 	ownerID: ID
 	"""
-	the internal owner for the identity holder when no user or group is linked
+	the internal owner for the identity holder when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
@@ -35411,6 +35570,10 @@ type IdentityHolder implements Node @modules(names: ["compliance_module","regist
 	the internal owner group id for the identity holder
 	"""
 	internalOwnerGroupID: ID
+	"""
+	the internal owner identity holder id for the identity holder
+	"""
+	internalOwnerIdentityHolderID: ID
 	"""
 	the environment of the identity_holder
 	"""
@@ -35611,6 +35774,7 @@ type IdentityHolder implements Node @modules(names: ["compliance_module","regist
 	): GroupConnection!
 	internalOwnerUser: User
 	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	employer: Entity
@@ -36438,6 +36602,20 @@ input IdentityHolderWhereInput {
 	internalOwnerGroupIDEqualFold: ID
 	internalOwnerGroupIDContainsFold: ID
 	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
+	"""
 	environment_name field predicates
 	"""
 	environmentName: String
@@ -36754,6 +36932,11 @@ input IdentityHolderWhereInput {
 	"""
 	hasInternalOwnerGroup: Boolean
 	hasInternalOwnerGroupWith: [GroupWhereInput!]
+	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	environment edge predicates
 	"""
@@ -57353,7 +57536,7 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
 	"""
 	ownerID: ID
 	"""
-	the internal owner for the platform when no user or group is linked
+	the internal owner for the platform when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	"""
@@ -57365,7 +57548,11 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
 	"""
 	internalOwnerGroupID: ID
 	"""
-	business owner for the platform when no user or group is linked
+	the internal owner identity holder id for the platform
+	"""
+	internalOwnerIdentityHolderID: ID
+	"""
+	business owner for the platform when no user, group, or identity holder is linked
 	"""
 	businessOwner: String
 	"""
@@ -57377,7 +57564,11 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
 	"""
 	businessOwnerGroupID: ID
 	"""
-	technical owner for the platform when no user or group is linked
+	the business owner identity holder id for the platform
+	"""
+	businessOwnerIdentityHolderID: ID
+	"""
+	technical owner for the platform when no user, group, or identity holder is linked
 	"""
 	technicalOwner: String
 	"""
@@ -57389,7 +57580,11 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
 	"""
 	technicalOwnerGroupID: ID
 	"""
-	security owner for the platform when no user or group is linked
+	the technical owner identity holder id for the platform
+	"""
+	technicalOwnerIdentityHolderID: ID
+	"""
+	security owner for the platform when no user, group, or identity holder is linked
 	"""
 	securityOwner: String
 	"""
@@ -57400,6 +57595,10 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
 	the security owner group id for the platform
 	"""
 	securityOwnerGroupID: ID
+	"""
+	the security owner identity holder id for the platform
+	"""
+	securityOwnerIdentityHolderID: ID
 	"""
 	the kind of the platform
 	"""
@@ -57640,12 +57839,16 @@ type Platform implements Node @modules(names: ["compliance_module","entity_manag
 	): GroupConnection!
 	internalOwnerUser: User
 	internalOwnerGroup: Group
+	internalOwnerIdentityHolder: IdentityHolder
 	businessOwnerUser: User
 	businessOwnerGroup: Group
+	businessOwnerIdentityHolder: IdentityHolder
 	technicalOwnerUser: User
 	technicalOwnerGroup: Group
+	technicalOwnerIdentityHolder: IdentityHolder
 	securityOwnerUser: User
 	securityOwnerGroup: Group
+	securityOwnerIdentityHolder: IdentityHolder
 	platformKind: CustomTypeEnum
 	platformDataClassification: CustomTypeEnum
 	environment: CustomTypeEnum
@@ -58745,6 +58948,20 @@ input PlatformWhereInput {
 	internalOwnerGroupIDEqualFold: ID
 	internalOwnerGroupIDContainsFold: ID
 	"""
+	internal_owner_identity_holder_id field predicates
+	"""
+	internalOwnerIdentityHolderID: ID
+	internalOwnerIdentityHolderIDNEQ: ID
+	internalOwnerIdentityHolderIDIn: [ID!]
+	internalOwnerIdentityHolderIDNotIn: [ID!]
+	internalOwnerIdentityHolderIDContains: ID
+	internalOwnerIdentityHolderIDHasPrefix: ID
+	internalOwnerIdentityHolderIDHasSuffix: ID
+	internalOwnerIdentityHolderIDIsNil: Boolean
+	internalOwnerIdentityHolderIDNotNil: Boolean
+	internalOwnerIdentityHolderIDEqualFold: ID
+	internalOwnerIdentityHolderIDContainsFold: ID
+	"""
 	business_owner field predicates
 	"""
 	businessOwner: String
@@ -58786,6 +59003,20 @@ input PlatformWhereInput {
 	businessOwnerGroupIDNotNil: Boolean
 	businessOwnerGroupIDEqualFold: ID
 	businessOwnerGroupIDContainsFold: ID
+	"""
+	business_owner_identity_holder_id field predicates
+	"""
+	businessOwnerIdentityHolderID: ID
+	businessOwnerIdentityHolderIDNEQ: ID
+	businessOwnerIdentityHolderIDIn: [ID!]
+	businessOwnerIdentityHolderIDNotIn: [ID!]
+	businessOwnerIdentityHolderIDContains: ID
+	businessOwnerIdentityHolderIDHasPrefix: ID
+	businessOwnerIdentityHolderIDHasSuffix: ID
+	businessOwnerIdentityHolderIDIsNil: Boolean
+	businessOwnerIdentityHolderIDNotNil: Boolean
+	businessOwnerIdentityHolderIDEqualFold: ID
+	businessOwnerIdentityHolderIDContainsFold: ID
 	"""
 	technical_owner field predicates
 	"""
@@ -58829,6 +59060,20 @@ input PlatformWhereInput {
 	technicalOwnerGroupIDEqualFold: ID
 	technicalOwnerGroupIDContainsFold: ID
 	"""
+	technical_owner_identity_holder_id field predicates
+	"""
+	technicalOwnerIdentityHolderID: ID
+	technicalOwnerIdentityHolderIDNEQ: ID
+	technicalOwnerIdentityHolderIDIn: [ID!]
+	technicalOwnerIdentityHolderIDNotIn: [ID!]
+	technicalOwnerIdentityHolderIDContains: ID
+	technicalOwnerIdentityHolderIDHasPrefix: ID
+	technicalOwnerIdentityHolderIDHasSuffix: ID
+	technicalOwnerIdentityHolderIDIsNil: Boolean
+	technicalOwnerIdentityHolderIDNotNil: Boolean
+	technicalOwnerIdentityHolderIDEqualFold: ID
+	technicalOwnerIdentityHolderIDContainsFold: ID
+	"""
 	security_owner field predicates
 	"""
 	securityOwner: String
@@ -58870,6 +59115,20 @@ input PlatformWhereInput {
 	securityOwnerGroupIDNotNil: Boolean
 	securityOwnerGroupIDEqualFold: ID
 	securityOwnerGroupIDContainsFold: ID
+	"""
+	security_owner_identity_holder_id field predicates
+	"""
+	securityOwnerIdentityHolderID: ID
+	securityOwnerIdentityHolderIDNEQ: ID
+	securityOwnerIdentityHolderIDIn: [ID!]
+	securityOwnerIdentityHolderIDNotIn: [ID!]
+	securityOwnerIdentityHolderIDContains: ID
+	securityOwnerIdentityHolderIDHasPrefix: ID
+	securityOwnerIdentityHolderIDHasSuffix: ID
+	securityOwnerIdentityHolderIDIsNil: Boolean
+	securityOwnerIdentityHolderIDNotNil: Boolean
+	securityOwnerIdentityHolderIDEqualFold: ID
+	securityOwnerIdentityHolderIDContainsFold: ID
 	"""
 	platform_kind_name field predicates
 	"""
@@ -59314,6 +59573,11 @@ input PlatformWhereInput {
 	hasInternalOwnerGroup: Boolean
 	hasInternalOwnerGroupWith: [GroupWhereInput!]
 	"""
+	internal_owner_identity_holder edge predicates
+	"""
+	hasInternalOwnerIdentityHolder: Boolean
+	hasInternalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
 	business_owner_user edge predicates
 	"""
 	hasBusinessOwnerUser: Boolean
@@ -59323,6 +59587,11 @@ input PlatformWhereInput {
 	"""
 	hasBusinessOwnerGroup: Boolean
 	hasBusinessOwnerGroupWith: [GroupWhereInput!]
+	"""
+	business_owner_identity_holder edge predicates
+	"""
+	hasBusinessOwnerIdentityHolder: Boolean
+	hasBusinessOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	technical_owner_user edge predicates
 	"""
@@ -59334,6 +59603,11 @@ input PlatformWhereInput {
 	hasTechnicalOwnerGroup: Boolean
 	hasTechnicalOwnerGroupWith: [GroupWhereInput!]
 	"""
+	technical_owner_identity_holder edge predicates
+	"""
+	hasTechnicalOwnerIdentityHolder: Boolean
+	hasTechnicalOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
 	security_owner_user edge predicates
 	"""
 	hasSecurityOwnerUser: Boolean
@@ -59343,6 +59617,11 @@ input PlatformWhereInput {
 	"""
 	hasSecurityOwnerGroup: Boolean
 	hasSecurityOwnerGroupWith: [GroupWhereInput!]
+	"""
+	security_owner_identity_holder edge predicates
+	"""
+	hasSecurityOwnerIdentityHolder: Boolean
+	hasSecurityOwnerIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	platform_kind edge predicates
 	"""
@@ -72249,7 +72528,7 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
 	"""
 	systemInternalID: String @hidden(if: true)
 	"""
-	who reviewed the scan when no user or group is linked
+	who reviewed the scan when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	"""
@@ -72261,7 +72540,11 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
 	"""
 	reviewedByGroupID: ID
 	"""
-	who the scan is assigned to when no user or group is linked
+	the identity holder id that reviewed the scan
+	"""
+	reviewedByIdentityHolderID: ID
+	"""
+	who the scan is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	"""
@@ -72272,6 +72555,10 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
 	the group id assigned to the scan
 	"""
 	assignedToGroupID: ID
+	"""
+	the identity holder id assigned to the scan
+	"""
+	assignedToIdentityHolderID: ID
 	"""
 	the environment of the scan
 	"""
@@ -72401,8 +72688,10 @@ type Scan implements Node @modules(names: ["vulnerability_management_module","co
 	): GroupConnection!
 	reviewedByUser: User
 	reviewedByGroup: Group
+	reviewedByIdentityHolder: IdentityHolder
 	assignedToUser: User
 	assignedToGroup: Group
+	assignedToIdentityHolder: IdentityHolder
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	assets(
@@ -73098,6 +73387,20 @@ input ScanWhereInput {
 	reviewedByGroupIDEqualFold: ID
 	reviewedByGroupIDContainsFold: ID
 	"""
+	reviewed_by_identity_holder_id field predicates
+	"""
+	reviewedByIdentityHolderID: ID
+	reviewedByIdentityHolderIDNEQ: ID
+	reviewedByIdentityHolderIDIn: [ID!]
+	reviewedByIdentityHolderIDNotIn: [ID!]
+	reviewedByIdentityHolderIDContains: ID
+	reviewedByIdentityHolderIDHasPrefix: ID
+	reviewedByIdentityHolderIDHasSuffix: ID
+	reviewedByIdentityHolderIDIsNil: Boolean
+	reviewedByIdentityHolderIDNotNil: Boolean
+	reviewedByIdentityHolderIDEqualFold: ID
+	reviewedByIdentityHolderIDContainsFold: ID
+	"""
 	assigned_to field predicates
 	"""
 	assignedTo: String
@@ -73139,6 +73442,20 @@ input ScanWhereInput {
 	assignedToGroupIDNotNil: Boolean
 	assignedToGroupIDEqualFold: ID
 	assignedToGroupIDContainsFold: ID
+	"""
+	assigned_to_identity_holder_id field predicates
+	"""
+	assignedToIdentityHolderID: ID
+	assignedToIdentityHolderIDNEQ: ID
+	assignedToIdentityHolderIDIn: [ID!]
+	assignedToIdentityHolderIDNotIn: [ID!]
+	assignedToIdentityHolderIDContains: ID
+	assignedToIdentityHolderIDHasPrefix: ID
+	assignedToIdentityHolderIDHasSuffix: ID
+	assignedToIdentityHolderIDIsNil: Boolean
+	assignedToIdentityHolderIDNotNil: Boolean
+	assignedToIdentityHolderIDEqualFold: ID
+	assignedToIdentityHolderIDContainsFold: ID
 	"""
 	environment_name field predicates
 	"""
@@ -73323,6 +73640,11 @@ input ScanWhereInput {
 	hasReviewedByGroup: Boolean
 	hasReviewedByGroupWith: [GroupWhereInput!]
 	"""
+	reviewed_by_identity_holder edge predicates
+	"""
+	hasReviewedByIdentityHolder: Boolean
+	hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
 	assigned_to_user edge predicates
 	"""
 	hasAssignedToUser: Boolean
@@ -73332,6 +73654,11 @@ input ScanWhereInput {
 	"""
 	hasAssignedToGroup: Boolean
 	hasAssignedToGroupWith: [GroupWhereInput!]
+	"""
+	assigned_to_identity_holder edge predicates
+	"""
+	hasAssignedToIdentityHolder: Boolean
+	hasAssignedToIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	environment edge predicates
 	"""
@@ -84807,7 +85134,7 @@ input UpdateAssetInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the internal owner for the asset when no user or group is linked
+	the internal owner for the asset when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	clearInternalOwner: Boolean
@@ -84954,6 +85281,8 @@ input UpdateAssetInput {
 	clearInternalOwnerUser: Boolean
 	internalOwnerGroupID: ID
 	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	assetSubtypeID: ID
 	clearAssetSubtype: Boolean
 	assetDataClassificationID: ID
@@ -85030,7 +85359,7 @@ input UpdateCampaignInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the internal owner for the campaign when no user or group is linked
+	the internal owner for the campaign when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	clearInternalOwner: Boolean
@@ -85157,6 +85486,8 @@ input UpdateCampaignInput {
 	clearInternalOwnerUser: Boolean
 	internalOwnerGroupID: ID
 	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	assessmentID: ID
 	clearAssessment: Boolean
 	templateID: ID
@@ -86638,12 +86969,12 @@ input UpdateEntityInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the internal owner for the entity when no user or group is linked
+	the internal owner for the entity when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	clearInternalOwner: Boolean
 	"""
-	who reviewed the entity when no user or group is linked
+	who reviewed the entity when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	clearReviewedBy: Boolean
@@ -86872,10 +87203,14 @@ input UpdateEntityInput {
 	clearInternalOwnerUser: Boolean
 	internalOwnerGroupID: ID
 	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	reviewedByUserID: ID
 	clearReviewedByUser: Boolean
 	reviewedByGroupID: ID
 	clearReviewedByGroup: Boolean
+	reviewedByIdentityHolderID: ID
+	clearReviewedByIdentityHolder: Boolean
 	entityRelationshipStateID: ID
 	clearEntityRelationshipState: Boolean
 	entitySecurityQuestionnaireStatusID: ID
@@ -87433,12 +87768,12 @@ input UpdateFindingInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	who reviewed the finding when no user or group is linked
+	who reviewed the finding when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	clearReviewedBy: Boolean
 	"""
-	who the finding is assigned to when no user or group is linked
+	who the finding is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	clearAssignedTo: Boolean
@@ -87666,10 +88001,14 @@ input UpdateFindingInput {
 	clearReviewedByUser: Boolean
 	reviewedByGroupID: ID
 	clearReviewedByGroup: Boolean
+	reviewedByIdentityHolderID: ID
+	clearReviewedByIdentityHolder: Boolean
 	assignedToUserID: ID
 	clearAssignedToUser: Boolean
 	assignedToGroupID: ID
 	clearAssignedToGroup: Boolean
+	assignedToIdentityHolderID: ID
+	clearAssignedToIdentityHolder: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -88061,7 +88400,7 @@ input UpdateIdentityHolderInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the internal owner for the identity holder when no user or group is linked
+	the internal owner for the identity holder when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	clearInternalOwner: Boolean
@@ -88184,6 +88523,8 @@ input UpdateIdentityHolderInput {
 	clearInternalOwnerUser: Boolean
 	internalOwnerGroupID: ID
 	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -89631,22 +89972,22 @@ input UpdatePlatformInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	the internal owner for the platform when no user or group is linked
+	the internal owner for the platform when no user, group, or identity holder is linked
 	"""
 	internalOwner: String
 	clearInternalOwner: Boolean
 	"""
-	business owner for the platform when no user or group is linked
+	business owner for the platform when no user, group, or identity holder is linked
 	"""
 	businessOwner: String
 	clearBusinessOwner: Boolean
 	"""
-	technical owner for the platform when no user or group is linked
+	technical owner for the platform when no user, group, or identity holder is linked
 	"""
 	technicalOwner: String
 	clearTechnicalOwner: Boolean
 	"""
-	security owner for the platform when no user or group is linked
+	security owner for the platform when no user, group, or identity holder is linked
 	"""
 	securityOwner: String
 	clearSecurityOwner: Boolean
@@ -89795,18 +90136,26 @@ input UpdatePlatformInput {
 	clearInternalOwnerUser: Boolean
 	internalOwnerGroupID: ID
 	clearInternalOwnerGroup: Boolean
+	internalOwnerIdentityHolderID: ID
+	clearInternalOwnerIdentityHolder: Boolean
 	businessOwnerUserID: ID
 	clearBusinessOwnerUser: Boolean
 	businessOwnerGroupID: ID
 	clearBusinessOwnerGroup: Boolean
+	businessOwnerIdentityHolderID: ID
+	clearBusinessOwnerIdentityHolder: Boolean
 	technicalOwnerUserID: ID
 	clearTechnicalOwnerUser: Boolean
 	technicalOwnerGroupID: ID
 	clearTechnicalOwnerGroup: Boolean
+	technicalOwnerIdentityHolderID: ID
+	clearTechnicalOwnerIdentityHolder: Boolean
 	securityOwnerUserID: ID
 	clearSecurityOwnerUser: Boolean
 	securityOwnerGroupID: ID
 	clearSecurityOwnerGroup: Boolean
+	securityOwnerIdentityHolderID: ID
+	clearSecurityOwnerIdentityHolder: Boolean
 	platformKindID: ID
 	clearPlatformKind: Boolean
 	platformDataClassificationID: ID
@@ -90919,12 +91268,12 @@ input UpdateScanInput {
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
 	"""
-	who reviewed the scan when no user or group is linked
+	who reviewed the scan when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	clearReviewedBy: Boolean
 	"""
-	who the scan is assigned to when no user or group is linked
+	who the scan is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	clearAssignedTo: Boolean
@@ -90991,10 +91340,14 @@ input UpdateScanInput {
 	clearReviewedByUser: Boolean
 	reviewedByGroupID: ID
 	clearReviewedByGroup: Boolean
+	reviewedByIdentityHolderID: ID
+	clearReviewedByIdentityHolder: Boolean
 	assignedToUserID: ID
 	clearAssignedToUser: Boolean
 	assignedToGroupID: ID
 	clearAssignedToGroup: Boolean
+	assignedToIdentityHolderID: ID
+	clearAssignedToIdentityHolder: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -92642,12 +92995,12 @@ input UpdateVulnerabilityInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
-	who reviewed the vulnerability when no user or group is linked
+	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	clearReviewedBy: Boolean
 	"""
-	who the vulnerability is assigned to when no user or group is linked
+	who the vulnerability is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	clearAssignedTo: Boolean
@@ -92901,10 +93254,14 @@ input UpdateVulnerabilityInput {
 	clearReviewedByUser: Boolean
 	reviewedByGroupID: ID
 	clearReviewedByGroup: Boolean
+	reviewedByIdentityHolderID: ID
+	clearReviewedByIdentityHolder: Boolean
 	assignedToUserID: ID
 	clearAssignedToUser: Boolean
 	assignedToGroupID: ID
 	clearAssignedToGroup: Boolean
+	assignedToIdentityHolderID: ID
+	clearAssignedToIdentityHolder: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -95500,7 +95857,7 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	"""
 	ownerID: ID
 	"""
-	who reviewed the vulnerability when no user or group is linked
+	who reviewed the vulnerability when no user, group, or identity holder is linked
 	"""
 	reviewedBy: String
 	"""
@@ -95512,7 +95869,11 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	"""
 	reviewedByGroupID: ID
 	"""
-	who the vulnerability is assigned to when no user or group is linked
+	the identity holder id that reviewed the vulnerability
+	"""
+	reviewedByIdentityHolderID: ID
+	"""
+	who the vulnerability is assigned to when no user, group, or identity holder is linked
 	"""
 	assignedTo: String
 	"""
@@ -95523,6 +95884,10 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	the group id assigned to the vulnerability
 	"""
 	assignedToGroupID: ID
+	"""
+	the identity holder id assigned to the vulnerability
+	"""
+	assignedToIdentityHolderID: ID
 	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
@@ -95827,8 +96192,10 @@ type Vulnerability implements Node @modules(names: ["vulnerability_management_mo
 	): GroupConnection!
 	reviewedByUser: User
 	reviewedByGroup: Group
+	reviewedByIdentityHolder: IdentityHolder
 	assignedToUser: User
 	assignedToGroup: Group
+	assignedToIdentityHolder: IdentityHolder
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	vulnerabilityStatus: CustomTypeEnum
@@ -96681,6 +97048,20 @@ input VulnerabilityWhereInput {
 	reviewedByGroupIDEqualFold: ID
 	reviewedByGroupIDContainsFold: ID
 	"""
+	reviewed_by_identity_holder_id field predicates
+	"""
+	reviewedByIdentityHolderID: ID
+	reviewedByIdentityHolderIDNEQ: ID
+	reviewedByIdentityHolderIDIn: [ID!]
+	reviewedByIdentityHolderIDNotIn: [ID!]
+	reviewedByIdentityHolderIDContains: ID
+	reviewedByIdentityHolderIDHasPrefix: ID
+	reviewedByIdentityHolderIDHasSuffix: ID
+	reviewedByIdentityHolderIDIsNil: Boolean
+	reviewedByIdentityHolderIDNotNil: Boolean
+	reviewedByIdentityHolderIDEqualFold: ID
+	reviewedByIdentityHolderIDContainsFold: ID
+	"""
 	assigned_to field predicates
 	"""
 	assignedTo: String
@@ -96722,6 +97103,20 @@ input VulnerabilityWhereInput {
 	assignedToGroupIDNotNil: Boolean
 	assignedToGroupIDEqualFold: ID
 	assignedToGroupIDContainsFold: ID
+	"""
+	assigned_to_identity_holder_id field predicates
+	"""
+	assignedToIdentityHolderID: ID
+	assignedToIdentityHolderIDNEQ: ID
+	assignedToIdentityHolderIDIn: [ID!]
+	assignedToIdentityHolderIDNotIn: [ID!]
+	assignedToIdentityHolderIDContains: ID
+	assignedToIdentityHolderIDHasPrefix: ID
+	assignedToIdentityHolderIDHasSuffix: ID
+	assignedToIdentityHolderIDIsNil: Boolean
+	assignedToIdentityHolderIDNotNil: Boolean
+	assignedToIdentityHolderIDEqualFold: ID
+	assignedToIdentityHolderIDContainsFold: ID
 	"""
 	system_owned field predicates
 	"""
@@ -97318,6 +97713,11 @@ input VulnerabilityWhereInput {
 	hasReviewedByGroup: Boolean
 	hasReviewedByGroupWith: [GroupWhereInput!]
 	"""
+	reviewed_by_identity_holder edge predicates
+	"""
+	hasReviewedByIdentityHolder: Boolean
+	hasReviewedByIdentityHolderWith: [IdentityHolderWhereInput!]
+	"""
 	assigned_to_user edge predicates
 	"""
 	hasAssignedToUser: Boolean
@@ -97327,6 +97727,11 @@ input VulnerabilityWhereInput {
 	"""
 	hasAssignedToGroup: Boolean
 	hasAssignedToGroupWith: [GroupWhereInput!]
+	"""
+	assigned_to_identity_holder edge predicates
+	"""
+	hasAssignedToIdentityHolder: Boolean
+	hasAssignedToIdentityHolderWith: [IdentityHolderWhereInput!]
 	"""
 	environment edge predicates
 	"""

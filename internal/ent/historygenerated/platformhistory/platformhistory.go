@@ -52,24 +52,32 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldBusinessOwner holds the string denoting the business_owner field in the database.
 	FieldBusinessOwner = "business_owner"
 	// FieldBusinessOwnerUserID holds the string denoting the business_owner_user_id field in the database.
 	FieldBusinessOwnerUserID = "business_owner_user_id"
 	// FieldBusinessOwnerGroupID holds the string denoting the business_owner_group_id field in the database.
 	FieldBusinessOwnerGroupID = "business_owner_group_id"
+	// FieldBusinessOwnerIdentityHolderID holds the string denoting the business_owner_identity_holder_id field in the database.
+	FieldBusinessOwnerIdentityHolderID = "business_owner_identity_holder_id"
 	// FieldTechnicalOwner holds the string denoting the technical_owner field in the database.
 	FieldTechnicalOwner = "technical_owner"
 	// FieldTechnicalOwnerUserID holds the string denoting the technical_owner_user_id field in the database.
 	FieldTechnicalOwnerUserID = "technical_owner_user_id"
 	// FieldTechnicalOwnerGroupID holds the string denoting the technical_owner_group_id field in the database.
 	FieldTechnicalOwnerGroupID = "technical_owner_group_id"
+	// FieldTechnicalOwnerIdentityHolderID holds the string denoting the technical_owner_identity_holder_id field in the database.
+	FieldTechnicalOwnerIdentityHolderID = "technical_owner_identity_holder_id"
 	// FieldSecurityOwner holds the string denoting the security_owner field in the database.
 	FieldSecurityOwner = "security_owner"
 	// FieldSecurityOwnerUserID holds the string denoting the security_owner_user_id field in the database.
 	FieldSecurityOwnerUserID = "security_owner_user_id"
 	// FieldSecurityOwnerGroupID holds the string denoting the security_owner_group_id field in the database.
 	FieldSecurityOwnerGroupID = "security_owner_group_id"
+	// FieldSecurityOwnerIdentityHolderID holds the string denoting the security_owner_identity_holder_id field in the database.
+	FieldSecurityOwnerIdentityHolderID = "security_owner_identity_holder_id"
 	// FieldPlatformKindName holds the string denoting the platform_kind_name field in the database.
 	FieldPlatformKindName = "platform_kind_name"
 	// FieldPlatformKindID holds the string denoting the platform_kind_id field in the database.
@@ -165,15 +173,19 @@ var Columns = []string{
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldBusinessOwner,
 	FieldBusinessOwnerUserID,
 	FieldBusinessOwnerGroupID,
+	FieldBusinessOwnerIdentityHolderID,
 	FieldTechnicalOwner,
 	FieldTechnicalOwnerUserID,
 	FieldTechnicalOwnerGroupID,
+	FieldTechnicalOwnerIdentityHolderID,
 	FieldSecurityOwner,
 	FieldSecurityOwnerUserID,
 	FieldSecurityOwnerGroupID,
+	FieldSecurityOwnerIdentityHolderID,
 	FieldPlatformKindName,
 	FieldPlatformKindID,
 	FieldPlatformDataClassificationName,
@@ -364,6 +376,11 @@ func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // ByBusinessOwner orders the results by the business_owner field.
 func ByBusinessOwner(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBusinessOwner, opts...).ToFunc()
@@ -377,6 +394,11 @@ func ByBusinessOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByBusinessOwnerGroupID orders the results by the business_owner_group_id field.
 func ByBusinessOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBusinessOwnerGroupID, opts...).ToFunc()
+}
+
+// ByBusinessOwnerIdentityHolderID orders the results by the business_owner_identity_holder_id field.
+func ByBusinessOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBusinessOwnerIdentityHolderID, opts...).ToFunc()
 }
 
 // ByTechnicalOwner orders the results by the technical_owner field.
@@ -394,6 +416,11 @@ func ByTechnicalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTechnicalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByTechnicalOwnerIdentityHolderID orders the results by the technical_owner_identity_holder_id field.
+func ByTechnicalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTechnicalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // BySecurityOwner orders the results by the security_owner field.
 func BySecurityOwner(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecurityOwner, opts...).ToFunc()
@@ -407,6 +434,11 @@ func BySecurityOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
 // BySecurityOwnerGroupID orders the results by the security_owner_group_id field.
 func BySecurityOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecurityOwnerGroupID, opts...).ToFunc()
+}
+
+// BySecurityOwnerIdentityHolderID orders the results by the security_owner_identity_holder_id field.
+func BySecurityOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityOwnerIdentityHolderID, opts...).ToFunc()
 }
 
 // ByPlatformKindName orders the results by the platform_kind_name field.

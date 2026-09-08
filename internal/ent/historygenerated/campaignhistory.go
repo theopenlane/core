@@ -49,12 +49,14 @@ type CampaignHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the internal owner for the campaign when no user or group is linked
+	// the internal owner for the campaign when no user, group, or identity holder is linked
 	InternalOwner string `json:"internal_owner,omitempty"`
 	// the internal owner user id for the campaign
 	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
 	// the internal owner group id for the campaign
 	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the campaign
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// the name of the campaign
@@ -133,7 +135,7 @@ func (*CampaignHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaignhistory.FieldRecurrenceInterval, campaignhistory.FieldRecipientCount, campaignhistory.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldUpdatedByImpersonator, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldEntityID, campaignhistory.FieldTemplateID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailTemplateID, campaignhistory.FieldIntegrationID, campaignhistory.FieldEmailBrandingID, campaignhistory.FieldTrustCenterID:
+		case campaignhistory.FieldID, campaignhistory.FieldRef, campaignhistory.FieldCreatedBy, campaignhistory.FieldUpdatedBy, campaignhistory.FieldUpdatedByImpersonator, campaignhistory.FieldDeletedBy, campaignhistory.FieldDisplayID, campaignhistory.FieldOwnerID, campaignhistory.FieldInternalOwner, campaignhistory.FieldInternalOwnerUserID, campaignhistory.FieldInternalOwnerGroupID, campaignhistory.FieldInternalOwnerIdentityHolderID, campaignhistory.FieldName, campaignhistory.FieldDescription, campaignhistory.FieldCampaignType, campaignhistory.FieldStatus, campaignhistory.FieldRecurrenceFrequency, campaignhistory.FieldRecurrenceTimezone, campaignhistory.FieldEntityID, campaignhistory.FieldTemplateID, campaignhistory.FieldAssessmentID, campaignhistory.FieldEmailTemplateID, campaignhistory.FieldIntegrationID, campaignhistory.FieldEmailBrandingID, campaignhistory.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case campaignhistory.FieldHistoryTime, campaignhistory.FieldCreatedAt, campaignhistory.FieldUpdatedAt, campaignhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -256,6 +258,12 @@ func (_m *CampaignHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
 			} else if value.Valid {
 				_m.InternalOwnerGroupID = value.String
+			}
+		case campaignhistory.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
 			}
 		case campaignhistory.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -527,6 +535,9 @@ func (_m *CampaignHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_owner_group_id=")
 	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))

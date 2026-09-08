@@ -139,6 +139,11 @@ func ReviewedByGroupID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldReviewedByGroupID, v))
 }
 
+// ReviewedByIdentityHolderID applies equality check predicate on the "reviewed_by_identity_holder_id" field. It's identical to ReviewedByIdentityHolderIDEQ.
+func ReviewedByIdentityHolderID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
 // AssignedTo applies equality check predicate on the "assigned_to" field. It's identical to AssignedToEQ.
 func AssignedTo(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedTo, v))
@@ -152,6 +157,11 @@ func AssignedToUserID(v string) predicate.FindingHistory {
 // AssignedToGroupID applies equality check predicate on the "assigned_to_group_id" field. It's identical to AssignedToGroupIDEQ.
 func AssignedToGroupID(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedToGroupID, v))
+}
+
+// AssignedToIdentityHolderID applies equality check predicate on the "assigned_to_identity_holder_id" field. It's identical to AssignedToIdentityHolderIDEQ.
+func AssignedToIdentityHolderID(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedToIdentityHolderID, v))
 }
 
 // SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
@@ -1309,6 +1319,81 @@ func ReviewedByGroupIDContainsFold(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldContainsFold(FieldReviewedByGroupID, v))
 }
 
+// ReviewedByIdentityHolderIDEQ applies the EQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDNEQ applies the NEQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIn applies the In predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDNotIn applies the NotIn predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDGT applies the GT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDGTE applies the GTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLT applies the LT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLTE applies the LTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContains applies the Contains predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIsNil applies the IsNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDNotNil applies the NotNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDEqualFold applies the EqualFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContainsFold applies the ContainsFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldReviewedByIdentityHolderID, v))
+}
+
 // AssignedToEQ applies the EQ predicate on the "assigned_to" field.
 func AssignedToEQ(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedTo, v))
@@ -1532,6 +1617,81 @@ func AssignedToGroupIDEqualFold(v string) predicate.FindingHistory {
 // AssignedToGroupIDContainsFold applies the ContainsFold predicate on the "assigned_to_group_id" field.
 func AssignedToGroupIDContainsFold(v string) predicate.FindingHistory {
 	return predicate.FindingHistory(sql.FieldContainsFold(FieldAssignedToGroupID, v))
+}
+
+// AssignedToIdentityHolderIDEQ applies the EQ predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEQ(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDNEQ applies the NEQ predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNEQ(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNEQ(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDIn applies the In predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIn(FieldAssignedToIdentityHolderID, vs...))
+}
+
+// AssignedToIdentityHolderIDNotIn applies the NotIn predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNotIn(vs ...string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotIn(FieldAssignedToIdentityHolderID, vs...))
+}
+
+// AssignedToIdentityHolderIDGT applies the GT predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDGT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGT(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDGTE applies the GTE predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDGTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldGTE(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDLT applies the LT predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDLT(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLT(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDLTE applies the LTE predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDLTE(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldLTE(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDContains applies the Contains predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDContains(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContains(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDHasPrefix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasPrefix(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDHasSuffix(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldHasSuffix(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDIsNil applies the IsNil predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDIsNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldIsNull(FieldAssignedToIdentityHolderID))
+}
+
+// AssignedToIdentityHolderIDNotNil applies the NotNil predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDNotNil() predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldNotNull(FieldAssignedToIdentityHolderID))
+}
+
+// AssignedToIdentityHolderIDEqualFold applies the EqualFold predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDEqualFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldEqualFold(FieldAssignedToIdentityHolderID, v))
+}
+
+// AssignedToIdentityHolderIDContainsFold applies the ContainsFold predicate on the "assigned_to_identity_holder_id" field.
+func AssignedToIdentityHolderIDContainsFold(v string) predicate.FindingHistory {
+	return predicate.FindingHistory(sql.FieldContainsFold(FieldAssignedToIdentityHolderID, v))
 }
 
 // SystemOwnedEQ applies the EQ predicate on the "system_owned" field.

@@ -210,6 +210,7 @@ query GetEntityByID ($entityId: ID!) {
 		internalNotes
 		internalOwner
 		internalOwnerGroupID
+		internalOwnerIdentityHolderID
 		internalOwnerUserID
 		lastReviewedAt
 		linkedAssetIds
@@ -227,6 +228,7 @@ query GetEntityByID ($entityId: ID!) {
 		reviewFrequency
 		reviewedBy
 		reviewedByGroupID
+		reviewedByIdentityHolderID
 		reviewedByUserID
 		riskRating
 		riskScore

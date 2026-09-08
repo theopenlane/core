@@ -109,6 +109,9 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.ReviewedByGroupIDCleared() {
 		_spec.ClearField(findinghistory.FieldReviewedByGroupID, field.TypeString)
 	}
+	if _u.mutation.ReviewedByIdentityHolderIDCleared() {
+		_spec.ClearField(findinghistory.FieldReviewedByIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.AssignedToCleared() {
 		_spec.ClearField(findinghistory.FieldAssignedTo, field.TypeString)
 	}
@@ -117,6 +120,9 @@ func (_u *FindingHistoryUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.AssignedToGroupIDCleared() {
 		_spec.ClearField(findinghistory.FieldAssignedToGroupID, field.TypeString)
+	}
+	if _u.mutation.AssignedToIdentityHolderIDCleared() {
+		_spec.ClearField(findinghistory.FieldAssignedToIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(findinghistory.FieldSystemOwned, field.TypeBool)
@@ -389,6 +395,9 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	if _u.mutation.ReviewedByGroupIDCleared() {
 		_spec.ClearField(findinghistory.FieldReviewedByGroupID, field.TypeString)
 	}
+	if _u.mutation.ReviewedByIdentityHolderIDCleared() {
+		_spec.ClearField(findinghistory.FieldReviewedByIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.AssignedToCleared() {
 		_spec.ClearField(findinghistory.FieldAssignedTo, field.TypeString)
 	}
@@ -397,6 +406,9 @@ func (_u *FindingHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingH
 	}
 	if _u.mutation.AssignedToGroupIDCleared() {
 		_spec.ClearField(findinghistory.FieldAssignedToGroupID, field.TypeString)
+	}
+	if _u.mutation.AssignedToIdentityHolderIDCleared() {
+		_spec.ClearField(findinghistory.FieldAssignedToIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(findinghistory.FieldSystemOwned, field.TypeBool)

@@ -134,6 +134,11 @@ func InternalOwnerGroupID(v string) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwnerGroupID, v))
 }
 
+// InternalOwnerIdentityHolderID applies equality check predicate on the "internal_owner_identity_holder_id" field. It's identical to InternalOwnerIdentityHolderIDEQ.
+func InternalOwnerIdentityHolderID(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // AssetSubtypeName applies equality check predicate on the "asset_subtype_name" field. It's identical to AssetSubtypeNameEQ.
 func AssetSubtypeName(v string) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldEQ(FieldAssetSubtypeName, v))
@@ -1202,6 +1207,81 @@ func InternalOwnerGroupIDEqualFold(v string) predicate.AssetHistory {
 // InternalOwnerGroupIDContainsFold applies the ContainsFold predicate on the "internal_owner_group_id" field.
 func InternalOwnerGroupIDContainsFold(v string) predicate.AssetHistory {
 	return predicate.AssetHistory(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
+}
+
+// InternalOwnerIdentityHolderIDEQ applies the EQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNEQ(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIn applies the In predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotIn(vs ...string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDGT applies the GT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDGTE applies the GTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldGTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLT applies the LT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLT(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLTE applies the LTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLTE(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldLTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContains applies the Contains predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContains(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContains(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasPrefix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasPrefix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasSuffix(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldHasSuffix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIsNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldIsNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotNil() predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldNotNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEqualFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldEqualFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContainsFold(v string) predicate.AssetHistory {
+	return predicate.AssetHistory(sql.FieldContainsFold(FieldInternalOwnerIdentityHolderID, v))
 }
 
 // AssetSubtypeNameEQ applies the EQ predicate on the "asset_subtype_name" field.

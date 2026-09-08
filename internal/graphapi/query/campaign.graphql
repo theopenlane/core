@@ -16,6 +16,7 @@ mutation CreateBulkCSVCampaign ($input: Upload!) {
 			integrationID
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			isActive
 			isRecurring
@@ -63,6 +64,7 @@ mutation CreateBulkCampaign ($input: [CreateCampaignInput!]) {
 			integrationID
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			isActive
 			isRecurring
@@ -110,6 +112,7 @@ mutation CreateCampaign ($input: CreateCampaignInput!) {
 			integrationID
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			isActive
 			isRecurring
@@ -170,6 +173,7 @@ query GetAllCampaigns ($first: Int, $last: Int, $after: Cursor, $before: Cursor,
 				integrationID
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				isActive
 				isRecurring
@@ -230,6 +234,7 @@ query GetCampaignByID ($campaignId: ID!) {
 		integrationID
 		internalOwner
 		internalOwnerGroupID
+		internalOwnerIdentityHolderID
 		internalOwnerUserID
 		isActive
 		isRecurring
@@ -297,6 +302,7 @@ query GetCampaigns ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $o
 				integrationID
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				isActive
 				isRecurring
@@ -358,6 +364,7 @@ mutation UpdateCampaign ($updateCampaignId: ID!, $input: UpdateCampaignInput!) {
 			integrationID
 			internalOwner
 			internalOwnerGroupID
+			internalOwnerIdentityHolderID
 			internalOwnerUserID
 			isActive
 			isRecurring

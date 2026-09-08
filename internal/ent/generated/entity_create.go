@@ -207,6 +207,20 @@ func (_c *EntityCreate) SetNillableInternalOwnerGroupID(v *string) *EntityCreate
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *EntityCreate) SetInternalOwnerIdentityHolderID(v string) *EntityCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_c *EntityCreate) SetReviewedBy(v string) *EntityCreate {
 	_c.mutation.SetReviewedBy(v)
@@ -245,6 +259,20 @@ func (_c *EntityCreate) SetReviewedByGroupID(v string) *EntityCreate {
 func (_c *EntityCreate) SetNillableReviewedByGroupID(v *string) *EntityCreate {
 	if v != nil {
 		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *EntityCreate) SetReviewedByIdentityHolderID(v string) *EntityCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *EntityCreate) SetNillableReviewedByIdentityHolderID(v *string) *EntityCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -974,6 +1002,11 @@ func (_c *EntityCreate) SetInternalOwnerGroup(v *Group) *EntityCreate {
 	return _c.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_c *EntityCreate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *EntityCreate {
+	return _c.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
 func (_c *EntityCreate) SetReviewedByUser(v *User) *EntityCreate {
 	return _c.SetReviewedByUserID(v.ID)
@@ -982,6 +1015,11 @@ func (_c *EntityCreate) SetReviewedByUser(v *User) *EntityCreate {
 // SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
 func (_c *EntityCreate) SetReviewedByGroup(v *Group) *EntityCreate {
 	return _c.SetReviewedByGroupID(v.ID)
+}
+
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_c *EntityCreate) SetReviewedByIdentityHolder(v *IdentityHolder) *EntityCreate {
+	return _c.SetReviewedByIdentityHolderID(v.ID)
 }
 
 // SetEntityRelationshipState sets the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -1901,6 +1939,23 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 		_node.InternalOwnerGroupID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.InternalOwnerIdentityHolderTable,
+			Columns: []string{entity.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.InternalOwnerIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1933,6 +1988,23 @@ func (_c *EntityCreate) createSpec() (*Entity, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.ReviewedByGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   entity.ReviewedByIdentityHolderTable,
+			Columns: []string{entity.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EntityRelationshipStateIDs(); len(nodes) > 0 {

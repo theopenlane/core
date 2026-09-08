@@ -109,6 +109,9 @@ func (_u *CampaignHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(campaignhistory.FieldInternalOwnerGroupID, field.TypeString)
 	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(campaignhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
+	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(campaignhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
@@ -310,6 +313,9 @@ func (_u *CampaignHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Campaig
 	}
 	if _u.mutation.InternalOwnerGroupIDCleared() {
 		_spec.ClearField(campaignhistory.FieldInternalOwnerGroupID, field.TypeString)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderIDCleared() {
+		_spec.ClearField(campaignhistory.FieldInternalOwnerIdentityHolderID, field.TypeString)
 	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(campaignhistory.FieldWorkflowEligibleMarker, field.TypeBool)
