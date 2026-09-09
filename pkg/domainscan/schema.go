@@ -189,6 +189,7 @@ type Favicon struct {
 // Branding is visual branding data captured from the scan, usable for org avatars, trust
 // center logos, or similar presentational purposes
 type Branding struct {
+	Error string `json:"error,omitempty"`
 	// Favicon is the scanned site's favicon
 	Favicon Favicon `json:"favicon"`
 	// LogoURL is the primary site logo discovered from the rendered page

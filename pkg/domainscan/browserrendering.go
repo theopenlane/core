@@ -250,6 +250,12 @@ func (c *Config) GetComplianceData(ctx context.Context, domain string) (*Complia
 // GetBrandingData extracts visual design tokens from the rendered website
 func (c *Config) GetBrandingData(ctx context.Context, domain string) (*BrandDesignProfile, error) {
 	resp, err := c.browserRendering(ctx, domain, promptBranding, "")
+	if errors.Is(err, errBrandingBotChallenge) {
+		return &BrandDesignProfile{
+			Error:      errBrandingBotChallenge.Error(),
+			FaviconURL: formatFaviconURL(domain),
+		}, nil
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -516,6 +522,10 @@ func (c *Config) browserRendering(ctx context.Context, target string, kind Promp
 				Interface("raw_response", envelope.Result).
 				Msg("domainscan: browser rendering response from cloudflare")
 
+			if kind == promptBranding && isBotChallenge(envelope.Meta) {
+				return nil, errBrandingBotChallenge
+			}
+
 			return &envelope.Result, nil
 		}
 
@@ -532,6 +542,17 @@ func (c *Config) browserRendering(ctx context.Context, target string, kind Promp
 	}
 
 	return nil, lastErr
+}
+
+func isBotChallenge(meta browser_rendering.JsonNewResponseEnvelopeMeta) bool {
+	for name, value := range meta.Headers {
+		if strings.EqualFold(name, "cf-mitigated") && strings.EqualFold(strings.TrimSpace(value), "challenge") {
+			return true
+		}
+	}
+
+	return (meta.Status == http.StatusForbidden || meta.Status == http.StatusTooManyRequests) &&
+		strings.EqualFold(strings.TrimSpace(meta.Title), "Just a moment...")
 }
 
 // hasCloudflareErrorCode reports whether apiErr contains a Cloudflare error with the given code

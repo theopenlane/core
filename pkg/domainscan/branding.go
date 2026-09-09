@@ -20,6 +20,7 @@ func formatFaviconURL(domain string) string {
 func buildBranding(result *url_scanner.ScanGetResponse, profile *BrandDesignProfile) *Branding {
 	branding := &Branding{}
 	if profile != nil {
+		branding.Error = profile.Error
 		branding.Favicon.URL = profile.FaviconURL
 		branding.LogoURL = profile.LogoURL
 		branding.PrimaryColor = profile.PrimaryColor

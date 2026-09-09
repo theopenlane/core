@@ -76,7 +76,7 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 			Exec(systemCtx)
 	}
 
-	if applyBrandDesign {
+	if applyBrandDesign && result.Enrichment.Branding.Error == "" {
 		if _, err := applyBrandingToTrustCenter(systemCtx, s.services.DB(), buildBrandDesignImport(result.Enrichment.Branding)); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed applying brand design to trust center")
 		}
@@ -85,6 +85,7 @@ func (s domainScanSaga) runBrandDesignScan(ctx context.Context, organizationID, 
 	metadata := map[string]any{
 		"url": domain,
 		"branding": domainscan.Branding{
+			Error: result.Enrichment.Branding.Error,
 			Favicon: domainscan.Favicon{
 				URL: result.Enrichment.Branding.FaviconURL,
 			},
@@ -347,7 +348,7 @@ func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organiz
 		return nil
 	}
 
-	if enrichment.Branding == nil {
+	if enrichment.Branding == nil || enrichment.Branding.Error != "" {
 		logx.FromContext(ctx).Info().Msg("domain scan: no brand design found, skipping trust center update")
 
 		return nil

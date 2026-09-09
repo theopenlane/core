@@ -25,6 +25,7 @@ type ResponseFormat struct {
 
 // BrandDesignProfile is the visual branding extracted from a rendered website
 type BrandDesignProfile struct {
+	Error                    string `json:"error,omitempty"`
 	LogoURL                  string `json:"logo_url,omitempty"`
 	FaviconURL               string `json:"favicon_url,omitempty"`
 	PrimaryColor             string `json:"primary_color,omitempty"`
@@ -40,7 +41,7 @@ type BrandDesignProfile struct {
 func (b BrandDesignProfile) IsEmpty() bool {
 	return b.LogoURL == "" && b.FaviconURL == "" && b.PrimaryColor == "" && b.Font == "" && b.ForegroundColor == "" &&
 		b.BackgroundColor == "" && b.AccentColor == "" &&
-		b.SecondaryBackgroundColor == "" && b.SecondaryForegroundColor == ""
+		b.SecondaryBackgroundColor == "" && b.SecondaryForegroundColor == "" && b.Error == ""
 }
 
 // CompanyProfile is the company information extracted from a website by
