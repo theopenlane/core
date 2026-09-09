@@ -6,10 +6,15 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
+	"github.com/theopenlane/core/v2/internal/ent/generated/task"
+	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 )
 
 func (suite *HookTestSuite) TestHookOnboarding() {
@@ -111,6 +116,96 @@ func (suite *HookTestSuite) TestHookOnboarding() {
 			}
 
 			assert.ElementsMatch(t, tc.input.Domains, org.Edges.Setting.Domains)
+		})
+	}
+}
+
+func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
+	t := suite.T()
+
+	admin := suite.seedSystemAdmin()
+	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), suite.client)
+	framework := gofakeit.UUID()
+
+	std, err := suite.client.Standard.Create().SetName(framework).SetShortName(framework).
+		SetFramework(framework).SetIsPublic(true).SetSystemOwned(true).
+		SetStatus(enums.StandardActive).Save(sysCtx)
+	require.NoError(t, err)
+
+	_, err = suite.client.Control.Create().SetStandardID(std.ID).
+		SetSystemOwned(true).SetRefCode("TEST-1").Save(sysCtx)
+	require.NoError(t, err)
+
+	for _, tc := range []struct {
+		name         string
+		compliance   map[string]interface{}
+		programCount int
+		controlCount int
+		expectedErr  string
+	}{
+		{name: "no compliance"},
+		{name: "no frameworks", compliance: map[string]interface{}{"existing_controls": true}},
+		{name: "empty frameworks", compliance: map[string]interface{}{"frameworks": []string{}}},
+		{
+			name:         "single framework",
+			compliance:   map[string]interface{}{"frameworks": []string{framework}},
+			programCount: 1,
+			controlCount: 1,
+		},
+		{
+			name:         "other framework",
+			compliance:   map[string]interface{}{"frameworks": []string{"other"}},
+			programCount: 1,
+		},
+		{
+			name:        "unknown framework",
+			compliance:  map[string]interface{}{"frameworks": []string{"missing-framework"}},
+			expectedErr: "resolve onboarding framework",
+		},
+		{
+			name:        "invalid framework input",
+			compliance:  map[string]interface{}{"frameworks": []interface{}{123}},
+			expectedErr: "invalid onboarding frameworks",
+		},
+	} {
+
+		t.Run(tc.name, func(t *testing.T) {
+			user := suite.seedUser()
+			ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
+			ctx = privacy.DecisionContext(ctx, privacy.Allow)
+
+			onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
+				CompanyName: gofakeit.Company(),
+				Compliance:  tc.compliance,
+			}).Save(ctx)
+
+			if tc.expectedErr != "" {
+				require.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+			require.NoError(t, err)
+
+			programs, err := suite.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).WithControls().All(ctx)
+			require.NoError(t, err)
+			require.Len(t, programs, tc.programCount)
+
+			if tc.programCount > 0 {
+				assert.Len(t, programs[0].Edges.Controls, tc.controlCount)
+			}
+
+			suite.waitForEvents()
+
+			taskCount, err := suite.client.Task.Query().Where(
+				task.OwnerIDEQ(onboarding.OrganizationID),
+				task.SourceKeyEQ("onboarding-"+taskrules.RuleFrameworkGeneric),
+			).Count(ctx)
+			require.NoError(t, err)
+
+			if tc.programCount == 0 {
+				assert.Equal(t, 1, taskCount)
+			} else {
+				assert.Zero(t, taskCount)
+			}
 		})
 	}
 }

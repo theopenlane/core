@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/v2/internal/ent/generated/program"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 	"github.com/theopenlane/iam/auth"
@@ -49,6 +50,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
 
 	// onboarding compliance answers were left blank, so the unanswered-fallback rule fires
 	assert.Contains(t, sourceKeys, "onboarding-"+taskrules.RuleImportTemplateControls)
+	assert.Contains(t, sourceKeys, "onboarding-"+taskrules.RuleFrameworkGeneric)
 }
 
 // TestTaskRuleListenersNotificationTaskOwnerAttribution guards against a suggested task
@@ -103,55 +105,95 @@ func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttributio
 	assert.Empty(t, tasksB)
 }
 
-func (suite *HookTestSuite) TestTaskRuleListenersFrameworkLinkIncludesAuditorParams() {
+func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks() {
 	t := suite.T()
-
 	user := suite.seedUser()
+	ctx := generated.NewContext(auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].OrganizationID), suite.client)
+	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-	userCtx := auth.NewTestContextWithOrgID(user.ID, user.Edges.OrgMemberships[0].ID)
-	userCtx = generated.NewContext(userCtx, suite.client)
-	ctx := privacy.DecisionContext(userCtx, privacy.Allow)
-	ctx = generated.NewContext(ctx, suite.client)
-
-	// the standard must exist before the onboarding mutation fires the listener; the
-	// production catalog is seeded system-wide ahead of any onboarding
 	admin := suite.seedSystemAdmin()
+	sysCtx := generated.NewContext(auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].OrganizationID), suite.client)
 
-	sysCtx := auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].ID)
-	sysCtx = generated.NewContext(sysCtx, suite.client)
+	for _, framework := range []struct {
+		code  string
+		label string
+	}{
+		{code: "soc2", label: "SOC 2"},
+		{code: "iso27001", label: "ISO 27001"},
+	} {
+		std, err := suite.client.Standard.Create().
+			SetSystemOwned(true).
+			SetIsPublic(true).
+			SetFramework(framework.code).
+			SetShortName(framework.label).
+			SetName(framework.label).
+			SetStatus(enums.StandardActive).
+			Save(sysCtx)
+		require.NoError(t, err)
 
-	_, err := suite.client.Standard.Create().
-		SetSystemOwned(true).
-		SetIsPublic(true).
-		SetFramework("iso27001").
-		SetShortName("ISO 27001").
-		SetName("ISO/IEC 27001").
-		SetStatus(enums.StandardActive).
-		Save(sysCtx)
-	require.NoError(t, err)
+		for _, category := range []string{"Security", "Availability", "Confidentiality", "Processing Integrity", "Privacy"} {
+			control, err := suite.client.Control.Create().
+				SetSystemOwned(true).
+				SetStandardID(std.ID).
+				SetRefCode(framework.code + "-" + category).
+				SetCategory(category).
+				Save(sysCtx)
+			require.NoError(t, err)
+
+			_, err = suite.client.Subcontrol.Create().
+				SetSystemOwned(true).
+				SetControlID(control.ID).
+				SetRefCode(control.RefCode + "-1").
+				SetCategory(category).
+				Save(sysCtx)
+			require.NoError(t, err)
+		}
+	}
 
 	onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
-		CompanyName: "Framework Link Co",
+		CompanyName: "Framework Program Co",
 		Compliance: map[string]interface{}{
-			"frameworks":    []interface{}{"soc2", "iso27001"},
+			"frameworks":    []interface{}{"soc2", "iso27001", "soc2"},
 			"auditor_name":  "Jane Doe",
 			"auditor_email": "jane@example.com",
 		},
 	}).Save(ctx)
 	require.NoError(t, err)
 
+	created, err := suite.client.Program.Query().Where(program.OwnerIDEQ(onboarding.OrganizationID)).
+		WithControls(func(q *generated.ControlQuery) { q.WithSubcontrols() }).
+		WithMembers().Only(ctx)
+	require.NoError(t, err)
+	assert.Equal(t, "SOC 2, ISO 27001", created.FrameworkName)
+	assert.Equal(t, "Jane Doe", created.Auditor)
+	assert.Equal(t, "jane@example.com", created.AuditorEmail)
+	require.Len(t, created.Edges.Members, 1)
+	assert.Equal(t, user.ID, created.Edges.Members[0].UserID)
+	assert.Equal(t, enums.RoleAdmin, created.Edges.Members[0].Role)
+
+	refs := make([]string, 0, len(created.Edges.Controls))
+	for _, control := range created.Edges.Controls {
+		refs = append(refs, control.RefCode)
+		assert.Equal(t, onboarding.OrganizationID, control.OwnerID)
+		assert.False(t, control.SystemOwned)
+		require.Len(t, control.Edges.Subcontrols, 1)
+		assert.Equal(t, control.RefCode+"-1", control.Edges.Subcontrols[0].RefCode)
+		assert.Equal(t, onboarding.OrganizationID, control.Edges.Subcontrols[0].OwnerID)
+		assert.Equal(t, control.ID, control.Edges.Subcontrols[0].ControlID)
+	}
+	assert.ElementsMatch(t, []string{
+		"soc2-Security", "iso27001-Security", "iso27001-Availability",
+		"iso27001-Confidentiality", "iso27001-Processing Integrity", "iso27001-Privacy",
+	}, refs)
+
 	suite.waitForEvents()
 
 	tasks, err := suite.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
 	require.NoError(t, err)
-
-	links := make(map[string]string, len(tasks))
+	require.NotEmpty(t, tasks)
 	for _, tk := range tasks {
-		if link, ok := tk.Metadata["link"].(string); ok {
-			links[tk.SourceKey] = link
-		}
+		assert.NotEqual(t, "onboarding-framework-soc2", tk.SourceKey)
+		assert.NotEqual(t, "onboarding-framework-iso27001", tk.SourceKey)
+		assert.NotEqual(t, "onboarding-"+taskrules.RuleFrameworkGeneric, tk.SourceKey)
 	}
-
-	assert.Equal(t, "/programs/create/soc2?onboarding=true&auditorName=Jane Doe&auditorEmail=jane@example.com", links["onboarding-framework-soc2"])
-	assert.Equal(t, "/programs/create/framework-based?onboarding=true&framework=ISO 27001&auditorName=Jane Doe&auditorEmail=jane@example.com", links["onboarding-framework-iso27001"])
 }

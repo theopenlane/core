@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/notification"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
-	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/ent/generated/task"
 	"github.com/theopenlane/core/v2/internal/ent/taskrules"
 	"github.com/theopenlane/core/v2/pkg/celx"
@@ -97,7 +96,7 @@ func handleTaskRuleMutation(inv entityops.Invocation, payload entityops.Mutation
 			continue
 		}
 
-		rendered, err := evaluateRule(inv.Context, inv.Client, fieldRule.Rule, value, placeholders)
+		rendered, err := evaluateRule(inv.Context, fieldRule.Rule, value, placeholders)
 		if err != nil {
 			logx.FromContext(inv.Context).Error().Err(err).Str("rule", fieldRule.Rule.RuleID).Msg("entityops: task rule evaluation failed")
 
@@ -234,10 +233,10 @@ type renderedTask struct {
 }
 
 // evaluateRule evaluates one rule against value: for EachElement rules it expands into one
-// renderedTask per list element, resolving {label} via any registered resolver; for Expression
+// renderedTask per list element; for Expression
 // rules it fires at most one renderedTask when the condition is true. placeholders carries the
 // firing entity's own fields (e.g. {id}, {body}), available regardless of which case fires
-func evaluateRule(ctx context.Context, client *generated.Client, rule entityops.TaskRuleDescriptor, value any, placeholders map[string]string) ([]renderedTask, error) {
+func evaluateRule(ctx context.Context, rule entityops.TaskRuleDescriptor, value any, placeholders map[string]string) ([]renderedTask, error) {
 	tmpl, ok := taskrules.Lookup(rule.RuleID)
 	if !ok {
 		return nil, fmt.Errorf("%w: %s", ErrMissingTaskTemplate, rule.RuleID)
@@ -264,9 +263,8 @@ func evaluateRule(ctx context.Context, client *generated.Client, rule entityops.
 
 		for _, element := range elements {
 			elementValue := fmt.Sprint(element)
-			label := resolveLabel(ctx, client, rule.RuleID, elementValue)
 
-			rendered, err := renderTask(tmpl, rule.RuleID, elementValue, label, placeholders)
+			rendered, err := renderTask(tmpl, rule.RuleID, elementValue, elementValue, placeholders)
 			if err != nil {
 				return nil, err
 			}
@@ -512,50 +510,4 @@ func evaluateCELList(ctx context.Context, expression string, value any) ([]any, 
 	}
 
 	return list, nil
-}
-
-// TaskLabelResolver resolves a human-readable label for one EachElement value filling the {label} placeholder in a task template
-type TaskLabelResolver func(ctx context.Context, client *generated.Client, value string) string
-
-var taskLabelResolvers = map[string]TaskLabelResolver{
-	taskrules.RuleFramework: resolveFrameworkLabel,
-}
-
-// resolveLabel looks up value's label via any resolver registered for ruleID, falling back to
-// value itself when none is registered or the resolver comes up empty
-func resolveLabel(ctx context.Context, client *generated.Client, ruleID, value string) string {
-	resolver, ok := taskLabelResolvers[ruleID]
-	if !ok {
-		return value
-	}
-
-	if label := resolver(ctx, client, value); label != "" {
-		return label
-	}
-
-	return value
-}
-
-// resolveFrameworkLabel resolves a framework code (the value submitted for the "frameworks"
-// onboarding question, see internal/onboarding/catalog.go's getFrameworkOptions) to its display name
-func resolveFrameworkLabel(ctx context.Context, client *generated.Client, value string) string {
-	if client == nil {
-		return value
-	}
-
-	std, err := client.Standard.Query().
-		Where(
-			standard.FrameworkEQ(value),
-			standard.StatusEQ(enums.StandardActive),
-		).
-		First(ctx)
-	if err != nil {
-		return value
-	}
-
-	if std.ShortName != "" {
-		return std.ShortName
-	}
-
-	return std.Name
 }
