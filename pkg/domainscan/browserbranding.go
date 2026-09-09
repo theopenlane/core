@@ -19,7 +19,12 @@ import (
 )
 
 const (
-	brandingCDPReadLimit = 8 << 20
+	brandingCDPReadLimit      = 8 << 20
+	brandingEvaluationTimeout = 10 * time.Second
+	brandingBrowserTimeout    = 75 * time.Second
+	brandingCleanupTimeout    = 10 * time.Second
+	brandingViewportWidth     = 1440
+	brandingViewportHeight    = 900
 
 	brandingPageInfoScript = `(async () => {
   await new Promise(resolve => setTimeout(resolve, 3000));
@@ -71,7 +76,7 @@ func (b *brandDesignCDP) callMethod(ctx context.Context, method string, params a
 		}
 
 		if message.Error != nil {
-			return fmt.Errorf("branding CDP %s (%d): %s", method, message.Error.Code, message.Error.Message)
+			return fmt.Errorf("%w %s (%d): %s", errBrandingCDP, method, message.Error.Code, message.Error.Message)
 		}
 
 		if result == nil {
@@ -146,7 +151,7 @@ func (b *brandDesignCDP) evaluatePageData(ctx context.Context, expression string
 		"expression":    expression,
 		"returnByValue": true,
 		"awaitPromise":  true,
-		"timeout":       10000,
+		"timeout":       brandingEvaluationTimeout.Milliseconds(),
 		// sites like stripe.com block out with csp and we never get the data
 		"allowUnsafeEvalBlockedByCSP": true,
 	}
@@ -156,18 +161,18 @@ func (b *brandDesignCDP) evaluatePageData(ctx context.Context, expression string
 	}
 
 	if len(evaluation.ExceptionDetails) > 0 && string(evaluation.ExceptionDetails) != "null" {
-		return fmt.Errorf("branding probe failed: %s", evaluation.ExceptionDetails)
+		return fmt.Errorf("%w: %s", errBrandingProbe, evaluation.ExceptionDetails)
 	}
 
 	if len(evaluation.Result.Value) == 0 || string(evaluation.Result.Value) == "null" {
-		return fmt.Errorf("branding probe returned no value")
+		return errBrandingProbeNoValue
 	}
 
 	return json.Unmarshal(evaluation.Result.Value, destination)
 }
 
 func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesignProfile, error) {
-	ctx, cancel := context.WithTimeout(ctx, 75*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, brandingBrowserTimeout)
 	defer cancel()
 
 	target, err := urlx.Parse(domain)
@@ -176,7 +181,7 @@ func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesi
 	}
 
 	if target.Scheme != "http" && target.Scheme != "https" {
-		return nil, fmt.Errorf("branding requires an HTTP or HTTPS URL")
+		return nil, errBrandingURLScheme
 	}
 
 	client := cloudflare.NewClient(c.clientOptions()...)
@@ -190,7 +195,7 @@ func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesi
 
 	// make sure to clean up the session
 	defer func() {
-		deleteCtx, deleteCancel := context.WithTimeout(context.WithoutCancel(ctx), 10*time.Second)
+		deleteCtx, deleteCancel := context.WithTimeout(context.WithoutCancel(ctx), brandingCleanupTimeout)
 		defer deleteCancel()
 
 		if _, err := client.BrowserRendering.Devtools.Browser.Delete(deleteCtx, devToolBrowser.SessionID, browser_rendering.DevtoolBrowserDeleteParams{
@@ -203,14 +208,18 @@ func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesi
 	endpoint := fmt.Sprintf("wss://api.cloudflare.com/client/v4/accounts/%s/browser-rendering/devtools/browser/%s",
 		url.PathEscape(c.AccountID), url.PathEscape(devToolBrowser.SessionID))
 
-	conn, _, err := websocket.Dial(ctx, endpoint, &websocket.DialOptions{
+	conn, _, err := websocket.Dial(ctx, endpoint, &websocket.DialOptions{ //nolint:bodyclose
 		HTTPHeader: http.Header{"Authorization": {"Bearer " + c.APIToken}},
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	defer conn.CloseNow()
+	defer func() {
+		if err := conn.CloseNow(); err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Msg("domainscan: failed closing branding websocket")
+		}
+	}()
 	conn.SetReadLimit(brandingCDPReadLimit)
 
 	cdp := &brandDesignCDP{conn: conn, loadedIDs: map[string]bool{}, loadedDocuments: map[string]browser_rendering.JsonNewResponseEnvelopeMeta{}}
@@ -244,7 +253,7 @@ func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesi
 	}
 
 	if err := cdp.callMethod(ctx, "Emulation.setDeviceMetricsOverride", map[string]any{
-		"width": 1440, "height": 900, "deviceScaleFactor": 1, "mobile": false,
+		"width": brandingViewportWidth, "height": brandingViewportHeight, "deviceScaleFactor": 1, "mobile": false,
 	}, nil); err != nil {
 		return nil, err
 	}
@@ -260,11 +269,11 @@ func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesi
 		return nil, err
 	}
 	if navigation.ErrorText != "" {
-		return nil, fmt.Errorf("branding navigation failed: %s", navigation.ErrorText)
+		return nil, fmt.Errorf("%w: %s", errBrandingNavigation, navigation.ErrorText)
 	}
 
 	if navigation.LoaderID == "" {
-		return nil, fmt.Errorf("branding navigation did not load a document")
+		return nil, errBrandingNoDocument
 	}
 
 	for !cdp.loadedIDs[navigation.LoaderID] {
@@ -290,12 +299,12 @@ func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesi
 		return nil, errBrandingBotChallenge
 	}
 
-	if meta.Status >= 400 {
+	if meta.Status >= http.StatusBadRequest {
 		return &BrandDesignProfile{Error: fmt.Sprintf("Branding extraction failed: website returned HTTP %d.", int(meta.Status))}, nil
 	}
 
 	if !strings.HasPrefix(pageInfo.URL, "https://") && !strings.HasPrefix(pageInfo.URL, "http://") {
-		return nil, fmt.Errorf("branding navigation did not reach a website")
+		return nil, errBrandingNoWebsite
 	}
 
 	var branding BrandDesignProfile
