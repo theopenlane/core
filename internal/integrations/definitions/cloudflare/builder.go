@@ -191,7 +191,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					// Disable if the runtime is not provisioned
 					DisabledForAll: !runtime.Provisioned(),
 					// only applied to user created scans, not onboarding scans
-					RateLimit:             &types.RateLimitPolicy{Window: time.Hour},
+					RateLimit:             &types.RateLimitPolicy{Window: time.Hour, Limit: 1000},
 					Handle:                DomainScanRequest{}.Handle(),
 					CustomerSelectable:    lo.ToPtr(false),
 					RequiresPaymentMethod: true,

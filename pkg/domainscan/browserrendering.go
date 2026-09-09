@@ -109,7 +109,7 @@ const brandStyleProbeScript = `(() => {
   }
 
   const bodyStyle = cs(document.body);
-  const mainText = document.querySelector('main p, p, main, body');
+  const mainText = document.querySelector('main p') || document.querySelector('p') || document.querySelector('main') || document.body;
   let foreground = toHex(cs(mainText || document.body).color) || toHex(bodyStyle.color);
 
   // gather accent candidates from interactive elements, weighted so filled button backgrounds
@@ -171,8 +171,10 @@ const brandStyleProbeScript = `(() => {
   // secondary surfaces come from the header or nav and the first card-like element
   const nav = document.querySelector('header, nav');
   const card = Array.from(document.querySelectorAll('[class*="card" i], section, article')).find(el => !isNoise(el) && toHex(cs(el).backgroundColor) && toHex(cs(el).backgroundColor) !== background);
-  const secondary_background = (nav && toHex(cs(nav).backgroundColor) !== background && toHex(cs(nav).backgroundColor)) || (card && toHex(cs(card).backgroundColor)) || '';
-  const secondary_foreground = (nav && toHex(cs(nav).color)) || (card && toHex(cs(card).color)) || '';
+  const navBackground = nav ? toHex(cs(nav).backgroundColor) : '';
+  const secondarySurface = navBackground && navBackground !== background ? nav : card;
+  const secondary_background = secondarySurface ? toHex(cs(secondarySurface).backgroundColor) : '';
+  const secondary_foreground = secondarySurface ? toHex(cs(secondarySurface).color) : '';
 
   // strip next.js style generated family names like __Inter_abc123 and quotes
   const font = (bodyStyle.fontFamily || '').split(',')[0].trim().replace(/^["']|["']$/g, '').replace(/^__([A-Za-z0-9]+?)_[0-9a-f]+$/, '$1').replace(/_/g, ' ');
@@ -498,9 +500,23 @@ func (c *Config) browserRendering(ctx context.Context, target string, kind Promp
 			}
 		}
 
-		resp, err := client.BrowserRendering.Json.New(ctx, params)
+		var envelope browser_rendering.JsonNewResponseEnvelope
+
+		_, err := client.BrowserRendering.Json.New(ctx, params, option.WithResponseBodyInto(&envelope))
 		if err == nil {
-			return resp, nil
+			logx.FromContext(ctx).Debug().
+				Str("url", target).
+				Str("prompt_type", string(kind)).
+				Int("attempt", attempt+1).
+				Float64("origin_status", envelope.Meta.Status).
+				Str("page_title", envelope.Meta.Title).
+				Str("final_url", envelope.Meta.FinalURL).
+				Interface("origin_headers", envelope.Meta.Headers).
+				Interface("redirect_chain", envelope.Meta.RedirectChain).
+				Interface("raw_response", envelope.Result).
+				Msg("domainscan: browser rendering response from cloudflare")
+
+			return &envelope.Result, nil
 		}
 
 		lastErr = err
