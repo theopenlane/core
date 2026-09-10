@@ -429,10 +429,6 @@ func (ec *executionContext) _FindingControlUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNFindingControlBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingControlBulkCreatePayload) graphql.Marshaler {
-	return ec._FindingControlBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFindingControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -441,10 +437,6 @@ func (ec *executionContext) marshalNFindingControlBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._FindingControlBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingControlBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingControlBulkDeletePayload) graphql.Marshaler {
-	return ec._FindingControlBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlBulkDeletePayload) graphql.Marshaler {
@@ -457,10 +449,6 @@ func (ec *executionContext) marshalNFindingControlBulkDeletePayload2ᚖgithubᚗ
 	return ec._FindingControlBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingControlCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingControlCreatePayload) graphql.Marshaler {
-	return ec._FindingControlCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFindingControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -471,10 +459,6 @@ func (ec *executionContext) marshalNFindingControlCreatePayload2ᚖgithubᚗcom�
 	return ec._FindingControlCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingControlDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingControlDeletePayload) graphql.Marshaler {
-	return ec._FindingControlDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFindingControlDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -483,10 +467,6 @@ func (ec *executionContext) marshalNFindingControlDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._FindingControlDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingControlUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingControlUpdatePayload) graphql.Marshaler {
-	return ec._FindingControlUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐFindingControlUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlUpdatePayload) graphql.Marshaler {

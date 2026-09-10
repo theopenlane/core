@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
@@ -408,6 +410,36 @@ func (_c *OrganizationCreate) AddAssetCreators(v ...*Group) *OrganizationCreate 
 		ids[i] = v[i].ID
 	}
 	return _c.AddAssetCreatorIDs(ids...)
+}
+
+// AddAudienceCreatorIDs adds the "audience_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddAudienceCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAudienceCreatorIDs(ids...)
+	return _c
+}
+
+// AddAudienceCreators adds the "audience_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddAudienceCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceCreatorIDs(ids...)
+}
+
+// AddAudienceMemberCreatorIDs adds the "audience_member_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddAudienceMemberCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAudienceMemberCreatorIDs(ids...)
+	return _c
+}
+
+// AddAudienceMemberCreators adds the "audience_member_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddAudienceMemberCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceMemberCreatorIDs(ids...)
 }
 
 // AddCampaignCreatorIDs adds the "campaign_creators" edge to the Group entity by IDs.
@@ -2327,6 +2359,36 @@ func (_c *OrganizationCreate) AddExports(v ...*Export) *OrganizationCreate {
 	return _c.AddExportIDs(ids...)
 }
 
+// AddAudienceIDs adds the "audiences" edge to the Audience entity by IDs.
+func (_c *OrganizationCreate) AddAudienceIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAudienceIDs(ids...)
+	return _c
+}
+
+// AddAudiences adds the "audiences" edges to the Audience entity.
+func (_c *OrganizationCreate) AddAudiences(v ...*Audience) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceIDs(ids...)
+}
+
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_c *OrganizationCreate) AddAudienceMemberIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAudienceMemberIDs(ids...)
+	return _c
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_c *OrganizationCreate) AddAudienceMembers(v ...*AudienceMember) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceMemberIDs(ids...)
+}
+
 // AddTrustCenterWatermarkConfigIDs adds the "trust_center_watermark_configs" edge to the TrustCenterWatermarkConfig entity by IDs.
 func (_c *OrganizationCreate) AddTrustCenterWatermarkConfigIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddTrustCenterWatermarkConfigIDs(ids...)
@@ -2993,6 +3055,38 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.AssetCreatorsTable,
 			Columns: []string{organization.AssetCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceCreatorsTable,
+			Columns: []string{organization.AudienceCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceMemberCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMemberCreatorsTable,
+			Columns: []string{organization.AudienceMemberCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -5037,6 +5131,38 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(export.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudiencesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudiencesTable,
+			Columns: []string{organization.AudiencesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audience.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AudienceMembersTable,
+			Columns: []string{organization.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

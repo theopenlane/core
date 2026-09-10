@@ -9,6 +9,8 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Assessment":                 {models.CatalogComplianceModule},
 	"AssessmentResponse":         {models.CatalogComplianceModule},
 	"Asset":                      {models.CatalogEntityManagementModule, models.CatalogComplianceModule, models.CatalogRegistryModule},
+	"Audience":                   {models.CatalogComplianceModule, models.CatalogTrustCenterModule},
+	"AudienceMember":             {models.CatalogComplianceModule, models.CatalogTrustCenterModule},
 	"Campaign":                   {models.CatalogComplianceModule, models.CatalogTrustCenterModule},
 	"CampaignTarget":             {models.CatalogComplianceModule, models.CatalogTrustCenterModule},
 	"Contact":                    {models.CatalogEntityManagementModule, models.CatalogComplianceModule, models.CatalogRegistryModule},

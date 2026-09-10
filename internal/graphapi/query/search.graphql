@@ -69,6 +69,40 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    audiences {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    audienceMembers {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          email
+          id
+          tags
+        }
+      }
+    }
     campaigns {
       totalCount
       pageInfo {

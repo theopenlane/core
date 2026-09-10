@@ -196,6 +196,7 @@ func (g Group) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(g, Task{}),
 		defaultEdgeFromWithPagination(g, Campaign{}),
 		defaultEdgeToWithPagination(g, CampaignTarget{}),
+		defaultEdgeToWithPagination(g, AudienceMember{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: g,
 			edgeSchema: Invite{},
@@ -214,7 +215,7 @@ func (g Group) Mixin() []ent.Mixin {
 			newOrgOwnedMixin(g),
 			// Add the reverse edges for m:m relationships permissions based on the groups
 			newGroupPermissionsEdgesMixin(
-				withEdges(Program{}, Risk{}, ControlObjective{}, Narrative{}, ControlImplementation{}, ActionPlan{}, Platform{}, Campaign{}),
+				withEdges(Program{}, Risk{}, ControlObjective{}, Narrative{}, ControlImplementation{}, ActionPlan{}, Platform{}, Campaign{}, Audience{}),
 				withEdgesNoView(Procedure{}, InternalPolicy{}, Control{}, MappedControl{}, Scan{}, Entity{}, Finding{}, Review{}, Remediation{}),
 			),
 		},

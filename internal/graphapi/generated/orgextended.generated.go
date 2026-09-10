@@ -181,10 +181,6 @@ func (ec *executionContext) unmarshalNOrgMembersInput2ᚖgithubᚗcomᚋtheopenl
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrganizationTransferOwnershipPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload(ctx context.Context, sel ast.SelectionSet, v model.OrganizationTransferOwnershipPayload) graphql.Marshaler {
-	return ec._OrganizationTransferOwnershipPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrganizationTransferOwnershipPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐOrganizationTransferOwnershipPayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationTransferOwnershipPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

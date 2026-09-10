@@ -471,10 +471,6 @@ func (ec *executionContext) unmarshalNImportDomainScanReviewInput2githubᚗcom�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNImportDomainScanReviewPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPayload(ctx context.Context, sel ast.SelectionSet, v model.ImportDomainScanReviewPayload) graphql.Marshaler {
-	return ec._ImportDomainScanReviewPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNImportDomainScanReviewPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewPayload(ctx context.Context, sel ast.SelectionSet, v *model.ImportDomainScanReviewPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

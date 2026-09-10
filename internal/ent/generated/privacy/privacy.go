@@ -231,6 +231,54 @@ func (f AssetMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mut
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.AssetMutation", m)
 }
 
+// The AudienceQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type AudienceQueryRuleFunc func(context.Context, *generated.AudienceQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f AudienceQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AudienceQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.AudienceQuery", q)
+}
+
+// The AudienceMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type AudienceMutationRuleFunc func(context.Context, *generated.AudienceMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f AudienceMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.AudienceMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.AudienceMutation", m)
+}
+
+// The AudienceMemberQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type AudienceMemberQueryRuleFunc func(context.Context, *generated.AudienceMemberQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f AudienceMemberQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AudienceMemberQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.AudienceMemberQuery", q)
+}
+
+// The AudienceMemberMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type AudienceMemberMutationRuleFunc func(context.Context, *generated.AudienceMemberMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f AudienceMemberMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.AudienceMemberMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.AudienceMemberMutation", m)
+}
+
 // The CampaignQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type CampaignQueryRuleFunc func(context.Context, *generated.CampaignQuery) error
@@ -2556,6 +2604,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.AssetQuery:
 		return q.Filter(), nil
+	case *generated.AudienceQuery:
+		return q.Filter(), nil
+	case *generated.AudienceMemberQuery:
+		return q.Filter(), nil
 	case *generated.CampaignQuery:
 		return q.Filter(), nil
 	case *generated.CampaignTargetQuery:
@@ -2762,6 +2814,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.AssessmentResponseMutation:
 		return m.Filter(), nil
 	case *generated.AssetMutation:
+		return m.Filter(), nil
+	case *generated.AudienceMutation:
+		return m.Filter(), nil
+	case *generated.AudienceMemberMutation:
 		return m.Filter(), nil
 	case *generated.CampaignMutation:
 		return m.Filter(), nil

@@ -27,6 +27,8 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		assessmentResults           *generated.AssessmentConnection
 		assessmentresponseResults   *generated.AssessmentResponseConnection
 		assetResults                *generated.AssetConnection
+		audienceResults             *generated.AudienceConnection
+		audiencememberResults       *generated.AudienceMemberConnection
 		campaignResults             *generated.CampaignConnection
 		campaigntargetResults       *generated.CampaignTargetConnection
 		contactResults              *generated.ContactConnection
@@ -115,6 +117,30 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, assetResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			audienceResults, err = searchAudiences(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, audienceResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			audiencememberResults, err = searchAudienceMembers(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, audiencememberResults, highlightTracker)
 			}
 		},
 		func() {
@@ -571,6 +597,16 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += assetResults.TotalCount
 	}
+	if audienceResults != nil && len(audienceResults.Edges) > 0 {
+		res.Audiences = audienceResults
+
+		res.TotalCount += audienceResults.TotalCount
+	}
+	if audiencememberResults != nil && len(audiencememberResults.Edges) > 0 {
+		res.AudienceMembers = audiencememberResults
+
+		res.TotalCount += audiencememberResults.TotalCount
+	}
 	if campaignResults != nil && len(campaignResults.Edges) > 0 {
 		res.Campaigns = campaignResults
 
@@ -788,6 +824,26 @@ func (r *queryResolver) AssetSearch(ctx context.Context, query string, after *en
 
 	// return the results
 	return assetResults, nil
+}
+func (r *queryResolver) AudienceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AudienceConnection, error) {
+	audienceResults, err := searchAudiences(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return audienceResults, nil
+}
+func (r *queryResolver) AudienceMemberSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.AudienceMemberConnection, error) {
+	audiencememberResults, err := searchAudienceMembers(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, common.ErrSearchFailed
+	}
+
+	// return the results
+	return audiencememberResults, nil
 }
 func (r *queryResolver) CampaignSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CampaignConnection, error) {
 	campaignResults, err := searchCampaigns(ctx, query, after, first, before, last)

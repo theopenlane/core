@@ -86,14 +86,17 @@ type SubscriberEdges struct {
 	Contact *Contact `json:"contact,omitempty"`
 	// User holds the value of the user edge.
 	User *User `json:"user,omitempty"`
+	// AudienceMembers holds the value of the audience_members edge.
+	AudienceMembers []*AudienceMember `json:"audience_members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedEvents          map[string][]*Event
 	namedCampaignTargets map[string][]*CampaignTarget
+	namedAudienceMembers map[string][]*AudienceMember
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -156,6 +159,15 @@ func (e SubscriberEdges) UserOrErr() (*User, error) {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
+}
+
+// AudienceMembersOrErr returns the AudienceMembers value or an error if the edge
+// was not loaded in eager-loading.
+func (e SubscriberEdges) AudienceMembersOrErr() ([]*AudienceMember, error) {
+	if e.loadedTypes[6] {
+		return e.AudienceMembers, nil
+	}
+	return nil, &NotLoadedError{edge: "audience_members"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -374,6 +386,11 @@ func (_m *Subscriber) QueryUser() *UserQuery {
 	return NewSubscriberClient(_m.config).QueryUser(_m)
 }
 
+// QueryAudienceMembers queries the "audience_members" edge of the Subscriber entity.
+func (_m *Subscriber) QueryAudienceMembers() *AudienceMemberQuery {
+	return NewSubscriberClient(_m.config).QueryAudienceMembers(_m)
+}
+
 // Update returns a builder for updating this Subscriber.
 // Note that you need to call Subscriber.Unwrap() before calling this method if this Subscriber
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -519,6 +536,30 @@ func (_m *Subscriber) appendNamedCampaignTargets(name string, edges ...*Campaign
 		_m.Edges.namedCampaignTargets[name] = []*CampaignTarget{}
 	} else {
 		_m.Edges.namedCampaignTargets[name] = append(_m.Edges.namedCampaignTargets[name], edges...)
+	}
+}
+
+// NamedAudienceMembers returns the AudienceMembers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Subscriber) NamedAudienceMembers(name string) ([]*AudienceMember, error) {
+	if _m.Edges.namedAudienceMembers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAudienceMembers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Subscriber) appendNamedAudienceMembers(name string, edges ...*AudienceMember) {
+	if _m.Edges.namedAudienceMembers == nil {
+		_m.Edges.namedAudienceMembers = make(map[string][]*AudienceMember)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAudienceMembers[name] = []*AudienceMember{}
+	} else {
+		_m.Edges.namedAudienceMembers[name] = append(_m.Edges.namedAudienceMembers[name], edges...)
 	}
 }
 

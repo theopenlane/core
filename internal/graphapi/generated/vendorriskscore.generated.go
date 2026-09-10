@@ -583,10 +583,6 @@ func (ec *executionContext) _VendorRiskScoreUpdatePayload(ctx context.Context, s
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNVendorRiskScoreBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkCreatePayload) graphql.Marshaler {
-	return ec._VendorRiskScoreBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorRiskScoreBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNVendorRiskScoreBulkCreatePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._VendorRiskScoreBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorRiskScoreBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkDeletePayload) graphql.Marshaler {
-	return ec._VendorRiskScoreBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorRiskScoreBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNVendorRiskScoreBulkDeletePayload2ᚖgithub�
 	return ec._VendorRiskScoreBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreBulkUpdatePayload) graphql.Marshaler {
-	return ec._VendorRiskScoreBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorRiskScoreBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNVendorRiskScoreBulkUpdatePayload2ᚖgithub�
 		return graphql.Null
 	}
 	return ec._VendorRiskScoreBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorRiskScoreCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreCreatePayload) graphql.Marshaler {
-	return ec._VendorRiskScoreCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorRiskScoreCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNVendorRiskScoreCreatePayload2ᚖgithubᚗcom
 	return ec._VendorRiskScoreCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendorRiskScoreDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreDeletePayload) graphql.Marshaler {
-	return ec._VendorRiskScoreDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorRiskScoreDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNVendorRiskScoreDeletePayload2ᚖgithubᚗcom
 		return graphql.Null
 	}
 	return ec._VendorRiskScoreDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorRiskScoreUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.VendorRiskScoreUpdatePayload) graphql.Marshaler {
-	return ec._VendorRiskScoreUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorRiskScoreUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐVendorRiskScoreUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.VendorRiskScoreUpdatePayload) graphql.Marshaler {

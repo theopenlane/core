@@ -312,10 +312,6 @@ func (ec *executionContext) _CampaignTargetUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNCampaignTargetBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignTargetBulkCreatePayload) graphql.Marshaler {
-	return ec._CampaignTargetBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCampaignTargetBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignTargetBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -324,10 +320,6 @@ func (ec *executionContext) marshalNCampaignTargetBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._CampaignTargetBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCampaignTargetCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignTargetCreatePayload) graphql.Marshaler {
-	return ec._CampaignTargetCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCampaignTargetCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignTargetCreatePayload) graphql.Marshaler {
@@ -340,10 +332,6 @@ func (ec *executionContext) marshalNCampaignTargetCreatePayload2ᚖgithubᚗcom�
 	return ec._CampaignTargetCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCampaignTargetDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignTargetDeletePayload) graphql.Marshaler {
-	return ec._CampaignTargetDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCampaignTargetDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignTargetDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -352,10 +340,6 @@ func (ec *executionContext) marshalNCampaignTargetDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._CampaignTargetDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCampaignTargetUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignTargetUpdatePayload) graphql.Marshaler {
-	return ec._CampaignTargetUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCampaignTargetUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTargetUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignTargetUpdatePayload) graphql.Marshaler {

@@ -3,4 +3,4 @@
 module base
 
 # marker type identifying which build of the model is deployed, see fga/modelversion
-type model_version_e634b59b12ee
+type model_version_4d306e485a5c

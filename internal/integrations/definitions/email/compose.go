@@ -252,6 +252,12 @@ func loadCampaignWithTargets(ctx context.Context, db *generated.Client, input Ca
 		return nil, nil, 0, err
 	}
 
+	if err := snapshotCampaignAudiences(ctx, db, camp); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", input.CampaignID).Msg("failed snapshotting campaign audiences")
+
+		return nil, nil, 0, err
+	}
+
 	targets, err := db.CampaignTarget.Query().
 		Where(campaigntarget.CampaignIDEQ(input.CampaignID)).
 		All(ctx)

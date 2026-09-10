@@ -18,6 +18,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/contact"
@@ -110,6 +112,8 @@ type OrganizationQuery struct {
 	withAPITokenCreators                        *GroupQuery
 	withAssessmentCreators                      *GroupQuery
 	withAssetCreators                           *GroupQuery
+	withAudienceCreators                        *GroupQuery
+	withAudienceMemberCreators                  *GroupQuery
 	withCampaignCreators                        *GroupQuery
 	withCampaignTargetCreators                  *GroupQuery
 	withCheckResultCreators                     *GroupQuery
@@ -237,6 +241,8 @@ type OrganizationQuery struct {
 	withSLADefinitions                          *SLADefinitionQuery
 	withSubprocessors                           *SubprocessorQuery
 	withExports                                 *ExportQuery
+	withAudiences                               *AudienceQuery
+	withAudienceMembers                         *AudienceMemberQuery
 	withTrustCenterWatermarkConfigs             *TrustCenterWatermarkConfigQuery
 	withImpersonationEvents                     *ImpersonationEventQuery
 	withAssessments                             *AssessmentQuery
@@ -270,6 +276,8 @@ type OrganizationQuery struct {
 	withNamedAPITokenCreators                   map[string]*GroupQuery
 	withNamedAssessmentCreators                 map[string]*GroupQuery
 	withNamedAssetCreators                      map[string]*GroupQuery
+	withNamedAudienceCreators                   map[string]*GroupQuery
+	withNamedAudienceMemberCreators             map[string]*GroupQuery
 	withNamedCampaignCreators                   map[string]*GroupQuery
 	withNamedCampaignTargetCreators             map[string]*GroupQuery
 	withNamedCheckResultCreators                map[string]*GroupQuery
@@ -394,6 +402,8 @@ type OrganizationQuery struct {
 	withNamedSLADefinitions                     map[string]*SLADefinitionQuery
 	withNamedSubprocessors                      map[string]*SubprocessorQuery
 	withNamedExports                            map[string]*ExportQuery
+	withNamedAudiences                          map[string]*AudienceQuery
+	withNamedAudienceMembers                    map[string]*AudienceMemberQuery
 	withNamedTrustCenterWatermarkConfigs        map[string]*TrustCenterWatermarkConfigQuery
 	withNamedImpersonationEvents                map[string]*ImpersonationEventQuery
 	withNamedAssessments                        map[string]*AssessmentQuery
@@ -538,6 +548,50 @@ func (_q *OrganizationQuery) QueryAssetCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssetCreatorsTable, organization.AssetCreatorsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAudienceCreators chains the current query on the "audience_creators" edge.
+func (_q *OrganizationQuery) QueryAudienceCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AudienceCreatorsTable, organization.AudienceCreatorsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAudienceMemberCreators chains the current query on the "audience_member_creators" edge.
+func (_q *OrganizationQuery) QueryAudienceMemberCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AudienceMemberCreatorsTable, organization.AudienceMemberCreatorsColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -3339,6 +3393,50 @@ func (_q *OrganizationQuery) QueryExports() *ExportQuery {
 	return query
 }
 
+// QueryAudiences chains the current query on the "audiences" edge.
+func (_q *OrganizationQuery) QueryAudiences() *AudienceQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AudiencesTable, organization.AudiencesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAudienceMembers chains the current query on the "audience_members" edge.
+func (_q *OrganizationQuery) QueryAudienceMembers() *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.AudienceMembersTable, organization.AudienceMembersColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryTrustCenterWatermarkConfigs chains the current query on the "trust_center_watermark_configs" edge.
 func (_q *OrganizationQuery) QueryTrustCenterWatermarkConfigs() *TrustCenterWatermarkConfigQuery {
 	query := (&TrustCenterWatermarkConfigClient{config: _q.config}).Query()
@@ -4129,6 +4227,8 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withAPITokenCreators:                   _q.withAPITokenCreators.Clone(),
 		withAssessmentCreators:                 _q.withAssessmentCreators.Clone(),
 		withAssetCreators:                      _q.withAssetCreators.Clone(),
+		withAudienceCreators:                   _q.withAudienceCreators.Clone(),
+		withAudienceMemberCreators:             _q.withAudienceMemberCreators.Clone(),
 		withCampaignCreators:                   _q.withCampaignCreators.Clone(),
 		withCampaignTargetCreators:             _q.withCampaignTargetCreators.Clone(),
 		withCheckResultCreators:                _q.withCheckResultCreators.Clone(),
@@ -4256,6 +4356,8 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withSLADefinitions:                     _q.withSLADefinitions.Clone(),
 		withSubprocessors:                      _q.withSubprocessors.Clone(),
 		withExports:                            _q.withExports.Clone(),
+		withAudiences:                          _q.withAudiences.Clone(),
+		withAudienceMembers:                    _q.withAudienceMembers.Clone(),
 		withTrustCenterWatermarkConfigs:        _q.withTrustCenterWatermarkConfigs.Clone(),
 		withImpersonationEvents:                _q.withImpersonationEvents.Clone(),
 		withAssessments:                        _q.withAssessments.Clone(),
@@ -4331,6 +4433,28 @@ func (_q *OrganizationQuery) WithAssetCreators(opts ...func(*GroupQuery)) *Organ
 		opt(query)
 	}
 	_q.withAssetCreators = query
+	return _q
+}
+
+// WithAudienceCreators tells the query-builder to eager-load the nodes that are connected to
+// the "audience_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAudienceCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceCreators = query
+	return _q
+}
+
+// WithAudienceMemberCreators tells the query-builder to eager-load the nodes that are connected to
+// the "audience_member_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAudienceMemberCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceMemberCreators = query
 	return _q
 }
 
@@ -5731,6 +5855,28 @@ func (_q *OrganizationQuery) WithExports(opts ...func(*ExportQuery)) *Organizati
 	return _q
 }
 
+// WithAudiences tells the query-builder to eager-load the nodes that are connected to
+// the "audiences" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAudiences(opts ...func(*AudienceQuery)) *OrganizationQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudiences = query
+	return _q
+}
+
+// WithAudienceMembers tells the query-builder to eager-load the nodes that are connected to
+// the "audience_members" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithAudienceMembers(opts ...func(*AudienceMemberQuery)) *OrganizationQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceMembers = query
+	return _q
+}
+
 // WithTrustCenterWatermarkConfigs tells the query-builder to eager-load the nodes that are connected to
 // the "trust_center_watermark_configs" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithTrustCenterWatermarkConfigs(opts ...func(*TrustCenterWatermarkConfigQuery)) *OrganizationQuery {
@@ -6112,11 +6258,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [158]bool{
+		loadedTypes = [162]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
 			_q.withAssetCreators != nil,
+			_q.withAudienceCreators != nil,
+			_q.withAudienceMemberCreators != nil,
 			_q.withCampaignCreators != nil,
 			_q.withCampaignTargetCreators != nil,
 			_q.withCheckResultCreators != nil,
@@ -6244,6 +6392,8 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withSLADefinitions != nil,
 			_q.withSubprocessors != nil,
 			_q.withExports != nil,
+			_q.withAudiences != nil,
+			_q.withAudienceMembers != nil,
 			_q.withTrustCenterWatermarkConfigs != nil,
 			_q.withImpersonationEvents != nil,
 			_q.withAssessments != nil,
@@ -6319,6 +6469,22 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAssetCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.AssetCreators = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.AssetCreators = append(n.Edges.AssetCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAudienceCreators; query != nil {
+		if err := _q.loadAudienceCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.AudienceCreators = []*Group{} },
+			func(n *Organization, e *Group) { n.Edges.AudienceCreators = append(n.Edges.AudienceCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAudienceMemberCreators; query != nil {
+		if err := _q.loadAudienceMemberCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.AudienceMemberCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.AudienceMemberCreators = append(n.Edges.AudienceMemberCreators, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -7296,6 +7462,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withAudiences; query != nil {
+		if err := _q.loadAudiences(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Audiences = []*Audience{} },
+			func(n *Organization, e *Audience) { n.Edges.Audiences = append(n.Edges.Audiences, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAudienceMembers; query != nil {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *Organization) { n.Edges.AudienceMembers = []*AudienceMember{} },
+			func(n *Organization, e *AudienceMember) { n.Edges.AudienceMembers = append(n.Edges.AudienceMembers, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withTrustCenterWatermarkConfigs; query != nil {
 		if err := _q.loadTrustCenterWatermarkConfigs(ctx, query, nodes,
 			func(n *Organization) { n.Edges.TrustCenterWatermarkConfigs = []*TrustCenterWatermarkConfig{} },
@@ -7538,6 +7718,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadAssetCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedAssetCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedAssetCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceCreators {
+		if err := _q.loadAudienceCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAudienceCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedAudienceCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceMemberCreators {
+		if err := _q.loadAudienceMemberCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAudienceMemberCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedAudienceMemberCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -8409,6 +8603,20 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	for name, query := range _q.withNamedAudiences {
+		if err := _q.loadAudiences(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAudiences(name) },
+			func(n *Organization, e *Audience) { n.appendNamedAudiences(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceMembers {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedAudienceMembers(name) },
+			func(n *Organization, e *AudienceMember) { n.appendNamedAudienceMembers(name, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedTrustCenterWatermarkConfigs {
 		if err := _q.loadTrustCenterWatermarkConfigs(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedTrustCenterWatermarkConfigs(name) },
@@ -8727,6 +8935,68 @@ func (_q *OrganizationQuery) loadAssetCreators(ctx context.Context, query *Group
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_asset_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadAudienceCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AudienceCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_audience_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_audience_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_audience_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadAudienceMemberCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AudienceMemberCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_audience_member_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_audience_member_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_audience_member_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -12756,6 +13026,66 @@ func (_q *OrganizationQuery) loadExports(ctx context.Context, query *ExportQuery
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadAudiences(ctx context.Context, query *AudienceQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Audience)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(audience.FieldOwnerID)
+	}
+	query.Where(predicate.Audience(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AudiencesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadAudienceMembers(ctx context.Context, query *AudienceMemberQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *AudienceMember)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(audiencemember.FieldOwnerID)
+	}
+	query.Where(predicate.AudienceMember(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.AudienceMembersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadTrustCenterWatermarkConfigs(ctx context.Context, query *TrustCenterWatermarkConfigQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *TrustCenterWatermarkConfig)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -13727,6 +14057,34 @@ func (_q *OrganizationQuery) WithNamedAssetCreators(name string, opts ...func(*G
 		_q.withNamedAssetCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedAssetCreators[name] = query
+	return _q
+}
+
+// WithNamedAudienceCreators tells the query-builder to eager-load the nodes that are connected to the "audience_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAudienceCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceCreators == nil {
+		_q.withNamedAudienceCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedAudienceCreators[name] = query
+	return _q
+}
+
+// WithNamedAudienceMemberCreators tells the query-builder to eager-load the nodes that are connected to the "audience_member_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAudienceMemberCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceMemberCreators == nil {
+		_q.withNamedAudienceMemberCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedAudienceMemberCreators[name] = query
 	return _q
 }
 
@@ -15463,6 +15821,34 @@ func (_q *OrganizationQuery) WithNamedExports(name string, opts ...func(*ExportQ
 		_q.withNamedExports = make(map[string]*ExportQuery)
 	}
 	_q.withNamedExports[name] = query
+	return _q
+}
+
+// WithNamedAudiences tells the query-builder to eager-load the nodes that are connected to the "audiences"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAudiences(name string, opts ...func(*AudienceQuery)) *OrganizationQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudiences == nil {
+		_q.withNamedAudiences = make(map[string]*AudienceQuery)
+	}
+	_q.withNamedAudiences[name] = query
+	return _q
+}
+
+// WithNamedAudienceMembers tells the query-builder to eager-load the nodes that are connected to the "audience_members"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedAudienceMembers(name string, opts ...func(*AudienceMemberQuery)) *OrganizationQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceMembers == nil {
+		_q.withNamedAudienceMembers = make(map[string]*AudienceMemberQuery)
+	}
+	_q.withNamedAudienceMembers[name] = query
 	return _q
 }
 

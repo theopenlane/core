@@ -583,10 +583,6 @@ func (ec *executionContext) _SLADefinitionUpdatePayload(ctx context.Context, sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNSLADefinitionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SLADefinitionBulkCreatePayload) graphql.Marshaler {
-	return ec._SLADefinitionBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSLADefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNSLADefinitionBulkCreatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._SLADefinitionBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSLADefinitionBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SLADefinitionBulkDeletePayload) graphql.Marshaler {
-	return ec._SLADefinitionBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSLADefinitionBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNSLADefinitionBulkDeletePayload2ᚖgithubᚗc
 	return ec._SLADefinitionBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSLADefinitionBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.SLADefinitionBulkUpdatePayload) graphql.Marshaler {
-	return ec._SLADefinitionBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSLADefinitionBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNSLADefinitionBulkUpdatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._SLADefinitionBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSLADefinitionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.SLADefinitionCreatePayload) graphql.Marshaler {
-	return ec._SLADefinitionCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSLADefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNSLADefinitionCreatePayload2ᚖgithubᚗcom�
 	return ec._SLADefinitionCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSLADefinitionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.SLADefinitionDeletePayload) graphql.Marshaler {
-	return ec._SLADefinitionDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSLADefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNSLADefinitionDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._SLADefinitionDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSLADefinitionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.SLADefinitionUpdatePayload) graphql.Marshaler {
-	return ec._SLADefinitionUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSLADefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSLADefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.SLADefinitionUpdatePayload) graphql.Marshaler {

@@ -312,10 +312,6 @@ func (ec *executionContext) _TrustCenterWatermarkConfigUpdatePayload(ctx context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigCreatePayload) graphql.Marshaler {
-	return ec._TrustCenterWatermarkConfigCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -326,10 +322,6 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2ᚖg
 	return ec._TrustCenterWatermarkConfigCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigDeletePayload) graphql.Marshaler {
-	return ec._TrustCenterWatermarkConfigDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -338,10 +330,6 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2ᚖg
 		return graphql.Null
 	}
 	return ec._TrustCenterWatermarkConfigDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterWatermarkConfigUpdatePayload) graphql.Marshaler {
-	return ec._TrustCenterWatermarkConfigUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterWatermarkConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigUpdatePayload) graphql.Marshaler {

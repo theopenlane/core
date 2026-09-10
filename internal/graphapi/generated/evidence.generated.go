@@ -583,10 +583,6 @@ func (ec *executionContext) _EvidenceUpdatePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNEvidenceBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkCreatePayload) graphql.Marshaler {
-	return ec._EvidenceBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEvidenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNEvidenceBulkCreatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._EvidenceBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEvidenceBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkDeletePayload) graphql.Marshaler {
-	return ec._EvidenceBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEvidenceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNEvidenceBulkDeletePayload2ᚖgithubᚗcomᚋ
 	return ec._EvidenceBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceBulkUpdatePayload) graphql.Marshaler {
-	return ec._EvidenceBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNEvidenceBulkUpdatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._EvidenceBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEvidenceCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceCreatePayload) graphql.Marshaler {
-	return ec._EvidenceCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEvidenceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNEvidenceCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._EvidenceCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNEvidenceDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceDeletePayload) graphql.Marshaler {
-	return ec._EvidenceDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEvidenceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNEvidenceDeletePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._EvidenceDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEvidenceUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.EvidenceUpdatePayload) graphql.Marshaler {
-	return ec._EvidenceUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.EvidenceUpdatePayload) graphql.Marshaler {

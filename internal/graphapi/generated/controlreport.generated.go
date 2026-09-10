@@ -2003,10 +2003,6 @@ func (ec *executionContext) marshalNControlReportCategory2ᚖgithubᚗcomᚋtheo
 	return ec._ControlReportCategory(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlReportConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportConnection(ctx context.Context, sel ast.SelectionSet, v model.ControlReportConnection) graphql.Marshaler {
-	return ec._ControlReportConnection(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlReportConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlReportConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlReportConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

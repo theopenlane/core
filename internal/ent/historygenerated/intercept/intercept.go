@@ -14,6 +14,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/audiencehistory"
+	"github.com/theopenlane/core/v2/internal/ent/historygenerated/audiencememberhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/v2/internal/ent/historygenerated/contacthistory"
@@ -241,6 +243,60 @@ func (f TraverseAssetHistory) Traverse(ctx context.Context, q historygenerated.Q
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *historygenerated.AssetHistoryQuery", q)
+}
+
+// The AudienceHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AudienceHistoryFunc func(context.Context, *historygenerated.AudienceHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f AudienceHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.AudienceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.AudienceHistoryQuery", q)
+}
+
+// The TraverseAudienceHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAudienceHistory func(context.Context, *historygenerated.AudienceHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAudienceHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAudienceHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.AudienceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.AudienceHistoryQuery", q)
+}
+
+// The AudienceMemberHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AudienceMemberHistoryFunc func(context.Context, *historygenerated.AudienceMemberHistoryQuery) (historygenerated.Value, error)
+
+// Query calls f(ctx, q).
+func (f AudienceMemberHistoryFunc) Query(ctx context.Context, q historygenerated.Query) (historygenerated.Value, error) {
+	if q, ok := q.(*historygenerated.AudienceMemberHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *historygenerated.AudienceMemberHistoryQuery", q)
+}
+
+// The TraverseAudienceMemberHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAudienceMemberHistory func(context.Context, *historygenerated.AudienceMemberHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAudienceMemberHistory) Intercept(next historygenerated.Querier) historygenerated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAudienceMemberHistory) Traverse(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.AudienceMemberHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *historygenerated.AudienceMemberHistoryQuery", q)
 }
 
 // The CampaignHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -1928,6 +1984,10 @@ func NewQuery(q historygenerated.Query) (Query, error) {
 		return &query[*historygenerated.AssessmentResponseHistoryQuery, predicate.AssessmentResponseHistory, assessmentresponsehistory.OrderOption]{typ: historygenerated.TypeAssessmentResponseHistory, tq: q}, nil
 	case *historygenerated.AssetHistoryQuery:
 		return &query[*historygenerated.AssetHistoryQuery, predicate.AssetHistory, assethistory.OrderOption]{typ: historygenerated.TypeAssetHistory, tq: q}, nil
+	case *historygenerated.AudienceHistoryQuery:
+		return &query[*historygenerated.AudienceHistoryQuery, predicate.AudienceHistory, audiencehistory.OrderOption]{typ: historygenerated.TypeAudienceHistory, tq: q}, nil
+	case *historygenerated.AudienceMemberHistoryQuery:
+		return &query[*historygenerated.AudienceMemberHistoryQuery, predicate.AudienceMemberHistory, audiencememberhistory.OrderOption]{typ: historygenerated.TypeAudienceMemberHistory, tq: q}, nil
 	case *historygenerated.CampaignHistoryQuery:
 		return &query[*historygenerated.CampaignHistoryQuery, predicate.CampaignHistory, campaignhistory.OrderOption]{typ: historygenerated.TypeCampaignHistory, tq: q}, nil
 	case *historygenerated.CampaignTargetHistoryQuery:

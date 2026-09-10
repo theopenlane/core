@@ -15,6 +15,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/v2/internal/audiences"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
@@ -188,7 +189,7 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 		SetOwnerID(tc.OrganizationID).
 		SetEmail("ada@example.com").
 		SetFullName("Ada Lovelace").
-		SetMetadata(map[string]any{email.MetadataUnsubscribeTokenKey: "tok_ada"}).
+		SetMetadata(map[string]any{audiences.MetadataUnsubscribeTokenKey: "tok_ada"}).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
@@ -197,7 +198,7 @@ func TestTrustCenterCampaignDispatchBranding(t *testing.T) {
 		SetOwnerID(tc.OrganizationID).
 		SetEmail("grace@example.com").
 		SetFullName("Grace Hopper").
-		SetMetadata(map[string]any{email.MetadataUnsubscribeTokenKey: "tok_grace"}).
+		SetMetadata(map[string]any{audiences.MetadataUnsubscribeTokenKey: "tok_grace"}).
 		Save(dbCtx)
 	assert.NilError(t, err)
 

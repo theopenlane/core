@@ -17,6 +17,8 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/v2/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audience"
+	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/checkresult"
@@ -177,6 +179,8 @@ func checkColumn(t, c string) error {
 			assessment.Table:                 assessment.ValidColumn,
 			assessmentresponse.Table:         assessmentresponse.ValidColumn,
 			asset.Table:                      asset.ValidColumn,
+			audience.Table:                   audience.ValidColumn,
+			audiencemember.Table:             audiencemember.ValidColumn,
 			campaign.Table:                   campaign.ValidColumn,
 			campaigntarget.Table:             campaigntarget.ValidColumn,
 			checkresult.Table:                checkresult.ValidColumn,
