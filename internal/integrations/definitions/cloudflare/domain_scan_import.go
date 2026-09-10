@@ -284,7 +284,7 @@ func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated
 		brandDesign.SecondaryForegroundColor,
 	}
 
-	// check if this new palette imports have atleast one valid color code
+	// check if this new palette imports have at least one valid color code
 	hasAcceptedColor := lo.SomeBy(palettes, func(color string) bool {
 		color = strings.TrimSpace(color)
 		return color != "" && validator.HexColorValidator(color) == nil
