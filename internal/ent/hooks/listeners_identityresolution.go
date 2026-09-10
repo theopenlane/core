@@ -21,9 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
-// init registers the identity resolution listeners so gala setup picks them up automatically
-func init() { registerListeners(IdentityResolutionListeners) }
-
 // IdentityResolutionListeners resolves directory accounts to identity holders after mutations commit
 func IdentityResolutionListeners() []gala.Registration {
 	return []gala.Registration{

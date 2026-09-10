@@ -57,7 +57,7 @@ func HookOnboarding() ent.Hook {
 			}
 
 			compliance, _ := m.Compliance()
-			if err := createProgram(ctx, m.Client(), org, compliance); err != nil {
+			if _, _, err := resolveOnboardingStandards(ctx, m.Client(), org.ID, compliance); err != nil {
 				return nil, err
 			}
 
