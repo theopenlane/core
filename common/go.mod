@@ -11,7 +11,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.12.1
-	github.com/theopenlane/core/v2 v2.4.2
+	github.com/theopenlane/core/v2 v2.4.5
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.33.5
 	github.com/theopenlane/utils v0.7.1

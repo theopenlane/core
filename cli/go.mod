@@ -3,7 +3,7 @@ module github.com/theopenlane/core/cli
 go 1.27.1
 
 require (
-	github.com/99designs/gqlgen v0.17.94
+	github.com/99designs/gqlgen v0.17.95
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/goccy/go-yaml v1.19.2
@@ -18,10 +18,10 @@ require (
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core/common v1.1.0
-	github.com/theopenlane/core/v2 v2.4.2
+	github.com/theopenlane/core/v2 v2.4.5
 	github.com/theopenlane/go-client v0.14.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.38.1
+	github.com/theopenlane/iam v0.38.2
 	github.com/theopenlane/utils v0.7.1
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/term v0.45.0
@@ -59,6 +59,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/knadh/koanf/maps v0.1.2 // indirect
 	github.com/labstack/echo/v5 v5.3.1 // indirect
+	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/lestrrat-go/blackmagic v1.0.4 // indirect
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
 	github.com/lestrrat-go/httprc/v3 v3.0.6 // indirect
@@ -86,6 +87,7 @@ require (
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/stoewer/go-strcase v1.3.1 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect
+	github.com/theopenlane/logx v0.1.0 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fastjson v1.6.10 // indirect
