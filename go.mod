@@ -16,7 +16,7 @@ require (
 	cloud.google.com/go/securitycenter v1.46.0
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6
-	github.com/99designs/gqlgen v0.17.94
+	github.com/99designs/gqlgen v0.17.95
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.23.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.14.1
@@ -85,7 +85,7 @@ require (
 	github.com/olekukonko/tablewriter v1.1.4
 	github.com/openfga/go-sdk v0.8.2
 	github.com/openfga/language/pkg/go v0.3.2-0.20260730144454-83fedf8a4e70
-	github.com/oracle/oci-go-sdk/v65 v65.124.0
+	github.com/oracle/oci-go-sdk/v65 v65.124.1
 	github.com/pdfcpu/pdfcpu v0.15.0
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
@@ -119,7 +119,7 @@ require (
 	github.com/theopenlane/go-client v0.14.0
 	github.com/theopenlane/gqlgen-plugins v0.18.0
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.38.1
+	github.com/theopenlane/iam v0.38.2
 	github.com/theopenlane/newman v0.4.3
 	github.com/theopenlane/riverboat v0.14.0
 	github.com/theopenlane/utils v0.7.1
@@ -129,7 +129,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/wundergraph/astjson v1.1.0
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/yuin/goldmark v1.8.5
+	github.com/yuin/goldmark v1.8.6
 	github.com/zitadel/oidc/v3 v3.49.4
 	github.com/zitadel/zitadel-go/v3 v3.29.3
 	goauthentik.io/api/v3 v3.2026020.16
@@ -348,6 +348,7 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tailscale/hujson v0.0.0-20220506213045-af5ed07155e5 // indirect
 	github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0 // indirect
+	github.com/theopenlane/logx v0.1.0 // indirect
 	github.com/theopenlane/oscalot v0.1.0 // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
