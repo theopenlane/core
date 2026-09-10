@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -64,45 +66,45 @@ type controlReportTestData struct {
 func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControlID, secondaryControlID, tertiaryControlID, controlOwnerGroupID string) *controlReportTestData {
 	t.Helper()
 
-	sc := (&SubcontrolBuilder{client: suite.client, ControlID: primaryControlID}).MustNew(ctx, t)
+	sc := (&th.SubcontrolBuilder{Client: suite.Client, ControlID: primaryControlID}).MustNew(ctx, t)
 
-	ev := (&EvidenceBuilder{client: suite.client, ControlID: primaryControlID}).MustNew(ctx, t)
-	(&EvidenceBuilder{
-		client:    suite.client,
+	ev := (&th.EvidenceBuilder{Client: suite.Client, ControlID: primaryControlID}).MustNew(ctx, t)
+	(&th.EvidenceBuilder{
+		Client:    suite.Client,
 		ControlID: primaryControlID,
 		Status:    lo.ToPtr(enums.EvidenceStatusAuditorApproved),
 	}).MustNew(ctx, t)
 
-	policy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
-	dbCtx := setContext(ctx, suite.client.db)
-	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(policy.ID).AddControlIDs(primaryControlID).Exec(dbCtx))
+	policy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
+	dbCtx := th.SetContext(ctx, suite.Client.DB)
+	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(policy.ID).AddControlIDs(primaryControlID).Exec(dbCtx))
 
 	// forward: primary → secondary
-	forward := (&MappedControlBuilder{
-		client:         suite.client,
+	forward := (&th.MappedControlBuilder{
+		Client:         suite.Client,
 		FromControlIDs: []string{primaryControlID},
 		ToControlIDs:   []string{secondaryControlID},
 	}).MustNew(ctx, t)
 
 	// reverse: secondary → primary (secondary now appears in two MappedControl records;
 	// processMappedControlResults deduplicates via the refCode::framework map key)
-	reverse := (&MappedControlBuilder{
-		client:         suite.client,
+	reverse := (&th.MappedControlBuilder{
+		Client:         suite.Client,
 		FromControlIDs: []string{secondaryControlID},
 		ToControlIDs:   []string{primaryControlID},
 	}).MustNew(ctx, t)
 
 	// tertiary: primary → tertiary (distinct ref code, adds one more unique related control)
-	tertiary := (&MappedControlBuilder{
-		client:         suite.client,
+	tertiary := (&th.MappedControlBuilder{
+		Client:         suite.Client,
 		FromControlIDs: []string{primaryControlID},
 		ToControlIDs:   []string{tertiaryControlID},
 	}).MustNew(ctx, t)
 
 	// control → subcontrol mapping: a subcontrol of tertiary is mapped directly to primary
-	scOfTertiary := (&SubcontrolBuilder{client: suite.client, ControlID: tertiaryControlID}).MustNew(ctx, t)
-	(&MappedControlBuilder{
-		client:          suite.client,
+	scOfTertiary := (&th.SubcontrolBuilder{Client: suite.Client, ControlID: tertiaryControlID}).MustNew(ctx, t)
+	(&th.MappedControlBuilder{
+		Client:          suite.Client,
 		FromControlIDs:  []string{primaryControlID},
 		ToSubcontrolIDs: []string{scOfTertiary.ID},
 	}).MustNew(ctx, t)
@@ -112,35 +114,35 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 	sysRefB := ulids.New().String()
 	sysFramework := lo.ToPtr("SOC 2")
 
-	sysControlA := (&ControlBuilder{
-		client:             suite.client,
+	sysControlA := (&th.ControlBuilder{
+		Client:             suite.Client,
 		RefCode:            sysRefA,
 		ReferenceFramework: sysFramework,
-	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
-	sysControlB := (&ControlBuilder{
-		client:             suite.client,
+	sysControlB := (&th.ControlBuilder{
+		Client:             suite.Client,
 		RefCode:            sysRefB,
 		ReferenceFramework: sysFramework,
-	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	// system-owned mapped control linking sysControlA → sysControlB
-	sysMap := (&MappedControlBuilder{
-		client:         suite.client,
+	sysMap := (&th.MappedControlBuilder{
+		Client:         suite.Client,
 		FromControlIDs: []string{sysControlA.ID},
 		ToControlIDs:   []string{sysControlB.ID},
-	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	// org-owned controls that mirror the system controls by refCode+framework;
 	// getOrgMappedControlsInfo resolves sysControlB's refCode to orgTgt
-	orgSrc := (&ControlBuilder{
-		client:             suite.client,
+	orgSrc := (&th.ControlBuilder{
+		Client:             suite.Client,
 		RefCode:            sysRefA,
 		ReferenceFramework: sysFramework,
 	}).MustNew(ctx, t)
 
-	orgTgt := (&ControlBuilder{
-		client:             suite.client,
+	orgTgt := (&th.ControlBuilder{
+		Client:             suite.Client,
 		RefCode:            sysRefB,
 		ReferenceFramework: sysFramework,
 	}).MustNew(ctx, t)
@@ -166,30 +168,30 @@ func seedControlReportTestData(ctx context.Context, t *testing.T, primaryControl
 func TestQueryControlReports(t *testing.T) {
 	t.Parallel()
 
-	localTestOrg := suite.seedFreshOrgUsers(t)
-	orgUser := suite.seedOrgOwner(t)
+	localTestOrg := suite.SeedFreshOrgUsers(t)
+	orgUser := suite.SeedOrgOwner(t)
 
 	// create 8 filler controls first (oldest) so that the enriched controls and the
 	// system-mapping controls created inside the seed fall in the first page (CreatedAt DESC)
 	for range 8 {
-		(&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+		(&th.ControlBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
 	}
 
 	// system-owned controls must not appear in controlReports results (resolver filters SystemOwned: false);
 	// the hook sets system_owned = true automatically when it sees a system admin caller
 	for range 3 {
-		(&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+		(&th.ControlBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 	}
 
 	// create primary/secondary/tertiary after the fillers so they appear in the first page
-	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
-	primary := (&ControlBuilder{client: suite.client, ControlOwnerID: ownerGroup.ID}).MustNew(localTestOrg.owner.UserCtx, t)
-	secondary := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
-	tertiary := (&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	ownerGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
+	primary := (&th.ControlBuilder{Client: suite.Client, ControlOwnerID: ownerGroup.ID}).MustNew(localTestOrg.Owner.UserCtx, t)
+	secondary := (&th.ControlBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
+	tertiary := (&th.ControlBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
 
 	// seed adds 2 more org controls (sysMapOrgSource, sysMapOrgTarget) → 8+3+2 = 13 total
 	orgOwnedCount := int64(13)
-	richData := seedControlReportTestData(localTestOrg.owner.UserCtx, t, primary.ID, secondary.ID, tertiary.ID, ownerGroup.ID)
+	richData := seedControlReportTestData(localTestOrg.Owner.UserCtx, t, primary.ID, secondary.ID, tertiary.ID, ownerGroup.ID)
 
 	testCases := []struct {
 		name            string
@@ -200,36 +202,36 @@ func TestQueryControlReports(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			ctx:             localTestOrg.owner.UserCtx,
+			ctx:             localTestOrg.Owner.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "happy path, with first set",
 			first:           lo.ToPtr(int64(5)),
-			ctx:             localTestOrg.owner.UserCtx,
+			ctx:             localTestOrg.Owner.UserCtx,
 			expectedResults: 5,
 		},
 		{
 			name:            "happy path, with last set by admin",
 			last:            lo.ToPtr(int64(3)),
-			ctx:             localTestOrg.admin.UserCtx,
+			ctx:             localTestOrg.Admin.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:            "first set over max (10 in test) by member",
 			first:           &orgOwnedCount,
-			ctx:             localTestOrg.member.UserCtx,
+			ctx:             localTestOrg.Member.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "last set over max (10 in test) by auditor",
 			last:            &orgOwnedCount,
-			ctx:             localTestOrg.auditor.UserCtx,
+			ctx:             localTestOrg.Auditor.UserCtx,
 			expectedResults: testutils.MaxResultLimit,
 		},
 		{
 			name:            "another org, no results returned",
-			ctx:             orgUser.owner.UserCtx,
+			ctx:             orgUser.Owner.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -237,7 +239,7 @@ func TestQueryControlReports(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
 			if tc.first != nil || tc.last != nil {
-				resp, err := suite.client.api.GetControlReports(tc.ctx, tc.first, tc.last, nil, nil, nil, nil)
+				resp, err := suite.Client.API.GetControlReports(tc.ctx, tc.first, tc.last, nil, nil, nil, nil)
 				assert.NilError(t, err)
 				assert.Check(t, resp != nil)
 
@@ -253,7 +255,7 @@ func TestQueryControlReports(t *testing.T) {
 				return
 			}
 
-			resp, err := suite.client.api.GetAllControlReports(tc.ctx)
+			resp, err := suite.Client.API.GetAllControlReports(tc.ctx)
 			assert.NilError(t, err)
 			assert.Check(t, resp != nil)
 
@@ -322,33 +324,33 @@ func TestQueryControlReports(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
-	cleanupOrganizationDataWithContext(orgUser.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(orgUser.Owner.UserCtx, t)
 }
 
 func TestQueryControlReportsByCategory(t *testing.T) {
 	t.Parallel()
 
-	localTestOrg := suite.seedOrgOwner(t)
-	orgUser := suite.seedOrgOwner(t)
+	localTestOrg := suite.SeedOrgOwner(t)
+	orgUser := suite.SeedOrgOwner(t)
 
 	cat1 := "Access Control"
 	cat2 := "Availability"
 
-	ownerGroup := (&GroupBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
-	control1 := (&ControlBuilder{client: suite.client, Category: cat1, ControlOwnerID: ownerGroup.ID}).MustNew(localTestOrg.owner.UserCtx, t)
-	control2 := (&ControlBuilder{client: suite.client, Category: cat1}).MustNew(localTestOrg.owner.UserCtx, t)
-	control3 := (&ControlBuilder{client: suite.client, Category: cat2}).MustNew(localTestOrg.owner.UserCtx, t)
-	(&ControlBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	ownerGroup := (&th.GroupBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
+	control1 := (&th.ControlBuilder{Client: suite.Client, Category: cat1, ControlOwnerID: ownerGroup.ID}).MustNew(localTestOrg.Owner.UserCtx, t)
+	control2 := (&th.ControlBuilder{Client: suite.Client, Category: cat1}).MustNew(localTestOrg.Owner.UserCtx, t)
+	control3 := (&th.ControlBuilder{Client: suite.Client, Category: cat2}).MustNew(localTestOrg.Owner.UserCtx, t)
+	(&th.ControlBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
 
 	// system-owned controls must not appear in results regardless of category;
 	// the hook sets system_owned = true automatically when it sees a system admin caller
-	(&ControlBuilder{client: suite.client, Category: cat1}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	(&ControlBuilder{client: suite.client, Category: cat2}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	(&th.ControlBuilder{Client: suite.Client, Category: cat1}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	(&th.ControlBuilder{Client: suite.Client, Category: cat2}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	// enrich control1 with associated data so enrichment paths are exercised;
 	// control3 is used as the tertiary to confirm a second unique related control
-	richData := seedControlReportTestData(localTestOrg.owner.UserCtx, t, control1.ID, control2.ID, control3.ID, ownerGroup.ID)
+	richData := seedControlReportTestData(localTestOrg.Owner.UserCtx, t, control1.ID, control2.ID, control3.ID, ownerGroup.ID)
 
 	testCases := []struct {
 		name               string
@@ -358,25 +360,25 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 	}{
 		{
 			name:               "happy path, returns all categories including uncategorized",
-			ctx:                localTestOrg.owner.UserCtx,
+			ctx:                localTestOrg.Owner.UserCtx,
 			expectedCategories: 3,
 		},
 		{
 			name:               "happy path, filter by category",
-			ctx:                localTestOrg.owner.UserCtx,
+			ctx:                localTestOrg.Owner.UserCtx,
 			where:              &testclient.ControlWhereInput{Category: lo.ToPtr(cat1)},
 			expectedCategories: 1,
 		},
 		{
 			name:               "another org, no categories returned",
-			ctx:                orgUser.owner.UserCtx,
+			ctx:                orgUser.Owner.UserCtx,
 			expectedCategories: 0,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("List "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.GetControlReportsByCategory(tc.ctx, tc.where)
+			resp, err := suite.Client.API.GetControlReportsByCategory(tc.ctx, tc.where)
 			assert.NilError(t, err)
 			assert.Check(t, resp != nil)
 
@@ -452,8 +454,8 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
-	cleanupOrganizationDataWithContext(orgUser.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(orgUser.Owner.UserCtx, t)
 }
 
 // TestControlReportRelatedControlsScoping verifies two properties of relatedControls (and the
@@ -469,42 +471,42 @@ func TestQueryControlReportsByCategory(t *testing.T) {
 func TestControlReportRelatedControlsScoping(t *testing.T) {
 	t.Parallel()
 
-	org := suite.seedOrgOwner(t)
-	ctx := org.owner.UserCtx
+	org := suite.SeedOrgOwner(t)
+	ctx := org.Owner.UserCtx
 
 	// sibA and sibB share the from-side of one mapping; target is its lone to-side control
-	sibA := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
-	sibB := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
-	target := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	sibA := (&th.ControlBuilder{Client: suite.Client}).MustNew(ctx, t)
+	sibB := (&th.ControlBuilder{Client: suite.Client}).MustNew(ctx, t)
+	target := (&th.ControlBuilder{Client: suite.Client}).MustNew(ctx, t)
 	// hop2 is a second hop reachable only by chasing target's mapping transitively
-	hop2 := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	hop2 := (&th.ControlBuilder{Client: suite.Client}).MustNew(ctx, t)
 
 	// mapping 1: [sibA, sibB] -> [target]
-	(&MappedControlBuilder{
-		client:         suite.client,
+	(&th.MappedControlBuilder{
+		Client:         suite.Client,
 		FromControlIDs: []string{sibA.ID, sibB.ID},
 		ToControlIDs:   []string{target.ID},
 	}).MustNew(ctx, t)
 
 	// mapping 2: [target] -> [hop2]
-	(&MappedControlBuilder{
-		client:         suite.client,
+	(&th.MappedControlBuilder{
+		Client:         suite.Client,
 		FromControlIDs: []string{target.ID},
 		ToControlIDs:   []string{hop2.ID},
 	}).MustNew(ctx, t)
 
 	// the sibling and the transitive hop each get a distinct linked policy; target's own policy
 	// lets us prove only the direct related control's policy surfaces on sibA
-	siblingPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
-	transitivePolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
-	targetPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
+	siblingPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
+	transitivePolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
+	targetPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
 
-	dbCtx := setContext(ctx, suite.client.db)
-	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(siblingPolicy.ID).AddControlIDs(sibB.ID).Exec(dbCtx))
-	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(transitivePolicy.ID).AddControlIDs(hop2.ID).Exec(dbCtx))
-	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(targetPolicy.ID).AddControlIDs(target.ID).Exec(dbCtx))
+	dbCtx := th.SetContext(ctx, suite.Client.DB)
+	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(siblingPolicy.ID).AddControlIDs(sibB.ID).Exec(dbCtx))
+	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(transitivePolicy.ID).AddControlIDs(hop2.ID).Exec(dbCtx))
+	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(targetPolicy.ID).AddControlIDs(target.ID).Exec(dbCtx))
 
-	resp, err := suite.client.api.GetAllControlReports(ctx)
+	resp, err := suite.Client.API.GetAllControlReports(ctx)
 	assert.NilError(t, err)
 	assert.Check(t, resp != nil)
 
@@ -535,46 +537,46 @@ func TestControlReportRelatedControlsScoping(t *testing.T) {
 
 	assert.Check(t, checkedSibA)
 
-	cleanupOrganizationDataWithContext(ctx, t)
+	th.CleanupOrganizationDataWithContext(ctx, t)
 }
 
 func TestControlReportInheritedRelatedControls(t *testing.T) {
 	t.Parallel()
 
-	org := suite.seedOrgOwner(t)
-	ctx := org.owner.UserCtx
+	org := suite.SeedOrgOwner(t)
+	ctx := org.Owner.UserCtx
 
-	parent := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
-	sub := (&SubcontrolBuilder{client: suite.client, ControlID: parent.ID}).MustNew(ctx, t)
+	parent := (&th.ControlBuilder{Client: suite.Client}).MustNew(ctx, t)
+	sub := (&th.SubcontrolBuilder{Client: suite.Client, ControlID: parent.ID}).MustNew(ctx, t)
 
-	inheritedTarget := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
-	directTarget := (&ControlBuilder{client: suite.client}).MustNew(ctx, t)
+	inheritedTarget := (&th.ControlBuilder{Client: suite.Client}).MustNew(ctx, t)
+	directTarget := (&th.ControlBuilder{Client: suite.Client}).MustNew(ctx, t)
 
-	(&MappedControlBuilder{
-		client:            suite.client,
+	(&th.MappedControlBuilder{
+		Client:            suite.Client,
 		FromSubcontrolIDs: []string{sub.ID},
 		ToControlIDs:      []string{inheritedTarget.ID},
 	}).MustNew(ctx, t)
 
-	(&MappedControlBuilder{
-		client:         suite.client,
+	(&th.MappedControlBuilder{
+		Client:         suite.Client,
 		FromControlIDs: []string{parent.ID},
 		ToControlIDs:   []string{directTarget.ID},
 	}).MustNew(ctx, t)
 
-	(&MappedControlBuilder{
-		client:            suite.client,
+	(&th.MappedControlBuilder{
+		Client:            suite.Client,
 		FromSubcontrolIDs: []string{sub.ID},
 		ToControlIDs:      []string{directTarget.ID},
 	}).MustNew(ctx, t)
 
 	// the inherited target carries a policy; it should surface on the parent's linkedPolicies
 	// because inheritance runs before the policy aggregation
-	inheritedPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(ctx, t)
-	dbCtx := setContext(ctx, suite.client.db)
-	requireNoError(t, suite.client.db.InternalPolicy.UpdateOneID(inheritedPolicy.ID).AddControlIDs(inheritedTarget.ID).Exec(dbCtx))
+	inheritedPolicy := (&th.InternalPolicyBuilder{Client: suite.Client}).MustNew(ctx, t)
+	dbCtx := th.SetContext(ctx, suite.Client.DB)
+	th.RequireNoError(t, suite.Client.DB.InternalPolicy.UpdateOneID(inheritedPolicy.ID).AddControlIDs(inheritedTarget.ID).Exec(dbCtx))
 
-	resp, err := suite.client.api.GetAllControlReports(ctx)
+	resp, err := suite.Client.API.GetAllControlReports(ctx)
 	assert.NilError(t, err)
 	assert.Check(t, resp != nil)
 
@@ -610,5 +612,5 @@ func TestControlReportInheritedRelatedControls(t *testing.T) {
 
 	assert.Check(t, checkedParent)
 
-	cleanupOrganizationDataWithContext(ctx, t)
+	th.CleanupOrganizationDataWithContext(ctx, t)
 }

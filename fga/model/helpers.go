@@ -4,6 +4,7 @@ import (
 	_ "embed"
 	"encoding/json"
 	"maps"
+	"regexp"
 	"slices"
 	"sort"
 	"strings"
@@ -29,6 +30,26 @@ var embeddedCrudModel []byte
 
 //go:embed roles/roles.fga
 var embeddedRolesModel []byte
+
+//go:embed generated/version.fga
+var embeddedVersionModel []byte
+
+// versionMarkerPattern matches the generated marker type in the version file
+var versionMarkerPattern = regexp.MustCompile(`(?m)^type (model_version_[a-f0-9]+)$`)
+
+// ErrNoVersionMarker is returned when the embedded version file carries no marker type
+var ErrNoVersionMarker = errors.New("no fga model version marker found, run task fga:generate:version")
+
+// VersionMarker returns the marker type name stamped into the model shipped with this build,
+// which identifies the model in the fga store that matches this build
+func VersionMarker() (string, error) {
+	match := versionMarkerPattern.FindSubmatch(embeddedVersionModel)
+	if match == nil {
+		return "", ErrNoVersionMarker
+	}
+
+	return string(match[1]), nil
+}
 
 var (
 	// CanView allows read-only access to an object

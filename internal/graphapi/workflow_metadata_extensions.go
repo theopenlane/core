@@ -213,7 +213,7 @@ func resolveOrgIntegrationAvailability(ctx context.Context, db *ent.Client) *org
 	installations, err := db.Integration.Query().
 		Where(
 			integration.OwnerIDEQ(ownerID),
-			integration.StatusEQ(enums.IntegrationStatusConnected),
+			integration.StatusIn(enums.IntegrationOperationalStatuses...),
 		).All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("failed querying integrations for workflow metadata availability")

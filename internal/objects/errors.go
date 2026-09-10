@@ -27,4 +27,6 @@ var (
 	ErrNoIntegrationWithSecrets = errors.New("no active integration with secrets found")
 	// ErrMissingFileID is returned when file ID is required but missing
 	ErrMissingFileID = errors.New("file id required for presigned URL")
+	// ErrMissingFile is returned when the file is nul
+	ErrMissingFile = errors.New("file is not set")
 )

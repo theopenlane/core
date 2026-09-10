@@ -61,10 +61,10 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 	for subs := range stripeSubsStatuses {
 		it := r.stripe.Client.V1Subscriptions.List(ctx, &stripe.SubscriptionListParams{
 			ListParams: stripe.ListParams{
-				Limit:  stripe.Int64(defaultStripePageLimit),
-				Expand: []*string{stripe.String("data.schedule")},
+				Limit: stripe.Int64(defaultStripePageLimit),
 			},
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
+			Expand: []*string{stripe.String("data.schedule")},
 		})
 
 		for sub, err := range it.All(ctx) {
@@ -164,10 +164,10 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 	for subs := range stripeSubsStatuses {
 		it := r.stripe.Client.V1Subscriptions.List(ctx, &stripe.SubscriptionListParams{
 			ListParams: stripe.ListParams{
-				Limit:  stripe.Int64(defaultStripePageLimit),
-				Expand: []*string{stripe.String("data.schedule")},
+				Limit: stripe.Int64(defaultStripePageLimit),
 			},
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
+			Expand: []*string{stripe.String("data.schedule")},
 		})
 		for sub, err := range it.All(ctx) {
 			if err != nil {
@@ -331,9 +331,7 @@ func (r *Reconciler) ReportSubscriptionsWithMissingProducts(ctx context.Context,
 			if item.Price != nil && item.Price.ID != "" {
 				// Fetch price with product data
 				priceObj, err := r.stripe.Client.V1Prices.Retrieve(ctx, item.Price.ID, &stripe.PriceRetrieveParams{
-					Params: stripe.Params{
-						Expand: []*string{stripe.String("product")},
-					},
+					Expand: []*string{stripe.String("product")},
 				})
 				if err != nil || priceObj == nil || priceObj.Product == nil {
 					continue

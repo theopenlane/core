@@ -134,55 +134,56 @@ type AssessmentResponseProjection struct {
 // the full generated.Asset whose edge graph cannot be reflected
 type AssetProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                          string           `json:"id,omitempty"`
-	AccessModelID               string           `json:"access_model_id,omitempty"`
-	AccessModelName             string           `json:"access_model_name,omitempty"`
-	AssetDataClassificationID   string           `json:"asset_data_classification_id,omitempty"`
-	AssetDataClassificationName string           `json:"asset_data_classification_name,omitempty"`
-	AssetSubtypeID              string           `json:"asset_subtype_id,omitempty"`
-	AssetSubtypeName            string           `json:"asset_subtype_name,omitempty"`
-	AssetType                   enums.AssetType  `json:"asset_type,omitempty"`
-	Categories                  []string         `json:"categories,omitempty"`
-	ContainsPii                 bool             `json:"contains_pii,omitempty"`
-	CostCenter                  string           `json:"cost_center,omitempty"`
-	Cpe                         string           `json:"cpe,omitempty"`
-	CreatedAt                   time.Time        `json:"created_at,omitempty"`
-	CreatedBy                   string           `json:"created_by,omitempty"`
-	CriticalityID               string           `json:"criticality_id,omitempty"`
-	CriticalityName             string           `json:"criticality_name,omitempty"`
-	Description                 string           `json:"description,omitempty"`
-	DisplayName                 string           `json:"display_name,omitempty"`
-	EncryptionStatusID          string           `json:"encryption_status_id,omitempty"`
-	EncryptionStatusName        string           `json:"encryption_status_name,omitempty"`
-	EnvironmentID               string           `json:"environment_id,omitempty"`
-	EnvironmentName             string           `json:"environment_name,omitempty"`
-	EstimatedMonthlyCost        float64          `json:"estimated_monthly_cost,omitempty"`
-	Identifier                  string           `json:"identifier,omitempty"`
-	IntegrationID               string           `json:"integration_id,omitempty"`
-	InternalNotes               string           `json:"internal_notes,omitempty"`
-	InternalOwner               string           `json:"internal_owner,omitempty"`
-	InternalOwnerGroupID        string           `json:"internal_owner_group_id,omitempty"`
-	InternalOwnerUserID         string           `json:"internal_owner_user_id,omitempty"`
-	Name                        string           `json:"name,omitempty"`
-	ObservedAt                  models.DateTime  `json:"observed_at,omitempty"`
-	OwnerID                     string           `json:"owner_id,omitempty"`
-	PhysicalLocation            string           `json:"physical_location,omitempty"`
-	PurchaseDate                models.DateTime  `json:"purchase_date,omitempty"`
-	Region                      string           `json:"region,omitempty"`
-	ScopeID                     string           `json:"scope_id,omitempty"`
-	ScopeName                   string           `json:"scope_name,omitempty"`
-	SecurityTierID              string           `json:"security_tier_id,omitempty"`
-	SecurityTierName            string           `json:"security_tier_name,omitempty"`
-	SourceIdentifier            string           `json:"source_identifier,omitempty"`
-	SourcePlatformID            string           `json:"source_platform_id,omitempty"`
-	SourceType                  enums.SourceType `json:"source_type,omitempty"`
-	SystemInternalID            string           `json:"system_internal_id,omitempty"`
-	SystemOwned                 bool             `json:"system_owned,omitempty"`
-	Tags                        []string         `json:"tags,omitempty"`
-	UpdatedAt                   time.Time        `json:"updated_at,omitempty"`
-	UpdatedBy                   string           `json:"updated_by,omitempty"`
-	UpdatedByImpersonator       string           `json:"updated_by_impersonator,omitempty"`
-	Website                     string           `json:"website,omitempty"`
+	ID                            string           `json:"id,omitempty"`
+	AccessModelID                 string           `json:"access_model_id,omitempty"`
+	AccessModelName               string           `json:"access_model_name,omitempty"`
+	AssetDataClassificationID     string           `json:"asset_data_classification_id,omitempty"`
+	AssetDataClassificationName   string           `json:"asset_data_classification_name,omitempty"`
+	AssetSubtypeID                string           `json:"asset_subtype_id,omitempty"`
+	AssetSubtypeName              string           `json:"asset_subtype_name,omitempty"`
+	AssetType                     enums.AssetType  `json:"asset_type,omitempty"`
+	Categories                    []string         `json:"categories,omitempty"`
+	ContainsPii                   bool             `json:"contains_pii,omitempty"`
+	CostCenter                    string           `json:"cost_center,omitempty"`
+	Cpe                           string           `json:"cpe,omitempty"`
+	CreatedAt                     time.Time        `json:"created_at,omitempty"`
+	CreatedBy                     string           `json:"created_by,omitempty"`
+	CriticalityID                 string           `json:"criticality_id,omitempty"`
+	CriticalityName               string           `json:"criticality_name,omitempty"`
+	Description                   string           `json:"description,omitempty"`
+	DisplayName                   string           `json:"display_name,omitempty"`
+	EncryptionStatusID            string           `json:"encryption_status_id,omitempty"`
+	EncryptionStatusName          string           `json:"encryption_status_name,omitempty"`
+	EnvironmentID                 string           `json:"environment_id,omitempty"`
+	EnvironmentName               string           `json:"environment_name,omitempty"`
+	EstimatedMonthlyCost          float64          `json:"estimated_monthly_cost,omitempty"`
+	Identifier                    string           `json:"identifier,omitempty"`
+	IntegrationID                 string           `json:"integration_id,omitempty"`
+	InternalNotes                 string           `json:"internal_notes,omitempty"`
+	InternalOwner                 string           `json:"internal_owner,omitempty"`
+	InternalOwnerGroupID          string           `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID string           `json:"internal_owner_identity_holder_id,omitempty"`
+	InternalOwnerUserID           string           `json:"internal_owner_user_id,omitempty"`
+	Name                          string           `json:"name,omitempty"`
+	ObservedAt                    models.DateTime  `json:"observed_at,omitempty"`
+	OwnerID                       string           `json:"owner_id,omitempty"`
+	PhysicalLocation              string           `json:"physical_location,omitempty"`
+	PurchaseDate                  models.DateTime  `json:"purchase_date,omitempty"`
+	Region                        string           `json:"region,omitempty"`
+	ScopeID                       string           `json:"scope_id,omitempty"`
+	ScopeName                     string           `json:"scope_name,omitempty"`
+	SecurityTierID                string           `json:"security_tier_id,omitempty"`
+	SecurityTierName              string           `json:"security_tier_name,omitempty"`
+	SourceIdentifier              string           `json:"source_identifier,omitempty"`
+	SourcePlatformID              string           `json:"source_platform_id,omitempty"`
+	SourceType                    enums.SourceType `json:"source_type,omitempty"`
+	SystemInternalID              string           `json:"system_internal_id,omitempty"`
+	SystemOwned                   bool             `json:"system_owned,omitempty"`
+	Tags                          []string         `json:"tags,omitempty"`
+	UpdatedAt                     time.Time        `json:"updated_at,omitempty"`
+	UpdatedBy                     string           `json:"updated_by,omitempty"`
+	UpdatedByImpersonator         string           `json:"updated_by_impersonator,omitempty"`
+	Website                       string           `json:"website,omitempty"`
 }
 
 // AudienceMemberProjection is the flat, CEL- and jsonschema-facing view of a AudienceMember: its
@@ -217,47 +218,48 @@ type AudienceMemberProjection struct {
 // the full generated.Campaign whose edge graph cannot be reflected
 type CampaignProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                     string                 `json:"id,omitempty"`
-	AssessmentID           string                 `json:"assessment_id,omitempty"`
-	CampaignType           enums.CampaignType     `json:"campaign_type,omitempty"`
-	CompletedAt            models.DateTime        `json:"completed_at,omitempty"`
-	CreatedAt              time.Time              `json:"created_at,omitempty"`
-	CreatedBy              string                 `json:"created_by,omitempty"`
-	Description            string                 `json:"description,omitempty"`
-	DisplayID              string                 `json:"display_id,omitempty"`
-	DueDate                models.DateTime        `json:"due_date,omitempty"`
-	EmailBrandingID        string                 `json:"email_branding_id,omitempty"`
-	EmailTemplateID        string                 `json:"email_template_id,omitempty"`
-	EntityID               string                 `json:"entity_id,omitempty"`
-	IntegrationID          string                 `json:"integration_id,omitempty"`
-	InternalOwner          string                 `json:"internal_owner,omitempty"`
-	InternalOwnerGroupID   string                 `json:"internal_owner_group_id,omitempty"`
-	InternalOwnerUserID    string                 `json:"internal_owner_user_id,omitempty"`
-	IsActive               bool                   `json:"is_active,omitempty"`
-	IsRecurring            bool                   `json:"is_recurring,omitempty"`
-	LastResentAt           models.DateTime        `json:"last_resent_at,omitempty"`
-	LastRunAt              models.DateTime        `json:"last_run_at,omitempty"`
-	LaunchedAt             models.DateTime        `json:"launched_at,omitempty"`
-	Metadata               map[string]interface{} `json:"metadata,omitempty"`
-	Name                   string                 `json:"name,omitempty"`
-	NextRunAt              models.DateTime        `json:"next_run_at,omitempty"`
-	OwnerID                string                 `json:"owner_id,omitempty"`
-	RecipientCount         int                    `json:"recipient_count,omitempty"`
-	RecurrenceCron         models.Cron            `json:"recurrence_cron,omitempty"`
-	RecurrenceEndAt        models.DateTime        `json:"recurrence_end_at,omitempty"`
-	RecurrenceFrequency    enums.Frequency        `json:"recurrence_frequency,omitempty"`
-	RecurrenceInterval     int                    `json:"recurrence_interval,omitempty"`
-	RecurrenceTimezone     string                 `json:"recurrence_timezone,omitempty"`
-	ResendCount            int                    `json:"resend_count,omitempty"`
-	ScheduledAt            models.DateTime        `json:"scheduled_at,omitempty"`
-	Status                 enums.CampaignStatus   `json:"status,omitempty"`
-	Tags                   []string               `json:"tags,omitempty"`
-	TemplateID             string                 `json:"template_id,omitempty"`
-	TrustCenterID          string                 `json:"trust_center_id,omitempty"`
-	UpdatedAt              time.Time              `json:"updated_at,omitempty"`
-	UpdatedBy              string                 `json:"updated_by,omitempty"`
-	UpdatedByImpersonator  string                 `json:"updated_by_impersonator,omitempty"`
-	WorkflowEligibleMarker bool                   `json:"workflow_eligible_marker,omitempty"`
+	ID                            string                 `json:"id,omitempty"`
+	AssessmentID                  string                 `json:"assessment_id,omitempty"`
+	CampaignType                  enums.CampaignType     `json:"campaign_type,omitempty"`
+	CompletedAt                   models.DateTime        `json:"completed_at,omitempty"`
+	CreatedAt                     time.Time              `json:"created_at,omitempty"`
+	CreatedBy                     string                 `json:"created_by,omitempty"`
+	Description                   string                 `json:"description,omitempty"`
+	DisplayID                     string                 `json:"display_id,omitempty"`
+	DueDate                       models.DateTime        `json:"due_date,omitempty"`
+	EmailBrandingID               string                 `json:"email_branding_id,omitempty"`
+	EmailTemplateID               string                 `json:"email_template_id,omitempty"`
+	EntityID                      string                 `json:"entity_id,omitempty"`
+	IntegrationID                 string                 `json:"integration_id,omitempty"`
+	InternalOwner                 string                 `json:"internal_owner,omitempty"`
+	InternalOwnerGroupID          string                 `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID string                 `json:"internal_owner_identity_holder_id,omitempty"`
+	InternalOwnerUserID           string                 `json:"internal_owner_user_id,omitempty"`
+	IsActive                      bool                   `json:"is_active,omitempty"`
+	IsRecurring                   bool                   `json:"is_recurring,omitempty"`
+	LastResentAt                  models.DateTime        `json:"last_resent_at,omitempty"`
+	LastRunAt                     models.DateTime        `json:"last_run_at,omitempty"`
+	LaunchedAt                    models.DateTime        `json:"launched_at,omitempty"`
+	Metadata                      map[string]interface{} `json:"metadata,omitempty"`
+	Name                          string                 `json:"name,omitempty"`
+	NextRunAt                     models.DateTime        `json:"next_run_at,omitempty"`
+	OwnerID                       string                 `json:"owner_id,omitempty"`
+	RecipientCount                int                    `json:"recipient_count,omitempty"`
+	RecurrenceCron                models.Cron            `json:"recurrence_cron,omitempty"`
+	RecurrenceEndAt               models.DateTime        `json:"recurrence_end_at,omitempty"`
+	RecurrenceFrequency           enums.Frequency        `json:"recurrence_frequency,omitempty"`
+	RecurrenceInterval            int                    `json:"recurrence_interval,omitempty"`
+	RecurrenceTimezone            string                 `json:"recurrence_timezone,omitempty"`
+	ResendCount                   int                    `json:"resend_count,omitempty"`
+	ScheduledAt                   models.DateTime        `json:"scheduled_at,omitempty"`
+	Status                        enums.CampaignStatus   `json:"status,omitempty"`
+	Tags                          []string               `json:"tags,omitempty"`
+	TemplateID                    string                 `json:"template_id,omitempty"`
+	TrustCenterID                 string                 `json:"trust_center_id,omitempty"`
+	UpdatedAt                     time.Time              `json:"updated_at,omitempty"`
+	UpdatedBy                     string                 `json:"updated_by,omitempty"`
+	UpdatedByImpersonator         string                 `json:"updated_by_impersonator,omitempty"`
+	WorkflowEligibleMarker        bool                   `json:"workflow_eligible_marker,omitempty"`
 }
 
 // CampaignTargetProjection is the flat, CEL- and jsonschema-facing view of a CampaignTarget: its
@@ -716,6 +718,7 @@ type EntityProjection struct {
 	InternalNotes                         string                 `json:"internal_notes,omitempty"`
 	InternalOwner                         string                 `json:"internal_owner,omitempty"`
 	InternalOwnerGroupID                  string                 `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID         string                 `json:"internal_owner_identity_holder_id,omitempty"`
 	InternalOwnerUserID                   string                 `json:"internal_owner_user_id,omitempty"`
 	LastReviewedAt                        models.DateTime        `json:"last_reviewed_at,omitempty"`
 	LinkedAssetIds                        []string               `json:"linked_asset_ids,omitempty"`
@@ -733,6 +736,7 @@ type EntityProjection struct {
 	ReviewFrequency                       enums.Frequency        `json:"review_frequency,omitempty"`
 	ReviewedBy                            string                 `json:"reviewed_by,omitempty"`
 	ReviewedByGroupID                     string                 `json:"reviewed_by_group_id,omitempty"`
+	ReviewedByIdentityHolderID            string                 `json:"reviewed_by_identity_holder_id,omitempty"`
 	ReviewedByUserID                      string                 `json:"reviewed_by_user_id,omitempty"`
 	RiskRating                            string                 `json:"risk_rating,omitempty"`
 	RiskScore                             int                    `json:"risk_score,omitempty"`
@@ -875,68 +879,70 @@ type FileProjection struct {
 // the full generated.Finding whose edge graph cannot be reflected
 type FindingProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                     string                 `json:"id,omitempty"`
-	AssessmentID           string                 `json:"assessment_id,omitempty"`
-	AssignedTo             string                 `json:"assigned_to,omitempty"`
-	AssignedToGroupID      string                 `json:"assigned_to_group_id,omitempty"`
-	AssignedToUserID       string                 `json:"assigned_to_user_id,omitempty"`
-	BlocksProduction       bool                   `json:"blocks_production,omitempty"`
-	Categories             []string               `json:"categories,omitempty"`
-	Category               string                 `json:"category,omitempty"`
-	CreatedAt              time.Time              `json:"created_at,omitempty"`
-	CreatedBy              string                 `json:"created_by,omitempty"`
-	Description            string                 `json:"description,omitempty"`
-	DisplayID              string                 `json:"display_id,omitempty"`
-	DisplayName            string                 `json:"display_name,omitempty"`
-	EnvironmentID          string                 `json:"environment_id,omitempty"`
-	EnvironmentName        string                 `json:"environment_name,omitempty"`
-	EventTime              models.DateTime        `json:"event_time,omitempty"`
-	Exploitability         float64                `json:"exploitability,omitempty"`
-	ExternalID             string                 `json:"external_id,omitempty"`
-	ExternalOwnerID        string                 `json:"external_owner_id,omitempty"`
-	ExternalURI            string                 `json:"external_uri,omitempty"`
-	FindingClass           string                 `json:"finding_class,omitempty"`
-	FindingStatusID        string                 `json:"finding_status_id,omitempty"`
-	FindingStatusName      string                 `json:"finding_status_name,omitempty"`
-	Impact                 float64                `json:"impact,omitempty"`
-	InternalNotes          string                 `json:"internal_notes,omitempty"`
-	Metadata               map[string]interface{} `json:"metadata,omitempty"`
-	NumericSeverity        float64                `json:"numeric_severity,omitempty"`
-	Open                   bool                   `json:"open,omitempty"`
-	OwnerID                string                 `json:"owner_id,omitempty"`
-	Priority               string                 `json:"priority,omitempty"`
-	Production             bool                   `json:"production,omitempty"`
-	Public                 bool                   `json:"public,omitempty"`
-	RawPayload             map[string]interface{} `json:"raw_payload,omitempty"`
-	Recommendation         string                 `json:"recommendation,omitempty"`
-	RecommendedActions     string                 `json:"recommended_actions,omitempty"`
-	References             []string               `json:"references,omitempty"`
-	RemediationSLA         int                    `json:"remediation_sla,omitempty"`
-	ReportedAt             models.DateTime        `json:"reported_at,omitempty"`
-	ResourceName           string                 `json:"resource_name,omitempty"`
-	ReviewedBy             string                 `json:"reviewed_by,omitempty"`
-	ReviewedByGroupID      string                 `json:"reviewed_by_group_id,omitempty"`
-	ReviewedByUserID       string                 `json:"reviewed_by_user_id,omitempty"`
-	ScopeID                string                 `json:"scope_id,omitempty"`
-	ScopeName              string                 `json:"scope_name,omitempty"`
-	Score                  float64                `json:"score,omitempty"`
-	SecurityLevel          enums.SecurityLevel    `json:"security_level,omitempty"`
-	Severity               string                 `json:"severity,omitempty"`
-	Source                 string                 `json:"source,omitempty"`
-	SourceUpdatedAt        models.DateTime        `json:"source_updated_at,omitempty"`
-	State                  string                 `json:"state,omitempty"`
-	StepsToReproduce       []string               `json:"steps_to_reproduce,omitempty"`
-	SystemInternalID       string                 `json:"system_internal_id,omitempty"`
-	SystemOwned            bool                   `json:"system_owned,omitempty"`
-	Tags                   []string               `json:"tags,omitempty"`
-	TargetDetails          map[string]interface{} `json:"target_details,omitempty"`
-	Targets                []string               `json:"targets,omitempty"`
-	UpdatedAt              time.Time              `json:"updated_at,omitempty"`
-	UpdatedBy              string                 `json:"updated_by,omitempty"`
-	UpdatedByImpersonator  string                 `json:"updated_by_impersonator,omitempty"`
-	Validated              bool                   `json:"validated,omitempty"`
-	Vector                 string                 `json:"vector,omitempty"`
-	WorkflowEligibleMarker bool                   `json:"workflow_eligible_marker,omitempty"`
+	ID                         string                 `json:"id,omitempty"`
+	AssessmentID               string                 `json:"assessment_id,omitempty"`
+	AssignedTo                 string                 `json:"assigned_to,omitempty"`
+	AssignedToGroupID          string                 `json:"assigned_to_group_id,omitempty"`
+	AssignedToIdentityHolderID string                 `json:"assigned_to_identity_holder_id,omitempty"`
+	AssignedToUserID           string                 `json:"assigned_to_user_id,omitempty"`
+	BlocksProduction           bool                   `json:"blocks_production,omitempty"`
+	Categories                 []string               `json:"categories,omitempty"`
+	Category                   string                 `json:"category,omitempty"`
+	CreatedAt                  time.Time              `json:"created_at,omitempty"`
+	CreatedBy                  string                 `json:"created_by,omitempty"`
+	Description                string                 `json:"description,omitempty"`
+	DisplayID                  string                 `json:"display_id,omitempty"`
+	DisplayName                string                 `json:"display_name,omitempty"`
+	EnvironmentID              string                 `json:"environment_id,omitempty"`
+	EnvironmentName            string                 `json:"environment_name,omitempty"`
+	EventTime                  models.DateTime        `json:"event_time,omitempty"`
+	Exploitability             float64                `json:"exploitability,omitempty"`
+	ExternalID                 string                 `json:"external_id,omitempty"`
+	ExternalOwnerID            string                 `json:"external_owner_id,omitempty"`
+	ExternalURI                string                 `json:"external_uri,omitempty"`
+	FindingClass               string                 `json:"finding_class,omitempty"`
+	FindingStatusID            string                 `json:"finding_status_id,omitempty"`
+	FindingStatusName          string                 `json:"finding_status_name,omitempty"`
+	Impact                     float64                `json:"impact,omitempty"`
+	InternalNotes              string                 `json:"internal_notes,omitempty"`
+	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
+	NumericSeverity            float64                `json:"numeric_severity,omitempty"`
+	Open                       bool                   `json:"open,omitempty"`
+	OwnerID                    string                 `json:"owner_id,omitempty"`
+	Priority                   string                 `json:"priority,omitempty"`
+	Production                 bool                   `json:"production,omitempty"`
+	Public                     bool                   `json:"public,omitempty"`
+	RawPayload                 map[string]interface{} `json:"raw_payload,omitempty"`
+	Recommendation             string                 `json:"recommendation,omitempty"`
+	RecommendedActions         string                 `json:"recommended_actions,omitempty"`
+	References                 []string               `json:"references,omitempty"`
+	RemediationSLA             int                    `json:"remediation_sla,omitempty"`
+	ReportedAt                 models.DateTime        `json:"reported_at,omitempty"`
+	ResourceName               string                 `json:"resource_name,omitempty"`
+	ReviewedBy                 string                 `json:"reviewed_by,omitempty"`
+	ReviewedByGroupID          string                 `json:"reviewed_by_group_id,omitempty"`
+	ReviewedByIdentityHolderID string                 `json:"reviewed_by_identity_holder_id,omitempty"`
+	ReviewedByUserID           string                 `json:"reviewed_by_user_id,omitempty"`
+	ScopeID                    string                 `json:"scope_id,omitempty"`
+	ScopeName                  string                 `json:"scope_name,omitempty"`
+	Score                      float64                `json:"score,omitempty"`
+	SecurityLevel              enums.SecurityLevel    `json:"security_level,omitempty"`
+	Severity                   string                 `json:"severity,omitempty"`
+	Source                     string                 `json:"source,omitempty"`
+	SourceUpdatedAt            models.DateTime        `json:"source_updated_at,omitempty"`
+	State                      string                 `json:"state,omitempty"`
+	StepsToReproduce           []string               `json:"steps_to_reproduce,omitempty"`
+	SystemInternalID           string                 `json:"system_internal_id,omitempty"`
+	SystemOwned                bool                   `json:"system_owned,omitempty"`
+	Tags                       []string               `json:"tags,omitempty"`
+	TargetDetails              map[string]interface{} `json:"target_details,omitempty"`
+	Targets                    []string               `json:"targets,omitempty"`
+	UpdatedAt                  time.Time              `json:"updated_at,omitempty"`
+	UpdatedBy                  string                 `json:"updated_by,omitempty"`
+	UpdatedByImpersonator      string                 `json:"updated_by_impersonator,omitempty"`
+	Validated                  bool                   `json:"validated,omitempty"`
+	Vector                     string                 `json:"vector,omitempty"`
+	WorkflowEligibleMarker     bool                   `json:"workflow_eligible_marker,omitempty"`
 }
 
 // FindingControlProjection is the flat, CEL- and jsonschema-facing view of a FindingControl: its
@@ -1000,44 +1006,45 @@ type GroupProjection struct {
 // the full generated.IdentityHolder whose edge graph cannot be reflected
 type IdentityHolderProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                     string                   `json:"id,omitempty"`
-	AlternateEmail         string                   `json:"alternate_email,omitempty"`
-	AvatarRemoteURL        string                   `json:"avatar_remote_url,omitempty"`
-	CreatedAt              time.Time                `json:"created_at,omitempty"`
-	CreatedBy              string                   `json:"created_by,omitempty"`
-	Department             string                   `json:"department,omitempty"`
-	DisplayID              string                   `json:"display_id,omitempty"`
-	Email                  string                   `json:"email,omitempty"`
-	EmailAliases           []string                 `json:"email_aliases,omitempty"`
-	EmployerEntityID       string                   `json:"employer_entity_id,omitempty"`
-	EndDate                models.DateTime          `json:"end_date,omitempty"`
-	EnvironmentID          string                   `json:"environment_id,omitempty"`
-	EnvironmentName        string                   `json:"environment_name,omitempty"`
-	ExternalReferenceID    string                   `json:"external_reference_id,omitempty"`
-	ExternalUserID         string                   `json:"external_user_id,omitempty"`
-	FullName               string                   `json:"full_name,omitempty"`
-	IdentityHolderType     enums.IdentityHolderType `json:"identity_holder_type,omitempty"`
-	InternalOwner          string                   `json:"internal_owner,omitempty"`
-	InternalOwnerGroupID   string                   `json:"internal_owner_group_id,omitempty"`
-	InternalOwnerUserID    string                   `json:"internal_owner_user_id,omitempty"`
-	IsActive               bool                     `json:"is_active,omitempty"`
-	IsOpenlaneUser         bool                     `json:"is_openlane_user,omitempty"`
-	Location               string                   `json:"location,omitempty"`
-	Metadata               map[string]interface{}   `json:"metadata,omitempty"`
-	OwnerID                string                   `json:"owner_id,omitempty"`
-	PhoneNumber            string                   `json:"phone_number,omitempty"`
-	ScopeID                string                   `json:"scope_id,omitempty"`
-	ScopeName              string                   `json:"scope_name,omitempty"`
-	StartDate              models.DateTime          `json:"start_date,omitempty"`
-	Status                 enums.UserStatus         `json:"status,omitempty"`
-	Tags                   []string                 `json:"tags,omitempty"`
-	Team                   string                   `json:"team,omitempty"`
-	Title                  string                   `json:"title,omitempty"`
-	UpdatedAt              time.Time                `json:"updated_at,omitempty"`
-	UpdatedBy              string                   `json:"updated_by,omitempty"`
-	UpdatedByImpersonator  string                   `json:"updated_by_impersonator,omitempty"`
-	UserID                 string                   `json:"user_id,omitempty"`
-	WorkflowEligibleMarker bool                     `json:"workflow_eligible_marker,omitempty"`
+	ID                            string                   `json:"id,omitempty"`
+	AlternateEmail                string                   `json:"alternate_email,omitempty"`
+	AvatarRemoteURL               string                   `json:"avatar_remote_url,omitempty"`
+	CreatedAt                     time.Time                `json:"created_at,omitempty"`
+	CreatedBy                     string                   `json:"created_by,omitempty"`
+	Department                    string                   `json:"department,omitempty"`
+	DisplayID                     string                   `json:"display_id,omitempty"`
+	Email                         string                   `json:"email,omitempty"`
+	EmailAliases                  []string                 `json:"email_aliases,omitempty"`
+	EmployerEntityID              string                   `json:"employer_entity_id,omitempty"`
+	EndDate                       models.DateTime          `json:"end_date,omitempty"`
+	EnvironmentID                 string                   `json:"environment_id,omitempty"`
+	EnvironmentName               string                   `json:"environment_name,omitempty"`
+	ExternalReferenceID           string                   `json:"external_reference_id,omitempty"`
+	ExternalUserID                string                   `json:"external_user_id,omitempty"`
+	FullName                      string                   `json:"full_name,omitempty"`
+	IdentityHolderType            enums.IdentityHolderType `json:"identity_holder_type,omitempty"`
+	InternalOwner                 string                   `json:"internal_owner,omitempty"`
+	InternalOwnerGroupID          string                   `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID string                   `json:"internal_owner_identity_holder_id,omitempty"`
+	InternalOwnerUserID           string                   `json:"internal_owner_user_id,omitempty"`
+	IsActive                      bool                     `json:"is_active,omitempty"`
+	IsOpenlaneUser                bool                     `json:"is_openlane_user,omitempty"`
+	Location                      string                   `json:"location,omitempty"`
+	Metadata                      map[string]interface{}   `json:"metadata,omitempty"`
+	OwnerID                       string                   `json:"owner_id,omitempty"`
+	PhoneNumber                   string                   `json:"phone_number,omitempty"`
+	ScopeID                       string                   `json:"scope_id,omitempty"`
+	ScopeName                     string                   `json:"scope_name,omitempty"`
+	StartDate                     models.DateTime          `json:"start_date,omitempty"`
+	Status                        enums.UserStatus         `json:"status,omitempty"`
+	Tags                          []string                 `json:"tags,omitempty"`
+	Team                          string                   `json:"team,omitempty"`
+	Title                         string                   `json:"title,omitempty"`
+	UpdatedAt                     time.Time                `json:"updated_at,omitempty"`
+	UpdatedBy                     string                   `json:"updated_by,omitempty"`
+	UpdatedByImpersonator         string                   `json:"updated_by_impersonator,omitempty"`
+	UserID                        string                   `json:"user_id,omitempty"`
+	WorkflowEligibleMarker        bool                     `json:"workflow_eligible_marker,omitempty"`
 }
 
 // IntegrationProjection is the flat, CEL- and jsonschema-facing view of a Integration: its
@@ -1046,35 +1053,37 @@ type IdentityHolderProjection struct {
 // the full generated.Integration whose edge graph cannot be reflected
 type IntegrationProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                       string                  `json:"id,omitempty"`
-	CampaignEmail            bool                    `json:"campaign_email,omitempty"`
-	CreatedAt                time.Time               `json:"created_at,omitempty"`
-	CreatedBy                string                  `json:"created_by,omitempty"`
-	DefinitionID             string                  `json:"definition_id,omitempty"`
-	DefinitionSlug           string                  `json:"definition_slug,omitempty"`
-	DefinitionVersion        string                  `json:"definition_version,omitempty"`
-	Description              string                  `json:"description,omitempty"`
-	EnvironmentID            string                  `json:"environment_id,omitempty"`
-	EnvironmentName          string                  `json:"environment_name,omitempty"`
-	Family                   string                  `json:"family,omitempty"`
-	IntegrationType          string                  `json:"integration_type,omitempty"`
-	InternalNotes            string                  `json:"internal_notes,omitempty"`
-	Kind                     string                  `json:"kind,omitempty"`
-	Metadata                 map[string]interface{}  `json:"metadata,omitempty"`
-	Name                     string                  `json:"name,omitempty"`
-	OwnerID                  string                  `json:"owner_id,omitempty"`
-	PlatformID               string                  `json:"platform_id,omitempty"`
-	PrimaryDirectory         bool                    `json:"primary_directory,omitempty"`
-	ProviderMetadataSnapshot map[string]interface{}  `json:"provider_metadata_snapshot,omitempty"`
-	ScopeID                  string                  `json:"scope_id,omitempty"`
-	ScopeName                string                  `json:"scope_name,omitempty"`
-	Status                   enums.IntegrationStatus `json:"status,omitempty"`
-	SystemInternalID         string                  `json:"system_internal_id,omitempty"`
-	SystemOwned              bool                    `json:"system_owned,omitempty"`
-	Tags                     []string                `json:"tags,omitempty"`
-	UpdatedAt                time.Time               `json:"updated_at,omitempty"`
-	UpdatedBy                string                  `json:"updated_by,omitempty"`
-	UpdatedByImpersonator    string                  `json:"updated_by_impersonator,omitempty"`
+	ID                       string                   `json:"id,omitempty"`
+	CampaignEmail            bool                     `json:"campaign_email,omitempty"`
+	CreatedAt                time.Time                `json:"created_at,omitempty"`
+	CreatedBy                string                   `json:"created_by,omitempty"`
+	DefinitionID             string                   `json:"definition_id,omitempty"`
+	DefinitionSlug           string                   `json:"definition_slug,omitempty"`
+	DefinitionVersion        string                   `json:"definition_version,omitempty"`
+	Description              string                   `json:"description,omitempty"`
+	EnvironmentID            string                   `json:"environment_id,omitempty"`
+	EnvironmentName          string                   `json:"environment_name,omitempty"`
+	ExpiresAt                time.Time                `json:"expires_at,omitempty"`
+	Family                   string                   `json:"family,omitempty"`
+	Health                   models.IntegrationHealth `json:"health,omitempty"`
+	IntegrationType          string                   `json:"integration_type,omitempty"`
+	InternalNotes            string                   `json:"internal_notes,omitempty"`
+	Kind                     string                   `json:"kind,omitempty"`
+	Metadata                 map[string]interface{}   `json:"metadata,omitempty"`
+	Name                     string                   `json:"name,omitempty"`
+	OwnerID                  string                   `json:"owner_id,omitempty"`
+	PlatformID               string                   `json:"platform_id,omitempty"`
+	PrimaryDirectory         bool                     `json:"primary_directory,omitempty"`
+	ProviderMetadataSnapshot map[string]interface{}   `json:"provider_metadata_snapshot,omitempty"`
+	ScopeID                  string                   `json:"scope_id,omitempty"`
+	ScopeName                string                   `json:"scope_name,omitempty"`
+	Status                   enums.IntegrationStatus  `json:"status,omitempty"`
+	SystemInternalID         string                   `json:"system_internal_id,omitempty"`
+	SystemOwned              bool                     `json:"system_owned,omitempty"`
+	Tags                     []string                 `json:"tags,omitempty"`
+	UpdatedAt                time.Time                `json:"updated_at,omitempty"`
+	UpdatedBy                string                   `json:"updated_by,omitempty"`
+	UpdatedByImpersonator    string                   `json:"updated_by_impersonator,omitempty"`
 }
 
 // InternalPolicyProjection is the flat, CEL- and jsonschema-facing view of a InternalPolicy: its
@@ -1210,6 +1219,7 @@ type PlatformProjection struct {
 	AccessModelName                string                 `json:"access_model_name,omitempty"`
 	BusinessOwner                  string                 `json:"business_owner,omitempty"`
 	BusinessOwnerGroupID           string                 `json:"business_owner_group_id,omitempty"`
+	BusinessOwnerIdentityHolderID  string                 `json:"business_owner_identity_holder_id,omitempty"`
 	BusinessOwnerUserID            string                 `json:"business_owner_user_id,omitempty"`
 	BusinessPurpose                string                 `json:"business_purpose,omitempty"`
 	ContainsPii                    bool                   `json:"contains_pii,omitempty"`
@@ -1230,6 +1240,7 @@ type PlatformProjection struct {
 	ExternalUUID                   string                 `json:"external_uuid,omitempty"`
 	InternalOwner                  string                 `json:"internal_owner,omitempty"`
 	InternalOwnerGroupID           string                 `json:"internal_owner_group_id,omitempty"`
+	InternalOwnerIdentityHolderID  string                 `json:"internal_owner_identity_holder_id,omitempty"`
 	InternalOwnerUserID            string                 `json:"internal_owner_user_id,omitempty"`
 	Metadata                       map[string]interface{} `json:"metadata,omitempty"`
 	Name                           string                 `json:"name,omitempty"`
@@ -1247,6 +1258,7 @@ type PlatformProjection struct {
 	ScopeStatement                 string                 `json:"scope_statement,omitempty"`
 	SecurityOwner                  string                 `json:"security_owner,omitempty"`
 	SecurityOwnerGroupID           string                 `json:"security_owner_group_id,omitempty"`
+	SecurityOwnerIdentityHolderID  string                 `json:"security_owner_identity_holder_id,omitempty"`
 	SecurityOwnerUserID            string                 `json:"security_owner_user_id,omitempty"`
 	SecurityTierID                 string                 `json:"security_tier_id,omitempty"`
 	SecurityTierName               string                 `json:"security_tier_name,omitempty"`
@@ -1256,6 +1268,7 @@ type PlatformProjection struct {
 	Tags                           []string               `json:"tags,omitempty"`
 	TechnicalOwner                 string                 `json:"technical_owner,omitempty"`
 	TechnicalOwnerGroupID          string                 `json:"technical_owner_group_id,omitempty"`
+	TechnicalOwnerIdentityHolderID string                 `json:"technical_owner_identity_holder_id,omitempty"`
 	TechnicalOwnerUserID           string                 `json:"technical_owner_user_id,omitempty"`
 	TrustBoundaryDescription       string                 `json:"trust_boundary_description,omitempty"`
 	UpdatedAt                      time.Time              `json:"updated_at,omitempty"`
@@ -1497,6 +1510,7 @@ type ScanProjection struct {
 	ID                         string                 `json:"id,omitempty"`
 	AssignedTo                 string                 `json:"assigned_to,omitempty"`
 	AssignedToGroupID          string                 `json:"assigned_to_group_id,omitempty"`
+	AssignedToIdentityHolderID string                 `json:"assigned_to_identity_holder_id,omitempty"`
 	AssignedToUserID           string                 `json:"assigned_to_user_id,omitempty"`
 	CreatedAt                  time.Time              `json:"created_at,omitempty"`
 	CreatedBy                  string                 `json:"created_by,omitempty"`
@@ -1513,6 +1527,7 @@ type ScanProjection struct {
 	PerformedByUserID          string                 `json:"performed_by_user_id,omitempty"`
 	ReviewedBy                 string                 `json:"reviewed_by,omitempty"`
 	ReviewedByGroupID          string                 `json:"reviewed_by_group_id,omitempty"`
+	ReviewedByIdentityHolderID string                 `json:"reviewed_by_identity_holder_id,omitempty"`
 	ReviewedByUserID           string                 `json:"reviewed_by_user_id,omitempty"`
 	ScanDate                   models.DateTime        `json:"scan_date,omitempty"`
 	ScanSchedule               models.Cron            `json:"scan_schedule,omitempty"`
@@ -1768,73 +1783,75 @@ type VendorRiskScoreProjection struct {
 // the full generated.Vulnerability whose edge graph cannot be reflected
 type VulnerabilityProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                      string                 `json:"id,omitempty"`
-	AssignedTo              string                 `json:"assigned_to,omitempty"`
-	AssignedToGroupID       string                 `json:"assigned_to_group_id,omitempty"`
-	AssignedToUserID        string                 `json:"assigned_to_user_id,omitempty"`
-	AutoDismissedAt         models.DateTime        `json:"auto_dismissed_at,omitempty"`
-	Blocking                bool                   `json:"blocking,omitempty"`
-	Category                string                 `json:"category,omitempty"`
-	CreatedAt               time.Time              `json:"created_at,omitempty"`
-	CreatedBy               string                 `json:"created_by,omitempty"`
-	CveID                   string                 `json:"cve_id,omitempty"`
-	CweIds                  []string               `json:"cwe_ids,omitempty"`
-	DependencyScope         string                 `json:"dependency_scope,omitempty"`
-	Description             string                 `json:"description,omitempty"`
-	DiscoveredAt            models.DateTime        `json:"discovered_at,omitempty"`
-	DismissedAt             models.DateTime        `json:"dismissed_at,omitempty"`
-	DismissedComment        string                 `json:"dismissed_comment,omitempty"`
-	DismissedReason         string                 `json:"dismissed_reason,omitempty"`
-	DisplayID               string                 `json:"display_id,omitempty"`
-	DisplayName             string                 `json:"display_name,omitempty"`
-	EnvironmentID           string                 `json:"environment_id,omitempty"`
-	EnvironmentName         string                 `json:"environment_name,omitempty"`
-	Exploitability          float64                `json:"exploitability,omitempty"`
-	ExternalID              string                 `json:"external_id,omitempty"`
-	ExternalOwnerID         string                 `json:"external_owner_id,omitempty"`
-	ExternalURI             string                 `json:"external_uri,omitempty"`
-	FirstPatchedVersion     string                 `json:"first_patched_version,omitempty"`
-	FixAvailable            bool                   `json:"fix_available,omitempty"`
-	FixedAt                 models.DateTime        `json:"fixed_at,omitempty"`
-	Impact                  float64                `json:"impact,omitempty"`
-	Impacts                 []string               `json:"impacts,omitempty"`
-	InternalNotes           string                 `json:"internal_notes,omitempty"`
-	ManifestPath            string                 `json:"manifest_path,omitempty"`
-	Metadata                map[string]interface{} `json:"metadata,omitempty"`
-	Open                    bool                   `json:"open,omitempty"`
-	OwnerID                 string                 `json:"owner_id,omitempty"`
-	PackageEcosystem        string                 `json:"package_ecosystem,omitempty"`
-	PackageName             string                 `json:"package_name,omitempty"`
-	Priority                string                 `json:"priority,omitempty"`
-	Production              bool                   `json:"production,omitempty"`
-	Public                  bool                   `json:"public,omitempty"`
-	PublishedAt             models.DateTime        `json:"published_at,omitempty"`
-	RawPayload              map[string]interface{} `json:"raw_payload,omitempty"`
-	References              []string               `json:"references,omitempty"`
-	RemediationSLA          int                    `json:"remediation_sla,omitempty"`
-	ReviewedBy              string                 `json:"reviewed_by,omitempty"`
-	ReviewedByGroupID       string                 `json:"reviewed_by_group_id,omitempty"`
-	ReviewedByUserID        string                 `json:"reviewed_by_user_id,omitempty"`
-	ScopeID                 string                 `json:"scope_id,omitempty"`
-	ScopeName               string                 `json:"scope_name,omitempty"`
-	Score                   float64                `json:"score,omitempty"`
-	SecurityLevel           enums.SecurityLevel    `json:"security_level,omitempty"`
-	Severity                string                 `json:"severity,omitempty"`
-	Source                  string                 `json:"source,omitempty"`
-	SourceUpdatedAt         models.DateTime        `json:"source_updated_at,omitempty"`
-	Summary                 string                 `json:"summary,omitempty"`
-	SystemInternalID        string                 `json:"system_internal_id,omitempty"`
-	SystemOwned             bool                   `json:"system_owned,omitempty"`
-	Tags                    []string               `json:"tags,omitempty"`
-	UpdatedAt               time.Time              `json:"updated_at,omitempty"`
-	UpdatedBy               string                 `json:"updated_by,omitempty"`
-	UpdatedByImpersonator   string                 `json:"updated_by_impersonator,omitempty"`
-	Validated               bool                   `json:"validated,omitempty"`
-	Vector                  string                 `json:"vector,omitempty"`
-	VulnerabilityStatusID   string                 `json:"vulnerability_status_id,omitempty"`
-	VulnerabilityStatusName string                 `json:"vulnerability_status_name,omitempty"`
-	VulnerableVersionRange  string                 `json:"vulnerable_version_range,omitempty"`
-	WorkflowEligibleMarker  bool                   `json:"workflow_eligible_marker,omitempty"`
+	ID                         string                 `json:"id,omitempty"`
+	AssignedTo                 string                 `json:"assigned_to,omitempty"`
+	AssignedToGroupID          string                 `json:"assigned_to_group_id,omitempty"`
+	AssignedToIdentityHolderID string                 `json:"assigned_to_identity_holder_id,omitempty"`
+	AssignedToUserID           string                 `json:"assigned_to_user_id,omitempty"`
+	AutoDismissedAt            models.DateTime        `json:"auto_dismissed_at,omitempty"`
+	Blocking                   bool                   `json:"blocking,omitempty"`
+	Category                   string                 `json:"category,omitempty"`
+	CreatedAt                  time.Time              `json:"created_at,omitempty"`
+	CreatedBy                  string                 `json:"created_by,omitempty"`
+	CveID                      string                 `json:"cve_id,omitempty"`
+	CweIds                     []string               `json:"cwe_ids,omitempty"`
+	DependencyScope            string                 `json:"dependency_scope,omitempty"`
+	Description                string                 `json:"description,omitempty"`
+	DiscoveredAt               models.DateTime        `json:"discovered_at,omitempty"`
+	DismissedAt                models.DateTime        `json:"dismissed_at,omitempty"`
+	DismissedComment           string                 `json:"dismissed_comment,omitempty"`
+	DismissedReason            string                 `json:"dismissed_reason,omitempty"`
+	DisplayID                  string                 `json:"display_id,omitempty"`
+	DisplayName                string                 `json:"display_name,omitempty"`
+	EnvironmentID              string                 `json:"environment_id,omitempty"`
+	EnvironmentName            string                 `json:"environment_name,omitempty"`
+	Exploitability             float64                `json:"exploitability,omitempty"`
+	ExternalID                 string                 `json:"external_id,omitempty"`
+	ExternalOwnerID            string                 `json:"external_owner_id,omitempty"`
+	ExternalURI                string                 `json:"external_uri,omitempty"`
+	FirstPatchedVersion        string                 `json:"first_patched_version,omitempty"`
+	FixAvailable               bool                   `json:"fix_available,omitempty"`
+	FixedAt                    models.DateTime        `json:"fixed_at,omitempty"`
+	Impact                     float64                `json:"impact,omitempty"`
+	Impacts                    []string               `json:"impacts,omitempty"`
+	InternalNotes              string                 `json:"internal_notes,omitempty"`
+	ManifestPath               string                 `json:"manifest_path,omitempty"`
+	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
+	Open                       bool                   `json:"open,omitempty"`
+	OwnerID                    string                 `json:"owner_id,omitempty"`
+	PackageEcosystem           string                 `json:"package_ecosystem,omitempty"`
+	PackageName                string                 `json:"package_name,omitempty"`
+	Priority                   string                 `json:"priority,omitempty"`
+	Production                 bool                   `json:"production,omitempty"`
+	Public                     bool                   `json:"public,omitempty"`
+	PublishedAt                models.DateTime        `json:"published_at,omitempty"`
+	RawPayload                 map[string]interface{} `json:"raw_payload,omitempty"`
+	References                 []string               `json:"references,omitempty"`
+	RemediationSLA             int                    `json:"remediation_sla,omitempty"`
+	ReviewedBy                 string                 `json:"reviewed_by,omitempty"`
+	ReviewedByGroupID          string                 `json:"reviewed_by_group_id,omitempty"`
+	ReviewedByIdentityHolderID string                 `json:"reviewed_by_identity_holder_id,omitempty"`
+	ReviewedByUserID           string                 `json:"reviewed_by_user_id,omitempty"`
+	ScopeID                    string                 `json:"scope_id,omitempty"`
+	ScopeName                  string                 `json:"scope_name,omitempty"`
+	Score                      float64                `json:"score,omitempty"`
+	SecurityLevel              enums.SecurityLevel    `json:"security_level,omitempty"`
+	Severity                   string                 `json:"severity,omitempty"`
+	Source                     string                 `json:"source,omitempty"`
+	SourceUpdatedAt            models.DateTime        `json:"source_updated_at,omitempty"`
+	Summary                    string                 `json:"summary,omitempty"`
+	SystemInternalID           string                 `json:"system_internal_id,omitempty"`
+	SystemOwned                bool                   `json:"system_owned,omitempty"`
+	Tags                       []string               `json:"tags,omitempty"`
+	UpdatedAt                  time.Time              `json:"updated_at,omitempty"`
+	UpdatedBy                  string                 `json:"updated_by,omitempty"`
+	UpdatedByImpersonator      string                 `json:"updated_by_impersonator,omitempty"`
+	Validated                  bool                   `json:"validated,omitempty"`
+	Vector                     string                 `json:"vector,omitempty"`
+	VulnerabilityStatusID      string                 `json:"vulnerability_status_id,omitempty"`
+	VulnerabilityStatusName    string                 `json:"vulnerability_status_name,omitempty"`
+	VulnerableVersionRange     string                 `json:"vulnerable_version_range,omitempty"`
+	WorkflowEligibleMarker     bool                   `json:"workflow_eligible_marker,omitempty"`
 }
 
 // WorkflowObjectRefProjection is the flat, CEL- and jsonschema-facing view of a WorkflowObjectRef: its

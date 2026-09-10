@@ -136,7 +136,7 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 		handler = scheduleHandler(g, definition)
 	}
 
-	return func(handlerCtx HandlerContext, payload any, operation string) error {
+	return func(handlerCtx HandlerContext, payload any, _ string) error {
 		typedPayload, ok := payload.(T)
 		if !ok {
 			return ErrPayloadTypeMismatch
@@ -157,9 +157,8 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 
 		handlerCtx.Context = logx.WithCallerIdentity(handlerCtx.Context)
 		handlerCtx.Context = logx.WithFields(handlerCtx.Context, map[string]any{
-			"event_id":  string(handlerCtx.Envelope.ID),
-			"topic":     string(handlerCtx.Envelope.Topic),
-			"operation": operation,
+			"event_id": string(handlerCtx.Envelope.ID),
+			"topic":    string(handlerCtx.Envelope.Topic),
 		})
 
 		if definition.LogFields != nil {

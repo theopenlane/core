@@ -122,6 +122,11 @@ func InternalOwnerGroupID(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldInternalOwnerGroupID, v))
 }
 
+// InternalOwnerIdentityHolderID applies equality check predicate on the "internal_owner_identity_holder_id" field. It's identical to InternalOwnerIdentityHolderIDEQ.
+func InternalOwnerIdentityHolderID(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // ReviewedBy applies equality check predicate on the "reviewed_by" field. It's identical to ReviewedByEQ.
 func ReviewedBy(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldReviewedBy, v))
@@ -135,6 +140,11 @@ func ReviewedByUserID(v string) predicate.Entity {
 // ReviewedByGroupID applies equality check predicate on the "reviewed_by_group_id" field. It's identical to ReviewedByGroupIDEQ.
 func ReviewedByGroupID(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByIdentityHolderID applies equality check predicate on the "reviewed_by_identity_holder_id" field. It's identical to ReviewedByIdentityHolderIDEQ.
+func ReviewedByIdentityHolderID(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
 }
 
 // LastReviewedAt applies equality check predicate on the "last_reviewed_at" field. It's identical to LastReviewedAtEQ.
@@ -1107,6 +1117,81 @@ func InternalOwnerGroupIDContainsFold(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldContainsFold(FieldInternalOwnerGroupID, v))
 }
 
+// InternalOwnerIdentityHolderIDEQ applies the EQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDNEQ applies the NEQ predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIn applies the In predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDNotIn applies the NotIn predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldInternalOwnerIdentityHolderID, vs...))
+}
+
+// InternalOwnerIdentityHolderIDGT applies the GT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDGTE applies the GTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLT applies the LT predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDLTE applies the LTE predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContains applies the Contains predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDIsNil applies the IsNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDNotNil applies the NotNil predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldInternalOwnerIdentityHolderID))
+}
+
+// InternalOwnerIdentityHolderIDEqualFold applies the EqualFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
+// InternalOwnerIdentityHolderIDContainsFold applies the ContainsFold predicate on the "internal_owner_identity_holder_id" field.
+func InternalOwnerIdentityHolderIDContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldInternalOwnerIdentityHolderID, v))
+}
+
 // ReviewedByEQ applies the EQ predicate on the "reviewed_by" field.
 func ReviewedByEQ(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldEQ(FieldReviewedBy, v))
@@ -1330,6 +1415,81 @@ func ReviewedByGroupIDEqualFold(v string) predicate.Entity {
 // ReviewedByGroupIDContainsFold applies the ContainsFold predicate on the "reviewed_by_group_id" field.
 func ReviewedByGroupIDContainsFold(v string) predicate.Entity {
 	return predicate.Entity(sql.FieldContainsFold(FieldReviewedByGroupID, v))
+}
+
+// ReviewedByIdentityHolderIDEQ applies the EQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDNEQ applies the NEQ predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNEQ(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldNEQ(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIn applies the In predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDNotIn applies the NotIn predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotIn(vs ...string) predicate.Entity {
+	return predicate.Entity(sql.FieldNotIn(FieldReviewedByIdentityHolderID, vs...))
+}
+
+// ReviewedByIdentityHolderIDGT applies the GT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDGTE applies the GTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDGTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldGTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLT applies the LT predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLT(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLT(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDLTE applies the LTE predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDLTE(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldLTE(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContains applies the Contains predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContains(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContains(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasPrefix applies the HasPrefix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasPrefix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasPrefix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDHasSuffix applies the HasSuffix predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDHasSuffix(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldHasSuffix(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDIsNil applies the IsNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDIsNil() predicate.Entity {
+	return predicate.Entity(sql.FieldIsNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDNotNil applies the NotNil predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDNotNil() predicate.Entity {
+	return predicate.Entity(sql.FieldNotNull(FieldReviewedByIdentityHolderID))
+}
+
+// ReviewedByIdentityHolderIDEqualFold applies the EqualFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDEqualFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldEqualFold(FieldReviewedByIdentityHolderID, v))
+}
+
+// ReviewedByIdentityHolderIDContainsFold applies the ContainsFold predicate on the "reviewed_by_identity_holder_id" field.
+func ReviewedByIdentityHolderIDContainsFold(v string) predicate.Entity {
+	return predicate.Entity(sql.FieldContainsFold(FieldReviewedByIdentityHolderID, v))
 }
 
 // LastReviewedAtEQ applies the EQ predicate on the "last_reviewed_at" field.
@@ -4117,6 +4277,29 @@ func HasInternalOwnerGroupWith(preds ...predicate.Group) predicate.Entity {
 	})
 }
 
+// HasInternalOwnerIdentityHolder applies the HasEdge predicate on the "internal_owner_identity_holder" edge.
+func HasInternalOwnerIdentityHolder() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasInternalOwnerIdentityHolderWith applies the HasEdge predicate on the "internal_owner_identity_holder" edge with a given conditions (other predicates).
+func HasInternalOwnerIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newInternalOwnerIdentityHolderStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasReviewedByUser applies the HasEdge predicate on the "reviewed_by_user" edge.
 func HasReviewedByUser() predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
@@ -4155,6 +4338,29 @@ func HasReviewedByGroup() predicate.Entity {
 func HasReviewedByGroupWith(preds ...predicate.Group) predicate.Entity {
 	return predicate.Entity(func(s *sql.Selector) {
 		step := newReviewedByGroupStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviewedByIdentityHolder applies the HasEdge predicate on the "reviewed_by_identity_holder" edge.
+func HasReviewedByIdentityHolder() predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByIdentityHolderTable, ReviewedByIdentityHolderColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewedByIdentityHolderWith applies the HasEdge predicate on the "reviewed_by_identity_holder" edge with a given conditions (other predicates).
+func HasReviewedByIdentityHolderWith(preds ...predicate.IdentityHolder) predicate.Entity {
+	return predicate.Entity(func(s *sql.Selector) {
+		step := newReviewedByIdentityHolderStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

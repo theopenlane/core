@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/v2/internal/consts"
 	"github.com/theopenlane/core/v2/pkg/logx"
+	"github.com/theopenlane/core/v2/pkg/metrics"
 	pkgobjects "github.com/theopenlane/core/v2/pkg/objects"
 	"github.com/theopenlane/core/v2/pkg/objects/storage"
 	"github.com/theopenlane/eddy"
@@ -17,7 +18,9 @@ import (
 
 // ProviderCacheKey implements eddy.CacheKey for provider caching
 type ProviderCacheKey struct {
-	TenantID        string
+	// TenantID is the organization the cached provider client belongs to
+	TenantID string
+	// IntegrationType is the provider type the client was built for, e.g. s3
 	IntegrationType string
 }
 
@@ -31,13 +34,20 @@ type Service struct {
 	resolver      *eddy.Resolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
 	clientService *eddy.ClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
 	objectService *storage.ObjectService
+	// backups holds backup destination targets keyed by source provider type
+	backups map[storage.ProviderType]BackupTarget
 }
 
 // Config holds configuration for creating a new Service
 type Config struct {
-	Resolver       *eddy.Resolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
-	ClientService  *eddy.ClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
+	// Resolver selects the storage provider to use for a given request from context hints
+	Resolver *eddy.Resolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
+	// ClientService caches and returns provider clients built by the resolver
+	ClientService *eddy.ClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
+	// ValidationFunc validates files before upload
 	ValidationFunc storage.ValidationFunc
+	// Backups maps a source provider type to its backup destination target
+	Backups map[storage.ProviderType]BackupTarget
 }
 
 // NewService creates a new storage orchestration service
@@ -53,7 +63,71 @@ func NewService(cfg Config) *Service {
 		resolver:      cfg.Resolver,
 		clientService: cfg.ClientService,
 		objectService: objectService,
+		backups:       cfg.Backups,
 	}
+}
+
+// BackupProviderFor returns the configured backup destination provider for a source provider
+// type, if one is configured. When absent, the source provider has no backup and behaves as today.
+func (s *Service) BackupProviderFor(source storage.ProviderType) (storage.Provider, bool) {
+	target, ok := s.backups[source]
+	if !ok {
+		return nil, false
+	}
+
+	return target.Provider, true
+}
+
+// ReadFromBackupFor returns the backup destination provider for a source provider when reads are
+// configured to be served from the backup instead of the source
+func (s *Service) ReadFromBackupFor(source storage.ProviderType) (storage.Provider, bool) {
+	target, ok := s.backups[source]
+	if !ok || !target.ReadFromBackup {
+		return nil, false
+	}
+
+	return target.Provider, true
+}
+
+// operations a read can be served from a backup replica for, used as a metric label
+const (
+	backupOpDownload     = "download"
+	backupOpPresignedURL = "presigned_url"
+	backupOpExists       = "exists"
+)
+
+// replicaTarget returns the backup provider and a file pointing at the replica when the file has
+// one recorded at a configured backup destination. It says nothing about whether reads should use
+// it, so callers that only touch the replica, such as deleting it, can share this lookup
+func (s *Service) replicaTarget(file *storagetypes.File) (storage.Provider, *storagetypes.File, bool) {
+	if file == nil || file.BackupLocation == nil || file.BackupLocation.Key == "" {
+		return nil, nil, false
+	}
+
+	target, ok := s.backups[file.ProviderType]
+	if !ok {
+		return nil, nil, false
+	}
+
+	return target.Provider, replicaFile(file), true
+}
+
+// replicaFile rewrites a file to point at its replica at the backup provider
+func replicaFile(file *storagetypes.File) *storagetypes.File {
+	location := file.BackupLocation
+
+	replica := *file
+	replica.ProviderType = location.ProviderType
+	replica.BackupLocation = nil
+	replica.Key = location.Key
+	replica.Bucket = location.Bucket
+	replica.Region = location.Region
+	replica.FullURI = location.FullURI
+	replica.ProviderHints = &storagetypes.ProviderHints{
+		KnownProvider: location.ProviderType,
+	}
+
+	return &replica
 }
 
 // Upload uploads a file using provider resolution
@@ -72,14 +146,63 @@ func (s *Service) Upload(ctx context.Context, reader io.Reader, opts *storage.Up
 	return file, nil
 }
 
+// readTarget returns the provider and file a read should be served from. A read goes to the
+// backup replica when the file's source provider is configured to serve reads from it and the
+// file has a replica recorded; that is a routing decision made before any I/O, not a retry, so
+// the source provider is never contacted. Everything else resolves the source provider as normal
+func (s *Service) readTarget(ctx context.Context, file *storagetypes.File, operation string) (storage.Provider, *storagetypes.File, error) {
+	if file != nil {
+		source := file.ProviderType
+
+		_, readFromBackup := s.ReadFromBackupFor(source)
+
+		// add logging fields to be reused in the context
+		ctx = logx.WithFields(ctx, map[string]any{
+			"file_id":          file.ID,
+			"source":           string(source),
+			"operation":        operation,
+			"read_from_backup": readFromBackup,
+			"has_replica":      file.BackupLocation != nil && file.BackupLocation.Key != ""})
+
+		if len(s.backups) > 0 {
+			logx.FromContext(ctx).Debug().Msg("backup read routing decision")
+		}
+
+		if readFromBackup {
+			provider, replica, ok := s.replicaTarget(file)
+			if !ok {
+				// reads come from the backup but this file was never replicated, so the source
+				// provider is the only place it can be served from
+				metrics.RecordStorageBackupReadMissingReplica(string(source), operation)
+
+				logx.FromContext(ctx).Warn().Msg("no backup replica for file; falling through to source provider")
+			} else {
+				metrics.RecordStorageBackupRead(string(source), string(replica.ProviderType), operation)
+
+				logx.FromContext(ctx).Debug().Str("destination", string(replica.ProviderType)).Str("bucket", replica.Bucket).Str("key", replica.Key).Msg("serving file from backup replica")
+
+				return provider, replica, nil
+			}
+		}
+	}
+
+	provider, err := s.resolveDownloadProvider(ctx, file)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return provider, file, nil
+}
+
 // Download downloads a file using provider resolution
 func (s *Service) Download(ctx context.Context, provider storage.Provider, file *storagetypes.File, opts *storage.DownloadOptions) (*storage.DownloadedMetadata, error) {
 	if provider == nil {
-		resolvedprovider, err := s.resolveDownloadProvider(ctx, file)
+		target, targetFile, err := s.readTarget(ctx, file, backupOpDownload)
 		if err != nil {
 			return nil, err
 		}
-		provider = resolvedprovider
+
+		return s.objectService.Download(ctx, target, targetFile, opts)
 	}
 
 	return s.objectService.Download(ctx, provider, file, opts)
@@ -91,13 +214,14 @@ func (s *Service) GetPresignedURL(ctx context.Context, file *storagetypes.File, 
 		return "", ErrMissingFileID
 	}
 
-	provider, err := s.resolveDownloadProvider(ctx, file)
+	opts := &storagetypes.PresignedURLOptions{Duration: duration}
+
+	provider, target, err := s.readTarget(ctx, file, backupOpPresignedURL)
 	if err != nil {
 		return "", err
 	}
 
-	opts := &storagetypes.PresignedURLOptions{Duration: duration}
-	return s.objectService.GetPresignedURL(ctx, provider, file, opts)
+	return s.objectService.GetPresignedURL(ctx, provider, target, opts)
 }
 
 // Delete deletes a file using provider resolution
@@ -110,14 +234,29 @@ func (s *Service) Delete(ctx context.Context, file *storagetypes.File, opts *sto
 	return s.objectService.Delete(ctx, provider, file, opts)
 }
 
+// DeleteBackup deletes the replica of a file from its backup provider so the replica shares the
+// lifetime of the object it backs up. Files with no usable replica, or whose source provider has
+// no backup configured, are a no-op
+func (s *Service) DeleteBackup(ctx context.Context, file *storagetypes.File, opts *storagetypes.DeleteFileOptions) error {
+	provider, replica, ok := s.replicaTarget(file)
+	if !ok {
+		return nil
+	}
+
+	err := s.objectService.Delete(ctx, provider, replica, opts)
+	metrics.RecordStorageBackupDelete(string(file.ProviderType), string(replica.ProviderType), err)
+
+	return err
+}
+
 // Exists checks if a file exists using provider resolution
 func (s *Service) Exists(ctx context.Context, file *storagetypes.File) (bool, error) {
-	provider, err := s.resolveDownloadProvider(ctx, file)
+	provider, target, err := s.readTarget(ctx, file, backupOpExists)
 	if err != nil {
 		return false, err
 	}
 
-	return provider.Exists(ctx, file)
+	return provider.Exists(ctx, target)
 }
 
 // Skipper returns the configured skipper function

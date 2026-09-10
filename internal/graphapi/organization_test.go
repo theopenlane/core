@@ -4,13 +4,13 @@ import (
 	"context"
 	"strings"
 	"testing"
-	"time"
+
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -21,47 +21,25 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/file"
-	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/generated/task"
-	"github.com/theopenlane/core/v2/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/v2/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/v2/internal/ent/historygenerated/filehistory"
-	"github.com/theopenlane/core/v2/internal/ent/historygenerated/taskhistory"
 	"github.com/theopenlane/core/v2/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 )
 
-func waitForCondition(t *testing.T, condition func() bool, msg string) {
-	t.Helper()
-
-	deadline := time.Now().Add(5 * time.Second)
-	for time.Now().Before(deadline) {
-		if condition() {
-			return
-		}
-
-		time.Sleep(100 * time.Millisecond)
-	}
-
-	t.Fatalf("timed out waiting for condition: %s", msg)
-}
-
 func TestQueryOrganization(t *testing.T) {
 	t.Parallel()
 
-	localTestOrg := suite.seedOrgOwner(t)
+	localTestOrg := suite.SeedOrgOwner(t)
 
 	// create api token for the user
-	(&APITokenBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	(&th.APITokenBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
 	// create personal access token for the user
-	(&PersonalAccessTokenBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
+	(&th.PersonalAccessTokenBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
 
 	// add org members
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(localTestOrg.owner.UserCtx, t)
-	anonymousContext := createAnonymousTrustCenterContext("abc123", localTestOrg.owner.OrganizationID)
+	om := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(localTestOrg.Owner.UserCtx, t)
+	anonymousContext := th.CreateAnonymousTrustCenterContext("abc123", localTestOrg.Owner.OrganizationID)
 
 	testCases := []struct {
 		name               string
@@ -73,38 +51,38 @@ func TestQueryOrganization(t *testing.T) {
 	}{
 		{
 			name:               "happy path, get organization",
-			queryID:            localTestOrg.owner.OrganizationID,
-			client:             suite.client.api,
-			ctx:                localTestOrg.owner.UserCtx,
+			queryID:            localTestOrg.Owner.OrganizationID,
+			client:             suite.Client.API,
+			ctx:                localTestOrg.Owner.UserCtx,
 			orgMembersExpected: 2, // owner and 1 member
 		},
 		{
 			name:               "happy path, get using api token",
-			queryID:            localTestOrg.owner.OrganizationID,
-			client:             localTestOrg.apiClient,
+			queryID:            localTestOrg.Owner.OrganizationID,
+			client:             localTestOrg.APIClient,
 			ctx:                context.Background(),
 			orgMembersExpected: 2, // owner and 1 member
 		},
 		{
 			name:               "happy path, get using personal access token",
-			queryID:            localTestOrg.owner.OrganizationID,
-			client:             localTestOrg.patClient,
+			queryID:            localTestOrg.Owner.OrganizationID,
+			client:             localTestOrg.PatClient,
 			ctx:                context.Background(),
 			orgMembersExpected: 2, // owner and 1 member
 		},
 		{
 			name:     "invalid-id",
 			queryID:  "tacos-for-dinner",
-			client:   suite.client.api,
-			ctx:      localTestOrg.owner.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      localTestOrg.Owner.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, anonymous user",
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      anonymousContext,
-			queryID:  localTestOrg.owner.OrganizationID,
-			errorMsg: notFoundErrorMsg,
+			queryID:  localTestOrg.Owner.OrganizationID,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -136,45 +114,45 @@ func TestQueryOrganization(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
 }
 
 func TestQueryOrganizations(t *testing.T) {
 	t.Parallel()
 
-	orgUser := suite.seedOrgOwner(t)
+	orgUser := suite.SeedOrgOwner(t)
 
-	org1ID := orgUser.owner.OrganizationID
-	avatarFile1 := uploadFile(t, logoFilePath)
+	org1ID := orgUser.Owner.OrganizationID
+	avatarFile1 := th.UploadFile(t, th.LogoFilePath)
 
 	input := testclient.CreateOrganizationInput{
 		Name: "test-org-" + ulids.New().String(),
 	}
 	// mock expect upload
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*avatarFile1})
-	resp, err := suite.client.api.CreateOrganization(orgUser.owner.UserCtx, input, avatarFile1, nil)
-	requireNoError(t, err)
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*avatarFile1})
+	resp, err := suite.Client.API.CreateOrganization(orgUser.Owner.UserCtx, input, avatarFile1, nil)
+	th.RequireNoError(t, err)
 	org2ID := resp.CreateOrganization.Organization.ID
 	assert.Assert(t, resp.CreateOrganization.Organization.AvatarFile != nil)
 	avatarFileIDOrg2 := resp.CreateOrganization.Organization.AvatarFile.ID
 
-	avatarFile2 := uploadFile(t, logoFilePath)
+	avatarFile2 := th.UploadFile(t, th.LogoFilePath)
 	input2 := testclient.CreateOrganizationInput{
 		Name: "test-org-" + ulids.New().String(),
 	}
 	// mock expect upload
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*avatarFile2})
-	resp2, err := suite.client.api.CreateOrganization(orgUser.owner.UserCtx, input2, avatarFile2, nil)
-	requireNoError(t, err)
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*avatarFile2})
+	resp2, err := suite.Client.API.CreateOrganization(orgUser.Owner.UserCtx, input2, avatarFile2, nil)
+	th.RequireNoError(t, err)
 	org3ID := resp2.CreateOrganization.Organization.ID
 	assert.Assert(t, resp2.CreateOrganization.Organization.AvatarFile != nil)
 	avatarFileIDOrg3 := resp2.CreateOrganization.Organization.AvatarFile.ID
 
 	// ensure context only has one organization id set, this will mimic JWT authorization
-	testContext := auth.NewTestContextWithOrgID(orgUser.owner.ID, org1ID)
+	testContext := auth.NewTestContextWithOrgID(orgUser.Owner.ID, org1ID)
 
 	t.Run("Get Organizations", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllOrganizations(testContext)
+		resp, err := suite.Client.API.GetAllOrganizations(testContext)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -213,9 +191,9 @@ func TestQueryOrganizations(t *testing.T) {
 	})
 
 	t.Run("support user can read organization avatar", func(t *testing.T) {
-		ctx := newSupportCtx(orgUser.owner.UserCtx, org2ID)
+		ctx := th.NewSupportCtx(orgUser.Owner.UserCtx, org2ID)
 
-		resp, err := suite.client.api.GetAllOrganizations(ctx)
+		resp, err := suite.Client.API.GetAllOrganizations(ctx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -231,24 +209,24 @@ func TestQueryOrganizations(t *testing.T) {
 	})
 
 	// cleanup orgs
-	cleanupOrganizationDataWithContext(orgUser.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(orgUser.Owner.UserCtx, t)
 }
 
 func TestMutationCreateOrganization(t *testing.T) {
 	t.Parallel()
 
-	orgUser := suite.seedOrgOwner(t)
+	orgUser := suite.SeedOrgOwner(t)
 
-	parentOrg, err := suite.client.api.GetOrganizationByID(orgUser.owner.UserCtx, orgUser.owner.OrganizationID)
+	parentOrg, err := suite.Client.API.GetOrganizationByID(orgUser.Owner.UserCtx, orgUser.Owner.OrganizationID)
 	assert.NilError(t, err)
 
 	// setup deleted org
-	orgToDelete := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.owner.UserCtx, t)
+	orgToDelete := (&th.OrganizationBuilder{Client: suite.Client}).MustNew(orgUser.Owner.UserCtx, t)
 	// delete said org
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: orgToDelete.ID}).MustDelete(orgUser.owner.UserCtx, t)
+	(&th.Cleanup[*generated.OrganizationDeleteOne]{Client: suite.Client.DB.Organization, ID: orgToDelete.ID}).MustDelete(orgUser.Owner.UserCtx, t)
 
-	avatarFile := uploadFile(t, logoFilePath)
-	invalidAvatarFile := uploadFile(t, txtFilePath)
+	avatarFile := th.UploadFile(t, th.LogoFilePath)
+	invalidAvatarFile := th.UploadFile(t, th.TxtFilePath)
 
 	testCases := []struct {
 		name                     string
@@ -270,8 +248,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgDescription:           gofakeit.HipsterSentence(),
 			expectedDefaultOrgUpdate: true, // only the first org created should update the default org
 			parentOrgID:              "",   // root org
-			client:                   suite.client.api,
-			ctx:                      orgUser.owner.UserCtx,
+			client:                   suite.Client.API,
+			ctx:                      orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "happy path organization with settings and avatar",
@@ -292,8 +270,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 				},
 			},
 			parentOrgID: "", // root org
-			client:      suite.client.api,
-			ctx:         orgUser.owner.UserCtx,
+			client:      suite.Client.API,
+			ctx:         orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "organization settings with free email domain not allowed",
@@ -304,33 +282,33 @@ func TestMutationCreateOrganization(t *testing.T) {
 				AllowedEmailDomains: []string{"gmail.com"},
 			},
 			parentOrgID: "", // root org
-			client:      suite.client.api,
-			ctx:         orgUser.owner.UserCtx,
-			errorMsg:    invalidInputErrorMsg,
+			client:      suite.Client.API,
+			ctx:         orgUser.Owner.UserCtx,
+			errorMsg:    th.InvalidInputErrorMsg,
 		},
 		{
 			name:           "happy path organization with parent org",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    orgUser.owner.OrganizationID,
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			parentOrgID:    orgUser.Owner.OrganizationID,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "organization with parent org, no access",
 			orgName:        gofakeit.Name(),
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    sharedTestUser2.OrganizationID,
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
-			errorMsg:       notFoundErrorMsg,
+			parentOrgID:    th.SharedTestUser2.OrganizationID,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
+			errorMsg:       th.NotFoundErrorMsg,
 		},
 		{
 			name:           "organization with parent org using personal access token, not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    orgUser.owner.OrganizationID,
-			client:         orgUser.patClient,
+			parentOrgID:    orgUser.Owner.OrganizationID,
+			client:         orgUser.PatClient,
 			ctx:            context.Background(),
 			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -338,8 +316,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "organization with parent org using personal access token, no access to parent, not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    sharedTestUser2.OrganizationID,
-			client:         orgUser.patClient,
+			parentOrgID:    th.SharedTestUser2.OrganizationID,
+			client:         orgUser.PatClient,
 			ctx:            context.Background(),
 			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -347,7 +325,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "organization create with api token not allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			client:         orgUser.apiClient,
+			client:         orgUser.APIClient,
 			ctx:            context.Background(),
 			errorMsg:       common.ErrResourceNotAccessibleWithToken.Error(),
 		},
@@ -355,72 +333,72 @@ func TestMutationCreateOrganization(t *testing.T) {
 			name:           "organization with parent personal org",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: gofakeit.HipsterSentence(),
-			parentOrgID:    orgUser.owner.PersonalOrgID,
+			parentOrgID:    orgUser.Owner.PersonalOrgID,
 			errorMsg:       "personal organizations are not allowed to have child organizations",
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "empty organization name",
 			orgName:        "",
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is less than the required length",
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "long organization name",
 			orgName:        gofakeit.LetterN(161),
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is greater than the required length",
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "organization with no description",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			orgDescription: "",
-			parentOrgID:    orgUser.owner.OrganizationID,
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			parentOrgID:    orgUser.Owner.OrganizationID,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "duplicate organization name",
 			orgName:        parentOrg.Organization.Name,
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "already exists",
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "duplicate organization name, case insensitive",
 			orgName:        strings.ToUpper(parentOrg.Organization.Name),
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "already exists",
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "duplicate organization name, but other was deleted, should pass",
 			orgName:        orgToDelete.Name,
 			orgDescription: gofakeit.HipsterSentence(),
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "organization name with trailing space should work with trailing space removed",
 			orgName:        "orgname ",
 			orgDescription: gofakeit.HipsterSentence(),
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "invalid organization name, too short",
 			orgName:        "a",
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is less than the required length",
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 
@@ -428,31 +406,31 @@ func TestMutationCreateOrganization(t *testing.T) {
 			orgName:        "orgn!me$",
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "invalid or unparsable field: name, field cannot contain special characters",
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "duplicate display name, should be allowed",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			displayName:    parentOrg.Organization.DisplayName,
 			orgDescription: gofakeit.HipsterSentence(),
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:           "display name with spaces should pass",
 			orgName:        ulids.New().String(), // use ulid to ensure uniqueness
 			displayName:    gofakeit.Sentence(),
 			orgDescription: gofakeit.HipsterSentence(),
-			client:         suite.client.api,
-			ctx:            orgUser.owner.UserCtx,
+			client:         suite.Client.API,
+			ctx:            orgUser.Owner.UserCtx,
 		},
 		{
 			name:       "invalid avatar file",
 			orgName:    ulids.New().String(), // use ulid to ensure uniqueness
 			avatarFile: invalidAvatarFile,
-			client:     suite.client.api,
-			ctx:        orgUser.owner.UserCtx,
+			client:     suite.Client.API,
+			ctx:        orgUser.Owner.UserCtx,
 			errorMsg:   "unsupported mime type uploaded: text/plain",
 		},
 		{
@@ -461,8 +439,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 			settings: &testclient.CreateOrganizationSettingInput{
 				AllowedEmailDomains: []string{"theopenlane"},
 			},
-			client:   suite.client.api,
-			ctx:      orgUser.owner.UserCtx,
+			client:   suite.Client.API,
+			ctx:      orgUser.Owner.UserCtx,
 			errorMsg: "invalid or unparsable field: domains",
 		},
 		{
@@ -471,8 +449,8 @@ func TestMutationCreateOrganization(t *testing.T) {
 			settings: &testclient.CreateOrganizationSettingInput{
 				Domains: []string{"theopenlane"},
 			},
-			client:   suite.client.api,
-			ctx:      orgUser.owner.UserCtx,
+			client:   suite.Client.API,
+			ctx:      orgUser.Owner.UserCtx,
 			errorMsg: "invalid or unparsable field: domains",
 		},
 	}
@@ -481,9 +459,9 @@ func TestMutationCreateOrganization(t *testing.T) {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
-					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.avatarFile})
+					th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*tc.avatarFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.mockProvider)
+					th.ExpectUploadCheckOnly(t, suite.Client.MockProvider)
 				}
 			}
 
@@ -541,7 +519,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 				assert.Check(t, is.Len(resp.CreateOrganization.Organization.Setting.Domains, 1))
 
 				// make sure default org is updated if it's the first org created
-				userResp, err := tc.client.GetUserByID(tc.ctx, orgUser.owner.ID)
+				userResp, err := tc.client.GetUserByID(tc.ctx, orgUser.Owner.ID)
 				assert.NilError(t, err)
 
 				if tc.expectedDefaultOrgUpdate {
@@ -564,9 +542,9 @@ func TestMutationCreateOrganization(t *testing.T) {
 			}
 
 			// ensure entity types are created
-			newCtx := auth.NewTestContextWithOrgID(orgUser.owner.ID, resp.CreateOrganization.Organization.ID)
+			newCtx := auth.NewTestContextWithOrgID(orgUser.Owner.ID, resp.CreateOrganization.Organization.ID)
 
-			et, err := suite.client.api.GetEntityTypes(newCtx, &testclient.EntityTypeWhereInput{
+			et, err := suite.Client.API.GetEntityTypes(newCtx, &testclient.EntityTypeWhereInput{
 				OwnerID: &resp.CreateOrganization.Organization.ID,
 			})
 			assert.NilError(t, err)
@@ -574,7 +552,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 			assert.Assert(t, is.Len(et.EntityTypes.Edges, 1))
 
 			// ensure managed groups are created
-			managedGroups, err := suite.client.api.GetGroups(newCtx, &testclient.GroupWhereInput{
+			managedGroups, err := suite.Client.API.GetGroups(newCtx, &testclient.GroupWhereInput{
 				IsManaged: lo.ToPtr(true),
 			})
 			assert.NilError(t, err)
@@ -601,42 +579,42 @@ func TestMutationCreateOrganization(t *testing.T) {
 			assert.Check(t, is.Len(managedGroups.Groups.Edges, num))
 
 			// cleanup org
-			(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(orgUser.owner.UserCtx, t)
+			(&th.Cleanup[*generated.OrganizationDeleteOne]{Client: suite.Client.DB.Organization, ID: resp.CreateOrganization.Organization.ID}).MustDelete(orgUser.Owner.UserCtx, t)
 		})
 	}
 }
 
 func TestMutationUpdateOrganization(t *testing.T) {
 	t.Parallel()
-	orgUser := suite.userBuilder(context.Background(), t)
+	orgUser := suite.UserBuilder(context.Background(), t)
 
 	nameUpdate := ulids.New().String()
 	displayNameUpdate := gofakeit.LetterN(40)
 	descriptionUpdate := gofakeit.HipsterSentence()
 	nameUpdateLong := gofakeit.LetterN(200)
 
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
-	user1 := (&UserBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
+	org := (&th.OrganizationBuilder{Client: suite.Client}).MustNew(orgUser.UserCtx, t)
+	user1 := (&th.UserBuilder{Client: suite.Client}).MustNew(orgUser.UserCtx, t)
 
 	reqCtx := auth.NewTestContextWithOrgID(orgUser.ID, org.ID)
 
 	// create groups for creator permissions tests and add a member
 	// group created by org owner
-	groupProgramCreators := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
-	anotherGroupProgramCreators := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
-	groupProcedureCreators := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
+	groupProgramCreators := (&th.GroupBuilder{Client: suite.Client}).MustNew(reqCtx, t)
+	anotherGroupProgramCreators := (&th.GroupBuilder{Client: suite.Client}).MustNew(reqCtx, t)
+	groupProcedureCreators := (&th.GroupBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 
-	(&GroupMemberBuilder{client: suite.client, GroupID: groupProgramCreators.ID}).MustNew(reqCtx, t)
-	(&GroupMemberBuilder{client: suite.client, GroupID: anotherGroupProgramCreators.ID}).MustNew(reqCtx, t)
-	(&GroupMemberBuilder{client: suite.client, GroupID: groupProcedureCreators.ID}).MustNew(reqCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, GroupID: groupProgramCreators.ID}).MustNew(reqCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, GroupID: anotherGroupProgramCreators.ID}).MustNew(reqCtx, t)
+	(&th.GroupMemberBuilder{Client: suite.Client, GroupID: groupProcedureCreators.ID}).MustNew(reqCtx, t)
 
 	// add a member to the org, to test permissions
-	om := (&OrgMemberBuilder{client: suite.client}).MustNew(reqCtx, t)
+	om := (&th.OrgMemberBuilder{Client: suite.Client}).MustNew(reqCtx, t)
 	memberUserCtx := auth.NewTestContextWithOrgID(om.UserID, org.ID)
 
 	// avatar file setup
-	avatarFile := uploadFile(t, logoFilePath)
-	invalidAvatarFile := uploadFile(t, txtFilePath)
+	avatarFile := th.UploadFile(t, th.LogoFilePath)
+	invalidAvatarFile := th.UploadFile(t, th.TxtFilePath)
 
 	testCases := []struct {
 		name        string
@@ -654,7 +632,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			updateInput: testclient.UpdateOrganizationInput{
 				DisplayName: &nameUpdate,
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
@@ -674,7 +652,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 					},
 				},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
@@ -699,7 +677,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			updateInput: testclient.UpdateOrganizationInput{
 				AddProgramCreatorIDs: []string{groupProgramCreators.ID, anotherGroupProgramCreators.ID},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
@@ -735,7 +713,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 				RemoveProgramCreatorIDs: []string{groupProgramCreators.ID},
 				AddProcedureCreatorIDs:  []string{groupProcedureCreators.ID},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
@@ -774,9 +752,9 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			updateInput: testclient.UpdateOrganizationInput{
 				AddProgramCreatorIDs: []string{groupProgramCreators.ID},
 			},
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      memberUserCtx,
-			errorMsg: notAuthorizedErrorMsg,
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:  "update description and avatar file, happy path",
@@ -785,7 +763,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 				Description: &descriptionUpdate,
 			},
 			avatarFile: avatarFile,
-			client:     suite.client.api,
+			client:     suite.Client.API,
 			ctx:        reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
@@ -800,7 +778,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			updateInput: testclient.UpdateOrganizationInput{
 				DisplayName: &displayNameUpdate,
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
@@ -818,7 +796,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 					Domains: []string{"meow.theopenlane.io", "woof.theopenlane.io"},
 				},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    reqCtx,
 			expectedRes: testclient.UpdateOrganization_UpdateOrganization_Organization{
 				ID:          org.ID,
@@ -831,7 +809,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			name:       "update avatar, invalid file",
 			orgID:      org.ID,
 			avatarFile: invalidAvatarFile,
-			client:     suite.client.api,
+			client:     suite.Client.API,
 			ctx:        reqCtx,
 			errorMsg:   "unsupported mime type uploaded: text/plain",
 		},
@@ -841,7 +819,7 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			updateInput: testclient.UpdateOrganizationInput{
 				DisplayName: &nameUpdateLong,
 			},
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      reqCtx,
 			errorMsg: "value is greater than the required length",
 		},
@@ -851,9 +829,9 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			updateInput: testclient.UpdateOrganizationInput{
 				DisplayName: &nameUpdate,
 			},
-			client:   suite.client.api,
+			client:   suite.Client.API,
 			ctx:      memberUserCtx,
-			errorMsg: notAuthorizedErrorMsg,
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:  "update name, not found",
@@ -861,9 +839,9 @@ func TestMutationUpdateOrganization(t *testing.T) {
 			updateInput: testclient.UpdateOrganizationInput{
 				DisplayName: &nameUpdate,
 			},
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -871,9 +849,9 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if tc.avatarFile != nil {
 				if tc.errorMsg == "" {
-					expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.avatarFile})
+					th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*tc.avatarFile})
 				} else {
-					expectUploadCheckOnly(t, suite.client.mockProvider)
+					th.ExpectUploadCheckOnly(t, suite.Client.MockProvider)
 				}
 			}
 
@@ -914,23 +892,23 @@ func TestMutationUpdateOrganization(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.OrganizationDeleteOne]{client: suite.client.db.Organization, ID: org.ID}).MustDelete(reqCtx, t)
-	(&Cleanup[*generated.UserDeleteOne]{client: suite.client.db.User, ID: user1.ID}).MustDelete(reqCtx, t)
+	(&th.Cleanup[*generated.OrganizationDeleteOne]{Client: suite.Client.DB.Organization, ID: org.ID}).MustDelete(reqCtx, t)
+	(&th.Cleanup[*generated.UserDeleteOne]{Client: suite.Client.DB.User, ID: user1.ID}).MustDelete(reqCtx, t)
 }
 
 func TestMutationDeleteOrganization(t *testing.T) {
 	t.Parallel()
-	orgUser := suite.seedFreshMinimalOrgUsers(t, false)
+	orgUser := suite.SeedFreshMinimalOrgUsers(t, false)
 
-	reqCtx := orgUser.owner.UserCtx
+	reqCtx := orgUser.Owner.UserCtx
 
-	setting, err := suite.client.api.UpdateUserSetting(reqCtx, orgUser.owner.UserInfo.Edges.Setting.ID,
+	setting, err := suite.Client.API.UpdateUserSetting(reqCtx, orgUser.Owner.UserInfo.Edges.Setting.ID,
 		testclient.UpdateUserSettingInput{
-			DefaultOrgID: &orgUser.owner.OrganizationID,
+			DefaultOrgID: &orgUser.Owner.OrganizationID,
 		},
 	)
 	assert.NilError(t, err)
-	assert.Equal(t, orgUser.owner.OrganizationID, setting.UpdateUserSetting.UserSetting.DefaultOrg.ID)
+	assert.Equal(t, orgUser.Owner.OrganizationID, setting.UpdateUserSetting.UserSetting.DefaultOrg.ID)
 
 	testCases := []struct {
 		name     string
@@ -940,38 +918,38 @@ func TestMutationDeleteOrganization(t *testing.T) {
 	}{
 		{
 			name:     "delete org, access denied",
-			orgID:    orgUser.owner.OrganizationID,
-			ctx:      orgUser.member.UserCtx,
-			errorMsg: notAuthorizedErrorMsg,
+			orgID:    orgUser.Owner.OrganizationID,
+			ctx:      orgUser.Member.UserCtx,
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name:     "delete org, not found",
-			orgID:    orgUser.owner.OrganizationID,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			orgID:    orgUser.Owner.OrganizationID,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:  "delete org, happy path",
-			orgID: orgUser.owner.OrganizationID,
-			ctx:   orgUser.owner.UserCtx,
+			orgID: orgUser.Owner.OrganizationID,
+			ctx:   orgUser.Owner.UserCtx,
 		},
 		{
 			name:     "delete org, personal org not allowed",
-			orgID:    orgUser.owner.PersonalOrgID,
-			ctx:      orgUser.owner.UserCtx,
+			orgID:    orgUser.Owner.PersonalOrgID,
+			ctx:      orgUser.Owner.UserCtx,
 			errorMsg: "cannot delete personal organizations",
 		},
 		{
 			name:     "delete org, not found",
 			orgID:    "tacos-tuesday",
-			ctx:      orgUser.owner.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			ctx:      orgUser.Owner.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.DeleteOrganization(tc.ctx, tc.orgID)
+			resp, err := suite.Client.API.DeleteOrganization(tc.ctx, tc.orgID)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -987,178 +965,29 @@ func TestMutationDeleteOrganization(t *testing.T) {
 			assert.Check(t, is.Equal(tc.orgID, resp.DeleteOrganization.DeletedID))
 
 			// update the context to have the correct org after the org is deleted
-			reqCtx := auth.NewTestContextWithOrgID(orgUser.owner.ID, orgUser.owner.OrganizationID)
+			reqCtx := auth.NewTestContextWithOrgID(orgUser.Owner.ID, orgUser.Owner.OrganizationID)
 
 			// make sure the default org is reset
-			settingUpdated, err := suite.client.api.GetUserSettingByID(reqCtx, orgUser.owner.UserInfo.Edges.Setting.ID)
+			settingUpdated, err := suite.Client.API.GetUserSettingByID(reqCtx, orgUser.Owner.UserInfo.Edges.Setting.ID)
 			assert.NilError(t, err)
 			assert.Assert(t, settingUpdated.UserSetting.DefaultOrg != nil)
-			assert.Check(t, orgUser.owner.OrganizationID != settingUpdated.UserSetting.DefaultOrg.ID)
+			assert.Check(t, orgUser.Owner.OrganizationID != settingUpdated.UserSetting.DefaultOrg.ID)
 
 			// allow ctx to ensure the org no longer exists after deletion
-			allowCtx := ent.NewContext(rule.WithInternalContext(reqCtx), suite.client.db)
+			allowCtx := ent.NewContext(rule.WithInternalContext(reqCtx), suite.Client.DB)
 
-			_, err = suite.client.api.GetOrganizationByID(allowCtx, tc.orgID)
-			assert.ErrorContains(t, err, notFoundErrorMsg)
+			_, err = suite.Client.API.GetOrganizationByID(allowCtx, tc.orgID)
+			assert.ErrorContains(t, err, th.NotFoundErrorMsg)
 
 			// tuples and entity are deleted, so we need to skip soft delete and privacy checks
 			ctx := entx.SkipSoftDelete(reqCtx)
 			ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
-			o, err := suite.client.api.GetOrganizationByID(ctx, tc.orgID)
+			o, err := suite.Client.API.GetOrganizationByID(ctx, tc.orgID)
 			assert.NilError(t, err)
 			assert.Assert(t, o != nil)
 
 			assert.Equal(t, o.Organization.ID, tc.orgID)
 		})
 	}
-}
-
-func TestMutationOrganizationCascadeDelete(t *testing.T) {
-	suite.enableGalaForTestSuite(t)
-
-	orgUser := suite.userBuilder(context.Background(), t)
-
-	org := (&OrganizationBuilder{client: suite.client}).MustNew(orgUser.UserCtx, t)
-
-	reqCtx := auth.NewTestContextWithOrgID(orgUser.ID, org.ID)
-	group1 := (&GroupBuilder{client: suite.client}).MustNew(reqCtx, t)
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	// add child org
-	childOrg := (&OrganizationBuilder{client: suite.client, ParentOrgID: org.ID}).MustNew(reqCtx, t)
-
-	// a task gives us an org owned record that tracks history
-	task1 := (&TaskBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	allowCtx := setContext(reqCtx, suite.client.db)
-
-	// the trust center is org owned, but the setting created alongside it is not, it only points at
-	// the trust center. The cascade has to recurse through the trust center to reach it
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(reqCtx, t)
-
-	trustCenterSetting, err := suite.client.db.TrustCenterSetting.Query().
-		Where(trustcentersetting.TrustCenterID(trustCenter.ID)).First(allowCtx)
-	assert.NilError(t, err)
-
-	// the storage path is what the file hook hands to the object storage provider on delete
-	storageKey := "organizations/" + org.ID + "/cascade-test-object"
-
-	file1, err := suite.client.db.File.Create().
-		SetProvidedFileName("cascade-test.txt").
-		SetProvidedFileExtension("txt").
-		SetDetectedContentType("text/plain").
-		SetStoragePath(storageKey).
-		SetURI("file:///tmp/cascade-test.txt").
-		AddOrganizationIDs(org.ID).
-		Save(allowCtx)
-	assert.NilError(t, err)
-
-	// the history rows have to exist up front, otherwise asserting they are gone proves nothing
-	assertHistoryExists(t, allowCtx, task1.ID, file1.ID, true)
-
-	// delete org
-	resp, err := suite.client.api.DeleteOrganization(reqCtx, org.ID)
-
-	assert.NilError(t, err)
-	assert.Assert(t, resp != nil)
-	assert.Assert(t, resp.DeleteOrganization.DeletedID != "")
-
-	// make sure the deletedID matches the ID we wanted to delete
-	assert.Check(t, is.Equal(org.ID, resp.DeleteOrganization.DeletedID))
-
-	_, err = suite.client.api.GetOrganizationByID(reqCtx, org.ID)
-
-	assert.ErrorContains(t, err, notFoundErrorMsg)
-
-	waitForCondition(t, func() bool {
-		_, err := suite.client.api.GetOrganizationByID(reqCtx, childOrg.ID)
-		return err != nil && strings.Contains(err.Error(), notFoundErrorMsg)
-	}, "child org should be deleted by async edge cleanup")
-
-	waitForCondition(t, func() bool {
-		_, err := suite.client.api.GetGroupByID(reqCtx, group1.ID)
-		return err != nil && strings.Contains(err.Error(), notFoundErrorMsg)
-	}, "group should be deleted by async edge cleanup")
-
-	waitForCondition(t, func() bool {
-		// make sure the custom domain(s) no longer exists
-		ctx := privacy.DecisionContext(reqCtx, privacy.Allow)
-		_, err := suite.client.db.CustomDomain.Get(ctx, customDomain.ID)
-		return generated.IsNotFound(err)
-	}, "custom domain should be deleted by async edge cleanup")
-
-	// skipping soft delete makes soft deleted rows visible, so the assertions below fail if the
-	// cascade only marked the records deleted instead of removing them
-	purgedCtx := entx.SkipSoftDelete(privacy.DecisionContext(reqCtx, privacy.Allow))
-
-	// the organization row is removed last, once everything it owned is gone, so its absence is
-	// what tells us the whole cascade finished. Waiting for the queue to go idle is not enough on
-	// its own, a handler that errors parks the job in a retryable state the idle check ignores
-	waitForCondition(t, func() bool {
-		exists, err := suite.client.db.Organization.Query().Where(organization.ID(org.ID)).Exist(purgedCtx)
-
-		return err == nil && !exists
-	}, "organization should be hard deleted by async edge cleanup")
-
-	taskExists, err := suite.client.db.Task.Query().Where(task.ID(task1.ID)).Exist(purgedCtx)
-	assert.NilError(t, err)
-	assert.Check(t, !taskExists, "task should be hard deleted with the organization, not soft deleted")
-
-	fileExists, err := suite.client.db.File.Query().Where(file.ID(file1.ID)).Exist(purgedCtx)
-	assert.NilError(t, err)
-	assert.Check(t, !fileExists, "file should be hard deleted with the organization, not soft deleted")
-
-	trustCenterExists, err := suite.client.db.TrustCenter.Query().Where(trustcenter.ID(trustCenter.ID)).Exist(purgedCtx)
-	assert.NilError(t, err)
-	assert.Check(t, !trustCenterExists, "trust center should be hard deleted with the organization")
-
-	// the setting carries no organization id of its own, it is only reachable by recursing through
-	// the trust center, so this is what proves the nested cleanup runs
-	settingExists, err := suite.client.db.TrustCenterSetting.Query().
-		Where(trustcentersetting.ID(trustCenterSetting.ID)).Exist(purgedCtx)
-	assert.NilError(t, err)
-	assert.Check(t, !settingExists, "trust center setting should be hard deleted with the organization")
-
-	assertHistoryExists(t, purgedCtx, task1.ID, file1.ID, false)
-
-	// the file hook only reaches object storage on a hard delete, a soft delete leaves the object
-	assert.Check(t, suite.client.deletedStorageKeys.Has(storageKey),
-		"the object backing the deleted file should have been removed from object storage")
-
-	// the cascade runs as an internal caller, which the delete permissions hook skips by default,
-	// so without the explicit opt in every cascaded record leaves its relationships behind
-	groupTuples, err := suite.client.fga.GetTuplesForObject(context.Background(), "group:"+group1.ID)
-	assert.NilError(t, err)
-	assert.Check(t, is.Len(groupTuples, 0), "group relationship tuples should be cleaned out of FGA")
-
-	orgTuples, err := suite.client.fga.GetTuplesForObject(context.Background(), "organization:"+org.ID)
-	assert.NilError(t, err)
-	assert.Check(t, is.Len(orgTuples, 0), "organization relationship tuples should be cleaned out of FGA")
-
-	// ensure all tuples, like feature tuples are cleaned up
-	allTuples, err := suite.client.fga.GetAllTuples(context.Background())
-	assert.NilError(t, err)
-
-	for _, tup := range allTuples {
-		assert.Check(t, tup.Key.User != "organization:"+org.ID,
-			"tuple %s#%s@%s should have been cleaned out of FGA", tup.Key.Object, tup.Key.Relation, tup.Key.User)
-	}
-}
-
-// assertHistoryExists checks whether the history rows for the given task and file are present
-func assertHistoryExists(t *testing.T, ctx context.Context, taskID, fileID string, want bool) {
-	t.Helper()
-
-	historyCtx := history.WithContext(ctx)
-
-	taskHistory, err := suite.client.db.HistoryClient.TaskHistory.Query().
-		Where(taskhistory.Ref(taskID)).Exist(historyCtx)
-	assert.NilError(t, err)
-	assert.Check(t, is.Equal(want, taskHistory), "task history presence mismatch")
-
-	fileHistory, err := suite.client.db.HistoryClient.FileHistory.Query().
-		Where(filehistory.Ref(fileID)).Exist(historyCtx)
-	assert.NilError(t, err)
-	assert.Check(t, is.Equal(want, fileHistory), "file history presence mismatch")
 }

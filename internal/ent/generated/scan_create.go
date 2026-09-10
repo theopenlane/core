@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/finding"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/remediation"
@@ -240,6 +241,20 @@ func (_c *ScanCreate) SetNillableReviewedByGroupID(v *string) *ScanCreate {
 	return _c
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *ScanCreate) SetReviewedByIdentityHolderID(v string) *ScanCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableReviewedByIdentityHolderID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (_c *ScanCreate) SetAssignedTo(v string) *ScanCreate {
 	_c.mutation.SetAssignedTo(v)
@@ -278,6 +293,20 @@ func (_c *ScanCreate) SetAssignedToGroupID(v string) *ScanCreate {
 func (_c *ScanCreate) SetNillableAssignedToGroupID(v *string) *ScanCreate {
 	if v != nil {
 		_c.SetAssignedToGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (_c *ScanCreate) SetAssignedToIdentityHolderID(v string) *ScanCreate {
+	_c.mutation.SetAssignedToIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableAssignedToIdentityHolderID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetAssignedToIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -541,6 +570,11 @@ func (_c *ScanCreate) SetReviewedByGroup(v *Group) *ScanCreate {
 	return _c.SetReviewedByGroupID(v.ID)
 }
 
+// SetReviewedByIdentityHolder sets the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (_c *ScanCreate) SetReviewedByIdentityHolder(v *IdentityHolder) *ScanCreate {
+	return _c.SetReviewedByIdentityHolderID(v.ID)
+}
+
 // SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
 func (_c *ScanCreate) SetAssignedToUser(v *User) *ScanCreate {
 	return _c.SetAssignedToUserID(v.ID)
@@ -549,6 +583,11 @@ func (_c *ScanCreate) SetAssignedToUser(v *User) *ScanCreate {
 // SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
 func (_c *ScanCreate) SetAssignedToGroup(v *Group) *ScanCreate {
 	return _c.SetAssignedToGroupID(v.ID)
+}
+
+// SetAssignedToIdentityHolder sets the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (_c *ScanCreate) SetAssignedToIdentityHolder(v *IdentityHolder) *ScanCreate {
+	return _c.SetAssignedToIdentityHolderID(v.ID)
 }
 
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
@@ -1087,6 +1126,23 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 		_node.ReviewedByGroupID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.ReviewedByIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.ReviewedByIdentityHolderTable,
+			Columns: []string{scan.ReviewedByIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByIdentityHolderID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.AssignedToUserIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1119,6 +1175,23 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.AssignedToGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssignedToIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   scan.AssignedToIdentityHolderTable,
+			Columns: []string{scan.AssignedToIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssignedToIdentityHolderID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {

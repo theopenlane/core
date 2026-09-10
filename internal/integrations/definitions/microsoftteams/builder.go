@@ -38,13 +38,16 @@ func Builder(cfg Config) registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       teamsCredential.ID(),
-					Name:                "Microsoft Teams OAuth",
-					Description:         "Connect your Microsoft Teams workspace using OAuth.",
-					CredentialRefs:      []types.CredentialSlotID{teamsCredential.ID()},
-					ClientRefs:          []types.ClientID{teamsClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         installation.Registration(),
+					CredentialRef:  teamsCredential.ID(),
+					Name:           "Microsoft Teams OAuth",
+					Description:    "Connect your Microsoft Teams workspace using OAuth.",
+					CredentialRefs: []types.CredentialSlotID{teamsCredential.ID()},
+					ClientRefs:     []types.ClientID{teamsClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: teamsClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: installation.Registration(),
 					Auth: auth.OAuthRegistration(auth.OAuthRegistrationOptions[teamsCred]{
 						CredentialRef: teamsCredential,
 						Config: auth.OAuthConfig{ //nolint:gosec
@@ -83,15 +86,6 @@ func Builder(cfg Config) registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Graph /me to verify Teams access",
-					Topic:        DefinitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    teamsClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				{
 					Name:         MessageSendOp.Name(),
 					Description:  "Send a Teams channel message via Microsoft Graph",

@@ -12,6 +12,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
 
+// init registers the workflow listeners so gala setup picks them up automatically
+func init() { registerListeners(WorkflowListeners) }
+
 // workflowMutationListenerLabel identifies the workflow mutation listener family in
 // dependency-resolution skip logs
 const workflowMutationListenerLabel = "workflow.mutation"

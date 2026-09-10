@@ -16,8 +16,6 @@ var (
 	entraCredential = types.NewClientRef[azcore.TokenCredential]()
 	// EntraClient is the client ref for the Microsoft Graph service client used by directory operations
 	entraClient = types.NewClientRef[*msgraphsdk.GraphServiceClient]()
-	// healthDefaultOperation is the operation ref for the Azure Entra ID health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// DirectorySyncOperation is the operation ref for the Azure Entra ID directory sync operation
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )

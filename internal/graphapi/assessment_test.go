@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
@@ -17,8 +19,8 @@ import (
 )
 
 func TestQueryAssessment(t *testing.T) {
-	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	assessment1 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	assessment2 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name           string
@@ -31,44 +33,44 @@ func TestQueryAssessment(t *testing.T) {
 		{
 			name:           "happy path",
 			queryID:        assessment1.ID,
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedResult: assessment1,
 		},
 		{
 			name:           "happy path, assessment created by admin user",
 			queryID:        assessment2.ID,
-			client:         suite.client.api,
-			ctx:            sharedTestUser1.UserCtx,
+			client:         suite.Client.API,
+			ctx:            th.SharedTestUser1.UserCtx,
 			expectedResult: assessment2,
 		},
 		{
 			name:           "happy path using personal access token",
 			queryID:        assessment1.ID,
-			client:         suite.client.apiWithPAT,
+			client:         suite.Client.APIWithPAT,
 			ctx:            context.Background(),
 			expectedResult: assessment1,
 		},
 		{
 			name:     "no access, user of different org",
 			queryID:  assessment1.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, api token of different org",
 			queryID:  assessment1.ID,
-			client:   suite.client.apiWithTokenOrg2,
+			client:   suite.Client.APIWithTokenOrg2,
 			ctx:      context.Background(),
-			errorMsg: notFoundErrorMsg,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "not found, invalid ID",
 			queryID:  ulids.New().String(),
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -91,29 +93,29 @@ func TestQueryAssessment(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment1.ID, assessment2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, IDs: []string{assessment1.ID, assessment2.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestQueryAssessments(t *testing.T) {
 	// assessments for the first organization
-	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	assessment1 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	assessment2 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	// assessment created by an admin user of the first organization
-	assessment3 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	assessment3 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedAdminUser.UserCtx, t)
 
 	// assessment for another organization
-	anotherUser := suite.userBuilder(context.Background(), t)
-	(&AssessmentBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
+	anotherUser := suite.UserBuilder(context.Background(), t)
+	(&th.AssessmentBuilder{Client: suite.Client}).MustNew(anotherUser.UserCtx, t)
 
 	t.Run("Get all assessments", func(t *testing.T) {
-		resp, err := suite.client.api.GetAllAssessments(sharedTestUser1.UserCtx)
+		resp, err := suite.Client.API.GetAllAssessments(th.SharedTestUser1.UserCtx)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		// should return at least the 3 assessments created by sharedTestUser1's organization
+		// should return at least the 3 assessments created by th.SharedTestUser1's organization
 		assert.Check(t, resp.Assessments.TotalCount >= 3)
 	})
 
@@ -122,7 +124,7 @@ func TestQueryAssessments(t *testing.T) {
 			Name: &assessment1.Name,
 		}
 
-		resp, err := suite.client.api.GetAssessments(sharedTestUser1.UserCtx, lo.ToPtr(int64(10)), nil, whereInput)
+		resp, err := suite.Client.API.GetAssessments(th.SharedTestUser1.UserCtx, lo.ToPtr(int64(10)), nil, whereInput)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -131,7 +133,7 @@ func TestQueryAssessments(t *testing.T) {
 	})
 
 	t.Run("Get assessments using personal access token", func(t *testing.T) {
-		resp, err := suite.client.apiWithPAT.GetAllAssessments(context.Background())
+		resp, err := suite.Client.APIWithPAT.GetAllAssessments(context.Background())
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -139,7 +141,7 @@ func TestQueryAssessments(t *testing.T) {
 	})
 
 	t.Run("Get assessments with pagination", func(t *testing.T) {
-		resp, err := suite.client.api.GetAssessments(sharedTestUser1.UserCtx, lo.ToPtr(int64(2)), nil, nil)
+		resp, err := suite.Client.API.GetAssessments(th.SharedTestUser1.UserCtx, lo.ToPtr(int64(2)), nil, nil)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
@@ -148,13 +150,13 @@ func TestQueryAssessments(t *testing.T) {
 		assert.Assert(t, resp.Assessments.PageInfo.EndCursor != nil)
 	})
 
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment1.ID, assessment2.ID, assessment3.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID, assessment3.TemplateID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	cleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, IDs: []string{assessment1.ID, assessment2.ID, assessment3.ID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID, assessment3.TemplateID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
 }
 
 func TestMutationCreateAssessment(t *testing.T) {
-	template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	template := (&th.TemplateBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	jsonConfig := map[string]any{
 		"title":       "Test Assessment Template Missing",
@@ -180,25 +182,25 @@ func TestMutationCreateAssessment(t *testing.T) {
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
 				TemplateID: lo.ToPtr(template.ID),
-				OwnerID:    &sharedTestUser1.OrganizationID,
+				OwnerID:    &th.SharedTestUser1.OrganizationID,
 				Jsonconfig: jsonConfig,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, all fields",
 			request: testclient.CreateAssessmentInput{
 				Name:                gofakeit.Company(),
 				TemplateID:          lo.ToPtr(template.ID),
-				OwnerID:             &sharedTestUser1.OrganizationID,
+				OwnerID:             &th.SharedTestUser1.OrganizationID,
 				AssessmentType:      lo.ToPtr(enums.AssessmentTypeInternal),
 				Tags:                []string{"tag1", "tag2"},
 				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day
 				Jsonconfig:          jsonConfig,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path using personal access token",
@@ -206,28 +208,28 @@ func TestMutationCreateAssessment(t *testing.T) {
 				Name:       gofakeit.Company(),
 				TemplateID: lo.ToPtr(template.ID),
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
 			name: "missing required field - jsonconfig",
 			request: testclient.CreateAssessmentInput{
-				OwnerID: &sharedTestUser1.OrganizationID,
+				OwnerID: &th.SharedTestUser1.OrganizationID,
 				Name:    "another assessment",
 			},
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
 			errorMsg: "jsonconfig is required",
 		},
 		{
 			name: "missing required field - name",
 			request: testclient.CreateAssessmentInput{
 				TemplateID: lo.ToPtr(template.ID),
-				OwnerID:    &sharedTestUser1.OrganizationID,
+				OwnerID:    &th.SharedTestUser1.OrganizationID,
 				Jsonconfig: jsonConfig,
 			},
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
 			errorMsg: "value is less than the required length",
 		},
 		{
@@ -235,12 +237,12 @@ func TestMutationCreateAssessment(t *testing.T) {
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
 				TemplateID: lo.ToPtr(ulids.New().String()),
-				OwnerID:    &sharedTestUser1.OrganizationID,
+				OwnerID:    &th.SharedTestUser1.OrganizationID,
 				Jsonconfig: jsonConfig,
 			},
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notAuthorizedErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotAuthorizedErrorMsg,
 		},
 	}
 
@@ -266,15 +268,15 @@ func TestMutationCreateAssessment(t *testing.T) {
 				assert.Check(t, is.Len(resp.CreateAssessment.Assessment.Tags, len(tc.request.Tags)))
 			}
 
-			(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: resp.CreateAssessment.Assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+			(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: resp.CreateAssessment.Assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 		})
 	}
 
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: template.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationTemplateFromAssessment(t *testing.T) {
-	assess := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	assess := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	newName := gofakeit.Company() + "-" + ulids.New().String()
 	fullName := gofakeit.Company() + "-" + ulids.New().String()
@@ -331,7 +333,7 @@ func TestMutationTemplateFromAssessment(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := suite.client.api.CreateAssessmentTemplate(sharedTestUser1.UserCtx, tc.input)
+			resp, err := suite.Client.API.CreateAssessmentTemplate(th.SharedTestUser1.UserCtx, tc.input)
 
 			if tc.errorMsg != "" {
 				assert.ErrorContains(t, err, tc.errorMsg)
@@ -362,11 +364,11 @@ func TestMutationTemplateFromAssessment(t *testing.T) {
 	}
 
 	if len(templateIDs) > 0 {
-		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: templateIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, IDs: templateIDs}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	}
 
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assess.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assess.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assess.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assess.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateAssessment(t *testing.T) {
@@ -382,7 +384,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 		},
 	}
 
-	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	assessment := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 	templateIDPtr := lo.ToPtr(assessment.TemplateID)
 
 	testCases := []struct {
@@ -401,8 +403,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 				TemplateID: templateIDPtr,
 				Jsonconfig: jsonConfig,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, update due date",
@@ -410,8 +412,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			request: testclient.UpdateAssessmentInput{
 				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day,
 			},
-			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedAdminUser.UserCtx,
 		},
 		{
 			name: "happy path, update tags",
@@ -421,8 +423,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 				TemplateID: templateIDPtr,
 				Jsonconfig: jsonConfig,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path, append tags",
@@ -432,8 +434,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 				TemplateID: templateIDPtr,
 				Jsonconfig: jsonConfig,
 			},
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 		{
 			name: "happy path using personal access token",
@@ -443,7 +445,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 				TemplateID: templateIDPtr,
 				Jsonconfig: jsonConfig,
 			},
-			client: suite.client.apiWithPAT,
+			client: suite.Client.APIWithPAT,
 			ctx:    context.Background(),
 		},
 		{
@@ -454,9 +456,9 @@ func TestMutationUpdateAssessment(t *testing.T) {
 				TemplateID: templateIDPtr,
 				Jsonconfig: jsonConfig,
 			},
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name: "no access, user of different org",
@@ -466,9 +468,9 @@ func TestMutationUpdateAssessment(t *testing.T) {
 				Jsonconfig: jsonConfig,
 				TemplateID: templateIDPtr,
 			},
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -504,13 +506,13 @@ func TestMutationUpdateAssessment(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteAssessment(t *testing.T) {
-	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	assessment1 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
+	assessment2 := (&th.AssessmentBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -522,42 +524,42 @@ func TestMutationDeleteAssessment(t *testing.T) {
 		{
 			name:        "not authorized, delete assessment",
 			idToDelete:  assessment1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "not authorized, view only user",
 			idToDelete:  assessment1.ID,
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
 			expectedErr: "you are not authorized to perform this action",
 		},
 		{
 			name:       "happy path, delete assessment",
 			idToDelete: assessment1.ID,
-			client:     suite.client.api,
-			ctx:        sharedTestUser1.UserCtx,
+			client:     suite.Client.API,
+			ctx:        th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:        "assessment already deleted, not found",
 			idToDelete:  assessment1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:       "happy path, delete assessment using personal access token",
 			idToDelete: assessment2.ID,
-			client:     suite.client.apiWithPAT,
+			client:     suite.Client.APIWithPAT,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "unknown assessment, not found",
 			idToDelete:  ulids.New().String(),
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -576,34 +578,34 @@ func TestMutationDeleteAssessment(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }
 
 func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
-	assessment1 := (&AssessmentBuilder{client: suite.client, Name: "Duplicate Test"}).MustNew(sharedTestUser1.UserCtx, t)
+	assessment1 := (&th.AssessmentBuilder{Client: suite.Client, Name: "Duplicate Test"}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	t.Run("duplicate name in same org should be allowed", func(t *testing.T) {
-		template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+		template := (&th.TemplateBuilder{Client: suite.Client}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 		request := testclient.CreateAssessmentInput{
 			Name:       "Duplicate Test",
 			TemplateID: lo.ToPtr(template.ID),
-			OwnerID:    &sharedTestUser1.OrganizationID,
+			OwnerID:    &th.SharedTestUser1.OrganizationID,
 		}
 
-		resp, err := suite.client.api.CreateAssessment(sharedTestUser1.UserCtx, request)
+		resp, err := suite.Client.API.CreateAssessment(th.SharedTestUser1.UserCtx, request)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal("Duplicate Test", resp.CreateAssessment.Assessment.Name))
 
-		(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: resp.CreateAssessment.Assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: resp.CreateAssessment.Assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+		(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: template.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 	})
 
 	// assessment with same name in different org should succeed
 	t.Run("duplicate name in different org should succeed", func(t *testing.T) {
-		anotherUser := suite.userBuilder(context.Background(), t)
-		template := (&TemplateBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
+		anotherUser := suite.UserBuilder(context.Background(), t)
+		template := (&th.TemplateBuilder{Client: suite.Client}).MustNew(anotherUser.UserCtx, t)
 
 		request := testclient.CreateAssessmentInput{
 			Name:       "Duplicate Test",
@@ -611,14 +613,14 @@ func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 			OwnerID:    &anotherUser.OrganizationID,
 		}
 
-		resp, err := suite.client.api.CreateAssessment(anotherUser.UserCtx, request)
+		resp, err := suite.Client.API.CreateAssessment(anotherUser.UserCtx, request)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal("Duplicate Test", resp.CreateAssessment.Assessment.Name))
 
-		cleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
+		th.CleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
 	})
 
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment1.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment1.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment1.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment1.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

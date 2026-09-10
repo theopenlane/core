@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
@@ -11,7 +13,7 @@ import (
 )
 
 func TestQueryMappableDomainByID(t *testing.T) {
-	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	mappableDomain := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name         string
@@ -25,15 +27,15 @@ func TestQueryMappableDomainByID(t *testing.T) {
 			name:         "happy path",
 			expectedName: mappableDomain.Name,
 			queryID:      mappableDomain.ID,
-			client:       suite.client.api,
-			ctx:          sharedTestUser1.UserCtx,
+			client:       suite.Client.API,
+			ctx:          th.SharedTestUser1.UserCtx,
 		},
 		{
 			name:     "done",
 			queryID:  "iddne",
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -54,13 +56,13 @@ func TestQueryMappableDomainByID(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, ID: mappableDomain.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestQueryMappableDomains(t *testing.T) {
-	localTestUser := suite.seedOrgOwner(t)
-	mappableDomain1 := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	mappableDomain2 := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	localTestUser := suite.SeedOrgOwner(t)
+	mappableDomain1 := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	mappableDomain2 := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 	bologneName := "bologne.io"
 
 	testCases := []struct {
@@ -72,8 +74,8 @@ func TestQueryMappableDomains(t *testing.T) {
 	}{
 		{
 			name:   "query by name",
-			client: suite.client.api,
-			ctx:    localTestUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    localTestUser.Owner.UserCtx,
 			where: &testclient.MappableDomainWhereInput{
 				Name: &mappableDomain1.Name,
 			},
@@ -81,8 +83,8 @@ func TestQueryMappableDomains(t *testing.T) {
 		},
 		{
 			name:   "query by name, other",
-			client: suite.client.api,
-			ctx:    localTestUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    localTestUser.Owner.UserCtx,
 			where: &testclient.MappableDomainWhereInput{
 				Name: &mappableDomain2.Name,
 			},
@@ -90,8 +92,8 @@ func TestQueryMappableDomains(t *testing.T) {
 		},
 		{
 			name:   "query by name, does not exist",
-			client: suite.client.api,
-			ctx:    localTestUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    localTestUser.Owner.UserCtx,
 			where: &testclient.MappableDomainWhereInput{
 				Name: &bologneName,
 			},
@@ -110,9 +112,9 @@ func TestQueryMappableDomains(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{mappableDomain1.ID, mappableDomain2.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, IDs: []string{mappableDomain1.ID, mappableDomain2.ID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 
-	cleanupOrganizationDataWithContext(localTestUser.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestUser.Owner.UserCtx, t)
 }
 
 func TestMutationCreateMappableDomain(t *testing.T) {
@@ -129,8 +131,8 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 				Name:   "trust.theopenlane.io",
 				ZoneID: "trust-zone-id",
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "invalid domain",
@@ -138,8 +140,8 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 				Name:   "!not-a-domain",
 				ZoneID: "trust-zone-id",
 			},
-			client:      suite.client.api,
-			ctx:         sharedSystemAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedSystemAdminUser.UserCtx,
 			expectedErr: "invalid or unparsable field: url",
 		},
 		{
@@ -148,8 +150,8 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 				Name:   "trust.theopenlane.io",
 				ZoneID: "trust-zone-id",
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 	}
@@ -167,7 +169,7 @@ func TestMutationCreateMappableDomain(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.request.Name, resp.CreateMappableDomain.MappableDomain.Name))
 
-			(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: resp.CreateMappableDomain.MappableDomain.ID}).MustDelete(tc.ctx, t)
+			(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, ID: resp.CreateMappableDomain.MappableDomain.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 }
@@ -197,8 +199,8 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 					ZoneID: "bulk3-zone-id",
 				},
 			},
-			client:      suite.client.api,
-			ctx:         sharedSystemAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedSystemAdminUser.UserCtx,
 			numExpected: 3,
 		},
 		{
@@ -209,8 +211,8 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 					ZoneID: "singlebulk-zone-id",
 				},
 			},
-			client:      suite.client.api,
-			ctx:         sharedSystemAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedSystemAdminUser.UserCtx,
 			numExpected: 1,
 		},
 		{
@@ -225,8 +227,8 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 					ZoneID: "singlebulk-zone-id",
 				},
 			},
-			client:      suite.client.api,
-			ctx:         sharedSystemAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedSystemAdminUser.UserCtx,
 			expectedErr: "invalid or unparsable field: url",
 		},
 		{
@@ -237,15 +239,15 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 					ZoneID: "singlebulk-zone-id",
 				},
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
 			expectedErr: "not found",
 		},
 		{
 			name:        "empty input",
 			requests:    []*testclient.CreateMappableDomainInput{},
-			client:      suite.client.api,
-			ctx:         sharedSystemAdminUser.UserCtx,
+			client:      suite.Client.API,
+			ctx:         th.SharedSystemAdminUser.UserCtx,
 			expectedErr: "input is required",
 		},
 	}
@@ -270,8 +272,8 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 
 			// Clean up created domains
 			for _, domain := range resp.CreateBulkMappableDomain.MappableDomains {
-				(&Cleanup[*generated.MappableDomainDeleteOne]{
-					client: suite.client.db.MappableDomain,
+				(&th.Cleanup[*generated.MappableDomainDeleteOne]{
+					Client: suite.Client.DB.MappableDomain,
 					ID:     domain.ID,
 				}).MustDelete(tc.ctx, t)
 			}
@@ -280,7 +282,7 @@ func TestMutationCreateBulkMappableDomain(t *testing.T) {
 }
 
 func TestUpdateMappableDomain(t *testing.T) {
-	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	mappableDomain := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -293,8 +295,8 @@ func TestUpdateMappableDomain(t *testing.T) {
 		{
 			name:    "happy path",
 			queryID: mappableDomain.ID,
-			client:  suite.client.api,
-			ctx:     sharedSystemAdminUser.UserCtx,
+			client:  suite.Client.API,
+			ctx:     th.SharedSystemAdminUser.UserCtx,
 			input: testclient.UpdateMappableDomainInput{
 				Tags: []string{"hello"},
 			},
@@ -302,9 +304,9 @@ func TestUpdateMappableDomain(t *testing.T) {
 		{
 			name:     "does not exist",
 			queryID:  "iddne",
-			client:   suite.client.api,
-			ctx:      sharedSystemAdminUser.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedSystemAdminUser.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 			input: testclient.UpdateMappableDomainInput{
 				Tags: []string{"hello"},
 			},
@@ -312,9 +314,9 @@ func TestUpdateMappableDomain(t *testing.T) {
 		{
 			name:     "not allowed",
 			queryID:  mappableDomain.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser1.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser1.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 			input: testclient.UpdateMappableDomainInput{
 				Tags: []string{"hello"},
 			},
@@ -337,14 +339,14 @@ func TestUpdateMappableDomain(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, ID: mappableDomain.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }
 
 func TestGetAllMappableDomains(t *testing.T) {
 	// Create test mappable domains
-	mappableDomain1 := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	mappableDomain2 := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	mappableDomain3 := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	mappableDomain1 := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	mappableDomain2 := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
+	mappableDomain3 := (&th.MappableDomainBuilder{Client: suite.Client}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	// ignore conflicts from other tests, just make sure we get these back
 	total := 3
@@ -357,13 +359,13 @@ func TestGetAllMappableDomains(t *testing.T) {
 	}{
 		{
 			name:   "happy path - system admin can see all domains",
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name:   "regular user",
-			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedTestUser1.UserCtx,
 		},
 	}
 
@@ -396,5 +398,5 @@ func TestGetAllMappableDomains(t *testing.T) {
 	}
 
 	// Clean up created domains
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{mappableDomain1.ID, mappableDomain2.ID, mappableDomain3.ID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&th.Cleanup[*generated.MappableDomainDeleteOne]{Client: suite.Client.DB.MappableDomain, IDs: []string{mappableDomain1.ID, mappableDomain2.ID, mappableDomain3.ID}}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }

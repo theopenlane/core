@@ -221,6 +221,26 @@ func (_u *IdentityHolderUpdate) ClearInternalOwnerGroupID() *IdentityHolderUpdat
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *IdentityHolderUpdate) SetInternalOwnerIdentityHolderID(v string) *IdentityHolderUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *IdentityHolderUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *IdentityHolderUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *IdentityHolderUpdate) ClearInternalOwnerIdentityHolderID() *IdentityHolderUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *IdentityHolderUpdate) SetEnvironmentName(v string) *IdentityHolderUpdate {
 	_u.mutation.SetEnvironmentName(v)
@@ -756,6 +776,11 @@ func (_u *IdentityHolderUpdate) SetInternalOwnerGroup(v *Group) *IdentityHolderU
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *IdentityHolderUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *IdentityHolderUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *IdentityHolderUpdate) SetEnvironment(v *CustomTypeEnum) *IdentityHolderUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -1122,6 +1147,12 @@ func (_u *IdentityHolderUpdate) ClearInternalOwnerUser() *IdentityHolderUpdate {
 // ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
 func (_u *IdentityHolderUpdate) ClearInternalOwnerGroup() *IdentityHolderUpdate {
 	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *IdentityHolderUpdate) ClearInternalOwnerIdentityHolder() *IdentityHolderUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -1972,6 +2003,35 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   identityholder.InternalOwnerIdentityHolderTable,
+			Columns: []string{identityholder.InternalOwnerIdentityHolderColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   identityholder.InternalOwnerIdentityHolderTable,
+			Columns: []string{identityholder.InternalOwnerIdentityHolderColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -3052,6 +3112,26 @@ func (_u *IdentityHolderUpdateOne) ClearInternalOwnerGroupID() *IdentityHolderUp
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *IdentityHolderUpdateOne) SetInternalOwnerIdentityHolderID(v string) *IdentityHolderUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *IdentityHolderUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *IdentityHolderUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *IdentityHolderUpdateOne) ClearInternalOwnerIdentityHolderID() *IdentityHolderUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_u *IdentityHolderUpdateOne) SetEnvironmentName(v string) *IdentityHolderUpdateOne {
 	_u.mutation.SetEnvironmentName(v)
@@ -3587,6 +3667,11 @@ func (_u *IdentityHolderUpdateOne) SetInternalOwnerGroup(v *Group) *IdentityHold
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *IdentityHolderUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *IdentityHolderUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *IdentityHolderUpdateOne) SetEnvironment(v *CustomTypeEnum) *IdentityHolderUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -3953,6 +4038,12 @@ func (_u *IdentityHolderUpdateOne) ClearInternalOwnerUser() *IdentityHolderUpdat
 // ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
 func (_u *IdentityHolderUpdateOne) ClearInternalOwnerGroup() *IdentityHolderUpdateOne {
 	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *IdentityHolderUpdateOne) ClearInternalOwnerIdentityHolder() *IdentityHolderUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -4833,6 +4924,35 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   identityholder.InternalOwnerIdentityHolderTable,
+			Columns: []string{identityholder.InternalOwnerIdentityHolderColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2O,
+			Inverse: false,
+			Table:   identityholder.InternalOwnerIdentityHolderTable,
+			Columns: []string{identityholder.InternalOwnerIdentityHolderColumn},
+			Bidi:    true,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

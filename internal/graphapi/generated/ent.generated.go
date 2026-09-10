@@ -4,7 +4,7 @@ package gqlgenerated
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
 	"errors"
 	"fmt"
 	"math"
@@ -86,8 +86,8 @@ type IdentityHolderResolver interface {
 }
 type IntegrationResolver interface {
 	WebhookURLs(ctx context.Context, obj *generated.Integration) (map[string]any, error)
-	Credentials(ctx context.Context, obj *generated.Integration) (json.RawMessage, error)
-	Config(ctx context.Context, obj *generated.Integration) (json.RawMessage, error)
+	Credentials(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
+	Config(ctx context.Context, obj *generated.Integration) (jsontext.Value, error)
 }
 type InternalPolicyResolver interface {
 	HasPendingWorkflow(ctx context.Context, obj *generated.InternalPolicy) (bool, error)
@@ -58468,6 +58468,29 @@ func (ec *executionContext) fieldContext_Asset_internalOwnerGroupID(_ context.Co
 	return graphql.NewScalarFieldContext("Asset", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Asset_internalOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Asset_internalOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Asset_internalOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Asset", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Asset_assetSubtypeName(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -59601,6 +59624,38 @@ func (ec *executionContext) fieldContext_Asset_internalOwnerGroup(_ context.Cont
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Asset_internalOwnerIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Asset_internalOwnerIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Asset_internalOwnerIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Asset",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -62500,6 +62555,29 @@ func (ec *executionContext) fieldContext_Campaign_internalOwnerGroupID(_ context
 	return graphql.NewScalarFieldContext("Campaign", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Campaign_internalOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Campaign) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Campaign_internalOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Campaign_internalOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Campaign", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Campaign_workflowEligibleMarker(ctx context.Context, field graphql.CollectedField, obj *generated.Campaign) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -63390,6 +63468,38 @@ func (ec *executionContext) fieldContext_Campaign_internalOwnerGroup(_ context.C
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Campaign_internalOwnerIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Campaign) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Campaign_internalOwnerIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Campaign_internalOwnerIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Campaign",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -82114,6 +82224,29 @@ func (ec *executionContext) fieldContext_Entity_internalOwnerGroupID(_ context.C
 	return graphql.NewScalarFieldContext("Entity", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Entity_internalOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_internalOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_internalOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Entity", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Entity_reviewedBy(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -82180,6 +82313,29 @@ func (ec *executionContext) _Entity_reviewedByGroupID(ctx context.Context, field
 	)
 }
 func (ec *executionContext) fieldContext_Entity_reviewedByGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Entity", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _Entity_reviewedByIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_reviewedByIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_reviewedByIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Entity", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
@@ -83576,6 +83732,38 @@ func (ec *executionContext) fieldContext_Entity_internalOwnerGroup(_ context.Con
 	return fc, nil
 }
 
+func (ec *executionContext) _Entity_internalOwnerIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_internalOwnerIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_internalOwnerIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Entity",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Entity_reviewedByUser(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -83635,6 +83823,38 @@ func (ec *executionContext) fieldContext_Entity_reviewedByGroup(_ context.Contex
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Entity_reviewedByIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_reviewedByIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_reviewedByIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Entity",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -90710,6 +90930,29 @@ func (ec *executionContext) fieldContext_Finding_reviewedByGroupID(_ context.Con
 	return graphql.NewScalarFieldContext("Finding", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Finding_reviewedByIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Finding) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Finding_reviewedByIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Finding_reviewedByIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Finding", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Finding_assignedTo(ctx context.Context, field graphql.CollectedField, obj *generated.Finding) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -90776,6 +91019,29 @@ func (ec *executionContext) _Finding_assignedToGroupID(ctx context.Context, fiel
 	)
 }
 func (ec *executionContext) fieldContext_Finding_assignedToGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Finding", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _Finding_assignedToIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Finding) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Finding_assignedToIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AssignedToIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Finding_assignedToIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Finding", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
@@ -92080,6 +92346,38 @@ func (ec *executionContext) fieldContext_Finding_reviewedByGroup(_ context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Finding_reviewedByIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Finding) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Finding_reviewedByIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Finding_reviewedByIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Finding",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Finding_assignedToUser(ctx context.Context, field graphql.CollectedField, obj *generated.Finding) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -92139,6 +92437,38 @@ func (ec *executionContext) fieldContext_Finding_assignedToGroup(_ context.Conte
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Finding_assignedToIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Finding) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Finding_assignedToIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AssignedToIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Finding_assignedToIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Finding",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -99148,6 +99478,29 @@ func (ec *executionContext) fieldContext_IdentityHolder_internalOwnerGroupID(_ c
 	return graphql.NewScalarFieldContext("IdentityHolder", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _IdentityHolder_internalOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.IdentityHolder) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolder_internalOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_IdentityHolder_internalOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("IdentityHolder", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _IdentityHolder_environmentName(ctx context.Context, field graphql.CollectedField, obj *generated.IdentityHolder) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -99969,6 +100322,38 @@ func (ec *executionContext) fieldContext_IdentityHolder_internalOwnerGroup(_ con
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _IdentityHolder_internalOwnerIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.IdentityHolder) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_IdentityHolder_internalOwnerIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_IdentityHolder_internalOwnerIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "IdentityHolder",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -101633,6 +102018,29 @@ func (ec *executionContext) fieldContext_Integration_metadata(_ context.Context,
 	return graphql.NewScalarFieldContext("Integration", field, false, false, errors.New("field of type Map does not have child fields"))
 }
 
+func (ec *executionContext) _Integration_health(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Integration_health(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Health, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v models.IntegrationHealth) graphql.Marshaler {
+			return ec.marshalOIntegrationHealth2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐIntegrationHealth(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Integration_health(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Integration", field, false, false, errors.New("field of type IntegrationHealth does not have child fields"))
+}
+
 func (ec *executionContext) _Integration_definitionID(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -101746,6 +102154,29 @@ func (ec *executionContext) _Integration_status(ctx context.Context, field graph
 }
 func (ec *executionContext) fieldContext_Integration_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Integration", field, false, false, errors.New("field of type IntegrationIntegrationStatus does not have child fields"))
+}
+
+func (ec *executionContext) _Integration_expiresAt(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Integration_expiresAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ExpiresAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
+			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Integration_expiresAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Integration", field, false, false, errors.New("field of type Time does not have child fields"))
 }
 
 func (ec *executionContext) _Integration_providerMetadataSnapshot(ctx context.Context, field graphql.CollectedField, obj *generated.Integration) (ret graphql.Marshaler) {
@@ -102860,8 +103291,8 @@ func (ec *executionContext) _Integration_credentials(ctx context.Context, field 
 			return ec.Resolvers.Integration().Credentials(ctx, obj)
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
-			return ec.marshalOJSON2encodingᚋjsonᚐRawMessage(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
+			return ec.marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx, selections, v)
 		},
 		true,
 		false,
@@ -102883,8 +103314,8 @@ func (ec *executionContext) _Integration_config(ctx context.Context, field graph
 			return ec.Resolvers.Integration().Config(ctx, obj)
 		},
 		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
-			return ec.marshalOJSON2encodingᚋjsonᚐRawMessage(ctx, selections, v)
+		func(ctx context.Context, selections ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
+			return ec.marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx, selections, v)
 		},
 		true,
 		false,
@@ -122445,6 +122876,29 @@ func (ec *executionContext) fieldContext_Platform_internalOwnerGroupID(_ context
 	return graphql.NewScalarFieldContext("Platform", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Platform_internalOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_internalOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_internalOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Platform", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Platform_businessOwner(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -122511,6 +122965,29 @@ func (ec *executionContext) _Platform_businessOwnerGroupID(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_Platform_businessOwnerGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Platform", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _Platform_businessOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_businessOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.BusinessOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_businessOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Platform", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
@@ -122583,6 +123060,29 @@ func (ec *executionContext) fieldContext_Platform_technicalOwnerGroupID(_ contex
 	return graphql.NewScalarFieldContext("Platform", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Platform_technicalOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_technicalOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TechnicalOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_technicalOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Platform", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Platform_securityOwner(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -122649,6 +123149,29 @@ func (ec *executionContext) _Platform_securityOwnerGroupID(ctx context.Context, 
 	)
 }
 func (ec *executionContext) fieldContext_Platform_securityOwnerGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Platform", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _Platform_securityOwnerIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_securityOwnerIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SecurityOwnerIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_securityOwnerIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Platform", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
@@ -123708,6 +124231,38 @@ func (ec *executionContext) fieldContext_Platform_internalOwnerGroup(_ context.C
 	return fc, nil
 }
 
+func (ec *executionContext) _Platform_internalOwnerIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_internalOwnerIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalOwnerIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_internalOwnerIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Platform",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Platform_businessOwnerUser(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -123767,6 +124322,38 @@ func (ec *executionContext) fieldContext_Platform_businessOwnerGroup(_ context.C
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Platform_businessOwnerIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_businessOwnerIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.BusinessOwnerIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_businessOwnerIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Platform",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -123836,6 +124423,38 @@ func (ec *executionContext) fieldContext_Platform_technicalOwnerGroup(_ context.
 	return fc, nil
 }
 
+func (ec *executionContext) _Platform_technicalOwnerIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_technicalOwnerIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TechnicalOwnerIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_technicalOwnerIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Platform",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Platform_securityOwnerUser(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -123895,6 +124514,38 @@ func (ec *executionContext) fieldContext_Platform_securityOwnerGroup(_ context.C
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Platform_securityOwnerIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Platform) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Platform_securityOwnerIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SecurityOwnerIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Platform_securityOwnerIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Platform",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -147616,6 +148267,29 @@ func (ec *executionContext) fieldContext_Scan_reviewedByGroupID(_ context.Contex
 	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Scan_reviewedByIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_reviewedByIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_reviewedByIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Scan_assignedTo(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -147682,6 +148356,29 @@ func (ec *executionContext) _Scan_assignedToGroupID(ctx context.Context, field g
 	)
 }
 func (ec *executionContext) fieldContext_Scan_assignedToGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _Scan_assignedToIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_assignedToIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AssignedToIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_assignedToIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
@@ -148237,6 +148934,38 @@ func (ec *executionContext) fieldContext_Scan_reviewedByGroup(_ context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Scan_reviewedByIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_reviewedByIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_reviewedByIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Scan",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Scan_assignedToUser(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -148296,6 +149025,38 @@ func (ec *executionContext) fieldContext_Scan_assignedToGroup(_ context.Context,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Scan_assignedToIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_assignedToIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AssignedToIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_assignedToIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Scan",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -169979,6 +170740,29 @@ func (ec *executionContext) fieldContext_Vulnerability_reviewedByGroupID(_ conte
 	return graphql.NewScalarFieldContext("Vulnerability", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _Vulnerability_reviewedByIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Vulnerability) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Vulnerability_reviewedByIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Vulnerability_reviewedByIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Vulnerability", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _Vulnerability_assignedTo(ctx context.Context, field graphql.CollectedField, obj *generated.Vulnerability) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -170045,6 +170829,29 @@ func (ec *executionContext) _Vulnerability_assignedToGroupID(ctx context.Context
 	)
 }
 func (ec *executionContext) fieldContext_Vulnerability_assignedToGroupID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Vulnerability", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _Vulnerability_assignedToIdentityHolderID(ctx context.Context, field graphql.CollectedField, obj *generated.Vulnerability) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Vulnerability_assignedToIdentityHolderID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AssignedToIdentityHolderID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Vulnerability_assignedToIdentityHolderID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Vulnerability", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
@@ -171508,6 +172315,38 @@ func (ec *executionContext) fieldContext_Vulnerability_reviewedByGroup(_ context
 	return fc, nil
 }
 
+func (ec *executionContext) _Vulnerability_reviewedByIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Vulnerability) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Vulnerability_reviewedByIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ReviewedByIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Vulnerability_reviewedByIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Vulnerability",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Vulnerability_assignedToUser(ctx context.Context, field graphql.CollectedField, obj *generated.Vulnerability) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -171567,6 +172406,38 @@ func (ec *executionContext) fieldContext_Vulnerability_assignedToGroup(_ context
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_Group(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Vulnerability_assignedToIdentityHolder(ctx context.Context, field graphql.CollectedField, obj *generated.Vulnerability) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Vulnerability_assignedToIdentityHolder(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AssignedToIdentityHolder(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
+			return ec.marshalOIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Vulnerability_assignedToIdentityHolder(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Vulnerability",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IdentityHolder(ctx, field)
 		},
 	}
 	return fc, nil
@@ -186187,7 +187058,7 @@ func (ec *executionContext) unmarshalInputAssetWhereInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "assetSubtypeName", "assetSubtypeNameNEQ", "assetSubtypeNameIn", "assetSubtypeNameNotIn", "assetSubtypeNameContains", "assetSubtypeNameHasPrefix", "assetSubtypeNameHasSuffix", "assetSubtypeNameIsNil", "assetSubtypeNameNotNil", "assetSubtypeNameEqualFold", "assetSubtypeNameContainsFold", "assetSubtypeID", "assetSubtypeIDNEQ", "assetSubtypeIDIn", "assetSubtypeIDNotIn", "assetSubtypeIDContains", "assetSubtypeIDHasPrefix", "assetSubtypeIDHasSuffix", "assetSubtypeIDIsNil", "assetSubtypeIDNotNil", "assetSubtypeIDEqualFold", "assetSubtypeIDContainsFold", "assetDataClassificationName", "assetDataClassificationNameNEQ", "assetDataClassificationNameIn", "assetDataClassificationNameNotIn", "assetDataClassificationNameContains", "assetDataClassificationNameHasPrefix", "assetDataClassificationNameHasSuffix", "assetDataClassificationNameIsNil", "assetDataClassificationNameNotNil", "assetDataClassificationNameEqualFold", "assetDataClassificationNameContainsFold", "assetDataClassificationID", "assetDataClassificationIDNEQ", "assetDataClassificationIDIn", "assetDataClassificationIDNotIn", "assetDataClassificationIDContains", "assetDataClassificationIDHasPrefix", "assetDataClassificationIDHasSuffix", "assetDataClassificationIDIsNil", "assetDataClassificationIDNotNil", "assetDataClassificationIDEqualFold", "assetDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "assetType", "assetTypeNEQ", "assetTypeIn", "assetTypeNotIn", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "identifier", "identifierNEQ", "identifierIn", "identifierNotIn", "identifierContains", "identifierHasPrefix", "identifierHasSuffix", "identifierIsNil", "identifierNotNil", "identifierEqualFold", "identifierContainsFold", "website", "websiteNEQ", "websiteIn", "websiteNotIn", "websiteContains", "websiteHasPrefix", "websiteHasSuffix", "websiteIsNil", "websiteNotNil", "websiteEqualFold", "websiteContainsFold", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourcePlatformID", "sourcePlatformIDNEQ", "sourcePlatformIDIn", "sourcePlatformIDNotIn", "sourcePlatformIDContains", "sourcePlatformIDHasPrefix", "sourcePlatformIDHasSuffix", "sourcePlatformIDIsNil", "sourcePlatformIDNotNil", "sourcePlatformIDEqualFold", "sourcePlatformIDContainsFold", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasAssetSubtype", "hasAssetSubtypeWith", "hasAssetDataClassification", "hasAssetDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasScans", "hasScansWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasSourcePlatform", "hasSourcePlatformWith", "hasIntegration", "hasIntegrationWith", "hasConnectedAssets", "hasConnectedAssetsWith", "hasConnectedFrom", "hasConnectedFromWith", "tagsHas", "categoriesHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "assetSubtypeName", "assetSubtypeNameNEQ", "assetSubtypeNameIn", "assetSubtypeNameNotIn", "assetSubtypeNameContains", "assetSubtypeNameHasPrefix", "assetSubtypeNameHasSuffix", "assetSubtypeNameIsNil", "assetSubtypeNameNotNil", "assetSubtypeNameEqualFold", "assetSubtypeNameContainsFold", "assetSubtypeID", "assetSubtypeIDNEQ", "assetSubtypeIDIn", "assetSubtypeIDNotIn", "assetSubtypeIDContains", "assetSubtypeIDHasPrefix", "assetSubtypeIDHasSuffix", "assetSubtypeIDIsNil", "assetSubtypeIDNotNil", "assetSubtypeIDEqualFold", "assetSubtypeIDContainsFold", "assetDataClassificationName", "assetDataClassificationNameNEQ", "assetDataClassificationNameIn", "assetDataClassificationNameNotIn", "assetDataClassificationNameContains", "assetDataClassificationNameHasPrefix", "assetDataClassificationNameHasSuffix", "assetDataClassificationNameIsNil", "assetDataClassificationNameNotNil", "assetDataClassificationNameEqualFold", "assetDataClassificationNameContainsFold", "assetDataClassificationID", "assetDataClassificationIDNEQ", "assetDataClassificationIDIn", "assetDataClassificationIDNotIn", "assetDataClassificationIDContains", "assetDataClassificationIDHasPrefix", "assetDataClassificationIDHasSuffix", "assetDataClassificationIDIsNil", "assetDataClassificationIDNotNil", "assetDataClassificationIDEqualFold", "assetDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "assetType", "assetTypeNEQ", "assetTypeIn", "assetTypeNotIn", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "identifier", "identifierNEQ", "identifierIn", "identifierNotIn", "identifierContains", "identifierHasPrefix", "identifierHasSuffix", "identifierIsNil", "identifierNotNil", "identifierEqualFold", "identifierContainsFold", "website", "websiteNEQ", "websiteIn", "websiteNotIn", "websiteContains", "websiteHasPrefix", "websiteHasSuffix", "websiteIsNil", "websiteNotNil", "websiteEqualFold", "websiteContainsFold", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourcePlatformID", "sourcePlatformIDNEQ", "sourcePlatformIDIn", "sourcePlatformIDNotIn", "sourcePlatformIDContains", "sourcePlatformIDHasPrefix", "sourcePlatformIDHasSuffix", "sourcePlatformIDIsNil", "sourcePlatformIDNotNil", "sourcePlatformIDEqualFold", "sourcePlatformIDContainsFold", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasAssetSubtype", "hasAssetSubtypeWith", "hasAssetDataClassification", "hasAssetDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasScans", "hasScansWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasSourcePlatform", "hasSourcePlatformWith", "hasIntegration", "hasIntegrationWith", "hasConnectedAssets", "hasConnectedAssetsWith", "hasConnectedFrom", "hasConnectedFromWith", "tagsHas", "categoriesHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -186894,6 +187765,83 @@ func (ec *executionContext) unmarshalInputAssetWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.InternalOwnerGroupIDContainsFold = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "internalOwnerIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNEQ = data
+		case "internalOwnerIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIn = data
+		case "internalOwnerIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotIn = data
+		case "internalOwnerIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContains = data
+		case "internalOwnerIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasPrefix = data
+		case "internalOwnerIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasSuffix = data
+		case "internalOwnerIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIsNil = data
+		case "internalOwnerIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotNil = data
+		case "internalOwnerIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDEqualFold = data
+		case "internalOwnerIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContainsFold = data
 		case "assetSubtypeName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetSubtypeName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -189477,6 +190425,20 @@ func (ec *executionContext) unmarshalInputAssetWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.HasInternalOwnerGroupWith = data
+		case "hasInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolder = data
+		case "hasInternalOwnerIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolderWith = data
 		case "hasAssetSubtype":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssetSubtype"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -193352,7 +194314,7 @@ func (ec *executionContext) unmarshalInputCampaignWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "campaignType", "campaignTypeNEQ", "campaignTypeIn", "campaignTypeNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "isActive", "isActiveNEQ", "scheduledAt", "scheduledAtGT", "scheduledAtGTE", "scheduledAtLT", "scheduledAtLTE", "scheduledAtIsNil", "scheduledAtNotNil", "launchedAt", "launchedAtGT", "launchedAtGTE", "launchedAtLT", "launchedAtLTE", "launchedAtIsNil", "launchedAtNotNil", "completedAt", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "dueDate", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "isRecurring", "isRecurringNEQ", "recurrenceFrequency", "recurrenceFrequencyNEQ", "recurrenceFrequencyIn", "recurrenceFrequencyNotIn", "recurrenceFrequencyIsNil", "recurrenceFrequencyNotNil", "recurrenceInterval", "recurrenceIntervalNEQ", "recurrenceIntervalGT", "recurrenceIntervalGTE", "recurrenceIntervalLT", "recurrenceIntervalLTE", "recurrenceIntervalIsNil", "recurrenceIntervalNotNil", "recurrenceTimezone", "recurrenceTimezoneNEQ", "recurrenceTimezoneIn", "recurrenceTimezoneNotIn", "recurrenceTimezoneContains", "recurrenceTimezoneHasPrefix", "recurrenceTimezoneHasSuffix", "recurrenceTimezoneIsNil", "recurrenceTimezoneNotNil", "recurrenceTimezoneEqualFold", "recurrenceTimezoneContainsFold", "lastRunAt", "lastRunAtGT", "lastRunAtGTE", "lastRunAtLT", "lastRunAtLTE", "lastRunAtIsNil", "lastRunAtNotNil", "nextRunAt", "nextRunAtGT", "nextRunAtGTE", "nextRunAtLT", "nextRunAtLTE", "nextRunAtIsNil", "nextRunAtNotNil", "recurrenceEndAt", "recurrenceEndAtGT", "recurrenceEndAtGTE", "recurrenceEndAtLT", "recurrenceEndAtLTE", "recurrenceEndAtIsNil", "recurrenceEndAtNotNil", "recipientCount", "recipientCountNEQ", "recipientCountGT", "recipientCountGTE", "recipientCountLT", "recipientCountLTE", "recipientCountIsNil", "recipientCountNotNil", "resendCount", "resendCountNEQ", "resendCountGT", "resendCountGTE", "resendCountLT", "resendCountLTE", "resendCountIsNil", "resendCountNotNil", "lastResentAt", "lastResentAtGT", "lastResentAtGTE", "lastResentAtLT", "lastResentAtLTE", "lastResentAtIsNil", "lastResentAtNotNil", "entityID", "entityIDNEQ", "entityIDIn", "entityIDNotIn", "entityIDContains", "entityIDHasPrefix", "entityIDHasSuffix", "entityIDIsNil", "entityIDNotNil", "entityIDEqualFold", "entityIDContainsFold", "templateID", "templateIDNEQ", "templateIDIn", "templateIDNotIn", "templateIDContains", "templateIDHasPrefix", "templateIDHasSuffix", "templateIDIsNil", "templateIDNotNil", "templateIDEqualFold", "templateIDContainsFold", "assessmentID", "assessmentIDNEQ", "assessmentIDIn", "assessmentIDNotIn", "assessmentIDContains", "assessmentIDHasPrefix", "assessmentIDHasSuffix", "assessmentIDIsNil", "assessmentIDNotNil", "assessmentIDEqualFold", "assessmentIDContainsFold", "emailTemplateID", "emailTemplateIDNEQ", "emailTemplateIDIn", "emailTemplateIDNotIn", "emailTemplateIDContains", "emailTemplateIDHasPrefix", "emailTemplateIDHasSuffix", "emailTemplateIDIsNil", "emailTemplateIDNotNil", "emailTemplateIDEqualFold", "emailTemplateIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "emailBrandingID", "emailBrandingIDNEQ", "emailBrandingIDIn", "emailBrandingIDNotIn", "emailBrandingIDContains", "emailBrandingIDHasPrefix", "emailBrandingIDHasSuffix", "emailBrandingIDIsNil", "emailBrandingIDNotNil", "emailBrandingIDEqualFold", "emailBrandingIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasAssessment", "hasAssessmentWith", "hasTemplate", "hasTemplateWith", "hasIntegration", "hasIntegrationWith", "hasEmailTemplate", "hasEmailTemplateWith", "hasEntity", "hasEntityWith", "hasTrustCenter", "hasTrustCenterWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasContacts", "hasContactsWith", "hasUsers", "hasUsersWith", "hasGroups", "hasGroupsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasAudiences", "hasAudiencesWith", "hasControls", "hasControlsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "campaignType", "campaignTypeNEQ", "campaignTypeIn", "campaignTypeNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "isActive", "isActiveNEQ", "scheduledAt", "scheduledAtGT", "scheduledAtGTE", "scheduledAtLT", "scheduledAtLTE", "scheduledAtIsNil", "scheduledAtNotNil", "launchedAt", "launchedAtGT", "launchedAtGTE", "launchedAtLT", "launchedAtLTE", "launchedAtIsNil", "launchedAtNotNil", "completedAt", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "dueDate", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "isRecurring", "isRecurringNEQ", "recurrenceFrequency", "recurrenceFrequencyNEQ", "recurrenceFrequencyIn", "recurrenceFrequencyNotIn", "recurrenceFrequencyIsNil", "recurrenceFrequencyNotNil", "recurrenceInterval", "recurrenceIntervalNEQ", "recurrenceIntervalGT", "recurrenceIntervalGTE", "recurrenceIntervalLT", "recurrenceIntervalLTE", "recurrenceIntervalIsNil", "recurrenceIntervalNotNil", "recurrenceTimezone", "recurrenceTimezoneNEQ", "recurrenceTimezoneIn", "recurrenceTimezoneNotIn", "recurrenceTimezoneContains", "recurrenceTimezoneHasPrefix", "recurrenceTimezoneHasSuffix", "recurrenceTimezoneIsNil", "recurrenceTimezoneNotNil", "recurrenceTimezoneEqualFold", "recurrenceTimezoneContainsFold", "lastRunAt", "lastRunAtGT", "lastRunAtGTE", "lastRunAtLT", "lastRunAtLTE", "lastRunAtIsNil", "lastRunAtNotNil", "nextRunAt", "nextRunAtGT", "nextRunAtGTE", "nextRunAtLT", "nextRunAtLTE", "nextRunAtIsNil", "nextRunAtNotNil", "recurrenceEndAt", "recurrenceEndAtGT", "recurrenceEndAtGTE", "recurrenceEndAtLT", "recurrenceEndAtLTE", "recurrenceEndAtIsNil", "recurrenceEndAtNotNil", "recipientCount", "recipientCountNEQ", "recipientCountGT", "recipientCountGTE", "recipientCountLT", "recipientCountLTE", "recipientCountIsNil", "recipientCountNotNil", "resendCount", "resendCountNEQ", "resendCountGT", "resendCountGTE", "resendCountLT", "resendCountLTE", "resendCountIsNil", "resendCountNotNil", "lastResentAt", "lastResentAtGT", "lastResentAtGTE", "lastResentAtLT", "lastResentAtLTE", "lastResentAtIsNil", "lastResentAtNotNil", "entityID", "entityIDNEQ", "entityIDIn", "entityIDNotIn", "entityIDContains", "entityIDHasPrefix", "entityIDHasSuffix", "entityIDIsNil", "entityIDNotNil", "entityIDEqualFold", "entityIDContainsFold", "templateID", "templateIDNEQ", "templateIDIn", "templateIDNotIn", "templateIDContains", "templateIDHasPrefix", "templateIDHasSuffix", "templateIDIsNil", "templateIDNotNil", "templateIDEqualFold", "templateIDContainsFold", "assessmentID", "assessmentIDNEQ", "assessmentIDIn", "assessmentIDNotIn", "assessmentIDContains", "assessmentIDHasPrefix", "assessmentIDHasSuffix", "assessmentIDIsNil", "assessmentIDNotNil", "assessmentIDEqualFold", "assessmentIDContainsFold", "emailTemplateID", "emailTemplateIDNEQ", "emailTemplateIDIn", "emailTemplateIDNotIn", "emailTemplateIDContains", "emailTemplateIDHasPrefix", "emailTemplateIDHasSuffix", "emailTemplateIDIsNil", "emailTemplateIDNotNil", "emailTemplateIDEqualFold", "emailTemplateIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "emailBrandingID", "emailBrandingIDNEQ", "emailBrandingIDIn", "emailBrandingIDNotIn", "emailBrandingIDContains", "emailBrandingIDHasPrefix", "emailBrandingIDHasSuffix", "emailBrandingIDIsNil", "emailBrandingIDNotNil", "emailBrandingIDEqualFold", "emailBrandingIDContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasAssessment", "hasAssessmentWith", "hasTemplate", "hasTemplateWith", "hasIntegration", "hasIntegrationWith", "hasEmailTemplate", "hasEmailTemplateWith", "hasEntity", "hasEntityWith", "hasTrustCenter", "hasTrustCenterWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasContacts", "hasContactsWith", "hasUsers", "hasUsersWith", "hasGroups", "hasGroupsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasAudiences", "hasAudiencesWith", "hasControls", "hasControlsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -194122,6 +195084,83 @@ func (ec *executionContext) unmarshalInputCampaignWhereInput(ctx context.Context
 				return it, err
 			}
 			it.InternalOwnerGroupIDContainsFold = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "internalOwnerIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNEQ = data
+		case "internalOwnerIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIn = data
+		case "internalOwnerIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotIn = data
+		case "internalOwnerIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContains = data
+		case "internalOwnerIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasPrefix = data
+		case "internalOwnerIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasSuffix = data
+		case "internalOwnerIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIsNil = data
+		case "internalOwnerIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotNil = data
+		case "internalOwnerIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDEqualFold = data
+		case "internalOwnerIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContainsFold = data
 		case "workflowEligibleMarker":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowEligibleMarker"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -195676,6 +196715,20 @@ func (ec *executionContext) unmarshalInputCampaignWhereInput(ctx context.Context
 				return it, err
 			}
 			it.HasInternalOwnerGroupWith = data
+		case "hasInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolder = data
+		case "hasInternalOwnerIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolderWith = data
 		case "hasAssessment":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssessment"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -205041,7 +206094,7 @@ func (ec *executionContext) unmarshalInputCreateAssetInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalOwner", "assetSubtypeName", "assetDataClassificationName", "environmentName", "scopeName", "accessModelName", "encryptionStatusName", "securityTierName", "criticalityName", "internalNotes", "systemInternalID", "assetType", "name", "displayName", "description", "identifier", "website", "physicalLocation", "region", "containsPii", "sourceType", "sourceIdentifier", "costCenter", "estimatedMonthlyCost", "purchaseDate", "cpe", "categories", "observedAt", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "assetSubtypeID", "assetDataClassificationID", "environmentID", "scopeID", "accessModelID", "encryptionStatusID", "securityTierID", "criticalityID", "scanIDs", "entityIDs", "platformIDs", "systemDetailIDs", "outOfScopePlatformIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "internalPolicyIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "sourcePlatformID", "integrationID", "connectedAssetIDs", "connectedFromIDs"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "assetSubtypeName", "assetDataClassificationName", "environmentName", "scopeName", "accessModelName", "encryptionStatusName", "securityTierName", "criticalityName", "internalNotes", "systemInternalID", "assetType", "name", "displayName", "description", "identifier", "website", "physicalLocation", "region", "containsPii", "sourceType", "sourceIdentifier", "costCenter", "estimatedMonthlyCost", "purchaseDate", "cpe", "categories", "observedAt", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "assetSubtypeID", "assetDataClassificationID", "environmentID", "scopeID", "accessModelID", "encryptionStatusID", "securityTierID", "criticalityID", "scanIDs", "entityIDs", "platformIDs", "systemDetailIDs", "outOfScopePlatformIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "internalPolicyIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "sourcePlatformID", "integrationID", "connectedAssetIDs", "connectedFromIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -205327,6 +206380,13 @@ func (ec *executionContext) unmarshalInputCreateAssetInput(ctx context.Context, 
 				return it, err
 			}
 			it.InternalOwnerGroupID = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
 		case "assetSubtypeID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetSubtypeID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -205725,7 +206785,7 @@ func (ec *executionContext) unmarshalInputCreateCampaignInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalOwner", "workflowEligibleMarker", "name", "description", "campaignType", "status", "isActive", "scheduledAt", "launchedAt", "completedAt", "dueDate", "isRecurring", "recurrenceFrequency", "recurrenceInterval", "recurrenceTimezone", "recurrenceCron", "lastRunAt", "nextRunAt", "recurrenceEndAt", "recipientCount", "resendCount", "lastResentAt", "metadata", "emailBrandingID", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "assessmentID", "templateID", "integrationID", "emailTemplateID", "entityID", "trustCenterID", "campaignTargetIDs", "assessmentResponseIDs", "contactIDs", "userIDs", "groupIDs", "identityHolderIDs", "audienceIDs", "controlIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "workflowEligibleMarker", "name", "description", "campaignType", "status", "isActive", "scheduledAt", "launchedAt", "completedAt", "dueDate", "isRecurring", "recurrenceFrequency", "recurrenceInterval", "recurrenceTimezone", "recurrenceCron", "lastRunAt", "nextRunAt", "recurrenceEndAt", "recipientCount", "resendCount", "lastResentAt", "metadata", "emailBrandingID", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "assessmentID", "templateID", "integrationID", "emailTemplateID", "entityID", "trustCenterID", "campaignTargetIDs", "assessmentResponseIDs", "contactIDs", "userIDs", "groupIDs", "identityHolderIDs", "audienceIDs", "controlIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -205949,6 +207009,13 @@ func (ec *executionContext) unmarshalInputCreateCampaignInput(ctx context.Contex
 				return it, err
 			}
 			it.InternalOwnerGroupID = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
 		case "assessmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -209355,7 +210422,7 @@ func (ec *executionContext) unmarshalInputCreateEntityInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalOwner", "reviewedBy", "lastReviewedAt", "internalNotes", "systemInternalID", "entityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "entitySourceTypeName", "environmentName", "scopeName", "name", "displayName", "description", "domains", "aliases", "status", "approvedForUse", "linkedAssetIds", "hasSoc2", "soc2PeriodEnd", "contractStartDate", "contractEndDate", "autoRenews", "terminationNoticeDays", "annualSpend", "spendCurrency", "billingModel", "renewalRisk", "ssoEnforced", "mfaSupported", "mfaEnforced", "statusPageURL", "providedServices", "links", "riskRating", "riskScore", "tier", "reviewFrequency", "nextReviewAt", "contractRenewalAt", "vendorMetadata", "logoRemoteURL", "externalID", "observedAt", "ownerID", "blockedGroupIDs", "editorIDs", "internalOwnerUserID", "internalOwnerGroupID", "reviewedByUserID", "reviewedByGroupID", "entityRelationshipStateID", "entitySecurityQuestionnaireStatusID", "entitySourceTypeID", "environmentID", "scopeID", "contactIDs", "documentIDs", "noteIDs", "fileIDs", "assetIDs", "systemDetailIDs", "scanIDs", "campaignIDs", "assessmentResponseIDs", "vendorRiskScoreIDs", "integrationIDs", "subprocessorIDs", "authMethodIDs", "employerIdentityHolderIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "platformIDs", "outOfScopePlatformIDs", "sourcePlatformIDs", "entityTypeID", "logoFileID", "internalPolicyIDs", "note"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "reviewedBy", "lastReviewedAt", "internalNotes", "systemInternalID", "entityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "entitySourceTypeName", "environmentName", "scopeName", "name", "displayName", "description", "domains", "aliases", "status", "approvedForUse", "linkedAssetIds", "hasSoc2", "soc2PeriodEnd", "contractStartDate", "contractEndDate", "autoRenews", "terminationNoticeDays", "annualSpend", "spendCurrency", "billingModel", "renewalRisk", "ssoEnforced", "mfaSupported", "mfaEnforced", "statusPageURL", "providedServices", "links", "riskRating", "riskScore", "tier", "reviewFrequency", "nextReviewAt", "contractRenewalAt", "vendorMetadata", "logoRemoteURL", "externalID", "observedAt", "ownerID", "blockedGroupIDs", "editorIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "entityRelationshipStateID", "entitySecurityQuestionnaireStatusID", "entitySourceTypeID", "environmentID", "scopeID", "contactIDs", "documentIDs", "noteIDs", "fileIDs", "assetIDs", "systemDetailIDs", "scanIDs", "campaignIDs", "assessmentResponseIDs", "vendorRiskScoreIDs", "integrationIDs", "subprocessorIDs", "authMethodIDs", "employerIdentityHolderIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "platformIDs", "outOfScopePlatformIDs", "sourcePlatformIDs", "entityTypeID", "logoFileID", "internalPolicyIDs", "note"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -209746,6 +210813,13 @@ func (ec *executionContext) unmarshalInputCreateEntityInput(ctx context.Context,
 				return it, err
 			}
 			it.InternalOwnerGroupID = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
 		case "reviewedByUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -209760,6 +210834,13 @@ func (ec *executionContext) unmarshalInputCreateEntityInput(ctx context.Context,
 				return it, err
 			}
 			it.ReviewedByGroupID = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
 		case "entityRelationshipStateID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityRelationshipStateID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -211034,7 +212115,7 @@ func (ec *executionContext) unmarshalInputCreateFindingInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "findingStatusName", "workflowEligibleMarker", "externalID", "externalOwnerID", "source", "resourceName", "displayName", "state", "category", "categories", "findingClass", "severity", "numericSeverity", "score", "impact", "exploitability", "priority", "open", "blocksProduction", "production", "public", "validated", "assessmentID", "description", "recommendation", "recommendedActions", "references", "stepsToReproduce", "targets", "targetDetails", "vector", "remediationSLA", "eventTime", "reportedAt", "sourceUpdatedAt", "externalURI", "metadata", "rawPayload", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "assignedToUserID", "assignedToGroupID", "environmentID", "scopeID", "findingStatusID", "integrationIDs", "vulnerabilityIDs", "actionPlanIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "directoryAccountIDs", "identityHolderIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs", "checkResultIDs"}
+	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "findingStatusName", "workflowEligibleMarker", "externalID", "externalOwnerID", "source", "resourceName", "displayName", "state", "category", "categories", "findingClass", "severity", "numericSeverity", "score", "impact", "exploitability", "priority", "open", "blocksProduction", "production", "public", "validated", "assessmentID", "description", "recommendation", "recommendedActions", "references", "stepsToReproduce", "targets", "targetDetails", "vector", "remediationSLA", "eventTime", "reportedAt", "sourceUpdatedAt", "externalURI", "metadata", "rawPayload", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "findingStatusID", "integrationIDs", "vulnerabilityIDs", "actionPlanIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "directoryAccountIDs", "identityHolderIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs", "checkResultIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -211425,6 +212506,13 @@ func (ec *executionContext) unmarshalInputCreateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.ReviewedByGroupID = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
 		case "assignedToUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -211439,6 +212527,13 @@ func (ec *executionContext) unmarshalInputCreateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.AssignedToGroupID = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -212374,7 +213469,7 @@ func (ec *executionContext) unmarshalInputCreateIdentityHolderInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalOwner", "environmentName", "scopeName", "workflowEligibleMarker", "fullName", "email", "alternateEmail", "emailAliases", "phoneNumber", "isOpenlaneUser", "identityHolderType", "status", "isActive", "title", "department", "team", "location", "startDate", "endDate", "externalUserID", "externalReferenceID", "metadata", "avatarRemoteURL", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "environmentID", "scopeID", "employerID", "assessmentResponseIDs", "assessmentIDs", "templateIDs", "assetIDs", "entityIDs", "directoryAccountIDs", "controlIDs", "subcontrolIDs", "platformIDs", "campaignIDs", "audienceMemberIDs", "taskIDs", "fileIDs", "findingIDs", "workflowObjectRefIDs", "accessPlatformIDs", "userID", "internalPolicyIDs"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "environmentName", "scopeName", "workflowEligibleMarker", "fullName", "email", "alternateEmail", "emailAliases", "phoneNumber", "isOpenlaneUser", "identityHolderType", "status", "isActive", "title", "department", "team", "location", "startDate", "endDate", "externalUserID", "externalReferenceID", "metadata", "avatarRemoteURL", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "environmentID", "scopeID", "employerID", "assessmentResponseIDs", "assessmentIDs", "templateIDs", "assetIDs", "entityIDs", "directoryAccountIDs", "controlIDs", "subcontrolIDs", "platformIDs", "campaignIDs", "audienceMemberIDs", "taskIDs", "fileIDs", "findingIDs", "workflowObjectRefIDs", "accessPlatformIDs", "userID", "internalPolicyIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -212591,6 +213686,13 @@ func (ec *executionContext) unmarshalInputCreateIdentityHolderInput(ctx context.
 				return it, err
 			}
 			it.InternalOwnerGroupID = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -215933,7 +217035,7 @@ func (ec *executionContext) unmarshalInputCreatePlatformInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalOwner", "businessOwner", "technicalOwner", "securityOwner", "platformKindName", "platformDataClassificationName", "environmentName", "scopeName", "accessModelName", "encryptionStatusName", "securityTierName", "criticalityName", "workflowEligibleMarker", "externalUUID", "name", "description", "businessPurpose", "scopeStatement", "trustBoundaryDescription", "dataFlowSummary", "status", "physicalLocation", "region", "containsPii", "sourceType", "sourceIdentifier", "costCenter", "estimatedMonthlyCost", "purchaseDate", "externalReferenceID", "metadata", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "businessOwnerUserID", "businessOwnerGroupID", "technicalOwnerUserID", "technicalOwnerGroupID", "securityOwnerUserID", "securityOwnerGroupID", "platformKindID", "platformDataClassificationID", "environmentID", "scopeID", "accessModelID", "encryptionStatusID", "securityTierID", "criticalityID", "assetIDs", "entityIDs", "evidenceIDs", "fileIDs", "architectureDiagramIDs", "dataFlowDiagramIDs", "trustBoundaryDiagramIDs", "riskIDs", "controlIDs", "assessmentIDs", "scanIDs", "taskIDs", "identityHolderIDs", "integrationIDs", "directorySyncRunIDs", "directoryAccountIDs", "directoryGroupIDs", "workflowObjectRefIDs", "sourceAssetIDs", "sourceEntityIDs", "outOfScopeAssetIDs", "outOfScopeVendorIDs", "applicableFrameworkIDs", "generatedScanIDs", "platformOwnerID", "systemDetailIDs"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "businessOwner", "technicalOwner", "securityOwner", "platformKindName", "platformDataClassificationName", "environmentName", "scopeName", "accessModelName", "encryptionStatusName", "securityTierName", "criticalityName", "workflowEligibleMarker", "externalUUID", "name", "description", "businessPurpose", "scopeStatement", "trustBoundaryDescription", "dataFlowSummary", "status", "physicalLocation", "region", "containsPii", "sourceType", "sourceIdentifier", "costCenter", "estimatedMonthlyCost", "purchaseDate", "externalReferenceID", "metadata", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "internalOwnerIdentityHolderID", "businessOwnerUserID", "businessOwnerGroupID", "businessOwnerIdentityHolderID", "technicalOwnerUserID", "technicalOwnerGroupID", "technicalOwnerIdentityHolderID", "securityOwnerUserID", "securityOwnerGroupID", "securityOwnerIdentityHolderID", "platformKindID", "platformDataClassificationID", "environmentID", "scopeID", "accessModelID", "encryptionStatusID", "securityTierID", "criticalityID", "assetIDs", "entityIDs", "evidenceIDs", "fileIDs", "architectureDiagramIDs", "dataFlowDiagramIDs", "trustBoundaryDiagramIDs", "riskIDs", "controlIDs", "assessmentIDs", "scanIDs", "taskIDs", "identityHolderIDs", "integrationIDs", "directorySyncRunIDs", "directoryAccountIDs", "directoryGroupIDs", "workflowObjectRefIDs", "sourceAssetIDs", "sourceEntityIDs", "outOfScopeAssetIDs", "outOfScopeVendorIDs", "applicableFrameworkIDs", "generatedScanIDs", "platformOwnerID", "systemDetailIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -216206,6 +217308,13 @@ func (ec *executionContext) unmarshalInputCreatePlatformInput(ctx context.Contex
 				return it, err
 			}
 			it.InternalOwnerGroupID = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
 		case "businessOwnerUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -216220,6 +217329,13 @@ func (ec *executionContext) unmarshalInputCreatePlatformInput(ctx context.Contex
 				return it, err
 			}
 			it.BusinessOwnerGroupID = data
+		case "businessOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderID = data
 		case "technicalOwnerUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -216234,6 +217350,13 @@ func (ec *executionContext) unmarshalInputCreatePlatformInput(ctx context.Contex
 				return it, err
 			}
 			it.TechnicalOwnerGroupID = data
+		case "technicalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderID = data
 		case "securityOwnerUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -216248,6 +217371,13 @@ func (ec *executionContext) unmarshalInputCreatePlatformInput(ctx context.Contex
 				return it, err
 			}
 			it.SecurityOwnerGroupID = data
+		case "securityOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderID = data
 		case "platformKindID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("platformKindID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -218459,7 +219589,7 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "reviewedBy", "assignedTo", "environmentName", "scopeName", "target", "scanType", "metadata", "scanDate", "scanSchedule", "nextScanRunAt", "performedBy", "discoveredVulnerabilityIds", "status", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "assignedToUserID", "assignedToGroupID", "environmentID", "scopeID", "assetIDs", "entityIDs", "evidenceIDs", "fileIDs", "remediationIDs", "actionPlanIDs", "taskIDs", "platformIDs", "vulnerabilityIDs", "controlIDs", "subcontrolIDs", "findingIDs", "generatedByPlatformID", "performedByUserID", "performedByGroupID"}
+	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "reviewedBy", "assignedTo", "environmentName", "scopeName", "target", "scanType", "metadata", "scanDate", "scanSchedule", "nextScanRunAt", "performedBy", "discoveredVulnerabilityIds", "status", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "assetIDs", "entityIDs", "evidenceIDs", "fileIDs", "remediationIDs", "actionPlanIDs", "taskIDs", "platformIDs", "vulnerabilityIDs", "controlIDs", "subcontrolIDs", "findingIDs", "generatedByPlatformID", "performedByUserID", "performedByGroupID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -218647,6 +219777,13 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.ReviewedByGroupID = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
 		case "assignedToUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -218661,6 +219798,13 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.AssignedToGroupID = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -222432,7 +223576,7 @@ func (ec *executionContext) unmarshalInputCreateVulnerabilityInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "vulnerabilityStatusName", "workflowEligibleMarker", "externalOwnerID", "externalID", "cveID", "source", "displayName", "category", "severity", "score", "impact", "exploitability", "priority", "summary", "description", "vector", "remediationSLA", "open", "blocking", "production", "public", "validated", "references", "impacts", "cweIds", "vulnerableVersionRange", "firstPatchedVersion", "fixAvailable", "packageName", "packageEcosystem", "manifestPath", "dependencyScope", "publishedAt", "discoveredAt", "sourceUpdatedAt", "dismissedAt", "dismissedReason", "dismissedComment", "fixedAt", "autoDismissedAt", "externalURI", "metadata", "rawPayload", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "reviewedByUserID", "reviewedByGroupID", "assignedToUserID", "assignedToGroupID", "environmentID", "scopeID", "vulnerabilityStatusID", "integrationIDs", "findingIDs", "actionPlanIDs", "controlIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "vulnerabilityStatusName", "workflowEligibleMarker", "externalOwnerID", "externalID", "cveID", "source", "displayName", "category", "severity", "score", "impact", "exploitability", "priority", "summary", "description", "vector", "remediationSLA", "open", "blocking", "production", "public", "validated", "references", "impacts", "cweIds", "vulnerableVersionRange", "firstPatchedVersion", "fixAvailable", "packageName", "packageEcosystem", "manifestPath", "dependencyScope", "publishedAt", "discoveredAt", "sourceUpdatedAt", "dismissedAt", "dismissedReason", "dismissedComment", "fixedAt", "autoDismissedAt", "externalURI", "metadata", "rawPayload", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "reviewedByUserID", "reviewedByGroupID", "reviewedByIdentityHolderID", "assignedToUserID", "assignedToGroupID", "assignedToIdentityHolderID", "environmentID", "scopeID", "vulnerabilityStatusID", "integrationIDs", "findingIDs", "actionPlanIDs", "controlIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -222865,6 +224009,13 @@ func (ec *executionContext) unmarshalInputCreateVulnerabilityInput(ctx context.C
 				return it, err
 			}
 			it.ReviewedByGroupID = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
 		case "assignedToUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -222879,6 +224030,13 @@ func (ec *executionContext) unmarshalInputCreateVulnerabilityInput(ctx context.C
 				return it, err
 			}
 			it.AssignedToGroupID = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -239433,7 +240591,7 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "lastReviewedAt", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "entityRelationshipStateName", "entityRelationshipStateNameNEQ", "entityRelationshipStateNameIn", "entityRelationshipStateNameNotIn", "entityRelationshipStateNameContains", "entityRelationshipStateNameHasPrefix", "entityRelationshipStateNameHasSuffix", "entityRelationshipStateNameIsNil", "entityRelationshipStateNameNotNil", "entityRelationshipStateNameEqualFold", "entityRelationshipStateNameContainsFold", "entityRelationshipStateID", "entityRelationshipStateIDNEQ", "entityRelationshipStateIDIn", "entityRelationshipStateIDNotIn", "entityRelationshipStateIDContains", "entityRelationshipStateIDHasPrefix", "entityRelationshipStateIDHasSuffix", "entityRelationshipStateIDIsNil", "entityRelationshipStateIDNotNil", "entityRelationshipStateIDEqualFold", "entityRelationshipStateIDContainsFold", "entitySecurityQuestionnaireStatusName", "entitySecurityQuestionnaireStatusNameNEQ", "entitySecurityQuestionnaireStatusNameIn", "entitySecurityQuestionnaireStatusNameNotIn", "entitySecurityQuestionnaireStatusNameContains", "entitySecurityQuestionnaireStatusNameHasPrefix", "entitySecurityQuestionnaireStatusNameHasSuffix", "entitySecurityQuestionnaireStatusNameIsNil", "entitySecurityQuestionnaireStatusNameNotNil", "entitySecurityQuestionnaireStatusNameEqualFold", "entitySecurityQuestionnaireStatusNameContainsFold", "entitySecurityQuestionnaireStatusID", "entitySecurityQuestionnaireStatusIDNEQ", "entitySecurityQuestionnaireStatusIDIn", "entitySecurityQuestionnaireStatusIDNotIn", "entitySecurityQuestionnaireStatusIDContains", "entitySecurityQuestionnaireStatusIDHasPrefix", "entitySecurityQuestionnaireStatusIDHasSuffix", "entitySecurityQuestionnaireStatusIDIsNil", "entitySecurityQuestionnaireStatusIDNotNil", "entitySecurityQuestionnaireStatusIDEqualFold", "entitySecurityQuestionnaireStatusIDContainsFold", "entitySourceTypeName", "entitySourceTypeNameNEQ", "entitySourceTypeNameIn", "entitySourceTypeNameNotIn", "entitySourceTypeNameContains", "entitySourceTypeNameHasPrefix", "entitySourceTypeNameHasSuffix", "entitySourceTypeNameIsNil", "entitySourceTypeNameNotNil", "entitySourceTypeNameEqualFold", "entitySourceTypeNameContainsFold", "entitySourceTypeID", "entitySourceTypeIDNEQ", "entitySourceTypeIDIn", "entitySourceTypeIDNotIn", "entitySourceTypeIDContains", "entitySourceTypeIDHasPrefix", "entitySourceTypeIDHasSuffix", "entitySourceTypeIDIsNil", "entitySourceTypeIDNotNil", "entitySourceTypeIDEqualFold", "entitySourceTypeIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "entityTypeID", "entityTypeIDNEQ", "entityTypeIDIn", "entityTypeIDNotIn", "entityTypeIDContains", "entityTypeIDHasPrefix", "entityTypeIDHasSuffix", "entityTypeIDIsNil", "entityTypeIDNotNil", "entityTypeIDEqualFold", "entityTypeIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedForUse", "approvedForUseNEQ", "approvedForUseIsNil", "approvedForUseNotNil", "hasSoc2", "hasSoc2NEQ", "hasSoc2IsNil", "hasSoc2NotNil", "soc2PeriodEnd", "soc2PeriodEndGT", "soc2PeriodEndGTE", "soc2PeriodEndLT", "soc2PeriodEndLTE", "soc2PeriodEndIsNil", "soc2PeriodEndNotNil", "contractStartDate", "contractStartDateGT", "contractStartDateGTE", "contractStartDateLT", "contractStartDateLTE", "contractStartDateIsNil", "contractStartDateNotNil", "contractEndDate", "contractEndDateGT", "contractEndDateGTE", "contractEndDateLT", "contractEndDateLTE", "contractEndDateIsNil", "contractEndDateNotNil", "autoRenews", "autoRenewsNEQ", "autoRenewsIsNil", "autoRenewsNotNil", "terminationNoticeDays", "terminationNoticeDaysNEQ", "terminationNoticeDaysGT", "terminationNoticeDaysGTE", "terminationNoticeDaysLT", "terminationNoticeDaysLTE", "terminationNoticeDaysIsNil", "terminationNoticeDaysNotNil", "annualSpend", "annualSpendNEQ", "annualSpendIn", "annualSpendNotIn", "annualSpendGT", "annualSpendGTE", "annualSpendLT", "annualSpendLTE", "annualSpendIsNil", "annualSpendNotNil", "spendCurrency", "spendCurrencyNEQ", "spendCurrencyIn", "spendCurrencyNotIn", "spendCurrencyContains", "spendCurrencyHasPrefix", "spendCurrencyHasSuffix", "spendCurrencyIsNil", "spendCurrencyNotNil", "spendCurrencyEqualFold", "spendCurrencyContainsFold", "billingModel", "billingModelNEQ", "billingModelIn", "billingModelNotIn", "billingModelContains", "billingModelHasPrefix", "billingModelHasSuffix", "billingModelIsNil", "billingModelNotNil", "billingModelEqualFold", "billingModelContainsFold", "renewalRisk", "renewalRiskNEQ", "renewalRiskIn", "renewalRiskNotIn", "renewalRiskContains", "renewalRiskHasPrefix", "renewalRiskHasSuffix", "renewalRiskIsNil", "renewalRiskNotNil", "renewalRiskEqualFold", "renewalRiskContainsFold", "ssoEnforced", "ssoEnforcedNEQ", "ssoEnforcedIsNil", "ssoEnforcedNotNil", "mfaSupported", "mfaSupportedNEQ", "mfaSupportedIsNil", "mfaSupportedNotNil", "mfaEnforced", "mfaEnforcedNEQ", "mfaEnforcedIsNil", "mfaEnforcedNotNil", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "riskRating", "riskRatingNEQ", "riskRatingIn", "riskRatingNotIn", "riskRatingContains", "riskRatingHasPrefix", "riskRatingHasSuffix", "riskRatingIsNil", "riskRatingNotNil", "riskRatingEqualFold", "riskRatingContainsFold", "riskScore", "riskScoreNEQ", "riskScoreGT", "riskScoreGTE", "riskScoreLT", "riskScoreLTE", "riskScoreIsNil", "riskScoreNotNil", "riskScoreCoverage", "riskScoreCoverageNEQ", "riskScoreCoverageGT", "riskScoreCoverageGTE", "riskScoreCoverageLT", "riskScoreCoverageLTE", "riskScoreCoverageIsNil", "riskScoreCoverageNotNil", "tier", "tierNEQ", "tierIn", "tierNotIn", "tierIsNil", "tierNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "nextReviewAt", "nextReviewAtGT", "nextReviewAtGTE", "nextReviewAtLT", "nextReviewAtLTE", "nextReviewAtIsNil", "nextReviewAtNotNil", "contractRenewalAt", "contractRenewalAtGT", "contractRenewalAtGTE", "contractRenewalAtLT", "contractRenewalAtLTE", "contractRenewalAtIsNil", "contractRenewalAtNotNil", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoFileID", "logoFileIDNEQ", "logoFileIDIn", "logoFileIDNotIn", "logoFileIDContains", "logoFileIDHasPrefix", "logoFileIDHasSuffix", "logoFileIDIsNil", "logoFileIDNotNil", "logoFileIDEqualFold", "logoFileIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasEntityRelationshipState", "hasEntityRelationshipStateWith", "hasEntitySecurityQuestionnaireStatus", "hasEntitySecurityQuestionnaireStatusWith", "hasEntitySourceType", "hasEntitySourceTypeWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasContacts", "hasContactsWith", "hasDocuments", "hasDocumentsWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasAssets", "hasAssetsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasScans", "hasScansWith", "hasCampaigns", "hasCampaignsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasIntegrations", "hasIntegrationsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasAuthMethods", "hasAuthMethodsWith", "hasEmployerIdentityHolders", "hasEmployerIdentityHoldersWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasPlatforms", "hasPlatformsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasSourcePlatforms", "hasSourcePlatformsWith", "hasEntityType", "hasEntityTypeWith", "hasLogoFile", "hasLogoFileWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "domainsHas", "aliasesHas", "linkedAssetIdsHas", "providedServicesHas", "linksHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "lastReviewedAt", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "entityRelationshipStateName", "entityRelationshipStateNameNEQ", "entityRelationshipStateNameIn", "entityRelationshipStateNameNotIn", "entityRelationshipStateNameContains", "entityRelationshipStateNameHasPrefix", "entityRelationshipStateNameHasSuffix", "entityRelationshipStateNameIsNil", "entityRelationshipStateNameNotNil", "entityRelationshipStateNameEqualFold", "entityRelationshipStateNameContainsFold", "entityRelationshipStateID", "entityRelationshipStateIDNEQ", "entityRelationshipStateIDIn", "entityRelationshipStateIDNotIn", "entityRelationshipStateIDContains", "entityRelationshipStateIDHasPrefix", "entityRelationshipStateIDHasSuffix", "entityRelationshipStateIDIsNil", "entityRelationshipStateIDNotNil", "entityRelationshipStateIDEqualFold", "entityRelationshipStateIDContainsFold", "entitySecurityQuestionnaireStatusName", "entitySecurityQuestionnaireStatusNameNEQ", "entitySecurityQuestionnaireStatusNameIn", "entitySecurityQuestionnaireStatusNameNotIn", "entitySecurityQuestionnaireStatusNameContains", "entitySecurityQuestionnaireStatusNameHasPrefix", "entitySecurityQuestionnaireStatusNameHasSuffix", "entitySecurityQuestionnaireStatusNameIsNil", "entitySecurityQuestionnaireStatusNameNotNil", "entitySecurityQuestionnaireStatusNameEqualFold", "entitySecurityQuestionnaireStatusNameContainsFold", "entitySecurityQuestionnaireStatusID", "entitySecurityQuestionnaireStatusIDNEQ", "entitySecurityQuestionnaireStatusIDIn", "entitySecurityQuestionnaireStatusIDNotIn", "entitySecurityQuestionnaireStatusIDContains", "entitySecurityQuestionnaireStatusIDHasPrefix", "entitySecurityQuestionnaireStatusIDHasSuffix", "entitySecurityQuestionnaireStatusIDIsNil", "entitySecurityQuestionnaireStatusIDNotNil", "entitySecurityQuestionnaireStatusIDEqualFold", "entitySecurityQuestionnaireStatusIDContainsFold", "entitySourceTypeName", "entitySourceTypeNameNEQ", "entitySourceTypeNameIn", "entitySourceTypeNameNotIn", "entitySourceTypeNameContains", "entitySourceTypeNameHasPrefix", "entitySourceTypeNameHasSuffix", "entitySourceTypeNameIsNil", "entitySourceTypeNameNotNil", "entitySourceTypeNameEqualFold", "entitySourceTypeNameContainsFold", "entitySourceTypeID", "entitySourceTypeIDNEQ", "entitySourceTypeIDIn", "entitySourceTypeIDNotIn", "entitySourceTypeIDContains", "entitySourceTypeIDHasPrefix", "entitySourceTypeIDHasSuffix", "entitySourceTypeIDIsNil", "entitySourceTypeIDNotNil", "entitySourceTypeIDEqualFold", "entitySourceTypeIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "entityTypeID", "entityTypeIDNEQ", "entityTypeIDIn", "entityTypeIDNotIn", "entityTypeIDContains", "entityTypeIDHasPrefix", "entityTypeIDHasSuffix", "entityTypeIDIsNil", "entityTypeIDNotNil", "entityTypeIDEqualFold", "entityTypeIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedForUse", "approvedForUseNEQ", "approvedForUseIsNil", "approvedForUseNotNil", "hasSoc2", "hasSoc2NEQ", "hasSoc2IsNil", "hasSoc2NotNil", "soc2PeriodEnd", "soc2PeriodEndGT", "soc2PeriodEndGTE", "soc2PeriodEndLT", "soc2PeriodEndLTE", "soc2PeriodEndIsNil", "soc2PeriodEndNotNil", "contractStartDate", "contractStartDateGT", "contractStartDateGTE", "contractStartDateLT", "contractStartDateLTE", "contractStartDateIsNil", "contractStartDateNotNil", "contractEndDate", "contractEndDateGT", "contractEndDateGTE", "contractEndDateLT", "contractEndDateLTE", "contractEndDateIsNil", "contractEndDateNotNil", "autoRenews", "autoRenewsNEQ", "autoRenewsIsNil", "autoRenewsNotNil", "terminationNoticeDays", "terminationNoticeDaysNEQ", "terminationNoticeDaysGT", "terminationNoticeDaysGTE", "terminationNoticeDaysLT", "terminationNoticeDaysLTE", "terminationNoticeDaysIsNil", "terminationNoticeDaysNotNil", "annualSpend", "annualSpendNEQ", "annualSpendIn", "annualSpendNotIn", "annualSpendGT", "annualSpendGTE", "annualSpendLT", "annualSpendLTE", "annualSpendIsNil", "annualSpendNotNil", "spendCurrency", "spendCurrencyNEQ", "spendCurrencyIn", "spendCurrencyNotIn", "spendCurrencyContains", "spendCurrencyHasPrefix", "spendCurrencyHasSuffix", "spendCurrencyIsNil", "spendCurrencyNotNil", "spendCurrencyEqualFold", "spendCurrencyContainsFold", "billingModel", "billingModelNEQ", "billingModelIn", "billingModelNotIn", "billingModelContains", "billingModelHasPrefix", "billingModelHasSuffix", "billingModelIsNil", "billingModelNotNil", "billingModelEqualFold", "billingModelContainsFold", "renewalRisk", "renewalRiskNEQ", "renewalRiskIn", "renewalRiskNotIn", "renewalRiskContains", "renewalRiskHasPrefix", "renewalRiskHasSuffix", "renewalRiskIsNil", "renewalRiskNotNil", "renewalRiskEqualFold", "renewalRiskContainsFold", "ssoEnforced", "ssoEnforcedNEQ", "ssoEnforcedIsNil", "ssoEnforcedNotNil", "mfaSupported", "mfaSupportedNEQ", "mfaSupportedIsNil", "mfaSupportedNotNil", "mfaEnforced", "mfaEnforcedNEQ", "mfaEnforcedIsNil", "mfaEnforcedNotNil", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "riskRating", "riskRatingNEQ", "riskRatingIn", "riskRatingNotIn", "riskRatingContains", "riskRatingHasPrefix", "riskRatingHasSuffix", "riskRatingIsNil", "riskRatingNotNil", "riskRatingEqualFold", "riskRatingContainsFold", "riskScore", "riskScoreNEQ", "riskScoreGT", "riskScoreGTE", "riskScoreLT", "riskScoreLTE", "riskScoreIsNil", "riskScoreNotNil", "riskScoreCoverage", "riskScoreCoverageNEQ", "riskScoreCoverageGT", "riskScoreCoverageGTE", "riskScoreCoverageLT", "riskScoreCoverageLTE", "riskScoreCoverageIsNil", "riskScoreCoverageNotNil", "tier", "tierNEQ", "tierIn", "tierNotIn", "tierIsNil", "tierNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "nextReviewAt", "nextReviewAtGT", "nextReviewAtGTE", "nextReviewAtLT", "nextReviewAtLTE", "nextReviewAtIsNil", "nextReviewAtNotNil", "contractRenewalAt", "contractRenewalAtGT", "contractRenewalAtGTE", "contractRenewalAtLT", "contractRenewalAtLTE", "contractRenewalAtIsNil", "contractRenewalAtNotNil", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoFileID", "logoFileIDNEQ", "logoFileIDIn", "logoFileIDNotIn", "logoFileIDContains", "logoFileIDHasPrefix", "logoFileIDHasSuffix", "logoFileIDIsNil", "logoFileIDNotNil", "logoFileIDEqualFold", "logoFileIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "observedAt", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasEntityRelationshipState", "hasEntityRelationshipStateWith", "hasEntitySecurityQuestionnaireStatus", "hasEntitySecurityQuestionnaireStatusWith", "hasEntitySourceType", "hasEntitySourceTypeWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasContacts", "hasContactsWith", "hasDocuments", "hasDocumentsWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasAssets", "hasAssetsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasScans", "hasScansWith", "hasCampaigns", "hasCampaignsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasIntegrations", "hasIntegrationsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasAuthMethods", "hasAuthMethodsWith", "hasEmployerIdentityHolders", "hasEmployerIdentityHoldersWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasPlatforms", "hasPlatformsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasSourcePlatforms", "hasSourcePlatformsWith", "hasEntityType", "hasEntityTypeWith", "hasLogoFile", "hasLogoFileWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "domainsHas", "aliasesHas", "linkedAssetIdsHas", "providedServicesHas", "linksHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -240140,6 +241298,83 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.InternalOwnerGroupIDContainsFold = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "internalOwnerIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNEQ = data
+		case "internalOwnerIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIn = data
+		case "internalOwnerIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotIn = data
+		case "internalOwnerIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContains = data
+		case "internalOwnerIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasPrefix = data
+		case "internalOwnerIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasSuffix = data
+		case "internalOwnerIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIsNil = data
+		case "internalOwnerIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotNil = data
+		case "internalOwnerIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDEqualFold = data
+		case "internalOwnerIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContainsFold = data
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -240371,6 +241606,83 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.ReviewedByGroupIDContainsFold = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
+		case "reviewedByIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNEQ = data
+		case "reviewedByIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDIn = data
+		case "reviewedByIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNotIn = data
+		case "reviewedByIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDContains = data
+		case "reviewedByIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDHasPrefix = data
+		case "reviewedByIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDHasSuffix = data
+		case "reviewedByIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDIsNil = data
+		case "reviewedByIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNotNil = data
+		case "reviewedByIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDEqualFold = data
+		case "reviewedByIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDContainsFold = data
 		case "lastReviewedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastReviewedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -243192,6 +244504,20 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.HasInternalOwnerGroupWith = data
+		case "hasInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolder = data
+		case "hasInternalOwnerIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolderWith = data
 		case "hasReviewedByUser":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByUser"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -243220,6 +244546,20 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.HasReviewedByGroupWith = data
+		case "hasReviewedByIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewedByIdentityHolder = data
+		case "hasReviewedByIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewedByIdentityHolderWith = data
 		case "hasEntityRelationshipState":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEntityRelationshipState"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -250758,7 +252098,7 @@ func (ec *executionContext) unmarshalInputFindingWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "findingStatusName", "findingStatusNameNEQ", "findingStatusNameIn", "findingStatusNameNotIn", "findingStatusNameContains", "findingStatusNameHasPrefix", "findingStatusNameHasSuffix", "findingStatusNameIsNil", "findingStatusNameNotNil", "findingStatusNameEqualFold", "findingStatusNameContainsFold", "findingStatusID", "findingStatusIDNEQ", "findingStatusIDIn", "findingStatusIDNotIn", "findingStatusIDContains", "findingStatusIDHasPrefix", "findingStatusIDHasSuffix", "findingStatusIDIsNil", "findingStatusIDNotNil", "findingStatusIDEqualFold", "findingStatusIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "securityLevel", "securityLevelNEQ", "securityLevelIn", "securityLevelNotIn", "securityLevelIsNil", "securityLevelNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "resourceName", "resourceNameNEQ", "resourceNameIn", "resourceNameNotIn", "resourceNameContains", "resourceNameHasPrefix", "resourceNameHasSuffix", "resourceNameIsNil", "resourceNameNotNil", "resourceNameEqualFold", "resourceNameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "state", "stateNEQ", "stateIn", "stateNotIn", "stateContains", "stateHasPrefix", "stateHasSuffix", "stateIsNil", "stateNotNil", "stateEqualFold", "stateContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "findingClass", "findingClassNEQ", "findingClassIn", "findingClassNotIn", "findingClassContains", "findingClassHasPrefix", "findingClassHasSuffix", "findingClassIsNil", "findingClassNotNil", "findingClassEqualFold", "findingClassContainsFold", "severity", "severityNEQ", "severityIn", "severityNotIn", "severityContains", "severityHasPrefix", "severityHasSuffix", "severityIsNil", "severityNotNil", "severityEqualFold", "severityContainsFold", "numericSeverity", "numericSeverityNEQ", "numericSeverityIn", "numericSeverityNotIn", "numericSeverityGT", "numericSeverityGTE", "numericSeverityLT", "numericSeverityLTE", "numericSeverityIsNil", "numericSeverityNotNil", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactGT", "impactGTE", "impactLT", "impactLTE", "impactIsNil", "impactNotNil", "exploitability", "exploitabilityNEQ", "exploitabilityIn", "exploitabilityNotIn", "exploitabilityGT", "exploitabilityGTE", "exploitabilityLT", "exploitabilityLTE", "exploitabilityIsNil", "exploitabilityNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityContains", "priorityHasPrefix", "priorityHasSuffix", "priorityIsNil", "priorityNotNil", "priorityEqualFold", "priorityContainsFold", "open", "openNEQ", "openIsNil", "openNotNil", "blocksProduction", "blocksProductionNEQ", "blocksProductionIsNil", "blocksProductionNotNil", "production", "productionNEQ", "productionIsNil", "productionNotNil", "public", "publicNEQ", "publicIsNil", "publicNotNil", "validated", "validatedNEQ", "validatedIsNil", "validatedNotNil", "assessmentID", "assessmentIDNEQ", "assessmentIDIn", "assessmentIDNotIn", "assessmentIDContains", "assessmentIDHasPrefix", "assessmentIDHasSuffix", "assessmentIDIsNil", "assessmentIDNotNil", "assessmentIDEqualFold", "assessmentIDContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "recommendation", "recommendationNEQ", "recommendationIn", "recommendationNotIn", "recommendationContains", "recommendationHasPrefix", "recommendationHasSuffix", "recommendationIsNil", "recommendationNotNil", "recommendationEqualFold", "recommendationContainsFold", "recommendedActions", "recommendedActionsNEQ", "recommendedActionsIn", "recommendedActionsNotIn", "recommendedActionsContains", "recommendedActionsHasPrefix", "recommendedActionsHasSuffix", "recommendedActionsIsNil", "recommendedActionsNotNil", "recommendedActionsEqualFold", "recommendedActionsContainsFold", "vector", "vectorNEQ", "vectorIn", "vectorNotIn", "vectorContains", "vectorHasPrefix", "vectorHasSuffix", "vectorIsNil", "vectorNotNil", "vectorEqualFold", "vectorContainsFold", "remediationSLA", "remediationSLANEQ", "remediationSLAGT", "remediationSLAGTE", "remediationSLALT", "remediationSLALTE", "remediationSLAIsNil", "remediationSLANotNil", "eventTime", "eventTimeGT", "eventTimeGTE", "eventTimeLT", "eventTimeLTE", "eventTimeIsNil", "eventTimeNotNil", "reportedAt", "reportedAtGT", "reportedAtGTE", "reportedAtLT", "reportedAtLTE", "reportedAtIsNil", "reportedAtNotNil", "sourceUpdatedAt", "sourceUpdatedAtGT", "sourceUpdatedAtGTE", "sourceUpdatedAtLT", "sourceUpdatedAtLTE", "sourceUpdatedAtIsNil", "sourceUpdatedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasFindingStatus", "hasFindingStatusWith", "hasIntegrations", "hasIntegrationsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasActionPlans", "hasActionPlansWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasRemediations", "hasRemediationsWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasCheckResults", "hasCheckResultsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "categoriesHas", "referencesHas", "stepsToReproduceHas", "targetsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "findingStatusName", "findingStatusNameNEQ", "findingStatusNameIn", "findingStatusNameNotIn", "findingStatusNameContains", "findingStatusNameHasPrefix", "findingStatusNameHasSuffix", "findingStatusNameIsNil", "findingStatusNameNotNil", "findingStatusNameEqualFold", "findingStatusNameContainsFold", "findingStatusID", "findingStatusIDNEQ", "findingStatusIDIn", "findingStatusIDNotIn", "findingStatusIDContains", "findingStatusIDHasPrefix", "findingStatusIDHasSuffix", "findingStatusIDIsNil", "findingStatusIDNotNil", "findingStatusIDEqualFold", "findingStatusIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "securityLevel", "securityLevelNEQ", "securityLevelIn", "securityLevelNotIn", "securityLevelIsNil", "securityLevelNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "resourceName", "resourceNameNEQ", "resourceNameIn", "resourceNameNotIn", "resourceNameContains", "resourceNameHasPrefix", "resourceNameHasSuffix", "resourceNameIsNil", "resourceNameNotNil", "resourceNameEqualFold", "resourceNameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "state", "stateNEQ", "stateIn", "stateNotIn", "stateContains", "stateHasPrefix", "stateHasSuffix", "stateIsNil", "stateNotNil", "stateEqualFold", "stateContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "findingClass", "findingClassNEQ", "findingClassIn", "findingClassNotIn", "findingClassContains", "findingClassHasPrefix", "findingClassHasSuffix", "findingClassIsNil", "findingClassNotNil", "findingClassEqualFold", "findingClassContainsFold", "severity", "severityNEQ", "severityIn", "severityNotIn", "severityContains", "severityHasPrefix", "severityHasSuffix", "severityIsNil", "severityNotNil", "severityEqualFold", "severityContainsFold", "numericSeverity", "numericSeverityNEQ", "numericSeverityIn", "numericSeverityNotIn", "numericSeverityGT", "numericSeverityGTE", "numericSeverityLT", "numericSeverityLTE", "numericSeverityIsNil", "numericSeverityNotNil", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactGT", "impactGTE", "impactLT", "impactLTE", "impactIsNil", "impactNotNil", "exploitability", "exploitabilityNEQ", "exploitabilityIn", "exploitabilityNotIn", "exploitabilityGT", "exploitabilityGTE", "exploitabilityLT", "exploitabilityLTE", "exploitabilityIsNil", "exploitabilityNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityContains", "priorityHasPrefix", "priorityHasSuffix", "priorityIsNil", "priorityNotNil", "priorityEqualFold", "priorityContainsFold", "open", "openNEQ", "openIsNil", "openNotNil", "blocksProduction", "blocksProductionNEQ", "blocksProductionIsNil", "blocksProductionNotNil", "production", "productionNEQ", "productionIsNil", "productionNotNil", "public", "publicNEQ", "publicIsNil", "publicNotNil", "validated", "validatedNEQ", "validatedIsNil", "validatedNotNil", "assessmentID", "assessmentIDNEQ", "assessmentIDIn", "assessmentIDNotIn", "assessmentIDContains", "assessmentIDHasPrefix", "assessmentIDHasSuffix", "assessmentIDIsNil", "assessmentIDNotNil", "assessmentIDEqualFold", "assessmentIDContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "recommendation", "recommendationNEQ", "recommendationIn", "recommendationNotIn", "recommendationContains", "recommendationHasPrefix", "recommendationHasSuffix", "recommendationIsNil", "recommendationNotNil", "recommendationEqualFold", "recommendationContainsFold", "recommendedActions", "recommendedActionsNEQ", "recommendedActionsIn", "recommendedActionsNotIn", "recommendedActionsContains", "recommendedActionsHasPrefix", "recommendedActionsHasSuffix", "recommendedActionsIsNil", "recommendedActionsNotNil", "recommendedActionsEqualFold", "recommendedActionsContainsFold", "vector", "vectorNEQ", "vectorIn", "vectorNotIn", "vectorContains", "vectorHasPrefix", "vectorHasSuffix", "vectorIsNil", "vectorNotNil", "vectorEqualFold", "vectorContainsFold", "remediationSLA", "remediationSLANEQ", "remediationSLAGT", "remediationSLAGTE", "remediationSLALT", "remediationSLALTE", "remediationSLAIsNil", "remediationSLANotNil", "eventTime", "eventTimeGT", "eventTimeGTE", "eventTimeLT", "eventTimeLTE", "eventTimeIsNil", "eventTimeNotNil", "reportedAt", "reportedAtGT", "reportedAtGTE", "reportedAtLT", "reportedAtLTE", "reportedAtIsNil", "reportedAtNotNil", "sourceUpdatedAt", "sourceUpdatedAtGT", "sourceUpdatedAtGTE", "sourceUpdatedAtLT", "sourceUpdatedAtLTE", "sourceUpdatedAtIsNil", "sourceUpdatedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasFindingStatus", "hasFindingStatusWith", "hasIntegrations", "hasIntegrationsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasActionPlans", "hasActionPlansWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasRemediations", "hasRemediationsWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasCheckResults", "hasCheckResultsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "categoriesHas", "referencesHas", "stepsToReproduceHas", "targetsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -251528,6 +252868,83 @@ func (ec *executionContext) unmarshalInputFindingWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.ReviewedByGroupIDContainsFold = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
+		case "reviewedByIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNEQ = data
+		case "reviewedByIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDIn = data
+		case "reviewedByIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNotIn = data
+		case "reviewedByIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDContains = data
+		case "reviewedByIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDHasPrefix = data
+		case "reviewedByIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDHasSuffix = data
+		case "reviewedByIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDIsNil = data
+		case "reviewedByIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNotNil = data
+		case "reviewedByIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDEqualFold = data
+		case "reviewedByIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDContainsFold = data
 		case "assignedTo":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedTo"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -251759,6 +253176,83 @@ func (ec *executionContext) unmarshalInputFindingWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.AssignedToGroupIDContainsFold = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
+		case "assignedToIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNEQ = data
+		case "assignedToIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDIn = data
+		case "assignedToIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNotIn = data
+		case "assignedToIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDContains = data
+		case "assignedToIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDHasPrefix = data
+		case "assignedToIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDHasSuffix = data
+		case "assignedToIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDIsNil = data
+		case "assignedToIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNotNil = data
+		case "assignedToIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDEqualFold = data
+		case "assignedToIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDContainsFold = data
 		case "systemOwned":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemOwned"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -254398,6 +255892,20 @@ func (ec *executionContext) unmarshalInputFindingWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.HasReviewedByGroupWith = data
+		case "hasReviewedByIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewedByIdentityHolder = data
+		case "hasReviewedByIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewedByIdentityHolderWith = data
 		case "hasAssignedToUser":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToUser"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -254426,6 +255934,20 @@ func (ec *executionContext) unmarshalInputFindingWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.HasAssignedToGroupWith = data
+		case "hasAssignedToIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssignedToIdentityHolder = data
+		case "hasAssignedToIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssignedToIdentityHolderWith = data
 		case "hasEnvironment":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEnvironment"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -259135,7 +260657,7 @@ func (ec *executionContext) unmarshalInputIdentityHolderWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "fullName", "fullNameNEQ", "fullNameIn", "fullNameNotIn", "fullNameContains", "fullNameHasPrefix", "fullNameHasSuffix", "fullNameEqualFold", "fullNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "alternateEmail", "alternateEmailNEQ", "alternateEmailIn", "alternateEmailNotIn", "alternateEmailContains", "alternateEmailHasPrefix", "alternateEmailHasSuffix", "alternateEmailIsNil", "alternateEmailNotNil", "alternateEmailEqualFold", "alternateEmailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "isOpenlaneUser", "isOpenlaneUserNEQ", "isOpenlaneUserIsNil", "isOpenlaneUserNotNil", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDIsNil", "userIDNotNil", "userIDEqualFold", "userIDContainsFold", "identityHolderType", "identityHolderTypeNEQ", "identityHolderTypeIn", "identityHolderTypeNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "isActive", "isActiveNEQ", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "department", "departmentNEQ", "departmentIn", "departmentNotIn", "departmentContains", "departmentHasPrefix", "departmentHasSuffix", "departmentIsNil", "departmentNotNil", "departmentEqualFold", "departmentContainsFold", "team", "teamNEQ", "teamIn", "teamNotIn", "teamContains", "teamHasPrefix", "teamHasSuffix", "teamIsNil", "teamNotNil", "teamEqualFold", "teamContainsFold", "location", "locationNEQ", "locationIn", "locationNotIn", "locationContains", "locationHasPrefix", "locationHasSuffix", "locationIsNil", "locationNotNil", "locationEqualFold", "locationContainsFold", "startDate", "startDateGT", "startDateGTE", "startDateLT", "startDateLTE", "startDateIsNil", "startDateNotNil", "endDate", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "employerEntityID", "employerEntityIDNEQ", "employerEntityIDIn", "employerEntityIDNotIn", "employerEntityIDContains", "employerEntityIDHasPrefix", "employerEntityIDHasSuffix", "employerEntityIDIsNil", "employerEntityIDNotNil", "employerEntityIDEqualFold", "employerEntityIDContainsFold", "externalUserID", "externalUserIDNEQ", "externalUserIDIn", "externalUserIDNotIn", "externalUserIDContains", "externalUserIDHasPrefix", "externalUserIDHasSuffix", "externalUserIDIsNil", "externalUserIDNotNil", "externalUserIDEqualFold", "externalUserIDContainsFold", "externalReferenceID", "externalReferenceIDNEQ", "externalReferenceIDIn", "externalReferenceIDNotIn", "externalReferenceIDContains", "externalReferenceIDHasPrefix", "externalReferenceIDHasSuffix", "externalReferenceIDIsNil", "externalReferenceIDNotNil", "externalReferenceIDEqualFold", "externalReferenceIDContainsFold", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasEmployer", "hasEmployerWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasAssessments", "hasAssessmentsWith", "hasTemplates", "hasTemplatesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasPlatforms", "hasPlatformsWith", "hasCampaigns", "hasCampaignsWith", "hasAudienceMembers", "hasAudienceMembersWith", "hasTasks", "hasTasksWith", "hasFiles", "hasFilesWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAccessPlatforms", "hasAccessPlatformsWith", "hasUser", "hasUserWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "emailAliasesHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "fullName", "fullNameNEQ", "fullNameIn", "fullNameNotIn", "fullNameContains", "fullNameHasPrefix", "fullNameHasSuffix", "fullNameEqualFold", "fullNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "alternateEmail", "alternateEmailNEQ", "alternateEmailIn", "alternateEmailNotIn", "alternateEmailContains", "alternateEmailHasPrefix", "alternateEmailHasSuffix", "alternateEmailIsNil", "alternateEmailNotNil", "alternateEmailEqualFold", "alternateEmailContainsFold", "phoneNumber", "phoneNumberNEQ", "phoneNumberIn", "phoneNumberNotIn", "phoneNumberContains", "phoneNumberHasPrefix", "phoneNumberHasSuffix", "phoneNumberIsNil", "phoneNumberNotNil", "phoneNumberEqualFold", "phoneNumberContainsFold", "isOpenlaneUser", "isOpenlaneUserNEQ", "isOpenlaneUserIsNil", "isOpenlaneUserNotNil", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDIsNil", "userIDNotNil", "userIDEqualFold", "userIDContainsFold", "identityHolderType", "identityHolderTypeNEQ", "identityHolderTypeIn", "identityHolderTypeNotIn", "status", "statusNEQ", "statusIn", "statusNotIn", "isActive", "isActiveNEQ", "title", "titleNEQ", "titleIn", "titleNotIn", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "department", "departmentNEQ", "departmentIn", "departmentNotIn", "departmentContains", "departmentHasPrefix", "departmentHasSuffix", "departmentIsNil", "departmentNotNil", "departmentEqualFold", "departmentContainsFold", "team", "teamNEQ", "teamIn", "teamNotIn", "teamContains", "teamHasPrefix", "teamHasSuffix", "teamIsNil", "teamNotNil", "teamEqualFold", "teamContainsFold", "location", "locationNEQ", "locationIn", "locationNotIn", "locationContains", "locationHasPrefix", "locationHasSuffix", "locationIsNil", "locationNotNil", "locationEqualFold", "locationContainsFold", "startDate", "startDateGT", "startDateGTE", "startDateLT", "startDateLTE", "startDateIsNil", "startDateNotNil", "endDate", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "employerEntityID", "employerEntityIDNEQ", "employerEntityIDIn", "employerEntityIDNotIn", "employerEntityIDContains", "employerEntityIDHasPrefix", "employerEntityIDHasSuffix", "employerEntityIDIsNil", "employerEntityIDNotNil", "employerEntityIDEqualFold", "employerEntityIDContainsFold", "externalUserID", "externalUserIDNEQ", "externalUserIDIn", "externalUserIDNotIn", "externalUserIDContains", "externalUserIDHasPrefix", "externalUserIDHasSuffix", "externalUserIDIsNil", "externalUserIDNotNil", "externalUserIDEqualFold", "externalUserIDContainsFold", "externalReferenceID", "externalReferenceIDNEQ", "externalReferenceIDIn", "externalReferenceIDNotIn", "externalReferenceIDContains", "externalReferenceIDHasPrefix", "externalReferenceIDHasSuffix", "externalReferenceIDIsNil", "externalReferenceIDNotNil", "externalReferenceIDEqualFold", "externalReferenceIDContainsFold", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasEmployer", "hasEmployerWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasAssessments", "hasAssessmentsWith", "hasTemplates", "hasTemplatesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasPlatforms", "hasPlatformsWith", "hasCampaigns", "hasCampaignsWith", "hasAudienceMembers", "hasAudienceMembersWith", "hasTasks", "hasTasksWith", "hasFiles", "hasFilesWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAccessPlatforms", "hasAccessPlatformsWith", "hasUser", "hasUserWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "emailAliasesHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -259905,6 +261427,83 @@ func (ec *executionContext) unmarshalInputIdentityHolderWhereInput(ctx context.C
 				return it, err
 			}
 			it.InternalOwnerGroupIDContainsFold = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "internalOwnerIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNEQ = data
+		case "internalOwnerIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIn = data
+		case "internalOwnerIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotIn = data
+		case "internalOwnerIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContains = data
+		case "internalOwnerIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasPrefix = data
+		case "internalOwnerIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasSuffix = data
+		case "internalOwnerIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIsNil = data
+		case "internalOwnerIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotNil = data
+		case "internalOwnerIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDEqualFold = data
+		case "internalOwnerIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContainsFold = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -261494,6 +263093,20 @@ func (ec *executionContext) unmarshalInputIdentityHolderWhereInput(ctx context.C
 				return it, err
 			}
 			it.HasInternalOwnerGroupWith = data
+		case "hasInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolder = data
+		case "hasInternalOwnerIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolderWith = data
 		case "hasEnvironment":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEnvironment"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -261859,7 +263472,7 @@ func (ec *executionContext) unmarshalInputIntegrationWhereInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "kind", "kindNEQ", "kindIn", "kindNotIn", "kindContains", "kindHasPrefix", "kindHasSuffix", "kindIsNil", "kindNotNil", "kindEqualFold", "kindContainsFold", "integrationType", "integrationTypeNEQ", "integrationTypeIn", "integrationTypeNotIn", "integrationTypeContains", "integrationTypeHasPrefix", "integrationTypeHasSuffix", "integrationTypeIsNil", "integrationTypeNotNil", "integrationTypeEqualFold", "integrationTypeContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "definitionID", "definitionIDNEQ", "definitionIDIn", "definitionIDNotIn", "definitionIDContains", "definitionIDHasPrefix", "definitionIDHasSuffix", "definitionIDIsNil", "definitionIDNotNil", "definitionIDEqualFold", "definitionIDContainsFold", "definitionVersion", "definitionVersionNEQ", "definitionVersionIn", "definitionVersionNotIn", "definitionVersionContains", "definitionVersionHasPrefix", "definitionVersionHasSuffix", "definitionVersionIsNil", "definitionVersionNotNil", "definitionVersionEqualFold", "definitionVersionContainsFold", "definitionSlug", "definitionSlugNEQ", "definitionSlugIn", "definitionSlugNotIn", "definitionSlugContains", "definitionSlugHasPrefix", "definitionSlugHasSuffix", "definitionSlugIsNil", "definitionSlugNotNil", "definitionSlugEqualFold", "definitionSlugContainsFold", "family", "familyNEQ", "familyIn", "familyNotIn", "familyContains", "familyHasPrefix", "familyHasSuffix", "familyIsNil", "familyNotNil", "familyEqualFold", "familyContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "primaryDirectory", "primaryDirectoryNEQ", "campaignEmail", "campaignEmailNEQ", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasSecrets", "hasSecretsWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasTasks", "hasTasksWith", "hasActionPlans", "hasActionPlansWith", "hasAssets", "hasAssetsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasDirectorySyncRuns", "hasDirectorySyncRunsWith", "hasCheckResults", "hasCheckResultsWith", "hasPlatform", "hasPlatformWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasEmailTemplates", "hasEmailTemplatesWith", "hasCampaigns", "hasCampaignsWith", "hasEntities", "hasEntitiesWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "kind", "kindNEQ", "kindIn", "kindNotIn", "kindContains", "kindHasPrefix", "kindHasSuffix", "kindIsNil", "kindNotNil", "kindEqualFold", "kindContainsFold", "integrationType", "integrationTypeNEQ", "integrationTypeIn", "integrationTypeNotIn", "integrationTypeContains", "integrationTypeHasPrefix", "integrationTypeHasSuffix", "integrationTypeIsNil", "integrationTypeNotNil", "integrationTypeEqualFold", "integrationTypeContainsFold", "platformID", "platformIDNEQ", "platformIDIn", "platformIDNotIn", "platformIDContains", "platformIDHasPrefix", "platformIDHasSuffix", "platformIDIsNil", "platformIDNotNil", "platformIDEqualFold", "platformIDContainsFold", "definitionID", "definitionIDNEQ", "definitionIDIn", "definitionIDNotIn", "definitionIDContains", "definitionIDHasPrefix", "definitionIDHasSuffix", "definitionIDIsNil", "definitionIDNotNil", "definitionIDEqualFold", "definitionIDContainsFold", "definitionVersion", "definitionVersionNEQ", "definitionVersionIn", "definitionVersionNotIn", "definitionVersionContains", "definitionVersionHasPrefix", "definitionVersionHasSuffix", "definitionVersionIsNil", "definitionVersionNotNil", "definitionVersionEqualFold", "definitionVersionContainsFold", "definitionSlug", "definitionSlugNEQ", "definitionSlugIn", "definitionSlugNotIn", "definitionSlugContains", "definitionSlugHasPrefix", "definitionSlugHasSuffix", "definitionSlugIsNil", "definitionSlugNotNil", "definitionSlugEqualFold", "definitionSlugContainsFold", "family", "familyNEQ", "familyIn", "familyNotIn", "familyContains", "familyHasPrefix", "familyHasSuffix", "familyIsNil", "familyNotNil", "familyEqualFold", "familyContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "expiresAt", "expiresAtGT", "expiresAtGTE", "expiresAtLT", "expiresAtLTE", "expiresAtIsNil", "expiresAtNotNil", "primaryDirectory", "primaryDirectoryNEQ", "campaignEmail", "campaignEmailNEQ", "hasOwner", "hasOwnerWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasSecrets", "hasSecretsWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasTasks", "hasTasksWith", "hasActionPlans", "hasActionPlansWith", "hasAssets", "hasAssetsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasDirectorySyncRuns", "hasDirectorySyncRunsWith", "hasCheckResults", "hasCheckResultsWith", "hasPlatform", "hasPlatformWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasEmailTemplates", "hasEmailTemplatesWith", "hasCampaigns", "hasCampaignsWith", "hasEntities", "hasEntitiesWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -263455,6 +265068,55 @@ func (ec *executionContext) unmarshalInputIntegrationWhereInput(ctx context.Cont
 				return it, err
 			}
 			it.StatusNotIn = data
+		case "expiresAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAt"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAt = data
+		case "expiresAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtGT = data
+		case "expiresAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtGTE = data
+		case "expiresAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtLT = data
+		case "expiresAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtLTE = data
+		case "expiresAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtIsNil = data
+		case "expiresAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("expiresAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ExpiresAtNotNil = data
 		case "primaryDirectory":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("primaryDirectory"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -282762,7 +284424,7 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "businessOwner", "businessOwnerNEQ", "businessOwnerIn", "businessOwnerNotIn", "businessOwnerContains", "businessOwnerHasPrefix", "businessOwnerHasSuffix", "businessOwnerIsNil", "businessOwnerNotNil", "businessOwnerEqualFold", "businessOwnerContainsFold", "businessOwnerUserID", "businessOwnerUserIDNEQ", "businessOwnerUserIDIn", "businessOwnerUserIDNotIn", "businessOwnerUserIDContains", "businessOwnerUserIDHasPrefix", "businessOwnerUserIDHasSuffix", "businessOwnerUserIDIsNil", "businessOwnerUserIDNotNil", "businessOwnerUserIDEqualFold", "businessOwnerUserIDContainsFold", "businessOwnerGroupID", "businessOwnerGroupIDNEQ", "businessOwnerGroupIDIn", "businessOwnerGroupIDNotIn", "businessOwnerGroupIDContains", "businessOwnerGroupIDHasPrefix", "businessOwnerGroupIDHasSuffix", "businessOwnerGroupIDIsNil", "businessOwnerGroupIDNotNil", "businessOwnerGroupIDEqualFold", "businessOwnerGroupIDContainsFold", "technicalOwner", "technicalOwnerNEQ", "technicalOwnerIn", "technicalOwnerNotIn", "technicalOwnerContains", "technicalOwnerHasPrefix", "technicalOwnerHasSuffix", "technicalOwnerIsNil", "technicalOwnerNotNil", "technicalOwnerEqualFold", "technicalOwnerContainsFold", "technicalOwnerUserID", "technicalOwnerUserIDNEQ", "technicalOwnerUserIDIn", "technicalOwnerUserIDNotIn", "technicalOwnerUserIDContains", "technicalOwnerUserIDHasPrefix", "technicalOwnerUserIDHasSuffix", "technicalOwnerUserIDIsNil", "technicalOwnerUserIDNotNil", "technicalOwnerUserIDEqualFold", "technicalOwnerUserIDContainsFold", "technicalOwnerGroupID", "technicalOwnerGroupIDNEQ", "technicalOwnerGroupIDIn", "technicalOwnerGroupIDNotIn", "technicalOwnerGroupIDContains", "technicalOwnerGroupIDHasPrefix", "technicalOwnerGroupIDHasSuffix", "technicalOwnerGroupIDIsNil", "technicalOwnerGroupIDNotNil", "technicalOwnerGroupIDEqualFold", "technicalOwnerGroupIDContainsFold", "securityOwner", "securityOwnerNEQ", "securityOwnerIn", "securityOwnerNotIn", "securityOwnerContains", "securityOwnerHasPrefix", "securityOwnerHasSuffix", "securityOwnerIsNil", "securityOwnerNotNil", "securityOwnerEqualFold", "securityOwnerContainsFold", "securityOwnerUserID", "securityOwnerUserIDNEQ", "securityOwnerUserIDIn", "securityOwnerUserIDNotIn", "securityOwnerUserIDContains", "securityOwnerUserIDHasPrefix", "securityOwnerUserIDHasSuffix", "securityOwnerUserIDIsNil", "securityOwnerUserIDNotNil", "securityOwnerUserIDEqualFold", "securityOwnerUserIDContainsFold", "securityOwnerGroupID", "securityOwnerGroupIDNEQ", "securityOwnerGroupIDIn", "securityOwnerGroupIDNotIn", "securityOwnerGroupIDContains", "securityOwnerGroupIDHasPrefix", "securityOwnerGroupIDHasSuffix", "securityOwnerGroupIDIsNil", "securityOwnerGroupIDNotNil", "securityOwnerGroupIDEqualFold", "securityOwnerGroupIDContainsFold", "platformKindName", "platformKindNameNEQ", "platformKindNameIn", "platformKindNameNotIn", "platformKindNameContains", "platformKindNameHasPrefix", "platformKindNameHasSuffix", "platformKindNameIsNil", "platformKindNameNotNil", "platformKindNameEqualFold", "platformKindNameContainsFold", "platformKindID", "platformKindIDNEQ", "platformKindIDIn", "platformKindIDNotIn", "platformKindIDContains", "platformKindIDHasPrefix", "platformKindIDHasSuffix", "platformKindIDIsNil", "platformKindIDNotNil", "platformKindIDEqualFold", "platformKindIDContainsFold", "platformDataClassificationName", "platformDataClassificationNameNEQ", "platformDataClassificationNameIn", "platformDataClassificationNameNotIn", "platformDataClassificationNameContains", "platformDataClassificationNameHasPrefix", "platformDataClassificationNameHasSuffix", "platformDataClassificationNameIsNil", "platformDataClassificationNameNotNil", "platformDataClassificationNameEqualFold", "platformDataClassificationNameContainsFold", "platformDataClassificationID", "platformDataClassificationIDNEQ", "platformDataClassificationIDIn", "platformDataClassificationIDNotIn", "platformDataClassificationIDContains", "platformDataClassificationIDHasPrefix", "platformDataClassificationIDHasSuffix", "platformDataClassificationIDIsNil", "platformDataClassificationIDNotNil", "platformDataClassificationIDEqualFold", "platformDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "businessPurpose", "businessPurposeNEQ", "businessPurposeIn", "businessPurposeNotIn", "businessPurposeContains", "businessPurposeHasPrefix", "businessPurposeHasSuffix", "businessPurposeIsNil", "businessPurposeNotNil", "businessPurposeEqualFold", "businessPurposeContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "platformOwnerID", "platformOwnerIDNEQ", "platformOwnerIDIn", "platformOwnerIDNotIn", "platformOwnerIDContains", "platformOwnerIDHasPrefix", "platformOwnerIDHasSuffix", "platformOwnerIDIsNil", "platformOwnerIDNotNil", "platformOwnerIDEqualFold", "platformOwnerIDContainsFold", "externalReferenceID", "externalReferenceIDNEQ", "externalReferenceIDIn", "externalReferenceIDNotIn", "externalReferenceIDContains", "externalReferenceIDHasPrefix", "externalReferenceIDHasSuffix", "externalReferenceIDIsNil", "externalReferenceIDNotNil", "externalReferenceIDEqualFold", "externalReferenceIDContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasBusinessOwnerUser", "hasBusinessOwnerUserWith", "hasBusinessOwnerGroup", "hasBusinessOwnerGroupWith", "hasTechnicalOwnerUser", "hasTechnicalOwnerUserWith", "hasTechnicalOwnerGroup", "hasTechnicalOwnerGroupWith", "hasSecurityOwnerUser", "hasSecurityOwnerUserWith", "hasSecurityOwnerGroup", "hasSecurityOwnerGroupWith", "hasPlatformKind", "hasPlatformKindWith", "hasPlatformDataClassification", "hasPlatformDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasArchitectureDiagrams", "hasArchitectureDiagramsWith", "hasDataFlowDiagrams", "hasDataFlowDiagramsWith", "hasTrustBoundaryDiagrams", "hasTrustBoundaryDiagramsWith", "hasRisks", "hasRisksWith", "hasControls", "hasControlsWith", "hasAssessments", "hasAssessmentsWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasIntegrations", "hasIntegrationsWith", "hasDirectorySyncRuns", "hasDirectorySyncRunsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasSourceAssets", "hasSourceAssetsWith", "hasSourceEntities", "hasSourceEntitiesWith", "hasOutOfScopeAssets", "hasOutOfScopeAssetsWith", "hasOutOfScopeVendors", "hasOutOfScopeVendorsWith", "hasApplicableFrameworks", "hasApplicableFrameworksWith", "hasGeneratedScans", "hasGeneratedScansWith", "hasPlatformOwner", "hasPlatformOwnerWith", "hasSystemDetails", "hasSystemDetailsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "internalOwnerIdentityHolderID", "internalOwnerIdentityHolderIDNEQ", "internalOwnerIdentityHolderIDIn", "internalOwnerIdentityHolderIDNotIn", "internalOwnerIdentityHolderIDContains", "internalOwnerIdentityHolderIDHasPrefix", "internalOwnerIdentityHolderIDHasSuffix", "internalOwnerIdentityHolderIDIsNil", "internalOwnerIdentityHolderIDNotNil", "internalOwnerIdentityHolderIDEqualFold", "internalOwnerIdentityHolderIDContainsFold", "businessOwner", "businessOwnerNEQ", "businessOwnerIn", "businessOwnerNotIn", "businessOwnerContains", "businessOwnerHasPrefix", "businessOwnerHasSuffix", "businessOwnerIsNil", "businessOwnerNotNil", "businessOwnerEqualFold", "businessOwnerContainsFold", "businessOwnerUserID", "businessOwnerUserIDNEQ", "businessOwnerUserIDIn", "businessOwnerUserIDNotIn", "businessOwnerUserIDContains", "businessOwnerUserIDHasPrefix", "businessOwnerUserIDHasSuffix", "businessOwnerUserIDIsNil", "businessOwnerUserIDNotNil", "businessOwnerUserIDEqualFold", "businessOwnerUserIDContainsFold", "businessOwnerGroupID", "businessOwnerGroupIDNEQ", "businessOwnerGroupIDIn", "businessOwnerGroupIDNotIn", "businessOwnerGroupIDContains", "businessOwnerGroupIDHasPrefix", "businessOwnerGroupIDHasSuffix", "businessOwnerGroupIDIsNil", "businessOwnerGroupIDNotNil", "businessOwnerGroupIDEqualFold", "businessOwnerGroupIDContainsFold", "businessOwnerIdentityHolderID", "businessOwnerIdentityHolderIDNEQ", "businessOwnerIdentityHolderIDIn", "businessOwnerIdentityHolderIDNotIn", "businessOwnerIdentityHolderIDContains", "businessOwnerIdentityHolderIDHasPrefix", "businessOwnerIdentityHolderIDHasSuffix", "businessOwnerIdentityHolderIDIsNil", "businessOwnerIdentityHolderIDNotNil", "businessOwnerIdentityHolderIDEqualFold", "businessOwnerIdentityHolderIDContainsFold", "technicalOwner", "technicalOwnerNEQ", "technicalOwnerIn", "technicalOwnerNotIn", "technicalOwnerContains", "technicalOwnerHasPrefix", "technicalOwnerHasSuffix", "technicalOwnerIsNil", "technicalOwnerNotNil", "technicalOwnerEqualFold", "technicalOwnerContainsFold", "technicalOwnerUserID", "technicalOwnerUserIDNEQ", "technicalOwnerUserIDIn", "technicalOwnerUserIDNotIn", "technicalOwnerUserIDContains", "technicalOwnerUserIDHasPrefix", "technicalOwnerUserIDHasSuffix", "technicalOwnerUserIDIsNil", "technicalOwnerUserIDNotNil", "technicalOwnerUserIDEqualFold", "technicalOwnerUserIDContainsFold", "technicalOwnerGroupID", "technicalOwnerGroupIDNEQ", "technicalOwnerGroupIDIn", "technicalOwnerGroupIDNotIn", "technicalOwnerGroupIDContains", "technicalOwnerGroupIDHasPrefix", "technicalOwnerGroupIDHasSuffix", "technicalOwnerGroupIDIsNil", "technicalOwnerGroupIDNotNil", "technicalOwnerGroupIDEqualFold", "technicalOwnerGroupIDContainsFold", "technicalOwnerIdentityHolderID", "technicalOwnerIdentityHolderIDNEQ", "technicalOwnerIdentityHolderIDIn", "technicalOwnerIdentityHolderIDNotIn", "technicalOwnerIdentityHolderIDContains", "technicalOwnerIdentityHolderIDHasPrefix", "technicalOwnerIdentityHolderIDHasSuffix", "technicalOwnerIdentityHolderIDIsNil", "technicalOwnerIdentityHolderIDNotNil", "technicalOwnerIdentityHolderIDEqualFold", "technicalOwnerIdentityHolderIDContainsFold", "securityOwner", "securityOwnerNEQ", "securityOwnerIn", "securityOwnerNotIn", "securityOwnerContains", "securityOwnerHasPrefix", "securityOwnerHasSuffix", "securityOwnerIsNil", "securityOwnerNotNil", "securityOwnerEqualFold", "securityOwnerContainsFold", "securityOwnerUserID", "securityOwnerUserIDNEQ", "securityOwnerUserIDIn", "securityOwnerUserIDNotIn", "securityOwnerUserIDContains", "securityOwnerUserIDHasPrefix", "securityOwnerUserIDHasSuffix", "securityOwnerUserIDIsNil", "securityOwnerUserIDNotNil", "securityOwnerUserIDEqualFold", "securityOwnerUserIDContainsFold", "securityOwnerGroupID", "securityOwnerGroupIDNEQ", "securityOwnerGroupIDIn", "securityOwnerGroupIDNotIn", "securityOwnerGroupIDContains", "securityOwnerGroupIDHasPrefix", "securityOwnerGroupIDHasSuffix", "securityOwnerGroupIDIsNil", "securityOwnerGroupIDNotNil", "securityOwnerGroupIDEqualFold", "securityOwnerGroupIDContainsFold", "securityOwnerIdentityHolderID", "securityOwnerIdentityHolderIDNEQ", "securityOwnerIdentityHolderIDIn", "securityOwnerIdentityHolderIDNotIn", "securityOwnerIdentityHolderIDContains", "securityOwnerIdentityHolderIDHasPrefix", "securityOwnerIdentityHolderIDHasSuffix", "securityOwnerIdentityHolderIDIsNil", "securityOwnerIdentityHolderIDNotNil", "securityOwnerIdentityHolderIDEqualFold", "securityOwnerIdentityHolderIDContainsFold", "platformKindName", "platformKindNameNEQ", "platformKindNameIn", "platformKindNameNotIn", "platformKindNameContains", "platformKindNameHasPrefix", "platformKindNameHasSuffix", "platformKindNameIsNil", "platformKindNameNotNil", "platformKindNameEqualFold", "platformKindNameContainsFold", "platformKindID", "platformKindIDNEQ", "platformKindIDIn", "platformKindIDNotIn", "platformKindIDContains", "platformKindIDHasPrefix", "platformKindIDHasSuffix", "platformKindIDIsNil", "platformKindIDNotNil", "platformKindIDEqualFold", "platformKindIDContainsFold", "platformDataClassificationName", "platformDataClassificationNameNEQ", "platformDataClassificationNameIn", "platformDataClassificationNameNotIn", "platformDataClassificationNameContains", "platformDataClassificationNameHasPrefix", "platformDataClassificationNameHasSuffix", "platformDataClassificationNameIsNil", "platformDataClassificationNameNotNil", "platformDataClassificationNameEqualFold", "platformDataClassificationNameContainsFold", "platformDataClassificationID", "platformDataClassificationIDNEQ", "platformDataClassificationIDIn", "platformDataClassificationIDNotIn", "platformDataClassificationIDContains", "platformDataClassificationIDHasPrefix", "platformDataClassificationIDHasSuffix", "platformDataClassificationIDIsNil", "platformDataClassificationIDNotNil", "platformDataClassificationIDEqualFold", "platformDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "businessPurpose", "businessPurposeNEQ", "businessPurposeIn", "businessPurposeNotIn", "businessPurposeContains", "businessPurposeHasPrefix", "businessPurposeHasSuffix", "businessPurposeIsNil", "businessPurposeNotNil", "businessPurposeEqualFold", "businessPurposeContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "platformOwnerID", "platformOwnerIDNEQ", "platformOwnerIDIn", "platformOwnerIDNotIn", "platformOwnerIDContains", "platformOwnerIDHasPrefix", "platformOwnerIDHasSuffix", "platformOwnerIDIsNil", "platformOwnerIDNotNil", "platformOwnerIDEqualFold", "platformOwnerIDContainsFold", "externalReferenceID", "externalReferenceIDNEQ", "externalReferenceIDIn", "externalReferenceIDNotIn", "externalReferenceIDContains", "externalReferenceIDHasPrefix", "externalReferenceIDHasSuffix", "externalReferenceIDIsNil", "externalReferenceIDNotNil", "externalReferenceIDEqualFold", "externalReferenceIDContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasInternalOwnerIdentityHolder", "hasInternalOwnerIdentityHolderWith", "hasBusinessOwnerUser", "hasBusinessOwnerUserWith", "hasBusinessOwnerGroup", "hasBusinessOwnerGroupWith", "hasBusinessOwnerIdentityHolder", "hasBusinessOwnerIdentityHolderWith", "hasTechnicalOwnerUser", "hasTechnicalOwnerUserWith", "hasTechnicalOwnerGroup", "hasTechnicalOwnerGroupWith", "hasTechnicalOwnerIdentityHolder", "hasTechnicalOwnerIdentityHolderWith", "hasSecurityOwnerUser", "hasSecurityOwnerUserWith", "hasSecurityOwnerGroup", "hasSecurityOwnerGroupWith", "hasSecurityOwnerIdentityHolder", "hasSecurityOwnerIdentityHolderWith", "hasPlatformKind", "hasPlatformKindWith", "hasPlatformDataClassification", "hasPlatformDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasArchitectureDiagrams", "hasArchitectureDiagramsWith", "hasDataFlowDiagrams", "hasDataFlowDiagramsWith", "hasTrustBoundaryDiagrams", "hasTrustBoundaryDiagramsWith", "hasRisks", "hasRisksWith", "hasControls", "hasControlsWith", "hasAssessments", "hasAssessmentsWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasIntegrations", "hasIntegrationsWith", "hasDirectorySyncRuns", "hasDirectorySyncRunsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasSourceAssets", "hasSourceAssetsWith", "hasSourceEntities", "hasSourceEntitiesWith", "hasOutOfScopeAssets", "hasOutOfScopeAssetsWith", "hasOutOfScopeVendors", "hasOutOfScopeVendorsWith", "hasApplicableFrameworks", "hasApplicableFrameworksWith", "hasGeneratedScans", "hasGeneratedScansWith", "hasPlatformOwner", "hasPlatformOwnerWith", "hasSystemDetails", "hasSystemDetailsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -283532,6 +285194,83 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.InternalOwnerGroupIDContainsFold = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "internalOwnerIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNEQ = data
+		case "internalOwnerIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIn = data
+		case "internalOwnerIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotIn = data
+		case "internalOwnerIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContains = data
+		case "internalOwnerIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasPrefix = data
+		case "internalOwnerIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDHasSuffix = data
+		case "internalOwnerIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDIsNil = data
+		case "internalOwnerIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDNotNil = data
+		case "internalOwnerIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDEqualFold = data
+		case "internalOwnerIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderIDContainsFold = data
 		case "businessOwner":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwner"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -283763,6 +285502,83 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.BusinessOwnerGroupIDContainsFold = data
+		case "businessOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderID = data
+		case "businessOwnerIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDNEQ = data
+		case "businessOwnerIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDIn = data
+		case "businessOwnerIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDNotIn = data
+		case "businessOwnerIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDContains = data
+		case "businessOwnerIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDHasPrefix = data
+		case "businessOwnerIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDHasSuffix = data
+		case "businessOwnerIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDIsNil = data
+		case "businessOwnerIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDNotNil = data
+		case "businessOwnerIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDEqualFold = data
+		case "businessOwnerIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderIDContainsFold = data
 		case "technicalOwner":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwner"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -283994,6 +285810,83 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.TechnicalOwnerGroupIDContainsFold = data
+		case "technicalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderID = data
+		case "technicalOwnerIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDNEQ = data
+		case "technicalOwnerIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDIn = data
+		case "technicalOwnerIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDNotIn = data
+		case "technicalOwnerIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDContains = data
+		case "technicalOwnerIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDHasPrefix = data
+		case "technicalOwnerIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDHasSuffix = data
+		case "technicalOwnerIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDIsNil = data
+		case "technicalOwnerIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDNotNil = data
+		case "technicalOwnerIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDEqualFold = data
+		case "technicalOwnerIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderIDContainsFold = data
 		case "securityOwner":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwner"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -284225,6 +286118,83 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.SecurityOwnerGroupIDContainsFold = data
+		case "securityOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderID = data
+		case "securityOwnerIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDNEQ = data
+		case "securityOwnerIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDIn = data
+		case "securityOwnerIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDNotIn = data
+		case "securityOwnerIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDContains = data
+		case "securityOwnerIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDHasPrefix = data
+		case "securityOwnerIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDHasSuffix = data
+		case "securityOwnerIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDIsNil = data
+		case "securityOwnerIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDNotNil = data
+		case "securityOwnerIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDEqualFold = data
+		case "securityOwnerIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderIDContainsFold = data
 		case "platformKindName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("platformKindName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -286528,6 +288498,20 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.HasInternalOwnerGroupWith = data
+		case "hasInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolder = data
+		case "hasInternalOwnerIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasInternalOwnerIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasInternalOwnerIdentityHolderWith = data
 		case "hasBusinessOwnerUser":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBusinessOwnerUser"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -286556,6 +288540,20 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.HasBusinessOwnerGroupWith = data
+		case "hasBusinessOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBusinessOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBusinessOwnerIdentityHolder = data
+		case "hasBusinessOwnerIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasBusinessOwnerIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasBusinessOwnerIdentityHolderWith = data
 		case "hasTechnicalOwnerUser":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTechnicalOwnerUser"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -286584,6 +288582,20 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.HasTechnicalOwnerGroupWith = data
+		case "hasTechnicalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTechnicalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasTechnicalOwnerIdentityHolder = data
+		case "hasTechnicalOwnerIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasTechnicalOwnerIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasTechnicalOwnerIdentityHolderWith = data
 		case "hasSecurityOwnerUser":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSecurityOwnerUser"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -286612,6 +288624,20 @@ func (ec *executionContext) unmarshalInputPlatformWhereInput(ctx context.Context
 				return it, err
 			}
 			it.HasSecurityOwnerGroupWith = data
+		case "hasSecurityOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSecurityOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasSecurityOwnerIdentityHolder = data
+		case "hasSecurityOwnerIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSecurityOwnerIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasSecurityOwnerIdentityHolderWith = data
 		case "hasPlatformKind":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPlatformKind"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -301040,7 +303066,7 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -301929,6 +303955,83 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.ReviewedByGroupIDContainsFold = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
+		case "reviewedByIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNEQ = data
+		case "reviewedByIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDIn = data
+		case "reviewedByIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNotIn = data
+		case "reviewedByIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDContains = data
+		case "reviewedByIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDHasPrefix = data
+		case "reviewedByIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDHasSuffix = data
+		case "reviewedByIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDIsNil = data
+		case "reviewedByIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNotNil = data
+		case "reviewedByIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDEqualFold = data
+		case "reviewedByIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDContainsFold = data
 		case "assignedTo":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedTo"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -302160,6 +304263,83 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.AssignedToGroupIDContainsFold = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
+		case "assignedToIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNEQ = data
+		case "assignedToIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDIn = data
+		case "assignedToIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNotIn = data
+		case "assignedToIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDContains = data
+		case "assignedToIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDHasPrefix = data
+		case "assignedToIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDHasSuffix = data
+		case "assignedToIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDIsNil = data
+		case "assignedToIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNotNil = data
+		case "assignedToIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDEqualFold = data
+		case "assignedToIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDContainsFold = data
 		case "environmentName":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentName"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -303063,6 +305243,20 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.HasReviewedByGroupWith = data
+		case "hasReviewedByIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewedByIdentityHolder = data
+		case "hasReviewedByIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewedByIdentityHolderWith = data
 		case "hasAssignedToUser":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToUser"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -303091,6 +305285,20 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.HasAssignedToGroupWith = data
+		case "hasAssignedToIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssignedToIdentityHolder = data
+		case "hasAssignedToIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssignedToIdentityHolderWith = data
 		case "hasEnvironment":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEnvironment"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -328837,7 +331045,7 @@ func (ec *executionContext) unmarshalInputUpdateAssetInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "assetSubtypeName", "clearAssetSubtypeName", "assetDataClassificationName", "clearAssetDataClassificationName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "accessModelName", "clearAccessModelName", "encryptionStatusName", "clearEncryptionStatusName", "securityTierName", "clearSecurityTierName", "criticalityName", "clearCriticalityName", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "assetType", "name", "displayName", "clearDisplayName", "description", "clearDescription", "identifier", "clearIdentifier", "website", "clearWebsite", "physicalLocation", "clearPhysicalLocation", "region", "clearRegion", "containsPii", "clearContainsPii", "sourceType", "sourceIdentifier", "clearSourceIdentifier", "costCenter", "clearCostCenter", "estimatedMonthlyCost", "clearEstimatedMonthlyCost", "purchaseDate", "clearPurchaseDate", "cpe", "clearCpe", "categories", "appendCategories", "clearCategories", "observedAt", "clearObservedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "assetSubtypeID", "clearAssetSubtype", "assetDataClassificationID", "clearAssetDataClassification", "environmentID", "clearEnvironment", "scopeID", "clearScope", "accessModelID", "clearAccessModel", "encryptionStatusID", "clearEncryptionStatus", "securityTierID", "clearSecurityTier", "criticalityID", "clearCriticality", "addScanIDs", "removeScanIDs", "clearScans", "addEntityIDs", "removeEntityIDs", "clearEntities", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "sourcePlatformID", "clearSourcePlatform", "addConnectedAssetIDs", "removeConnectedAssetIDs", "clearConnectedAssets", "addConnectedFromIDs", "removeConnectedFromIDs", "clearConnectedFrom"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "assetSubtypeName", "clearAssetSubtypeName", "assetDataClassificationName", "clearAssetDataClassificationName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "accessModelName", "clearAccessModelName", "encryptionStatusName", "clearEncryptionStatusName", "securityTierName", "clearSecurityTierName", "criticalityName", "clearCriticalityName", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "assetType", "name", "displayName", "clearDisplayName", "description", "clearDescription", "identifier", "clearIdentifier", "website", "clearWebsite", "physicalLocation", "clearPhysicalLocation", "region", "clearRegion", "containsPii", "clearContainsPii", "sourceType", "sourceIdentifier", "clearSourceIdentifier", "costCenter", "clearCostCenter", "estimatedMonthlyCost", "clearEstimatedMonthlyCost", "purchaseDate", "clearPurchaseDate", "cpe", "clearCpe", "categories", "appendCategories", "clearCategories", "observedAt", "clearObservedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "assetSubtypeID", "clearAssetSubtype", "assetDataClassificationID", "clearAssetDataClassification", "environmentID", "clearEnvironment", "scopeID", "clearScope", "accessModelID", "clearAccessModel", "encryptionStatusID", "clearEncryptionStatus", "securityTierID", "clearSecurityTier", "criticalityID", "clearCriticality", "addScanIDs", "removeScanIDs", "clearScans", "addEntityIDs", "removeEntityIDs", "clearEntities", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "sourcePlatformID", "clearSourcePlatform", "addConnectedAssetIDs", "removeConnectedAssetIDs", "clearConnectedAssets", "addConnectedFromIDs", "removeConnectedFromIDs", "clearConnectedFrom"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -329383,6 +331591,20 @@ func (ec *executionContext) unmarshalInputUpdateAssetInput(ctx context.Context, 
 				return it, err
 			}
 			it.ClearInternalOwnerGroup = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "clearInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearInternalOwnerIdentityHolder = data
 		case "assetSubtypeID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetSubtypeID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -330222,7 +332444,7 @@ func (ec *executionContext) unmarshalInputUpdateCampaignInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "name", "description", "clearDescription", "campaignType", "status", "isActive", "scheduledAt", "clearScheduledAt", "launchedAt", "clearLaunchedAt", "completedAt", "clearCompletedAt", "dueDate", "clearDueDate", "isRecurring", "recurrenceFrequency", "clearRecurrenceFrequency", "recurrenceInterval", "clearRecurrenceInterval", "recurrenceTimezone", "clearRecurrenceTimezone", "recurrenceCron", "clearRecurrenceCron", "lastRunAt", "clearLastRunAt", "nextRunAt", "clearNextRunAt", "recurrenceEndAt", "clearRecurrenceEndAt", "recipientCount", "clearRecipientCount", "resendCount", "clearResendCount", "lastResentAt", "clearLastResentAt", "metadata", "clearMetadata", "emailBrandingID", "clearEmailBrandingID", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "assessmentID", "clearAssessment", "templateID", "clearTemplate", "integrationID", "clearIntegration", "emailTemplateID", "clearEmailTemplate", "entityID", "clearEntity", "trustCenterID", "clearTrustCenter", "addCampaignTargetIDs", "removeCampaignTargetIDs", "clearCampaignTargets", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addContactIDs", "removeContactIDs", "clearContacts", "addUserIDs", "removeUserIDs", "clearUsers", "addGroupIDs", "removeGroupIDs", "clearGroups", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addAudienceIDs", "removeAudienceIDs", "clearAudiences", "addControlIDs", "removeControlIDs", "clearControls", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "name", "description", "clearDescription", "campaignType", "status", "isActive", "scheduledAt", "clearScheduledAt", "launchedAt", "clearLaunchedAt", "completedAt", "clearCompletedAt", "dueDate", "clearDueDate", "isRecurring", "recurrenceFrequency", "clearRecurrenceFrequency", "recurrenceInterval", "clearRecurrenceInterval", "recurrenceTimezone", "clearRecurrenceTimezone", "recurrenceCron", "clearRecurrenceCron", "lastRunAt", "clearLastRunAt", "nextRunAt", "clearNextRunAt", "recurrenceEndAt", "clearRecurrenceEndAt", "recipientCount", "clearRecipientCount", "resendCount", "clearResendCount", "lastResentAt", "clearLastResentAt", "metadata", "clearMetadata", "emailBrandingID", "clearEmailBrandingID", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "assessmentID", "clearAssessment", "templateID", "clearTemplate", "integrationID", "clearIntegration", "emailTemplateID", "clearEmailTemplate", "entityID", "clearEntity", "trustCenterID", "clearTrustCenter", "addCampaignTargetIDs", "removeCampaignTargetIDs", "clearCampaignTargets", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addContactIDs", "removeContactIDs", "clearContacts", "addUserIDs", "removeUserIDs", "clearUsers", "addGroupIDs", "removeGroupIDs", "clearGroups", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addAudienceIDs", "removeAudienceIDs", "clearAudiences", "addControlIDs", "removeControlIDs", "clearControls", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -330642,6 +332864,20 @@ func (ec *executionContext) unmarshalInputUpdateCampaignInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearInternalOwnerGroup = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "clearInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearInternalOwnerIdentityHolder = data
 		case "assessmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -337031,7 +339267,7 @@ func (ec *executionContext) unmarshalInputUpdateEntityInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "lastReviewedAt", "clearLastReviewedAt", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "entityRelationshipStateName", "clearEntityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "clearEntitySecurityQuestionnaireStatusName", "entitySourceTypeName", "clearEntitySourceTypeName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "name", "clearName", "displayName", "clearDisplayName", "description", "clearDescription", "domains", "appendDomains", "clearDomains", "aliases", "appendAliases", "clearAliases", "status", "clearStatus", "approvedForUse", "clearApprovedForUse", "linkedAssetIds", "appendLinkedAssetIds", "clearLinkedAssetIds", "hasSoc2", "clearHasSoc2", "soc2PeriodEnd", "clearSoc2PeriodEnd", "contractStartDate", "clearContractStartDate", "contractEndDate", "clearContractEndDate", "autoRenews", "clearAutoRenews", "terminationNoticeDays", "clearTerminationNoticeDays", "annualSpend", "clearAnnualSpend", "spendCurrency", "clearSpendCurrency", "billingModel", "clearBillingModel", "renewalRisk", "clearRenewalRisk", "ssoEnforced", "clearSSOEnforced", "mfaSupported", "clearMfaSupported", "mfaEnforced", "clearMfaEnforced", "statusPageURL", "clearStatusPageURL", "providedServices", "appendProvidedServices", "clearProvidedServices", "links", "appendLinks", "clearLinks", "riskRating", "clearRiskRating", "riskScore", "clearRiskScore", "tier", "clearTier", "reviewFrequency", "clearReviewFrequency", "nextReviewAt", "clearNextReviewAt", "contractRenewalAt", "clearContractRenewalAt", "vendorMetadata", "clearVendorMetadata", "logoRemoteURL", "clearLogoRemoteURL", "externalID", "clearExternalID", "observedAt", "clearObservedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "entityRelationshipStateID", "clearEntityRelationshipState", "entitySecurityQuestionnaireStatusID", "clearEntitySecurityQuestionnaireStatus", "entitySourceTypeID", "clearEntitySourceType", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addContactIDs", "removeContactIDs", "clearContacts", "addDocumentIDs", "removeDocumentIDs", "clearDocuments", "addNoteIDs", "removeNoteIDs", "clearNotes", "addFileIDs", "removeFileIDs", "clearFiles", "addAssetIDs", "removeAssetIDs", "clearAssets", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addScanIDs", "removeScanIDs", "clearScans", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addVendorRiskScoreIDs", "removeVendorRiskScoreIDs", "clearVendorRiskScores", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addSubprocessorIDs", "removeSubprocessorIDs", "clearSubprocessors", "addAuthMethodIDs", "removeAuthMethodIDs", "clearAuthMethods", "addEmployerIdentityHolderIDs", "removeEmployerIdentityHolderIDs", "clearEmployerIdentityHolders", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addSourcePlatformIDs", "removeSourcePlatformIDs", "clearSourcePlatforms", "entityTypeID", "clearEntityType", "logoFileID", "clearLogoFile", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "note"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "lastReviewedAt", "clearLastReviewedAt", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "entityRelationshipStateName", "clearEntityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "clearEntitySecurityQuestionnaireStatusName", "entitySourceTypeName", "clearEntitySourceTypeName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "name", "clearName", "displayName", "clearDisplayName", "description", "clearDescription", "domains", "appendDomains", "clearDomains", "aliases", "appendAliases", "clearAliases", "status", "clearStatus", "approvedForUse", "clearApprovedForUse", "linkedAssetIds", "appendLinkedAssetIds", "clearLinkedAssetIds", "hasSoc2", "clearHasSoc2", "soc2PeriodEnd", "clearSoc2PeriodEnd", "contractStartDate", "clearContractStartDate", "contractEndDate", "clearContractEndDate", "autoRenews", "clearAutoRenews", "terminationNoticeDays", "clearTerminationNoticeDays", "annualSpend", "clearAnnualSpend", "spendCurrency", "clearSpendCurrency", "billingModel", "clearBillingModel", "renewalRisk", "clearRenewalRisk", "ssoEnforced", "clearSSOEnforced", "mfaSupported", "clearMfaSupported", "mfaEnforced", "clearMfaEnforced", "statusPageURL", "clearStatusPageURL", "providedServices", "appendProvidedServices", "clearProvidedServices", "links", "appendLinks", "clearLinks", "riskRating", "clearRiskRating", "riskScore", "clearRiskScore", "tier", "clearTier", "reviewFrequency", "clearReviewFrequency", "nextReviewAt", "clearNextReviewAt", "contractRenewalAt", "clearContractRenewalAt", "vendorMetadata", "clearVendorMetadata", "logoRemoteURL", "clearLogoRemoteURL", "externalID", "clearExternalID", "observedAt", "clearObservedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "entityRelationshipStateID", "clearEntityRelationshipState", "entitySecurityQuestionnaireStatusID", "clearEntitySecurityQuestionnaireStatus", "entitySourceTypeID", "clearEntitySourceType", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addContactIDs", "removeContactIDs", "clearContacts", "addDocumentIDs", "removeDocumentIDs", "clearDocuments", "addNoteIDs", "removeNoteIDs", "clearNotes", "addFileIDs", "removeFileIDs", "clearFiles", "addAssetIDs", "removeAssetIDs", "clearAssets", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addScanIDs", "removeScanIDs", "clearScans", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addVendorRiskScoreIDs", "removeVendorRiskScoreIDs", "clearVendorRiskScores", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addSubprocessorIDs", "removeSubprocessorIDs", "clearSubprocessors", "addAuthMethodIDs", "removeAuthMethodIDs", "clearAuthMethods", "addEmployerIdentityHolderIDs", "removeEmployerIdentityHolderIDs", "clearEmployerIdentityHolders", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addSourcePlatformIDs", "removeSourcePlatformIDs", "clearSourcePlatforms", "entityTypeID", "clearEntityType", "logoFileID", "clearLogoFile", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "note"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -337829,6 +340065,20 @@ func (ec *executionContext) unmarshalInputUpdateEntityInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearInternalOwnerGroup = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "clearInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearInternalOwnerIdentityHolder = data
 		case "reviewedByUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -337857,6 +340107,20 @@ func (ec *executionContext) unmarshalInputUpdateEntityInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearReviewedByGroup = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
+		case "clearReviewedByIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearReviewedByIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearReviewedByIdentityHolder = data
 		case "entityRelationshipStateID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("entityRelationshipStateID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -340579,7 +342843,7 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "findingStatusName", "clearFindingStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "externalOwnerID", "clearExternalOwnerID", "source", "clearSource", "resourceName", "clearResourceName", "displayName", "clearDisplayName", "state", "clearState", "category", "clearCategory", "categories", "appendCategories", "clearCategories", "findingClass", "clearFindingClass", "severity", "clearSeverity", "numericSeverity", "clearNumericSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "open", "clearOpen", "blocksProduction", "clearBlocksProduction", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "assessmentID", "clearAssessmentID", "description", "clearDescription", "recommendation", "clearRecommendation", "recommendedActions", "clearRecommendedActions", "references", "appendReferences", "clearReferences", "stepsToReproduce", "appendStepsToReproduce", "clearStepsToReproduce", "targets", "appendTargets", "clearTargets", "targetDetails", "clearTargetDetails", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "eventTime", "clearEventTime", "reportedAt", "clearReportedAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "environmentID", "clearEnvironment", "scopeID", "clearScope", "findingStatusID", "clearFindingStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "findingStatusName", "clearFindingStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "externalOwnerID", "clearExternalOwnerID", "source", "clearSource", "resourceName", "clearResourceName", "displayName", "clearDisplayName", "state", "clearState", "category", "clearCategory", "categories", "appendCategories", "clearCategories", "findingClass", "clearFindingClass", "severity", "clearSeverity", "numericSeverity", "clearNumericSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "open", "clearOpen", "blocksProduction", "clearBlocksProduction", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "assessmentID", "clearAssessmentID", "description", "clearDescription", "recommendation", "clearRecommendation", "recommendedActions", "clearRecommendedActions", "references", "appendReferences", "clearReferences", "stepsToReproduce", "appendStepsToReproduce", "clearStepsToReproduce", "targets", "appendTargets", "clearTargets", "targetDetails", "clearTargetDetails", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "eventTime", "clearEventTime", "reportedAt", "clearReportedAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "findingStatusID", "clearFindingStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -341370,6 +343634,20 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.ClearReviewedByGroup = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
+		case "clearReviewedByIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearReviewedByIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearReviewedByIdentityHolder = data
 		case "assignedToUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -341398,6 +343676,20 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.ClearAssignedToGroup = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
+		case "clearAssignedToIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAssignedToIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAssignedToIdentityHolder = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -343593,7 +345885,7 @@ func (ec *executionContext) unmarshalInputUpdateIdentityHolderInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "fullName", "email", "alternateEmail", "clearAlternateEmail", "emailAliases", "appendEmailAliases", "clearEmailAliases", "phoneNumber", "clearPhoneNumber", "isOpenlaneUser", "clearIsOpenlaneUser", "identityHolderType", "status", "isActive", "title", "clearTitle", "department", "clearDepartment", "team", "clearTeam", "location", "clearLocation", "startDate", "clearStartDate", "endDate", "clearEndDate", "externalUserID", "clearExternalUserID", "externalReferenceID", "clearExternalReferenceID", "metadata", "clearMetadata", "avatarRemoteURL", "clearAvatarRemoteURL", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "environmentID", "clearEnvironment", "scopeID", "clearScope", "employerID", "clearEmployer", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addAssessmentIDs", "removeAssessmentIDs", "clearAssessments", "addTemplateIDs", "removeTemplateIDs", "clearTemplates", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addAudienceMemberIDs", "removeAudienceMemberIDs", "clearAudienceMembers", "addTaskIDs", "removeTaskIDs", "clearTasks", "addFileIDs", "removeFileIDs", "clearFiles", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addAccessPlatformIDs", "removeAccessPlatformIDs", "clearAccessPlatforms", "userID", "clearUser", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "fullName", "email", "alternateEmail", "clearAlternateEmail", "emailAliases", "appendEmailAliases", "clearEmailAliases", "phoneNumber", "clearPhoneNumber", "isOpenlaneUser", "clearIsOpenlaneUser", "identityHolderType", "status", "isActive", "title", "clearTitle", "department", "clearDepartment", "team", "clearTeam", "location", "clearLocation", "startDate", "clearStartDate", "endDate", "clearEndDate", "externalUserID", "clearExternalUserID", "externalReferenceID", "clearExternalReferenceID", "metadata", "clearMetadata", "avatarRemoteURL", "clearAvatarRemoteURL", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "employerID", "clearEmployer", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addAssessmentIDs", "removeAssessmentIDs", "clearAssessments", "addTemplateIDs", "removeTemplateIDs", "clearTemplates", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addAudienceMemberIDs", "removeAudienceMemberIDs", "clearAudienceMembers", "addTaskIDs", "removeTaskIDs", "clearTasks", "addFileIDs", "removeFileIDs", "clearFiles", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addAccessPlatformIDs", "removeAccessPlatformIDs", "clearAccessPlatforms", "userID", "clearUser", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -344006,6 +346298,20 @@ func (ec *executionContext) unmarshalInputUpdateIdentityHolderInput(ctx context.
 				return it, err
 			}
 			it.ClearInternalOwnerGroup = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "clearInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearInternalOwnerIdentityHolder = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -351297,7 +353603,7 @@ func (ec *executionContext) unmarshalInputUpdatePlatformInput(ctx context.Contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "businessOwner", "clearBusinessOwner", "technicalOwner", "clearTechnicalOwner", "securityOwner", "clearSecurityOwner", "platformKindName", "clearPlatformKindName", "platformDataClassificationName", "clearPlatformDataClassificationName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "accessModelName", "clearAccessModelName", "encryptionStatusName", "clearEncryptionStatusName", "securityTierName", "clearSecurityTierName", "criticalityName", "clearCriticalityName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalUUID", "clearExternalUUID", "name", "description", "clearDescription", "businessPurpose", "clearBusinessPurpose", "scopeStatement", "clearScopeStatement", "trustBoundaryDescription", "clearTrustBoundaryDescription", "dataFlowSummary", "clearDataFlowSummary", "status", "physicalLocation", "clearPhysicalLocation", "region", "clearRegion", "containsPii", "clearContainsPii", "sourceType", "sourceIdentifier", "clearSourceIdentifier", "costCenter", "clearCostCenter", "estimatedMonthlyCost", "clearEstimatedMonthlyCost", "purchaseDate", "clearPurchaseDate", "externalReferenceID", "clearExternalReferenceID", "metadata", "clearMetadata", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "businessOwnerUserID", "clearBusinessOwnerUser", "businessOwnerGroupID", "clearBusinessOwnerGroup", "technicalOwnerUserID", "clearTechnicalOwnerUser", "technicalOwnerGroupID", "clearTechnicalOwnerGroup", "securityOwnerUserID", "clearSecurityOwnerUser", "securityOwnerGroupID", "clearSecurityOwnerGroup", "platformKindID", "clearPlatformKind", "platformDataClassificationID", "clearPlatformDataClassification", "environmentID", "clearEnvironment", "scopeID", "clearScope", "accessModelID", "clearAccessModel", "encryptionStatusID", "clearEncryptionStatus", "securityTierID", "clearSecurityTier", "criticalityID", "clearCriticality", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addFileIDs", "removeFileIDs", "clearFiles", "addArchitectureDiagramIDs", "removeArchitectureDiagramIDs", "clearArchitectureDiagrams", "addDataFlowDiagramIDs", "removeDataFlowDiagramIDs", "clearDataFlowDiagrams", "addTrustBoundaryDiagramIDs", "removeTrustBoundaryDiagramIDs", "clearTrustBoundaryDiagrams", "addRiskIDs", "removeRiskIDs", "clearRisks", "addControlIDs", "removeControlIDs", "clearControls", "addAssessmentIDs", "removeAssessmentIDs", "clearAssessments", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addDirectorySyncRunIDs", "removeDirectorySyncRunIDs", "clearDirectorySyncRuns", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addDirectoryGroupIDs", "removeDirectoryGroupIDs", "clearDirectoryGroups", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addSourceAssetIDs", "removeSourceAssetIDs", "clearSourceAssets", "addSourceEntityIDs", "removeSourceEntityIDs", "clearSourceEntities", "addOutOfScopeAssetIDs", "removeOutOfScopeAssetIDs", "clearOutOfScopeAssets", "addOutOfScopeVendorIDs", "removeOutOfScopeVendorIDs", "clearOutOfScopeVendors", "addApplicableFrameworkIDs", "removeApplicableFrameworkIDs", "clearApplicableFrameworks", "addGeneratedScanIDs", "removeGeneratedScanIDs", "clearGeneratedScans", "platformOwnerID", "clearPlatformOwner", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "businessOwner", "clearBusinessOwner", "technicalOwner", "clearTechnicalOwner", "securityOwner", "clearSecurityOwner", "platformKindName", "clearPlatformKindName", "platformDataClassificationName", "clearPlatformDataClassificationName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "accessModelName", "clearAccessModelName", "encryptionStatusName", "clearEncryptionStatusName", "securityTierName", "clearSecurityTierName", "criticalityName", "clearCriticalityName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalUUID", "clearExternalUUID", "name", "description", "clearDescription", "businessPurpose", "clearBusinessPurpose", "scopeStatement", "clearScopeStatement", "trustBoundaryDescription", "clearTrustBoundaryDescription", "dataFlowSummary", "clearDataFlowSummary", "status", "physicalLocation", "clearPhysicalLocation", "region", "clearRegion", "containsPii", "clearContainsPii", "sourceType", "sourceIdentifier", "clearSourceIdentifier", "costCenter", "clearCostCenter", "estimatedMonthlyCost", "clearEstimatedMonthlyCost", "purchaseDate", "clearPurchaseDate", "externalReferenceID", "clearExternalReferenceID", "metadata", "clearMetadata", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "internalOwnerIdentityHolderID", "clearInternalOwnerIdentityHolder", "businessOwnerUserID", "clearBusinessOwnerUser", "businessOwnerGroupID", "clearBusinessOwnerGroup", "businessOwnerIdentityHolderID", "clearBusinessOwnerIdentityHolder", "technicalOwnerUserID", "clearTechnicalOwnerUser", "technicalOwnerGroupID", "clearTechnicalOwnerGroup", "technicalOwnerIdentityHolderID", "clearTechnicalOwnerIdentityHolder", "securityOwnerUserID", "clearSecurityOwnerUser", "securityOwnerGroupID", "clearSecurityOwnerGroup", "securityOwnerIdentityHolderID", "clearSecurityOwnerIdentityHolder", "platformKindID", "clearPlatformKind", "platformDataClassificationID", "clearPlatformDataClassification", "environmentID", "clearEnvironment", "scopeID", "clearScope", "accessModelID", "clearAccessModel", "encryptionStatusID", "clearEncryptionStatus", "securityTierID", "clearSecurityTier", "criticalityID", "clearCriticality", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addFileIDs", "removeFileIDs", "clearFiles", "addArchitectureDiagramIDs", "removeArchitectureDiagramIDs", "clearArchitectureDiagrams", "addDataFlowDiagramIDs", "removeDataFlowDiagramIDs", "clearDataFlowDiagrams", "addTrustBoundaryDiagramIDs", "removeTrustBoundaryDiagramIDs", "clearTrustBoundaryDiagrams", "addRiskIDs", "removeRiskIDs", "clearRisks", "addControlIDs", "removeControlIDs", "clearControls", "addAssessmentIDs", "removeAssessmentIDs", "clearAssessments", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addDirectorySyncRunIDs", "removeDirectorySyncRunIDs", "clearDirectorySyncRuns", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addDirectoryGroupIDs", "removeDirectoryGroupIDs", "clearDirectoryGroups", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addSourceAssetIDs", "removeSourceAssetIDs", "clearSourceAssets", "addSourceEntityIDs", "removeSourceEntityIDs", "clearSourceEntities", "addOutOfScopeAssetIDs", "removeOutOfScopeAssetIDs", "clearOutOfScopeAssets", "addOutOfScopeVendorIDs", "removeOutOfScopeVendorIDs", "clearOutOfScopeVendors", "addApplicableFrameworkIDs", "removeApplicableFrameworkIDs", "clearApplicableFrameworks", "addGeneratedScanIDs", "removeGeneratedScanIDs", "clearGeneratedScans", "platformOwnerID", "clearPlatformOwner", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -351829,6 +354135,20 @@ func (ec *executionContext) unmarshalInputUpdatePlatformInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearInternalOwnerGroup = data
+		case "internalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalOwnerIdentityHolderID = data
+		case "clearInternalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearInternalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearInternalOwnerIdentityHolder = data
 		case "businessOwnerUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -351857,6 +354177,20 @@ func (ec *executionContext) unmarshalInputUpdatePlatformInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearBusinessOwnerGroup = data
+		case "businessOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("businessOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.BusinessOwnerIdentityHolderID = data
+		case "clearBusinessOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearBusinessOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearBusinessOwnerIdentityHolder = data
 		case "technicalOwnerUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -351885,6 +354219,20 @@ func (ec *executionContext) unmarshalInputUpdatePlatformInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearTechnicalOwnerGroup = data
+		case "technicalOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("technicalOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TechnicalOwnerIdentityHolderID = data
+		case "clearTechnicalOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearTechnicalOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearTechnicalOwnerIdentityHolder = data
 		case "securityOwnerUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -351913,6 +354261,20 @@ func (ec *executionContext) unmarshalInputUpdatePlatformInput(ctx context.Contex
 				return it, err
 			}
 			it.ClearSecurityOwnerGroup = data
+		case "securityOwnerIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("securityOwnerIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SecurityOwnerIdentityHolderID = data
+		case "clearSecurityOwnerIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSecurityOwnerIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearSecurityOwnerIdentityHolder = data
 		case "platformKindID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("platformKindID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -357013,7 +359375,7 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "target", "scanType", "metadata", "clearMetadata", "scanDate", "clearScanDate", "scanSchedule", "clearScanSchedule", "nextScanRunAt", "clearNextScanRunAt", "performedBy", "clearPerformedBy", "discoveredVulnerabilityIds", "appendDiscoveredVulnerabilityIds", "clearDiscoveredVulnerabilityIds", "status", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addFileIDs", "removeFileIDs", "clearFiles", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "generatedByPlatformID", "clearGeneratedByPlatform", "performedByUserID", "clearPerformedByUser", "performedByGroupID", "clearPerformedByGroup"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "target", "scanType", "metadata", "clearMetadata", "scanDate", "clearScanDate", "scanSchedule", "clearScanSchedule", "nextScanRunAt", "clearNextScanRunAt", "performedBy", "clearPerformedBy", "discoveredVulnerabilityIds", "appendDiscoveredVulnerabilityIds", "clearDiscoveredVulnerabilityIds", "status", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addFileIDs", "removeFileIDs", "clearFiles", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "generatedByPlatformID", "clearGeneratedByPlatform", "performedByUserID", "clearPerformedByUser", "performedByGroupID", "clearPerformedByGroup"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -357356,6 +359718,20 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearReviewedByGroup = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
+		case "clearReviewedByIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearReviewedByIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearReviewedByIdentityHolder = data
 		case "assignedToUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -357384,6 +359760,20 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearAssignedToGroup = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
+		case "clearAssignedToIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAssignedToIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAssignedToIdentityHolder = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -364814,7 +367204,7 @@ func (ec *executionContext) unmarshalInputUpdateVulnerabilityInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "vulnerabilityStatusName", "clearVulnerabilityStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalOwnerID", "clearExternalOwnerID", "externalID", "cveID", "clearCveID", "source", "clearSource", "displayName", "clearDisplayName", "category", "clearCategory", "severity", "clearSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "summary", "clearSummary", "description", "clearDescription", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "open", "clearOpen", "blocking", "clearBlocking", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "references", "appendReferences", "clearReferences", "impacts", "appendImpacts", "clearImpacts", "cweIds", "appendCweIds", "clearCweIds", "vulnerableVersionRange", "clearVulnerableVersionRange", "firstPatchedVersion", "clearFirstPatchedVersion", "fixAvailable", "clearFixAvailable", "packageName", "clearPackageName", "packageEcosystem", "clearPackageEcosystem", "manifestPath", "clearManifestPath", "dependencyScope", "clearDependencyScope", "publishedAt", "clearPublishedAt", "discoveredAt", "clearDiscoveredAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "dismissedAt", "clearDismissedAt", "dismissedReason", "clearDismissedReason", "dismissedComment", "clearDismissedComment", "fixedAt", "clearFixedAt", "autoDismissedAt", "clearAutoDismissedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "environmentID", "clearEnvironment", "scopeID", "clearScope", "vulnerabilityStatusID", "clearVulnerabilityStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addFindingIDs", "removeFindingIDs", "clearFindings", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "vulnerabilityStatusName", "clearVulnerabilityStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalOwnerID", "clearExternalOwnerID", "externalID", "cveID", "clearCveID", "source", "clearSource", "displayName", "clearDisplayName", "category", "clearCategory", "severity", "clearSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "summary", "clearSummary", "description", "clearDescription", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "open", "clearOpen", "blocking", "clearBlocking", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "references", "appendReferences", "clearReferences", "impacts", "appendImpacts", "clearImpacts", "cweIds", "appendCweIds", "clearCweIds", "vulnerableVersionRange", "clearVulnerableVersionRange", "firstPatchedVersion", "clearFirstPatchedVersion", "fixAvailable", "clearFixAvailable", "packageName", "clearPackageName", "packageEcosystem", "clearPackageEcosystem", "manifestPath", "clearManifestPath", "dependencyScope", "clearDependencyScope", "publishedAt", "clearPublishedAt", "discoveredAt", "clearDiscoveredAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "dismissedAt", "clearDismissedAt", "dismissedReason", "clearDismissedReason", "dismissedComment", "clearDismissedComment", "fixedAt", "clearFixedAt", "autoDismissedAt", "clearAutoDismissedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "reviewedByIdentityHolderID", "clearReviewedByIdentityHolder", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "assignedToIdentityHolderID", "clearAssignedToIdentityHolder", "environmentID", "clearEnvironment", "scopeID", "clearScope", "vulnerabilityStatusID", "clearVulnerabilityStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addFindingIDs", "removeFindingIDs", "clearFindings", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -365682,6 +368072,20 @@ func (ec *executionContext) unmarshalInputUpdateVulnerabilityInput(ctx context.C
 				return it, err
 			}
 			it.ClearReviewedByGroup = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
+		case "clearReviewedByIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearReviewedByIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearReviewedByIdentityHolder = data
 		case "assignedToUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToUserID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -365710,6 +368114,20 @@ func (ec *executionContext) unmarshalInputUpdateVulnerabilityInput(ctx context.C
 				return it, err
 			}
 			it.ClearAssignedToGroup = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
+		case "clearAssignedToIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearAssignedToIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearAssignedToIdentityHolder = data
 		case "environmentID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("environmentID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -371219,7 +373637,7 @@ func (ec *executionContext) unmarshalInputVulnerabilityWhereInput(ctx context.Co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "vulnerabilityStatusName", "vulnerabilityStatusNameNEQ", "vulnerabilityStatusNameIn", "vulnerabilityStatusNameNotIn", "vulnerabilityStatusNameContains", "vulnerabilityStatusNameHasPrefix", "vulnerabilityStatusNameHasSuffix", "vulnerabilityStatusNameIsNil", "vulnerabilityStatusNameNotNil", "vulnerabilityStatusNameEqualFold", "vulnerabilityStatusNameContainsFold", "vulnerabilityStatusID", "vulnerabilityStatusIDNEQ", "vulnerabilityStatusIDIn", "vulnerabilityStatusIDNotIn", "vulnerabilityStatusIDContains", "vulnerabilityStatusIDHasPrefix", "vulnerabilityStatusIDHasSuffix", "vulnerabilityStatusIDIsNil", "vulnerabilityStatusIDNotNil", "vulnerabilityStatusIDEqualFold", "vulnerabilityStatusIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "securityLevel", "securityLevelNEQ", "securityLevelIn", "securityLevelNotIn", "securityLevelIsNil", "securityLevelNotNil", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "cveID", "cveIDNEQ", "cveIDIn", "cveIDNotIn", "cveIDContains", "cveIDHasPrefix", "cveIDHasSuffix", "cveIDIsNil", "cveIDNotNil", "cveIDEqualFold", "cveIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "severity", "severityNEQ", "severityIn", "severityNotIn", "severityContains", "severityHasPrefix", "severityHasSuffix", "severityIsNil", "severityNotNil", "severityEqualFold", "severityContainsFold", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactGT", "impactGTE", "impactLT", "impactLTE", "impactIsNil", "impactNotNil", "exploitability", "exploitabilityNEQ", "exploitabilityIn", "exploitabilityNotIn", "exploitabilityGT", "exploitabilityGTE", "exploitabilityLT", "exploitabilityLTE", "exploitabilityIsNil", "exploitabilityNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityContains", "priorityHasPrefix", "priorityHasSuffix", "priorityIsNil", "priorityNotNil", "priorityEqualFold", "priorityContainsFold", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "vector", "vectorNEQ", "vectorIn", "vectorNotIn", "vectorContains", "vectorHasPrefix", "vectorHasSuffix", "vectorIsNil", "vectorNotNil", "vectorEqualFold", "vectorContainsFold", "remediationSLA", "remediationSLANEQ", "remediationSLAGT", "remediationSLAGTE", "remediationSLALT", "remediationSLALTE", "remediationSLAIsNil", "remediationSLANotNil", "open", "openNEQ", "openIsNil", "openNotNil", "blocking", "blockingNEQ", "blockingIsNil", "blockingNotNil", "production", "productionNEQ", "productionIsNil", "productionNotNil", "public", "publicNEQ", "publicIsNil", "publicNotNil", "validated", "validatedNEQ", "validatedIsNil", "validatedNotNil", "vulnerableVersionRange", "vulnerableVersionRangeNEQ", "vulnerableVersionRangeIn", "vulnerableVersionRangeNotIn", "vulnerableVersionRangeContains", "vulnerableVersionRangeHasPrefix", "vulnerableVersionRangeHasSuffix", "vulnerableVersionRangeIsNil", "vulnerableVersionRangeNotNil", "vulnerableVersionRangeEqualFold", "vulnerableVersionRangeContainsFold", "firstPatchedVersion", "firstPatchedVersionNEQ", "firstPatchedVersionIn", "firstPatchedVersionNotIn", "firstPatchedVersionContains", "firstPatchedVersionHasPrefix", "firstPatchedVersionHasSuffix", "firstPatchedVersionIsNil", "firstPatchedVersionNotNil", "firstPatchedVersionEqualFold", "firstPatchedVersionContainsFold", "fixAvailable", "fixAvailableNEQ", "fixAvailableIsNil", "fixAvailableNotNil", "packageName", "packageNameNEQ", "packageNameIn", "packageNameNotIn", "packageNameContains", "packageNameHasPrefix", "packageNameHasSuffix", "packageNameIsNil", "packageNameNotNil", "packageNameEqualFold", "packageNameContainsFold", "packageEcosystem", "packageEcosystemNEQ", "packageEcosystemIn", "packageEcosystemNotIn", "packageEcosystemContains", "packageEcosystemHasPrefix", "packageEcosystemHasSuffix", "packageEcosystemIsNil", "packageEcosystemNotNil", "packageEcosystemEqualFold", "packageEcosystemContainsFold", "manifestPath", "manifestPathNEQ", "manifestPathIn", "manifestPathNotIn", "manifestPathContains", "manifestPathHasPrefix", "manifestPathHasSuffix", "manifestPathIsNil", "manifestPathNotNil", "manifestPathEqualFold", "manifestPathContainsFold", "dependencyScope", "dependencyScopeNEQ", "dependencyScopeIn", "dependencyScopeNotIn", "dependencyScopeContains", "dependencyScopeHasPrefix", "dependencyScopeHasSuffix", "dependencyScopeIsNil", "dependencyScopeNotNil", "dependencyScopeEqualFold", "dependencyScopeContainsFold", "publishedAt", "publishedAtGT", "publishedAtGTE", "publishedAtLT", "publishedAtLTE", "publishedAtIsNil", "publishedAtNotNil", "discoveredAt", "discoveredAtGT", "discoveredAtGTE", "discoveredAtLT", "discoveredAtLTE", "discoveredAtIsNil", "discoveredAtNotNil", "sourceUpdatedAt", "sourceUpdatedAtGT", "sourceUpdatedAtGTE", "sourceUpdatedAtLT", "sourceUpdatedAtLTE", "sourceUpdatedAtIsNil", "sourceUpdatedAtNotNil", "dismissedAt", "dismissedAtGT", "dismissedAtGTE", "dismissedAtLT", "dismissedAtLTE", "dismissedAtIsNil", "dismissedAtNotNil", "dismissedReason", "dismissedReasonNEQ", "dismissedReasonIn", "dismissedReasonNotIn", "dismissedReasonContains", "dismissedReasonHasPrefix", "dismissedReasonHasSuffix", "dismissedReasonIsNil", "dismissedReasonNotNil", "dismissedReasonEqualFold", "dismissedReasonContainsFold", "dismissedComment", "dismissedCommentNEQ", "dismissedCommentIn", "dismissedCommentNotIn", "dismissedCommentContains", "dismissedCommentHasPrefix", "dismissedCommentHasSuffix", "dismissedCommentIsNil", "dismissedCommentNotNil", "dismissedCommentEqualFold", "dismissedCommentContainsFold", "fixedAt", "fixedAtGT", "fixedAtGTE", "fixedAtLT", "fixedAtLTE", "fixedAtIsNil", "fixedAtNotNil", "autoDismissedAt", "autoDismissedAtGT", "autoDismissedAtGTE", "autoDismissedAtLT", "autoDismissedAtLTE", "autoDismissedAtIsNil", "autoDismissedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasVulnerabilityStatus", "hasVulnerabilityStatusWith", "hasIntegrations", "hasIntegrationsWith", "hasFindings", "hasFindingsWith", "hasActionPlans", "hasActionPlansWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasRemediations", "hasRemediationsWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas", "referencesHas", "impactsHas", "cweIdsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "reviewedByIdentityHolderID", "reviewedByIdentityHolderIDNEQ", "reviewedByIdentityHolderIDIn", "reviewedByIdentityHolderIDNotIn", "reviewedByIdentityHolderIDContains", "reviewedByIdentityHolderIDHasPrefix", "reviewedByIdentityHolderIDHasSuffix", "reviewedByIdentityHolderIDIsNil", "reviewedByIdentityHolderIDNotNil", "reviewedByIdentityHolderIDEqualFold", "reviewedByIdentityHolderIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "assignedToIdentityHolderID", "assignedToIdentityHolderIDNEQ", "assignedToIdentityHolderIDIn", "assignedToIdentityHolderIDNotIn", "assignedToIdentityHolderIDContains", "assignedToIdentityHolderIDHasPrefix", "assignedToIdentityHolderIDHasSuffix", "assignedToIdentityHolderIDIsNil", "assignedToIdentityHolderIDNotNil", "assignedToIdentityHolderIDEqualFold", "assignedToIdentityHolderIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "vulnerabilityStatusName", "vulnerabilityStatusNameNEQ", "vulnerabilityStatusNameIn", "vulnerabilityStatusNameNotIn", "vulnerabilityStatusNameContains", "vulnerabilityStatusNameHasPrefix", "vulnerabilityStatusNameHasSuffix", "vulnerabilityStatusNameIsNil", "vulnerabilityStatusNameNotNil", "vulnerabilityStatusNameEqualFold", "vulnerabilityStatusNameContainsFold", "vulnerabilityStatusID", "vulnerabilityStatusIDNEQ", "vulnerabilityStatusIDIn", "vulnerabilityStatusIDNotIn", "vulnerabilityStatusIDContains", "vulnerabilityStatusIDHasPrefix", "vulnerabilityStatusIDHasSuffix", "vulnerabilityStatusIDIsNil", "vulnerabilityStatusIDNotNil", "vulnerabilityStatusIDEqualFold", "vulnerabilityStatusIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalOwnerID", "externalOwnerIDNEQ", "externalOwnerIDIn", "externalOwnerIDNotIn", "externalOwnerIDContains", "externalOwnerIDHasPrefix", "externalOwnerIDHasSuffix", "externalOwnerIDIsNil", "externalOwnerIDNotNil", "externalOwnerIDEqualFold", "externalOwnerIDContainsFold", "securityLevel", "securityLevelNEQ", "securityLevelIn", "securityLevelNotIn", "securityLevelIsNil", "securityLevelNotNil", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDEqualFold", "externalIDContainsFold", "cveID", "cveIDNEQ", "cveIDIn", "cveIDNotIn", "cveIDContains", "cveIDHasPrefix", "cveIDHasSuffix", "cveIDIsNil", "cveIDNotNil", "cveIDEqualFold", "cveIDContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "severity", "severityNEQ", "severityIn", "severityNotIn", "severityContains", "severityHasPrefix", "severityHasSuffix", "severityIsNil", "severityNotNil", "severityEqualFold", "severityContainsFold", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactGT", "impactGTE", "impactLT", "impactLTE", "impactIsNil", "impactNotNil", "exploitability", "exploitabilityNEQ", "exploitabilityIn", "exploitabilityNotIn", "exploitabilityGT", "exploitabilityGTE", "exploitabilityLT", "exploitabilityLTE", "exploitabilityIsNil", "exploitabilityNotNil", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityContains", "priorityHasPrefix", "priorityHasSuffix", "priorityIsNil", "priorityNotNil", "priorityEqualFold", "priorityContainsFold", "summary", "summaryNEQ", "summaryIn", "summaryNotIn", "summaryContains", "summaryHasPrefix", "summaryHasSuffix", "summaryIsNil", "summaryNotNil", "summaryEqualFold", "summaryContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "vector", "vectorNEQ", "vectorIn", "vectorNotIn", "vectorContains", "vectorHasPrefix", "vectorHasSuffix", "vectorIsNil", "vectorNotNil", "vectorEqualFold", "vectorContainsFold", "remediationSLA", "remediationSLANEQ", "remediationSLAGT", "remediationSLAGTE", "remediationSLALT", "remediationSLALTE", "remediationSLAIsNil", "remediationSLANotNil", "open", "openNEQ", "openIsNil", "openNotNil", "blocking", "blockingNEQ", "blockingIsNil", "blockingNotNil", "production", "productionNEQ", "productionIsNil", "productionNotNil", "public", "publicNEQ", "publicIsNil", "publicNotNil", "validated", "validatedNEQ", "validatedIsNil", "validatedNotNil", "vulnerableVersionRange", "vulnerableVersionRangeNEQ", "vulnerableVersionRangeIn", "vulnerableVersionRangeNotIn", "vulnerableVersionRangeContains", "vulnerableVersionRangeHasPrefix", "vulnerableVersionRangeHasSuffix", "vulnerableVersionRangeIsNil", "vulnerableVersionRangeNotNil", "vulnerableVersionRangeEqualFold", "vulnerableVersionRangeContainsFold", "firstPatchedVersion", "firstPatchedVersionNEQ", "firstPatchedVersionIn", "firstPatchedVersionNotIn", "firstPatchedVersionContains", "firstPatchedVersionHasPrefix", "firstPatchedVersionHasSuffix", "firstPatchedVersionIsNil", "firstPatchedVersionNotNil", "firstPatchedVersionEqualFold", "firstPatchedVersionContainsFold", "fixAvailable", "fixAvailableNEQ", "fixAvailableIsNil", "fixAvailableNotNil", "packageName", "packageNameNEQ", "packageNameIn", "packageNameNotIn", "packageNameContains", "packageNameHasPrefix", "packageNameHasSuffix", "packageNameIsNil", "packageNameNotNil", "packageNameEqualFold", "packageNameContainsFold", "packageEcosystem", "packageEcosystemNEQ", "packageEcosystemIn", "packageEcosystemNotIn", "packageEcosystemContains", "packageEcosystemHasPrefix", "packageEcosystemHasSuffix", "packageEcosystemIsNil", "packageEcosystemNotNil", "packageEcosystemEqualFold", "packageEcosystemContainsFold", "manifestPath", "manifestPathNEQ", "manifestPathIn", "manifestPathNotIn", "manifestPathContains", "manifestPathHasPrefix", "manifestPathHasSuffix", "manifestPathIsNil", "manifestPathNotNil", "manifestPathEqualFold", "manifestPathContainsFold", "dependencyScope", "dependencyScopeNEQ", "dependencyScopeIn", "dependencyScopeNotIn", "dependencyScopeContains", "dependencyScopeHasPrefix", "dependencyScopeHasSuffix", "dependencyScopeIsNil", "dependencyScopeNotNil", "dependencyScopeEqualFold", "dependencyScopeContainsFold", "publishedAt", "publishedAtGT", "publishedAtGTE", "publishedAtLT", "publishedAtLTE", "publishedAtIsNil", "publishedAtNotNil", "discoveredAt", "discoveredAtGT", "discoveredAtGTE", "discoveredAtLT", "discoveredAtLTE", "discoveredAtIsNil", "discoveredAtNotNil", "sourceUpdatedAt", "sourceUpdatedAtGT", "sourceUpdatedAtGTE", "sourceUpdatedAtLT", "sourceUpdatedAtLTE", "sourceUpdatedAtIsNil", "sourceUpdatedAtNotNil", "dismissedAt", "dismissedAtGT", "dismissedAtGTE", "dismissedAtLT", "dismissedAtLTE", "dismissedAtIsNil", "dismissedAtNotNil", "dismissedReason", "dismissedReasonNEQ", "dismissedReasonIn", "dismissedReasonNotIn", "dismissedReasonContains", "dismissedReasonHasPrefix", "dismissedReasonHasSuffix", "dismissedReasonIsNil", "dismissedReasonNotNil", "dismissedReasonEqualFold", "dismissedReasonContainsFold", "dismissedComment", "dismissedCommentNEQ", "dismissedCommentIn", "dismissedCommentNotIn", "dismissedCommentContains", "dismissedCommentHasPrefix", "dismissedCommentHasSuffix", "dismissedCommentIsNil", "dismissedCommentNotNil", "dismissedCommentEqualFold", "dismissedCommentContainsFold", "fixedAt", "fixedAtGT", "fixedAtGTE", "fixedAtLT", "fixedAtLTE", "fixedAtIsNil", "fixedAtNotNil", "autoDismissedAt", "autoDismissedAtGT", "autoDismissedAtGTE", "autoDismissedAtLT", "autoDismissedAtLTE", "autoDismissedAtIsNil", "autoDismissedAtNotNil", "externalURI", "externalURINEQ", "externalURIIn", "externalURINotIn", "externalURIContains", "externalURIHasPrefix", "externalURIHasSuffix", "externalURIIsNil", "externalURINotNil", "externalURIEqualFold", "externalURIContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasReviewedByIdentityHolder", "hasReviewedByIdentityHolderWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasAssignedToIdentityHolder", "hasAssignedToIdentityHolderWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasVulnerabilityStatus", "hasVulnerabilityStatusWith", "hasIntegrations", "hasIntegrationsWith", "hasFindings", "hasFindingsWith", "hasActionPlans", "hasActionPlansWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasRisks", "hasRisksWith", "hasPrograms", "hasProgramsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasTasks", "hasTasksWith", "hasRemediations", "hasRemediationsWith", "hasReviews", "hasReviewsWith", "hasComments", "hasCommentsWith", "hasFiles", "hasFilesWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas", "referencesHas", "impactsHas", "cweIdsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -371989,6 +374407,83 @@ func (ec *executionContext) unmarshalInputVulnerabilityWhereInput(ctx context.Co
 				return it, err
 			}
 			it.ReviewedByGroupIDContainsFold = data
+		case "reviewedByIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderID = data
+		case "reviewedByIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNEQ = data
+		case "reviewedByIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDIn = data
+		case "reviewedByIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNotIn = data
+		case "reviewedByIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDContains = data
+		case "reviewedByIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDHasPrefix = data
+		case "reviewedByIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDHasSuffix = data
+		case "reviewedByIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDIsNil = data
+		case "reviewedByIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDNotNil = data
+		case "reviewedByIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDEqualFold = data
+		case "reviewedByIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedByIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewedByIdentityHolderIDContainsFold = data
 		case "assignedTo":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedTo"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -372220,6 +374715,83 @@ func (ec *executionContext) unmarshalInputVulnerabilityWhereInput(ctx context.Co
 				return it, err
 			}
 			it.AssignedToGroupIDContainsFold = data
+		case "assignedToIdentityHolderID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderID = data
+		case "assignedToIdentityHolderIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNEQ"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNEQ = data
+		case "assignedToIdentityHolderIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDIn = data
+		case "assignedToIdentityHolderIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNotIn"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNotIn = data
+		case "assignedToIdentityHolderIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDContains"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDContains = data
+		case "assignedToIdentityHolderIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDHasPrefix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDHasPrefix = data
+		case "assignedToIdentityHolderIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDHasSuffix"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDHasSuffix = data
+		case "assignedToIdentityHolderIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDIsNil = data
+		case "assignedToIdentityHolderIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDNotNil = data
+		case "assignedToIdentityHolderIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDEqualFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDEqualFold = data
+		case "assignedToIdentityHolderIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assignedToIdentityHolderIDContainsFold"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssignedToIdentityHolderIDContainsFold = data
 		case "systemOwned":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemOwned"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -375272,6 +377844,20 @@ func (ec *executionContext) unmarshalInputVulnerabilityWhereInput(ctx context.Co
 				return it, err
 			}
 			it.HasReviewedByGroupWith = data
+		case "hasReviewedByIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewedByIdentityHolder = data
+		case "hasReviewedByIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewedByIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewedByIdentityHolderWith = data
 		case "hasAssignedToUser":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToUser"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -375300,6 +377886,20 @@ func (ec *executionContext) unmarshalInputVulnerabilityWhereInput(ctx context.Co
 				return it, err
 			}
 			it.HasAssignedToGroupWith = data
+		case "hasAssignedToIdentityHolder":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToIdentityHolder"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssignedToIdentityHolder = data
+		case "hasAssignedToIdentityHolderWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssignedToIdentityHolderWith"))
+			data, err := ec.unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasAssignedToIdentityHolderWith = data
 		case "hasEnvironment":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasEnvironment"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -388958,6 +391558,11 @@ func (ec *executionContext) _Asset(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "internalOwnerIdentityHolderID":
+			out.Values[i] = ec._Asset_internalOwnerIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "assetSubtypeName":
 			out.Values[i] = ec._Asset_assetSubtypeName(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -389348,6 +391953,44 @@ func (ec *executionContext) _Asset(ctx context.Context, sel ast.SelectionSet, ob
 					}
 				}()
 				res = ec._Asset_internalOwnerGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "internalOwnerIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Asset_internalOwnerIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -391412,6 +394055,11 @@ func (ec *executionContext) _Campaign(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "internalOwnerIdentityHolderID":
+			out.Values[i] = ec._Campaign_internalOwnerIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "workflowEligibleMarker":
 			out.Values[i] = ec._Campaign_workflowEligibleMarker(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -391757,6 +394405,44 @@ func (ec *executionContext) _Campaign(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._Campaign_internalOwnerGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "internalOwnerIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Campaign_internalOwnerIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -402782,6 +405468,11 @@ func (ec *executionContext) _Entity(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "internalOwnerIdentityHolderID":
+			out.Values[i] = ec._Entity_internalOwnerIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "reviewedBy":
 			out.Values[i] = ec._Entity_reviewedBy(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -402794,6 +405485,11 @@ func (ec *executionContext) _Entity(ctx context.Context, sel ast.SelectionSet, o
 			}
 		case "reviewedByGroupID":
 			out.Values[i] = ec._Entity_reviewedByGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "reviewedByIdentityHolderID":
+			out.Values[i] = ec._Entity_reviewedByIdentityHolderID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -403242,6 +405938,44 @@ func (ec *executionContext) _Entity(ctx context.Context, sel ast.SelectionSet, o
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "internalOwnerIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Entity_internalOwnerIdentityHolder(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "reviewedByUser":
 			field := field
 
@@ -403290,6 +406024,44 @@ func (ec *executionContext) _Entity(ctx context.Context, sel ast.SelectionSet, o
 					}
 				}()
 				res = ec._Entity_reviewedByGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "reviewedByIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Entity_reviewedByIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -408042,6 +410814,11 @@ func (ec *executionContext) _Finding(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "reviewedByIdentityHolderID":
+			out.Values[i] = ec._Finding_reviewedByIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "assignedTo":
 			out.Values[i] = ec._Finding_assignedTo(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -408054,6 +410831,11 @@ func (ec *executionContext) _Finding(ctx context.Context, sel ast.SelectionSet, 
 			}
 		case "assignedToGroupID":
 			out.Values[i] = ec._Finding_assignedToGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "assignedToIdentityHolderID":
+			out.Values[i] = ec._Finding_assignedToIdentityHolderID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -408482,6 +411264,44 @@ func (ec *executionContext) _Finding(ctx context.Context, sel ast.SelectionSet, 
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "reviewedByIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Finding_reviewedByIdentityHolder(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "assignedToUser":
 			field := field
 
@@ -408530,6 +411350,44 @@ func (ec *executionContext) _Finding(ctx context.Context, sel ast.SelectionSet, 
 					}
 				}()
 				res = ec._Finding_assignedToGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "assignedToIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Finding_assignedToIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -413471,6 +416329,11 @@ func (ec *executionContext) _IdentityHolder(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "internalOwnerIdentityHolderID":
+			out.Values[i] = ec._IdentityHolder_internalOwnerIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "environmentName":
 			out.Values[i] = ec._IdentityHolder_environmentName(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -413801,6 +416664,44 @@ func (ec *executionContext) _IdentityHolder(ctx context.Context, sel ast.Selecti
 					}
 				}()
 				res = ec._IdentityHolder_internalOwnerGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "internalOwnerIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._IdentityHolder_internalOwnerIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -415008,6 +417909,11 @@ func (ec *executionContext) _Integration(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "health":
+			out.Values[i] = ec._Integration_health(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "definitionID":
 			out.Values[i] = ec._Integration_definitionID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -415031,6 +417937,11 @@ func (ec *executionContext) _Integration(ctx context.Context, sel ast.SelectionS
 		case "status":
 			out.Values[i] = ec._Integration_status(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "expiresAt":
+			out.Values[i] = ec._Integration_expiresAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "providerMetadataSnapshot":
@@ -428677,6 +431588,11 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "internalOwnerIdentityHolderID":
+			out.Values[i] = ec._Platform_internalOwnerIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "businessOwner":
 			out.Values[i] = ec._Platform_businessOwner(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -428689,6 +431605,11 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "businessOwnerGroupID":
 			out.Values[i] = ec._Platform_businessOwnerGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "businessOwnerIdentityHolderID":
+			out.Values[i] = ec._Platform_businessOwnerIdentityHolderID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -428707,6 +431628,11 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "technicalOwnerIdentityHolderID":
+			out.Values[i] = ec._Platform_technicalOwnerIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "securityOwner":
 			out.Values[i] = ec._Platform_securityOwner(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -428719,6 +431645,11 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "securityOwnerGroupID":
 			out.Values[i] = ec._Platform_securityOwnerGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "securityOwnerIdentityHolderID":
+			out.Values[i] = ec._Platform_securityOwnerIdentityHolderID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -429130,6 +432061,44 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "internalOwnerIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Platform_internalOwnerIdentityHolder(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "businessOwnerUser":
 			field := field
 
@@ -429178,6 +432147,44 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._Platform_businessOwnerGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "businessOwnerIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Platform_businessOwnerIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -429282,6 +432289,44 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "technicalOwnerIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Platform_technicalOwnerIdentityHolder(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "securityOwnerUser":
 			field := field
 
@@ -429330,6 +432375,44 @@ func (ec *executionContext) _Platform(ctx context.Context, sel ast.SelectionSet,
 					}
 				}()
 				res = ec._Platform_securityOwnerGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "securityOwnerIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Platform_securityOwnerIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -443257,6 +446340,11 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "reviewedByIdentityHolderID":
+			out.Values[i] = ec._Scan_reviewedByIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "assignedTo":
 			out.Values[i] = ec._Scan_assignedTo(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -443269,6 +446357,11 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "assignedToGroupID":
 			out.Values[i] = ec._Scan_assignedToGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "assignedToIdentityHolderID":
+			out.Values[i] = ec._Scan_assignedToIdentityHolderID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -443542,6 +446635,44 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "reviewedByIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Scan_reviewedByIdentityHolder(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "assignedToUser":
 			field := field
 
@@ -443590,6 +446721,44 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 					}
 				}()
 				res = ec._Scan_assignedToGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "assignedToIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Scan_assignedToIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -456440,6 +459609,11 @@ func (ec *executionContext) _Vulnerability(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "reviewedByIdentityHolderID":
+			out.Values[i] = ec._Vulnerability_reviewedByIdentityHolderID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "assignedTo":
 			out.Values[i] = ec._Vulnerability_assignedTo(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
@@ -456452,6 +459626,11 @@ func (ec *executionContext) _Vulnerability(ctx context.Context, sel ast.Selectio
 			}
 		case "assignedToGroupID":
 			out.Values[i] = ec._Vulnerability_assignedToGroupID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "assignedToIdentityHolderID":
+			out.Values[i] = ec._Vulnerability_assignedToIdentityHolderID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -456943,6 +460122,44 @@ func (ec *executionContext) _Vulnerability(ctx context.Context, sel ast.Selectio
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "reviewedByIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Vulnerability_reviewedByIdentityHolder(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "assignedToUser":
 			field := field
 
@@ -456991,6 +460208,44 @@ func (ec *executionContext) _Vulnerability(ctx context.Context, sel ast.Selectio
 					}
 				}()
 				res = ec._Vulnerability_assignedToGroup(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "assignedToIdentityHolder":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Vulnerability_assignedToIdentityHolder(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -462357,10 +465612,6 @@ func (ec *executionContext) _WorkflowProposal(ctx context.Context, sel ast.Selec
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAPIToken2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx context.Context, sel ast.SelectionSet, v generated.APIToken) graphql.Marshaler {
-	return ec._APIToken(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx context.Context, sel ast.SelectionSet, v *generated.APIToken) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462369,10 +465620,6 @@ func (ec *executionContext) marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._APIToken(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAPITokenConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenConnection(ctx context.Context, sel ast.SelectionSet, v generated.APITokenConnection) graphql.Marshaler {
-	return ec._APITokenConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAPITokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenConnection(ctx context.Context, sel ast.SelectionSet, v *generated.APITokenConnection) graphql.Marshaler {
@@ -462411,10 +465658,6 @@ func (ec *executionContext) unmarshalNAPITokenWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNActionPlan2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlan(ctx context.Context, sel ast.SelectionSet, v generated.ActionPlan) graphql.Marshaler {
-	return ec._ActionPlan(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlan(ctx context.Context, sel ast.SelectionSet, v *generated.ActionPlan) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462423,10 +465666,6 @@ func (ec *executionContext) marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._ActionPlan(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNActionPlanConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx context.Context, sel ast.SelectionSet, v generated.ActionPlanConnection) graphql.Marshaler {
-	return ec._ActionPlanConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ActionPlanConnection) graphql.Marshaler {
@@ -462505,10 +465744,6 @@ func (ec *executionContext) unmarshalNActionPlanWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAssessment2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessment(ctx context.Context, sel ast.SelectionSet, v generated.Assessment) graphql.Marshaler {
-	return ec._Assessment(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssessment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessment(ctx context.Context, sel ast.SelectionSet, v *generated.Assessment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462527,10 +465762,6 @@ func (ec *executionContext) unmarshalNAssessmentAssessmentType2githubᚗcomᚋth
 
 func (ec *executionContext) marshalNAssessmentAssessmentType2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentType(ctx context.Context, sel ast.SelectionSet, v enums.AssessmentType) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNAssessmentConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx context.Context, sel ast.SelectionSet, v generated.AssessmentConnection) graphql.Marshaler {
-	return ec._AssessmentConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentConnection) graphql.Marshaler {
@@ -462564,10 +465795,6 @@ func (ec *executionContext) marshalNAssessmentOrderField2ᚖgithubᚗcomᚋtheop
 	return v
 }
 
-func (ec *executionContext) marshalNAssessmentResponse2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx context.Context, sel ast.SelectionSet, v generated.AssessmentResponse) graphql.Marshaler {
-	return ec._AssessmentResponse(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462586,10 +465813,6 @@ func (ec *executionContext) unmarshalNAssessmentResponseAssessmentResponseStatus
 
 func (ec *executionContext) marshalNAssessmentResponseAssessmentResponseStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentResponseStatus(ctx context.Context, sel ast.SelectionSet, v enums.AssessmentResponseStatus) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNAssessmentResponseConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx context.Context, sel ast.SelectionSet, v generated.AssessmentResponseConnection) graphql.Marshaler {
-	return ec._AssessmentResponseConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentResponseConnection) graphql.Marshaler {
@@ -462633,10 +465856,6 @@ func (ec *executionContext) unmarshalNAssessmentWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAsset2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAsset(ctx context.Context, sel ast.SelectionSet, v generated.Asset) graphql.Marshaler {
-	return ec._Asset(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAsset2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAsset(ctx context.Context, sel ast.SelectionSet, v *generated.Asset) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462655,10 +465874,6 @@ func (ec *executionContext) unmarshalNAssetAssetType2githubᚗcomᚋtheopenlane�
 
 func (ec *executionContext) marshalNAssetAssetType2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssetType(ctx context.Context, sel ast.SelectionSet, v enums.AssetType) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNAssetConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx context.Context, sel ast.SelectionSet, v generated.AssetConnection) graphql.Marshaler {
-	return ec._AssetConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AssetConnection) graphql.Marshaler {
@@ -462707,10 +465922,6 @@ func (ec *executionContext) unmarshalNAssetWhereInput2ᚖgithubᚗcomᚋtheopenl
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAudience2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudience(ctx context.Context, sel ast.SelectionSet, v generated.Audience) graphql.Marshaler {
-	return ec._Audience(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAudience2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudience(ctx context.Context, sel ast.SelectionSet, v *generated.Audience) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462731,10 +465942,6 @@ func (ec *executionContext) marshalNAudienceAudienceType2githubᚗcomᚋtheopenl
 	return v
 }
 
-func (ec *executionContext) marshalNAudienceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudienceConnection(ctx context.Context, sel ast.SelectionSet, v generated.AudienceConnection) graphql.Marshaler {
-	return ec._AudienceConnection(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAudienceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudienceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AudienceConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462745,10 +465952,6 @@ func (ec *executionContext) marshalNAudienceConnection2ᚖgithubᚗcomᚋtheopen
 	return ec._AudienceConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAudienceMember2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudienceMember(ctx context.Context, sel ast.SelectionSet, v generated.AudienceMember) graphql.Marshaler {
-	return ec._AudienceMember(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAudienceMember2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudienceMember(ctx context.Context, sel ast.SelectionSet, v *generated.AudienceMember) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462757,10 +465960,6 @@ func (ec *executionContext) marshalNAudienceMember2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._AudienceMember(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAudienceMemberConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudienceMemberConnection(ctx context.Context, sel ast.SelectionSet, v generated.AudienceMemberConnection) graphql.Marshaler {
-	return ec._AudienceMemberConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAudienceMemberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAudienceMemberConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AudienceMemberConnection) graphql.Marshaler {
@@ -462825,10 +466024,6 @@ func (ec *executionContext) unmarshalNAudienceWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCampaign2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaign(ctx context.Context, sel ast.SelectionSet, v generated.Campaign) graphql.Marshaler {
-	return ec._Campaign(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaign(ctx context.Context, sel ast.SelectionSet, v *generated.Campaign) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462857,10 +466052,6 @@ func (ec *executionContext) unmarshalNCampaignCampaignType2githubᚗcomᚋtheope
 
 func (ec *executionContext) marshalNCampaignCampaignType2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCampaignType(ctx context.Context, sel ast.SelectionSet, v enums.CampaignType) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNCampaignConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignConnection(ctx context.Context, sel ast.SelectionSet, v generated.CampaignConnection) graphql.Marshaler {
-	return ec._CampaignConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCampaignConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CampaignConnection) graphql.Marshaler {
@@ -462904,10 +466095,6 @@ func (ec *executionContext) marshalNCampaignOrderField2ᚖgithubᚗcomᚋtheopen
 	return v
 }
 
-func (ec *executionContext) marshalNCampaignTarget2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTarget(ctx context.Context, sel ast.SelectionSet, v generated.CampaignTarget) graphql.Marshaler {
-	return ec._CampaignTarget(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCampaignTarget2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTarget(ctx context.Context, sel ast.SelectionSet, v *generated.CampaignTarget) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462926,10 +466113,6 @@ func (ec *executionContext) unmarshalNCampaignTargetAssessmentResponseStatus2git
 
 func (ec *executionContext) marshalNCampaignTargetAssessmentResponseStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentResponseStatus(ctx context.Context, sel ast.SelectionSet, v enums.AssessmentResponseStatus) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNCampaignTargetConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection(ctx context.Context, sel ast.SelectionSet, v generated.CampaignTargetConnection) graphql.Marshaler {
-	return ec._CampaignTargetConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCampaignTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CampaignTargetConnection) graphql.Marshaler {
@@ -462973,10 +466156,6 @@ func (ec *executionContext) unmarshalNCampaignWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCheckResult2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCheckResult(ctx context.Context, sel ast.SelectionSet, v generated.CheckResult) graphql.Marshaler {
-	return ec._CheckResult(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCheckResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCheckResult(ctx context.Context, sel ast.SelectionSet, v *generated.CheckResult) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462995,10 +466174,6 @@ func (ec *executionContext) unmarshalNCheckResultCheckStatus2githubᚗcomᚋtheo
 
 func (ec *executionContext) marshalNCheckResultCheckStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCheckStatus(ctx context.Context, sel ast.SelectionSet, v enums.CheckStatus) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNCheckResultConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCheckResultConnection(ctx context.Context, sel ast.SelectionSet, v generated.CheckResultConnection) graphql.Marshaler {
-	return ec._CheckResultConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCheckResultConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCheckResultConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CheckResultConnection) graphql.Marshaler {
@@ -463037,10 +466212,6 @@ func (ec *executionContext) unmarshalNCheckResultWhereInput2ᚖgithubᚗcomᚋth
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNContact2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContact(ctx context.Context, sel ast.SelectionSet, v generated.Contact) graphql.Marshaler {
-	return ec._Contact(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContact(ctx context.Context, sel ast.SelectionSet, v *generated.Contact) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463049,10 +466220,6 @@ func (ec *executionContext) marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return ec._Contact(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNContactConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx context.Context, sel ast.SelectionSet, v generated.ContactConnection) graphql.Marshaler {
-	return ec._ContactConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ContactConnection) graphql.Marshaler {
@@ -463101,10 +466268,6 @@ func (ec *executionContext) unmarshalNContactWhereInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNControl2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControl(ctx context.Context, sel ast.SelectionSet, v generated.Control) graphql.Marshaler {
-	return ec._Control(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControl(ctx context.Context, sel ast.SelectionSet, v *generated.Control) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463113,10 +466276,6 @@ func (ec *executionContext) marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return ec._Control(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx context.Context, sel ast.SelectionSet, v generated.ControlConnection) graphql.Marshaler {
-	return ec._ControlConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ControlConnection) graphql.Marshaler {
@@ -463159,10 +466318,6 @@ func (ec *executionContext) marshalNControlControlStatus2githubᚗcomᚋtheopenl
 	return v
 }
 
-func (ec *executionContext) marshalNControlImplementation2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementation(ctx context.Context, sel ast.SelectionSet, v generated.ControlImplementation) graphql.Marshaler {
-	return ec._ControlImplementation(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlImplementation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementation(ctx context.Context, sel ast.SelectionSet, v *generated.ControlImplementation) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463171,10 +466326,6 @@ func (ec *executionContext) marshalNControlImplementation2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._ControlImplementation(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlImplementationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationConnection(ctx context.Context, sel ast.SelectionSet, v generated.ControlImplementationConnection) graphql.Marshaler {
-	return ec._ControlImplementationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlImplementationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ControlImplementationConnection) graphql.Marshaler {
@@ -463223,10 +466374,6 @@ func (ec *executionContext) unmarshalNControlImplementationWhereInput2ᚖgithub�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNControlObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjective(ctx context.Context, sel ast.SelectionSet, v generated.ControlObjective) graphql.Marshaler {
-	return ec._ControlObjective(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlObjective2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjective(ctx context.Context, sel ast.SelectionSet, v *generated.ControlObjective) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463235,10 +466382,6 @@ func (ec *executionContext) marshalNControlObjective2ᚖgithubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return ec._ControlObjective(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlObjectiveConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx context.Context, sel ast.SelectionSet, v generated.ControlObjectiveConnection) graphql.Marshaler {
-	return ec._ControlObjectiveConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ControlObjectiveConnection) graphql.Marshaler {
@@ -464098,10 +467241,6 @@ func (ec *executionContext) marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCurso
 	return v
 }
 
-func (ec *executionContext) marshalNCustomDomain2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx context.Context, sel ast.SelectionSet, v generated.CustomDomain) graphql.Marshaler {
-	return ec._CustomDomain(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx context.Context, sel ast.SelectionSet, v *generated.CustomDomain) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464110,10 +467249,6 @@ func (ec *executionContext) marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._CustomDomain(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCustomDomainConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainConnection(ctx context.Context, sel ast.SelectionSet, v generated.CustomDomainConnection) graphql.Marshaler {
-	return ec._CustomDomainConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCustomDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CustomDomainConnection) graphql.Marshaler {
@@ -464162,10 +467297,6 @@ func (ec *executionContext) unmarshalNCustomDomainWhereInput2ᚖgithubᚗcomᚋt
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnum2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx context.Context, sel ast.SelectionSet, v generated.CustomTypeEnum) graphql.Marshaler {
-	return ec._CustomTypeEnum(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx context.Context, sel ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464174,10 +467305,6 @@ func (ec *executionContext) marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._CustomTypeEnum(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCustomTypeEnumConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection(ctx context.Context, sel ast.SelectionSet, v generated.CustomTypeEnumConnection) graphql.Marshaler {
-	return ec._CustomTypeEnumConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CustomTypeEnumConnection) graphql.Marshaler {
@@ -464216,10 +467343,6 @@ func (ec *executionContext) unmarshalNCustomTypeEnumWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDNSVerification2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx context.Context, sel ast.SelectionSet, v generated.DNSVerification) graphql.Marshaler {
-	return ec._DNSVerification(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx context.Context, sel ast.SelectionSet, v *generated.DNSVerification) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464228,10 +467351,6 @@ func (ec *executionContext) marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlan
 		return graphql.Null
 	}
 	return ec._DNSVerification(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDNSVerificationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationConnection(ctx context.Context, sel ast.SelectionSet, v generated.DNSVerificationConnection) graphql.Marshaler {
-	return ec._DNSVerificationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDNSVerificationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DNSVerificationConnection) graphql.Marshaler {
@@ -464290,10 +467409,6 @@ func (ec *executionContext) unmarshalNDNSVerificationWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDirectoryAccount2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccount(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryAccount) graphql.Marshaler {
-	return ec._DirectoryAccount(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccount(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryAccount) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464302,10 +467417,6 @@ func (ec *executionContext) marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return ec._DirectoryAccount(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectoryAccountConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccountConnection(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryAccountConnection) graphql.Marshaler {
-	return ec._DirectoryAccountConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectoryAccountConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccountConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryAccountConnection) graphql.Marshaler {
@@ -464374,10 +467485,6 @@ func (ec *executionContext) unmarshalNDirectoryAccountWhereInput2ᚖgithubᚗcom
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDirectoryGroup2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroup(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryGroup) graphql.Marshaler {
-	return ec._DirectoryGroup(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroup(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryGroup) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464386,10 +467493,6 @@ func (ec *executionContext) marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._DirectoryGroup(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectoryGroupConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroupConnection(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryGroupConnection) graphql.Marshaler {
-	return ec._DirectoryGroupConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectoryGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroupConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryGroupConnection) graphql.Marshaler {
@@ -464448,10 +467551,6 @@ func (ec *executionContext) unmarshalNDirectoryGroupWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDirectoryMembership2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembership(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryMembership) graphql.Marshaler {
-	return ec._DirectoryMembership(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembership(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryMembership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464460,10 +467559,6 @@ func (ec *executionContext) marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._DirectoryMembership(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectoryMembershipConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipConnection(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryMembershipConnection) graphql.Marshaler {
-	return ec._DirectoryMembershipConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectoryMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryMembershipConnection) graphql.Marshaler {
@@ -464512,10 +467607,6 @@ func (ec *executionContext) unmarshalNDirectoryMembershipWhereInput2ᚖgithubᚗ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRun2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx context.Context, sel ast.SelectionSet, v generated.DirectorySyncRun) graphql.Marshaler {
-	return ec._DirectorySyncRun(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx context.Context, sel ast.SelectionSet, v *generated.DirectorySyncRun) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464524,10 +467615,6 @@ func (ec *executionContext) marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return ec._DirectorySyncRun(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectorySyncRunConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunConnection(ctx context.Context, sel ast.SelectionSet, v generated.DirectorySyncRunConnection) graphql.Marshaler {
-	return ec._DirectorySyncRunConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectorySyncRunConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DirectorySyncRunConnection) graphql.Marshaler {
@@ -464576,10 +467663,6 @@ func (ec *executionContext) unmarshalNDirectorySyncRunWhereInput2ᚖgithubᚗcom
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDiscussion2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx context.Context, sel ast.SelectionSet, v generated.Discussion) graphql.Marshaler {
-	return ec._Discussion(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx context.Context, sel ast.SelectionSet, v *generated.Discussion) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464588,10 +467671,6 @@ func (ec *executionContext) marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._Discussion(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDiscussionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionConnection(ctx context.Context, sel ast.SelectionSet, v generated.DiscussionConnection) graphql.Marshaler {
-	return ec._DiscussionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDiscussionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DiscussionConnection) graphql.Marshaler {
@@ -464630,10 +467709,6 @@ func (ec *executionContext) unmarshalNDiscussionWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDocumentData2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx context.Context, sel ast.SelectionSet, v generated.DocumentData) graphql.Marshaler {
-	return ec._DocumentData(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx context.Context, sel ast.SelectionSet, v *generated.DocumentData) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464642,10 +467717,6 @@ func (ec *executionContext) marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._DocumentData(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDocumentDataConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataConnection(ctx context.Context, sel ast.SelectionSet, v generated.DocumentDataConnection) graphql.Marshaler {
-	return ec._DocumentDataConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDocumentDataConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DocumentDataConnection) graphql.Marshaler {
@@ -464684,10 +467755,6 @@ func (ec *executionContext) unmarshalNDocumentDataWhereInput2ᚖgithubᚗcomᚋt
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNEmailTemplate2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx context.Context, sel ast.SelectionSet, v generated.EmailTemplate) graphql.Marshaler {
-	return ec._EmailTemplate(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx context.Context, sel ast.SelectionSet, v *generated.EmailTemplate) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464696,10 +467763,6 @@ func (ec *executionContext) marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._EmailTemplate(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEmailTemplateConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection(ctx context.Context, sel ast.SelectionSet, v generated.EmailTemplateConnection) graphql.Marshaler {
-	return ec._EmailTemplateConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEmailTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EmailTemplateConnection) graphql.Marshaler {
@@ -464758,10 +467821,6 @@ func (ec *executionContext) unmarshalNEmailTemplateWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNEntity2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntity(ctx context.Context, sel ast.SelectionSet, v generated.Entity) graphql.Marshaler {
-	return ec._Entity(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntity(ctx context.Context, sel ast.SelectionSet, v *generated.Entity) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464770,10 +467829,6 @@ func (ec *executionContext) marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Entity(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEntityConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx context.Context, sel ast.SelectionSet, v generated.EntityConnection) graphql.Marshaler {
-	return ec._EntityConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EntityConnection) graphql.Marshaler {
@@ -464827,10 +467882,6 @@ func (ec *executionContext) marshalNEntityOrderField2ᚖgithubᚗcomᚋtheopenla
 	return v
 }
 
-func (ec *executionContext) marshalNEntityType2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityType(ctx context.Context, sel ast.SelectionSet, v generated.EntityType) graphql.Marshaler {
-	return ec._EntityType(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityType(ctx context.Context, sel ast.SelectionSet, v *generated.EntityType) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464839,10 +467890,6 @@ func (ec *executionContext) marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._EntityType(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEntityTypeConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityTypeConnection(ctx context.Context, sel ast.SelectionSet, v generated.EntityTypeConnection) graphql.Marshaler {
-	return ec._EntityTypeConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEntityTypeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityTypeConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EntityTypeConnection) graphql.Marshaler {
@@ -464896,10 +467943,6 @@ func (ec *executionContext) unmarshalNEntityWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNEvent2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvent(ctx context.Context, sel ast.SelectionSet, v generated.Event) graphql.Marshaler {
-	return ec._Event(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvent(ctx context.Context, sel ast.SelectionSet, v *generated.Event) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464908,10 +467951,6 @@ func (ec *executionContext) marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Event(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEventConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEventConnection(ctx context.Context, sel ast.SelectionSet, v generated.EventConnection) graphql.Marshaler {
-	return ec._EventConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEventConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EventConnection) graphql.Marshaler {
@@ -464950,10 +467989,6 @@ func (ec *executionContext) unmarshalNEventWhereInput2ᚖgithubᚗcomᚋtheopenl
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidence(ctx context.Context, sel ast.SelectionSet, v generated.Evidence) graphql.Marshaler {
-	return ec._Evidence(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidence(ctx context.Context, sel ast.SelectionSet, v *generated.Evidence) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464962,10 +467997,6 @@ func (ec *executionContext) marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._Evidence(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEvidenceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx context.Context, sel ast.SelectionSet, v generated.EvidenceConnection) graphql.Marshaler {
-	return ec._EvidenceConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EvidenceConnection) graphql.Marshaler {
@@ -465024,10 +468055,6 @@ func (ec *executionContext) unmarshalNEvidenceWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNExport2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExport(ctx context.Context, sel ast.SelectionSet, v generated.Export) graphql.Marshaler {
-	return ec._Export(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNExport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExport(ctx context.Context, sel ast.SelectionSet, v *generated.Export) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465036,10 +468063,6 @@ func (ec *executionContext) marshalNExport2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Export(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNExportConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExportConnection(ctx context.Context, sel ast.SelectionSet, v generated.ExportConnection) graphql.Marshaler {
-	return ec._ExportConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNExportConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExportConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ExportConnection) graphql.Marshaler {
@@ -465118,10 +468141,6 @@ func (ec *executionContext) unmarshalNExportWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNFile2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFile(ctx context.Context, sel ast.SelectionSet, v generated.File) graphql.Marshaler {
-	return ec._File(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFile2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFile(ctx context.Context, sel ast.SelectionSet, v *generated.File) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465130,10 +468149,6 @@ func (ec *executionContext) marshalNFile2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._File(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFileConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFileConnection(ctx context.Context, sel ast.SelectionSet, v generated.FileConnection) graphql.Marshaler {
-	return ec._FileConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFileConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFileConnection(ctx context.Context, sel ast.SelectionSet, v *generated.FileConnection) graphql.Marshaler {
@@ -465172,10 +468187,6 @@ func (ec *executionContext) unmarshalNFileWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNFinding2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFinding(ctx context.Context, sel ast.SelectionSet, v generated.Finding) graphql.Marshaler {
-	return ec._Finding(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFinding(ctx context.Context, sel ast.SelectionSet, v *generated.Finding) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465184,10 +468195,6 @@ func (ec *executionContext) marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return ec._Finding(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx context.Context, sel ast.SelectionSet, v generated.FindingConnection) graphql.Marshaler {
-	return ec._FindingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
@@ -465200,10 +468207,6 @@ func (ec *executionContext) marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenl
 	return ec._FindingConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingControl2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControl(ctx context.Context, sel ast.SelectionSet, v generated.FindingControl) graphql.Marshaler {
-	return ec._FindingControl(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControl(ctx context.Context, sel ast.SelectionSet, v *generated.FindingControl) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465212,10 +468215,6 @@ func (ec *executionContext) marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._FindingControl(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingControlConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControlConnection(ctx context.Context, sel ast.SelectionSet, v generated.FindingControlConnection) graphql.Marshaler {
-	return ec._FindingControlConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControlConnection(ctx context.Context, sel ast.SelectionSet, v *generated.FindingControlConnection) graphql.Marshaler {
@@ -465290,10 +468289,6 @@ func (ec *executionContext) unmarshalNFindingWhereInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNGroup2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx context.Context, sel ast.SelectionSet, v generated.Group) graphql.Marshaler {
-	return ec._Group(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx context.Context, sel ast.SelectionSet, v *generated.Group) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465302,10 +468297,6 @@ func (ec *executionContext) marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Group(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx context.Context, sel ast.SelectionSet, v generated.GroupConnection) graphql.Marshaler {
-	return ec._GroupConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx context.Context, sel ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
@@ -465318,10 +468309,6 @@ func (ec *executionContext) marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlan
 	return ec._GroupConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupMembership2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupMembership(ctx context.Context, sel ast.SelectionSet, v generated.GroupMembership) graphql.Marshaler {
-	return ec._GroupMembership(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupMembership(ctx context.Context, sel ast.SelectionSet, v *generated.GroupMembership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465330,10 +468317,6 @@ func (ec *executionContext) marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlan
 		return graphql.Null
 	}
 	return ec._GroupMembership(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupMembershipConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupMembershipConnection(ctx context.Context, sel ast.SelectionSet, v generated.GroupMembershipConnection) graphql.Marshaler {
-	return ec._GroupMembershipConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupMembershipConnection(ctx context.Context, sel ast.SelectionSet, v *generated.GroupMembershipConnection) graphql.Marshaler {
@@ -465403,10 +468386,6 @@ func (ec *executionContext) marshalNGroupOrderField2ᚖgithubᚗcomᚋtheopenlan
 	return v
 }
 
-func (ec *executionContext) marshalNGroupSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupSetting(ctx context.Context, sel ast.SelectionSet, v generated.GroupSetting) graphql.Marshaler {
-	return ec._GroupSetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupSetting(ctx context.Context, sel ast.SelectionSet, v *generated.GroupSetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465415,10 +468394,6 @@ func (ec *executionContext) marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._GroupSetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupSettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupSettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.GroupSettingConnection) graphql.Marshaler {
-	return ec._GroupSettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.GroupSettingConnection) graphql.Marshaler {
@@ -465482,10 +468457,6 @@ func (ec *executionContext) unmarshalNGroupWhereInput2ᚖgithubᚗcomᚋtheopenl
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNHush2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHush(ctx context.Context, sel ast.SelectionSet, v generated.Hush) graphql.Marshaler {
-	return ec._Hush(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHush(ctx context.Context, sel ast.SelectionSet, v *generated.Hush) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465494,10 +468465,6 @@ func (ec *executionContext) marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Hush(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNHushConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushConnection(ctx context.Context, sel ast.SelectionSet, v generated.HushConnection) graphql.Marshaler {
-	return ec._HushConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNHushConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushConnection(ctx context.Context, sel ast.SelectionSet, v *generated.HushConnection) graphql.Marshaler {
@@ -465536,10 +468503,6 @@ func (ec *executionContext) unmarshalNHushWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNIdentityHolder2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx context.Context, sel ast.SelectionSet, v generated.IdentityHolder) graphql.Marshaler {
-	return ec._IdentityHolder(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx context.Context, sel ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465548,10 +468511,6 @@ func (ec *executionContext) marshalNIdentityHolder2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._IdentityHolder(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNIdentityHolderConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection(ctx context.Context, sel ast.SelectionSet, v generated.IdentityHolderConnection) graphql.Marshaler {
-	return ec._IdentityHolderConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIdentityHolderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection(ctx context.Context, sel ast.SelectionSet, v *generated.IdentityHolderConnection) graphql.Marshaler {
@@ -465610,10 +468569,6 @@ func (ec *executionContext) unmarshalNIdentityHolderWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNIntegration2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegration(ctx context.Context, sel ast.SelectionSet, v generated.Integration) graphql.Marshaler {
-	return ec._Integration(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNIntegration2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegration(ctx context.Context, sel ast.SelectionSet, v *generated.Integration) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465622,10 +468577,6 @@ func (ec *executionContext) marshalNIntegration2ᚖgithubᚗcomᚋtheopenlaneᚋ
 		return graphql.Null
 	}
 	return ec._Integration(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNIntegrationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx context.Context, sel ast.SelectionSet, v generated.IntegrationConnection) graphql.Marshaler {
-	return ec._IntegrationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.IntegrationConnection) graphql.Marshaler {
@@ -465674,10 +468625,6 @@ func (ec *executionContext) unmarshalNIntegrationWhereInput2ᚖgithubᚗcomᚋth
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNInternalPolicy2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx context.Context, sel ast.SelectionSet, v generated.InternalPolicy) graphql.Marshaler {
-	return ec._InternalPolicy(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx context.Context, sel ast.SelectionSet, v *generated.InternalPolicy) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465686,10 +468633,6 @@ func (ec *executionContext) marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._InternalPolicy(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInternalPolicyConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx context.Context, sel ast.SelectionSet, v generated.InternalPolicyConnection) graphql.Marshaler {
-	return ec._InternalPolicyConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx context.Context, sel ast.SelectionSet, v *generated.InternalPolicyConnection) graphql.Marshaler {
@@ -465758,10 +468701,6 @@ func (ec *executionContext) unmarshalNInternalPolicyWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNInvite2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInvite(ctx context.Context, sel ast.SelectionSet, v generated.Invite) graphql.Marshaler {
-	return ec._Invite(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInvite(ctx context.Context, sel ast.SelectionSet, v *generated.Invite) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465770,10 +468709,6 @@ func (ec *executionContext) marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Invite(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInviteConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInviteConnection(ctx context.Context, sel ast.SelectionSet, v generated.InviteConnection) graphql.Marshaler {
-	return ec._InviteConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInviteConnection(ctx context.Context, sel ast.SelectionSet, v *generated.InviteConnection) graphql.Marshaler {
@@ -465854,10 +468789,6 @@ func (ec *executionContext) marshalNMap2map(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNMappableDomain2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx context.Context, sel ast.SelectionSet, v generated.MappableDomain) graphql.Marshaler {
-	return ec._MappableDomain(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx context.Context, sel ast.SelectionSet, v *generated.MappableDomain) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465866,10 +468797,6 @@ func (ec *executionContext) marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._MappableDomain(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappableDomainConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainConnection(ctx context.Context, sel ast.SelectionSet, v generated.MappableDomainConnection) graphql.Marshaler {
-	return ec._MappableDomainConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappableDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainConnection(ctx context.Context, sel ast.SelectionSet, v *generated.MappableDomainConnection) graphql.Marshaler {
@@ -465908,10 +468835,6 @@ func (ec *executionContext) unmarshalNMappableDomainWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNMappedControl2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControl(ctx context.Context, sel ast.SelectionSet, v generated.MappedControl) graphql.Marshaler {
-	return ec._MappedControl(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControl(ctx context.Context, sel ast.SelectionSet, v *generated.MappedControl) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465920,10 +468843,6 @@ func (ec *executionContext) marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._MappedControl(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappedControlConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControlConnection(ctx context.Context, sel ast.SelectionSet, v generated.MappedControlConnection) graphql.Marshaler {
-	return ec._MappedControlConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappedControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControlConnection(ctx context.Context, sel ast.SelectionSet, v *generated.MappedControlConnection) graphql.Marshaler {
@@ -465982,10 +468901,6 @@ func (ec *executionContext) unmarshalNMappedControlWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNNarrative2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrative(ctx context.Context, sel ast.SelectionSet, v generated.Narrative) graphql.Marshaler {
-	return ec._Narrative(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrative(ctx context.Context, sel ast.SelectionSet, v *generated.Narrative) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -465994,10 +468909,6 @@ func (ec *executionContext) marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋco
 		return graphql.Null
 	}
 	return ec._Narrative(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNarrativeConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx context.Context, sel ast.SelectionSet, v generated.NarrativeConnection) graphql.Marshaler {
-	return ec._NarrativeConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx context.Context, sel ast.SelectionSet, v *generated.NarrativeConnection) graphql.Marshaler {
@@ -466046,10 +468957,6 @@ func (ec *executionContext) marshalNNode2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalNNote2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNote(ctx context.Context, sel ast.SelectionSet, v generated.Note) graphql.Marshaler {
-	return ec._Note(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNote2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNote(ctx context.Context, sel ast.SelectionSet, v *generated.Note) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466058,10 +468965,6 @@ func (ec *executionContext) marshalNNote2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Note(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNoteConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteConnection(ctx context.Context, sel ast.SelectionSet, v generated.NoteConnection) graphql.Marshaler {
-	return ec._NoteConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNoteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteConnection(ctx context.Context, sel ast.SelectionSet, v *generated.NoteConnection) graphql.Marshaler {
@@ -466098,10 +469001,6 @@ func (ec *executionContext) marshalNNoteOrderField2ᚖgithubᚗcomᚋtheopenlane
 func (ec *executionContext) unmarshalNNoteWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteWhereInput(ctx context.Context, v any) (*generated.NoteWhereInput, error) {
 	res, err := ec.unmarshalInputNoteWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNNotification2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotification(ctx context.Context, sel ast.SelectionSet, v generated.Notification) graphql.Marshaler {
-	return ec._Notification(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotification(ctx context.Context, sel ast.SelectionSet, v *generated.Notification) graphql.Marshaler {
@@ -466150,10 +469049,6 @@ func (ec *executionContext) marshalNNotificationOrderField2ᚖgithubᚗcomᚋthe
 	return v
 }
 
-func (ec *executionContext) marshalNNotificationPreference2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreference(ctx context.Context, sel ast.SelectionSet, v generated.NotificationPreference) graphql.Marshaler {
-	return ec._NotificationPreference(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNotificationPreference2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreference(ctx context.Context, sel ast.SelectionSet, v *generated.NotificationPreference) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466172,10 +469067,6 @@ func (ec *executionContext) unmarshalNNotificationPreferenceChannel2githubᚗcom
 
 func (ec *executionContext) marshalNNotificationPreferenceChannel2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐChannel(ctx context.Context, sel ast.SelectionSet, v enums.Channel) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNNotificationPreferenceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceConnection(ctx context.Context, sel ast.SelectionSet, v generated.NotificationPreferenceConnection) graphql.Marshaler {
-	return ec._NotificationPreferenceConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotificationPreferenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.NotificationPreferenceConnection) graphql.Marshaler {
@@ -466244,10 +469135,6 @@ func (ec *executionContext) unmarshalNNotificationPreferenceWhereInput2ᚖgithub
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNNotificationTemplate2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplate(ctx context.Context, sel ast.SelectionSet, v generated.NotificationTemplate) graphql.Marshaler {
-	return ec._NotificationTemplate(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNotificationTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplate(ctx context.Context, sel ast.SelectionSet, v *generated.NotificationTemplate) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466266,10 +469153,6 @@ func (ec *executionContext) unmarshalNNotificationTemplateChannel2githubᚗcom�
 
 func (ec *executionContext) marshalNNotificationTemplateChannel2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐChannel(ctx context.Context, sel ast.SelectionSet, v enums.Channel) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNNotificationTemplateConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection(ctx context.Context, sel ast.SelectionSet, v generated.NotificationTemplateConnection) graphql.Marshaler {
-	return ec._NotificationTemplateConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotificationTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection(ctx context.Context, sel ast.SelectionSet, v *generated.NotificationTemplateConnection) graphql.Marshaler {
@@ -466353,10 +469236,6 @@ func (ec *executionContext) marshalNOrderDirection2entgoᚗioᚋcontribᚋentgql
 	return v
 }
 
-func (ec *executionContext) marshalNOrgMembership2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgMembership(ctx context.Context, sel ast.SelectionSet, v generated.OrgMembership) graphql.Marshaler {
-	return ec._OrgMembership(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgMembership(ctx context.Context, sel ast.SelectionSet, v *generated.OrgMembership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466365,10 +469244,6 @@ func (ec *executionContext) marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._OrgMembership(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrgMembershipConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgMembershipConnection(ctx context.Context, sel ast.SelectionSet, v generated.OrgMembershipConnection) graphql.Marshaler {
-	return ec._OrgMembershipConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrgMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgMembershipConnection(ctx context.Context, sel ast.SelectionSet, v *generated.OrgMembershipConnection) graphql.Marshaler {
@@ -466417,10 +469292,6 @@ func (ec *executionContext) unmarshalNOrgMembershipWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrgSubscription2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgSubscription(ctx context.Context, sel ast.SelectionSet, v generated.OrgSubscription) graphql.Marshaler {
-	return ec._OrgSubscription(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrgSubscription2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgSubscription(ctx context.Context, sel ast.SelectionSet, v *generated.OrgSubscription) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466429,10 +469300,6 @@ func (ec *executionContext) marshalNOrgSubscription2ᚖgithubᚗcomᚋtheopenlan
 		return graphql.Null
 	}
 	return ec._OrgSubscription(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrgSubscriptionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgSubscriptionConnection(ctx context.Context, sel ast.SelectionSet, v generated.OrgSubscriptionConnection) graphql.Marshaler {
-	return ec._OrgSubscriptionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrgSubscriptionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgSubscriptionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.OrgSubscriptionConnection) graphql.Marshaler {
@@ -466466,10 +469333,6 @@ func (ec *executionContext) unmarshalNOrgSubscriptionWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrganization2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx context.Context, sel ast.SelectionSet, v generated.Organization) graphql.Marshaler {
-	return ec._Organization(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx context.Context, sel ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466478,10 +469341,6 @@ func (ec *executionContext) marshalNOrganization2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._Organization(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrganizationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationConnection(ctx context.Context, sel ast.SelectionSet, v generated.OrganizationConnection) graphql.Marshaler {
-	return ec._OrganizationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.OrganizationConnection) graphql.Marshaler {
@@ -466515,10 +469374,6 @@ func (ec *executionContext) marshalNOrganizationOrderField2ᚖgithubᚗcomᚋthe
 	return v
 }
 
-func (ec *executionContext) marshalNOrganizationSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx context.Context, sel ast.SelectionSet, v generated.OrganizationSetting) graphql.Marshaler {
-	return ec._OrganizationSetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx context.Context, sel ast.SelectionSet, v *generated.OrganizationSetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466527,10 +469382,6 @@ func (ec *executionContext) marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._OrganizationSetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrganizationSettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.OrganizationSettingConnection) graphql.Marshaler {
-	return ec._OrganizationSettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrganizationSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.OrganizationSettingConnection) graphql.Marshaler {
@@ -466608,10 +469459,6 @@ func (ec *executionContext) marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐ
 	return ec._PageInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPersonalAccessToken2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken(ctx context.Context, sel ast.SelectionSet, v generated.PersonalAccessToken) graphql.Marshaler {
-	return ec._PersonalAccessToken(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken(ctx context.Context, sel ast.SelectionSet, v *generated.PersonalAccessToken) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466620,10 +469467,6 @@ func (ec *executionContext) marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._PersonalAccessToken(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNPersonalAccessTokenConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenConnection(ctx context.Context, sel ast.SelectionSet, v generated.PersonalAccessTokenConnection) graphql.Marshaler {
-	return ec._PersonalAccessTokenConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPersonalAccessTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenConnection(ctx context.Context, sel ast.SelectionSet, v *generated.PersonalAccessTokenConnection) graphql.Marshaler {
@@ -466662,10 +469505,6 @@ func (ec *executionContext) unmarshalNPersonalAccessTokenWhereInput2ᚖgithubᚗ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPlatform2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatform(ctx context.Context, sel ast.SelectionSet, v generated.Platform) graphql.Marshaler {
-	return ec._Platform(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNPlatform2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatform(ctx context.Context, sel ast.SelectionSet, v *generated.Platform) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466674,10 +469513,6 @@ func (ec *executionContext) marshalNPlatform2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._Platform(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNPlatformConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformConnection(ctx context.Context, sel ast.SelectionSet, v generated.PlatformConnection) graphql.Marshaler {
-	return ec._PlatformConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPlatformConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformConnection(ctx context.Context, sel ast.SelectionSet, v *generated.PlatformConnection) graphql.Marshaler {
@@ -466736,10 +469571,6 @@ func (ec *executionContext) unmarshalNPlatformWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProcedure2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedure(ctx context.Context, sel ast.SelectionSet, v generated.Procedure) graphql.Marshaler {
-	return ec._Procedure(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedure(ctx context.Context, sel ast.SelectionSet, v *generated.Procedure) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466748,10 +469579,6 @@ func (ec *executionContext) marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋco
 		return graphql.Null
 	}
 	return ec._Procedure(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProcedureConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx context.Context, sel ast.SelectionSet, v generated.ProcedureConnection) graphql.Marshaler {
-	return ec._ProcedureConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ProcedureConnection) graphql.Marshaler {
@@ -466820,10 +469647,6 @@ func (ec *executionContext) unmarshalNProcedureWhereInput2ᚖgithubᚗcomᚋtheo
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProgram2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgram(ctx context.Context, sel ast.SelectionSet, v generated.Program) graphql.Marshaler {
-	return ec._Program(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgram(ctx context.Context, sel ast.SelectionSet, v *generated.Program) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466832,10 +469655,6 @@ func (ec *executionContext) marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return ec._Program(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProgramConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx context.Context, sel ast.SelectionSet, v generated.ProgramConnection) graphql.Marshaler {
-	return ec._ProgramConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ProgramConnection) graphql.Marshaler {
@@ -466848,10 +469667,6 @@ func (ec *executionContext) marshalNProgramConnection2ᚖgithubᚗcomᚋtheopenl
 	return ec._ProgramConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProgramMembership2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramMembership(ctx context.Context, sel ast.SelectionSet, v generated.ProgramMembership) graphql.Marshaler {
-	return ec._ProgramMembership(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramMembership(ctx context.Context, sel ast.SelectionSet, v *generated.ProgramMembership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466860,10 +469675,6 @@ func (ec *executionContext) marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._ProgramMembership(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProgramMembershipConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramMembershipConnection(ctx context.Context, sel ast.SelectionSet, v generated.ProgramMembershipConnection) graphql.Marshaler {
-	return ec._ProgramMembershipConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProgramMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramMembershipConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ProgramMembershipConnection) graphql.Marshaler {
@@ -466948,10 +469759,6 @@ func (ec *executionContext) unmarshalNProgramWhereInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRemediation2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediation(ctx context.Context, sel ast.SelectionSet, v generated.Remediation) graphql.Marshaler {
-	return ec._Remediation(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRemediation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediation(ctx context.Context, sel ast.SelectionSet, v *generated.Remediation) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -466960,10 +469767,6 @@ func (ec *executionContext) marshalNRemediation2ᚖgithubᚗcomᚋtheopenlaneᚋ
 		return graphql.Null
 	}
 	return ec._Remediation(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRemediationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx context.Context, sel ast.SelectionSet, v generated.RemediationConnection) graphql.Marshaler {
-	return ec._RemediationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
@@ -467012,10 +469815,6 @@ func (ec *executionContext) unmarshalNRemediationWhereInput2ᚖgithubᚗcomᚋth
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNReview2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReview(ctx context.Context, sel ast.SelectionSet, v generated.Review) graphql.Marshaler {
-	return ec._Review(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReview(ctx context.Context, sel ast.SelectionSet, v *generated.Review) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467024,10 +469823,6 @@ func (ec *executionContext) marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Review(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNReviewConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx context.Context, sel ast.SelectionSet, v generated.ReviewConnection) graphql.Marshaler {
-	return ec._ReviewConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ReviewConnection) graphql.Marshaler {
@@ -467076,10 +469871,6 @@ func (ec *executionContext) unmarshalNReviewWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRisk2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRisk(ctx context.Context, sel ast.SelectionSet, v generated.Risk) graphql.Marshaler {
-	return ec._Risk(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRisk(ctx context.Context, sel ast.SelectionSet, v *generated.Risk) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467088,10 +469879,6 @@ func (ec *executionContext) marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Risk(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRiskConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx context.Context, sel ast.SelectionSet, v generated.RiskConnection) graphql.Marshaler {
-	return ec._RiskConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx context.Context, sel ast.SelectionSet, v *generated.RiskConnection) graphql.Marshaler {
@@ -467180,10 +469967,6 @@ func (ec *executionContext) unmarshalNRiskWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSLADefinition2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinition(ctx context.Context, sel ast.SelectionSet, v generated.SLADefinition) graphql.Marshaler {
-	return ec._SLADefinition(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSLADefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinition(ctx context.Context, sel ast.SelectionSet, v *generated.SLADefinition) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467192,10 +469975,6 @@ func (ec *executionContext) marshalNSLADefinition2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._SLADefinition(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSLADefinitionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinitionConnection(ctx context.Context, sel ast.SelectionSet, v generated.SLADefinitionConnection) graphql.Marshaler {
-	return ec._SLADefinitionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSLADefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinitionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SLADefinitionConnection) graphql.Marshaler {
@@ -467244,10 +470023,6 @@ func (ec *executionContext) unmarshalNSLADefinitionWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNScan2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScan(ctx context.Context, sel ast.SelectionSet, v generated.Scan) graphql.Marshaler {
-	return ec._Scan(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScan(ctx context.Context, sel ast.SelectionSet, v *generated.Scan) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467256,10 +470031,6 @@ func (ec *executionContext) marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Scan(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNScanConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx context.Context, sel ast.SelectionSet, v generated.ScanConnection) graphql.Marshaler {
-	return ec._ScanConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ScanConnection) graphql.Marshaler {
@@ -467318,10 +470089,6 @@ func (ec *executionContext) unmarshalNScanWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNStandard2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandard(ctx context.Context, sel ast.SelectionSet, v generated.Standard) graphql.Marshaler {
-	return ec._Standard(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandard(ctx context.Context, sel ast.SelectionSet, v *generated.Standard) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467330,10 +470097,6 @@ func (ec *executionContext) marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._Standard(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNStandardConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx context.Context, sel ast.SelectionSet, v generated.StandardConnection) graphql.Marshaler {
-	return ec._StandardConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx context.Context, sel ast.SelectionSet, v *generated.StandardConnection) graphql.Marshaler {
@@ -467382,10 +470145,6 @@ func (ec *executionContext) unmarshalNStandardWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSubcontrol2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrol(ctx context.Context, sel ast.SelectionSet, v generated.Subcontrol) graphql.Marshaler {
-	return ec._Subcontrol(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrol(ctx context.Context, sel ast.SelectionSet, v *generated.Subcontrol) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467394,10 +470153,6 @@ func (ec *executionContext) marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._Subcontrol(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSubcontrolConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx context.Context, sel ast.SelectionSet, v generated.SubcontrolConnection) graphql.Marshaler {
-	return ec._SubcontrolConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SubcontrolConnection) graphql.Marshaler {
@@ -467466,10 +470221,6 @@ func (ec *executionContext) unmarshalNSubcontrolWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSubprocessor2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessor(ctx context.Context, sel ast.SelectionSet, v generated.Subprocessor) graphql.Marshaler {
-	return ec._Subprocessor(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessor(ctx context.Context, sel ast.SelectionSet, v *generated.Subprocessor) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467478,10 +470229,6 @@ func (ec *executionContext) marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._Subprocessor(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSubprocessorConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx context.Context, sel ast.SelectionSet, v generated.SubprocessorConnection) graphql.Marshaler {
-	return ec._SubprocessorConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SubprocessorConnection) graphql.Marshaler {
@@ -467520,10 +470267,6 @@ func (ec *executionContext) unmarshalNSubprocessorWhereInput2ᚖgithubᚗcomᚋt
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSubscriber2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx context.Context, sel ast.SelectionSet, v generated.Subscriber) graphql.Marshaler {
-	return ec._Subscriber(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx context.Context, sel ast.SelectionSet, v *generated.Subscriber) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467532,10 +470275,6 @@ func (ec *executionContext) marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._Subscriber(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSubscriberConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx context.Context, sel ast.SelectionSet, v generated.SubscriberConnection) graphql.Marshaler {
-	return ec._SubscriberConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SubscriberConnection) graphql.Marshaler {
@@ -467574,10 +470313,6 @@ func (ec *executionContext) unmarshalNSubscriberWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSystemDetail2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetail(ctx context.Context, sel ast.SelectionSet, v generated.SystemDetail) graphql.Marshaler {
-	return ec._SystemDetail(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSystemDetail2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetail(ctx context.Context, sel ast.SelectionSet, v *generated.SystemDetail) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467586,10 +470321,6 @@ func (ec *executionContext) marshalNSystemDetail2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._SystemDetail(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSystemDetailConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection(ctx context.Context, sel ast.SelectionSet, v generated.SystemDetailConnection) graphql.Marshaler {
-	return ec._SystemDetailConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSystemDetailConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SystemDetailConnection) graphql.Marshaler {
@@ -467638,10 +470369,6 @@ func (ec *executionContext) unmarshalNSystemDetailWhereInput2ᚖgithubᚗcomᚋt
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTFASetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASetting(ctx context.Context, sel ast.SelectionSet, v generated.TFASetting) graphql.Marshaler {
-	return ec._TFASetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASetting(ctx context.Context, sel ast.SelectionSet, v *generated.TFASetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467650,10 +470377,6 @@ func (ec *executionContext) marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._TFASetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTFASettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.TFASettingConnection) graphql.Marshaler {
-	return ec._TFASettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTFASettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TFASettingConnection) graphql.Marshaler {
@@ -467692,10 +470415,6 @@ func (ec *executionContext) unmarshalNTFASettingWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTagDefinition2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx context.Context, sel ast.SelectionSet, v generated.TagDefinition) graphql.Marshaler {
-	return ec._TagDefinition(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx context.Context, sel ast.SelectionSet, v *generated.TagDefinition) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467704,10 +470423,6 @@ func (ec *executionContext) marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._TagDefinition(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTagDefinitionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection(ctx context.Context, sel ast.SelectionSet, v generated.TagDefinitionConnection) graphql.Marshaler {
-	return ec._TagDefinitionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TagDefinitionConnection) graphql.Marshaler {
@@ -467746,10 +470461,6 @@ func (ec *executionContext) unmarshalNTagDefinitionWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTask2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTask(ctx context.Context, sel ast.SelectionSet, v generated.Task) graphql.Marshaler {
-	return ec._Task(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTask(ctx context.Context, sel ast.SelectionSet, v *generated.Task) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467758,10 +470469,6 @@ func (ec *executionContext) marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Task(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTaskConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx context.Context, sel ast.SelectionSet, v generated.TaskConnection) graphql.Marshaler {
-	return ec._TaskConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TaskConnection) graphql.Marshaler {
@@ -467810,10 +470517,6 @@ func (ec *executionContext) unmarshalNTaskWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTemplate2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplate(ctx context.Context, sel ast.SelectionSet, v generated.Template) graphql.Marshaler {
-	return ec._Template(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplate(ctx context.Context, sel ast.SelectionSet, v *generated.Template) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467822,10 +470525,6 @@ func (ec *executionContext) marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._Template(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTemplateConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx context.Context, sel ast.SelectionSet, v generated.TemplateConnection) graphql.Marshaler {
-	return ec._TemplateConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TemplateConnection) graphql.Marshaler {
@@ -467900,10 +470599,6 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalNTrustCenter2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenter(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenter) graphql.Marshaler {
-	return ec._TrustCenter(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenter2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenter(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenter) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467914,10 +470609,6 @@ func (ec *executionContext) marshalNTrustCenter2ᚖgithubᚗcomᚋtheopenlaneᚋ
 	return ec._TrustCenter(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterCompliance2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterCompliance) graphql.Marshaler {
-	return ec._TrustCenterCompliance(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterCompliance) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467926,10 +470617,6 @@ func (ec *executionContext) marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._TrustCenterCompliance(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterComplianceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterComplianceConnection) graphql.Marshaler {
-	return ec._TrustCenterComplianceConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterComplianceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterComplianceConnection) graphql.Marshaler {
@@ -467968,10 +470655,6 @@ func (ec *executionContext) unmarshalNTrustCenterComplianceWhereInput2ᚖgithub�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterConnection) graphql.Marshaler {
-	return ec._TrustCenterConnection(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467982,10 +470665,6 @@ func (ec *executionContext) marshalNTrustCenterConnection2ᚖgithubᚗcomᚋtheo
 	return ec._TrustCenterConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterDoc2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterDoc) graphql.Marshaler {
-	return ec._TrustCenterDoc(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterDoc) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -467994,10 +470673,6 @@ func (ec *executionContext) marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._TrustCenterDoc(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterDocConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterDocConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterDocConnection) graphql.Marshaler {
-	return ec._TrustCenterDocConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterDocConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterDocConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterDocConnection) graphql.Marshaler {
@@ -468056,10 +470731,6 @@ func (ec *executionContext) unmarshalNTrustCenterDocWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterEntity2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntity(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterEntity) graphql.Marshaler {
-	return ec._TrustCenterEntity(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntity(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterEntity) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -468068,10 +470739,6 @@ func (ec *executionContext) marshalNTrustCenterEntity2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._TrustCenterEntity(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterEntityConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterEntityConnection) graphql.Marshaler {
-	return ec._TrustCenterEntityConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterEntityConnection) graphql.Marshaler {
@@ -468110,10 +470777,6 @@ func (ec *executionContext) unmarshalNTrustCenterEntityWhereInput2ᚖgithubᚗco
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterFAQ2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterFAQ(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterFAQ) graphql.Marshaler {
-	return ec._TrustCenterFAQ(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterFAQ2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterFAQ(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterFAQ) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -468122,10 +470785,6 @@ func (ec *executionContext) marshalNTrustCenterFAQ2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._TrustCenterFAQ(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterFAQConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterFAQConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterFAQConnection) graphql.Marshaler {
-	return ec._TrustCenterFAQConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterFAQConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterFAQConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterFAQConnection) graphql.Marshaler {
@@ -468164,10 +470823,6 @@ func (ec *executionContext) unmarshalNTrustCenterFAQWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterNDARequest2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequest(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterNDARequest) graphql.Marshaler {
-	return ec._TrustCenterNDARequest(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterNDARequest2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequest(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequest) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -468176,10 +470831,6 @@ func (ec *executionContext) marshalNTrustCenterNDARequest2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._TrustCenterNDARequest(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterNDARequestConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterNDARequestConnection) graphql.Marshaler {
-	return ec._TrustCenterNDARequestConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterNDARequestConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequestConnection) graphql.Marshaler {
@@ -468259,10 +470910,6 @@ func (ec *executionContext) marshalNTrustCenterOrderField2ᚖgithubᚗcomᚋtheo
 	return v
 }
 
-func (ec *executionContext) marshalNTrustCenterSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterSetting) graphql.Marshaler {
-	return ec._TrustCenterSetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterSetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -468271,10 +470918,6 @@ func (ec *executionContext) marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopen
 		return graphql.Null
 	}
 	return ec._TrustCenterSetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterSettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterSettingConnection) graphql.Marshaler {
-	return ec._TrustCenterSettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterSettingConnection) graphql.Marshaler {
@@ -468333,10 +470976,6 @@ func (ec *executionContext) unmarshalNTrustCenterSettingWhereInput2ᚖgithubᚗc
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterSubprocessor2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterSubprocessor) graphql.Marshaler {
-	return ec._TrustCenterSubprocessor(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterSubprocessor) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -468345,10 +470984,6 @@ func (ec *executionContext) marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessor(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterSubprocessorConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterSubprocessorConnection) graphql.Marshaler {
-	return ec._TrustCenterSubprocessorConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterSubprocessorConnection) graphql.Marshaler {
@@ -468397,10 +471032,6 @@ func (ec *executionContext) marshalNTrustCenterTrustCenterPreviewStatus2github�
 	return v
 }
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterWatermarkConfig) graphql.Marshaler {
-	return ec._TrustCenterWatermarkConfig(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterWatermarkConfig) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -468409,10 +471040,6 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._TrustCenterWatermarkConfig(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterWatermarkConfigConnection) graphql.Marshaler {
-	return ec._TrustCenterWatermarkConfigConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterWatermarkConfigConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterWatermarkConfigConnection) graphql.Marshaler {
@@ -468876,10 +471503,6 @@ func (ec *executionContext) unmarshalNUpdateWorkflowDefinitionInput2githubᚗcom
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUser(ctx context.Context, sel ast.SelectionSet, v generated.User) graphql.Marshaler {
-	return ec._User(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUser(ctx context.Context, sel ast.SelectionSet, v *generated.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -468898,10 +471521,6 @@ func (ec *executionContext) unmarshalNUserAuthProvider2githubᚗcomᚋtheopenlan
 
 func (ec *executionContext) marshalNUserAuthProvider2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAuthProvider(ctx context.Context, sel ast.SelectionSet, v enums.AuthProvider) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNUserConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserConnection(ctx context.Context, sel ast.SelectionSet, v generated.UserConnection) graphql.Marshaler {
-	return ec._UserConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUserConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserConnection(ctx context.Context, sel ast.SelectionSet, v *generated.UserConnection) graphql.Marshaler {
@@ -468945,10 +471564,6 @@ func (ec *executionContext) marshalNUserRole2githubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
-func (ec *executionContext) marshalNUserSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v generated.UserSetting) graphql.Marshaler {
-	return ec._UserSetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v *generated.UserSetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -468957,10 +471572,6 @@ func (ec *executionContext) marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋ
 		return graphql.Null
 	}
 	return ec._UserSetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNUserSettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.UserSettingConnection) graphql.Marshaler {
-	return ec._UserSettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUserSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.UserSettingConnection) graphql.Marshaler {
@@ -469014,10 +471625,6 @@ func (ec *executionContext) unmarshalNUserWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNVendorRiskScore2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScore(ctx context.Context, sel ast.SelectionSet, v generated.VendorRiskScore) graphql.Marshaler {
-	return ec._VendorRiskScore(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorRiskScore2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScore(ctx context.Context, sel ast.SelectionSet, v *generated.VendorRiskScore) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469026,10 +471633,6 @@ func (ec *executionContext) marshalNVendorRiskScore2ᚖgithubᚗcomᚋtheopenlan
 		return graphql.Null
 	}
 	return ec._VendorRiskScore(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorRiskScoreConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreConnection(ctx context.Context, sel ast.SelectionSet, v generated.VendorRiskScoreConnection) graphql.Marshaler {
-	return ec._VendorRiskScoreConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorRiskScoreConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreConnection(ctx context.Context, sel ast.SelectionSet, v *generated.VendorRiskScoreConnection) graphql.Marshaler {
@@ -469108,10 +471711,6 @@ func (ec *executionContext) unmarshalNVendorRiskScoreWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNVendorScoringConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfig(ctx context.Context, sel ast.SelectionSet, v generated.VendorScoringConfig) graphql.Marshaler {
-	return ec._VendorScoringConfig(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorScoringConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfig(ctx context.Context, sel ast.SelectionSet, v *generated.VendorScoringConfig) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469120,10 +471719,6 @@ func (ec *executionContext) marshalNVendorScoringConfig2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._VendorScoringConfig(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorScoringConfigConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigConnection(ctx context.Context, sel ast.SelectionSet, v generated.VendorScoringConfigConnection) graphql.Marshaler {
-	return ec._VendorScoringConfigConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorScoringConfigConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigConnection(ctx context.Context, sel ast.SelectionSet, v *generated.VendorScoringConfigConnection) graphql.Marshaler {
@@ -469172,10 +471767,6 @@ func (ec *executionContext) unmarshalNVendorScoringConfigWhereInput2ᚖgithubᚗ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNVulnerability2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerability(ctx context.Context, sel ast.SelectionSet, v generated.Vulnerability) graphql.Marshaler {
-	return ec._Vulnerability(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVulnerability2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerability(ctx context.Context, sel ast.SelectionSet, v *generated.Vulnerability) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469184,10 +471775,6 @@ func (ec *executionContext) marshalNVulnerability2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._Vulnerability(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVulnerabilityConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx context.Context, sel ast.SelectionSet, v generated.VulnerabilityConnection) graphql.Marshaler {
-	return ec._VulnerabilityConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx context.Context, sel ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
@@ -469236,10 +471823,6 @@ func (ec *executionContext) unmarshalNVulnerabilityWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWebauthnConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWebauthnConnection(ctx context.Context, sel ast.SelectionSet, v generated.WebauthnConnection) graphql.Marshaler {
-	return ec._WebauthnConnection(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWebauthnConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWebauthnConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WebauthnConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469271,10 +471854,6 @@ func (ec *executionContext) unmarshalNWebauthnWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowAssignment2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowAssignment) graphql.Marshaler {
-	return ec._WorkflowAssignment(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowAssignment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469283,10 +471862,6 @@ func (ec *executionContext) marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopen
 		return graphql.Null
 	}
 	return ec._WorkflowAssignment(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowAssignmentConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowAssignmentConnection) graphql.Marshaler {
-	return ec._WorkflowAssignmentConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowAssignmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowAssignmentConnection) graphql.Marshaler {
@@ -469320,10 +471895,6 @@ func (ec *executionContext) marshalNWorkflowAssignmentOrderField2ᚖgithubᚗcom
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowAssignmentTarget2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTarget(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowAssignmentTarget) graphql.Marshaler {
-	return ec._WorkflowAssignmentTarget(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowAssignmentTarget2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTarget(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowAssignmentTarget) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469332,10 +471903,6 @@ func (ec *executionContext) marshalNWorkflowAssignmentTarget2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._WorkflowAssignmentTarget(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowAssignmentTargetConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTargetConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowAssignmentTargetConnection) graphql.Marshaler {
-	return ec._WorkflowAssignmentTargetConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowAssignmentTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTargetConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowAssignmentTargetConnection) graphql.Marshaler {
@@ -469399,10 +471966,6 @@ func (ec *executionContext) marshalNWorkflowAssignmentWorkflowAssignmentStatus2g
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowDefinition2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowDefinition) graphql.Marshaler {
-	return ec._WorkflowDefinition(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowDefinition) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469411,10 +471974,6 @@ func (ec *executionContext) marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopen
 		return graphql.Null
 	}
 	return ec._WorkflowDefinition(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowDefinitionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowDefinitionConnection) graphql.Marshaler {
-	return ec._WorkflowDefinitionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowDefinitionConnection) graphql.Marshaler {
@@ -469463,10 +472022,6 @@ func (ec *executionContext) marshalNWorkflowDefinitionWorkflowKind2githubᚗcom�
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowEvent2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEvent(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowEvent) graphql.Marshaler {
-	return ec._WorkflowEvent(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEvent(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowEvent) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469475,10 +472030,6 @@ func (ec *executionContext) marshalNWorkflowEvent2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._WorkflowEvent(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowEventConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEventConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowEventConnection) graphql.Marshaler {
-	return ec._WorkflowEventConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEventConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowEventConnection) graphql.Marshaler {
@@ -469527,10 +472078,6 @@ func (ec *executionContext) marshalNWorkflowEventWorkflowEventType2githubᚗcom�
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowInstance2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstance(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowInstance) graphql.Marshaler {
-	return ec._WorkflowInstance(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowInstance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.WorkflowInstance) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
@@ -469555,10 +472102,6 @@ func (ec *executionContext) marshalNWorkflowInstance2ᚖgithubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return ec._WorkflowInstance(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowInstanceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowInstanceConnection) graphql.Marshaler {
-	return ec._WorkflowInstanceConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowInstanceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowInstanceConnection) graphql.Marshaler {
@@ -469607,10 +472150,6 @@ func (ec *executionContext) marshalNWorkflowInstanceWorkflowInstanceState2github
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowObjectRef2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRef(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowObjectRef) graphql.Marshaler {
-	return ec._WorkflowObjectRef(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRef(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowObjectRef) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469619,10 +472158,6 @@ func (ec *executionContext) marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._WorkflowObjectRef(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowObjectRefConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowObjectRefConnection) graphql.Marshaler {
-	return ec._WorkflowObjectRefConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowObjectRefConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowObjectRefConnection) graphql.Marshaler {
@@ -469659,10 +472194,6 @@ func (ec *executionContext) marshalNWorkflowObjectRefOrderField2ᚖgithubᚗcom�
 func (ec *executionContext) unmarshalNWorkflowObjectRefWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefWhereInput(ctx context.Context, v any) (*generated.WorkflowObjectRefWhereInput, error) {
 	res, err := ec.unmarshalInputWorkflowObjectRefWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNWorkflowProposal2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowProposal) graphql.Marshaler {
-	return ec._WorkflowProposal(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowProposal2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowProposalᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.WorkflowProposal) graphql.Marshaler {
@@ -477664,7 +480195,7 @@ func (ec *executionContext) unmarshalOInviteWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚐRawMessage(ctx context.Context, v any) (json.RawMessage, error) {
+func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx context.Context, v any) (jsontext.Value, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -477672,7 +480203,7 @@ func (ec *executionContext) unmarshalOJSON2encodingᚋjsonᚐRawMessage(ctx cont
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOJSON2encodingᚋjsonᚐRawMessage(ctx context.Context, sel ast.SelectionSet, v json.RawMessage) graphql.Marshaler {
+func (ec *executionContext) marshalOJSON2encodingᚋjsonᚋjsontextᚐValue(ctx context.Context, sel ast.SelectionSet, v jsontext.Value) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

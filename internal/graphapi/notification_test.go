@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -27,10 +29,10 @@ func TestMutationCreateNotification(t *testing.T) {
 				ObjectType:       "program",
 				Title:            "Test Notification",
 				Body:             "This is a test notification body",
-				OwnerID:          &sharedTestUser1.OrganizationID,
+				OwnerID:          &th.SharedTestUser1.OrganizationID,
 			},
-			client: suite.client.api,
-			ctx:    sharedSystemAdminUser.UserCtx,
+			client: suite.Client.API,
+			ctx:    th.SharedSystemAdminUser.UserCtx,
 		},
 		{
 			name: "not authorized, create notification as member",
@@ -39,11 +41,11 @@ func TestMutationCreateNotification(t *testing.T) {
 				ObjectType:       "program",
 				Title:            "Test Notification",
 				Body:             "This is a test notification body",
-				OwnerID:          &sharedViewOnlyUser.OrganizationID,
+				OwnerID:          &th.SharedViewOnlyUser.OrganizationID,
 			},
-			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedViewOnlyUser.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name: "not authorized, create notification as org owner/admin",
@@ -52,11 +54,11 @@ func TestMutationCreateNotification(t *testing.T) {
 				ObjectType:       "program",
 				Title:            "Test Notification",
 				Body:             "This is a test notification body",
-				OwnerID:          &sharedTestUser1.OrganizationID,
+				OwnerID:          &th.SharedTestUser1.OrganizationID,
 			},
-			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser1.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -76,7 +78,7 @@ func TestMutationCreateNotification(t *testing.T) {
 			assert.Check(t, is.Equal(tc.request.Body, resp.CreateNotification.Notification.Body))
 			assert.Check(t, is.Equal(tc.request.ObjectType, resp.CreateNotification.Notification.ObjectType))
 
-			(&Cleanup[*generated.NotificationDeleteOne]{client: suite.client.db.Notification, ID: resp.CreateNotification.Notification.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+			(&th.Cleanup[*generated.NotificationDeleteOne]{Client: suite.Client.DB.Notification, ID: resp.CreateNotification.Notification.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 		})
 	}
 }

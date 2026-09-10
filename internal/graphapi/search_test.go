@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/theopenlane/core/v2/internal/graphapi/testclient"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -13,11 +15,11 @@ import (
 func TestGlobalSearch(t *testing.T) {
 	t.Parallel()
 
-	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
-	testSearchUser := localTestOrg.owner
-	testViewOnlyUser := localTestOrg.member
+	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	testSearchUser := localTestOrg.Owner
+	testViewOnlyUser := localTestOrg.Member
 
-	testAnotherUser := suite.userBuilder(context.Background(), t)
+	testAnotherUser := suite.UserBuilder(context.Background(), t)
 
 	// create multiple objects to be searched by testSearchUser
 	// dont use objects that might be created by the system, that could be returned such as system owned controls, policies, etc
@@ -25,14 +27,14 @@ func TestGlobalSearch(t *testing.T) {
 	numContacts := 10
 	contactIDs := []string{}
 	for i := range numContacts {
-		contact := (&ContactBuilder{client: suite.client, Name: fmt.Sprintf("Test A1CD2D Contact %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		contact := (&th.ContactBuilder{Client: suite.Client, Name: fmt.Sprintf("Test A1CD2D Contact %d", i)}).MustNew(testSearchUser.UserCtx, t)
 		contactIDs = append(contactIDs, contact.ID)
 	}
 
 	numPrograms := 3
 	programIDs := []string{}
 	for i := range numPrograms {
-		program := (&ProgramBuilder{client: suite.client, Name: fmt.Sprintf("Test A1CD2D Program %d", i)}).MustNew(testSearchUser.UserCtx, t)
+		program := (&th.ProgramBuilder{Client: suite.Client, Name: fmt.Sprintf("Test A1CD2D Program %d", i)}).MustNew(testSearchUser.UserCtx, t)
 		programIDs = append(programIDs, program.ID)
 	}
 
@@ -48,7 +50,7 @@ func TestGlobalSearch(t *testing.T) {
 	}{
 		{
 			name:             "happy path",
-			client:           suite.client.api,
+			client:           suite.Client.API,
 			ctx:              testSearchUser.UserCtx,
 			query:            "A1CD2D",
 			expectResults:    true,
@@ -57,7 +59,7 @@ func TestGlobalSearch(t *testing.T) {
 		},
 		{
 			name:             "happy path, case insensitive with both",
-			client:           suite.client.api,
+			client:           suite.Client.API,
 			ctx:              testSearchUser.UserCtx,
 			query:            "a1cd2d",
 			expectResults:    true,
@@ -66,7 +68,7 @@ func TestGlobalSearch(t *testing.T) {
 		},
 		{
 			name:             "happy path, case insensitive just contacts",
-			client:           suite.client.api,
+			client:           suite.Client.API,
 			ctx:              testSearchUser.UserCtx,
 			query:            "a1cd2d con",
 			expectResults:    true,
@@ -75,7 +77,7 @@ func TestGlobalSearch(t *testing.T) {
 		},
 		{
 			name:             "happy path, view only user",
-			client:           suite.client.api,
+			client:           suite.Client.API,
 			ctx:              testViewOnlyUser.UserCtx,
 			query:            "A1CD2D",
 			expectResults:    true,
@@ -84,21 +86,21 @@ func TestGlobalSearch(t *testing.T) {
 		},
 		{
 			name:          "no results",
-			client:        suite.client.api,
+			client:        suite.Client.API,
 			ctx:           testSearchUser.UserCtx,
 			query:         "NonExistent RAnD0M Str!ng F0r Sanity",
 			expectResults: false,
 		},
 		{
 			name:          "no results, another user",
-			client:        suite.client.api,
+			client:        suite.Client.API,
 			ctx:           testAnotherUser.UserCtx,
 			query:         "A1CD2D",
 			expectResults: false,
 		},
 		{
 			name:        "empty query",
-			client:      suite.client.api,
+			client:      suite.Client.API,
 			ctx:         testSearchUser.UserCtx,
 			query:       "",
 			errExpected: "search query is too short",
@@ -139,6 +141,6 @@ func TestGlobalSearch(t *testing.T) {
 	}
 
 	// clean up the created objects
-	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
-	cleanupOrganizationDataWithContext(testAnotherUser.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(testAnotherUser.UserCtx, t)
 }

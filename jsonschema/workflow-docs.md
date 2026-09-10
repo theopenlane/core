@@ -42,8 +42,8 @@ Schema for Openlane workflow definitions
 ```
 
    
-<a name="actions"></a>
-## actions\[\]: array
+<a name="triggers"></a>
+## triggers\[\]: array
 
 **Items**
 
@@ -51,7 +51,9 @@ Schema for Openlane workflow definitions
 
 ```json
 [
-    {}
+    {
+        "selector": {}
+    }
 ]
 ```
 
@@ -70,14 +72,8 @@ Schema for Openlane workflow definitions
 ```
 
    
-<a name="metadata"></a>
-## metadata: object
-
-**No properties.**
-
-   
-<a name="triggers"></a>
-## triggers\[\]: array
+<a name="actions"></a>
+## actions\[\]: array
 
 **Items**
 
@@ -85,11 +81,15 @@ Schema for Openlane workflow definitions
 
 ```json
 [
-    {
-        "selector": {}
-    }
+    {}
 ]
 ```
+
+   
+<a name="metadata"></a>
+## metadata: object
+
+**No properties.**
 
    
 <a name="defsworkflowselector"></a>
@@ -104,6 +104,13 @@ Schema for Openlane workflow definitions
 |[**objectTypes**](#defsworkflowselectorobjecttypes)|`string[]`|||
 
 **Additional Properties:** not allowed   
+   
+<a name="defsworkflowselectortagids"></a>
+### $defs/WorkflowSelector\.tagIds\[\]: array
+
+**Items**
+
+**Item Type:** `string`   
    
 <a name="defsworkflowselectorgroupids"></a>
 ### $defs/WorkflowSelector\.groupIds\[\]: array
@@ -122,11 +129,4 @@ The object type the workflow applies to
 
 **Item Type:** `string`   
 **Item Enum:** `"ActionPlan"`, `"Assessment"`, `"AssessmentResponse"`, `"Campaign"`, `"CampaignTarget"`, `"Control"`, `"Evidence"`, `"Finding"`, `"IdentityHolder"`, `"InternalPolicy"`, `"Platform"`, `"Procedure"`, `"Remediation"`, `"Risk"`, `"Subcontrol"`, `"Task"`, `"Vulnerability"`   
-   
-<a name="defsworkflowselectortagids"></a>
-### $defs/WorkflowSelector\.tagIds\[\]: array
-
-**Items**
-
-**Item Type:** `string`   
 

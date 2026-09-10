@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/v2/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/platform"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
@@ -49,18 +50,22 @@ type Scan struct {
 	InternalNotes *string `json:"internal_notes,omitempty"`
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID *string `json:"system_internal_id,omitempty"`
-	// who reviewed the scan when no user or group is linked
+	// who reviewed the scan when no user, group, or identity holder is linked
 	ReviewedBy string `json:"reviewed_by,omitempty"`
 	// the user id that reviewed the scan
 	ReviewedByUserID string `json:"reviewed_by_user_id,omitempty"`
 	// the group id that reviewed the scan
 	ReviewedByGroupID string `json:"reviewed_by_group_id,omitempty"`
-	// who the scan is assigned to when no user or group is linked
+	// the identity holder id that reviewed the scan
+	ReviewedByIdentityHolderID string `json:"reviewed_by_identity_holder_id,omitempty"`
+	// who the scan is assigned to when no user, group, or identity holder is linked
 	AssignedTo string `json:"assigned_to,omitempty"`
 	// the user id assigned to the scan
 	AssignedToUserID string `json:"assigned_to_user_id,omitempty"`
 	// the group id assigned to the scan
 	AssignedToGroupID string `json:"assigned_to_group_id,omitempty"`
+	// the identity holder id assigned to the scan
+	AssignedToIdentityHolderID string `json:"assigned_to_identity_holder_id,omitempty"`
 	// the environment of the scan
 	EnvironmentName string `json:"environment_name,omitempty"`
 	// the environment of the scan
@@ -112,10 +117,14 @@ type ScanEdges struct {
 	ReviewedByUser *User `json:"reviewed_by_user,omitempty"`
 	// ReviewedByGroup holds the value of the reviewed_by_group edge.
 	ReviewedByGroup *Group `json:"reviewed_by_group,omitempty"`
+	// ReviewedByIdentityHolder holds the value of the reviewed_by_identity_holder edge.
+	ReviewedByIdentityHolder *IdentityHolder `json:"reviewed_by_identity_holder,omitempty"`
 	// AssignedToUser holds the value of the assigned_to_user edge.
 	AssignedToUser *User `json:"assigned_to_user,omitempty"`
 	// AssignedToGroup holds the value of the assigned_to_group edge.
 	AssignedToGroup *Group `json:"assigned_to_group,omitempty"`
+	// AssignedToIdentityHolder holds the value of the assigned_to_identity_holder edge.
+	AssignedToIdentityHolder *IdentityHolder `json:"assigned_to_identity_holder,omitempty"`
 	// Environment holds the value of the environment edge.
 	Environment *CustomTypeEnum `json:"environment,omitempty"`
 	// Scope holds the value of the scope edge.
@@ -152,9 +161,9 @@ type ScanEdges struct {
 	PerformedByGroup *Group `json:"performed_by_group,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [26]bool
 	// totalCount holds the count of the edges above.
-	totalCount [24]map[string]int
+	totalCount [26]map[string]int
 
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
@@ -223,12 +232,23 @@ func (e ScanEdges) ReviewedByGroupOrErr() (*Group, error) {
 	return nil, &NotLoadedError{edge: "reviewed_by_group"}
 }
 
+// ReviewedByIdentityHolderOrErr returns the ReviewedByIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) ReviewedByIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.ReviewedByIdentityHolder != nil {
+		return e.ReviewedByIdentityHolder, nil
+	} else if e.loadedTypes[5] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "reviewed_by_identity_holder"}
+}
+
 // AssignedToUserOrErr returns the AssignedToUser value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ScanEdges) AssignedToUserOrErr() (*User, error) {
 	if e.AssignedToUser != nil {
 		return e.AssignedToUser, nil
-	} else if e.loadedTypes[5] {
+	} else if e.loadedTypes[6] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigned_to_user"}
@@ -239,10 +259,21 @@ func (e ScanEdges) AssignedToUserOrErr() (*User, error) {
 func (e ScanEdges) AssignedToGroupOrErr() (*Group, error) {
 	if e.AssignedToGroup != nil {
 		return e.AssignedToGroup, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "assigned_to_group"}
+}
+
+// AssignedToIdentityHolderOrErr returns the AssignedToIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e ScanEdges) AssignedToIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.AssignedToIdentityHolder != nil {
+		return e.AssignedToIdentityHolder, nil
+	} else if e.loadedTypes[8] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "assigned_to_identity_holder"}
 }
 
 // EnvironmentOrErr returns the Environment value or an error if the edge
@@ -250,7 +281,7 @@ func (e ScanEdges) AssignedToGroupOrErr() (*Group, error) {
 func (e ScanEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 	if e.Environment != nil {
 		return e.Environment, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "environment"}
@@ -261,7 +292,7 @@ func (e ScanEdges) EnvironmentOrErr() (*CustomTypeEnum, error) {
 func (e ScanEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 	if e.Scope != nil {
 		return e.Scope, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: customtypeenum.Label}
 	}
 	return nil, &NotLoadedError{edge: "scope"}
@@ -270,7 +301,7 @@ func (e ScanEdges) ScopeOrErr() (*CustomTypeEnum, error) {
 // AssetsOrErr returns the Assets value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) AssetsOrErr() ([]*Asset, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Assets, nil
 	}
 	return nil, &NotLoadedError{edge: "assets"}
@@ -279,7 +310,7 @@ func (e ScanEdges) AssetsOrErr() ([]*Asset, error) {
 // EntitiesOrErr returns the Entities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) EntitiesOrErr() ([]*Entity, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Entities, nil
 	}
 	return nil, &NotLoadedError{edge: "entities"}
@@ -288,7 +319,7 @@ func (e ScanEdges) EntitiesOrErr() ([]*Entity, error) {
 // EvidenceOrErr returns the Evidence value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) EvidenceOrErr() ([]*Evidence, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
@@ -297,7 +328,7 @@ func (e ScanEdges) EvidenceOrErr() ([]*Evidence, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -306,7 +337,7 @@ func (e ScanEdges) FilesOrErr() ([]*File, error) {
 // RemediationsOrErr returns the Remediations value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) RemediationsOrErr() ([]*Remediation, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.Remediations, nil
 	}
 	return nil, &NotLoadedError{edge: "remediations"}
@@ -315,7 +346,7 @@ func (e ScanEdges) RemediationsOrErr() ([]*Remediation, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[16] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -324,7 +355,7 @@ func (e ScanEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[17] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -333,7 +364,7 @@ func (e ScanEdges) TasksOrErr() ([]*Task, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[18] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -342,7 +373,7 @@ func (e ScanEdges) PlatformsOrErr() ([]*Platform, error) {
 // VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[19] {
 		return e.Vulnerabilities, nil
 	}
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
@@ -351,7 +382,7 @@ func (e ScanEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[20] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -360,7 +391,7 @@ func (e ScanEdges) ControlsOrErr() ([]*Control, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[21] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -369,7 +400,7 @@ func (e ScanEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ScanEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[22] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -380,7 +411,7 @@ func (e ScanEdges) FindingsOrErr() ([]*Finding, error) {
 func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 	if e.GeneratedByPlatform != nil {
 		return e.GeneratedByPlatform, nil
-	} else if e.loadedTypes[21] {
+	} else if e.loadedTypes[23] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "generated_by_platform"}
@@ -391,7 +422,7 @@ func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 	if e.PerformedByUser != nil {
 		return e.PerformedByUser, nil
-	} else if e.loadedTypes[22] {
+	} else if e.loadedTypes[24] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_user"}
@@ -402,7 +433,7 @@ func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 func (e ScanEdges) PerformedByGroupOrErr() (*Group, error) {
 	if e.PerformedByGroup != nil {
 		return e.PerformedByGroup, nil
-	} else if e.loadedTypes[23] {
+	} else if e.loadedTypes[25] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_group"}
@@ -421,7 +452,7 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case scan.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
+		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldReviewedByIdentityHolderID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldAssignedToIdentityHolderID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scan.FieldCreatedAt, scan.FieldUpdatedAt, scan.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -543,6 +574,12 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ReviewedByGroupID = value.String
 			}
+		case scan.FieldReviewedByIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByIdentityHolderID = value.String
+			}
 		case scan.FieldAssignedTo:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field assigned_to", values[i])
@@ -560,6 +597,12 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field assigned_to_group_id", values[i])
 			} else if value.Valid {
 				_m.AssignedToGroupID = value.String
+			}
+		case scan.FieldAssignedToIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.AssignedToIdentityHolderID = value.String
 			}
 		case scan.FieldEnvironmentName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -709,6 +752,11 @@ func (_m *Scan) QueryReviewedByGroup() *GroupQuery {
 	return NewScanClient(_m.config).QueryReviewedByGroup(_m)
 }
 
+// QueryReviewedByIdentityHolder queries the "reviewed_by_identity_holder" edge of the Scan entity.
+func (_m *Scan) QueryReviewedByIdentityHolder() *IdentityHolderQuery {
+	return NewScanClient(_m.config).QueryReviewedByIdentityHolder(_m)
+}
+
 // QueryAssignedToUser queries the "assigned_to_user" edge of the Scan entity.
 func (_m *Scan) QueryAssignedToUser() *UserQuery {
 	return NewScanClient(_m.config).QueryAssignedToUser(_m)
@@ -717,6 +765,11 @@ func (_m *Scan) QueryAssignedToUser() *UserQuery {
 // QueryAssignedToGroup queries the "assigned_to_group" edge of the Scan entity.
 func (_m *Scan) QueryAssignedToGroup() *GroupQuery {
 	return NewScanClient(_m.config).QueryAssignedToGroup(_m)
+}
+
+// QueryAssignedToIdentityHolder queries the "assigned_to_identity_holder" edge of the Scan entity.
+func (_m *Scan) QueryAssignedToIdentityHolder() *IdentityHolderQuery {
+	return NewScanClient(_m.config).QueryAssignedToIdentityHolder(_m)
 }
 
 // QueryEnvironment queries the "environment" edge of the Scan entity.
@@ -878,6 +931,9 @@ func (_m *Scan) String() string {
 	builder.WriteString("reviewed_by_group_id=")
 	builder.WriteString(_m.ReviewedByGroupID)
 	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_identity_holder_id=")
+	builder.WriteString(_m.ReviewedByIdentityHolderID)
+	builder.WriteString(", ")
 	builder.WriteString("assigned_to=")
 	builder.WriteString(_m.AssignedTo)
 	builder.WriteString(", ")
@@ -886,6 +942,9 @@ func (_m *Scan) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("assigned_to_group_id=")
 	builder.WriteString(_m.AssignedToGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to_identity_holder_id=")
+	builder.WriteString(_m.AssignedToIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("environment_name=")
 	builder.WriteString(_m.EnvironmentName)

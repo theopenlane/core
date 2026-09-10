@@ -312,10 +312,6 @@ func (ec *executionContext) _TagDefinitionUpdatePayload(ctx context.Context, sel
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionBulkCreatePayload) graphql.Marshaler {
-	return ec._TagDefinitionBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -324,10 +320,6 @@ func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗc
 		return graphql.Null
 	}
 	return ec._TagDefinitionBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTagDefinitionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionCreatePayload) graphql.Marshaler {
-	return ec._TagDefinitionCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTagDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionCreatePayload) graphql.Marshaler {
@@ -340,10 +332,6 @@ func (ec *executionContext) marshalNTagDefinitionCreatePayload2ᚖgithubᚗcom�
 	return ec._TagDefinitionCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTagDefinitionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionDeletePayload) graphql.Marshaler {
-	return ec._TagDefinitionDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTagDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -352,10 +340,6 @@ func (ec *executionContext) marshalNTagDefinitionDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._TagDefinitionDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTagDefinitionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TagDefinitionUpdatePayload) graphql.Marshaler {
-	return ec._TagDefinitionUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTagDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionUpdatePayload) graphql.Marshaler {

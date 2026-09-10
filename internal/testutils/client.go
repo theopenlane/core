@@ -241,6 +241,48 @@ func MockStorageServiceWithValidation(t *testing.T, uploader storage.UploaderFun
 	return storageService, err
 }
 
+// MockStorageServiceWithBackup creates a storage service whose source provider replicates to a
+// backup provider, returning the service and both mock providers
+func MockStorageServiceWithBackup(t *testing.T, source storage.ProviderType, readFromBackup bool) (*objects.Service, *mock_shared.MockProvider, *mock_shared.MockProvider, error) {
+	sourceProvider := mock_shared.NewMockProvider(t)
+	backupProvider := mock_shared.NewMockProvider(t)
+
+	pool := eddy.NewClientPool[storage.Provider](time.Minute)
+	clientService := eddy.NewClientService(pool, eddy.WithConfigClone[
+		storage.Provider,
+		storage.ProviderCredentials](func(in *storage.ProviderOptions) *storage.ProviderOptions {
+		if in == nil {
+			return nil
+		}
+
+		return in.Clone()
+	}))
+
+	resolver := eddy.NewResolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]()
+	resolver.AddRule(&helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+		Predicate: func(_ context.Context) bool {
+			return true
+		},
+		Resolver: func(_ context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+			return &eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+				Builder: &testProviderBuilder{provider: sourceProvider},
+				Output:  storage.ProviderCredentials{},
+				Config:  storage.NewProviderOptions(),
+			}, nil
+		},
+	})
+
+	service := objects.NewService(objects.Config{
+		Resolver:      resolver,
+		ClientService: clientService,
+		Backups: map[storage.ProviderType]objects.BackupTarget{
+			source: {Provider: backupProvider, ReadFromBackup: readFromBackup},
+		},
+	})
+
+	return service, sourceProvider, backupProvider, nil
+}
+
 // MockStorageServiceWithValidationAndProvider creates a new storage service for testing with custom validation
 // and returns both the StorageService and the mock provider for setting up expectations
 func MockStorageServiceWithValidationAndProvider(t *testing.T, uploader storage.UploaderFunc, validationFunc storage.ValidationFunc) (*objects.Service, *mock_shared.MockProvider, error) {

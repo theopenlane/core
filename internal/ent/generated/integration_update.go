@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/v2/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/v2/internal/ent/generated/asset"
@@ -472,6 +473,26 @@ func (_u *IntegrationUpdate) ClearMetadata() *IntegrationUpdate {
 	return _u
 }
 
+// SetHealth sets the "health" field.
+func (_u *IntegrationUpdate) SetHealth(v models.IntegrationHealth) *IntegrationUpdate {
+	_u.mutation.SetHealth(v)
+	return _u
+}
+
+// SetNillableHealth sets the "health" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableHealth(v *models.IntegrationHealth) *IntegrationUpdate {
+	if v != nil {
+		_u.SetHealth(*v)
+	}
+	return _u
+}
+
+// ClearHealth clears the value of the "health" field.
+func (_u *IntegrationUpdate) ClearHealth() *IntegrationUpdate {
+	_u.mutation.ClearHealth()
+	return _u
+}
+
 // SetDefinitionID sets the "definition_id" field.
 func (_u *IntegrationUpdate) SetDefinitionID(v string) *IntegrationUpdate {
 	_u.mutation.SetDefinitionID(v)
@@ -563,6 +584,26 @@ func (_u *IntegrationUpdate) SetNillableStatus(v *enums.IntegrationStatus) *Inte
 	if v != nil {
 		_u.SetStatus(*v)
 	}
+	return _u
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_u *IntegrationUpdate) SetExpiresAt(v time.Time) *IntegrationUpdate {
+	_u.mutation.SetExpiresAt(v)
+	return _u
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_u *IntegrationUpdate) SetNillableExpiresAt(v *time.Time) *IntegrationUpdate {
+	if v != nil {
+		_u.SetExpiresAt(*v)
+	}
+	return _u
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (_u *IntegrationUpdate) ClearExpiresAt() *IntegrationUpdate {
+	_u.mutation.ClearExpiresAt()
 	return _u
 }
 
@@ -1636,6 +1677,12 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(integration.FieldMetadata, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Health(); ok {
+		_spec.SetField(integration.FieldHealth, field.TypeJSON, value)
+	}
+	if _u.mutation.HealthCleared() {
+		_spec.ClearField(integration.FieldHealth, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.DefinitionID(); ok {
 		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)
 	}
@@ -1662,6 +1709,12 @@ func (_u *IntegrationUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ExpiresAt(); ok {
+		_spec.SetField(integration.FieldExpiresAt, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiresAtCleared() {
+		_spec.ClearField(integration.FieldExpiresAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)
@@ -3190,6 +3243,26 @@ func (_u *IntegrationUpdateOne) ClearMetadata() *IntegrationUpdateOne {
 	return _u
 }
 
+// SetHealth sets the "health" field.
+func (_u *IntegrationUpdateOne) SetHealth(v models.IntegrationHealth) *IntegrationUpdateOne {
+	_u.mutation.SetHealth(v)
+	return _u
+}
+
+// SetNillableHealth sets the "health" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableHealth(v *models.IntegrationHealth) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetHealth(*v)
+	}
+	return _u
+}
+
+// ClearHealth clears the value of the "health" field.
+func (_u *IntegrationUpdateOne) ClearHealth() *IntegrationUpdateOne {
+	_u.mutation.ClearHealth()
+	return _u
+}
+
 // SetDefinitionID sets the "definition_id" field.
 func (_u *IntegrationUpdateOne) SetDefinitionID(v string) *IntegrationUpdateOne {
 	_u.mutation.SetDefinitionID(v)
@@ -3281,6 +3354,26 @@ func (_u *IntegrationUpdateOne) SetNillableStatus(v *enums.IntegrationStatus) *I
 	if v != nil {
 		_u.SetStatus(*v)
 	}
+	return _u
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (_u *IntegrationUpdateOne) SetExpiresAt(v time.Time) *IntegrationUpdateOne {
+	_u.mutation.SetExpiresAt(v)
+	return _u
+}
+
+// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
+func (_u *IntegrationUpdateOne) SetNillableExpiresAt(v *time.Time) *IntegrationUpdateOne {
+	if v != nil {
+		_u.SetExpiresAt(*v)
+	}
+	return _u
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (_u *IntegrationUpdateOne) ClearExpiresAt() *IntegrationUpdateOne {
+	_u.mutation.ClearExpiresAt()
 	return _u
 }
 
@@ -4384,6 +4477,12 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(integration.FieldMetadata, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Health(); ok {
+		_spec.SetField(integration.FieldHealth, field.TypeJSON, value)
+	}
+	if _u.mutation.HealthCleared() {
+		_spec.ClearField(integration.FieldHealth, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.DefinitionID(); ok {
 		_spec.SetField(integration.FieldDefinitionID, field.TypeString, value)
 	}
@@ -4410,6 +4509,12 @@ func (_u *IntegrationUpdateOne) sqlSave(ctx context.Context) (_node *Integration
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(integration.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.ExpiresAt(); ok {
+		_spec.SetField(integration.FieldExpiresAt, field.TypeTime, value)
+	}
+	if _u.mutation.ExpiresAtCleared() {
+		_spec.ClearField(integration.FieldExpiresAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.ProviderMetadataSnapshot(); ok {
 		_spec.SetField(integration.FieldProviderMetadataSnapshot, field.TypeJSON, value)

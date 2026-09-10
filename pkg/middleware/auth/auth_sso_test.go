@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
@@ -26,7 +27,7 @@ func withOverrides(mustSSOFn func(context.Context, *generated.Client, string, st
 	return func() { userMustSSOFunc = origMustSSO }
 }
 
-func TestUnauthorizedRedirectToSSO(t *testing.T) {
+func TestUnauthorizedSSORequiredReply(t *testing.T) {
 	restore := withOverrides(
 		func(context.Context, *generated.Client, string, string) (bool, error) { return true, nil },
 	)
@@ -53,14 +54,17 @@ func TestUnauthorizedRedirectToSSO(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	// we basically want to simulate that the unauthorized function is called
-	// and what the behavior is when it is called
+	// the SSO login endpoint is POST-only and takes a JSON body, so an unauthorized API request
+	// gets a 401 carrying the details needed to start the flow rather than a redirect it cannot follow
 	err := unauthorized(c, errors.New("invalid"), &conf, validator)
 	assert.NoError(t, err)
-	assert.Equal(t, http.StatusFound, rec.Code)
-	// the "location" is the destination we'd be 302'ing someone to, so it should match the
-	// helper function SSOLogin
-	assert.Equal(t, sso.SSOLogin(e, "org"), rec.Header().Get("Location"))
+	assert.Equal(t, http.StatusUnauthorized, rec.Code)
+
+	var reply SSOUnauthorizedReply
+	assert.NoError(t, json.Unmarshal(rec.Body.Bytes(), &reply))
+	assert.True(t, reply.SSORequired)
+	assert.Equal(t, "org", reply.OrganizationID)
+	assert.Equal(t, sso.SSOLogin(e, ""), reply.SSOLoginPath)
 }
 
 func TestUnauthorizedNoSSORedirect(t *testing.T) {

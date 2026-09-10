@@ -29,6 +29,9 @@ import (
 	"github.com/theopenlane/core/common/enums"
 )
 
+// init registers the task rule listeners so gala setup picks them up automatically
+func init() { registerListeners(TaskRuleListeners) }
+
 // TaskRuleListeners evaluates schema task rules on mutation and creates suggested tasks
 func TaskRuleListeners() []gala.Registration {
 	return lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) gala.Registration {

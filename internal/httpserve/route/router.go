@@ -385,6 +385,7 @@ func RegisterRoutes(router *Router) error {
 		registerIntegrationConfigHandler,
 		registerIntegrationDisconnectHandler,
 		registerIntegrationOperationHandler,
+		registerIntegrationHealthHandler,
 		registerSwitchRoute,
 		registerLivenessHandler,
 		registerSecurityTxtHandler,

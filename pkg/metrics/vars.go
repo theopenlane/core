@@ -179,6 +179,50 @@ var (
 		Help: "Total number of files deleted per storage provider",
 	}, []string{"provider"})
 
+	// StorageBackupAttempts tracks backup replication attempts by source/destination provider and outcome
+	StorageBackupAttempts = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_backup_attempts_total",
+		Help: "Total number of file backup replication attempts by source provider, destination provider, and status (success, failed)",
+	}, []string{"source", "destination", "status"})
+
+	// StorageBackupBytesReplicated tracks total bytes successfully replicated to a backup provider
+	StorageBackupBytesReplicated = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_backup_bytes_replicated_total",
+		Help: "Total bytes successfully replicated per source and destination provider",
+	}, []string{"source", "destination"})
+
+	// StorageBackupDuration records the duration of backup replication operations
+	StorageBackupDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "openlane_storage_backup_duration_seconds",
+		Help:    "Duration of file backup replication operations by source provider, destination provider, and status",
+		Buckets: prometheus.DefBuckets,
+	}, []string{"source", "destination", "status"})
+
+	// StorageBackupState tracks file backup state transitions, so EXHAUSTED can be alerted on
+	StorageBackupState = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_backup_state_total",
+		Help: "Total number of file backup state transitions by source provider, destination provider, and status (COMPLETED, FAILED, EXHAUSTED)",
+	}, []string{"source", "destination", "status"})
+
+	// StorageBackupReads tracks reads served from a backup replica instead of the source provider
+	StorageBackupReads = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_backup_reads_total",
+		Help: "Total number of reads served from a backup replica by source provider, destination provider, and operation (download, presigned_url, exists)",
+	}, []string{"source", "destination", "operation"})
+
+	// StorageBackupReadsMissingReplica tracks reads for files that have no usable backup replica
+	// while their source provider is configured to serve reads from the backup
+	StorageBackupReadsMissingReplica = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_backup_reads_missing_replica_total",
+		Help: "Total number of reads that fell through to the source provider because the file has no backup replica, by source provider and operation",
+	}, []string{"source", "operation"})
+
+	// StorageBackupDeletes tracks backup replicas deleted alongside the file they back up
+	StorageBackupDeletes = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_backup_deletes_total",
+		Help: "Total number of backup replicas deleted by source provider, destination provider, and status (success, failed)",
+	}, []string{"source", "destination", "status"})
+
 	// AuthenticationAttempts tracks the number of authentication attempts by type
 	AuthenticationAttempts = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: "openlane_authentication_attempts_total",
@@ -267,6 +311,13 @@ var (
 		StorageProviderDownloads,
 		StorageProviderBytesDownloaded,
 		StorageProviderDeletes,
+		StorageBackupAttempts,
+		StorageBackupBytesReplicated,
+		StorageBackupDuration,
+		StorageBackupState,
+		StorageBackupReads,
+		StorageBackupReadsMissingReplica,
+		StorageBackupDeletes,
 		AuthenticationAttempts,
 		WorkflowOperationsTotal,
 		WorkflowOperationDuration,

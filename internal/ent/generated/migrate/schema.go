@@ -429,6 +429,7 @@ var (
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "asset_subtype_id", Type: field.TypeString, Nullable: true},
 		{Name: "asset_data_classification_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
@@ -461,74 +462,80 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_custom_type_enums_asset_subtype",
+				Symbol:     "assets_identity_holders_internal_owner_identity_holder",
 				Columns:    []*schema.Column{AssetsColumns[40]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_custom_type_enums_asset_data_classification",
+				Symbol:     "assets_custom_type_enums_asset_subtype",
 				Columns:    []*schema.Column{AssetsColumns[41]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_custom_type_enums_environment",
+				Symbol:     "assets_custom_type_enums_asset_data_classification",
 				Columns:    []*schema.Column{AssetsColumns[42]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_custom_type_enums_scope",
+				Symbol:     "assets_custom_type_enums_environment",
 				Columns:    []*schema.Column{AssetsColumns[43]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_custom_type_enums_access_model",
+				Symbol:     "assets_custom_type_enums_scope",
 				Columns:    []*schema.Column{AssetsColumns[44]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_custom_type_enums_encryption_status",
+				Symbol:     "assets_custom_type_enums_access_model",
 				Columns:    []*schema.Column{AssetsColumns[45]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_custom_type_enums_security_tier",
+				Symbol:     "assets_custom_type_enums_encryption_status",
 				Columns:    []*schema.Column{AssetsColumns[46]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_custom_type_enums_criticality",
+				Symbol:     "assets_custom_type_enums_security_tier",
 				Columns:    []*schema.Column{AssetsColumns[47]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_integrations_assets",
+				Symbol:     "assets_custom_type_enums_criticality",
 				Columns:    []*schema.Column{AssetsColumns[48]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_integrations_assets",
+				Columns:    []*schema.Column{AssetsColumns[49]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_organizations_assets",
-				Columns:    []*schema.Column{AssetsColumns[49]},
+				Columns:    []*schema.Column{AssetsColumns[50]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_platforms_source_assets",
-				Columns:    []*schema.Column{AssetsColumns[50]},
+				Columns:    []*schema.Column{AssetsColumns[51]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_risks_assets",
-				Columns:    []*schema.Column{AssetsColumns[51]},
+				Columns:    []*schema.Column{AssetsColumns[52]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -537,17 +544,17 @@ var (
 			{
 				Name:    "asset_source_platform_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{AssetsColumns[50]},
+				Columns: []*schema.Column{AssetsColumns[51]},
 			},
 			{
 				Name:    "asset_integration_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{AssetsColumns[48]},
+				Columns: []*schema.Column{AssetsColumns[49]},
 			},
 			{
 				Name:    "asset_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{AssetsColumns[49]},
+				Columns: []*schema.Column{AssetsColumns[50]},
 			},
 		},
 	}
@@ -761,6 +768,7 @@ var (
 		{Name: "assessment_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "email_template_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_id", Type: field.TypeString, Nullable: true},
 		{Name: "integration_id", Type: field.TypeString, Nullable: true},
@@ -793,38 +801,44 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "campaigns_email_templates_campaigns",
+				Symbol:     "campaigns_identity_holders_internal_owner_identity_holder",
 				Columns:    []*schema.Column{CampaignsColumns[37]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "campaigns_email_templates_campaigns",
+				Columns:    []*schema.Column{CampaignsColumns[38]},
 				RefColumns: []*schema.Column{EmailTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaigns_entities_campaigns",
-				Columns:    []*schema.Column{CampaignsColumns[38]},
+				Columns:    []*schema.Column{CampaignsColumns[39]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaigns_integrations_campaigns",
-				Columns:    []*schema.Column{CampaignsColumns[39]},
+				Columns:    []*schema.Column{CampaignsColumns[40]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaigns_organizations_campaigns",
-				Columns:    []*schema.Column{CampaignsColumns[40]},
+				Columns:    []*schema.Column{CampaignsColumns[41]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaigns_templates_campaigns",
-				Columns:    []*schema.Column{CampaignsColumns[41]},
+				Columns:    []*schema.Column{CampaignsColumns[42]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaigns_trust_centers_campaigns",
-				Columns:    []*schema.Column{CampaignsColumns[42]},
+				Columns:    []*schema.Column{CampaignsColumns[43]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -838,37 +852,37 @@ var (
 			{
 				Name:    "campaign_template_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignsColumns[41]},
+				Columns: []*schema.Column{CampaignsColumns[42]},
 			},
 			{
 				Name:    "campaign_integration_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignsColumns[39]},
+				Columns: []*schema.Column{CampaignsColumns[40]},
 			},
 			{
 				Name:    "campaign_email_template_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignsColumns[37]},
+				Columns: []*schema.Column{CampaignsColumns[38]},
 			},
 			{
 				Name:    "campaign_trust_center_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignsColumns[42]},
+				Columns: []*schema.Column{CampaignsColumns[43]},
 			},
 			{
 				Name:    "campaign_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{CampaignsColumns[8], CampaignsColumns[40]},
+				Columns: []*schema.Column{CampaignsColumns[8], CampaignsColumns[41]},
 			},
 			{
 				Name:    "campaign_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignsColumns[40]},
+				Columns: []*schema.Column{CampaignsColumns[41]},
 			},
 			{
 				Name:    "campaign_name_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignsColumns[12], CampaignsColumns[40]},
+				Columns: []*schema.Column{CampaignsColumns[12], CampaignsColumns[41]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -876,7 +890,7 @@ var (
 			{
 				Name:    "campaign_entity_id",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignsColumns[38]},
+				Columns: []*schema.Column{CampaignsColumns[39]},
 			},
 		},
 	}
@@ -2464,8 +2478,10 @@ var (
 		{Name: "observed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "reviewed_by_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_relationship_state_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_security_questionnaire_status_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_source_type_id", Type: field.TypeString, Nullable: true},
@@ -2496,74 +2512,86 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_users_reviewed_by_user",
+				Symbol:     "entities_identity_holders_internal_owner_identity_holder",
 				Columns:    []*schema.Column{EntitiesColumns[57]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_users_reviewed_by_user",
+				Columns:    []*schema.Column{EntitiesColumns[58]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_groups_reviewed_by_group",
-				Columns:    []*schema.Column{EntitiesColumns[58]},
+				Columns:    []*schema.Column{EntitiesColumns[59]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_custom_type_enums_entity_relationship_state",
-				Columns:    []*schema.Column{EntitiesColumns[59]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "entities_custom_type_enums_entity_security_questionnaire_status",
+				Symbol:     "entities_identity_holders_reviewed_by_identity_holder",
 				Columns:    []*schema.Column{EntitiesColumns[60]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_custom_type_enums_entity_source_type",
+				Symbol:     "entities_custom_type_enums_entity_relationship_state",
 				Columns:    []*schema.Column{EntitiesColumns[61]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_custom_type_enums_environment",
+				Symbol:     "entities_custom_type_enums_entity_security_questionnaire_status",
 				Columns:    []*schema.Column{EntitiesColumns[62]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_custom_type_enums_scope",
+				Symbol:     "entities_custom_type_enums_entity_source_type",
 				Columns:    []*schema.Column{EntitiesColumns[63]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_entity_types_entity_type",
+				Symbol:     "entities_custom_type_enums_environment",
 				Columns:    []*schema.Column{EntitiesColumns[64]},
-				RefColumns: []*schema.Column{EntityTypesColumns[0]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_files_logo_file",
+				Symbol:     "entities_custom_type_enums_scope",
 				Columns:    []*schema.Column{EntitiesColumns[65]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_entity_types_entities",
+				Symbol:     "entities_entity_types_entity_type",
 				Columns:    []*schema.Column{EntitiesColumns[66]},
 				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_organizations_entities",
+				Symbol:     "entities_files_logo_file",
 				Columns:    []*schema.Column{EntitiesColumns[67]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_entity_types_entities",
+				Columns:    []*schema.Column{EntitiesColumns[68]},
+				RefColumns: []*schema.Column{EntityTypesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_organizations_entities",
+				Columns:    []*schema.Column{EntitiesColumns[69]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_risks_entities",
-				Columns:    []*schema.Column{EntitiesColumns[68]},
+				Columns:    []*schema.Column{EntitiesColumns[70]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2572,22 +2600,22 @@ var (
 			{
 				Name:    "entity_entity_type_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[64]},
+				Columns: []*schema.Column{EntitiesColumns[66]},
 			},
 			{
 				Name:    "entity_logo_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[65]},
+				Columns: []*schema.Column{EntitiesColumns[67]},
 			},
 			{
 				Name:    "entity_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[67]},
+				Columns: []*schema.Column{EntitiesColumns[69]},
 			},
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[20], EntitiesColumns[67]},
+				Columns: []*schema.Column{EntitiesColumns[20], EntitiesColumns[69]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2595,7 +2623,7 @@ var (
 			{
 				Name:    "entity_reviewed_by_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[57]},
+				Columns: []*schema.Column{EntitiesColumns[58]},
 			},
 		},
 	}
@@ -2834,6 +2862,7 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "storage_region", Type: field.TypeString, Nullable: true},
 		{Name: "storage_provider", Type: field.TypeString, Nullable: true},
+		{Name: "backup_state", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_accessed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "email_template_files", Type: field.TypeString, Nullable: true},
 		{Name: "export_files", Type: field.TypeString, Nullable: true},
@@ -2858,85 +2887,85 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "files_email_templates_files",
-				Columns:    []*schema.Column{FilesColumns[34]},
+				Columns:    []*schema.Column{FilesColumns[35]},
 				RefColumns: []*schema.Column{EmailTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_exports_files",
-				Columns:    []*schema.Column{FilesColumns[35]},
+				Columns:    []*schema.Column{FilesColumns[36]},
 				RefColumns: []*schema.Column{ExportsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_custom_type_enums_environment",
-				Columns:    []*schema.Column{FilesColumns[36]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "files_custom_type_enums_scope",
 				Columns:    []*schema.Column{FilesColumns[37]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "files_custom_type_enums_category",
+				Symbol:     "files_custom_type_enums_scope",
 				Columns:    []*schema.Column{FilesColumns[38]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "files_findings_files",
+				Symbol:     "files_custom_type_enums_category",
 				Columns:    []*schema.Column{FilesColumns[39]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_findings_files",
+				Columns:    []*schema.Column{FilesColumns[40]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_integrations_files",
-				Columns:    []*schema.Column{FilesColumns[40]},
+				Columns:    []*schema.Column{FilesColumns[41]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_notes_files",
-				Columns:    []*schema.Column{FilesColumns[41]},
+				Columns:    []*schema.Column{FilesColumns[42]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_platforms_architecture_diagrams",
-				Columns:    []*schema.Column{FilesColumns[42]},
-				RefColumns: []*schema.Column{PlatformsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "files_platforms_data_flow_diagrams",
 				Columns:    []*schema.Column{FilesColumns[43]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "files_platforms_trust_boundary_diagrams",
+				Symbol:     "files_platforms_data_flow_diagrams",
 				Columns:    []*schema.Column{FilesColumns[44]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "files_remediations_files",
+				Symbol:     "files_platforms_trust_boundary_diagrams",
 				Columns:    []*schema.Column{FilesColumns[45]},
+				RefColumns: []*schema.Column{PlatformsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_remediations_files",
+				Columns:    []*schema.Column{FilesColumns[46]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_reviews_files",
-				Columns:    []*schema.Column{FilesColumns[46]},
+				Columns:    []*schema.Column{FilesColumns[47]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_vulnerabilities_files",
-				Columns:    []*schema.Column{FilesColumns[47]},
+				Columns:    []*schema.Column{FilesColumns[48]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3048,8 +3077,10 @@ var (
 		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
 		{Name: "reviewed_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "reviewed_by_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigned_to_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigned_to_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "assigned_to_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "finding_status_id", Type: field.TypeString, Nullable: true},
@@ -3074,38 +3105,50 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "findings_users_assigned_to_user",
+				Symbol:     "findings_identity_holders_reviewed_by_identity_holder",
 				Columns:    []*schema.Column{FindingsColumns[58]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "findings_users_assigned_to_user",
+				Columns:    []*schema.Column{FindingsColumns[59]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "findings_groups_assigned_to_group",
-				Columns:    []*schema.Column{FindingsColumns[59]},
+				Columns:    []*schema.Column{FindingsColumns[60]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "findings_custom_type_enums_environment",
-				Columns:    []*schema.Column{FindingsColumns[60]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "findings_custom_type_enums_scope",
+				Symbol:     "findings_identity_holders_assigned_to_identity_holder",
 				Columns:    []*schema.Column{FindingsColumns[61]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "findings_custom_type_enums_finding_status",
+				Symbol:     "findings_custom_type_enums_environment",
 				Columns:    []*schema.Column{FindingsColumns[62]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "findings_organizations_findings",
+				Symbol:     "findings_custom_type_enums_scope",
 				Columns:    []*schema.Column{FindingsColumns[63]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "findings_custom_type_enums_finding_status",
+				Columns:    []*schema.Column{FindingsColumns[64]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "findings_organizations_findings",
+				Columns:    []*schema.Column{FindingsColumns[65]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3114,17 +3157,17 @@ var (
 			{
 				Name:    "finding_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{FindingsColumns[8], FindingsColumns[63]},
+				Columns: []*schema.Column{FindingsColumns[8], FindingsColumns[65]},
 			},
 			{
 				Name:    "finding_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{FindingsColumns[63]},
+				Columns: []*schema.Column{FindingsColumns[65]},
 			},
 			{
 				Name:    "finding_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{FindingsColumns[19], FindingsColumns[21], FindingsColumns[63]},
+				Columns: []*schema.Column{FindingsColumns[19], FindingsColumns[21], FindingsColumns[65]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4280,6 +4323,7 @@ var (
 		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_identity_holder_id", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "employer_entity_id", Type: field.TypeString, Nullable: true},
@@ -4305,32 +4349,38 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "identity_holders_custom_type_enums_environment",
+				Symbol:     "identity_holders_identity_holders_internal_owner_identity_holder",
 				Columns:    []*schema.Column{IdentityHoldersColumns[35]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "identity_holders_custom_type_enums_scope",
+				Symbol:     "identity_holders_custom_type_enums_environment",
 				Columns:    []*schema.Column{IdentityHoldersColumns[36]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "identity_holders_entities_employer",
+				Symbol:     "identity_holders_custom_type_enums_scope",
 				Columns:    []*schema.Column{IdentityHoldersColumns[37]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "identity_holders_entities_employer",
+				Columns:    []*schema.Column{IdentityHoldersColumns[38]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_organizations_identity_holders",
-				Columns:    []*schema.Column{IdentityHoldersColumns[38]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[39]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "identity_holders_users_identity_holder_profiles",
-				Columns:    []*schema.Column{IdentityHoldersColumns[39]},
+				Columns:    []*schema.Column{IdentityHoldersColumns[40]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4339,22 +4389,22 @@ var (
 			{
 				Name:    "identity_holder_employer_entity_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[37]},
+				Columns: []*schema.Column{IdentityHoldersColumns[38]},
 			},
 			{
 				Name:    "identityholder_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{IdentityHoldersColumns[8], IdentityHoldersColumns[38]},
+				Columns: []*schema.Column{IdentityHoldersColumns[8], IdentityHoldersColumns[39]},
 			},
 			{
 				Name:    "identity_holder_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[38]},
+				Columns: []*schema.Column{IdentityHoldersColumns[39]},
 			},
 			{
 				Name:    "identityholder_email_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{IdentityHoldersColumns[15], IdentityHoldersColumns[38]},
+				Columns: []*schema.Column{IdentityHoldersColumns[15], IdentityHoldersColumns[39]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4362,7 +4412,7 @@ var (
 			{
 				Name:    "identityholder_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{IdentityHoldersColumns[39]},
+				Columns: []*schema.Column{IdentityHoldersColumns[40]},
 			},
 			{
 				Name:    "identityholder_external_user_id",
@@ -4460,11 +4510,13 @@ var (
 		{Name: "installation_metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "provider_state", Type: field.TypeJSON, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "health", Type: field.TypeJSON, Nullable: true},
 		{Name: "definition_id", Type: field.TypeString, Nullable: true},
 		{Name: "definition_version", Type: field.TypeString, Nullable: true},
 		{Name: "definition_slug", Type: field.TypeString, Nullable: true},
 		{Name: "family", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED"}, Default: "PENDING"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "CONNECTED", "DEGRADED", "ERRORED", "DISABLED"}, Default: "PENDING"},
+		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
 		{Name: "provider_metadata_snapshot", Type: field.TypeJSON, Nullable: true},
 		{Name: "primary_directory", Type: field.TypeBool, Default: false},
 		{Name: "campaign_email", Type: field.TypeBool, Default: false},
@@ -4483,37 +4535,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "integrations_files_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[31]},
+				Columns:    []*schema.Column{IntegrationsColumns[33]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_groups_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[32]},
+				Columns:    []*schema.Column{IntegrationsColumns[34]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_custom_type_enums_environment",
-				Columns:    []*schema.Column{IntegrationsColumns[33]},
+				Columns:    []*schema.Column{IntegrationsColumns[35]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_custom_type_enums_scope",
-				Columns:    []*schema.Column{IntegrationsColumns[34]},
+				Columns:    []*schema.Column{IntegrationsColumns[36]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_organizations_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[35]},
+				Columns:    []*schema.Column{IntegrationsColumns[37]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "integrations_platforms_integrations",
-				Columns:    []*schema.Column{IntegrationsColumns[36]},
+				Columns:    []*schema.Column{IntegrationsColumns[38]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4522,12 +4574,12 @@ var (
 			{
 				Name:    "integration_platform_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[36]},
+				Columns: []*schema.Column{IntegrationsColumns[38]},
 			},
 			{
 				Name:    "integration_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{IntegrationsColumns[35]},
+				Columns: []*schema.Column{IntegrationsColumns[37]},
 			},
 		},
 	}
@@ -6004,12 +6056,16 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "business_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "business_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "business_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "technical_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "technical_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "technical_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "security_owner_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "security_owner_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "security_owner_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "platform_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "platform_data_classification_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
@@ -6057,92 +6113,116 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_users_business_owner_user",
+				Symbol:     "platforms_identity_holders_internal_owner_identity_holder",
 				Columns:    []*schema.Column{PlatformsColumns[46]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "platforms_users_business_owner_user",
+				Columns:    []*schema.Column{PlatformsColumns[47]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "platforms_groups_business_owner_group",
-				Columns:    []*schema.Column{PlatformsColumns[47]},
+				Columns:    []*schema.Column{PlatformsColumns[48]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "platforms_identity_holders_business_owner_identity_holder",
+				Columns:    []*schema.Column{PlatformsColumns[49]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "platforms_users_technical_owner_user",
-				Columns:    []*schema.Column{PlatformsColumns[48]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "platforms_groups_technical_owner_group",
-				Columns:    []*schema.Column{PlatformsColumns[49]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "platforms_users_security_owner_user",
 				Columns:    []*schema.Column{PlatformsColumns[50]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_groups_security_owner_group",
+				Symbol:     "platforms_groups_technical_owner_group",
 				Columns:    []*schema.Column{PlatformsColumns[51]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_custom_type_enums_platform_kind",
+				Symbol:     "platforms_identity_holders_technical_owner_identity_holder",
 				Columns:    []*schema.Column{PlatformsColumns[52]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_custom_type_enums_platform_data_classification",
+				Symbol:     "platforms_users_security_owner_user",
 				Columns:    []*schema.Column{PlatformsColumns[53]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_custom_type_enums_environment",
+				Symbol:     "platforms_groups_security_owner_group",
 				Columns:    []*schema.Column{PlatformsColumns[54]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_custom_type_enums_scope",
+				Symbol:     "platforms_identity_holders_security_owner_identity_holder",
 				Columns:    []*schema.Column{PlatformsColumns[55]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_custom_type_enums_access_model",
+				Symbol:     "platforms_custom_type_enums_platform_kind",
 				Columns:    []*schema.Column{PlatformsColumns[56]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_custom_type_enums_encryption_status",
+				Symbol:     "platforms_custom_type_enums_platform_data_classification",
 				Columns:    []*schema.Column{PlatformsColumns[57]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_custom_type_enums_security_tier",
+				Symbol:     "platforms_custom_type_enums_environment",
 				Columns:    []*schema.Column{PlatformsColumns[58]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_custom_type_enums_criticality",
+				Symbol:     "platforms_custom_type_enums_scope",
 				Columns:    []*schema.Column{PlatformsColumns[59]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "platforms_users_platforms_owned",
+				Symbol:     "platforms_custom_type_enums_access_model",
 				Columns:    []*schema.Column{PlatformsColumns[60]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "platforms_custom_type_enums_encryption_status",
+				Columns:    []*schema.Column{PlatformsColumns[61]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "platforms_custom_type_enums_security_tier",
+				Columns:    []*schema.Column{PlatformsColumns[62]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "platforms_custom_type_enums_criticality",
+				Columns:    []*schema.Column{PlatformsColumns[63]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "platforms_users_platforms_owned",
+				Columns:    []*schema.Column{PlatformsColumns[64]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6151,7 +6231,7 @@ var (
 			{
 				Name:    "platform_platform_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{PlatformsColumns[60]},
+				Columns: []*schema.Column{PlatformsColumns[64]},
 			},
 			{
 				Name:    "platform_display_id_owner_id",
@@ -6868,8 +6948,10 @@ var (
 		{Name: "risk_scans", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "reviewed_by_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigned_to_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigned_to_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "assigned_to_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "performed_by_user_id", Type: field.TypeString, Nullable: true},
@@ -6912,38 +6994,50 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "scans_users_assigned_to_user",
+				Symbol:     "scans_identity_holders_reviewed_by_identity_holder",
 				Columns:    []*schema.Column{ScansColumns[30]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scans_users_assigned_to_user",
+				Columns:    []*schema.Column{ScansColumns[31]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_groups_assigned_to_group",
-				Columns:    []*schema.Column{ScansColumns[31]},
+				Columns:    []*schema.Column{ScansColumns[32]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "scans_identity_holders_assigned_to_identity_holder",
+				Columns:    []*schema.Column{ScansColumns[33]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "scans_custom_type_enums_environment",
-				Columns:    []*schema.Column{ScansColumns[32]},
+				Columns:    []*schema.Column{ScansColumns[34]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_custom_type_enums_scope",
-				Columns:    []*schema.Column{ScansColumns[33]},
+				Columns:    []*schema.Column{ScansColumns[35]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_users_performed_by_user",
-				Columns:    []*schema.Column{ScansColumns[34]},
+				Columns:    []*schema.Column{ScansColumns[36]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_groups_performed_by_group",
-				Columns:    []*schema.Column{ScansColumns[35]},
+				Columns:    []*schema.Column{ScansColumns[37]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6957,12 +7051,12 @@ var (
 			{
 				Name:    "scan_performed_by_user_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ScansColumns[34]},
+				Columns: []*schema.Column{ScansColumns[36]},
 			},
 			{
 				Name:    "scan_performed_by_group_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ScansColumns[35]},
+				Columns: []*schema.Column{ScansColumns[37]},
 			},
 			{
 				Name:    "scan_owner_id_idx",
@@ -8727,8 +8821,10 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "reviewed_by_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigned_to_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigned_to_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "assigned_to_identity_holder_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_status_id", Type: field.TypeString, Nullable: true},
@@ -8758,32 +8854,44 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "vulnerabilities_users_assigned_to_user",
+				Symbol:     "vulnerabilities_identity_holders_reviewed_by_identity_holder",
 				Columns:    []*schema.Column{VulnerabilitiesColumns[64]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vulnerabilities_users_assigned_to_user",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[65]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_groups_assigned_to_group",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[65]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[66]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "vulnerabilities_identity_holders_assigned_to_identity_holder",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[67]},
+				RefColumns: []*schema.Column{IdentityHoldersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "vulnerabilities_custom_type_enums_environment",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[66]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[68]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_custom_type_enums_scope",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[67]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[69]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_custom_type_enums_vulnerability_status",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[68]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[70]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -15738,7 +15846,7 @@ func init() {
 	AssessmentResponsesTable.ForeignKeys[5].RefTable = OrganizationsTable
 	AssetsTable.ForeignKeys[0].RefTable = UsersTable
 	AssetsTable.ForeignKeys[1].RefTable = GroupsTable
-	AssetsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
+	AssetsTable.ForeignKeys[2].RefTable = IdentityHoldersTable
 	AssetsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
 	AssetsTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
 	AssetsTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
@@ -15746,10 +15854,11 @@ func init() {
 	AssetsTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
 	AssetsTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
 	AssetsTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
-	AssetsTable.ForeignKeys[10].RefTable = IntegrationsTable
-	AssetsTable.ForeignKeys[11].RefTable = OrganizationsTable
-	AssetsTable.ForeignKeys[12].RefTable = PlatformsTable
-	AssetsTable.ForeignKeys[13].RefTable = RisksTable
+	AssetsTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
+	AssetsTable.ForeignKeys[11].RefTable = IntegrationsTable
+	AssetsTable.ForeignKeys[12].RefTable = OrganizationsTable
+	AssetsTable.ForeignKeys[13].RefTable = PlatformsTable
+	AssetsTable.ForeignKeys[14].RefTable = RisksTable
 	AudiencesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	AudienceMembersTable.ForeignKeys[0].RefTable = AudiencesTable
 	AudienceMembersTable.ForeignKeys[1].RefTable = ContactsTable
@@ -15761,12 +15870,13 @@ func init() {
 	CampaignsTable.ForeignKeys[0].RefTable = AssessmentsTable
 	CampaignsTable.ForeignKeys[1].RefTable = UsersTable
 	CampaignsTable.ForeignKeys[2].RefTable = GroupsTable
-	CampaignsTable.ForeignKeys[3].RefTable = EmailTemplatesTable
-	CampaignsTable.ForeignKeys[4].RefTable = EntitiesTable
-	CampaignsTable.ForeignKeys[5].RefTable = IntegrationsTable
-	CampaignsTable.ForeignKeys[6].RefTable = OrganizationsTable
-	CampaignsTable.ForeignKeys[7].RefTable = TemplatesTable
-	CampaignsTable.ForeignKeys[8].RefTable = TrustCentersTable
+	CampaignsTable.ForeignKeys[3].RefTable = IdentityHoldersTable
+	CampaignsTable.ForeignKeys[4].RefTable = EmailTemplatesTable
+	CampaignsTable.ForeignKeys[5].RefTable = EntitiesTable
+	CampaignsTable.ForeignKeys[6].RefTable = IntegrationsTable
+	CampaignsTable.ForeignKeys[7].RefTable = OrganizationsTable
+	CampaignsTable.ForeignKeys[8].RefTable = TemplatesTable
+	CampaignsTable.ForeignKeys[9].RefTable = TrustCentersTable
 	CampaignTargetsTable.ForeignKeys[0].RefTable = CampaignsTable
 	CampaignTargetsTable.ForeignKeys[1].RefTable = ContactsTable
 	CampaignTargetsTable.ForeignKeys[2].RefTable = GroupsTable
@@ -15841,18 +15951,20 @@ func init() {
 	EmailVerificationTokensTable.ForeignKeys[0].RefTable = UsersTable
 	EntitiesTable.ForeignKeys[0].RefTable = UsersTable
 	EntitiesTable.ForeignKeys[1].RefTable = GroupsTable
-	EntitiesTable.ForeignKeys[2].RefTable = UsersTable
-	EntitiesTable.ForeignKeys[3].RefTable = GroupsTable
-	EntitiesTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
-	EntitiesTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
+	EntitiesTable.ForeignKeys[2].RefTable = IdentityHoldersTable
+	EntitiesTable.ForeignKeys[3].RefTable = UsersTable
+	EntitiesTable.ForeignKeys[4].RefTable = GroupsTable
+	EntitiesTable.ForeignKeys[5].RefTable = IdentityHoldersTable
 	EntitiesTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
-	EntitiesTable.ForeignKeys[9].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[10].RefTable = FilesTable
+	EntitiesTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
+	EntitiesTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
 	EntitiesTable.ForeignKeys[11].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[12].RefTable = OrganizationsTable
-	EntitiesTable.ForeignKeys[13].RefTable = RisksTable
+	EntitiesTable.ForeignKeys[12].RefTable = FilesTable
+	EntitiesTable.ForeignKeys[13].RefTable = EntityTypesTable
+	EntitiesTable.ForeignKeys[14].RefTable = OrganizationsTable
+	EntitiesTable.ForeignKeys[15].RefTable = RisksTable
 	EntityTypesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EventsTable.ForeignKeys[0].RefTable = DirectoryMembershipsTable
 	EventsTable.ForeignKeys[1].RefTable = ExportsTable
@@ -15877,12 +15989,14 @@ func init() {
 	FileDownloadTokensTable.ForeignKeys[0].RefTable = UsersTable
 	FindingsTable.ForeignKeys[0].RefTable = UsersTable
 	FindingsTable.ForeignKeys[1].RefTable = GroupsTable
-	FindingsTable.ForeignKeys[2].RefTable = UsersTable
-	FindingsTable.ForeignKeys[3].RefTable = GroupsTable
-	FindingsTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
-	FindingsTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
+	FindingsTable.ForeignKeys[2].RefTable = IdentityHoldersTable
+	FindingsTable.ForeignKeys[3].RefTable = UsersTable
+	FindingsTable.ForeignKeys[4].RefTable = GroupsTable
+	FindingsTable.ForeignKeys[5].RefTable = IdentityHoldersTable
 	FindingsTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
-	FindingsTable.ForeignKeys[7].RefTable = OrganizationsTable
+	FindingsTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
+	FindingsTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
+	FindingsTable.ForeignKeys[9].RefTable = OrganizationsTable
 	FindingControlsTable.ForeignKeys[0].RefTable = FindingsTable
 	FindingControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	FindingControlsTable.ForeignKeys[2].RefTable = StandardsTable
@@ -16015,11 +16129,12 @@ func init() {
 	HushesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	IdentityHoldersTable.ForeignKeys[0].RefTable = UsersTable
 	IdentityHoldersTable.ForeignKeys[1].RefTable = GroupsTable
-	IdentityHoldersTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
+	IdentityHoldersTable.ForeignKeys[2].RefTable = IdentityHoldersTable
 	IdentityHoldersTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
-	IdentityHoldersTable.ForeignKeys[4].RefTable = EntitiesTable
-	IdentityHoldersTable.ForeignKeys[5].RefTable = OrganizationsTable
-	IdentityHoldersTable.ForeignKeys[6].RefTable = UsersTable
+	IdentityHoldersTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
+	IdentityHoldersTable.ForeignKeys[5].RefTable = EntitiesTable
+	IdentityHoldersTable.ForeignKeys[6].RefTable = OrganizationsTable
+	IdentityHoldersTable.ForeignKeys[7].RefTable = UsersTable
 	ImpersonationEventsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ImpersonationEventsTable.ForeignKeys[1].RefTable = UsersTable
 	ImpersonationEventsTable.ForeignKeys[2].RefTable = UsersTable
@@ -16098,21 +16213,25 @@ func init() {
 	PlatformsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	PlatformsTable.ForeignKeys[3].RefTable = UsersTable
 	PlatformsTable.ForeignKeys[4].RefTable = GroupsTable
-	PlatformsTable.ForeignKeys[5].RefTable = UsersTable
-	PlatformsTable.ForeignKeys[6].RefTable = GroupsTable
-	PlatformsTable.ForeignKeys[7].RefTable = UsersTable
-	PlatformsTable.ForeignKeys[8].RefTable = GroupsTable
+	PlatformsTable.ForeignKeys[5].RefTable = IdentityHoldersTable
+	PlatformsTable.ForeignKeys[6].RefTable = UsersTable
+	PlatformsTable.ForeignKeys[7].RefTable = GroupsTable
+	PlatformsTable.ForeignKeys[8].RefTable = IdentityHoldersTable
 	PlatformsTable.ForeignKeys[9].RefTable = UsersTable
 	PlatformsTable.ForeignKeys[10].RefTable = GroupsTable
-	PlatformsTable.ForeignKeys[11].RefTable = CustomTypeEnumsTable
-	PlatformsTable.ForeignKeys[12].RefTable = CustomTypeEnumsTable
-	PlatformsTable.ForeignKeys[13].RefTable = CustomTypeEnumsTable
-	PlatformsTable.ForeignKeys[14].RefTable = CustomTypeEnumsTable
+	PlatformsTable.ForeignKeys[11].RefTable = IdentityHoldersTable
+	PlatformsTable.ForeignKeys[12].RefTable = UsersTable
+	PlatformsTable.ForeignKeys[13].RefTable = GroupsTable
+	PlatformsTable.ForeignKeys[14].RefTable = IdentityHoldersTable
 	PlatformsTable.ForeignKeys[15].RefTable = CustomTypeEnumsTable
 	PlatformsTable.ForeignKeys[16].RefTable = CustomTypeEnumsTable
 	PlatformsTable.ForeignKeys[17].RefTable = CustomTypeEnumsTable
 	PlatformsTable.ForeignKeys[18].RefTable = CustomTypeEnumsTable
-	PlatformsTable.ForeignKeys[19].RefTable = UsersTable
+	PlatformsTable.ForeignKeys[19].RefTable = CustomTypeEnumsTable
+	PlatformsTable.ForeignKeys[20].RefTable = CustomTypeEnumsTable
+	PlatformsTable.ForeignKeys[21].RefTable = CustomTypeEnumsTable
+	PlatformsTable.ForeignKeys[22].RefTable = CustomTypeEnumsTable
+	PlatformsTable.ForeignKeys[23].RefTable = UsersTable
 	ProceduresTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ProceduresTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	ProceduresTable.ForeignKeys[2].RefTable = EvidencesTable
@@ -16153,12 +16272,14 @@ func init() {
 	ScansTable.ForeignKeys[2].RefTable = RisksTable
 	ScansTable.ForeignKeys[3].RefTable = UsersTable
 	ScansTable.ForeignKeys[4].RefTable = GroupsTable
-	ScansTable.ForeignKeys[5].RefTable = UsersTable
-	ScansTable.ForeignKeys[6].RefTable = GroupsTable
-	ScansTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
-	ScansTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
-	ScansTable.ForeignKeys[9].RefTable = UsersTable
-	ScansTable.ForeignKeys[10].RefTable = GroupsTable
+	ScansTable.ForeignKeys[5].RefTable = IdentityHoldersTable
+	ScansTable.ForeignKeys[6].RefTable = UsersTable
+	ScansTable.ForeignKeys[7].RefTable = GroupsTable
+	ScansTable.ForeignKeys[8].RefTable = IdentityHoldersTable
+	ScansTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
+	ScansTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
+	ScansTable.ForeignKeys[11].RefTable = UsersTable
+	ScansTable.ForeignKeys[12].RefTable = GroupsTable
 	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	StandardsTable.ForeignKeys[1].RefTable = FilesTable
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlsTable
@@ -16253,11 +16374,13 @@ func init() {
 	VulnerabilitiesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	VulnerabilitiesTable.ForeignKeys[1].RefTable = UsersTable
 	VulnerabilitiesTable.ForeignKeys[2].RefTable = GroupsTable
-	VulnerabilitiesTable.ForeignKeys[3].RefTable = UsersTable
-	VulnerabilitiesTable.ForeignKeys[4].RefTable = GroupsTable
-	VulnerabilitiesTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
-	VulnerabilitiesTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
+	VulnerabilitiesTable.ForeignKeys[3].RefTable = IdentityHoldersTable
+	VulnerabilitiesTable.ForeignKeys[4].RefTable = UsersTable
+	VulnerabilitiesTable.ForeignKeys[5].RefTable = GroupsTable
+	VulnerabilitiesTable.ForeignKeys[6].RefTable = IdentityHoldersTable
 	VulnerabilitiesTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
+	VulnerabilitiesTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
+	VulnerabilitiesTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
 	WorkflowAssignmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	WorkflowAssignmentsTable.ForeignKeys[1].RefTable = WorkflowInstancesTable

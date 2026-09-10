@@ -370,8 +370,6 @@ func (r *updateControlInputResolver) AddDiscussion(ctx context.Context, obj *gen
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
-
 	return nil
 }
 
@@ -516,8 +514,6 @@ func (r *updateInternalPolicyInputResolver) AddDiscussion(ctx context.Context, o
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
-
 	return nil
 }
 
@@ -622,8 +618,6 @@ func (r *updateProcedureInputResolver) AddDiscussion(ctx context.Context, obj *g
 	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
 
 	return nil
 }
@@ -769,8 +763,6 @@ func (r *updateRiskInputResolver) AddDiscussion(ctx context.Context, obj *genera
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
 
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
-
 	return nil
 }
 
@@ -875,8 +867,6 @@ func (r *updateSubcontrolInputResolver) AddDiscussion(ctx context.Context, obj *
 	if err := withTransactionalMutation(ctx).Discussion.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "discussion"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, data.CommentIDs...)
 
 	return nil
 }

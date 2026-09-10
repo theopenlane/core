@@ -22,6 +22,18 @@ type ConfigureIntegrationResponse = openapi.ConfigureIntegrationResponse
 // RunIntegrationOperationResponse is the response after executing or queuing a provider operation.
 type RunIntegrationOperationResponse = openapi.RunIntegrationOperationResponse
 
+// IntegrationHealthRequest is the request type for running an installation health assessment.
+type IntegrationHealthRequest = openapi.IntegrationHealthRequest
+
+// IntegrationConnectionHealth is the connection-level health check outcome.
+type IntegrationConnectionHealth = openapi.IntegrationConnectionHealth
+
+// IntegrationOperationHealth is one operation's health outcome.
+type IntegrationOperationHealth = openapi.IntegrationOperationHealth
+
+// IntegrationHealthResponse is the response after running an installation health assessment.
+type IntegrationHealthResponse = openapi.IntegrationHealthResponse
+
 // IntegrationProvidersResponse is the response listing available integration definitions.
 type IntegrationProvidersResponse struct {
 	rout.Reply
@@ -40,3 +52,6 @@ var ExampleConfigureIntegrationRequest = openapi.ExampleConfigureIntegrationRequ
 
 // ExampleRunIntegrationOperationRequest is an example operation payload for OpenAPI documentation.
 var ExampleRunIntegrationOperationRequest = openapi.ExampleRunIntegrationOperationRequest
+
+// ExampleIntegrationHealthRequest is an example health assessment request for OpenAPI documentation.
+var ExampleIntegrationHealthRequest = openapi.ExampleIntegrationHealthRequest

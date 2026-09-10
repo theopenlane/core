@@ -259,6 +259,8 @@ var (
 	ErrExpressionNotList = errors.New("entityops: expression did not evaluate to a list")
 	// ErrQuestionnaireTransformInvalid is returned when a questionnaire transform configuration or submission cannot map to its target
 	ErrQuestionnaireTransformInvalid = errors.New("questionnaire transform invalid")
+	// ErrClientResolveFailed indicates the ent client could not be resolved from the context
+	ErrClientResolveFailed = errors.New("client resolve failed")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

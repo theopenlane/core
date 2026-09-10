@@ -35,13 +35,16 @@ func Builder() registry.Builder {
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       oktaCredential.ID(),
-					Name:                "Okta API Token",
-					Description:         "Configure Okta access using an API token from your organization.",
-					CredentialRefs:      []types.CredentialSlotID{oktaCredential.ID()},
-					ClientRefs:          []types.ClientID{oktaClient.ID()},
-					ValidationOperation: healthCheckOperation.Name(),
-					Integration:         integration.Registration(),
+					CredentialRef:  oktaCredential.ID(),
+					Name:           "Okta API Token",
+					Description:    "Configure Okta access using an API token from your organization.",
+					CredentialRefs: []types.CredentialSlotID{oktaCredential.ID()},
+					ClientRefs:     []types.ClientID{oktaClient.ID()},
+					HealthCheck: &types.HealthCheckRegistration{
+						ClientRef: oktaClient.ID(),
+						Handle:    HealthCheck{}.Handle(),
+					},
+					Integration: integration.Registration(),
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: oktaCredential.ID(),
 						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your Okta admin console under Security > API.",
@@ -57,15 +60,6 @@ func Builder() registry.Builder {
 				},
 			},
 			Operations: []types.OperationRegistration{
-				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Call Okta user API to verify API token",
-					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
-					ClientRef:    oktaClient.ID(),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       HealthCheck{}.Handle(),
-				},
 				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Collect Okta directory users, groups, and memberships as directory accounts",

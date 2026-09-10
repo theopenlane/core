@@ -49,6 +49,11 @@ func TestReconcileShouldCancelClassification(t *testing.T) {
 			want: true,
 		},
 		{
+			name: "degraded failure stops the loop",
+			err:  fmt.Errorf("cycle: %w", types.Degraded(errTestCycle, "missing operation permission")),
+			want: true,
+		},
+		{
 			name: "definition no longer registered stops the loop",
 			err:  fmt.Errorf("cycle: %w", registry.ErrDefinitionNotFound),
 			want: true,

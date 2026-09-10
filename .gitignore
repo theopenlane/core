@@ -37,6 +37,8 @@ tmp/test.md
 
 # object files
 file_uploads/*
+file_uploads/backups/*
+file_uploads-backup/*
 
 # Packages
 *.7z
@@ -85,5 +87,5 @@ internal/integrations/cli/config/.integrations.yaml
 # claude
 .claude
 
-#generated files
-docker/pg-init-scripts/init_zitadel.sql
+# generated files
+docker/pg-init-scripts/init_*.sql

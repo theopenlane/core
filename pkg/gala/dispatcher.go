@@ -193,7 +193,11 @@ func (g *Gala) insertEnvelope(ctx context.Context, envelope Envelope) (dispatchR
 	}
 
 	if result.UniqueSkippedAsDuplicate {
-		logx.FromContext(ctx).Info().Str("topic", string(envelope.Topic)).Str("unique_key", envelope.Headers.UniqueKey).Msg("gala: dispatch skipped, a live job already holds the unique key")
+		logx.FromContext(ctx).Info().
+			Str("topic", string(envelope.Topic)).
+			Str("unique_key", envelope.Headers.UniqueKey).
+			Bool("unique_once", envelope.Headers.UniqueOnce).
+			Msg("gala: dispatch skipped, an existing job holds the unique key; with unique_once the holder may be a completed job")
 	}
 
 	return dispatchResult{

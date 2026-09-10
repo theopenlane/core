@@ -14,6 +14,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the subscriber link listeners so gala setup picks them up automatically
+func init() { registerListeners(SubscriberLinkListeners) }
+
 // SubscriberLinkListeners links a newly created subscriber to an existing contact and/or user with a matching email
 func SubscriberLinkListeners() []gala.Registration {
 	return []gala.Registration{

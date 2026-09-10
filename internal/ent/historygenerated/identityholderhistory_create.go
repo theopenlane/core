@@ -225,6 +225,20 @@ func (_c *IdentityHolderHistoryCreate) SetNillableInternalOwnerGroupID(v *string
 	return _c
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_c *IdentityHolderHistoryCreate) SetInternalOwnerIdentityHolderID(v string) *IdentityHolderHistoryCreate {
+	_c.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_c *IdentityHolderHistoryCreate) SetNillableInternalOwnerIdentityHolderID(v *string) *IdentityHolderHistoryCreate {
+	if v != nil {
+		_c.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetEnvironmentName sets the "environment_name" field.
 func (_c *IdentityHolderHistoryCreate) SetEnvironmentName(v string) *IdentityHolderHistoryCreate {
 	_c.mutation.SetEnvironmentName(v)
@@ -806,6 +820,10 @@ func (_c *IdentityHolderHistoryCreate) createSpec() (*IdentityHolderHistory, *sq
 	if value, ok := _c.mutation.InternalOwnerGroupID(); ok {
 		_spec.SetField(identityholderhistory.FieldInternalOwnerGroupID, field.TypeString, value)
 		_node.InternalOwnerGroupID = value
+	}
+	if value, ok := _c.mutation.InternalOwnerIdentityHolderID(); ok {
+		_spec.SetField(identityholderhistory.FieldInternalOwnerIdentityHolderID, field.TypeString, value)
+		_node.InternalOwnerIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.EnvironmentName(); ok {
 		_spec.SetField(identityholderhistory.FieldEnvironmentName, field.TypeString, value)

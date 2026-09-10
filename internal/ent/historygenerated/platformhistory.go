@@ -49,30 +49,38 @@ type PlatformHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the internal owner for the platform when no user or group is linked
+	// the internal owner for the platform when no user, group, or identity holder is linked
 	InternalOwner string `json:"internal_owner,omitempty"`
 	// the internal owner user id for the platform
 	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
 	// the internal owner group id for the platform
 	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
-	// business owner for the platform when no user or group is linked
+	// the internal owner identity holder id for the platform
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
+	// business owner for the platform when no user, group, or identity holder is linked
 	BusinessOwner string `json:"business_owner,omitempty"`
 	// the business owner user id for the platform
 	BusinessOwnerUserID string `json:"business_owner_user_id,omitempty"`
 	// the business owner group id for the platform
 	BusinessOwnerGroupID string `json:"business_owner_group_id,omitempty"`
-	// technical owner for the platform when no user or group is linked
+	// the business owner identity holder id for the platform
+	BusinessOwnerIdentityHolderID string `json:"business_owner_identity_holder_id,omitempty"`
+	// technical owner for the platform when no user, group, or identity holder is linked
 	TechnicalOwner string `json:"technical_owner,omitempty"`
 	// the technical owner user id for the platform
 	TechnicalOwnerUserID string `json:"technical_owner_user_id,omitempty"`
 	// the technical owner group id for the platform
 	TechnicalOwnerGroupID string `json:"technical_owner_group_id,omitempty"`
-	// security owner for the platform when no user or group is linked
+	// the technical owner identity holder id for the platform
+	TechnicalOwnerIdentityHolderID string `json:"technical_owner_identity_holder_id,omitempty"`
+	// security owner for the platform when no user, group, or identity holder is linked
 	SecurityOwner string `json:"security_owner,omitempty"`
 	// the security owner user id for the platform
 	SecurityOwnerUserID string `json:"security_owner_user_id,omitempty"`
 	// the security owner group id for the platform
 	SecurityOwnerGroupID string `json:"security_owner_group_id,omitempty"`
+	// the security owner identity holder id for the platform
+	SecurityOwnerIdentityHolderID string `json:"security_owner_identity_holder_id,omitempty"`
 	// the kind of the platform
 	PlatformKindName string `json:"platform_kind_name,omitempty"`
 	// the kind of the platform
@@ -163,7 +171,7 @@ func (*PlatformHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case platformhistory.FieldEstimatedMonthlyCost:
 			values[i] = new(sql.NullFloat64)
-		case platformhistory.FieldID, platformhistory.FieldRef, platformhistory.FieldCreatedBy, platformhistory.FieldUpdatedBy, platformhistory.FieldUpdatedByImpersonator, platformhistory.FieldDeletedBy, platformhistory.FieldDisplayID, platformhistory.FieldOwnerID, platformhistory.FieldInternalOwner, platformhistory.FieldInternalOwnerUserID, platformhistory.FieldInternalOwnerGroupID, platformhistory.FieldBusinessOwner, platformhistory.FieldBusinessOwnerUserID, platformhistory.FieldBusinessOwnerGroupID, platformhistory.FieldTechnicalOwner, platformhistory.FieldTechnicalOwnerUserID, platformhistory.FieldTechnicalOwnerGroupID, platformhistory.FieldSecurityOwner, platformhistory.FieldSecurityOwnerUserID, platformhistory.FieldSecurityOwnerGroupID, platformhistory.FieldPlatformKindName, platformhistory.FieldPlatformKindID, platformhistory.FieldPlatformDataClassificationName, platformhistory.FieldPlatformDataClassificationID, platformhistory.FieldEnvironmentName, platformhistory.FieldEnvironmentID, platformhistory.FieldScopeName, platformhistory.FieldScopeID, platformhistory.FieldAccessModelName, platformhistory.FieldAccessModelID, platformhistory.FieldEncryptionStatusName, platformhistory.FieldEncryptionStatusID, platformhistory.FieldSecurityTierName, platformhistory.FieldSecurityTierID, platformhistory.FieldCriticalityName, platformhistory.FieldCriticalityID, platformhistory.FieldExternalUUID, platformhistory.FieldName, platformhistory.FieldDescription, platformhistory.FieldBusinessPurpose, platformhistory.FieldScopeStatement, platformhistory.FieldTrustBoundaryDescription, platformhistory.FieldDataFlowSummary, platformhistory.FieldStatus, platformhistory.FieldPhysicalLocation, platformhistory.FieldRegion, platformhistory.FieldSourceType, platformhistory.FieldSourceIdentifier, platformhistory.FieldCostCenter, platformhistory.FieldPlatformOwnerID, platformhistory.FieldExternalReferenceID:
+		case platformhistory.FieldID, platformhistory.FieldRef, platformhistory.FieldCreatedBy, platformhistory.FieldUpdatedBy, platformhistory.FieldUpdatedByImpersonator, platformhistory.FieldDeletedBy, platformhistory.FieldDisplayID, platformhistory.FieldOwnerID, platformhistory.FieldInternalOwner, platformhistory.FieldInternalOwnerUserID, platformhistory.FieldInternalOwnerGroupID, platformhistory.FieldInternalOwnerIdentityHolderID, platformhistory.FieldBusinessOwner, platformhistory.FieldBusinessOwnerUserID, platformhistory.FieldBusinessOwnerGroupID, platformhistory.FieldBusinessOwnerIdentityHolderID, platformhistory.FieldTechnicalOwner, platformhistory.FieldTechnicalOwnerUserID, platformhistory.FieldTechnicalOwnerGroupID, platformhistory.FieldTechnicalOwnerIdentityHolderID, platformhistory.FieldSecurityOwner, platformhistory.FieldSecurityOwnerUserID, platformhistory.FieldSecurityOwnerGroupID, platformhistory.FieldSecurityOwnerIdentityHolderID, platformhistory.FieldPlatformKindName, platformhistory.FieldPlatformKindID, platformhistory.FieldPlatformDataClassificationName, platformhistory.FieldPlatformDataClassificationID, platformhistory.FieldEnvironmentName, platformhistory.FieldEnvironmentID, platformhistory.FieldScopeName, platformhistory.FieldScopeID, platformhistory.FieldAccessModelName, platformhistory.FieldAccessModelID, platformhistory.FieldEncryptionStatusName, platformhistory.FieldEncryptionStatusID, platformhistory.FieldSecurityTierName, platformhistory.FieldSecurityTierID, platformhistory.FieldCriticalityName, platformhistory.FieldCriticalityID, platformhistory.FieldExternalUUID, platformhistory.FieldName, platformhistory.FieldDescription, platformhistory.FieldBusinessPurpose, platformhistory.FieldScopeStatement, platformhistory.FieldTrustBoundaryDescription, platformhistory.FieldDataFlowSummary, platformhistory.FieldStatus, platformhistory.FieldPhysicalLocation, platformhistory.FieldRegion, platformhistory.FieldSourceType, platformhistory.FieldSourceIdentifier, platformhistory.FieldCostCenter, platformhistory.FieldPlatformOwnerID, platformhistory.FieldExternalReferenceID:
 			values[i] = new(sql.NullString)
 		case platformhistory.FieldHistoryTime, platformhistory.FieldCreatedAt, platformhistory.FieldUpdatedAt, platformhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -287,6 +295,12 @@ func (_m *PlatformHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.InternalOwnerGroupID = value.String
 			}
+		case platformhistory.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
+			}
 		case platformhistory.FieldBusinessOwner:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field business_owner", values[i])
@@ -304,6 +318,12 @@ func (_m *PlatformHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field business_owner_group_id", values[i])
 			} else if value.Valid {
 				_m.BusinessOwnerGroupID = value.String
+			}
+		case platformhistory.FieldBusinessOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field business_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.BusinessOwnerIdentityHolderID = value.String
 			}
 		case platformhistory.FieldTechnicalOwner:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -323,6 +343,12 @@ func (_m *PlatformHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TechnicalOwnerGroupID = value.String
 			}
+		case platformhistory.FieldTechnicalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field technical_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.TechnicalOwnerIdentityHolderID = value.String
+			}
 		case platformhistory.FieldSecurityOwner:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field security_owner", values[i])
@@ -340,6 +366,12 @@ func (_m *PlatformHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field security_owner_group_id", values[i])
 			} else if value.Valid {
 				_m.SecurityOwnerGroupID = value.String
+			}
+		case platformhistory.FieldSecurityOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field security_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.SecurityOwnerIdentityHolderID = value.String
 			}
 		case platformhistory.FieldPlatformKindName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -647,6 +679,9 @@ func (_m *PlatformHistory) String() string {
 	builder.WriteString("internal_owner_group_id=")
 	builder.WriteString(_m.InternalOwnerGroupID)
 	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
+	builder.WriteString(", ")
 	builder.WriteString("business_owner=")
 	builder.WriteString(_m.BusinessOwner)
 	builder.WriteString(", ")
@@ -655,6 +690,9 @@ func (_m *PlatformHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("business_owner_group_id=")
 	builder.WriteString(_m.BusinessOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("business_owner_identity_holder_id=")
+	builder.WriteString(_m.BusinessOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("technical_owner=")
 	builder.WriteString(_m.TechnicalOwner)
@@ -665,6 +703,9 @@ func (_m *PlatformHistory) String() string {
 	builder.WriteString("technical_owner_group_id=")
 	builder.WriteString(_m.TechnicalOwnerGroupID)
 	builder.WriteString(", ")
+	builder.WriteString("technical_owner_identity_holder_id=")
+	builder.WriteString(_m.TechnicalOwnerIdentityHolderID)
+	builder.WriteString(", ")
 	builder.WriteString("security_owner=")
 	builder.WriteString(_m.SecurityOwner)
 	builder.WriteString(", ")
@@ -673,6 +714,9 @@ func (_m *PlatformHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("security_owner_group_id=")
 	builder.WriteString(_m.SecurityOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("security_owner_identity_holder_id=")
+	builder.WriteString(_m.SecurityOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("platform_kind_name=")
 	builder.WriteString(_m.PlatformKindName)

@@ -44,6 +44,8 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldEnvironmentName holds the string denoting the environment_name field in the database.
 	FieldEnvironmentName = "environment_name"
 	// FieldEnvironmentID holds the string denoting the environment_id field in the database.
@@ -108,6 +110,8 @@ const (
 	EdgeInternalOwnerUser = "internal_owner_user"
 	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
 	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeInternalOwnerIdentityHolder holds the string denoting the internal_owner_identity_holder edge name in mutations.
+	EdgeInternalOwnerIdentityHolder = "internal_owner_identity_holder"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
@@ -194,6 +198,10 @@ const (
 	InternalOwnerGroupInverseTable = "groups"
 	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
 	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// InternalOwnerIdentityHolderTable is the table that holds the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderTable = "identity_holders"
+	// InternalOwnerIdentityHolderColumn is the table column denoting the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderColumn = "internal_owner_identity_holder_id"
 	// EnvironmentTable is the table that holds the environment relation/edge.
 	EnvironmentTable = "identity_holders"
 	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
@@ -335,6 +343,7 @@ var Columns = []string{
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldEnvironmentName,
 	FieldEnvironmentID,
 	FieldScopeName,
@@ -549,6 +558,11 @@ func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // ByEnvironmentName orders the results by the environment_name field.
 func ByEnvironmentName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEnvironmentName, opts...).ToFunc()
@@ -729,6 +743,13 @@ func ByInternalOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOp
 func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByInternalOwnerIdentityHolderField orders the results by internal_owner_identity_holder field.
+func ByInternalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1037,6 +1058,13 @@ func newInternalOwnerGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalOwnerGroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
+	)
+}
+func newInternalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(Table, FieldID),
+		sqlgraph.Edge(sqlgraph.O2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
 	)
 }
 func newEnvironmentStep() *sqlgraph.Step {

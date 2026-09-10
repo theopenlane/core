@@ -21,6 +21,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the identity resolution listeners so gala setup picks them up automatically
+func init() { registerListeners(IdentityResolutionListeners) }
+
 // IdentityResolutionListeners resolves directory accounts to identity holders after mutations commit
 func IdentityResolutionListeners() []gala.Registration {
 	return []gala.Registration{
@@ -323,6 +326,10 @@ func syncEmailAliases(ctx context.Context, client *entgen.Client, holder *entgen
 			return !strings.EqualFold(email, holder.Email)
 		})
 	}))
+
+	if len(aliases) == len(holder.EmailAliases) && lo.Every(holder.EmailAliases, aliases) {
+		return nil
+	}
 
 	return client.IdentityHolder.UpdateOneID(holder.ID).
 		SetEmailAliases(aliases).

@@ -25,6 +25,7 @@ query GetAllCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before:
 				integrationID
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				isActive
 				isRecurring
@@ -84,6 +85,7 @@ query GetCampaignHistories ($first: Int, $last: Int, $after: Cursor, $before: Cu
 				integrationID
 				internalOwner
 				internalOwnerGroupID
+				internalOwnerIdentityHolderID
 				internalOwnerUserID
 				isActive
 				isRecurring

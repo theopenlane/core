@@ -20,8 +20,6 @@ var (
 	zitadelOAuthCredentialSchema, zitadelOAuthCredential = providerkit.CredentialSchema[OAuthCredentialSchema]()
 	// zitadelClient is the client ref for the Zitadel unified API client
 	zitadelClient = types.NewClientRef[*client.Client]()
-	// healthCheckSchema, healthCheckOperation is the operation ref for the health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema, directorySyncOperation is the operation ref for directory sync
 	directorySyncSchema, directorySyncOperation = providerkit.OperationSchema[DirectorySync]()
 )

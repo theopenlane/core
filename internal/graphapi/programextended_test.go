@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
@@ -16,11 +18,11 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 	// setup a separate user
 	t.Parallel()
 
-	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
-	user := localTestOrg.owner
+	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	user := localTestOrg.Owner
 
-	member := localTestOrg.member
-	admin := localTestOrg.admin
+	member := localTestOrg.Member
+	admin := localTestOrg.Admin
 
 	members := []*testclient.CreateMemberWithProgramInput{
 		{
@@ -33,12 +35,12 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 		},
 	}
 
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	numAdminControls := 5
 	adminControlIDs := []string{}
 	for range numAdminControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
+		control := (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
@@ -58,7 +60,7 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 				Members:    members,
 				StandardID: &publicStandard.ID,
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    user.UserCtx,
 		},
 		{
@@ -69,7 +71,7 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 				},
 				Members: members,
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    user.UserCtx,
 		},
 		{
@@ -79,7 +81,7 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 					Name: "MITB Assessment - 2025",
 				},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    user.UserCtx,
 		},
 		{
@@ -90,7 +92,7 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 				},
 				Members: nil,
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    user.UserCtx,
 		},
 	}
@@ -115,27 +117,27 @@ func TestMutationCreateProgramWithMembers(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
 }
 
 func TestMutationCreateFullProgram(t *testing.T) {
 	// setup a separate user
 	t.Parallel()
 
-	localTestOrg := suite.seedFreshMinimalOrgUsers(t, false)
-	user := localTestOrg.owner
+	localTestOrg := suite.SeedFreshMinimalOrgUsers(t, false)
+	user := localTestOrg.Owner
 
-	member := localTestOrg.member
-	admin := localTestOrg.admin
+	member := localTestOrg.Member
+	admin := localTestOrg.Admin
 
 	numControls := 5
 	controlIDs := []string{}
 	for range numControls {
-		control := (&ControlBuilder{client: suite.client}).MustNew(user.UserCtx, t)
+		control := (&th.ControlBuilder{Client: suite.Client}).MustNew(user.UserCtx, t)
 		controlIDs = append(controlIDs, control.ID)
 	}
 
-	resp, err := suite.client.api.CreateStandard(user.UserCtx, testclient.CreateStandardInput{
+	resp, err := suite.Client.API.CreateStandard(user.UserCtx, testclient.CreateStandardInput{
 		Name:       "Super Awesome Standard",
 		ControlIDs: controlIDs,
 	}, nil, nil)
@@ -143,12 +145,12 @@ func TestMutationCreateFullProgram(t *testing.T) {
 
 	orgStandard := resp.CreateStandard.Standard
 
-	publicStandard := (&StandardBuilder{client: suite.client, IsPublic: true}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	publicStandard := (&th.StandardBuilder{Client: suite.Client, IsPublic: true}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 
 	numAdminControls := 5
 	adminControlIDs := []string{}
 	for range numAdminControls {
-		control := (&ControlBuilder{client: suite.client, StandardID: publicStandard.ID}).MustNew(sharedSystemAdminUser.UserCtx, t)
+		control := (&th.ControlBuilder{Client: suite.Client, StandardID: publicStandard.ID}).MustNew(th.SharedSystemAdminUser.UserCtx, t)
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
@@ -180,7 +182,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 				Members:    members,
 				StandardID: lo.ToPtr(publicStandard.ID),
 			},
-			client:               suite.client.api,
+			client:               suite.Client.API,
 			ctx:                  user.UserCtx,
 			expectedControlCount: numAdminControls,
 		},
@@ -193,7 +195,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 				Members:    members,
 				StandardID: &orgStandard.ID,
 			},
-			client:               suite.client.api,
+			client:               suite.Client.API,
 			ctx:                  user.UserCtx,
 			expectedControlCount: numControls,
 		},
@@ -241,7 +243,7 @@ func TestMutationCreateFullProgram(t *testing.T) {
 					},
 				},
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    user.UserCtx,
 		},
 	}
@@ -283,6 +285,6 @@ func TestMutationCreateFullProgram(t *testing.T) {
 	}
 
 	// cleanup seeded input
-	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
-	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: publicStandard.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestOrg.Owner.UserCtx, t)
+	(&th.Cleanup[*generated.StandardDeleteOne]{Client: suite.Client.DB.Standard, ID: publicStandard.ID}).MustDelete(th.SharedSystemAdminUser.UserCtx, t)
 }

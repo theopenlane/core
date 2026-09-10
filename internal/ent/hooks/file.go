@@ -46,6 +46,7 @@ func HookFileDelete() ent.Hook {
 						file.FieldMetadata,
 						file.FieldStorageVolume,
 						file.FieldStorageRegion,
+						file.FieldBackupState,
 					).All(ctx)
 				if err != nil {
 					return nil, err
@@ -87,8 +88,24 @@ func HookFileDelete() ent.Hook {
 							storageFile.ProviderType = storagetypes.ProviderType(f.StorageProvider)
 						}
 
-						if err := m.ObjectManager.Delete(ctx, storageFile, nil); err != nil {
-							logx.FromContext(ctx).Error().Err(err).Str("fileID", f.ID).Msg("failed to delete file from object storage")
+						storageFile.BackupLocation = f.BackupState.Location()
+
+						// during a disaster recovery event the source storage is presumed lost, so the
+						// replica is the only remaining copy and deleting the source would only fail
+						_, readFromBackup := m.ObjectManager.ReadFromBackupFor(storageFile.ProviderType)
+
+						if !readFromBackup {
+							if err := m.ObjectManager.Delete(ctx, storageFile, nil); err != nil {
+								logx.FromContext(ctx).Error().Err(err).Str("fileID", f.ID).Msg("failed to delete file from object storage")
+
+								return nil, err
+							}
+						}
+
+						// the replica shares the lifetime of the object it backs up, so it is deleted
+						// with the same semantics as the source
+						if err := m.ObjectManager.DeleteBackup(ctx, storageFile, nil); err != nil {
+							logx.FromContext(ctx).Error().Err(err).Str("fileID", f.ID).Msg("failed to delete file from backup storage")
 
 							return nil, err
 						}

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/hooks"
@@ -90,24 +89,7 @@ func ConfigureGala(galaApp, notificationGala *gala.Gala, dbClient *ent.Client, w
 		return err
 	}
 
-	registrations := lo.Flatten([][]gala.Registration{
-		hooks.OrganizationAvatarListeners(),
-		hooks.TaskRuleListeners(),
-		hooks.EntitlementListeners(),
-		hooks.OrganizationCleanupListeners(),
-		hooks.TrustCenterCacheListeners(),
-		hooks.TrustCenterWatermarkListeners(),
-		hooks.WorkflowListeners(),
-		hooks.VendorScoringListeners(),
-		hooks.IdentityResolutionListeners(),
-		hooks.DocumentAssociationListeners(),
-		hooks.QuestionnaireTransformListeners(),
-		hooks.CampaignRecurringListeners(),
-		hooks.SubscriberLinkListeners(),
-		hooks.NDAAttestationListeners(),
-		hooks.DomainScanListeners(),
-		hooks.IntegrationCleanupListeners(),
-	})
+	registrations := hooks.AllListeners()
 
 	if _, err := gala.Register(galaApp, registrations...); err != nil {
 		closeRuntimes()

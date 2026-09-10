@@ -169,6 +169,9 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.StorageProviderCleared() {
 		_spec.ClearField(filehistory.FieldStorageProvider, field.TypeString)
 	}
+	if _u.mutation.BackupStateCleared() {
+		_spec.ClearField(filehistory.FieldBackupState, field.TypeJSON)
+	}
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(filehistory.FieldLastAccessedAt, field.TypeTime)
 	}
@@ -361,6 +364,9 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.StorageProviderCleared() {
 		_spec.ClearField(filehistory.FieldStorageProvider, field.TypeString)
+	}
+	if _u.mutation.BackupStateCleared() {
+		_spec.ClearField(filehistory.FieldBackupState, field.TypeJSON)
 	}
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(filehistory.FieldLastAccessedAt, field.TypeTime)

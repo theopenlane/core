@@ -5,6 +5,8 @@ import (
 	"reflect"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -17,9 +19,9 @@ import (
 func TestQueryTFASetting(t *testing.T) {
 	t.Parallel()
 	// create a user for this test
-	testUser := suite.seedOrgOwner(t)
+	testUser := suite.SeedOrgOwner(t)
 
-	(&TFASettingBuilder{client: suite.client}).MustNew(testUser.owner.UserCtx, t)
+	(&th.TFASettingBuilder{Client: suite.Client}).MustNew(testUser.Owner.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -30,19 +32,19 @@ func TestQueryTFASetting(t *testing.T) {
 	}{
 		{
 			name:   "happy path user",
-			client: suite.client.api,
-			ctx:    testUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    testUser.Owner.UserCtx,
 		},
 		{
 			name:   "happy path, using personal access token",
-			client: testUser.patClient,
+			client: testUser.PatClient,
 			ctx:    context.Background(),
 		},
 		{
 			name:     "valid user, but not auth",
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -62,15 +64,15 @@ func TestQueryTFASetting(t *testing.T) {
 	}
 
 	// cleanup
-	cleanupOrganizationDataWithContext(testUser.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(testUser.Owner.UserCtx, t)
 }
 
 func TestMutationCreateTFASetting(t *testing.T) {
 	// create a user for this test
 	t.Parallel()
-	localTestUser := suite.seedOrgOwner(t)
-	localTestUser2 := suite.userBuilder(context.Background(), t)
-	testUserAnother := suite.userBuilder(context.Background(), t)
+	localTestUser := suite.SeedOrgOwner(t)
+	localTestUser2 := suite.UserBuilder(context.Background(), t)
+	testUserAnother := suite.UserBuilder(context.Background(), t)
 
 	testCases := []struct {
 		name   string
@@ -86,36 +88,36 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    localTestUser2.UserCtx,
 		},
 		{
 			name:   "happy path, using personal access token",
-			userID: localTestUser.owner.ID,
+			userID: localTestUser.Owner.ID,
 			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
-			client: localTestUser.patClient,
+			client: localTestUser.PatClient,
 			ctx:    context.Background(),
 		},
 		{
 			name:   "unable to create using api token",
-			userID: localTestUser.owner.ID,
+			userID: localTestUser.Owner.ID,
 			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
-			client: localTestUser.apiClient,
+			client: localTestUser.APIClient,
 			ctx:    context.Background(),
 			errMsg: rout.ErrBadRequest.Error(),
 		},
 		{
 			name:   "already exists",
-			userID: localTestUser.owner.ID,
+			userID: localTestUser.Owner.ID,
 			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
-			client: suite.client.api,
-			ctx:    localTestUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    localTestUser.Owner.UserCtx,
 			errMsg: "tfasetting already exists",
 		},
 		{
@@ -124,7 +126,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			input: testclient.CreateTFASettingInput{
 				TotpAllowed: lo.ToPtr(false),
 			},
-			client: suite.client.api,
+			client: suite.Client.API,
 			ctx:    testUserAnother.UserCtx,
 		},
 	}
@@ -158,7 +160,7 @@ func TestMutationCreateTFASetting(t *testing.T) {
 			assert.Check(t, is.Equal(tc.userID, resp.CreateTFASetting.TfaSetting.Owner.ID))
 
 			// make sure user setting was not updated
-			userSetting, err := sharedTestUser1.UserInfo.Setting(sharedTestUser1.UserCtx)
+			userSetting, err := th.SharedTestUser1.UserInfo.Setting(th.SharedTestUser1.UserCtx)
 			assert.NilError(t, err)
 
 			assert.Check(t, !userSetting.IsTfaEnabled)
@@ -166,20 +168,20 @@ func TestMutationCreateTFASetting(t *testing.T) {
 	}
 
 	// cleanup
-	_, err := suite.client.api.GetTFASetting(localTestUser2.UserCtx)
+	_, err := suite.Client.API.GetTFASetting(localTestUser2.UserCtx)
 	assert.NilError(t, err)
 
-	cleanupOrganizationDataWithContext(localTestUser.owner.UserCtx, t)
-	cleanupOrganizationDataWithContext(localTestUser2.UserCtx, t)
-	cleanupOrganizationDataWithContext(testUserAnother.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestUser.Owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestUser2.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(testUserAnother.UserCtx, t)
 }
 
 func TestMutationUpdateTFASetting(t *testing.T) {
 	t.Parallel()
-	localTestUser := suite.seedOrgOwner(t)
+	localTestUser := suite.SeedOrgOwner(t)
 
 	// create tfa settings for user
-	(&TFASettingBuilder{client: suite.client}).MustNew(localTestUser.owner.UserCtx, t)
+	(&th.TFASettingBuilder{Client: suite.Client}).MustNew(localTestUser.Owner.UserCtx, t)
 
 	recoveryCodes := []string{}
 
@@ -196,15 +198,15 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 				TotpAllowed: lo.ToPtr(true),
 				Verified:    lo.ToPtr(true),
 			},
-			client: suite.client.api,
-			ctx:    localTestUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    localTestUser.Owner.UserCtx,
 		},
 		{
 			name: "regen codes using personal access token",
 			input: testclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(true),
 			},
-			client: localTestUser.patClient,
+			client: localTestUser.PatClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -212,7 +214,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 			input: testclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(true),
 			},
-			client: localTestUser.apiClient,
+			client: localTestUser.APIClient,
 			ctx:    context.Background(),
 			errMsg: rout.ErrBadRequest.Error(),
 		},
@@ -221,24 +223,24 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 			input: testclient.UpdateTFASettingInput{
 				RegenBackupCodes: lo.ToPtr(false),
 			},
-			client: suite.client.api,
-			ctx:    localTestUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    localTestUser.Owner.UserCtx,
 		},
 		{
 			name: "update totp to false should clear settings",
 			input: testclient.UpdateTFASettingInput{
 				TotpAllowed: lo.ToPtr(false),
 			},
-			client: suite.client.api,
-			ctx:    localTestUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    localTestUser.Owner.UserCtx,
 		},
 		{
 			name: "update TotpAllowed to true should enable TFA",
 			input: testclient.UpdateTFASettingInput{
 				TotpAllowed: lo.ToPtr(true),
 			},
-			client: suite.client.api,
-			ctx:    localTestUser.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    localTestUser.Owner.UserCtx,
 		},
 	}
 
@@ -286,7 +288,7 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 			}
 
 			// make sure user setting is updated correctly
-			userSettings, err := suite.client.api.GetUserSettingByID(localTestUser.owner.UserCtx, localTestUser.owner.UserInfo.Edges.Setting.ID)
+			userSettings, err := suite.Client.API.GetUserSettingByID(localTestUser.Owner.UserCtx, localTestUser.Owner.UserInfo.Edges.Setting.ID)
 			assert.NilError(t, err)
 
 			if resp.UpdateTFASetting.TfaSetting.Verified {
@@ -304,5 +306,5 @@ func TestMutationUpdateTFASetting(t *testing.T) {
 	}
 
 	// cleanup
-	cleanupOrganizationDataWithContext(localTestUser.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(localTestUser.Owner.UserCtx, t)
 }

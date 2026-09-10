@@ -14,6 +14,7 @@ import (
 // activeOrTrialingSubscriptionPredicates matches organizations with an active or trialing subscription
 func activeOrTrialingSubscriptionPredicates() []predicate.OrgSubscription {
 	return []predicate.OrgSubscription{
+		orgsubscription.DeletedAtIsNil(),
 		orgsubscription.Or(
 			orgsubscription.ActiveEQ(true),
 			orgsubscription.StripeSubscriptionStatusEQ(string(stripe.SubscriptionStatusTrialing)),

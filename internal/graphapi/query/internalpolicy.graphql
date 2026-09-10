@@ -479,6 +479,45 @@ query GetInternalPolicyByID ($internalPolicyId: ID!) {
 			id
 			name
 		}
+		discussions {
+			edges {
+				node {
+					id
+					externalID
+					createdAt
+					isResolved
+					comments {
+						edges {
+							node {
+								id
+								displayID
+								text
+								noteRef
+								isEdited
+								discussionID
+								createdAt
+								createdBy
+								updatedAt
+								updatedBy
+							}
+						}
+					}
+				}
+			}
+		}
+		comments {
+			edges {
+				node {
+					id
+					displayID
+					text
+					createdAt
+					createdBy
+					updatedAt
+					updatedBy
+				}
+			}
+		}
 	}
 }
 mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInput!) {

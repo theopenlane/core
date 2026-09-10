@@ -312,10 +312,6 @@ func (ec *executionContext) _WorkflowDefinitionUpdatePayload(ctx context.Context
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNWorkflowDefinitionBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionBulkCreatePayload) graphql.Marshaler {
-	return ec._WorkflowDefinitionBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -324,10 +320,6 @@ func (ec *executionContext) marshalNWorkflowDefinitionBulkCreatePayload2ᚖgithu
 		return graphql.Null
 	}
 	return ec._WorkflowDefinitionBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowDefinitionCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionCreatePayload) graphql.Marshaler {
-	return ec._WorkflowDefinitionCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionCreatePayload) graphql.Marshaler {
@@ -340,10 +332,6 @@ func (ec *executionContext) marshalNWorkflowDefinitionCreatePayload2ᚖgithubᚗ
 	return ec._WorkflowDefinitionCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowDefinitionDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionDeletePayload) graphql.Marshaler {
-	return ec._WorkflowDefinitionDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -352,10 +340,6 @@ func (ec *executionContext) marshalNWorkflowDefinitionDeletePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._WorkflowDefinitionDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowDefinitionUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.WorkflowDefinitionUpdatePayload) graphql.Marshaler {
-	return ec._WorkflowDefinitionUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowDefinitionUpdatePayload) graphql.Marshaler {

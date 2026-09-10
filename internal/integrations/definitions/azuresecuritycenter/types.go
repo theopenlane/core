@@ -14,8 +14,6 @@ var (
 	securityCenterSchema, securityCenterCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// securityCenterClient is the client ref for the Azure Security Center client
 	securityCenterClient = types.NewClientRef[*azureSecurityClient]()
-	// healthDefaultOperation is the operation ref for the Azure Security Center health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// assessmentsCollectSchema is the operation ref for the Azure Security Center assessments collect operation
 	assessmentsCollectSchema, assessmentsCollectOperation = providerkit.OperationSchema[AssessmentsCollect]()
 	// subAssessmentsCollectSchema is the operation ref for the Azure Security Center sub-assessments collect operation

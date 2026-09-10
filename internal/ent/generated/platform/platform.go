@@ -44,24 +44,32 @@ const (
 	FieldInternalOwnerUserID = "internal_owner_user_id"
 	// FieldInternalOwnerGroupID holds the string denoting the internal_owner_group_id field in the database.
 	FieldInternalOwnerGroupID = "internal_owner_group_id"
+	// FieldInternalOwnerIdentityHolderID holds the string denoting the internal_owner_identity_holder_id field in the database.
+	FieldInternalOwnerIdentityHolderID = "internal_owner_identity_holder_id"
 	// FieldBusinessOwner holds the string denoting the business_owner field in the database.
 	FieldBusinessOwner = "business_owner"
 	// FieldBusinessOwnerUserID holds the string denoting the business_owner_user_id field in the database.
 	FieldBusinessOwnerUserID = "business_owner_user_id"
 	// FieldBusinessOwnerGroupID holds the string denoting the business_owner_group_id field in the database.
 	FieldBusinessOwnerGroupID = "business_owner_group_id"
+	// FieldBusinessOwnerIdentityHolderID holds the string denoting the business_owner_identity_holder_id field in the database.
+	FieldBusinessOwnerIdentityHolderID = "business_owner_identity_holder_id"
 	// FieldTechnicalOwner holds the string denoting the technical_owner field in the database.
 	FieldTechnicalOwner = "technical_owner"
 	// FieldTechnicalOwnerUserID holds the string denoting the technical_owner_user_id field in the database.
 	FieldTechnicalOwnerUserID = "technical_owner_user_id"
 	// FieldTechnicalOwnerGroupID holds the string denoting the technical_owner_group_id field in the database.
 	FieldTechnicalOwnerGroupID = "technical_owner_group_id"
+	// FieldTechnicalOwnerIdentityHolderID holds the string denoting the technical_owner_identity_holder_id field in the database.
+	FieldTechnicalOwnerIdentityHolderID = "technical_owner_identity_holder_id"
 	// FieldSecurityOwner holds the string denoting the security_owner field in the database.
 	FieldSecurityOwner = "security_owner"
 	// FieldSecurityOwnerUserID holds the string denoting the security_owner_user_id field in the database.
 	FieldSecurityOwnerUserID = "security_owner_user_id"
 	// FieldSecurityOwnerGroupID holds the string denoting the security_owner_group_id field in the database.
 	FieldSecurityOwnerGroupID = "security_owner_group_id"
+	// FieldSecurityOwnerIdentityHolderID holds the string denoting the security_owner_identity_holder_id field in the database.
+	FieldSecurityOwnerIdentityHolderID = "security_owner_identity_holder_id"
 	// FieldPlatformKindName holds the string denoting the platform_kind_name field in the database.
 	FieldPlatformKindName = "platform_kind_name"
 	// FieldPlatformKindID holds the string denoting the platform_kind_id field in the database.
@@ -146,18 +154,26 @@ const (
 	EdgeInternalOwnerUser = "internal_owner_user"
 	// EdgeInternalOwnerGroup holds the string denoting the internal_owner_group edge name in mutations.
 	EdgeInternalOwnerGroup = "internal_owner_group"
+	// EdgeInternalOwnerIdentityHolder holds the string denoting the internal_owner_identity_holder edge name in mutations.
+	EdgeInternalOwnerIdentityHolder = "internal_owner_identity_holder"
 	// EdgeBusinessOwnerUser holds the string denoting the business_owner_user edge name in mutations.
 	EdgeBusinessOwnerUser = "business_owner_user"
 	// EdgeBusinessOwnerGroup holds the string denoting the business_owner_group edge name in mutations.
 	EdgeBusinessOwnerGroup = "business_owner_group"
+	// EdgeBusinessOwnerIdentityHolder holds the string denoting the business_owner_identity_holder edge name in mutations.
+	EdgeBusinessOwnerIdentityHolder = "business_owner_identity_holder"
 	// EdgeTechnicalOwnerUser holds the string denoting the technical_owner_user edge name in mutations.
 	EdgeTechnicalOwnerUser = "technical_owner_user"
 	// EdgeTechnicalOwnerGroup holds the string denoting the technical_owner_group edge name in mutations.
 	EdgeTechnicalOwnerGroup = "technical_owner_group"
+	// EdgeTechnicalOwnerIdentityHolder holds the string denoting the technical_owner_identity_holder edge name in mutations.
+	EdgeTechnicalOwnerIdentityHolder = "technical_owner_identity_holder"
 	// EdgeSecurityOwnerUser holds the string denoting the security_owner_user edge name in mutations.
 	EdgeSecurityOwnerUser = "security_owner_user"
 	// EdgeSecurityOwnerGroup holds the string denoting the security_owner_group edge name in mutations.
 	EdgeSecurityOwnerGroup = "security_owner_group"
+	// EdgeSecurityOwnerIdentityHolder holds the string denoting the security_owner_identity_holder edge name in mutations.
+	EdgeSecurityOwnerIdentityHolder = "security_owner_identity_holder"
 	// EdgePlatformKind holds the string denoting the platform_kind edge name in mutations.
 	EdgePlatformKind = "platform_kind"
 	// EdgePlatformDataClassification holds the string denoting the platform_data_classification edge name in mutations.
@@ -266,6 +282,13 @@ const (
 	InternalOwnerGroupInverseTable = "groups"
 	// InternalOwnerGroupColumn is the table column denoting the internal_owner_group relation/edge.
 	InternalOwnerGroupColumn = "internal_owner_group_id"
+	// InternalOwnerIdentityHolderTable is the table that holds the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderTable = "platforms"
+	// InternalOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	InternalOwnerIdentityHolderInverseTable = "identity_holders"
+	// InternalOwnerIdentityHolderColumn is the table column denoting the internal_owner_identity_holder relation/edge.
+	InternalOwnerIdentityHolderColumn = "internal_owner_identity_holder_id"
 	// BusinessOwnerUserTable is the table that holds the business_owner_user relation/edge.
 	BusinessOwnerUserTable = "platforms"
 	// BusinessOwnerUserInverseTable is the table name for the User entity.
@@ -280,6 +303,13 @@ const (
 	BusinessOwnerGroupInverseTable = "groups"
 	// BusinessOwnerGroupColumn is the table column denoting the business_owner_group relation/edge.
 	BusinessOwnerGroupColumn = "business_owner_group_id"
+	// BusinessOwnerIdentityHolderTable is the table that holds the business_owner_identity_holder relation/edge.
+	BusinessOwnerIdentityHolderTable = "platforms"
+	// BusinessOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	BusinessOwnerIdentityHolderInverseTable = "identity_holders"
+	// BusinessOwnerIdentityHolderColumn is the table column denoting the business_owner_identity_holder relation/edge.
+	BusinessOwnerIdentityHolderColumn = "business_owner_identity_holder_id"
 	// TechnicalOwnerUserTable is the table that holds the technical_owner_user relation/edge.
 	TechnicalOwnerUserTable = "platforms"
 	// TechnicalOwnerUserInverseTable is the table name for the User entity.
@@ -294,6 +324,13 @@ const (
 	TechnicalOwnerGroupInverseTable = "groups"
 	// TechnicalOwnerGroupColumn is the table column denoting the technical_owner_group relation/edge.
 	TechnicalOwnerGroupColumn = "technical_owner_group_id"
+	// TechnicalOwnerIdentityHolderTable is the table that holds the technical_owner_identity_holder relation/edge.
+	TechnicalOwnerIdentityHolderTable = "platforms"
+	// TechnicalOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	TechnicalOwnerIdentityHolderInverseTable = "identity_holders"
+	// TechnicalOwnerIdentityHolderColumn is the table column denoting the technical_owner_identity_holder relation/edge.
+	TechnicalOwnerIdentityHolderColumn = "technical_owner_identity_holder_id"
 	// SecurityOwnerUserTable is the table that holds the security_owner_user relation/edge.
 	SecurityOwnerUserTable = "platforms"
 	// SecurityOwnerUserInverseTable is the table name for the User entity.
@@ -308,6 +345,13 @@ const (
 	SecurityOwnerGroupInverseTable = "groups"
 	// SecurityOwnerGroupColumn is the table column denoting the security_owner_group relation/edge.
 	SecurityOwnerGroupColumn = "security_owner_group_id"
+	// SecurityOwnerIdentityHolderTable is the table that holds the security_owner_identity_holder relation/edge.
+	SecurityOwnerIdentityHolderTable = "platforms"
+	// SecurityOwnerIdentityHolderInverseTable is the table name for the IdentityHolder entity.
+	// It exists in this package in order to avoid circular dependency with the "identityholder" package.
+	SecurityOwnerIdentityHolderInverseTable = "identity_holders"
+	// SecurityOwnerIdentityHolderColumn is the table column denoting the security_owner_identity_holder relation/edge.
+	SecurityOwnerIdentityHolderColumn = "security_owner_identity_holder_id"
 	// PlatformKindTable is the table that holds the platform_kind relation/edge.
 	PlatformKindTable = "platforms"
 	// PlatformKindInverseTable is the table name for the CustomTypeEnum entity.
@@ -541,15 +585,19 @@ var Columns = []string{
 	FieldInternalOwner,
 	FieldInternalOwnerUserID,
 	FieldInternalOwnerGroupID,
+	FieldInternalOwnerIdentityHolderID,
 	FieldBusinessOwner,
 	FieldBusinessOwnerUserID,
 	FieldBusinessOwnerGroupID,
+	FieldBusinessOwnerIdentityHolderID,
 	FieldTechnicalOwner,
 	FieldTechnicalOwnerUserID,
 	FieldTechnicalOwnerGroupID,
+	FieldTechnicalOwnerIdentityHolderID,
 	FieldSecurityOwner,
 	FieldSecurityOwnerUserID,
 	FieldSecurityOwnerGroupID,
+	FieldSecurityOwnerIdentityHolderID,
 	FieldPlatformKindName,
 	FieldPlatformKindID,
 	FieldPlatformDataClassificationName,
@@ -790,6 +838,11 @@ func ByInternalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldInternalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByInternalOwnerIdentityHolderID orders the results by the internal_owner_identity_holder_id field.
+func ByInternalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // ByBusinessOwner orders the results by the business_owner field.
 func ByBusinessOwner(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBusinessOwner, opts...).ToFunc()
@@ -803,6 +856,11 @@ func ByBusinessOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
 // ByBusinessOwnerGroupID orders the results by the business_owner_group_id field.
 func ByBusinessOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldBusinessOwnerGroupID, opts...).ToFunc()
+}
+
+// ByBusinessOwnerIdentityHolderID orders the results by the business_owner_identity_holder_id field.
+func ByBusinessOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldBusinessOwnerIdentityHolderID, opts...).ToFunc()
 }
 
 // ByTechnicalOwner orders the results by the technical_owner field.
@@ -820,6 +878,11 @@ func ByTechnicalOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTechnicalOwnerGroupID, opts...).ToFunc()
 }
 
+// ByTechnicalOwnerIdentityHolderID orders the results by the technical_owner_identity_holder_id field.
+func ByTechnicalOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTechnicalOwnerIdentityHolderID, opts...).ToFunc()
+}
+
 // BySecurityOwner orders the results by the security_owner field.
 func BySecurityOwner(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecurityOwner, opts...).ToFunc()
@@ -833,6 +896,11 @@ func BySecurityOwnerUserID(opts ...sql.OrderTermOption) OrderOption {
 // BySecurityOwnerGroupID orders the results by the security_owner_group_id field.
 func BySecurityOwnerGroupID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecurityOwnerGroupID, opts...).ToFunc()
+}
+
+// BySecurityOwnerIdentityHolderID orders the results by the security_owner_identity_holder_id field.
+func BySecurityOwnerIdentityHolderID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSecurityOwnerIdentityHolderID, opts...).ToFunc()
 }
 
 // ByPlatformKindName orders the results by the platform_kind_name field.
@@ -1073,6 +1141,13 @@ func ByInternalOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderO
 	}
 }
 
+// ByInternalOwnerIdentityHolderField orders the results by internal_owner_identity_holder field.
+func ByInternalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newInternalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByBusinessOwnerUserField orders the results by business_owner_user field.
 func ByBusinessOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1084,6 +1159,13 @@ func ByBusinessOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOp
 func ByBusinessOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newBusinessOwnerGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByBusinessOwnerIdentityHolderField orders the results by business_owner_identity_holder field.
+func ByBusinessOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBusinessOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1101,6 +1183,13 @@ func ByTechnicalOwnerGroupField(field string, opts ...sql.OrderTermOption) Order
 	}
 }
 
+// ByTechnicalOwnerIdentityHolderField orders the results by technical_owner_identity_holder field.
+func ByTechnicalOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTechnicalOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // BySecurityOwnerUserField orders the results by security_owner_user field.
 func BySecurityOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1112,6 +1201,13 @@ func BySecurityOwnerUserField(field string, opts ...sql.OrderTermOption) OrderOp
 func BySecurityOwnerGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSecurityOwnerGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// BySecurityOwnerIdentityHolderField orders the results by security_owner_identity_holder field.
+func BySecurityOwnerIdentityHolderField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSecurityOwnerIdentityHolderStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1583,6 +1679,13 @@ func newInternalOwnerGroupStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
 	)
 }
+func newInternalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(InternalOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerIdentityHolderTable, InternalOwnerIdentityHolderColumn),
+	)
+}
 func newBusinessOwnerUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1595,6 +1698,13 @@ func newBusinessOwnerGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(BusinessOwnerGroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, BusinessOwnerGroupTable, BusinessOwnerGroupColumn),
+	)
+}
+func newBusinessOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BusinessOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, BusinessOwnerIdentityHolderTable, BusinessOwnerIdentityHolderColumn),
 	)
 }
 func newTechnicalOwnerUserStep() *sqlgraph.Step {
@@ -1611,6 +1721,13 @@ func newTechnicalOwnerGroupStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, TechnicalOwnerGroupTable, TechnicalOwnerGroupColumn),
 	)
 }
+func newTechnicalOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TechnicalOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, TechnicalOwnerIdentityHolderTable, TechnicalOwnerIdentityHolderColumn),
+	)
+}
 func newSecurityOwnerUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1623,6 +1740,13 @@ func newSecurityOwnerGroupStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SecurityOwnerGroupInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, SecurityOwnerGroupTable, SecurityOwnerGroupColumn),
+	)
+}
+func newSecurityOwnerIdentityHolderStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SecurityOwnerIdentityHolderInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, SecurityOwnerIdentityHolderTable, SecurityOwnerIdentityHolderColumn),
 	)
 }
 func newPlatformKindStep() *sqlgraph.Step {

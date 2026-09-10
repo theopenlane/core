@@ -583,10 +583,6 @@ func (ec *executionContext) _AudienceUpdatePayload(ctx context.Context, sel ast.
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAudienceBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AudienceBulkCreatePayload) graphql.Marshaler {
-	return ec._AudienceBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAudienceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AudienceBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNAudienceBulkCreatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._AudienceBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAudienceBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AudienceBulkDeletePayload) graphql.Marshaler {
-	return ec._AudienceBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAudienceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AudienceBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNAudienceBulkDeletePayload2ᚖgithubᚗcomᚋ
 	return ec._AudienceBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAudienceBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.AudienceBulkUpdatePayload) graphql.Marshaler {
-	return ec._AudienceBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAudienceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AudienceBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNAudienceBulkUpdatePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._AudienceBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAudienceCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AudienceCreatePayload) graphql.Marshaler {
-	return ec._AudienceCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAudienceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AudienceCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNAudienceCreatePayload2ᚖgithubᚗcomᚋtheo
 	return ec._AudienceCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAudienceDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AudienceDeletePayload) graphql.Marshaler {
-	return ec._AudienceDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAudienceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AudienceDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNAudienceDeletePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._AudienceDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAudienceUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.AudienceUpdatePayload) graphql.Marshaler {
-	return ec._AudienceUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAudienceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAudienceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AudienceUpdatePayload) graphql.Marshaler {

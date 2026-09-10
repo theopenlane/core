@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/v2/internal/httpserve/handlers"
 	definitionscim "github.com/theopenlane/core/v2/internal/integrations/definitions/scim"
-	"github.com/theopenlane/core/v2/internal/integrations/providerkit"
 	"github.com/theopenlane/core/v2/internal/integrations/registry"
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/jsonx"
@@ -32,13 +31,7 @@ const (
 	configTestFailHealthProviderID = "def_01K0TESTCFG00000000000002"
 )
 
-// ConfigTestHealthCheck is the config type for the config test health check operation
-type ConfigTestHealthCheck struct{}
-
-var (
-	configTestCredentialRef                        = types.NewCredentialSlotID("config_test")
-	configHealthSchema, configHealthCheckOperation = providerkit.OperationSchema[ConfigTestHealthCheck]()
-)
+var configTestCredentialRef = types.NewCredentialSlotID("config_test")
 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	t := suite.T()
@@ -495,25 +488,15 @@ func configTestDefinitionBuilder(definitionID string, failHealth bool) registry.
 			},
 			Connections: []types.ConnectionRegistration{
 				{
-					CredentialRef:       configTestCredentialRef,
-					Name:                "Config Test Connection",
-					Description:         "Connect the config test definition using the configured credential payload.",
-					CredentialRefs:      []types.CredentialSlotID{configTestCredentialRef},
-					ValidationOperation: configHealthCheckOperation.Name(),
+					CredentialRef:  configTestCredentialRef,
+					Name:           "Config Test Connection",
+					Description:    "Connect the config test definition using the configured credential payload.",
+					CredentialRefs: []types.CredentialSlotID{configTestCredentialRef},
+					HealthCheck:    &types.HealthCheckRegistration{Handle: healthHandler},
 					Disconnect: &types.DisconnectRegistration{
 						CredentialRef: configTestCredentialRef,
 						Description:   "Remove the persisted config test credential and disconnect this installation.",
 					},
-				},
-			},
-			Operations: []types.OperationRegistration{
-				{
-					Name:         configHealthCheckOperation.Name(),
-					Description:  "Validate the config test installation",
-					Topic:        types.NewDefinitionRef(definitionID).OperationTopic(configHealthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: configHealthSchema,
-					Handle:       healthHandler,
 				},
 			},
 		}, nil

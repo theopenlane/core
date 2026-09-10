@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
@@ -12,30 +14,30 @@ import (
 )
 
 func TestAssessmentDueDateUpdateSyncsToResponses(t *testing.T) {
-	assessment := (&AssessmentBuilder{
-		client:              suite.client,
+	assessment := (&th.AssessmentBuilder{
+		Client:              suite.Client,
 		ResponseDueDuration: int64(time.Hour.Seconds()),
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
-	assessmentResponse := (&AssessmentResponseBuilder{
-		client:       suite.client,
+	assessmentResponse := (&th.AssessmentResponseBuilder{
+		Client:       suite.Client,
 		AssessmentID: assessment.ID,
 		OwnerID:      assessment.OwnerID,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(th.SharedTestUser1.UserCtx, t)
 
 	assert.Assert(t, !assessmentResponse.DueDate.IsZero())
 
-	_, err := suite.client.api.UpdateAssessment(sharedTestUser1.UserCtx, assessment.ID, testclient.UpdateAssessmentInput{
+	_, err := suite.Client.API.UpdateAssessment(th.SharedTestUser1.UserCtx, assessment.ID, testclient.UpdateAssessmentInput{
 		ResponseDueDuration: lo.ToPtr(int64((2 * time.Hour).Seconds())),
 	})
 	assert.NilError(t, err)
 
-	resp, err := suite.client.api.GetAssessmentResponseByID(sharedTestUser1.UserCtx, assessmentResponse.ID)
+	resp, err := suite.Client.API.GetAssessmentResponseByID(th.SharedTestUser1.UserCtx, assessmentResponse.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, resp.AssessmentResponse.DueDate != nil)
 	assert.Assert(t, resp.AssessmentResponse.DueDate.After(assessmentResponse.DueDate))
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, ID: assessmentResponse.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentResponseDeleteOne]{Client: suite.Client.DB.AssessmentResponse, ID: assessmentResponse.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.AssessmentDeleteOne]{Client: suite.Client.DB.Assessment, ID: assessment.ID}).MustDelete(th.SharedTestUser1.UserCtx, t)
+	(&th.Cleanup[*generated.TemplateDeleteOne]{Client: suite.Client.DB.Template, ID: assessment.TemplateID}).MustDelete(th.SharedTestUser1.UserCtx, t)
 }

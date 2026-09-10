@@ -327,10 +327,6 @@ func (ec *executionContext) unmarshalNSubmitTrustCenterNDAResponseInput2github�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
-	return ec._SubmitTrustCenterNDAResponsePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐSubmitTrustCenterNDAResponsePayload(ctx context.Context, sel ast.SelectionSet, v *model.SubmitTrustCenterNDAResponsePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -341,10 +337,6 @@ func (ec *executionContext) marshalNSubmitTrustCenterNDAResponsePayload2ᚖgithu
 	return ec._SubmitTrustCenterNDAResponsePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterNDACreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDACreatePayload) graphql.Marshaler {
-	return ec._TrustCenterNDACreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDACreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterNDACreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -353,10 +345,6 @@ func (ec *executionContext) marshalNTrustCenterNDACreatePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._TrustCenterNDACreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterNDAUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterNDAUpdatePayload) graphql.Marshaler {
-	return ec._TrustCenterNDAUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterNDAUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterNDAUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterNDAUpdatePayload) graphql.Marshaler {

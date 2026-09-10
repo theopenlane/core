@@ -20,8 +20,6 @@ var (
 	_, oneDriveCredential = providerkit.CredentialSchema[oneDriveCred]()
 	// oneDriveClient is the client ref for the wrapped OneDrive graph client
 	oneDriveClient = types.NewClientRef[*DriveClient]()
-	// healthCheckSchema is the operation schema for the health check operation
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// documentExportSchema is the operation schema for the document export operation
 	documentExportSchema, documentExportOperation = providerkit.OperationSchema[operations.DocumentExport]()
 	// folderSyncSchema is the operation schema for the folder sync operation

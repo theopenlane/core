@@ -491,10 +491,6 @@ func (ec *executionContext) marshalNWorkflowFieldMetadata2ᚖgithubᚗcomᚋtheo
 	return ec._WorkflowFieldMetadata(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNWorkflowMetadata2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowMetadata(ctx context.Context, sel ast.SelectionSet, v model.WorkflowMetadata) graphql.Marshaler {
-	return ec._WorkflowMetadata(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowMetadata2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐWorkflowMetadata(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowMetadata) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
 	intobvs "github.com/theopenlane/core/v2/internal/integrations/observability"
@@ -98,7 +100,7 @@ func (r *Runtime) markReconcileExhausted(ctx context.Context, e operations.Recon
 // adaptive schedule state), while zero or multiple loops are cancelled and reseeded as one fresh
 // unique loop
 func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Integration) error {
-	if installation.Status != enums.IntegrationStatusConnected {
+	if !lo.Contains(enums.IntegrationOperationalStatuses, installation.Status) {
 		return nil
 	}
 
@@ -122,12 +124,18 @@ func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Int
 
 	var errs []error
 
+	unhealthy := installation.Health.UnhealthyOperations
+
 	for _, op := range def.Operations {
 		if !op.Policy.Reconcile {
 			continue
 		}
 
 		if op.Disabled != nil && op.Disabled(installation.Config.ClientConfig) {
+			continue
+		}
+
+		if _, failing := unhealthy[op.Name]; failing {
 			continue
 		}
 

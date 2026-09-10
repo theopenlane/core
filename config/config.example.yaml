@@ -218,6 +218,10 @@ integrations:
         clientid: ""
         clientsecret: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    integrationlifecycle:
+        dryrun: true
+        enabled: true
+        maxperrun: 100
     microsoftteams:
         applicationid: ""
         clientid: ""
@@ -307,6 +311,7 @@ objectstorage:
     maxsizemb: 0
     providers:
         database:
+            backup: null
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:
@@ -321,6 +326,7 @@ objectstorage:
             proxypresignenabled: false
             region: ""
         disk:
+            backup: null
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:
@@ -335,6 +341,7 @@ objectstorage:
             proxypresignenabled: false
             region: ""
         r2:
+            backup: null
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:
@@ -349,6 +356,7 @@ objectstorage:
             proxypresignenabled: false
             region: ""
         s3:
+            backup: null
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:

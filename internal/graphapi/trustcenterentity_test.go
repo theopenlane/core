@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	th "github.com/theopenlane/core/v2/internal/graphapi/testharness"
+
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
@@ -15,13 +17,13 @@ import (
 
 func TestQueryTrustCenterEntity(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withAPIClients())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithAPIClients())
+	trustCenter := tcOrg.TrustCenter
 
-	trustCenterEntity := (&TrustCenterEntityBuilder{
-		client:        suite.client,
+	trustCenterEntity := (&th.TrustCenterEntityBuilder{
+		Client:        suite.Client,
 		TrustCenterID: trustCenter.ID,
-	}).MustNew(tcOrg.owner.UserCtx, t)
+	}).MustNew(tcOrg.Owner.UserCtx, t)
 
 	testCases := []struct {
 		name     string
@@ -33,34 +35,34 @@ func TestQueryTrustCenterEntity(t *testing.T) {
 		{
 			name:    "happy path as admin",
 			queryID: trustCenterEntity.ID,
-			client:  suite.client.api,
-			ctx:     tcOrg.admin.UserCtx,
+			client:  suite.Client.API,
+			ctx:     tcOrg.Admin.UserCtx,
 		},
 		{
 			name:    "happy path, using api token",
 			queryID: trustCenterEntity.ID,
-			client:  tcOrg.adminApiClient,
+			client:  tcOrg.AdminAPIClient,
 			ctx:     context.Background(),
 		},
 		{
 			name:    "happy path, using personal access token",
 			queryID: trustCenterEntity.ID,
-			client:  tcOrg.adminPatClient,
+			client:  tcOrg.AdminPatClient,
 			ctx:     context.Background(),
 		},
 		{
 			name:     "not found",
 			queryID:  "non-existent-id",
-			client:   suite.client.api,
-			ctx:      tcOrg.owner.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      tcOrg.Owner.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 		{
 			name:     "no access, different org user",
 			queryID:  trustCenterEntity.ID,
-			client:   suite.client.api,
-			ctx:      sharedTestUser2.UserCtx,
-			errorMsg: notFoundErrorMsg,
+			client:   suite.Client.API,
+			ctx:      th.SharedTestUser2.UserCtx,
+			errorMsg: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -80,39 +82,39 @@ func TestQueryTrustCenterEntity(t *testing.T) {
 			assert.Check(t, resp.TrustCenterEntity.TrustCenterID != nil)
 			assert.Check(t, is.Equal(trustCenter.ID, *resp.TrustCenterEntity.TrustCenterID))
 			assert.Check(t, resp.TrustCenterEntity.EntityTypeID != nil)
-			entityType, err := suite.client.db.EntityType.Get(tcOrg.owner.UserCtx, *resp.TrustCenterEntity.EntityTypeID)
+			entityType, err := suite.Client.DB.EntityType.Get(tcOrg.Owner.UserCtx, *resp.TrustCenterEntity.EntityTypeID)
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal("customer", entityType.Name))
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestQueryTrustCenterEntities(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withAPIClients())
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithAPIClients())
 
-	trustCenter := tcOrg.trustCenter
+	trustCenter := tcOrg.TrustCenter
 
-	(&TrustCenterEntityBuilder{
-		client:        suite.client,
+	(&th.TrustCenterEntityBuilder{
+		Client:        suite.Client,
 		TrustCenterID: trustCenter.ID,
-	}).MustNew(tcOrg.owner.UserCtx, t)
-	(&TrustCenterEntityBuilder{
-		client:        suite.client,
+	}).MustNew(tcOrg.Owner.UserCtx, t)
+	(&th.TrustCenterEntityBuilder{
+		Client:        suite.Client,
 		TrustCenterID: trustCenter.ID,
-	}).MustNew(tcOrg.owner.UserCtx, t)
+	}).MustNew(tcOrg.Owner.UserCtx, t)
 
-	createLogoUpload := logoFileFunc(t)
+	createLogoUpload := th.LogoFileFunc(t)
 	logoFile := createLogoUpload()
 
-	expectUpload(t, suite.client.mockProvider, []graphql.Upload{*logoFile})
+	th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*logoFile})
 
-	entityWithFile, err := suite.client.api.CreateTrustCenterEntity(tcOrg.owner.UserCtx, testclient.CreateTrustCenterEntityInput{
+	entityWithFile, err := suite.Client.API.CreateTrustCenterEntity(tcOrg.Owner.UserCtx, testclient.CreateTrustCenterEntityInput{
 		Name: "Entity With File",
 	}, logoFile, nil)
-	requireNoError(t, err)
+	th.RequireNoError(t, err)
 
 	assert.Assert(t, entityWithFile != nil)
 	assert.Assert(t, entityWithFile.CreateTrustCenterEntity.TrustCenterEntity.ID != "")
@@ -126,32 +128,32 @@ func TestQueryTrustCenterEntities(t *testing.T) {
 	}{
 		{
 			name:            "happy path",
-			client:          suite.client.api,
-			ctx:             tcOrg.admin.UserCtx,
+			client:          suite.Client.API,
+			ctx:             tcOrg.Admin.UserCtx,
 			expectedResults: 3,
 		},
 		{
 			name:            "happy path, using api token",
-			client:          tcOrg.adminApiClient,
+			client:          tcOrg.AdminAPIClient,
 			ctx:             context.Background(),
 			expectedResults: 3,
 		},
 		{
 			name:            "happy path, using pat",
-			client:          tcOrg.adminPatClient,
+			client:          tcOrg.AdminPatClient,
 			ctx:             context.Background(),
 			expectedResults: 3,
 		},
 		{
 			name:            "anonymous user can see trust center entities for trust center they have access to",
-			client:          suite.client.api,
-			ctx:             createAnonymousTrustCenterContext(trustCenter.ID, tcOrg.organizationID),
+			client:          suite.Client.API,
+			ctx:             th.CreateAnonymousTrustCenterContext(trustCenter.ID, tcOrg.OrganizationID),
 			expectedResults: 3,
 		},
 		{
 			name:            "another user, no entities should be returned",
-			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
+			client:          suite.Client.API,
+			ctx:             th.SharedTestUser2.UserCtx,
 			expectedResults: 0,
 		},
 	}
@@ -173,14 +175,14 @@ func TestQueryTrustCenterEntities(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationCreateTrustCenterEntity(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithAllUserTypes())
 
-	createLogoUpload := logoFileFunc(t)
+	createLogoUpload := th.LogoFileFunc(t)
 
 	testCases := []struct {
 		name        string
@@ -195,8 +197,8 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "Test Entity",
 			},
-			client: suite.client.api,
-			ctx:    tcOrg.owner.UserCtx,
+			client: suite.Client.API,
+			ctx:    tcOrg.Owner.UserCtx,
 		},
 		{
 			name: "happy path, full input",
@@ -204,8 +206,8 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 				Name: "Full Test Entity",
 				URL:  lo.ToPtr("https://example.com"),
 			},
-			client: suite.client.api,
-			ctx:    tcOrg.superAdmin.UserCtx,
+			client: suite.Client.API,
+			ctx:    tcOrg.SuperAdmin.UserCtx,
 		},
 		{
 			name: "happy path, with logo file",
@@ -214,8 +216,8 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 				URL:  lo.ToPtr("https://example.com"),
 			},
 			logoFile: createLogoUpload(),
-			client:   suite.client.api,
-			ctx:      tcOrg.admin.UserCtx,
+			client:   suite.Client.API,
+			ctx:      tcOrg.Admin.UserCtx,
 		},
 		{
 			name: "happy path, using api token",
@@ -223,7 +225,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 				Name: "API Token Entity",
 				URL:  lo.ToPtr("https://example.com"),
 			},
-			client: tcOrg.adminApiClient,
+			client: tcOrg.AdminAPIClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -232,7 +234,7 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 				Name: "PAT Entity",
 				URL:  lo.ToPtr("https://example.com"),
 			},
-			client: tcOrg.adminPatClient,
+			client: tcOrg.AdminPatClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -240,9 +242,9 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "Unauthorized Entity",
 			},
-			client:      suite.client.api,
-			ctx:         tcOrg.member.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Member.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "invalid URL",
@@ -250,16 +252,16 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 				Name: "Invalid URL Entity",
 				URL:  lo.ToPtr("not-a-valid-url"),
 			},
-			client:      suite.client.api,
-			ctx:         tcOrg.admin.UserCtx,
-			expectedErr: invalidInputErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Admin.UserCtx,
+			expectedErr: th.InvalidInputErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			if tc.logoFile != nil {
-				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.logoFile})
+				th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*tc.logoFile})
 			}
 
 			resp, err := tc.client.CreateTrustCenterEntity(tc.ctx, tc.request, tc.logoFile, nil)
@@ -287,20 +289,20 @@ func TestMutationCreateTrustCenterEntity(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withAPIClients())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithAPIClients())
+	trustCenter := tcOrg.TrustCenter
 
-	trustCenterEntity := (&TrustCenterEntityBuilder{
-		client:        suite.client,
+	trustCenterEntity := (&th.TrustCenterEntityBuilder{
+		Client:        suite.Client,
 		TrustCenterID: trustCenter.ID,
-	}).MustNew(tcOrg.owner.UserCtx, t)
+	}).MustNew(tcOrg.Owner.UserCtx, t)
 
-	createLogoUpload := logoFileFunc(t)
+	createLogoUpload := th.LogoFileFunc(t)
 
 	testCases := []struct {
 		name        string
@@ -313,16 +315,16 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		{
 			name:    "happy path, minimal input",
 			request: testclient.UpdateTrustCenterEntityInput{},
-			client:  suite.client.api,
-			ctx:     tcOrg.owner.UserCtx,
+			client:  suite.Client.API,
+			ctx:     tcOrg.Owner.UserCtx,
 		},
 		{
 			name: "happy path, full input as admin",
 			request: testclient.UpdateTrustCenterEntityInput{
 				URL: lo.ToPtr("https://example.com"),
 			},
-			client: suite.client.api,
-			ctx:    tcOrg.admin.UserCtx,
+			client: suite.Client.API,
+			ctx:    tcOrg.Admin.UserCtx,
 		},
 		{
 			name: "happy path, with logo file",
@@ -330,15 +332,15 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 				URL: lo.ToPtr("https://example.com"),
 			},
 			logoFile: createLogoUpload(),
-			client:   suite.client.api,
-			ctx:      tcOrg.admin.UserCtx,
+			client:   suite.Client.API,
+			ctx:      tcOrg.Admin.UserCtx,
 		},
 		{
 			name: "happy path, using api token",
 			request: testclient.UpdateTrustCenterEntityInput{
 				URL: lo.ToPtr("https://example.com"),
 			},
-			client: tcOrg.adminApiClient,
+			client: tcOrg.AdminAPIClient,
 			ctx:    context.Background(),
 		},
 		{
@@ -346,31 +348,31 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 			request: testclient.UpdateTrustCenterEntityInput{
 				URL: lo.ToPtr("https://example.com"),
 			},
-			client: tcOrg.adminPatClient,
+			client: tcOrg.AdminPatClient,
 			ctx:    context.Background(),
 		},
 		{
 			name:        "not authorized, view only user",
 			request:     testclient.UpdateTrustCenterEntityInput{},
-			client:      suite.client.api,
-			ctx:         tcOrg.member.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Member.UserCtx,
+			expectedErr: th.NotAuthorizedErrorMsg,
 		},
 		{
 			name: "invalid URL",
 			request: testclient.UpdateTrustCenterEntityInput{
 				URL: lo.ToPtr("not-a-valid-url"),
 			},
-			client:      suite.client.api,
-			ctx:         tcOrg.owner.UserCtx,
-			expectedErr: invalidInputErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Owner.UserCtx,
+			expectedErr: th.InvalidInputErrorMsg,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			if tc.logoFile != nil {
-				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.logoFile})
+				th.ExpectUpload(t, suite.Client.MockProvider, []graphql.Upload{*tc.logoFile})
 			}
 
 			resp, err := tc.client.UpdateTrustCenterEntity(tc.ctx, trustCenterEntity.ID, tc.request, tc.logoFile, nil)
@@ -396,22 +398,22 @@ func TestMutationUpdateTrustCenterEntity(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestMutationDeleteTrustCenterEntity(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withAPIClients())
-	trustCenter := tcOrg.trustCenter
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithAPIClients())
+	trustCenter := tcOrg.TrustCenter
 
-	trustCenterEntity1 := (&TrustCenterEntityBuilder{
-		client:        suite.client,
+	trustCenterEntity1 := (&th.TrustCenterEntityBuilder{
+		Client:        suite.Client,
 		TrustCenterID: trustCenter.ID,
-	}).MustNew(tcOrg.owner.UserCtx, t)
-	trustCenterEntity2 := (&TrustCenterEntityBuilder{
-		client:        suite.client,
+	}).MustNew(tcOrg.Owner.UserCtx, t)
+	trustCenterEntity2 := (&th.TrustCenterEntityBuilder{
+		Client:        suite.Client,
 		TrustCenterID: trustCenter.ID,
-	}).MustNew(tcOrg.owner.UserCtx, t)
+	}).MustNew(tcOrg.Owner.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -423,28 +425,28 @@ func TestMutationDeleteTrustCenterEntity(t *testing.T) {
 		{
 			name:       "happy path, delete trustcenter as admin",
 			idToDelete: trustCenterEntity1.ID,
-			client:     suite.client.api,
-			ctx:        tcOrg.admin.UserCtx,
+			client:     suite.Client.API,
+			ctx:        tcOrg.Admin.UserCtx,
 		},
 		{
 			name:       "happy path, using api token",
 			idToDelete: trustCenterEntity2.ID,
-			client:     tcOrg.adminApiClient,
+			client:     tcOrg.AdminAPIClient,
 			ctx:        context.Background(),
 		},
 		{
 			name:        "not found",
 			idToDelete:  "non-existent-id",
-			client:      suite.client.api,
-			ctx:         tcOrg.owner.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         tcOrg.Owner.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 		{
 			name:        "no access, different org user",
 			idToDelete:  trustCenterEntity1.ID,
-			client:      suite.client.api,
-			ctx:         sharedTestUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			client:      suite.Client.API,
+			ctx:         th.SharedTestUser2.UserCtx,
+			expectedErr: th.NotFoundErrorMsg,
 		},
 	}
 
@@ -462,12 +464,12 @@ func TestMutationDeleteTrustCenterEntity(t *testing.T) {
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }
 
 func TestTrustCenterEntityHookCustomerEntityType(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withAllUserTypes())
+	tcOrg := th.CreateFreshOrgWithTrustCenter(t, th.WithAllUserTypes())
 
 	testCases := []struct {
 		name        string
@@ -481,22 +483,22 @@ func TestTrustCenterEntityHookCustomerEntityType(t *testing.T) {
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "Test Entity",
 			},
-			client: suite.client.api,
-			ctx:    tcOrg.admin.UserCtx,
+			client: suite.Client.API,
+			ctx:    tcOrg.Admin.UserCtx,
 		},
 		{
 			name: "uses existing customer entity type if it exists",
 			request: testclient.CreateTrustCenterEntityInput{
 				Name: "Test Entity 2",
 			},
-			client: suite.client.api,
-			ctx:    tcOrg.superAdmin.UserCtx,
+			client: suite.Client.API,
+			ctx:    tcOrg.SuperAdmin.UserCtx,
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ctx := setContext(tc.ctx, suite.client.db)
+			ctx := th.SetContext(tc.ctx, suite.Client.DB)
 
 			resp, err := tc.client.CreateTrustCenterEntity(tc.ctx, tc.request, nil, nil)
 			if tc.expectedErr != "" {
@@ -509,13 +511,13 @@ func TestTrustCenterEntityHookCustomerEntityType(t *testing.T) {
 
 			assert.Check(t, resp.CreateTrustCenterEntity.TrustCenterEntity.EntityTypeID != nil)
 
-			entityType, err := suite.client.db.EntityType.Get(ctx, *resp.CreateTrustCenterEntity.TrustCenterEntity.EntityTypeID)
+			entityType, err := suite.Client.DB.EntityType.Get(ctx, *resp.CreateTrustCenterEntity.TrustCenterEntity.EntityTypeID)
 			assert.NilError(t, err)
 			assert.Check(t, is.Equal("customer", entityType.Name))
 
-			(&Cleanup[*generated.TrustCenterEntityDeleteOne]{client: suite.client.db.TrustCenterEntity, ID: resp.CreateTrustCenterEntity.TrustCenterEntity.ID}).MustDelete(tc.ctx, t)
+			(&th.Cleanup[*generated.TrustCenterEntityDeleteOne]{Client: suite.Client.DB.TrustCenterEntity, ID: resp.CreateTrustCenterEntity.TrustCenterEntity.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 
-	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+	th.CleanupOrganizationDataWithContext(tcOrg.Owner.UserCtx, t)
 }

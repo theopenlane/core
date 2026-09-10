@@ -488,6 +488,19 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
       # -- R2 provider configuration
       r2:
         # -- Enabled indicates if this provider is enabled
@@ -506,6 +519,19 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled
@@ -524,6 +550,19 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
       # -- Database provider configuration
       database:
         # -- Enabled indicates if this provider is enabled
@@ -542,6 +581,19 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup:
+          # -- Enabled indicates if this backup target is enabled
+          enabled: false  # @schema type:boolean; default:false
+          # -- Provider names the destination backend type, e.g. s3; empty replicates to the source
+          # provider itself, which writes the backup to the suffixed bucket alongside the live one
+          provider:   # @schema type:string
+          # -- ReadFromBackup serves reads from this backup target instead of the source provider, intended
+          # to be enabled during a disaster recovery event when the source provider storage is lost
+          readfrombackup: false  # @schema type:boolean; default:false
+          # -- Region optionally overrides the destination provider's region, so a backup can replicate
+          # into a region other than the one holding the live objects
+          region: ""  # @schema type:string
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
     # -- Enabled determines if the entitlements service is enabled
@@ -668,6 +720,13 @@ coreConfiguration:
       maxdeletesperrun: 0  # @schema type:integer
       # -- Whether the organization deletion listener is enabled
       enabled: false  # @schema type:boolean
+    integrationlifecycle:
+      # -- Whether the integration lifecycle sweep is enabled
+      enabled: true  # @schema type:boolean; default:true
+      # -- If true only log integration IDs and actions that would be dispatched
+      dryrun: true  # @schema type:boolean; default:true
+      # -- Maximum integrations to evaluate per run
+      maxperrun: 100  # @schema type:integer; default:100
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false
@@ -702,7 +761,7 @@ coreConfiguration:
     endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
   # -- Backfill contains configuration for one-time startup data backfill routines
   backfill:
-    # -- Enabled runs the backfill routines on server startup
+    # -- Enabled runs the backfill routines on server startup, this only setups up the main job, all configured backfills will run based on their settings
     enabled: false  # @schema type:boolean; default:false
 
 # -- External Secrets configuration

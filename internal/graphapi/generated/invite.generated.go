@@ -583,10 +583,6 @@ func (ec *executionContext) _InviteUpdatePayload(ctx context.Context, sel ast.Se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNInviteBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkCreatePayload) graphql.Marshaler {
-	return ec._InviteBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInviteBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNInviteBulkCreatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._InviteBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInviteBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkDeletePayload) graphql.Marshaler {
-	return ec._InviteBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInviteBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNInviteBulkDeletePayload2ᚖgithubᚗcomᚋth
 	return ec._InviteBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInviteBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteBulkUpdatePayload) graphql.Marshaler {
-	return ec._InviteBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInviteBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNInviteBulkUpdatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._InviteBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInviteCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteCreatePayload) graphql.Marshaler {
-	return ec._InviteCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInviteCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNInviteCreatePayload2ᚖgithubᚗcomᚋtheope
 	return ec._InviteCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInviteDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteDeletePayload) graphql.Marshaler {
-	return ec._InviteDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInviteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNInviteDeletePayload2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._InviteDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInviteUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InviteUpdatePayload) graphql.Marshaler {
-	return ec._InviteUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInviteUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInviteUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InviteUpdatePayload) graphql.Marshaler {

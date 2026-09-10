@@ -61,6 +61,7 @@ func (rc *ruleCoordinator) configure() {
 		return
 	}
 
+	rc.addBackupTargetRule()
 	rc.addKnownProviderRule()
 	rc.addTemplateKindRule(enums.TemplateKindTrustCenterNda, storage.R2Provider)
 	rc.addModuleRule(models.CatalogTrustCenterModule, storage.R2Provider)
@@ -91,18 +92,7 @@ func WithRuntimeOptions(runtime serviceOptions) RuleOption {
 
 // getBuilder returns the appropriate builder for a provider type
 func (rc *ruleCoordinator) getBuilder(provider storage.ProviderType) providerBuilder {
-	switch provider {
-	case storage.S3Provider:
-		return rc.builders.s3
-	case storage.R2Provider:
-		return rc.builders.r2
-	case storage.DiskProvider:
-		return rc.builders.disk
-	case storage.DatabaseProvider:
-		return rc.builders.db
-	default:
-		return nil
-	}
+	return builderFor(rc.builders, provider)
 }
 
 func devModeOptions() *storage.ProviderOptions {
@@ -141,6 +131,52 @@ func (rc *ruleCoordinator) handleDevMode() bool {
 	rc.resolver.AddRule(devRule)
 
 	return true
+}
+
+// addBackupTargetRule resolves the backup destination configured for the source provider named by
+// the backup hint, so backup writes go through the same rule chain as every other lookup
+func (rc *ruleCoordinator) addBackupTargetRule() {
+	destinations, err := backupDestinations(rc.config)
+	if err != nil || len(destinations) == 0 {
+		return
+	}
+
+	rule := &helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+		Predicate: func(ctx context.Context) bool {
+			hint, ok := objects.BackupSourceHintFromContext(ctx)
+			if !ok {
+				return false
+			}
+
+			_, hasDestination := destinations[storage.ProviderType(hint)]
+
+			return hasDestination
+		},
+		Resolver: func(ctx context.Context) (*eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions], error) {
+			hint, _ := objects.BackupSourceHintFromContext(ctx)
+			destination := destinations[storage.ProviderType(hint)]
+
+			builder := rc.getBuilder(destination.Provider)
+			if builder == nil {
+				return nil, errUnsupportedProvider
+			}
+
+			options, creds, err := providerOptionsFromProviderConfig(destination.Provider, destination.Config, rc.runtime)
+			if err != nil {
+				return nil, err
+			}
+
+			storage.WithExtra(storage.BackupTargetExtraKey, true)(options)
+
+			return &eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
+				Builder: builder,
+				Output:  creds,
+				Config:  options,
+			}, nil
+		},
+	}
+
+	rc.resolver.AddRule(rule)
 }
 
 // addKnownProviderRule resolves providers when a known provider hint is supplied

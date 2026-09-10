@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/v2/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/v2/internal/ent/generated/entity"
 	"github.com/theopenlane/core/v2/internal/ent/generated/group"
+	"github.com/theopenlane/core/v2/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/v2/internal/ent/generated/integration"
 	"github.com/theopenlane/core/v2/internal/ent/generated/organization"
 	"github.com/theopenlane/core/v2/internal/ent/generated/template"
@@ -49,12 +50,14 @@ type Campaign struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// the internal owner for the campaign when no user or group is linked
+	// the internal owner for the campaign when no user, group, or identity holder is linked
 	InternalOwner string `json:"internal_owner,omitempty"`
 	// the internal owner user id for the campaign
 	InternalOwnerUserID string `json:"internal_owner_user_id,omitempty"`
 	// the internal owner group id for the campaign
 	InternalOwnerGroupID string `json:"internal_owner_group_id,omitempty"`
+	// the internal owner identity holder id for the campaign
+	InternalOwnerIdentityHolderID string `json:"internal_owner_identity_holder_id,omitempty"`
 	// internal marker field for workflow eligibility, not exposed in API
 	WorkflowEligibleMarker bool `json:"-"`
 	// the name of the campaign
@@ -133,6 +136,8 @@ type CampaignEdges struct {
 	InternalOwnerUser *User `json:"internal_owner_user,omitempty"`
 	// InternalOwnerGroup holds the value of the internal_owner_group edge.
 	InternalOwnerGroup *Group `json:"internal_owner_group,omitempty"`
+	// InternalOwnerIdentityHolder holds the value of the internal_owner_identity_holder edge.
+	InternalOwnerIdentityHolder *IdentityHolder `json:"internal_owner_identity_holder,omitempty"`
 	// Assessment holds the value of the assessment edge.
 	Assessment *Assessment `json:"assessment,omitempty"`
 	// Template holds the value of the template edge.
@@ -165,9 +170,9 @@ type CampaignEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [22]bool
 	// totalCount holds the count of the edges above.
-	totalCount [21]map[string]int
+	totalCount [22]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -243,12 +248,23 @@ func (e CampaignEdges) InternalOwnerGroupOrErr() (*Group, error) {
 	return nil, &NotLoadedError{edge: "internal_owner_group"}
 }
 
+// InternalOwnerIdentityHolderOrErr returns the InternalOwnerIdentityHolder value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e CampaignEdges) InternalOwnerIdentityHolderOrErr() (*IdentityHolder, error) {
+	if e.InternalOwnerIdentityHolder != nil {
+		return e.InternalOwnerIdentityHolder, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: identityholder.Label}
+	}
+	return nil, &NotLoadedError{edge: "internal_owner_identity_holder"}
+}
+
 // AssessmentOrErr returns the Assessment value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e CampaignEdges) AssessmentOrErr() (*Assessment, error) {
 	if e.Assessment != nil {
 		return e.Assessment, nil
-	} else if e.loadedTypes[6] {
+	} else if e.loadedTypes[7] {
 		return nil, &NotFoundError{label: assessment.Label}
 	}
 	return nil, &NotLoadedError{edge: "assessment"}
@@ -259,7 +275,7 @@ func (e CampaignEdges) AssessmentOrErr() (*Assessment, error) {
 func (e CampaignEdges) TemplateOrErr() (*Template, error) {
 	if e.Template != nil {
 		return e.Template, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: template.Label}
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -270,7 +286,7 @@ func (e CampaignEdges) TemplateOrErr() (*Template, error) {
 func (e CampaignEdges) IntegrationOrErr() (*Integration, error) {
 	if e.Integration != nil {
 		return e.Integration, nil
-	} else if e.loadedTypes[8] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: integration.Label}
 	}
 	return nil, &NotLoadedError{edge: "integration"}
@@ -281,7 +297,7 @@ func (e CampaignEdges) IntegrationOrErr() (*Integration, error) {
 func (e CampaignEdges) EmailTemplateOrErr() (*EmailTemplate, error) {
 	if e.EmailTemplate != nil {
 		return e.EmailTemplate, nil
-	} else if e.loadedTypes[9] {
+	} else if e.loadedTypes[10] {
 		return nil, &NotFoundError{label: emailtemplate.Label}
 	}
 	return nil, &NotLoadedError{edge: "email_template"}
@@ -292,7 +308,7 @@ func (e CampaignEdges) EmailTemplateOrErr() (*EmailTemplate, error) {
 func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 	if e.Entity != nil {
 		return e.Entity, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[11] {
 		return nil, &NotFoundError{label: entity.Label}
 	}
 	return nil, &NotLoadedError{edge: "entity"}
@@ -303,7 +319,7 @@ func (e CampaignEdges) EntityOrErr() (*Entity, error) {
 func (e CampaignEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[11] {
+	} else if e.loadedTypes[12] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -312,7 +328,7 @@ func (e CampaignEdges) TrustCenterOrErr() (*TrustCenter, error) {
 // CampaignTargetsOrErr returns the CampaignTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[13] {
 		return e.CampaignTargets, nil
 	}
 	return nil, &NotLoadedError{edge: "campaign_targets"}
@@ -321,7 +337,7 @@ func (e CampaignEdges) CampaignTargetsOrErr() ([]*CampaignTarget, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[14] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -330,7 +346,7 @@ func (e CampaignEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error)
 // ContactsOrErr returns the Contacts value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[15] {
 		return e.Contacts, nil
 	}
 	return nil, &NotLoadedError{edge: "contacts"}
@@ -339,7 +355,7 @@ func (e CampaignEdges) ContactsOrErr() ([]*Contact, error) {
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[16] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -348,7 +364,7 @@ func (e CampaignEdges) UsersOrErr() ([]*User, error) {
 // GroupsOrErr returns the Groups value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[17] {
 		return e.Groups, nil
 	}
 	return nil, &NotLoadedError{edge: "groups"}
@@ -357,7 +373,7 @@ func (e CampaignEdges) GroupsOrErr() ([]*Group, error) {
 // IdentityHoldersOrErr returns the IdentityHolders value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[18] {
 		return e.IdentityHolders, nil
 	}
 	return nil, &NotLoadedError{edge: "identity_holders"}
@@ -366,7 +382,7 @@ func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 // AudiencesOrErr returns the Audiences value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) AudiencesOrErr() ([]*Audience, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Audiences, nil
 	}
 	return nil, &NotLoadedError{edge: "audiences"}
@@ -375,7 +391,7 @@ func (e CampaignEdges) AudiencesOrErr() ([]*Audience, error) {
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -384,7 +400,7 @@ func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[21] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -405,7 +421,7 @@ func (*Campaign) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case campaign.FieldRecurrenceInterval, campaign.FieldRecipientCount, campaign.FieldResendCount:
 			values[i] = new(sql.NullInt64)
-		case campaign.FieldID, campaign.FieldCreatedBy, campaign.FieldUpdatedBy, campaign.FieldUpdatedByImpersonator, campaign.FieldDeletedBy, campaign.FieldDisplayID, campaign.FieldOwnerID, campaign.FieldInternalOwner, campaign.FieldInternalOwnerUserID, campaign.FieldInternalOwnerGroupID, campaign.FieldName, campaign.FieldDescription, campaign.FieldCampaignType, campaign.FieldStatus, campaign.FieldRecurrenceFrequency, campaign.FieldRecurrenceTimezone, campaign.FieldEntityID, campaign.FieldTemplateID, campaign.FieldAssessmentID, campaign.FieldEmailTemplateID, campaign.FieldIntegrationID, campaign.FieldEmailBrandingID, campaign.FieldTrustCenterID:
+		case campaign.FieldID, campaign.FieldCreatedBy, campaign.FieldUpdatedBy, campaign.FieldUpdatedByImpersonator, campaign.FieldDeletedBy, campaign.FieldDisplayID, campaign.FieldOwnerID, campaign.FieldInternalOwner, campaign.FieldInternalOwnerUserID, campaign.FieldInternalOwnerGroupID, campaign.FieldInternalOwnerIdentityHolderID, campaign.FieldName, campaign.FieldDescription, campaign.FieldCampaignType, campaign.FieldStatus, campaign.FieldRecurrenceFrequency, campaign.FieldRecurrenceTimezone, campaign.FieldEntityID, campaign.FieldTemplateID, campaign.FieldAssessmentID, campaign.FieldEmailTemplateID, campaign.FieldIntegrationID, campaign.FieldEmailBrandingID, campaign.FieldTrustCenterID:
 			values[i] = new(sql.NullString)
 		case campaign.FieldCreatedAt, campaign.FieldUpdatedAt, campaign.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -510,6 +526,12 @@ func (_m *Campaign) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field internal_owner_group_id", values[i])
 			} else if value.Valid {
 				_m.InternalOwnerGroupID = value.String
+			}
+		case campaign.FieldInternalOwnerIdentityHolderID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_owner_identity_holder_id", values[i])
+			} else if value.Valid {
+				_m.InternalOwnerIdentityHolderID = value.String
 			}
 		case campaign.FieldWorkflowEligibleMarker:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -739,6 +761,11 @@ func (_m *Campaign) QueryInternalOwnerGroup() *GroupQuery {
 	return NewCampaignClient(_m.config).QueryInternalOwnerGroup(_m)
 }
 
+// QueryInternalOwnerIdentityHolder queries the "internal_owner_identity_holder" edge of the Campaign entity.
+func (_m *Campaign) QueryInternalOwnerIdentityHolder() *IdentityHolderQuery {
+	return NewCampaignClient(_m.config).QueryInternalOwnerIdentityHolder(_m)
+}
+
 // QueryAssessment queries the "assessment" edge of the Campaign entity.
 func (_m *Campaign) QueryAssessment() *AssessmentQuery {
 	return NewCampaignClient(_m.config).QueryAssessment(_m)
@@ -877,6 +904,9 @@ func (_m *Campaign) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("internal_owner_group_id=")
 	builder.WriteString(_m.InternalOwnerGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("internal_owner_identity_holder_id=")
+	builder.WriteString(_m.InternalOwnerIdentityHolderID)
 	builder.WriteString(", ")
 	builder.WriteString("workflow_eligible_marker=")
 	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))

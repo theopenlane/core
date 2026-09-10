@@ -12703,133 +12703,135 @@ func (m *AssessmentResponseMutation) ResetEdge(name string) error {
 // AssetMutation represents an operation that mutates the Asset nodes in the graph.
 type AssetMutation struct {
 	config
-	op                               Op
-	typ                              string
-	id                               *string
-	created_at                       *time.Time
-	updated_at                       *time.Time
-	created_by                       *string
-	updated_by                       *string
-	updated_by_impersonator          *string
-	deleted_at                       *time.Time
-	deleted_by                       *string
-	tags                             *[]string
-	appendtags                       []string
-	internal_owner                   *string
-	asset_subtype_name               *string
-	asset_data_classification_name   *string
-	environment_name                 *string
-	scope_name                       *string
-	access_model_name                *string
-	encryption_status_name           *string
-	security_tier_name               *string
-	criticality_name                 *string
-	system_owned                     *bool
-	internal_notes                   *string
-	system_internal_id               *string
-	asset_type                       *enums.AssetType
-	name                             *string
-	display_name                     *string
-	description                      *string
-	identifier                       *string
-	website                          *string
-	physical_location                *string
-	region                           *string
-	contains_pii                     *bool
-	source_type                      *enums.SourceType
-	source_identifier                *string
-	cost_center                      *string
-	estimated_monthly_cost           *float64
-	addestimated_monthly_cost        *float64
-	purchase_date                    *models.DateTime
-	cpe                              *string
-	categories                       *[]string
-	appendcategories                 []string
-	observed_at                      *models.DateTime
-	clearedFields                    map[string]struct{}
-	owner                            *string
-	clearedowner                     bool
-	blocked_groups                   map[string]struct{}
-	removedblocked_groups            map[string]struct{}
-	clearedblocked_groups            bool
-	editors                          map[string]struct{}
-	removededitors                   map[string]struct{}
-	clearededitors                   bool
-	viewers                          map[string]struct{}
-	removedviewers                   map[string]struct{}
-	clearedviewers                   bool
-	internal_owner_user              *string
-	clearedinternal_owner_user       bool
-	internal_owner_group             *string
-	clearedinternal_owner_group      bool
-	asset_subtype                    *string
-	clearedasset_subtype             bool
-	asset_data_classification        *string
-	clearedasset_data_classification bool
-	environment                      *string
-	clearedenvironment               bool
-	scope                            *string
-	clearedscope                     bool
-	access_model                     *string
-	clearedaccess_model              bool
-	encryption_status                *string
-	clearedencryption_status         bool
-	security_tier                    *string
-	clearedsecurity_tier             bool
-	criticality                      *string
-	clearedcriticality               bool
-	scans                            map[string]struct{}
-	removedscans                     map[string]struct{}
-	clearedscans                     bool
-	entities                         map[string]struct{}
-	removedentities                  map[string]struct{}
-	clearedentities                  bool
-	platforms                        map[string]struct{}
-	removedplatforms                 map[string]struct{}
-	clearedplatforms                 bool
-	system_details                   map[string]struct{}
-	removedsystem_details            map[string]struct{}
-	clearedsystem_details            bool
-	out_of_scope_platforms           map[string]struct{}
-	removedout_of_scope_platforms    map[string]struct{}
-	clearedout_of_scope_platforms    bool
-	identity_holders                 map[string]struct{}
-	removedidentity_holders          map[string]struct{}
-	clearedidentity_holders          bool
-	controls                         map[string]struct{}
-	removedcontrols                  map[string]struct{}
-	clearedcontrols                  bool
-	subcontrols                      map[string]struct{}
-	removedsubcontrols               map[string]struct{}
-	clearedsubcontrols               bool
-	internal_policies                map[string]struct{}
-	removedinternal_policies         map[string]struct{}
-	clearedinternal_policies         bool
-	findings                         map[string]struct{}
-	removedfindings                  map[string]struct{}
-	clearedfindings                  bool
-	vulnerabilities                  map[string]struct{}
-	removedvulnerabilities           map[string]struct{}
-	clearedvulnerabilities           bool
-	reviews                          map[string]struct{}
-	removedreviews                   map[string]struct{}
-	clearedreviews                   bool
-	remediations                     map[string]struct{}
-	removedremediations              map[string]struct{}
-	clearedremediations              bool
-	source_platform                  *string
-	clearedsource_platform           bool
-	integration                      *string
-	clearedintegration               bool
-	connected_assets                 map[string]struct{}
-	removedconnected_assets          map[string]struct{}
-	clearedconnected_assets          bool
-	connected_from                   map[string]struct{}
-	removedconnected_from            map[string]struct{}
-	clearedconnected_from            bool
-	done                             bool
-	oldValue                         func(context.Context) (*Asset, error)
-	predicates                       []predicate.Asset
+	op                                    Op
+	typ                                   string
+	id                                    *string
+	created_at                            *time.Time
+	updated_at                            *time.Time
+	created_by                            *string
+	updated_by                            *string
+	updated_by_impersonator               *string
+	deleted_at                            *time.Time
+	deleted_by                            *string
+	tags                                  *[]string
+	appendtags                            []string
+	internal_owner                        *string
+	asset_subtype_name                    *string
+	asset_data_classification_name        *string
+	environment_name                      *string
+	scope_name                            *string
+	access_model_name                     *string
+	encryption_status_name                *string
+	security_tier_name                    *string
+	criticality_name                      *string
+	system_owned                          *bool
+	internal_notes                        *string
+	system_internal_id                    *string
+	asset_type                            *enums.AssetType
+	name                                  *string
+	display_name                          *string
+	description                           *string
+	identifier                            *string
+	website                               *string
+	physical_location                     *string
+	region                                *string
+	contains_pii                          *bool
+	source_type                           *enums.SourceType
+	source_identifier                     *string
+	cost_center                           *string
+	estimated_monthly_cost                *float64
+	addestimated_monthly_cost             *float64
+	purchase_date                         *models.DateTime
+	cpe                                   *string
+	categories                            *[]string
+	appendcategories                      []string
+	observed_at                           *models.DateTime
+	clearedFields                         map[string]struct{}
+	owner                                 *string
+	clearedowner                          bool
+	blocked_groups                        map[string]struct{}
+	removedblocked_groups                 map[string]struct{}
+	clearedblocked_groups                 bool
+	editors                               map[string]struct{}
+	removededitors                        map[string]struct{}
+	clearededitors                        bool
+	viewers                               map[string]struct{}
+	removedviewers                        map[string]struct{}
+	clearedviewers                        bool
+	internal_owner_user                   *string
+	clearedinternal_owner_user            bool
+	internal_owner_group                  *string
+	clearedinternal_owner_group           bool
+	internal_owner_identity_holder        *string
+	clearedinternal_owner_identity_holder bool
+	asset_subtype                         *string
+	clearedasset_subtype                  bool
+	asset_data_classification             *string
+	clearedasset_data_classification      bool
+	environment                           *string
+	clearedenvironment                    bool
+	scope                                 *string
+	clearedscope                          bool
+	access_model                          *string
+	clearedaccess_model                   bool
+	encryption_status                     *string
+	clearedencryption_status              bool
+	security_tier                         *string
+	clearedsecurity_tier                  bool
+	criticality                           *string
+	clearedcriticality                    bool
+	scans                                 map[string]struct{}
+	removedscans                          map[string]struct{}
+	clearedscans                          bool
+	entities                              map[string]struct{}
+	removedentities                       map[string]struct{}
+	clearedentities                       bool
+	platforms                             map[string]struct{}
+	removedplatforms                      map[string]struct{}
+	clearedplatforms                      bool
+	system_details                        map[string]struct{}
+	removedsystem_details                 map[string]struct{}
+	clearedsystem_details                 bool
+	out_of_scope_platforms                map[string]struct{}
+	removedout_of_scope_platforms         map[string]struct{}
+	clearedout_of_scope_platforms         bool
+	identity_holders                      map[string]struct{}
+	removedidentity_holders               map[string]struct{}
+	clearedidentity_holders               bool
+	controls                              map[string]struct{}
+	removedcontrols                       map[string]struct{}
+	clearedcontrols                       bool
+	subcontrols                           map[string]struct{}
+	removedsubcontrols                    map[string]struct{}
+	clearedsubcontrols                    bool
+	internal_policies                     map[string]struct{}
+	removedinternal_policies              map[string]struct{}
+	clearedinternal_policies              bool
+	findings                              map[string]struct{}
+	removedfindings                       map[string]struct{}
+	clearedfindings                       bool
+	vulnerabilities                       map[string]struct{}
+	removedvulnerabilities                map[string]struct{}
+	clearedvulnerabilities                bool
+	reviews                               map[string]struct{}
+	removedreviews                        map[string]struct{}
+	clearedreviews                        bool
+	remediations                          map[string]struct{}
+	removedremediations                   map[string]struct{}
+	clearedremediations                   bool
+	source_platform                       *string
+	clearedsource_platform                bool
+	integration                           *string
+	clearedintegration                    bool
+	connected_assets                      map[string]struct{}
+	removedconnected_assets               map[string]struct{}
+	clearedconnected_assets               bool
+	connected_from                        map[string]struct{}
+	removedconnected_from                 map[string]struct{}
+	clearedconnected_from                 bool
+	done                                  bool
+	oldValue                              func(context.Context) (*Asset, error)
+	predicates                            []predicate.Asset
 }
 
 var _ ent.Mutation = (*AssetMutation)(nil)
@@ -13538,6 +13540,55 @@ func (m *AssetMutation) InternalOwnerGroupIDCleared() bool {
 func (m *AssetMutation) ResetInternalOwnerGroupID() {
 	m.internal_owner_group = nil
 	delete(m.clearedFields, asset.FieldInternalOwnerGroupID)
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *AssetMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *AssetMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the Asset entity.
+// If the Asset object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AssetMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *AssetMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	m.clearedFields[asset.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *AssetMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[asset.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *AssetMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	delete(m.clearedFields, asset.FieldInternalOwnerIdentityHolderID)
 }
 
 // SetAssetSubtypeName sets the "asset_subtype_name" field.
@@ -15643,6 +15694,33 @@ func (m *AssetMutation) ResetInternalOwnerGroup() {
 	m.clearedinternal_owner_group = false
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *AssetMutation) ClearInternalOwnerIdentityHolder() {
+	m.clearedinternal_owner_identity_holder = true
+	m.clearedFields[asset.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderCleared reports if the "internal_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *AssetMutation) InternalOwnerIdentityHolderCleared() bool {
+	return m.InternalOwnerIdentityHolderIDCleared() || m.clearedinternal_owner_identity_holder
+}
+
+// InternalOwnerIdentityHolderIDs returns the "internal_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *AssetMutation) InternalOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.internal_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalOwnerIdentityHolder resets all changes to the "internal_owner_identity_holder" edge.
+func (m *AssetMutation) ResetInternalOwnerIdentityHolder() {
+	m.internal_owner_identity_holder = nil
+	m.clearedinternal_owner_identity_holder = false
+}
+
 // ClearAssetSubtype clears the "asset_subtype" edge to the CustomTypeEnum entity.
 func (m *AssetMutation) ClearAssetSubtype() {
 	m.clearedasset_subtype = true
@@ -16757,7 +16835,7 @@ func (m *AssetMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssetMutation) Fields() []string {
-	fields := make([]string, 0, 50)
+	fields := make([]string, 0, 51)
 	if m.created_at != nil {
 		fields = append(fields, asset.FieldCreatedAt)
 	}
@@ -16793,6 +16871,9 @@ func (m *AssetMutation) Fields() []string {
 	}
 	if m.internal_owner_group != nil {
 		fields = append(fields, asset.FieldInternalOwnerGroupID)
+	}
+	if m.internal_owner_identity_holder != nil {
+		fields = append(fields, asset.FieldInternalOwnerIdentityHolderID)
 	}
 	if m.asset_subtype_name != nil {
 		fields = append(fields, asset.FieldAssetSubtypeName)
@@ -16940,6 +17021,8 @@ func (m *AssetMutation) Field(name string) (ent.Value, bool) {
 		return m.InternalOwnerUserID()
 	case asset.FieldInternalOwnerGroupID:
 		return m.InternalOwnerGroupID()
+	case asset.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
 	case asset.FieldAssetSubtypeName:
 		return m.AssetSubtypeName()
 	case asset.FieldAssetSubtypeID:
@@ -17049,6 +17132,8 @@ func (m *AssetMutation) OldField(ctx context.Context, name string) (ent.Value, e
 		return m.OldInternalOwnerUserID(ctx)
 	case asset.FieldInternalOwnerGroupID:
 		return m.OldInternalOwnerGroupID(ctx)
+	case asset.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
 	case asset.FieldAssetSubtypeName:
 		return m.OldAssetSubtypeName(ctx)
 	case asset.FieldAssetSubtypeID:
@@ -17217,6 +17302,13 @@ func (m *AssetMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetInternalOwnerGroupID(v)
+		return nil
+	case asset.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
 		return nil
 	case asset.FieldAssetSubtypeName:
 		v, ok := value.(string)
@@ -17565,6 +17657,9 @@ func (m *AssetMutation) ClearedFields() []string {
 	if m.FieldCleared(asset.FieldInternalOwnerGroupID) {
 		fields = append(fields, asset.FieldInternalOwnerGroupID)
 	}
+	if m.FieldCleared(asset.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, asset.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.FieldCleared(asset.FieldAssetSubtypeName) {
 		fields = append(fields, asset.FieldAssetSubtypeName)
 	}
@@ -17720,6 +17815,9 @@ func (m *AssetMutation) ClearField(name string) error {
 	case asset.FieldInternalOwnerGroupID:
 		m.ClearInternalOwnerGroupID()
 		return nil
+	case asset.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
+		return nil
 	case asset.FieldAssetSubtypeName:
 		m.ClearAssetSubtypeName()
 		return nil
@@ -17869,6 +17967,9 @@ func (m *AssetMutation) ResetField(name string) error {
 	case asset.FieldInternalOwnerGroupID:
 		m.ResetInternalOwnerGroupID()
 		return nil
+	case asset.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
+		return nil
 	case asset.FieldAssetSubtypeName:
 		m.ResetAssetSubtypeName()
 		return nil
@@ -17989,7 +18090,7 @@ func (m *AssetMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AssetMutation) AddedEdges() []string {
-	edges := make([]string, 0, 31)
+	edges := make([]string, 0, 32)
 	if m.owner != nil {
 		edges = append(edges, asset.EdgeOwner)
 	}
@@ -18007,6 +18108,9 @@ func (m *AssetMutation) AddedEdges() []string {
 	}
 	if m.internal_owner_group != nil {
 		edges = append(edges, asset.EdgeInternalOwnerGroup)
+	}
+	if m.internal_owner_identity_holder != nil {
+		edges = append(edges, asset.EdgeInternalOwnerIdentityHolder)
 	}
 	if m.asset_subtype != nil {
 		edges = append(edges, asset.EdgeAssetSubtype)
@@ -18118,6 +18222,10 @@ func (m *AssetMutation) AddedIDs(name string) []ent.Value {
 		}
 	case asset.EdgeInternalOwnerGroup:
 		if id := m.internal_owner_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case asset.EdgeInternalOwnerIdentityHolder:
+		if id := m.internal_owner_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case asset.EdgeAssetSubtype:
@@ -18256,7 +18364,7 @@ func (m *AssetMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AssetMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 31)
+	edges := make([]string, 0, 32)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, asset.EdgeBlockedGroups)
 	}
@@ -18432,7 +18540,7 @@ func (m *AssetMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AssetMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 31)
+	edges := make([]string, 0, 32)
 	if m.clearedowner {
 		edges = append(edges, asset.EdgeOwner)
 	}
@@ -18450,6 +18558,9 @@ func (m *AssetMutation) ClearedEdges() []string {
 	}
 	if m.clearedinternal_owner_group {
 		edges = append(edges, asset.EdgeInternalOwnerGroup)
+	}
+	if m.clearedinternal_owner_identity_holder {
+		edges = append(edges, asset.EdgeInternalOwnerIdentityHolder)
 	}
 	if m.clearedasset_subtype {
 		edges = append(edges, asset.EdgeAssetSubtype)
@@ -18545,6 +18656,8 @@ func (m *AssetMutation) EdgeCleared(name string) bool {
 		return m.clearedinternal_owner_user
 	case asset.EdgeInternalOwnerGroup:
 		return m.clearedinternal_owner_group
+	case asset.EdgeInternalOwnerIdentityHolder:
+		return m.clearedinternal_owner_identity_holder
 	case asset.EdgeAssetSubtype:
 		return m.clearedasset_subtype
 	case asset.EdgeAssetDataClassification:
@@ -18612,6 +18725,9 @@ func (m *AssetMutation) ClearEdge(name string) error {
 	case asset.EdgeInternalOwnerGroup:
 		m.ClearInternalOwnerGroup()
 		return nil
+	case asset.EdgeInternalOwnerIdentityHolder:
+		m.ClearInternalOwnerIdentityHolder()
+		return nil
 	case asset.EdgeAssetSubtype:
 		m.ClearAssetSubtype()
 		return nil
@@ -18667,6 +18783,9 @@ func (m *AssetMutation) ResetEdge(name string) error {
 		return nil
 	case asset.EdgeInternalOwnerGroup:
 		m.ResetInternalOwnerGroup()
+		return nil
+	case asset.EdgeInternalOwnerIdentityHolder:
+		m.ResetInternalOwnerIdentityHolder()
 		return nil
 	case asset.EdgeAssetSubtype:
 		m.ResetAssetSubtype()
@@ -22515,104 +22634,106 @@ func (m *AudienceMemberMutation) ResetEdge(name string) error {
 // CampaignMutation represents an operation that mutates the Campaign nodes in the graph.
 type CampaignMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *string
-	created_at                  *time.Time
-	updated_at                  *time.Time
-	created_by                  *string
-	updated_by                  *string
-	updated_by_impersonator     *string
-	deleted_at                  *time.Time
-	deleted_by                  *string
-	display_id                  *string
-	tags                        *[]string
-	appendtags                  []string
-	internal_owner              *string
-	workflow_eligible_marker    *bool
-	name                        *string
-	description                 *string
-	campaign_type               *enums.CampaignType
-	status                      *enums.CampaignStatus
-	is_active                   *bool
-	scheduled_at                *models.DateTime
-	launched_at                 *models.DateTime
-	completed_at                *models.DateTime
-	due_date                    *models.DateTime
-	is_recurring                *bool
-	recurrence_frequency        *enums.Frequency
-	recurrence_interval         *int
-	addrecurrence_interval      *int
-	recurrence_timezone         *string
-	recurrence_cron             *models.Cron
-	last_run_at                 *models.DateTime
-	next_run_at                 *models.DateTime
-	recurrence_end_at           *models.DateTime
-	recipient_count             *int
-	addrecipient_count          *int
-	resend_count                *int
-	addresend_count             *int
-	last_resent_at              *models.DateTime
-	metadata                    *map[string]interface{}
-	email_branding_id           *string
-	clearedFields               map[string]struct{}
-	owner                       *string
-	clearedowner                bool
-	blocked_groups              map[string]struct{}
-	removedblocked_groups       map[string]struct{}
-	clearedblocked_groups       bool
-	editors                     map[string]struct{}
-	removededitors              map[string]struct{}
-	clearededitors              bool
-	viewers                     map[string]struct{}
-	removedviewers              map[string]struct{}
-	clearedviewers              bool
-	internal_owner_user         *string
-	clearedinternal_owner_user  bool
-	internal_owner_group        *string
-	clearedinternal_owner_group bool
-	assessment                  *string
-	clearedassessment           bool
-	template                    *string
-	clearedtemplate             bool
-	integration                 *string
-	clearedintegration          bool
-	email_template              *string
-	clearedemail_template       bool
-	entity                      *string
-	clearedentity               bool
-	trust_center                *string
-	clearedtrust_center         bool
-	campaign_targets            map[string]struct{}
-	removedcampaign_targets     map[string]struct{}
-	clearedcampaign_targets     bool
-	assessment_responses        map[string]struct{}
-	removedassessment_responses map[string]struct{}
-	clearedassessment_responses bool
-	contacts                    map[string]struct{}
-	removedcontacts             map[string]struct{}
-	clearedcontacts             bool
-	users                       map[string]struct{}
-	removedusers                map[string]struct{}
-	clearedusers                bool
-	groups                      map[string]struct{}
-	removedgroups               map[string]struct{}
-	clearedgroups               bool
-	identity_holders            map[string]struct{}
-	removedidentity_holders     map[string]struct{}
-	clearedidentity_holders     bool
-	audiences                   map[string]struct{}
-	removedaudiences            map[string]struct{}
-	clearedaudiences            bool
-	controls                    map[string]struct{}
-	removedcontrols             map[string]struct{}
-	clearedcontrols             bool
-	workflow_object_refs        map[string]struct{}
-	removedworkflow_object_refs map[string]struct{}
-	clearedworkflow_object_refs bool
-	done                        bool
-	oldValue                    func(context.Context) (*Campaign, error)
-	predicates                  []predicate.Campaign
+	op                                    Op
+	typ                                   string
+	id                                    *string
+	created_at                            *time.Time
+	updated_at                            *time.Time
+	created_by                            *string
+	updated_by                            *string
+	updated_by_impersonator               *string
+	deleted_at                            *time.Time
+	deleted_by                            *string
+	display_id                            *string
+	tags                                  *[]string
+	appendtags                            []string
+	internal_owner                        *string
+	workflow_eligible_marker              *bool
+	name                                  *string
+	description                           *string
+	campaign_type                         *enums.CampaignType
+	status                                *enums.CampaignStatus
+	is_active                             *bool
+	scheduled_at                          *models.DateTime
+	launched_at                           *models.DateTime
+	completed_at                          *models.DateTime
+	due_date                              *models.DateTime
+	is_recurring                          *bool
+	recurrence_frequency                  *enums.Frequency
+	recurrence_interval                   *int
+	addrecurrence_interval                *int
+	recurrence_timezone                   *string
+	recurrence_cron                       *models.Cron
+	last_run_at                           *models.DateTime
+	next_run_at                           *models.DateTime
+	recurrence_end_at                     *models.DateTime
+	recipient_count                       *int
+	addrecipient_count                    *int
+	resend_count                          *int
+	addresend_count                       *int
+	last_resent_at                        *models.DateTime
+	metadata                              *map[string]interface{}
+	email_branding_id                     *string
+	clearedFields                         map[string]struct{}
+	owner                                 *string
+	clearedowner                          bool
+	blocked_groups                        map[string]struct{}
+	removedblocked_groups                 map[string]struct{}
+	clearedblocked_groups                 bool
+	editors                               map[string]struct{}
+	removededitors                        map[string]struct{}
+	clearededitors                        bool
+	viewers                               map[string]struct{}
+	removedviewers                        map[string]struct{}
+	clearedviewers                        bool
+	internal_owner_user                   *string
+	clearedinternal_owner_user            bool
+	internal_owner_group                  *string
+	clearedinternal_owner_group           bool
+	internal_owner_identity_holder        *string
+	clearedinternal_owner_identity_holder bool
+	assessment                            *string
+	clearedassessment                     bool
+	template                              *string
+	clearedtemplate                       bool
+	integration                           *string
+	clearedintegration                    bool
+	email_template                        *string
+	clearedemail_template                 bool
+	entity                                *string
+	clearedentity                         bool
+	trust_center                          *string
+	clearedtrust_center                   bool
+	campaign_targets                      map[string]struct{}
+	removedcampaign_targets               map[string]struct{}
+	clearedcampaign_targets               bool
+	assessment_responses                  map[string]struct{}
+	removedassessment_responses           map[string]struct{}
+	clearedassessment_responses           bool
+	contacts                              map[string]struct{}
+	removedcontacts                       map[string]struct{}
+	clearedcontacts                       bool
+	users                                 map[string]struct{}
+	removedusers                          map[string]struct{}
+	clearedusers                          bool
+	groups                                map[string]struct{}
+	removedgroups                         map[string]struct{}
+	clearedgroups                         bool
+	identity_holders                      map[string]struct{}
+	removedidentity_holders               map[string]struct{}
+	clearedidentity_holders               bool
+	audiences                             map[string]struct{}
+	removedaudiences                      map[string]struct{}
+	clearedaudiences                      bool
+	controls                              map[string]struct{}
+	removedcontrols                       map[string]struct{}
+	clearedcontrols                       bool
+	workflow_object_refs                  map[string]struct{}
+	removedworkflow_object_refs           map[string]struct{}
+	clearedworkflow_object_refs           bool
+	done                                  bool
+	oldValue                              func(context.Context) (*Campaign, error)
+	predicates                            []predicate.Campaign
 }
 
 var _ ent.Mutation = (*CampaignMutation)(nil)
@@ -23357,6 +23478,55 @@ func (m *CampaignMutation) InternalOwnerGroupIDCleared() bool {
 func (m *CampaignMutation) ResetInternalOwnerGroupID() {
 	m.internal_owner_group = nil
 	delete(m.clearedFields, campaign.FieldInternalOwnerGroupID)
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *CampaignMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *CampaignMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the Campaign entity.
+// If the Campaign object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *CampaignMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	m.clearedFields[campaign.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *CampaignMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[campaign.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *CampaignMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	delete(m.clearedFields, campaign.FieldInternalOwnerIdentityHolderID)
 }
 
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
@@ -25021,6 +25191,33 @@ func (m *CampaignMutation) ResetInternalOwnerGroup() {
 	m.clearedinternal_owner_group = false
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *CampaignMutation) ClearInternalOwnerIdentityHolder() {
+	m.clearedinternal_owner_identity_holder = true
+	m.clearedFields[campaign.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderCleared reports if the "internal_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *CampaignMutation) InternalOwnerIdentityHolderCleared() bool {
+	return m.InternalOwnerIdentityHolderIDCleared() || m.clearedinternal_owner_identity_holder
+}
+
+// InternalOwnerIdentityHolderIDs returns the "internal_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *CampaignMutation) InternalOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.internal_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalOwnerIdentityHolder resets all changes to the "internal_owner_identity_holder" edge.
+func (m *CampaignMutation) ResetInternalOwnerIdentityHolder() {
+	m.internal_owner_identity_holder = nil
+	m.clearedinternal_owner_identity_holder = false
+}
+
 // ClearAssessment clears the "assessment" edge to the Assessment entity.
 func (m *CampaignMutation) ClearAssessment() {
 	m.clearedassessment = true
@@ -25703,7 +25900,7 @@ func (m *CampaignMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CampaignMutation) Fields() []string {
-	fields := make([]string, 0, 42)
+	fields := make([]string, 0, 43)
 	if m.created_at != nil {
 		fields = append(fields, campaign.FieldCreatedAt)
 	}
@@ -25742,6 +25939,9 @@ func (m *CampaignMutation) Fields() []string {
 	}
 	if m.internal_owner_group != nil {
 		fields = append(fields, campaign.FieldInternalOwnerGroupID)
+	}
+	if m.internal_owner_identity_holder != nil {
+		fields = append(fields, campaign.FieldInternalOwnerIdentityHolderID)
 	}
 	if m.workflow_eligible_marker != nil {
 		fields = append(fields, campaign.FieldWorkflowEligibleMarker)
@@ -25864,6 +26064,8 @@ func (m *CampaignMutation) Field(name string) (ent.Value, bool) {
 		return m.InternalOwnerUserID()
 	case campaign.FieldInternalOwnerGroupID:
 		return m.InternalOwnerGroupID()
+	case campaign.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
 	case campaign.FieldWorkflowEligibleMarker:
 		return m.WorkflowEligibleMarker()
 	case campaign.FieldName:
@@ -25957,6 +26159,8 @@ func (m *CampaignMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldInternalOwnerUserID(ctx)
 	case campaign.FieldInternalOwnerGroupID:
 		return m.OldInternalOwnerGroupID(ctx)
+	case campaign.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
 	case campaign.FieldWorkflowEligibleMarker:
 		return m.OldWorkflowEligibleMarker(ctx)
 	case campaign.FieldName:
@@ -26114,6 +26318,13 @@ func (m *CampaignMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetInternalOwnerGroupID(v)
+		return nil
+	case campaign.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
 		return nil
 	case campaign.FieldWorkflowEligibleMarker:
 		v, ok := value.(bool)
@@ -26423,6 +26634,9 @@ func (m *CampaignMutation) ClearedFields() []string {
 	if m.FieldCleared(campaign.FieldInternalOwnerGroupID) {
 		fields = append(fields, campaign.FieldInternalOwnerGroupID)
 	}
+	if m.FieldCleared(campaign.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, campaign.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.FieldCleared(campaign.FieldWorkflowEligibleMarker) {
 		fields = append(fields, campaign.FieldWorkflowEligibleMarker)
 	}
@@ -26545,6 +26759,9 @@ func (m *CampaignMutation) ClearField(name string) error {
 	case campaign.FieldInternalOwnerGroupID:
 		m.ClearInternalOwnerGroupID()
 		return nil
+	case campaign.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
+		return nil
 	case campaign.FieldWorkflowEligibleMarker:
 		m.ClearWorkflowEligibleMarker()
 		return nil
@@ -26664,6 +26881,9 @@ func (m *CampaignMutation) ResetField(name string) error {
 	case campaign.FieldInternalOwnerGroupID:
 		m.ResetInternalOwnerGroupID()
 		return nil
+	case campaign.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
+		return nil
 	case campaign.FieldWorkflowEligibleMarker:
 		m.ResetWorkflowEligibleMarker()
 		return nil
@@ -26757,7 +26977,7 @@ func (m *CampaignMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *CampaignMutation) AddedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 22)
 	if m.owner != nil {
 		edges = append(edges, campaign.EdgeOwner)
 	}
@@ -26775,6 +26995,9 @@ func (m *CampaignMutation) AddedEdges() []string {
 	}
 	if m.internal_owner_group != nil {
 		edges = append(edges, campaign.EdgeInternalOwnerGroup)
+	}
+	if m.internal_owner_identity_holder != nil {
+		edges = append(edges, campaign.EdgeInternalOwnerIdentityHolder)
 	}
 	if m.assessment != nil {
 		edges = append(edges, campaign.EdgeAssessment)
@@ -26856,6 +27079,10 @@ func (m *CampaignMutation) AddedIDs(name string) []ent.Value {
 		}
 	case campaign.EdgeInternalOwnerGroup:
 		if id := m.internal_owner_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case campaign.EdgeInternalOwnerIdentityHolder:
+		if id := m.internal_owner_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case campaign.EdgeAssessment:
@@ -26942,7 +27169,7 @@ func (m *CampaignMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *CampaignMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 22)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, campaign.EdgeBlockedGroups)
 	}
@@ -27064,7 +27291,7 @@ func (m *CampaignMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *CampaignMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 22)
 	if m.clearedowner {
 		edges = append(edges, campaign.EdgeOwner)
 	}
@@ -27082,6 +27309,9 @@ func (m *CampaignMutation) ClearedEdges() []string {
 	}
 	if m.clearedinternal_owner_group {
 		edges = append(edges, campaign.EdgeInternalOwnerGroup)
+	}
+	if m.clearedinternal_owner_identity_holder {
+		edges = append(edges, campaign.EdgeInternalOwnerIdentityHolder)
 	}
 	if m.clearedassessment {
 		edges = append(edges, campaign.EdgeAssessment)
@@ -27147,6 +27377,8 @@ func (m *CampaignMutation) EdgeCleared(name string) bool {
 		return m.clearedinternal_owner_user
 	case campaign.EdgeInternalOwnerGroup:
 		return m.clearedinternal_owner_group
+	case campaign.EdgeInternalOwnerIdentityHolder:
+		return m.clearedinternal_owner_identity_holder
 	case campaign.EdgeAssessment:
 		return m.clearedassessment
 	case campaign.EdgeTemplate:
@@ -27194,6 +27426,9 @@ func (m *CampaignMutation) ClearEdge(name string) error {
 	case campaign.EdgeInternalOwnerGroup:
 		m.ClearInternalOwnerGroup()
 		return nil
+	case campaign.EdgeInternalOwnerIdentityHolder:
+		m.ClearInternalOwnerIdentityHolder()
+		return nil
 	case campaign.EdgeAssessment:
 		m.ClearAssessment()
 		return nil
@@ -27237,6 +27472,9 @@ func (m *CampaignMutation) ResetEdge(name string) error {
 		return nil
 	case campaign.EdgeInternalOwnerGroup:
 		m.ResetInternalOwnerGroup()
+		return nil
+	case campaign.EdgeInternalOwnerIdentityHolder:
+		m.ResetInternalOwnerIdentityHolder()
 		return nil
 	case campaign.EdgeAssessment:
 		m.ResetAssessment()
@@ -71765,10 +72003,14 @@ type EntityMutation struct {
 	clearedinternal_owner_user                  bool
 	internal_owner_group                        *string
 	clearedinternal_owner_group                 bool
+	internal_owner_identity_holder              *string
+	clearedinternal_owner_identity_holder       bool
 	reviewed_by_user                            *string
 	clearedreviewed_by_user                     bool
 	reviewed_by_group                           *string
 	clearedreviewed_by_group                    bool
+	reviewed_by_identity_holder                 *string
+	clearedreviewed_by_identity_holder          bool
 	entity_relationship_state                   *string
 	clearedentity_relationship_state            bool
 	entity_security_questionnaire_status        *string
@@ -72571,6 +72813,55 @@ func (m *EntityMutation) ResetInternalOwnerGroupID() {
 	delete(m.clearedFields, entity.FieldInternalOwnerGroupID)
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *EntityMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *EntityMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *EntityMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	m.clearedFields[entity.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *EntityMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[entity.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *EntityMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	delete(m.clearedFields, entity.FieldInternalOwnerIdentityHolderID)
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (m *EntityMutation) SetReviewedBy(s string) {
 	m.reviewed_by = &s
@@ -72716,6 +73007,55 @@ func (m *EntityMutation) ReviewedByGroupIDCleared() bool {
 func (m *EntityMutation) ResetReviewedByGroupID() {
 	m.reviewed_by_group = nil
 	delete(m.clearedFields, entity.FieldReviewedByGroupID)
+}
+
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (m *EntityMutation) SetReviewedByIdentityHolderID(s string) {
+	m.reviewed_by_identity_holder = &s
+}
+
+// ReviewedByIdentityHolderID returns the value of the "reviewed_by_identity_holder_id" field in the mutation.
+func (m *EntityMutation) ReviewedByIdentityHolderID() (r string, exists bool) {
+	v := m.reviewed_by_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewedByIdentityHolderID returns the old "reviewed_by_identity_holder_id" field's value of the Entity entity.
+// If the Entity object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EntityMutation) OldReviewedByIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewedByIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewedByIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewedByIdentityHolderID: %w", err)
+	}
+	return oldValue.ReviewedByIdentityHolderID, nil
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (m *EntityMutation) ClearReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder = nil
+	m.clearedFields[entity.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderIDCleared returns if the "reviewed_by_identity_holder_id" field was cleared in this mutation.
+func (m *EntityMutation) ReviewedByIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[entity.FieldReviewedByIdentityHolderID]
+	return ok
+}
+
+// ResetReviewedByIdentityHolderID resets all changes to the "reviewed_by_identity_holder_id" field.
+func (m *EntityMutation) ResetReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder = nil
+	delete(m.clearedFields, entity.FieldReviewedByIdentityHolderID)
 }
 
 // SetLastReviewedAt sets the "last_reviewed_at" field.
@@ -75570,6 +75910,33 @@ func (m *EntityMutation) ResetInternalOwnerGroup() {
 	m.clearedinternal_owner_group = false
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *EntityMutation) ClearInternalOwnerIdentityHolder() {
+	m.clearedinternal_owner_identity_holder = true
+	m.clearedFields[entity.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderCleared reports if the "internal_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *EntityMutation) InternalOwnerIdentityHolderCleared() bool {
+	return m.InternalOwnerIdentityHolderIDCleared() || m.clearedinternal_owner_identity_holder
+}
+
+// InternalOwnerIdentityHolderIDs returns the "internal_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *EntityMutation) InternalOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.internal_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalOwnerIdentityHolder resets all changes to the "internal_owner_identity_holder" edge.
+func (m *EntityMutation) ResetInternalOwnerIdentityHolder() {
+	m.internal_owner_identity_holder = nil
+	m.clearedinternal_owner_identity_holder = false
+}
+
 // ClearReviewedByUser clears the "reviewed_by_user" edge to the User entity.
 func (m *EntityMutation) ClearReviewedByUser() {
 	m.clearedreviewed_by_user = true
@@ -75622,6 +75989,33 @@ func (m *EntityMutation) ReviewedByGroupIDs() (ids []string) {
 func (m *EntityMutation) ResetReviewedByGroup() {
 	m.reviewed_by_group = nil
 	m.clearedreviewed_by_group = false
+}
+
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (m *EntityMutation) ClearReviewedByIdentityHolder() {
+	m.clearedreviewed_by_identity_holder = true
+	m.clearedFields[entity.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderCleared reports if the "reviewed_by_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *EntityMutation) ReviewedByIdentityHolderCleared() bool {
+	return m.ReviewedByIdentityHolderIDCleared() || m.clearedreviewed_by_identity_holder
+}
+
+// ReviewedByIdentityHolderIDs returns the "reviewed_by_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ReviewedByIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *EntityMutation) ReviewedByIdentityHolderIDs() (ids []string) {
+	if id := m.reviewed_by_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetReviewedByIdentityHolder resets all changes to the "reviewed_by_identity_holder" edge.
+func (m *EntityMutation) ResetReviewedByIdentityHolder() {
+	m.reviewed_by_identity_holder = nil
+	m.clearedreviewed_by_identity_holder = false
 }
 
 // ClearEntityRelationshipState clears the "entity_relationship_state" edge to the CustomTypeEnum entity.
@@ -77197,7 +77591,7 @@ func (m *EntityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EntityMutation) Fields() []string {
-	fields := make([]string, 0, 66)
+	fields := make([]string, 0, 68)
 	if m.created_at != nil {
 		fields = append(fields, entity.FieldCreatedAt)
 	}
@@ -77234,6 +77628,9 @@ func (m *EntityMutation) Fields() []string {
 	if m.internal_owner_group != nil {
 		fields = append(fields, entity.FieldInternalOwnerGroupID)
 	}
+	if m.internal_owner_identity_holder != nil {
+		fields = append(fields, entity.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.reviewed_by != nil {
 		fields = append(fields, entity.FieldReviewedBy)
 	}
@@ -77242,6 +77639,9 @@ func (m *EntityMutation) Fields() []string {
 	}
 	if m.reviewed_by_group != nil {
 		fields = append(fields, entity.FieldReviewedByGroupID)
+	}
+	if m.reviewed_by_identity_holder != nil {
+		fields = append(fields, entity.FieldReviewedByIdentityHolderID)
 	}
 	if m.last_reviewed_at != nil {
 		fields = append(fields, entity.FieldLastReviewedAt)
@@ -77428,12 +77828,16 @@ func (m *EntityMutation) Field(name string) (ent.Value, bool) {
 		return m.InternalOwnerUserID()
 	case entity.FieldInternalOwnerGroupID:
 		return m.InternalOwnerGroupID()
+	case entity.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
 	case entity.FieldReviewedBy:
 		return m.ReviewedBy()
 	case entity.FieldReviewedByUserID:
 		return m.ReviewedByUserID()
 	case entity.FieldReviewedByGroupID:
 		return m.ReviewedByGroupID()
+	case entity.FieldReviewedByIdentityHolderID:
+		return m.ReviewedByIdentityHolderID()
 	case entity.FieldLastReviewedAt:
 		return m.LastReviewedAt()
 	case entity.FieldSystemOwned:
@@ -77569,12 +77973,16 @@ func (m *EntityMutation) OldField(ctx context.Context, name string) (ent.Value, 
 		return m.OldInternalOwnerUserID(ctx)
 	case entity.FieldInternalOwnerGroupID:
 		return m.OldInternalOwnerGroupID(ctx)
+	case entity.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
 	case entity.FieldReviewedBy:
 		return m.OldReviewedBy(ctx)
 	case entity.FieldReviewedByUserID:
 		return m.OldReviewedByUserID(ctx)
 	case entity.FieldReviewedByGroupID:
 		return m.OldReviewedByGroupID(ctx)
+	case entity.FieldReviewedByIdentityHolderID:
+		return m.OldReviewedByIdentityHolderID(ctx)
 	case entity.FieldLastReviewedAt:
 		return m.OldLastReviewedAt(ctx)
 	case entity.FieldSystemOwned:
@@ -77770,6 +78178,13 @@ func (m *EntityMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetInternalOwnerGroupID(v)
 		return nil
+	case entity.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
+		return nil
 	case entity.FieldReviewedBy:
 		v, ok := value.(string)
 		if !ok {
@@ -77790,6 +78205,13 @@ func (m *EntityMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetReviewedByGroupID(v)
+		return nil
+	case entity.FieldReviewedByIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewedByIdentityHolderID(v)
 		return nil
 	case entity.FieldLastReviewedAt:
 		v, ok := value.(models.DateTime)
@@ -78265,6 +78687,9 @@ func (m *EntityMutation) ClearedFields() []string {
 	if m.FieldCleared(entity.FieldInternalOwnerGroupID) {
 		fields = append(fields, entity.FieldInternalOwnerGroupID)
 	}
+	if m.FieldCleared(entity.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, entity.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.FieldCleared(entity.FieldReviewedBy) {
 		fields = append(fields, entity.FieldReviewedBy)
 	}
@@ -78273,6 +78698,9 @@ func (m *EntityMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(entity.FieldReviewedByGroupID) {
 		fields = append(fields, entity.FieldReviewedByGroupID)
+	}
+	if m.FieldCleared(entity.FieldReviewedByIdentityHolderID) {
+		fields = append(fields, entity.FieldReviewedByIdentityHolderID)
 	}
 	if m.FieldCleared(entity.FieldLastReviewedAt) {
 		fields = append(fields, entity.FieldLastReviewedAt)
@@ -78477,6 +78905,9 @@ func (m *EntityMutation) ClearField(name string) error {
 	case entity.FieldInternalOwnerGroupID:
 		m.ClearInternalOwnerGroupID()
 		return nil
+	case entity.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
+		return nil
 	case entity.FieldReviewedBy:
 		m.ClearReviewedBy()
 		return nil
@@ -78485,6 +78916,9 @@ func (m *EntityMutation) ClearField(name string) error {
 		return nil
 	case entity.FieldReviewedByGroupID:
 		m.ClearReviewedByGroupID()
+		return nil
+	case entity.FieldReviewedByIdentityHolderID:
+		m.ClearReviewedByIdentityHolderID()
 		return nil
 	case entity.FieldLastReviewedAt:
 		m.ClearLastReviewedAt()
@@ -78683,6 +79117,9 @@ func (m *EntityMutation) ResetField(name string) error {
 	case entity.FieldInternalOwnerGroupID:
 		m.ResetInternalOwnerGroupID()
 		return nil
+	case entity.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
+		return nil
 	case entity.FieldReviewedBy:
 		m.ResetReviewedBy()
 		return nil
@@ -78691,6 +79128,9 @@ func (m *EntityMutation) ResetField(name string) error {
 		return nil
 	case entity.FieldReviewedByGroupID:
 		m.ResetReviewedByGroupID()
+		return nil
+	case entity.FieldReviewedByIdentityHolderID:
+		m.ResetReviewedByIdentityHolderID()
 		return nil
 	case entity.FieldLastReviewedAt:
 		m.ResetLastReviewedAt()
@@ -78851,7 +79291,7 @@ func (m *EntityMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *EntityMutation) AddedEdges() []string {
-	edges := make([]string, 0, 39)
+	edges := make([]string, 0, 41)
 	if m.owner != nil {
 		edges = append(edges, entity.EdgeOwner)
 	}
@@ -78867,11 +79307,17 @@ func (m *EntityMutation) AddedEdges() []string {
 	if m.internal_owner_group != nil {
 		edges = append(edges, entity.EdgeInternalOwnerGroup)
 	}
+	if m.internal_owner_identity_holder != nil {
+		edges = append(edges, entity.EdgeInternalOwnerIdentityHolder)
+	}
 	if m.reviewed_by_user != nil {
 		edges = append(edges, entity.EdgeReviewedByUser)
 	}
 	if m.reviewed_by_group != nil {
 		edges = append(edges, entity.EdgeReviewedByGroup)
+	}
+	if m.reviewed_by_identity_holder != nil {
+		edges = append(edges, entity.EdgeReviewedByIdentityHolder)
 	}
 	if m.entity_relationship_state != nil {
 		edges = append(edges, entity.EdgeEntityRelationshipState)
@@ -79000,12 +79446,20 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 		if id := m.internal_owner_group; id != nil {
 			return []ent.Value{*id}
 		}
+	case entity.EdgeInternalOwnerIdentityHolder:
+		if id := m.internal_owner_identity_holder; id != nil {
+			return []ent.Value{*id}
+		}
 	case entity.EdgeReviewedByUser:
 		if id := m.reviewed_by_user; id != nil {
 			return []ent.Value{*id}
 		}
 	case entity.EdgeReviewedByGroup:
 		if id := m.reviewed_by_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case entity.EdgeReviewedByIdentityHolder:
+		if id := m.reviewed_by_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case entity.EdgeEntityRelationshipState:
@@ -79192,7 +79646,7 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *EntityMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 39)
+	edges := make([]string, 0, 41)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, entity.EdgeBlockedGroups)
 	}
@@ -79449,7 +79903,7 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *EntityMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 39)
+	edges := make([]string, 0, 41)
 	if m.clearedowner {
 		edges = append(edges, entity.EdgeOwner)
 	}
@@ -79465,11 +79919,17 @@ func (m *EntityMutation) ClearedEdges() []string {
 	if m.clearedinternal_owner_group {
 		edges = append(edges, entity.EdgeInternalOwnerGroup)
 	}
+	if m.clearedinternal_owner_identity_holder {
+		edges = append(edges, entity.EdgeInternalOwnerIdentityHolder)
+	}
 	if m.clearedreviewed_by_user {
 		edges = append(edges, entity.EdgeReviewedByUser)
 	}
 	if m.clearedreviewed_by_group {
 		edges = append(edges, entity.EdgeReviewedByGroup)
+	}
+	if m.clearedreviewed_by_identity_holder {
+		edges = append(edges, entity.EdgeReviewedByIdentityHolder)
 	}
 	if m.clearedentity_relationship_state {
 		edges = append(edges, entity.EdgeEntityRelationshipState)
@@ -79584,10 +80044,14 @@ func (m *EntityMutation) EdgeCleared(name string) bool {
 		return m.clearedinternal_owner_user
 	case entity.EdgeInternalOwnerGroup:
 		return m.clearedinternal_owner_group
+	case entity.EdgeInternalOwnerIdentityHolder:
+		return m.clearedinternal_owner_identity_holder
 	case entity.EdgeReviewedByUser:
 		return m.clearedreviewed_by_user
 	case entity.EdgeReviewedByGroup:
 		return m.clearedreviewed_by_group
+	case entity.EdgeReviewedByIdentityHolder:
+		return m.clearedreviewed_by_identity_holder
 	case entity.EdgeEntityRelationshipState:
 		return m.clearedentity_relationship_state
 	case entity.EdgeEntitySecurityQuestionnaireStatus:
@@ -79669,11 +80133,17 @@ func (m *EntityMutation) ClearEdge(name string) error {
 	case entity.EdgeInternalOwnerGroup:
 		m.ClearInternalOwnerGroup()
 		return nil
+	case entity.EdgeInternalOwnerIdentityHolder:
+		m.ClearInternalOwnerIdentityHolder()
+		return nil
 	case entity.EdgeReviewedByUser:
 		m.ClearReviewedByUser()
 		return nil
 	case entity.EdgeReviewedByGroup:
 		m.ClearReviewedByGroup()
+		return nil
+	case entity.EdgeReviewedByIdentityHolder:
+		m.ClearReviewedByIdentityHolder()
 		return nil
 	case entity.EdgeEntityRelationshipState:
 		m.ClearEntityRelationshipState()
@@ -79719,11 +80189,17 @@ func (m *EntityMutation) ResetEdge(name string) error {
 	case entity.EdgeInternalOwnerGroup:
 		m.ResetInternalOwnerGroup()
 		return nil
+	case entity.EdgeInternalOwnerIdentityHolder:
+		m.ResetInternalOwnerIdentityHolder()
+		return nil
 	case entity.EdgeReviewedByUser:
 		m.ResetReviewedByUser()
 		return nil
 	case entity.EdgeReviewedByGroup:
 		m.ResetReviewedByGroup()
+		return nil
+	case entity.EdgeReviewedByIdentityHolder:
+		m.ResetReviewedByIdentityHolder()
 		return nil
 	case entity.EdgeEntityRelationshipState:
 		m.ResetEntityRelationshipState()
@@ -88299,6 +88775,7 @@ type FileMutation struct {
 	metadata                         *map[string]interface{}
 	storage_region                   *string
 	storage_provider                 *string
+	backup_state                     *models.FileBackupState
 	last_accessed_at                 *time.Time
 	clearedFields                    map[string]struct{}
 	environment                      *string
@@ -90204,6 +90681,55 @@ func (m *FileMutation) ResetStorageProvider() {
 	delete(m.clearedFields, file.FieldStorageProvider)
 }
 
+// SetBackupState sets the "backup_state" field.
+func (m *FileMutation) SetBackupState(mbs models.FileBackupState) {
+	m.backup_state = &mbs
+}
+
+// BackupState returns the value of the "backup_state" field in the mutation.
+func (m *FileMutation) BackupState() (r models.FileBackupState, exists bool) {
+	v := m.backup_state
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBackupState returns the old "backup_state" field's value of the File entity.
+// If the File object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FileMutation) OldBackupState(ctx context.Context) (v models.FileBackupState, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBackupState is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBackupState requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBackupState: %w", err)
+	}
+	return oldValue.BackupState, nil
+}
+
+// ClearBackupState clears the value of the "backup_state" field.
+func (m *FileMutation) ClearBackupState() {
+	m.backup_state = nil
+	m.clearedFields[file.FieldBackupState] = struct{}{}
+}
+
+// BackupStateCleared returns if the "backup_state" field was cleared in this mutation.
+func (m *FileMutation) BackupStateCleared() bool {
+	_, ok := m.clearedFields[file.FieldBackupState]
+	return ok
+}
+
+// ResetBackupState resets all changes to the "backup_state" field.
+func (m *FileMutation) ResetBackupState() {
+	m.backup_state = nil
+	delete(m.clearedFields, file.FieldBackupState)
+}
+
 // SetLastAccessedAt sets the "last_accessed_at" field.
 func (m *FileMutation) SetLastAccessedAt(t time.Time) {
 	m.last_accessed_at = &t
@@ -91340,7 +91866,7 @@ func (m *FileMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileMutation) Fields() []string {
-	fields := make([]string, 0, 36)
+	fields := make([]string, 0, 37)
 	if m.created_at != nil {
 		fields = append(fields, file.FieldCreatedAt)
 	}
@@ -91446,6 +91972,9 @@ func (m *FileMutation) Fields() []string {
 	if m.storage_provider != nil {
 		fields = append(fields, file.FieldStorageProvider)
 	}
+	if m.backup_state != nil {
+		fields = append(fields, file.FieldBackupState)
+	}
 	if m.last_accessed_at != nil {
 		fields = append(fields, file.FieldLastAccessedAt)
 	}
@@ -91527,6 +92056,8 @@ func (m *FileMutation) Field(name string) (ent.Value, bool) {
 		return m.StorageRegion()
 	case file.FieldStorageProvider:
 		return m.StorageProvider()
+	case file.FieldBackupState:
+		return m.BackupState()
 	case file.FieldLastAccessedAt:
 		return m.LastAccessedAt()
 	}
@@ -91608,6 +92139,8 @@ func (m *FileMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldStorageRegion(ctx)
 	case file.FieldStorageProvider:
 		return m.OldStorageProvider(ctx)
+	case file.FieldBackupState:
+		return m.OldBackupState(ctx)
 	case file.FieldLastAccessedAt:
 		return m.OldLastAccessedAt(ctx)
 	}
@@ -91864,6 +92397,13 @@ func (m *FileMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStorageProvider(v)
 		return nil
+	case file.FieldBackupState:
+		v, ok := value.(models.FileBackupState)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBackupState(v)
+		return nil
 	case file.FieldLastAccessedAt:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -92024,6 +92564,9 @@ func (m *FileMutation) ClearedFields() []string {
 	if m.FieldCleared(file.FieldStorageProvider) {
 		fields = append(fields, file.FieldStorageProvider)
 	}
+	if m.FieldCleared(file.FieldBackupState) {
+		fields = append(fields, file.FieldBackupState)
+	}
 	if m.FieldCleared(file.FieldLastAccessedAt) {
 		fields = append(fields, file.FieldLastAccessedAt)
 	}
@@ -92136,6 +92679,9 @@ func (m *FileMutation) ClearField(name string) error {
 		return nil
 	case file.FieldStorageProvider:
 		m.ClearStorageProvider()
+		return nil
+	case file.FieldBackupState:
+		m.ClearBackupState()
 		return nil
 	case file.FieldLastAccessedAt:
 		m.ClearLastAccessedAt()
@@ -92252,6 +92798,9 @@ func (m *FileMutation) ResetField(name string) error {
 		return nil
 	case file.FieldStorageProvider:
 		m.ResetStorageProvider()
+		return nil
+	case file.FieldBackupState:
+		m.ResetBackupState()
 		return nil
 	case file.FieldLastAccessedAt:
 		m.ResetLastAccessedAt()
@@ -94108,160 +94657,164 @@ func (m *FileDownloadTokenMutation) ResetEdge(name string) error {
 // FindingMutation represents an operation that mutates the Finding nodes in the graph.
 type FindingMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *string
-	created_at                  *time.Time
-	updated_at                  *time.Time
-	created_by                  *string
-	updated_by                  *string
-	updated_by_impersonator     *string
-	deleted_at                  *time.Time
-	deleted_by                  *string
-	display_id                  *string
-	tags                        *[]string
-	appendtags                  []string
-	reviewed_by                 *string
-	assigned_to                 *string
-	system_owned                *bool
-	internal_notes              *string
-	system_internal_id          *string
-	environment_name            *string
-	scope_name                  *string
-	finding_status_name         *string
-	workflow_eligible_marker    *bool
-	external_id                 *string
-	security_level              *enums.SecurityLevel
-	external_owner_id           *string
-	source                      *string
-	resource_name               *string
-	display_name                *string
-	state                       *string
-	category                    *string
-	categories                  *[]string
-	appendcategories            []string
-	finding_class               *string
-	severity                    *string
-	numeric_severity            *float64
-	addnumeric_severity         *float64
-	score                       *float64
-	addscore                    *float64
-	impact                      *float64
-	addimpact                   *float64
-	exploitability              *float64
-	addexploitability           *float64
-	priority                    *string
-	open                        *bool
-	blocks_production           *bool
-	production                  *bool
-	public                      *bool
-	validated                   *bool
-	assessment_id               *string
-	description                 *string
-	recommendation              *string
-	recommended_actions         *string
-	references                  *[]string
-	appendreferences            []string
-	steps_to_reproduce          *[]string
-	appendsteps_to_reproduce    []string
-	targets                     *[]string
-	appendtargets               []string
-	target_details              *map[string]interface{}
-	vector                      *string
-	remediation_sla             *int
-	addremediation_sla          *int
-	event_time                  *models.DateTime
-	reported_at                 *models.DateTime
-	source_updated_at           *models.DateTime
-	external_uri                *string
-	metadata                    *map[string]interface{}
-	raw_payload                 *map[string]interface{}
-	clearedFields               map[string]struct{}
-	owner                       *string
-	clearedowner                bool
-	blocked_groups              map[string]struct{}
-	removedblocked_groups       map[string]struct{}
-	clearedblocked_groups       bool
-	editors                     map[string]struct{}
-	removededitors              map[string]struct{}
-	clearededitors              bool
-	reviewed_by_user            *string
-	clearedreviewed_by_user     bool
-	reviewed_by_group           *string
-	clearedreviewed_by_group    bool
-	assigned_to_user            *string
-	clearedassigned_to_user     bool
-	assigned_to_group           *string
-	clearedassigned_to_group    bool
-	environment                 *string
-	clearedenvironment          bool
-	scope                       *string
-	clearedscope                bool
-	finding_status              *string
-	clearedfinding_status       bool
-	integrations                map[string]struct{}
-	removedintegrations         map[string]struct{}
-	clearedintegrations         bool
-	vulnerabilities             map[string]struct{}
-	removedvulnerabilities      map[string]struct{}
-	clearedvulnerabilities      bool
-	action_plans                map[string]struct{}
-	removedaction_plans         map[string]struct{}
-	clearedaction_plans         bool
-	controls                    map[string]struct{}
-	removedcontrols             map[string]struct{}
-	clearedcontrols             bool
-	subcontrols                 map[string]struct{}
-	removedsubcontrols          map[string]struct{}
-	clearedsubcontrols          bool
-	risks                       map[string]struct{}
-	removedrisks                map[string]struct{}
-	clearedrisks                bool
-	programs                    map[string]struct{}
-	removedprograms             map[string]struct{}
-	clearedprograms             bool
-	assets                      map[string]struct{}
-	removedassets               map[string]struct{}
-	clearedassets               bool
-	entities                    map[string]struct{}
-	removedentities             map[string]struct{}
-	clearedentities             bool
-	scans                       map[string]struct{}
-	removedscans                map[string]struct{}
-	clearedscans                bool
-	tasks                       map[string]struct{}
-	removedtasks                map[string]struct{}
-	clearedtasks                bool
-	directory_accounts          map[string]struct{}
-	removeddirectory_accounts   map[string]struct{}
-	cleareddirectory_accounts   bool
-	identity_holders            map[string]struct{}
-	removedidentity_holders     map[string]struct{}
-	clearedidentity_holders     bool
-	remediations                map[string]struct{}
-	removedremediations         map[string]struct{}
-	clearedremediations         bool
-	reviews                     map[string]struct{}
-	removedreviews              map[string]struct{}
-	clearedreviews              bool
-	comments                    map[string]struct{}
-	removedcomments             map[string]struct{}
-	clearedcomments             bool
-	files                       map[string]struct{}
-	removedfiles                map[string]struct{}
-	clearedfiles                bool
-	workflow_object_refs        map[string]struct{}
-	removedworkflow_object_refs map[string]struct{}
-	clearedworkflow_object_refs bool
-	check_results               map[string]struct{}
-	removedcheck_results        map[string]struct{}
-	clearedcheck_results        bool
-	control_mappings            map[string]struct{}
-	removedcontrol_mappings     map[string]struct{}
-	clearedcontrol_mappings     bool
-	done                        bool
-	oldValue                    func(context.Context) (*Finding, error)
-	predicates                  []predicate.Finding
+	op                                 Op
+	typ                                string
+	id                                 *string
+	created_at                         *time.Time
+	updated_at                         *time.Time
+	created_by                         *string
+	updated_by                         *string
+	updated_by_impersonator            *string
+	deleted_at                         *time.Time
+	deleted_by                         *string
+	display_id                         *string
+	tags                               *[]string
+	appendtags                         []string
+	reviewed_by                        *string
+	assigned_to                        *string
+	system_owned                       *bool
+	internal_notes                     *string
+	system_internal_id                 *string
+	environment_name                   *string
+	scope_name                         *string
+	finding_status_name                *string
+	workflow_eligible_marker           *bool
+	external_id                        *string
+	security_level                     *enums.SecurityLevel
+	external_owner_id                  *string
+	source                             *string
+	resource_name                      *string
+	display_name                       *string
+	state                              *string
+	category                           *string
+	categories                         *[]string
+	appendcategories                   []string
+	finding_class                      *string
+	severity                           *string
+	numeric_severity                   *float64
+	addnumeric_severity                *float64
+	score                              *float64
+	addscore                           *float64
+	impact                             *float64
+	addimpact                          *float64
+	exploitability                     *float64
+	addexploitability                  *float64
+	priority                           *string
+	open                               *bool
+	blocks_production                  *bool
+	production                         *bool
+	public                             *bool
+	validated                          *bool
+	assessment_id                      *string
+	description                        *string
+	recommendation                     *string
+	recommended_actions                *string
+	references                         *[]string
+	appendreferences                   []string
+	steps_to_reproduce                 *[]string
+	appendsteps_to_reproduce           []string
+	targets                            *[]string
+	appendtargets                      []string
+	target_details                     *map[string]interface{}
+	vector                             *string
+	remediation_sla                    *int
+	addremediation_sla                 *int
+	event_time                         *models.DateTime
+	reported_at                        *models.DateTime
+	source_updated_at                  *models.DateTime
+	external_uri                       *string
+	metadata                           *map[string]interface{}
+	raw_payload                        *map[string]interface{}
+	clearedFields                      map[string]struct{}
+	owner                              *string
+	clearedowner                       bool
+	blocked_groups                     map[string]struct{}
+	removedblocked_groups              map[string]struct{}
+	clearedblocked_groups              bool
+	editors                            map[string]struct{}
+	removededitors                     map[string]struct{}
+	clearededitors                     bool
+	reviewed_by_user                   *string
+	clearedreviewed_by_user            bool
+	reviewed_by_group                  *string
+	clearedreviewed_by_group           bool
+	reviewed_by_identity_holder        *string
+	clearedreviewed_by_identity_holder bool
+	assigned_to_user                   *string
+	clearedassigned_to_user            bool
+	assigned_to_group                  *string
+	clearedassigned_to_group           bool
+	assigned_to_identity_holder        *string
+	clearedassigned_to_identity_holder bool
+	environment                        *string
+	clearedenvironment                 bool
+	scope                              *string
+	clearedscope                       bool
+	finding_status                     *string
+	clearedfinding_status              bool
+	integrations                       map[string]struct{}
+	removedintegrations                map[string]struct{}
+	clearedintegrations                bool
+	vulnerabilities                    map[string]struct{}
+	removedvulnerabilities             map[string]struct{}
+	clearedvulnerabilities             bool
+	action_plans                       map[string]struct{}
+	removedaction_plans                map[string]struct{}
+	clearedaction_plans                bool
+	controls                           map[string]struct{}
+	removedcontrols                    map[string]struct{}
+	clearedcontrols                    bool
+	subcontrols                        map[string]struct{}
+	removedsubcontrols                 map[string]struct{}
+	clearedsubcontrols                 bool
+	risks                              map[string]struct{}
+	removedrisks                       map[string]struct{}
+	clearedrisks                       bool
+	programs                           map[string]struct{}
+	removedprograms                    map[string]struct{}
+	clearedprograms                    bool
+	assets                             map[string]struct{}
+	removedassets                      map[string]struct{}
+	clearedassets                      bool
+	entities                           map[string]struct{}
+	removedentities                    map[string]struct{}
+	clearedentities                    bool
+	scans                              map[string]struct{}
+	removedscans                       map[string]struct{}
+	clearedscans                       bool
+	tasks                              map[string]struct{}
+	removedtasks                       map[string]struct{}
+	clearedtasks                       bool
+	directory_accounts                 map[string]struct{}
+	removeddirectory_accounts          map[string]struct{}
+	cleareddirectory_accounts          bool
+	identity_holders                   map[string]struct{}
+	removedidentity_holders            map[string]struct{}
+	clearedidentity_holders            bool
+	remediations                       map[string]struct{}
+	removedremediations                map[string]struct{}
+	clearedremediations                bool
+	reviews                            map[string]struct{}
+	removedreviews                     map[string]struct{}
+	clearedreviews                     bool
+	comments                           map[string]struct{}
+	removedcomments                    map[string]struct{}
+	clearedcomments                    bool
+	files                              map[string]struct{}
+	removedfiles                       map[string]struct{}
+	clearedfiles                       bool
+	workflow_object_refs               map[string]struct{}
+	removedworkflow_object_refs        map[string]struct{}
+	clearedworkflow_object_refs        bool
+	check_results                      map[string]struct{}
+	removedcheck_results               map[string]struct{}
+	clearedcheck_results               bool
+	control_mappings                   map[string]struct{}
+	removedcontrol_mappings            map[string]struct{}
+	clearedcontrol_mappings            bool
+	done                               bool
+	oldValue                           func(context.Context) (*Finding, error)
+	predicates                         []predicate.Finding
 }
 
 var _ ent.Mutation = (*FindingMutation)(nil)
@@ -95008,6 +95561,55 @@ func (m *FindingMutation) ResetReviewedByGroupID() {
 	delete(m.clearedFields, finding.FieldReviewedByGroupID)
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (m *FindingMutation) SetReviewedByIdentityHolderID(s string) {
+	m.reviewed_by_identity_holder = &s
+}
+
+// ReviewedByIdentityHolderID returns the value of the "reviewed_by_identity_holder_id" field in the mutation.
+func (m *FindingMutation) ReviewedByIdentityHolderID() (r string, exists bool) {
+	v := m.reviewed_by_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewedByIdentityHolderID returns the old "reviewed_by_identity_holder_id" field's value of the Finding entity.
+// If the Finding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FindingMutation) OldReviewedByIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewedByIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewedByIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewedByIdentityHolderID: %w", err)
+	}
+	return oldValue.ReviewedByIdentityHolderID, nil
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (m *FindingMutation) ClearReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder = nil
+	m.clearedFields[finding.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderIDCleared returns if the "reviewed_by_identity_holder_id" field was cleared in this mutation.
+func (m *FindingMutation) ReviewedByIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[finding.FieldReviewedByIdentityHolderID]
+	return ok
+}
+
+// ResetReviewedByIdentityHolderID resets all changes to the "reviewed_by_identity_holder_id" field.
+func (m *FindingMutation) ResetReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder = nil
+	delete(m.clearedFields, finding.FieldReviewedByIdentityHolderID)
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (m *FindingMutation) SetAssignedTo(s string) {
 	m.assigned_to = &s
@@ -95153,6 +95755,55 @@ func (m *FindingMutation) AssignedToGroupIDCleared() bool {
 func (m *FindingMutation) ResetAssignedToGroupID() {
 	m.assigned_to_group = nil
 	delete(m.clearedFields, finding.FieldAssignedToGroupID)
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (m *FindingMutation) SetAssignedToIdentityHolderID(s string) {
+	m.assigned_to_identity_holder = &s
+}
+
+// AssignedToIdentityHolderID returns the value of the "assigned_to_identity_holder_id" field in the mutation.
+func (m *FindingMutation) AssignedToIdentityHolderID() (r string, exists bool) {
+	v := m.assigned_to_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAssignedToIdentityHolderID returns the old "assigned_to_identity_holder_id" field's value of the Finding entity.
+// If the Finding object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FindingMutation) OldAssignedToIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAssignedToIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAssignedToIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAssignedToIdentityHolderID: %w", err)
+	}
+	return oldValue.AssignedToIdentityHolderID, nil
+}
+
+// ClearAssignedToIdentityHolderID clears the value of the "assigned_to_identity_holder_id" field.
+func (m *FindingMutation) ClearAssignedToIdentityHolderID() {
+	m.assigned_to_identity_holder = nil
+	m.clearedFields[finding.FieldAssignedToIdentityHolderID] = struct{}{}
+}
+
+// AssignedToIdentityHolderIDCleared returns if the "assigned_to_identity_holder_id" field was cleared in this mutation.
+func (m *FindingMutation) AssignedToIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[finding.FieldAssignedToIdentityHolderID]
+	return ok
+}
+
+// ResetAssignedToIdentityHolderID resets all changes to the "assigned_to_identity_holder_id" field.
+func (m *FindingMutation) ResetAssignedToIdentityHolderID() {
+	m.assigned_to_identity_holder = nil
+	delete(m.clearedFields, finding.FieldAssignedToIdentityHolderID)
 }
 
 // SetSystemOwned sets the "system_owned" field.
@@ -97816,6 +98467,33 @@ func (m *FindingMutation) ResetReviewedByGroup() {
 	m.clearedreviewed_by_group = false
 }
 
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (m *FindingMutation) ClearReviewedByIdentityHolder() {
+	m.clearedreviewed_by_identity_holder = true
+	m.clearedFields[finding.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderCleared reports if the "reviewed_by_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *FindingMutation) ReviewedByIdentityHolderCleared() bool {
+	return m.ReviewedByIdentityHolderIDCleared() || m.clearedreviewed_by_identity_holder
+}
+
+// ReviewedByIdentityHolderIDs returns the "reviewed_by_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ReviewedByIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *FindingMutation) ReviewedByIdentityHolderIDs() (ids []string) {
+	if id := m.reviewed_by_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetReviewedByIdentityHolder resets all changes to the "reviewed_by_identity_holder" edge.
+func (m *FindingMutation) ResetReviewedByIdentityHolder() {
+	m.reviewed_by_identity_holder = nil
+	m.clearedreviewed_by_identity_holder = false
+}
+
 // ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
 func (m *FindingMutation) ClearAssignedToUser() {
 	m.clearedassigned_to_user = true
@@ -97868,6 +98546,33 @@ func (m *FindingMutation) AssignedToGroupIDs() (ids []string) {
 func (m *FindingMutation) ResetAssignedToGroup() {
 	m.assigned_to_group = nil
 	m.clearedassigned_to_group = false
+}
+
+// ClearAssignedToIdentityHolder clears the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (m *FindingMutation) ClearAssignedToIdentityHolder() {
+	m.clearedassigned_to_identity_holder = true
+	m.clearedFields[finding.FieldAssignedToIdentityHolderID] = struct{}{}
+}
+
+// AssignedToIdentityHolderCleared reports if the "assigned_to_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *FindingMutation) AssignedToIdentityHolderCleared() bool {
+	return m.AssignedToIdentityHolderIDCleared() || m.clearedassigned_to_identity_holder
+}
+
+// AssignedToIdentityHolderIDs returns the "assigned_to_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AssignedToIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *FindingMutation) AssignedToIdentityHolderIDs() (ids []string) {
+	if id := m.assigned_to_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAssignedToIdentityHolder resets all changes to the "assigned_to_identity_holder" edge.
+func (m *FindingMutation) ResetAssignedToIdentityHolder() {
+	m.assigned_to_identity_holder = nil
+	m.clearedassigned_to_identity_holder = false
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -99065,7 +99770,7 @@ func (m *FindingMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FindingMutation) Fields() []string {
-	fields := make([]string, 0, 63)
+	fields := make([]string, 0, 65)
 	if m.created_at != nil {
 		fields = append(fields, finding.FieldCreatedAt)
 	}
@@ -99105,6 +99810,9 @@ func (m *FindingMutation) Fields() []string {
 	if m.reviewed_by_group != nil {
 		fields = append(fields, finding.FieldReviewedByGroupID)
 	}
+	if m.reviewed_by_identity_holder != nil {
+		fields = append(fields, finding.FieldReviewedByIdentityHolderID)
+	}
 	if m.assigned_to != nil {
 		fields = append(fields, finding.FieldAssignedTo)
 	}
@@ -99113,6 +99821,9 @@ func (m *FindingMutation) Fields() []string {
 	}
 	if m.assigned_to_group != nil {
 		fields = append(fields, finding.FieldAssignedToGroupID)
+	}
+	if m.assigned_to_identity_holder != nil {
+		fields = append(fields, finding.FieldAssignedToIdentityHolderID)
 	}
 	if m.system_owned != nil {
 		fields = append(fields, finding.FieldSystemOwned)
@@ -99289,12 +100000,16 @@ func (m *FindingMutation) Field(name string) (ent.Value, bool) {
 		return m.ReviewedByUserID()
 	case finding.FieldReviewedByGroupID:
 		return m.ReviewedByGroupID()
+	case finding.FieldReviewedByIdentityHolderID:
+		return m.ReviewedByIdentityHolderID()
 	case finding.FieldAssignedTo:
 		return m.AssignedTo()
 	case finding.FieldAssignedToUserID:
 		return m.AssignedToUserID()
 	case finding.FieldAssignedToGroupID:
 		return m.AssignedToGroupID()
+	case finding.FieldAssignedToIdentityHolderID:
+		return m.AssignedToIdentityHolderID()
 	case finding.FieldSystemOwned:
 		return m.SystemOwned()
 	case finding.FieldInternalNotes:
@@ -99424,12 +100139,16 @@ func (m *FindingMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldReviewedByUserID(ctx)
 	case finding.FieldReviewedByGroupID:
 		return m.OldReviewedByGroupID(ctx)
+	case finding.FieldReviewedByIdentityHolderID:
+		return m.OldReviewedByIdentityHolderID(ctx)
 	case finding.FieldAssignedTo:
 		return m.OldAssignedTo(ctx)
 	case finding.FieldAssignedToUserID:
 		return m.OldAssignedToUserID(ctx)
 	case finding.FieldAssignedToGroupID:
 		return m.OldAssignedToGroupID(ctx)
+	case finding.FieldAssignedToIdentityHolderID:
+		return m.OldAssignedToIdentityHolderID(ctx)
 	case finding.FieldSystemOwned:
 		return m.OldSystemOwned(ctx)
 	case finding.FieldInternalNotes:
@@ -99624,6 +100343,13 @@ func (m *FindingMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetReviewedByGroupID(v)
 		return nil
+	case finding.FieldReviewedByIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewedByIdentityHolderID(v)
+		return nil
 	case finding.FieldAssignedTo:
 		v, ok := value.(string)
 		if !ok {
@@ -99644,6 +100370,13 @@ func (m *FindingMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAssignedToGroupID(v)
+		return nil
+	case finding.FieldAssignedToIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAssignedToIdentityHolderID(v)
 		return nil
 	case finding.FieldSystemOwned:
 		v, ok := value.(bool)
@@ -100103,6 +100836,9 @@ func (m *FindingMutation) ClearedFields() []string {
 	if m.FieldCleared(finding.FieldReviewedByGroupID) {
 		fields = append(fields, finding.FieldReviewedByGroupID)
 	}
+	if m.FieldCleared(finding.FieldReviewedByIdentityHolderID) {
+		fields = append(fields, finding.FieldReviewedByIdentityHolderID)
+	}
 	if m.FieldCleared(finding.FieldAssignedTo) {
 		fields = append(fields, finding.FieldAssignedTo)
 	}
@@ -100111,6 +100847,9 @@ func (m *FindingMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(finding.FieldAssignedToGroupID) {
 		fields = append(fields, finding.FieldAssignedToGroupID)
+	}
+	if m.FieldCleared(finding.FieldAssignedToIdentityHolderID) {
+		fields = append(fields, finding.FieldAssignedToIdentityHolderID)
 	}
 	if m.FieldCleared(finding.FieldSystemOwned) {
 		fields = append(fields, finding.FieldSystemOwned)
@@ -100303,6 +101042,9 @@ func (m *FindingMutation) ClearField(name string) error {
 	case finding.FieldReviewedByGroupID:
 		m.ClearReviewedByGroupID()
 		return nil
+	case finding.FieldReviewedByIdentityHolderID:
+		m.ClearReviewedByIdentityHolderID()
+		return nil
 	case finding.FieldAssignedTo:
 		m.ClearAssignedTo()
 		return nil
@@ -100311,6 +101053,9 @@ func (m *FindingMutation) ClearField(name string) error {
 		return nil
 	case finding.FieldAssignedToGroupID:
 		m.ClearAssignedToGroupID()
+		return nil
+	case finding.FieldAssignedToIdentityHolderID:
+		m.ClearAssignedToIdentityHolderID()
 		return nil
 	case finding.FieldSystemOwned:
 		m.ClearSystemOwned()
@@ -100500,6 +101245,9 @@ func (m *FindingMutation) ResetField(name string) error {
 	case finding.FieldReviewedByGroupID:
 		m.ResetReviewedByGroupID()
 		return nil
+	case finding.FieldReviewedByIdentityHolderID:
+		m.ResetReviewedByIdentityHolderID()
+		return nil
 	case finding.FieldAssignedTo:
 		m.ResetAssignedTo()
 		return nil
@@ -100508,6 +101256,9 @@ func (m *FindingMutation) ResetField(name string) error {
 		return nil
 	case finding.FieldAssignedToGroupID:
 		m.ResetAssignedToGroupID()
+		return nil
+	case finding.FieldAssignedToIdentityHolderID:
+		m.ResetAssignedToIdentityHolderID()
 		return nil
 	case finding.FieldSystemOwned:
 		m.ResetSystemOwned()
@@ -100656,7 +101407,7 @@ func (m *FindingMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FindingMutation) AddedEdges() []string {
-	edges := make([]string, 0, 30)
+	edges := make([]string, 0, 32)
 	if m.owner != nil {
 		edges = append(edges, finding.EdgeOwner)
 	}
@@ -100672,11 +101423,17 @@ func (m *FindingMutation) AddedEdges() []string {
 	if m.reviewed_by_group != nil {
 		edges = append(edges, finding.EdgeReviewedByGroup)
 	}
+	if m.reviewed_by_identity_holder != nil {
+		edges = append(edges, finding.EdgeReviewedByIdentityHolder)
+	}
 	if m.assigned_to_user != nil {
 		edges = append(edges, finding.EdgeAssignedToUser)
 	}
 	if m.assigned_to_group != nil {
 		edges = append(edges, finding.EdgeAssignedToGroup)
+	}
+	if m.assigned_to_identity_holder != nil {
+		edges = append(edges, finding.EdgeAssignedToIdentityHolder)
 	}
 	if m.environment != nil {
 		edges = append(edges, finding.EdgeEnvironment)
@@ -100778,12 +101535,20 @@ func (m *FindingMutation) AddedIDs(name string) []ent.Value {
 		if id := m.reviewed_by_group; id != nil {
 			return []ent.Value{*id}
 		}
+	case finding.EdgeReviewedByIdentityHolder:
+		if id := m.reviewed_by_identity_holder; id != nil {
+			return []ent.Value{*id}
+		}
 	case finding.EdgeAssignedToUser:
 		if id := m.assigned_to_user; id != nil {
 			return []ent.Value{*id}
 		}
 	case finding.EdgeAssignedToGroup:
 		if id := m.assigned_to_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case finding.EdgeAssignedToIdentityHolder:
+		if id := m.assigned_to_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case finding.EdgeEnvironment:
@@ -100924,7 +101689,7 @@ func (m *FindingMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FindingMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 30)
+	edges := make([]string, 0, 32)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, finding.EdgeBlockedGroups)
 	}
@@ -101136,7 +101901,7 @@ func (m *FindingMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FindingMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 30)
+	edges := make([]string, 0, 32)
 	if m.clearedowner {
 		edges = append(edges, finding.EdgeOwner)
 	}
@@ -101152,11 +101917,17 @@ func (m *FindingMutation) ClearedEdges() []string {
 	if m.clearedreviewed_by_group {
 		edges = append(edges, finding.EdgeReviewedByGroup)
 	}
+	if m.clearedreviewed_by_identity_holder {
+		edges = append(edges, finding.EdgeReviewedByIdentityHolder)
+	}
 	if m.clearedassigned_to_user {
 		edges = append(edges, finding.EdgeAssignedToUser)
 	}
 	if m.clearedassigned_to_group {
 		edges = append(edges, finding.EdgeAssignedToGroup)
+	}
+	if m.clearedassigned_to_identity_holder {
+		edges = append(edges, finding.EdgeAssignedToIdentityHolder)
 	}
 	if m.clearedenvironment {
 		edges = append(edges, finding.EdgeEnvironment)
@@ -101244,10 +102015,14 @@ func (m *FindingMutation) EdgeCleared(name string) bool {
 		return m.clearedreviewed_by_user
 	case finding.EdgeReviewedByGroup:
 		return m.clearedreviewed_by_group
+	case finding.EdgeReviewedByIdentityHolder:
+		return m.clearedreviewed_by_identity_holder
 	case finding.EdgeAssignedToUser:
 		return m.clearedassigned_to_user
 	case finding.EdgeAssignedToGroup:
 		return m.clearedassigned_to_group
+	case finding.EdgeAssignedToIdentityHolder:
+		return m.clearedassigned_to_identity_holder
 	case finding.EdgeEnvironment:
 		return m.clearedenvironment
 	case finding.EdgeScope:
@@ -101311,11 +102086,17 @@ func (m *FindingMutation) ClearEdge(name string) error {
 	case finding.EdgeReviewedByGroup:
 		m.ClearReviewedByGroup()
 		return nil
+	case finding.EdgeReviewedByIdentityHolder:
+		m.ClearReviewedByIdentityHolder()
+		return nil
 	case finding.EdgeAssignedToUser:
 		m.ClearAssignedToUser()
 		return nil
 	case finding.EdgeAssignedToGroup:
 		m.ClearAssignedToGroup()
+		return nil
+	case finding.EdgeAssignedToIdentityHolder:
+		m.ClearAssignedToIdentityHolder()
 		return nil
 	case finding.EdgeEnvironment:
 		m.ClearEnvironment()
@@ -101349,11 +102130,17 @@ func (m *FindingMutation) ResetEdge(name string) error {
 	case finding.EdgeReviewedByGroup:
 		m.ResetReviewedByGroup()
 		return nil
+	case finding.EdgeReviewedByIdentityHolder:
+		m.ResetReviewedByIdentityHolder()
+		return nil
 	case finding.EdgeAssignedToUser:
 		m.ResetAssignedToUser()
 		return nil
 	case finding.EdgeAssignedToGroup:
 		m.ResetAssignedToGroup()
+		return nil
+	case finding.EdgeAssignedToIdentityHolder:
+		m.ResetAssignedToIdentityHolder()
 		return nil
 	case finding.EdgeEnvironment:
 		m.ResetEnvironment()
@@ -113962,121 +114749,123 @@ func (m *HushMutation) ResetEdge(name string) error {
 // IdentityHolderMutation represents an operation that mutates the IdentityHolder nodes in the graph.
 type IdentityHolderMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *string
-	created_at                  *time.Time
-	updated_at                  *time.Time
-	created_by                  *string
-	updated_by                  *string
-	updated_by_impersonator     *string
-	deleted_at                  *time.Time
-	deleted_by                  *string
-	display_id                  *string
-	tags                        *[]string
-	appendtags                  []string
-	internal_owner              *string
-	environment_name            *string
-	scope_name                  *string
-	workflow_eligible_marker    *bool
-	full_name                   *string
-	email                       *string
-	alternate_email             *string
-	email_aliases               *[]string
-	appendemail_aliases         []string
-	phone_number                *string
-	is_openlane_user            *bool
-	identity_holder_type        *enums.IdentityHolderType
-	status                      *enums.UserStatus
-	is_active                   *bool
-	title                       *string
-	department                  *string
-	team                        *string
-	location                    *string
-	start_date                  *models.DateTime
-	end_date                    *models.DateTime
-	external_user_id            *string
-	external_reference_id       *string
-	metadata                    *map[string]interface{}
-	avatar_remote_url           *string
-	clearedFields               map[string]struct{}
-	owner                       *string
-	clearedowner                bool
-	blocked_groups              map[string]struct{}
-	removedblocked_groups       map[string]struct{}
-	clearedblocked_groups       bool
-	editors                     map[string]struct{}
-	removededitors              map[string]struct{}
-	clearededitors              bool
-	viewers                     map[string]struct{}
-	removedviewers              map[string]struct{}
-	clearedviewers              bool
-	internal_owner_user         *string
-	clearedinternal_owner_user  bool
-	internal_owner_group        *string
-	clearedinternal_owner_group bool
-	environment                 *string
-	clearedenvironment          bool
-	scope                       *string
-	clearedscope                bool
-	employer                    *string
-	clearedemployer             bool
-	assessment_responses        map[string]struct{}
-	removedassessment_responses map[string]struct{}
-	clearedassessment_responses bool
-	assessments                 map[string]struct{}
-	removedassessments          map[string]struct{}
-	clearedassessments          bool
-	templates                   map[string]struct{}
-	removedtemplates            map[string]struct{}
-	clearedtemplates            bool
-	assets                      map[string]struct{}
-	removedassets               map[string]struct{}
-	clearedassets               bool
-	entities                    map[string]struct{}
-	removedentities             map[string]struct{}
-	clearedentities             bool
-	directory_accounts          map[string]struct{}
-	removeddirectory_accounts   map[string]struct{}
-	cleareddirectory_accounts   bool
-	controls                    map[string]struct{}
-	removedcontrols             map[string]struct{}
-	clearedcontrols             bool
-	subcontrols                 map[string]struct{}
-	removedsubcontrols          map[string]struct{}
-	clearedsubcontrols          bool
-	platforms                   map[string]struct{}
-	removedplatforms            map[string]struct{}
-	clearedplatforms            bool
-	campaigns                   map[string]struct{}
-	removedcampaigns            map[string]struct{}
-	clearedcampaigns            bool
-	audience_members            map[string]struct{}
-	removedaudience_members     map[string]struct{}
-	clearedaudience_members     bool
-	tasks                       map[string]struct{}
-	removedtasks                map[string]struct{}
-	clearedtasks                bool
-	files                       map[string]struct{}
-	removedfiles                map[string]struct{}
-	clearedfiles                bool
-	findings                    map[string]struct{}
-	removedfindings             map[string]struct{}
-	clearedfindings             bool
-	workflow_object_refs        map[string]struct{}
-	removedworkflow_object_refs map[string]struct{}
-	clearedworkflow_object_refs bool
-	access_platforms            map[string]struct{}
-	removedaccess_platforms     map[string]struct{}
-	clearedaccess_platforms     bool
-	user                        *string
-	cleareduser                 bool
-	internal_policies           map[string]struct{}
-	removedinternal_policies    map[string]struct{}
-	clearedinternal_policies    bool
-	done                        bool
-	oldValue                    func(context.Context) (*IdentityHolder, error)
-	predicates                  []predicate.IdentityHolder
+	op                                    Op
+	typ                                   string
+	id                                    *string
+	created_at                            *time.Time
+	updated_at                            *time.Time
+	created_by                            *string
+	updated_by                            *string
+	updated_by_impersonator               *string
+	deleted_at                            *time.Time
+	deleted_by                            *string
+	display_id                            *string
+	tags                                  *[]string
+	appendtags                            []string
+	internal_owner                        *string
+	environment_name                      *string
+	scope_name                            *string
+	workflow_eligible_marker              *bool
+	full_name                             *string
+	email                                 *string
+	alternate_email                       *string
+	email_aliases                         *[]string
+	appendemail_aliases                   []string
+	phone_number                          *string
+	is_openlane_user                      *bool
+	identity_holder_type                  *enums.IdentityHolderType
+	status                                *enums.UserStatus
+	is_active                             *bool
+	title                                 *string
+	department                            *string
+	team                                  *string
+	location                              *string
+	start_date                            *models.DateTime
+	end_date                              *models.DateTime
+	external_user_id                      *string
+	external_reference_id                 *string
+	metadata                              *map[string]interface{}
+	avatar_remote_url                     *string
+	clearedFields                         map[string]struct{}
+	owner                                 *string
+	clearedowner                          bool
+	blocked_groups                        map[string]struct{}
+	removedblocked_groups                 map[string]struct{}
+	clearedblocked_groups                 bool
+	editors                               map[string]struct{}
+	removededitors                        map[string]struct{}
+	clearededitors                        bool
+	viewers                               map[string]struct{}
+	removedviewers                        map[string]struct{}
+	clearedviewers                        bool
+	internal_owner_user                   *string
+	clearedinternal_owner_user            bool
+	internal_owner_group                  *string
+	clearedinternal_owner_group           bool
+	internal_owner_identity_holder        *string
+	clearedinternal_owner_identity_holder bool
+	environment                           *string
+	clearedenvironment                    bool
+	scope                                 *string
+	clearedscope                          bool
+	employer                              *string
+	clearedemployer                       bool
+	assessment_responses                  map[string]struct{}
+	removedassessment_responses           map[string]struct{}
+	clearedassessment_responses           bool
+	assessments                           map[string]struct{}
+	removedassessments                    map[string]struct{}
+	clearedassessments                    bool
+	templates                             map[string]struct{}
+	removedtemplates                      map[string]struct{}
+	clearedtemplates                      bool
+	assets                                map[string]struct{}
+	removedassets                         map[string]struct{}
+	clearedassets                         bool
+	entities                              map[string]struct{}
+	removedentities                       map[string]struct{}
+	clearedentities                       bool
+	directory_accounts                    map[string]struct{}
+	removeddirectory_accounts             map[string]struct{}
+	cleareddirectory_accounts             bool
+	controls                              map[string]struct{}
+	removedcontrols                       map[string]struct{}
+	clearedcontrols                       bool
+	subcontrols                           map[string]struct{}
+	removedsubcontrols                    map[string]struct{}
+	clearedsubcontrols                    bool
+	platforms                             map[string]struct{}
+	removedplatforms                      map[string]struct{}
+	clearedplatforms                      bool
+	campaigns                             map[string]struct{}
+	removedcampaigns                      map[string]struct{}
+	clearedcampaigns                      bool
+	audience_members                      map[string]struct{}
+	removedaudience_members               map[string]struct{}
+	clearedaudience_members               bool
+	tasks                                 map[string]struct{}
+	removedtasks                          map[string]struct{}
+	clearedtasks                          bool
+	files                                 map[string]struct{}
+	removedfiles                          map[string]struct{}
+	clearedfiles                          bool
+	findings                              map[string]struct{}
+	removedfindings                       map[string]struct{}
+	clearedfindings                       bool
+	workflow_object_refs                  map[string]struct{}
+	removedworkflow_object_refs           map[string]struct{}
+	clearedworkflow_object_refs           bool
+	access_platforms                      map[string]struct{}
+	removedaccess_platforms               map[string]struct{}
+	clearedaccess_platforms               bool
+	user                                  *string
+	cleareduser                           bool
+	internal_policies                     map[string]struct{}
+	removedinternal_policies              map[string]struct{}
+	clearedinternal_policies              bool
+	done                                  bool
+	oldValue                              func(context.Context) (*IdentityHolder, error)
+	predicates                            []predicate.IdentityHolder
 }
 
 var _ ent.Mutation = (*IdentityHolderMutation)(nil)
@@ -114821,6 +115610,55 @@ func (m *IdentityHolderMutation) InternalOwnerGroupIDCleared() bool {
 func (m *IdentityHolderMutation) ResetInternalOwnerGroupID() {
 	m.internal_owner_group = nil
 	delete(m.clearedFields, identityholder.FieldInternalOwnerGroupID)
+}
+
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *IdentityHolderMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *IdentityHolderMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the IdentityHolder entity.
+// If the IdentityHolder object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IdentityHolderMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *IdentityHolderMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	m.clearedFields[identityholder.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *IdentityHolderMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[identityholder.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *IdentityHolderMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	delete(m.clearedFields, identityholder.FieldInternalOwnerIdentityHolderID)
 }
 
 // SetEnvironmentName sets the "environment_name" field.
@@ -116291,6 +117129,33 @@ func (m *IdentityHolderMutation) ResetInternalOwnerGroup() {
 	m.clearedinternal_owner_group = false
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *IdentityHolderMutation) ClearInternalOwnerIdentityHolder() {
+	m.clearedinternal_owner_identity_holder = true
+	m.clearedFields[identityholder.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderCleared reports if the "internal_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *IdentityHolderMutation) InternalOwnerIdentityHolderCleared() bool {
+	return m.InternalOwnerIdentityHolderIDCleared() || m.clearedinternal_owner_identity_holder
+}
+
+// InternalOwnerIdentityHolderIDs returns the "internal_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *IdentityHolderMutation) InternalOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.internal_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalOwnerIdentityHolder resets all changes to the "internal_owner_identity_holder" edge.
+func (m *IdentityHolderMutation) ResetInternalOwnerIdentityHolder() {
+	m.internal_owner_identity_holder = nil
+	m.clearedinternal_owner_identity_holder = false
+}
+
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
 func (m *IdentityHolderMutation) ClearEnvironment() {
 	m.clearedenvironment = true
@@ -117364,7 +118229,7 @@ func (m *IdentityHolderMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IdentityHolderMutation) Fields() []string {
-	fields := make([]string, 0, 39)
+	fields := make([]string, 0, 40)
 	if m.created_at != nil {
 		fields = append(fields, identityholder.FieldCreatedAt)
 	}
@@ -117403,6 +118268,9 @@ func (m *IdentityHolderMutation) Fields() []string {
 	}
 	if m.internal_owner_group != nil {
 		fields = append(fields, identityholder.FieldInternalOwnerGroupID)
+	}
+	if m.internal_owner_identity_holder != nil {
+		fields = append(fields, identityholder.FieldInternalOwnerIdentityHolderID)
 	}
 	if m.environment_name != nil {
 		fields = append(fields, identityholder.FieldEnvironmentName)
@@ -117516,6 +118384,8 @@ func (m *IdentityHolderMutation) Field(name string) (ent.Value, bool) {
 		return m.InternalOwnerUserID()
 	case identityholder.FieldInternalOwnerGroupID:
 		return m.InternalOwnerGroupID()
+	case identityholder.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
 	case identityholder.FieldEnvironmentName:
 		return m.EnvironmentName()
 	case identityholder.FieldEnvironmentID:
@@ -117603,6 +118473,8 @@ func (m *IdentityHolderMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldInternalOwnerUserID(ctx)
 	case identityholder.FieldInternalOwnerGroupID:
 		return m.OldInternalOwnerGroupID(ctx)
+	case identityholder.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
 	case identityholder.FieldEnvironmentName:
 		return m.OldEnvironmentName(ctx)
 	case identityholder.FieldEnvironmentID:
@@ -117754,6 +118626,13 @@ func (m *IdentityHolderMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetInternalOwnerGroupID(v)
+		return nil
+	case identityholder.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
 		return nil
 	case identityholder.FieldEnvironmentName:
 		v, ok := value.(string)
@@ -118003,6 +118882,9 @@ func (m *IdentityHolderMutation) ClearedFields() []string {
 	if m.FieldCleared(identityholder.FieldInternalOwnerGroupID) {
 		fields = append(fields, identityholder.FieldInternalOwnerGroupID)
 	}
+	if m.FieldCleared(identityholder.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, identityholder.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.FieldCleared(identityholder.FieldEnvironmentName) {
 		fields = append(fields, identityholder.FieldEnvironmentName)
 	}
@@ -118116,6 +118998,9 @@ func (m *IdentityHolderMutation) ClearField(name string) error {
 	case identityholder.FieldInternalOwnerGroupID:
 		m.ClearInternalOwnerGroupID()
 		return nil
+	case identityholder.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
+		return nil
 	case identityholder.FieldEnvironmentName:
 		m.ClearEnvironmentName()
 		return nil
@@ -118226,6 +119111,9 @@ func (m *IdentityHolderMutation) ResetField(name string) error {
 	case identityholder.FieldInternalOwnerGroupID:
 		m.ResetInternalOwnerGroupID()
 		return nil
+	case identityholder.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
+		return nil
 	case identityholder.FieldEnvironmentName:
 		m.ResetEnvironmentName()
 		return nil
@@ -118310,7 +119198,7 @@ func (m *IdentityHolderMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *IdentityHolderMutation) AddedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.owner != nil {
 		edges = append(edges, identityholder.EdgeOwner)
 	}
@@ -118328,6 +119216,9 @@ func (m *IdentityHolderMutation) AddedEdges() []string {
 	}
 	if m.internal_owner_group != nil {
 		edges = append(edges, identityholder.EdgeInternalOwnerGroup)
+	}
+	if m.internal_owner_identity_holder != nil {
+		edges = append(edges, identityholder.EdgeInternalOwnerIdentityHolder)
 	}
 	if m.environment != nil {
 		edges = append(edges, identityholder.EdgeEnvironment)
@@ -118427,6 +119318,10 @@ func (m *IdentityHolderMutation) AddedIDs(name string) []ent.Value {
 		}
 	case identityholder.EdgeInternalOwnerGroup:
 		if id := m.internal_owner_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case identityholder.EdgeInternalOwnerIdentityHolder:
+		if id := m.internal_owner_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case identityholder.EdgeEnvironment:
@@ -118553,7 +119448,7 @@ func (m *IdentityHolderMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *IdentityHolderMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, identityholder.EdgeBlockedGroups)
 	}
@@ -118747,7 +119642,7 @@ func (m *IdentityHolderMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *IdentityHolderMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 28)
 	if m.clearedowner {
 		edges = append(edges, identityholder.EdgeOwner)
 	}
@@ -118765,6 +119660,9 @@ func (m *IdentityHolderMutation) ClearedEdges() []string {
 	}
 	if m.clearedinternal_owner_group {
 		edges = append(edges, identityholder.EdgeInternalOwnerGroup)
+	}
+	if m.clearedinternal_owner_identity_holder {
+		edges = append(edges, identityholder.EdgeInternalOwnerIdentityHolder)
 	}
 	if m.clearedenvironment {
 		edges = append(edges, identityholder.EdgeEnvironment)
@@ -118848,6 +119746,8 @@ func (m *IdentityHolderMutation) EdgeCleared(name string) bool {
 		return m.clearedinternal_owner_user
 	case identityholder.EdgeInternalOwnerGroup:
 		return m.clearedinternal_owner_group
+	case identityholder.EdgeInternalOwnerIdentityHolder:
+		return m.clearedinternal_owner_identity_holder
 	case identityholder.EdgeEnvironment:
 		return m.clearedenvironment
 	case identityholder.EdgeScope:
@@ -118907,6 +119807,9 @@ func (m *IdentityHolderMutation) ClearEdge(name string) error {
 	case identityholder.EdgeInternalOwnerGroup:
 		m.ClearInternalOwnerGroup()
 		return nil
+	case identityholder.EdgeInternalOwnerIdentityHolder:
+		m.ClearInternalOwnerIdentityHolder()
+		return nil
 	case identityholder.EdgeEnvironment:
 		m.ClearEnvironment()
 		return nil
@@ -118944,6 +119847,9 @@ func (m *IdentityHolderMutation) ResetEdge(name string) error {
 		return nil
 	case identityholder.EdgeInternalOwnerGroup:
 		m.ResetInternalOwnerGroup()
+		return nil
+	case identityholder.EdgeInternalOwnerIdentityHolder:
+		m.ResetInternalOwnerIdentityHolder()
 		return nil
 	case identityholder.EdgeEnvironment:
 		m.ResetEnvironment()
@@ -120667,11 +121573,13 @@ type IntegrationMutation struct {
 	installation_metadata         *openapi.IntegrationInstallationMetadata
 	provider_state                *openapi.IntegrationProviderState
 	metadata                      *map[string]interface{}
+	health                        *models.IntegrationHealth
 	definition_id                 *string
 	definition_version            *string
 	definition_slug               *string
 	family                        *string
 	status                        *enums.IntegrationStatus
+	expires_at                    *time.Time
 	provider_metadata_snapshot    *map[string]interface{}
 	primary_directory             *bool
 	campaign_email                *bool
@@ -122136,6 +123044,55 @@ func (m *IntegrationMutation) ResetMetadata() {
 	delete(m.clearedFields, integration.FieldMetadata)
 }
 
+// SetHealth sets the "health" field.
+func (m *IntegrationMutation) SetHealth(mh models.IntegrationHealth) {
+	m.health = &mh
+}
+
+// Health returns the value of the "health" field in the mutation.
+func (m *IntegrationMutation) Health() (r models.IntegrationHealth, exists bool) {
+	v := m.health
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHealth returns the old "health" field's value of the Integration entity.
+// If the Integration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationMutation) OldHealth(ctx context.Context) (v models.IntegrationHealth, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHealth is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHealth requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHealth: %w", err)
+	}
+	return oldValue.Health, nil
+}
+
+// ClearHealth clears the value of the "health" field.
+func (m *IntegrationMutation) ClearHealth() {
+	m.health = nil
+	m.clearedFields[integration.FieldHealth] = struct{}{}
+}
+
+// HealthCleared returns if the "health" field was cleared in this mutation.
+func (m *IntegrationMutation) HealthCleared() bool {
+	_, ok := m.clearedFields[integration.FieldHealth]
+	return ok
+}
+
+// ResetHealth resets all changes to the "health" field.
+func (m *IntegrationMutation) ResetHealth() {
+	m.health = nil
+	delete(m.clearedFields, integration.FieldHealth)
+}
+
 // SetDefinitionID sets the "definition_id" field.
 func (m *IntegrationMutation) SetDefinitionID(s string) {
 	m.definition_id = &s
@@ -122366,6 +123323,55 @@ func (m *IntegrationMutation) OldStatus(ctx context.Context) (v enums.Integratio
 // ResetStatus resets all changes to the "status" field.
 func (m *IntegrationMutation) ResetStatus() {
 	m.status = nil
+}
+
+// SetExpiresAt sets the "expires_at" field.
+func (m *IntegrationMutation) SetExpiresAt(t time.Time) {
+	m.expires_at = &t
+}
+
+// ExpiresAt returns the value of the "expires_at" field in the mutation.
+func (m *IntegrationMutation) ExpiresAt() (r time.Time, exists bool) {
+	v := m.expires_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldExpiresAt returns the old "expires_at" field's value of the Integration entity.
+// If the Integration object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationMutation) OldExpiresAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldExpiresAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldExpiresAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldExpiresAt: %w", err)
+	}
+	return oldValue.ExpiresAt, nil
+}
+
+// ClearExpiresAt clears the value of the "expires_at" field.
+func (m *IntegrationMutation) ClearExpiresAt() {
+	m.expires_at = nil
+	m.clearedFields[integration.FieldExpiresAt] = struct{}{}
+}
+
+// ExpiresAtCleared returns if the "expires_at" field was cleared in this mutation.
+func (m *IntegrationMutation) ExpiresAtCleared() bool {
+	_, ok := m.clearedFields[integration.FieldExpiresAt]
+	return ok
+}
+
+// ResetExpiresAt resets all changes to the "expires_at" field.
+func (m *IntegrationMutation) ResetExpiresAt() {
+	m.expires_at = nil
+	delete(m.clearedFields, integration.FieldExpiresAt)
 }
 
 // SetProviderMetadataSnapshot sets the "provider_metadata_snapshot" field.
@@ -123819,7 +124825,7 @@ func (m *IntegrationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *IntegrationMutation) Fields() []string {
-	fields := make([]string, 0, 34)
+	fields := make([]string, 0, 36)
 	if m.created_at != nil {
 		fields = append(fields, integration.FieldCreatedAt)
 	}
@@ -123898,6 +124904,9 @@ func (m *IntegrationMutation) Fields() []string {
 	if m.metadata != nil {
 		fields = append(fields, integration.FieldMetadata)
 	}
+	if m.health != nil {
+		fields = append(fields, integration.FieldHealth)
+	}
 	if m.definition_id != nil {
 		fields = append(fields, integration.FieldDefinitionID)
 	}
@@ -123912,6 +124921,9 @@ func (m *IntegrationMutation) Fields() []string {
 	}
 	if m.status != nil {
 		fields = append(fields, integration.FieldStatus)
+	}
+	if m.expires_at != nil {
+		fields = append(fields, integration.FieldExpiresAt)
 	}
 	if m.provider_metadata_snapshot != nil {
 		fields = append(fields, integration.FieldProviderMetadataSnapshot)
@@ -123982,6 +124994,8 @@ func (m *IntegrationMutation) Field(name string) (ent.Value, bool) {
 		return m.ProviderState()
 	case integration.FieldMetadata:
 		return m.Metadata()
+	case integration.FieldHealth:
+		return m.Health()
 	case integration.FieldDefinitionID:
 		return m.DefinitionID()
 	case integration.FieldDefinitionVersion:
@@ -123992,6 +125006,8 @@ func (m *IntegrationMutation) Field(name string) (ent.Value, bool) {
 		return m.Family()
 	case integration.FieldStatus:
 		return m.Status()
+	case integration.FieldExpiresAt:
+		return m.ExpiresAt()
 	case integration.FieldProviderMetadataSnapshot:
 		return m.ProviderMetadataSnapshot()
 	case integration.FieldPrimaryDirectory:
@@ -124059,6 +125075,8 @@ func (m *IntegrationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldProviderState(ctx)
 	case integration.FieldMetadata:
 		return m.OldMetadata(ctx)
+	case integration.FieldHealth:
+		return m.OldHealth(ctx)
 	case integration.FieldDefinitionID:
 		return m.OldDefinitionID(ctx)
 	case integration.FieldDefinitionVersion:
@@ -124069,6 +125087,8 @@ func (m *IntegrationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldFamily(ctx)
 	case integration.FieldStatus:
 		return m.OldStatus(ctx)
+	case integration.FieldExpiresAt:
+		return m.OldExpiresAt(ctx)
 	case integration.FieldProviderMetadataSnapshot:
 		return m.OldProviderMetadataSnapshot(ctx)
 	case integration.FieldPrimaryDirectory:
@@ -124266,6 +125286,13 @@ func (m *IntegrationMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetMetadata(v)
 		return nil
+	case integration.FieldHealth:
+		v, ok := value.(models.IntegrationHealth)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHealth(v)
+		return nil
 	case integration.FieldDefinitionID:
 		v, ok := value.(string)
 		if !ok {
@@ -124300,6 +125327,13 @@ func (m *IntegrationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetStatus(v)
+		return nil
+	case integration.FieldExpiresAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetExpiresAt(v)
 		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		v, ok := value.(map[string]interface{})
@@ -124427,6 +125461,9 @@ func (m *IntegrationMutation) ClearedFields() []string {
 	if m.FieldCleared(integration.FieldMetadata) {
 		fields = append(fields, integration.FieldMetadata)
 	}
+	if m.FieldCleared(integration.FieldHealth) {
+		fields = append(fields, integration.FieldHealth)
+	}
 	if m.FieldCleared(integration.FieldDefinitionID) {
 		fields = append(fields, integration.FieldDefinitionID)
 	}
@@ -124438,6 +125475,9 @@ func (m *IntegrationMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(integration.FieldFamily) {
 		fields = append(fields, integration.FieldFamily)
+	}
+	if m.FieldCleared(integration.FieldExpiresAt) {
+		fields = append(fields, integration.FieldExpiresAt)
 	}
 	if m.FieldCleared(integration.FieldProviderMetadataSnapshot) {
 		fields = append(fields, integration.FieldProviderMetadataSnapshot)
@@ -124531,6 +125571,9 @@ func (m *IntegrationMutation) ClearField(name string) error {
 	case integration.FieldMetadata:
 		m.ClearMetadata()
 		return nil
+	case integration.FieldHealth:
+		m.ClearHealth()
+		return nil
 	case integration.FieldDefinitionID:
 		m.ClearDefinitionID()
 		return nil
@@ -124542,6 +125585,9 @@ func (m *IntegrationMutation) ClearField(name string) error {
 		return nil
 	case integration.FieldFamily:
 		m.ClearFamily()
+		return nil
+	case integration.FieldExpiresAt:
+		m.ClearExpiresAt()
 		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		m.ClearProviderMetadataSnapshot()
@@ -124632,6 +125678,9 @@ func (m *IntegrationMutation) ResetField(name string) error {
 	case integration.FieldMetadata:
 		m.ResetMetadata()
 		return nil
+	case integration.FieldHealth:
+		m.ResetHealth()
+		return nil
 	case integration.FieldDefinitionID:
 		m.ResetDefinitionID()
 		return nil
@@ -124646,6 +125695,9 @@ func (m *IntegrationMutation) ResetField(name string) error {
 		return nil
 	case integration.FieldStatus:
 		m.ResetStatus()
+		return nil
+	case integration.FieldExpiresAt:
+		m.ResetExpiresAt()
 		return nil
 	case integration.FieldProviderMetadataSnapshot:
 		m.ResetProviderMetadataSnapshot()
@@ -182026,178 +183078,186 @@ func (m *PersonalAccessTokenMutation) ResetEdge(name string) error {
 // PlatformMutation represents an operation that mutates the Platform nodes in the graph.
 type PlatformMutation struct {
 	config
-	op                                  Op
-	typ                                 string
-	id                                  *string
-	created_at                          *time.Time
-	updated_at                          *time.Time
-	created_by                          *string
-	updated_by                          *string
-	updated_by_impersonator             *string
-	deleted_at                          *time.Time
-	deleted_by                          *string
-	display_id                          *string
-	tags                                *[]string
-	appendtags                          []string
-	internal_owner                      *string
-	business_owner                      *string
-	technical_owner                     *string
-	security_owner                      *string
-	platform_kind_name                  *string
-	platform_data_classification_name   *string
-	environment_name                    *string
-	scope_name                          *string
-	access_model_name                   *string
-	encryption_status_name              *string
-	security_tier_name                  *string
-	criticality_name                    *string
-	workflow_eligible_marker            *bool
-	external_uuid                       *string
-	name                                *string
-	description                         *string
-	business_purpose                    *string
-	scope_statement                     *string
-	trust_boundary_description          *string
-	data_flow_summary                   *string
-	status                              *enums.PlatformStatus
-	physical_location                   *string
-	region                              *string
-	contains_pii                        *bool
-	source_type                         *enums.SourceType
-	source_identifier                   *string
-	cost_center                         *string
-	estimated_monthly_cost              *float64
-	addestimated_monthly_cost           *float64
-	purchase_date                       *models.DateTime
-	external_reference_id               *string
-	metadata                            *map[string]interface{}
-	clearedFields                       map[string]struct{}
-	owner                               *string
-	clearedowner                        bool
-	blocked_groups                      map[string]struct{}
-	removedblocked_groups               map[string]struct{}
-	clearedblocked_groups               bool
-	editors                             map[string]struct{}
-	removededitors                      map[string]struct{}
-	clearededitors                      bool
-	viewers                             map[string]struct{}
-	removedviewers                      map[string]struct{}
-	clearedviewers                      bool
-	internal_owner_user                 *string
-	clearedinternal_owner_user          bool
-	internal_owner_group                *string
-	clearedinternal_owner_group         bool
-	business_owner_user                 *string
-	clearedbusiness_owner_user          bool
-	business_owner_group                *string
-	clearedbusiness_owner_group         bool
-	technical_owner_user                *string
-	clearedtechnical_owner_user         bool
-	technical_owner_group               *string
-	clearedtechnical_owner_group        bool
-	security_owner_user                 *string
-	clearedsecurity_owner_user          bool
-	security_owner_group                *string
-	clearedsecurity_owner_group         bool
-	platform_kind                       *string
-	clearedplatform_kind                bool
-	platform_data_classification        *string
-	clearedplatform_data_classification bool
-	environment                         *string
-	clearedenvironment                  bool
-	scope                               *string
-	clearedscope                        bool
-	access_model                        *string
-	clearedaccess_model                 bool
-	encryption_status                   *string
-	clearedencryption_status            bool
-	security_tier                       *string
-	clearedsecurity_tier                bool
-	criticality                         *string
-	clearedcriticality                  bool
-	assets                              map[string]struct{}
-	removedassets                       map[string]struct{}
-	clearedassets                       bool
-	entities                            map[string]struct{}
-	removedentities                     map[string]struct{}
-	clearedentities                     bool
-	evidence                            map[string]struct{}
-	removedevidence                     map[string]struct{}
-	clearedevidence                     bool
-	files                               map[string]struct{}
-	removedfiles                        map[string]struct{}
-	clearedfiles                        bool
-	architecture_diagrams               map[string]struct{}
-	removedarchitecture_diagrams        map[string]struct{}
-	clearedarchitecture_diagrams        bool
-	data_flow_diagrams                  map[string]struct{}
-	removeddata_flow_diagrams           map[string]struct{}
-	cleareddata_flow_diagrams           bool
-	trust_boundary_diagrams             map[string]struct{}
-	removedtrust_boundary_diagrams      map[string]struct{}
-	clearedtrust_boundary_diagrams      bool
-	risks                               map[string]struct{}
-	removedrisks                        map[string]struct{}
-	clearedrisks                        bool
-	controls                            map[string]struct{}
-	removedcontrols                     map[string]struct{}
-	clearedcontrols                     bool
-	assessments                         map[string]struct{}
-	removedassessments                  map[string]struct{}
-	clearedassessments                  bool
-	scans                               map[string]struct{}
-	removedscans                        map[string]struct{}
-	clearedscans                        bool
-	tasks                               map[string]struct{}
-	removedtasks                        map[string]struct{}
-	clearedtasks                        bool
-	identity_holders                    map[string]struct{}
-	removedidentity_holders             map[string]struct{}
-	clearedidentity_holders             bool
-	integrations                        map[string]struct{}
-	removedintegrations                 map[string]struct{}
-	clearedintegrations                 bool
-	directory_sync_runs                 map[string]struct{}
-	removeddirectory_sync_runs          map[string]struct{}
-	cleareddirectory_sync_runs          bool
-	directory_accounts                  map[string]struct{}
-	removeddirectory_accounts           map[string]struct{}
-	cleareddirectory_accounts           bool
-	directory_groups                    map[string]struct{}
-	removeddirectory_groups             map[string]struct{}
-	cleareddirectory_groups             bool
-	directory_memberships               map[string]struct{}
-	removeddirectory_memberships        map[string]struct{}
-	cleareddirectory_memberships        bool
-	workflow_object_refs                map[string]struct{}
-	removedworkflow_object_refs         map[string]struct{}
-	clearedworkflow_object_refs         bool
-	source_assets                       map[string]struct{}
-	removedsource_assets                map[string]struct{}
-	clearedsource_assets                bool
-	source_entities                     map[string]struct{}
-	removedsource_entities              map[string]struct{}
-	clearedsource_entities              bool
-	out_of_scope_assets                 map[string]struct{}
-	removedout_of_scope_assets          map[string]struct{}
-	clearedout_of_scope_assets          bool
-	out_of_scope_vendors                map[string]struct{}
-	removedout_of_scope_vendors         map[string]struct{}
-	clearedout_of_scope_vendors         bool
-	applicable_frameworks               map[string]struct{}
-	removedapplicable_frameworks        map[string]struct{}
-	clearedapplicable_frameworks        bool
-	generated_scans                     map[string]struct{}
-	removedgenerated_scans              map[string]struct{}
-	clearedgenerated_scans              bool
-	platform_owner                      *string
-	clearedplatform_owner               bool
-	system_details                      map[string]struct{}
-	removedsystem_details               map[string]struct{}
-	clearedsystem_details               bool
-	done                                bool
-	oldValue                            func(context.Context) (*Platform, error)
-	predicates                          []predicate.Platform
+	op                                     Op
+	typ                                    string
+	id                                     *string
+	created_at                             *time.Time
+	updated_at                             *time.Time
+	created_by                             *string
+	updated_by                             *string
+	updated_by_impersonator                *string
+	deleted_at                             *time.Time
+	deleted_by                             *string
+	display_id                             *string
+	tags                                   *[]string
+	appendtags                             []string
+	internal_owner                         *string
+	business_owner                         *string
+	technical_owner                        *string
+	security_owner                         *string
+	platform_kind_name                     *string
+	platform_data_classification_name      *string
+	environment_name                       *string
+	scope_name                             *string
+	access_model_name                      *string
+	encryption_status_name                 *string
+	security_tier_name                     *string
+	criticality_name                       *string
+	workflow_eligible_marker               *bool
+	external_uuid                          *string
+	name                                   *string
+	description                            *string
+	business_purpose                       *string
+	scope_statement                        *string
+	trust_boundary_description             *string
+	data_flow_summary                      *string
+	status                                 *enums.PlatformStatus
+	physical_location                      *string
+	region                                 *string
+	contains_pii                           *bool
+	source_type                            *enums.SourceType
+	source_identifier                      *string
+	cost_center                            *string
+	estimated_monthly_cost                 *float64
+	addestimated_monthly_cost              *float64
+	purchase_date                          *models.DateTime
+	external_reference_id                  *string
+	metadata                               *map[string]interface{}
+	clearedFields                          map[string]struct{}
+	owner                                  *string
+	clearedowner                           bool
+	blocked_groups                         map[string]struct{}
+	removedblocked_groups                  map[string]struct{}
+	clearedblocked_groups                  bool
+	editors                                map[string]struct{}
+	removededitors                         map[string]struct{}
+	clearededitors                         bool
+	viewers                                map[string]struct{}
+	removedviewers                         map[string]struct{}
+	clearedviewers                         bool
+	internal_owner_user                    *string
+	clearedinternal_owner_user             bool
+	internal_owner_group                   *string
+	clearedinternal_owner_group            bool
+	internal_owner_identity_holder         *string
+	clearedinternal_owner_identity_holder  bool
+	business_owner_user                    *string
+	clearedbusiness_owner_user             bool
+	business_owner_group                   *string
+	clearedbusiness_owner_group            bool
+	business_owner_identity_holder         *string
+	clearedbusiness_owner_identity_holder  bool
+	technical_owner_user                   *string
+	clearedtechnical_owner_user            bool
+	technical_owner_group                  *string
+	clearedtechnical_owner_group           bool
+	technical_owner_identity_holder        *string
+	clearedtechnical_owner_identity_holder bool
+	security_owner_user                    *string
+	clearedsecurity_owner_user             bool
+	security_owner_group                   *string
+	clearedsecurity_owner_group            bool
+	security_owner_identity_holder         *string
+	clearedsecurity_owner_identity_holder  bool
+	platform_kind                          *string
+	clearedplatform_kind                   bool
+	platform_data_classification           *string
+	clearedplatform_data_classification    bool
+	environment                            *string
+	clearedenvironment                     bool
+	scope                                  *string
+	clearedscope                           bool
+	access_model                           *string
+	clearedaccess_model                    bool
+	encryption_status                      *string
+	clearedencryption_status               bool
+	security_tier                          *string
+	clearedsecurity_tier                   bool
+	criticality                            *string
+	clearedcriticality                     bool
+	assets                                 map[string]struct{}
+	removedassets                          map[string]struct{}
+	clearedassets                          bool
+	entities                               map[string]struct{}
+	removedentities                        map[string]struct{}
+	clearedentities                        bool
+	evidence                               map[string]struct{}
+	removedevidence                        map[string]struct{}
+	clearedevidence                        bool
+	files                                  map[string]struct{}
+	removedfiles                           map[string]struct{}
+	clearedfiles                           bool
+	architecture_diagrams                  map[string]struct{}
+	removedarchitecture_diagrams           map[string]struct{}
+	clearedarchitecture_diagrams           bool
+	data_flow_diagrams                     map[string]struct{}
+	removeddata_flow_diagrams              map[string]struct{}
+	cleareddata_flow_diagrams              bool
+	trust_boundary_diagrams                map[string]struct{}
+	removedtrust_boundary_diagrams         map[string]struct{}
+	clearedtrust_boundary_diagrams         bool
+	risks                                  map[string]struct{}
+	removedrisks                           map[string]struct{}
+	clearedrisks                           bool
+	controls                               map[string]struct{}
+	removedcontrols                        map[string]struct{}
+	clearedcontrols                        bool
+	assessments                            map[string]struct{}
+	removedassessments                     map[string]struct{}
+	clearedassessments                     bool
+	scans                                  map[string]struct{}
+	removedscans                           map[string]struct{}
+	clearedscans                           bool
+	tasks                                  map[string]struct{}
+	removedtasks                           map[string]struct{}
+	clearedtasks                           bool
+	identity_holders                       map[string]struct{}
+	removedidentity_holders                map[string]struct{}
+	clearedidentity_holders                bool
+	integrations                           map[string]struct{}
+	removedintegrations                    map[string]struct{}
+	clearedintegrations                    bool
+	directory_sync_runs                    map[string]struct{}
+	removeddirectory_sync_runs             map[string]struct{}
+	cleareddirectory_sync_runs             bool
+	directory_accounts                     map[string]struct{}
+	removeddirectory_accounts              map[string]struct{}
+	cleareddirectory_accounts              bool
+	directory_groups                       map[string]struct{}
+	removeddirectory_groups                map[string]struct{}
+	cleareddirectory_groups                bool
+	directory_memberships                  map[string]struct{}
+	removeddirectory_memberships           map[string]struct{}
+	cleareddirectory_memberships           bool
+	workflow_object_refs                   map[string]struct{}
+	removedworkflow_object_refs            map[string]struct{}
+	clearedworkflow_object_refs            bool
+	source_assets                          map[string]struct{}
+	removedsource_assets                   map[string]struct{}
+	clearedsource_assets                   bool
+	source_entities                        map[string]struct{}
+	removedsource_entities                 map[string]struct{}
+	clearedsource_entities                 bool
+	out_of_scope_assets                    map[string]struct{}
+	removedout_of_scope_assets             map[string]struct{}
+	clearedout_of_scope_assets             bool
+	out_of_scope_vendors                   map[string]struct{}
+	removedout_of_scope_vendors            map[string]struct{}
+	clearedout_of_scope_vendors            bool
+	applicable_frameworks                  map[string]struct{}
+	removedapplicable_frameworks           map[string]struct{}
+	clearedapplicable_frameworks           bool
+	generated_scans                        map[string]struct{}
+	removedgenerated_scans                 map[string]struct{}
+	clearedgenerated_scans                 bool
+	platform_owner                         *string
+	clearedplatform_owner                  bool
+	system_details                         map[string]struct{}
+	removedsystem_details                  map[string]struct{}
+	clearedsystem_details                  bool
+	done                                   bool
+	oldValue                               func(context.Context) (*Platform, error)
+	predicates                             []predicate.Platform
 }
 
 var _ ent.Mutation = (*PlatformMutation)(nil)
@@ -182944,6 +184004,55 @@ func (m *PlatformMutation) ResetInternalOwnerGroupID() {
 	delete(m.clearedFields, platform.FieldInternalOwnerGroupID)
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (m *PlatformMutation) SetInternalOwnerIdentityHolderID(s string) {
+	m.internal_owner_identity_holder = &s
+}
+
+// InternalOwnerIdentityHolderID returns the value of the "internal_owner_identity_holder_id" field in the mutation.
+func (m *PlatformMutation) InternalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.internal_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalOwnerIdentityHolderID returns the old "internal_owner_identity_holder_id" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldInternalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.InternalOwnerIdentityHolderID, nil
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (m *PlatformMutation) ClearInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	m.clearedFields[platform.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderIDCleared returns if the "internal_owner_identity_holder_id" field was cleared in this mutation.
+func (m *PlatformMutation) InternalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[platform.FieldInternalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetInternalOwnerIdentityHolderID resets all changes to the "internal_owner_identity_holder_id" field.
+func (m *PlatformMutation) ResetInternalOwnerIdentityHolderID() {
+	m.internal_owner_identity_holder = nil
+	delete(m.clearedFields, platform.FieldInternalOwnerIdentityHolderID)
+}
+
 // SetBusinessOwner sets the "business_owner" field.
 func (m *PlatformMutation) SetBusinessOwner(s string) {
 	m.business_owner = &s
@@ -183089,6 +184198,55 @@ func (m *PlatformMutation) BusinessOwnerGroupIDCleared() bool {
 func (m *PlatformMutation) ResetBusinessOwnerGroupID() {
 	m.business_owner_group = nil
 	delete(m.clearedFields, platform.FieldBusinessOwnerGroupID)
+}
+
+// SetBusinessOwnerIdentityHolderID sets the "business_owner_identity_holder_id" field.
+func (m *PlatformMutation) SetBusinessOwnerIdentityHolderID(s string) {
+	m.business_owner_identity_holder = &s
+}
+
+// BusinessOwnerIdentityHolderID returns the value of the "business_owner_identity_holder_id" field in the mutation.
+func (m *PlatformMutation) BusinessOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.business_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldBusinessOwnerIdentityHolderID returns the old "business_owner_identity_holder_id" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldBusinessOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldBusinessOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldBusinessOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldBusinessOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.BusinessOwnerIdentityHolderID, nil
+}
+
+// ClearBusinessOwnerIdentityHolderID clears the value of the "business_owner_identity_holder_id" field.
+func (m *PlatformMutation) ClearBusinessOwnerIdentityHolderID() {
+	m.business_owner_identity_holder = nil
+	m.clearedFields[platform.FieldBusinessOwnerIdentityHolderID] = struct{}{}
+}
+
+// BusinessOwnerIdentityHolderIDCleared returns if the "business_owner_identity_holder_id" field was cleared in this mutation.
+func (m *PlatformMutation) BusinessOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[platform.FieldBusinessOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetBusinessOwnerIdentityHolderID resets all changes to the "business_owner_identity_holder_id" field.
+func (m *PlatformMutation) ResetBusinessOwnerIdentityHolderID() {
+	m.business_owner_identity_holder = nil
+	delete(m.clearedFields, platform.FieldBusinessOwnerIdentityHolderID)
 }
 
 // SetTechnicalOwner sets the "technical_owner" field.
@@ -183238,6 +184396,55 @@ func (m *PlatformMutation) ResetTechnicalOwnerGroupID() {
 	delete(m.clearedFields, platform.FieldTechnicalOwnerGroupID)
 }
 
+// SetTechnicalOwnerIdentityHolderID sets the "technical_owner_identity_holder_id" field.
+func (m *PlatformMutation) SetTechnicalOwnerIdentityHolderID(s string) {
+	m.technical_owner_identity_holder = &s
+}
+
+// TechnicalOwnerIdentityHolderID returns the value of the "technical_owner_identity_holder_id" field in the mutation.
+func (m *PlatformMutation) TechnicalOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.technical_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTechnicalOwnerIdentityHolderID returns the old "technical_owner_identity_holder_id" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldTechnicalOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTechnicalOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTechnicalOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTechnicalOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.TechnicalOwnerIdentityHolderID, nil
+}
+
+// ClearTechnicalOwnerIdentityHolderID clears the value of the "technical_owner_identity_holder_id" field.
+func (m *PlatformMutation) ClearTechnicalOwnerIdentityHolderID() {
+	m.technical_owner_identity_holder = nil
+	m.clearedFields[platform.FieldTechnicalOwnerIdentityHolderID] = struct{}{}
+}
+
+// TechnicalOwnerIdentityHolderIDCleared returns if the "technical_owner_identity_holder_id" field was cleared in this mutation.
+func (m *PlatformMutation) TechnicalOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[platform.FieldTechnicalOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetTechnicalOwnerIdentityHolderID resets all changes to the "technical_owner_identity_holder_id" field.
+func (m *PlatformMutation) ResetTechnicalOwnerIdentityHolderID() {
+	m.technical_owner_identity_holder = nil
+	delete(m.clearedFields, platform.FieldTechnicalOwnerIdentityHolderID)
+}
+
 // SetSecurityOwner sets the "security_owner" field.
 func (m *PlatformMutation) SetSecurityOwner(s string) {
 	m.security_owner = &s
@@ -183383,6 +184590,55 @@ func (m *PlatformMutation) SecurityOwnerGroupIDCleared() bool {
 func (m *PlatformMutation) ResetSecurityOwnerGroupID() {
 	m.security_owner_group = nil
 	delete(m.clearedFields, platform.FieldSecurityOwnerGroupID)
+}
+
+// SetSecurityOwnerIdentityHolderID sets the "security_owner_identity_holder_id" field.
+func (m *PlatformMutation) SetSecurityOwnerIdentityHolderID(s string) {
+	m.security_owner_identity_holder = &s
+}
+
+// SecurityOwnerIdentityHolderID returns the value of the "security_owner_identity_holder_id" field in the mutation.
+func (m *PlatformMutation) SecurityOwnerIdentityHolderID() (r string, exists bool) {
+	v := m.security_owner_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSecurityOwnerIdentityHolderID returns the old "security_owner_identity_holder_id" field's value of the Platform entity.
+// If the Platform object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PlatformMutation) OldSecurityOwnerIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSecurityOwnerIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSecurityOwnerIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSecurityOwnerIdentityHolderID: %w", err)
+	}
+	return oldValue.SecurityOwnerIdentityHolderID, nil
+}
+
+// ClearSecurityOwnerIdentityHolderID clears the value of the "security_owner_identity_holder_id" field.
+func (m *PlatformMutation) ClearSecurityOwnerIdentityHolderID() {
+	m.security_owner_identity_holder = nil
+	m.clearedFields[platform.FieldSecurityOwnerIdentityHolderID] = struct{}{}
+}
+
+// SecurityOwnerIdentityHolderIDCleared returns if the "security_owner_identity_holder_id" field was cleared in this mutation.
+func (m *PlatformMutation) SecurityOwnerIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[platform.FieldSecurityOwnerIdentityHolderID]
+	return ok
+}
+
+// ResetSecurityOwnerIdentityHolderID resets all changes to the "security_owner_identity_holder_id" field.
+func (m *PlatformMutation) ResetSecurityOwnerIdentityHolderID() {
+	m.security_owner_identity_holder = nil
+	delete(m.clearedFields, platform.FieldSecurityOwnerIdentityHolderID)
 }
 
 // SetPlatformKindName sets the "platform_kind_name" field.
@@ -185374,6 +186630,33 @@ func (m *PlatformMutation) ResetInternalOwnerGroup() {
 	m.clearedinternal_owner_group = false
 }
 
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *PlatformMutation) ClearInternalOwnerIdentityHolder() {
+	m.clearedinternal_owner_identity_holder = true
+	m.clearedFields[platform.FieldInternalOwnerIdentityHolderID] = struct{}{}
+}
+
+// InternalOwnerIdentityHolderCleared reports if the "internal_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *PlatformMutation) InternalOwnerIdentityHolderCleared() bool {
+	return m.InternalOwnerIdentityHolderIDCleared() || m.clearedinternal_owner_identity_holder
+}
+
+// InternalOwnerIdentityHolderIDs returns the "internal_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// InternalOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *PlatformMutation) InternalOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.internal_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetInternalOwnerIdentityHolder resets all changes to the "internal_owner_identity_holder" edge.
+func (m *PlatformMutation) ResetInternalOwnerIdentityHolder() {
+	m.internal_owner_identity_holder = nil
+	m.clearedinternal_owner_identity_holder = false
+}
+
 // ClearBusinessOwnerUser clears the "business_owner_user" edge to the User entity.
 func (m *PlatformMutation) ClearBusinessOwnerUser() {
 	m.clearedbusiness_owner_user = true
@@ -185426,6 +186709,33 @@ func (m *PlatformMutation) BusinessOwnerGroupIDs() (ids []string) {
 func (m *PlatformMutation) ResetBusinessOwnerGroup() {
 	m.business_owner_group = nil
 	m.clearedbusiness_owner_group = false
+}
+
+// ClearBusinessOwnerIdentityHolder clears the "business_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *PlatformMutation) ClearBusinessOwnerIdentityHolder() {
+	m.clearedbusiness_owner_identity_holder = true
+	m.clearedFields[platform.FieldBusinessOwnerIdentityHolderID] = struct{}{}
+}
+
+// BusinessOwnerIdentityHolderCleared reports if the "business_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *PlatformMutation) BusinessOwnerIdentityHolderCleared() bool {
+	return m.BusinessOwnerIdentityHolderIDCleared() || m.clearedbusiness_owner_identity_holder
+}
+
+// BusinessOwnerIdentityHolderIDs returns the "business_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// BusinessOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *PlatformMutation) BusinessOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.business_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetBusinessOwnerIdentityHolder resets all changes to the "business_owner_identity_holder" edge.
+func (m *PlatformMutation) ResetBusinessOwnerIdentityHolder() {
+	m.business_owner_identity_holder = nil
+	m.clearedbusiness_owner_identity_holder = false
 }
 
 // ClearTechnicalOwnerUser clears the "technical_owner_user" edge to the User entity.
@@ -185482,6 +186792,33 @@ func (m *PlatformMutation) ResetTechnicalOwnerGroup() {
 	m.clearedtechnical_owner_group = false
 }
 
+// ClearTechnicalOwnerIdentityHolder clears the "technical_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *PlatformMutation) ClearTechnicalOwnerIdentityHolder() {
+	m.clearedtechnical_owner_identity_holder = true
+	m.clearedFields[platform.FieldTechnicalOwnerIdentityHolderID] = struct{}{}
+}
+
+// TechnicalOwnerIdentityHolderCleared reports if the "technical_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *PlatformMutation) TechnicalOwnerIdentityHolderCleared() bool {
+	return m.TechnicalOwnerIdentityHolderIDCleared() || m.clearedtechnical_owner_identity_holder
+}
+
+// TechnicalOwnerIdentityHolderIDs returns the "technical_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// TechnicalOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *PlatformMutation) TechnicalOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.technical_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetTechnicalOwnerIdentityHolder resets all changes to the "technical_owner_identity_holder" edge.
+func (m *PlatformMutation) ResetTechnicalOwnerIdentityHolder() {
+	m.technical_owner_identity_holder = nil
+	m.clearedtechnical_owner_identity_holder = false
+}
+
 // ClearSecurityOwnerUser clears the "security_owner_user" edge to the User entity.
 func (m *PlatformMutation) ClearSecurityOwnerUser() {
 	m.clearedsecurity_owner_user = true
@@ -185534,6 +186871,33 @@ func (m *PlatformMutation) SecurityOwnerGroupIDs() (ids []string) {
 func (m *PlatformMutation) ResetSecurityOwnerGroup() {
 	m.security_owner_group = nil
 	m.clearedsecurity_owner_group = false
+}
+
+// ClearSecurityOwnerIdentityHolder clears the "security_owner_identity_holder" edge to the IdentityHolder entity.
+func (m *PlatformMutation) ClearSecurityOwnerIdentityHolder() {
+	m.clearedsecurity_owner_identity_holder = true
+	m.clearedFields[platform.FieldSecurityOwnerIdentityHolderID] = struct{}{}
+}
+
+// SecurityOwnerIdentityHolderCleared reports if the "security_owner_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *PlatformMutation) SecurityOwnerIdentityHolderCleared() bool {
+	return m.SecurityOwnerIdentityHolderIDCleared() || m.clearedsecurity_owner_identity_holder
+}
+
+// SecurityOwnerIdentityHolderIDs returns the "security_owner_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// SecurityOwnerIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *PlatformMutation) SecurityOwnerIdentityHolderIDs() (ids []string) {
+	if id := m.security_owner_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetSecurityOwnerIdentityHolder resets all changes to the "security_owner_identity_holder" edge.
+func (m *PlatformMutation) ResetSecurityOwnerIdentityHolder() {
+	m.security_owner_identity_holder = nil
+	m.clearedsecurity_owner_identity_holder = false
 }
 
 // ClearPlatformKind clears the "platform_kind" edge to the CustomTypeEnum entity.
@@ -187217,7 +188581,7 @@ func (m *PlatformMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PlatformMutation) Fields() []string {
-	fields := make([]string, 0, 58)
+	fields := make([]string, 0, 62)
 	if m.created_at != nil {
 		fields = append(fields, platform.FieldCreatedAt)
 	}
@@ -187257,6 +188621,9 @@ func (m *PlatformMutation) Fields() []string {
 	if m.internal_owner_group != nil {
 		fields = append(fields, platform.FieldInternalOwnerGroupID)
 	}
+	if m.internal_owner_identity_holder != nil {
+		fields = append(fields, platform.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.business_owner != nil {
 		fields = append(fields, platform.FieldBusinessOwner)
 	}
@@ -187265,6 +188632,9 @@ func (m *PlatformMutation) Fields() []string {
 	}
 	if m.business_owner_group != nil {
 		fields = append(fields, platform.FieldBusinessOwnerGroupID)
+	}
+	if m.business_owner_identity_holder != nil {
+		fields = append(fields, platform.FieldBusinessOwnerIdentityHolderID)
 	}
 	if m.technical_owner != nil {
 		fields = append(fields, platform.FieldTechnicalOwner)
@@ -187275,6 +188645,9 @@ func (m *PlatformMutation) Fields() []string {
 	if m.technical_owner_group != nil {
 		fields = append(fields, platform.FieldTechnicalOwnerGroupID)
 	}
+	if m.technical_owner_identity_holder != nil {
+		fields = append(fields, platform.FieldTechnicalOwnerIdentityHolderID)
+	}
 	if m.security_owner != nil {
 		fields = append(fields, platform.FieldSecurityOwner)
 	}
@@ -187283,6 +188656,9 @@ func (m *PlatformMutation) Fields() []string {
 	}
 	if m.security_owner_group != nil {
 		fields = append(fields, platform.FieldSecurityOwnerGroupID)
+	}
+	if m.security_owner_identity_holder != nil {
+		fields = append(fields, platform.FieldSecurityOwnerIdentityHolderID)
 	}
 	if m.platform_kind_name != nil {
 		fields = append(fields, platform.FieldPlatformKindName)
@@ -187426,24 +188802,32 @@ func (m *PlatformMutation) Field(name string) (ent.Value, bool) {
 		return m.InternalOwnerUserID()
 	case platform.FieldInternalOwnerGroupID:
 		return m.InternalOwnerGroupID()
+	case platform.FieldInternalOwnerIdentityHolderID:
+		return m.InternalOwnerIdentityHolderID()
 	case platform.FieldBusinessOwner:
 		return m.BusinessOwner()
 	case platform.FieldBusinessOwnerUserID:
 		return m.BusinessOwnerUserID()
 	case platform.FieldBusinessOwnerGroupID:
 		return m.BusinessOwnerGroupID()
+	case platform.FieldBusinessOwnerIdentityHolderID:
+		return m.BusinessOwnerIdentityHolderID()
 	case platform.FieldTechnicalOwner:
 		return m.TechnicalOwner()
 	case platform.FieldTechnicalOwnerUserID:
 		return m.TechnicalOwnerUserID()
 	case platform.FieldTechnicalOwnerGroupID:
 		return m.TechnicalOwnerGroupID()
+	case platform.FieldTechnicalOwnerIdentityHolderID:
+		return m.TechnicalOwnerIdentityHolderID()
 	case platform.FieldSecurityOwner:
 		return m.SecurityOwner()
 	case platform.FieldSecurityOwnerUserID:
 		return m.SecurityOwnerUserID()
 	case platform.FieldSecurityOwnerGroupID:
 		return m.SecurityOwnerGroupID()
+	case platform.FieldSecurityOwnerIdentityHolderID:
+		return m.SecurityOwnerIdentityHolderID()
 	case platform.FieldPlatformKindName:
 		return m.PlatformKindName()
 	case platform.FieldPlatformKindID:
@@ -187551,24 +188935,32 @@ func (m *PlatformMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldInternalOwnerUserID(ctx)
 	case platform.FieldInternalOwnerGroupID:
 		return m.OldInternalOwnerGroupID(ctx)
+	case platform.FieldInternalOwnerIdentityHolderID:
+		return m.OldInternalOwnerIdentityHolderID(ctx)
 	case platform.FieldBusinessOwner:
 		return m.OldBusinessOwner(ctx)
 	case platform.FieldBusinessOwnerUserID:
 		return m.OldBusinessOwnerUserID(ctx)
 	case platform.FieldBusinessOwnerGroupID:
 		return m.OldBusinessOwnerGroupID(ctx)
+	case platform.FieldBusinessOwnerIdentityHolderID:
+		return m.OldBusinessOwnerIdentityHolderID(ctx)
 	case platform.FieldTechnicalOwner:
 		return m.OldTechnicalOwner(ctx)
 	case platform.FieldTechnicalOwnerUserID:
 		return m.OldTechnicalOwnerUserID(ctx)
 	case platform.FieldTechnicalOwnerGroupID:
 		return m.OldTechnicalOwnerGroupID(ctx)
+	case platform.FieldTechnicalOwnerIdentityHolderID:
+		return m.OldTechnicalOwnerIdentityHolderID(ctx)
 	case platform.FieldSecurityOwner:
 		return m.OldSecurityOwner(ctx)
 	case platform.FieldSecurityOwnerUserID:
 		return m.OldSecurityOwnerUserID(ctx)
 	case platform.FieldSecurityOwnerGroupID:
 		return m.OldSecurityOwnerGroupID(ctx)
+	case platform.FieldSecurityOwnerIdentityHolderID:
+		return m.OldSecurityOwnerIdentityHolderID(ctx)
 	case platform.FieldPlatformKindName:
 		return m.OldPlatformKindName(ctx)
 	case platform.FieldPlatformKindID:
@@ -187741,6 +189133,13 @@ func (m *PlatformMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetInternalOwnerGroupID(v)
 		return nil
+	case platform.FieldInternalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalOwnerIdentityHolderID(v)
+		return nil
 	case platform.FieldBusinessOwner:
 		v, ok := value.(string)
 		if !ok {
@@ -187761,6 +189160,13 @@ func (m *PlatformMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetBusinessOwnerGroupID(v)
+		return nil
+	case platform.FieldBusinessOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetBusinessOwnerIdentityHolderID(v)
 		return nil
 	case platform.FieldTechnicalOwner:
 		v, ok := value.(string)
@@ -187783,6 +189189,13 @@ func (m *PlatformMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetTechnicalOwnerGroupID(v)
 		return nil
+	case platform.FieldTechnicalOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTechnicalOwnerIdentityHolderID(v)
+		return nil
 	case platform.FieldSecurityOwner:
 		v, ok := value.(string)
 		if !ok {
@@ -187803,6 +189216,13 @@ func (m *PlatformMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSecurityOwnerGroupID(v)
+		return nil
+	case platform.FieldSecurityOwnerIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSecurityOwnerIdentityHolderID(v)
 		return nil
 	case platform.FieldPlatformKindName:
 		v, ok := value.(string)
@@ -188137,6 +189557,9 @@ func (m *PlatformMutation) ClearedFields() []string {
 	if m.FieldCleared(platform.FieldInternalOwnerGroupID) {
 		fields = append(fields, platform.FieldInternalOwnerGroupID)
 	}
+	if m.FieldCleared(platform.FieldInternalOwnerIdentityHolderID) {
+		fields = append(fields, platform.FieldInternalOwnerIdentityHolderID)
+	}
 	if m.FieldCleared(platform.FieldBusinessOwner) {
 		fields = append(fields, platform.FieldBusinessOwner)
 	}
@@ -188145,6 +189568,9 @@ func (m *PlatformMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(platform.FieldBusinessOwnerGroupID) {
 		fields = append(fields, platform.FieldBusinessOwnerGroupID)
+	}
+	if m.FieldCleared(platform.FieldBusinessOwnerIdentityHolderID) {
+		fields = append(fields, platform.FieldBusinessOwnerIdentityHolderID)
 	}
 	if m.FieldCleared(platform.FieldTechnicalOwner) {
 		fields = append(fields, platform.FieldTechnicalOwner)
@@ -188155,6 +189581,9 @@ func (m *PlatformMutation) ClearedFields() []string {
 	if m.FieldCleared(platform.FieldTechnicalOwnerGroupID) {
 		fields = append(fields, platform.FieldTechnicalOwnerGroupID)
 	}
+	if m.FieldCleared(platform.FieldTechnicalOwnerIdentityHolderID) {
+		fields = append(fields, platform.FieldTechnicalOwnerIdentityHolderID)
+	}
 	if m.FieldCleared(platform.FieldSecurityOwner) {
 		fields = append(fields, platform.FieldSecurityOwner)
 	}
@@ -188163,6 +189592,9 @@ func (m *PlatformMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(platform.FieldSecurityOwnerGroupID) {
 		fields = append(fields, platform.FieldSecurityOwnerGroupID)
+	}
+	if m.FieldCleared(platform.FieldSecurityOwnerIdentityHolderID) {
+		fields = append(fields, platform.FieldSecurityOwnerIdentityHolderID)
 	}
 	if m.FieldCleared(platform.FieldPlatformKindName) {
 		fields = append(fields, platform.FieldPlatformKindName)
@@ -188313,6 +189745,9 @@ func (m *PlatformMutation) ClearField(name string) error {
 	case platform.FieldInternalOwnerGroupID:
 		m.ClearInternalOwnerGroupID()
 		return nil
+	case platform.FieldInternalOwnerIdentityHolderID:
+		m.ClearInternalOwnerIdentityHolderID()
+		return nil
 	case platform.FieldBusinessOwner:
 		m.ClearBusinessOwner()
 		return nil
@@ -188321,6 +189756,9 @@ func (m *PlatformMutation) ClearField(name string) error {
 		return nil
 	case platform.FieldBusinessOwnerGroupID:
 		m.ClearBusinessOwnerGroupID()
+		return nil
+	case platform.FieldBusinessOwnerIdentityHolderID:
+		m.ClearBusinessOwnerIdentityHolderID()
 		return nil
 	case platform.FieldTechnicalOwner:
 		m.ClearTechnicalOwner()
@@ -188331,6 +189769,9 @@ func (m *PlatformMutation) ClearField(name string) error {
 	case platform.FieldTechnicalOwnerGroupID:
 		m.ClearTechnicalOwnerGroupID()
 		return nil
+	case platform.FieldTechnicalOwnerIdentityHolderID:
+		m.ClearTechnicalOwnerIdentityHolderID()
+		return nil
 	case platform.FieldSecurityOwner:
 		m.ClearSecurityOwner()
 		return nil
@@ -188339,6 +189780,9 @@ func (m *PlatformMutation) ClearField(name string) error {
 		return nil
 	case platform.FieldSecurityOwnerGroupID:
 		m.ClearSecurityOwnerGroupID()
+		return nil
+	case platform.FieldSecurityOwnerIdentityHolderID:
+		m.ClearSecurityOwnerIdentityHolderID()
 		return nil
 	case platform.FieldPlatformKindName:
 		m.ClearPlatformKindName()
@@ -188486,6 +189930,9 @@ func (m *PlatformMutation) ResetField(name string) error {
 	case platform.FieldInternalOwnerGroupID:
 		m.ResetInternalOwnerGroupID()
 		return nil
+	case platform.FieldInternalOwnerIdentityHolderID:
+		m.ResetInternalOwnerIdentityHolderID()
+		return nil
 	case platform.FieldBusinessOwner:
 		m.ResetBusinessOwner()
 		return nil
@@ -188494,6 +189941,9 @@ func (m *PlatformMutation) ResetField(name string) error {
 		return nil
 	case platform.FieldBusinessOwnerGroupID:
 		m.ResetBusinessOwnerGroupID()
+		return nil
+	case platform.FieldBusinessOwnerIdentityHolderID:
+		m.ResetBusinessOwnerIdentityHolderID()
 		return nil
 	case platform.FieldTechnicalOwner:
 		m.ResetTechnicalOwner()
@@ -188504,6 +189954,9 @@ func (m *PlatformMutation) ResetField(name string) error {
 	case platform.FieldTechnicalOwnerGroupID:
 		m.ResetTechnicalOwnerGroupID()
 		return nil
+	case platform.FieldTechnicalOwnerIdentityHolderID:
+		m.ResetTechnicalOwnerIdentityHolderID()
+		return nil
 	case platform.FieldSecurityOwner:
 		m.ResetSecurityOwner()
 		return nil
@@ -188512,6 +189965,9 @@ func (m *PlatformMutation) ResetField(name string) error {
 		return nil
 	case platform.FieldSecurityOwnerGroupID:
 		m.ResetSecurityOwnerGroupID()
+		return nil
+	case platform.FieldSecurityOwnerIdentityHolderID:
+		m.ResetSecurityOwnerIdentityHolderID()
 		return nil
 	case platform.FieldPlatformKindName:
 		m.ResetPlatformKindName()
@@ -188627,7 +190083,7 @@ func (m *PlatformMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PlatformMutation) AddedEdges() []string {
-	edges := make([]string, 0, 47)
+	edges := make([]string, 0, 51)
 	if m.owner != nil {
 		edges = append(edges, platform.EdgeOwner)
 	}
@@ -188646,11 +190102,17 @@ func (m *PlatformMutation) AddedEdges() []string {
 	if m.internal_owner_group != nil {
 		edges = append(edges, platform.EdgeInternalOwnerGroup)
 	}
+	if m.internal_owner_identity_holder != nil {
+		edges = append(edges, platform.EdgeInternalOwnerIdentityHolder)
+	}
 	if m.business_owner_user != nil {
 		edges = append(edges, platform.EdgeBusinessOwnerUser)
 	}
 	if m.business_owner_group != nil {
 		edges = append(edges, platform.EdgeBusinessOwnerGroup)
+	}
+	if m.business_owner_identity_holder != nil {
+		edges = append(edges, platform.EdgeBusinessOwnerIdentityHolder)
 	}
 	if m.technical_owner_user != nil {
 		edges = append(edges, platform.EdgeTechnicalOwnerUser)
@@ -188658,11 +190120,17 @@ func (m *PlatformMutation) AddedEdges() []string {
 	if m.technical_owner_group != nil {
 		edges = append(edges, platform.EdgeTechnicalOwnerGroup)
 	}
+	if m.technical_owner_identity_holder != nil {
+		edges = append(edges, platform.EdgeTechnicalOwnerIdentityHolder)
+	}
 	if m.security_owner_user != nil {
 		edges = append(edges, platform.EdgeSecurityOwnerUser)
 	}
 	if m.security_owner_group != nil {
 		edges = append(edges, platform.EdgeSecurityOwnerGroup)
+	}
+	if m.security_owner_identity_holder != nil {
+		edges = append(edges, platform.EdgeSecurityOwnerIdentityHolder)
 	}
 	if m.platform_kind != nil {
 		edges = append(edges, platform.EdgePlatformKind)
@@ -188806,12 +190274,20 @@ func (m *PlatformMutation) AddedIDs(name string) []ent.Value {
 		if id := m.internal_owner_group; id != nil {
 			return []ent.Value{*id}
 		}
+	case platform.EdgeInternalOwnerIdentityHolder:
+		if id := m.internal_owner_identity_holder; id != nil {
+			return []ent.Value{*id}
+		}
 	case platform.EdgeBusinessOwnerUser:
 		if id := m.business_owner_user; id != nil {
 			return []ent.Value{*id}
 		}
 	case platform.EdgeBusinessOwnerGroup:
 		if id := m.business_owner_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case platform.EdgeBusinessOwnerIdentityHolder:
+		if id := m.business_owner_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case platform.EdgeTechnicalOwnerUser:
@@ -188822,12 +190298,20 @@ func (m *PlatformMutation) AddedIDs(name string) []ent.Value {
 		if id := m.technical_owner_group; id != nil {
 			return []ent.Value{*id}
 		}
+	case platform.EdgeTechnicalOwnerIdentityHolder:
+		if id := m.technical_owner_identity_holder; id != nil {
+			return []ent.Value{*id}
+		}
 	case platform.EdgeSecurityOwnerUser:
 		if id := m.security_owner_user; id != nil {
 			return []ent.Value{*id}
 		}
 	case platform.EdgeSecurityOwnerGroup:
 		if id := m.security_owner_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case platform.EdgeSecurityOwnerIdentityHolder:
+		if id := m.security_owner_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case platform.EdgePlatformKind:
@@ -189028,7 +190512,7 @@ func (m *PlatformMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PlatformMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 47)
+	edges := make([]string, 0, 51)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, platform.EdgeBlockedGroups)
 	}
@@ -189303,7 +190787,7 @@ func (m *PlatformMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PlatformMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 47)
+	edges := make([]string, 0, 51)
 	if m.clearedowner {
 		edges = append(edges, platform.EdgeOwner)
 	}
@@ -189322,11 +190806,17 @@ func (m *PlatformMutation) ClearedEdges() []string {
 	if m.clearedinternal_owner_group {
 		edges = append(edges, platform.EdgeInternalOwnerGroup)
 	}
+	if m.clearedinternal_owner_identity_holder {
+		edges = append(edges, platform.EdgeInternalOwnerIdentityHolder)
+	}
 	if m.clearedbusiness_owner_user {
 		edges = append(edges, platform.EdgeBusinessOwnerUser)
 	}
 	if m.clearedbusiness_owner_group {
 		edges = append(edges, platform.EdgeBusinessOwnerGroup)
+	}
+	if m.clearedbusiness_owner_identity_holder {
+		edges = append(edges, platform.EdgeBusinessOwnerIdentityHolder)
 	}
 	if m.clearedtechnical_owner_user {
 		edges = append(edges, platform.EdgeTechnicalOwnerUser)
@@ -189334,11 +190824,17 @@ func (m *PlatformMutation) ClearedEdges() []string {
 	if m.clearedtechnical_owner_group {
 		edges = append(edges, platform.EdgeTechnicalOwnerGroup)
 	}
+	if m.clearedtechnical_owner_identity_holder {
+		edges = append(edges, platform.EdgeTechnicalOwnerIdentityHolder)
+	}
 	if m.clearedsecurity_owner_user {
 		edges = append(edges, platform.EdgeSecurityOwnerUser)
 	}
 	if m.clearedsecurity_owner_group {
 		edges = append(edges, platform.EdgeSecurityOwnerGroup)
+	}
+	if m.clearedsecurity_owner_identity_holder {
+		edges = append(edges, platform.EdgeSecurityOwnerIdentityHolder)
 	}
 	if m.clearedplatform_kind {
 		edges = append(edges, platform.EdgePlatformKind)
@@ -189464,18 +190960,26 @@ func (m *PlatformMutation) EdgeCleared(name string) bool {
 		return m.clearedinternal_owner_user
 	case platform.EdgeInternalOwnerGroup:
 		return m.clearedinternal_owner_group
+	case platform.EdgeInternalOwnerIdentityHolder:
+		return m.clearedinternal_owner_identity_holder
 	case platform.EdgeBusinessOwnerUser:
 		return m.clearedbusiness_owner_user
 	case platform.EdgeBusinessOwnerGroup:
 		return m.clearedbusiness_owner_group
+	case platform.EdgeBusinessOwnerIdentityHolder:
+		return m.clearedbusiness_owner_identity_holder
 	case platform.EdgeTechnicalOwnerUser:
 		return m.clearedtechnical_owner_user
 	case platform.EdgeTechnicalOwnerGroup:
 		return m.clearedtechnical_owner_group
+	case platform.EdgeTechnicalOwnerIdentityHolder:
+		return m.clearedtechnical_owner_identity_holder
 	case platform.EdgeSecurityOwnerUser:
 		return m.clearedsecurity_owner_user
 	case platform.EdgeSecurityOwnerGroup:
 		return m.clearedsecurity_owner_group
+	case platform.EdgeSecurityOwnerIdentityHolder:
+		return m.clearedsecurity_owner_identity_holder
 	case platform.EdgePlatformKind:
 		return m.clearedplatform_kind
 	case platform.EdgePlatformDataClassification:
@@ -189563,11 +191067,17 @@ func (m *PlatformMutation) ClearEdge(name string) error {
 	case platform.EdgeInternalOwnerGroup:
 		m.ClearInternalOwnerGroup()
 		return nil
+	case platform.EdgeInternalOwnerIdentityHolder:
+		m.ClearInternalOwnerIdentityHolder()
+		return nil
 	case platform.EdgeBusinessOwnerUser:
 		m.ClearBusinessOwnerUser()
 		return nil
 	case platform.EdgeBusinessOwnerGroup:
 		m.ClearBusinessOwnerGroup()
+		return nil
+	case platform.EdgeBusinessOwnerIdentityHolder:
+		m.ClearBusinessOwnerIdentityHolder()
 		return nil
 	case platform.EdgeTechnicalOwnerUser:
 		m.ClearTechnicalOwnerUser()
@@ -189575,11 +191085,17 @@ func (m *PlatformMutation) ClearEdge(name string) error {
 	case platform.EdgeTechnicalOwnerGroup:
 		m.ClearTechnicalOwnerGroup()
 		return nil
+	case platform.EdgeTechnicalOwnerIdentityHolder:
+		m.ClearTechnicalOwnerIdentityHolder()
+		return nil
 	case platform.EdgeSecurityOwnerUser:
 		m.ClearSecurityOwnerUser()
 		return nil
 	case platform.EdgeSecurityOwnerGroup:
 		m.ClearSecurityOwnerGroup()
+		return nil
+	case platform.EdgeSecurityOwnerIdentityHolder:
+		m.ClearSecurityOwnerIdentityHolder()
 		return nil
 	case platform.EdgePlatformKind:
 		m.ClearPlatformKind()
@@ -189634,11 +191150,17 @@ func (m *PlatformMutation) ResetEdge(name string) error {
 	case platform.EdgeInternalOwnerGroup:
 		m.ResetInternalOwnerGroup()
 		return nil
+	case platform.EdgeInternalOwnerIdentityHolder:
+		m.ResetInternalOwnerIdentityHolder()
+		return nil
 	case platform.EdgeBusinessOwnerUser:
 		m.ResetBusinessOwnerUser()
 		return nil
 	case platform.EdgeBusinessOwnerGroup:
 		m.ResetBusinessOwnerGroup()
+		return nil
+	case platform.EdgeBusinessOwnerIdentityHolder:
+		m.ResetBusinessOwnerIdentityHolder()
 		return nil
 	case platform.EdgeTechnicalOwnerUser:
 		m.ResetTechnicalOwnerUser()
@@ -189646,11 +191168,17 @@ func (m *PlatformMutation) ResetEdge(name string) error {
 	case platform.EdgeTechnicalOwnerGroup:
 		m.ResetTechnicalOwnerGroup()
 		return nil
+	case platform.EdgeTechnicalOwnerIdentityHolder:
+		m.ResetTechnicalOwnerIdentityHolder()
+		return nil
 	case platform.EdgeSecurityOwnerUser:
 		m.ResetSecurityOwnerUser()
 		return nil
 	case platform.EdgeSecurityOwnerGroup:
 		m.ResetSecurityOwnerGroup()
+		return nil
+	case platform.EdgeSecurityOwnerIdentityHolder:
+		m.ResetSecurityOwnerIdentityHolder()
 		return nil
 	case platform.EdgePlatformKind:
 		m.ResetPlatformKind()
@@ -216072,10 +217600,14 @@ type ScanMutation struct {
 	clearedreviewed_by_user            bool
 	reviewed_by_group                  *string
 	clearedreviewed_by_group           bool
+	reviewed_by_identity_holder        *string
+	clearedreviewed_by_identity_holder bool
 	assigned_to_user                   *string
 	clearedassigned_to_user            bool
 	assigned_to_group                  *string
 	clearedassigned_to_group           bool
+	assigned_to_identity_holder        *string
+	clearedassigned_to_identity_holder bool
 	environment                        *string
 	clearedenvironment                 bool
 	scope                              *string
@@ -216982,6 +218514,55 @@ func (m *ScanMutation) ResetReviewedByGroupID() {
 	delete(m.clearedFields, scan.FieldReviewedByGroupID)
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (m *ScanMutation) SetReviewedByIdentityHolderID(s string) {
+	m.reviewed_by_identity_holder = &s
+}
+
+// ReviewedByIdentityHolderID returns the value of the "reviewed_by_identity_holder_id" field in the mutation.
+func (m *ScanMutation) ReviewedByIdentityHolderID() (r string, exists bool) {
+	v := m.reviewed_by_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewedByIdentityHolderID returns the old "reviewed_by_identity_holder_id" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldReviewedByIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewedByIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewedByIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewedByIdentityHolderID: %w", err)
+	}
+	return oldValue.ReviewedByIdentityHolderID, nil
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (m *ScanMutation) ClearReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder = nil
+	m.clearedFields[scan.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderIDCleared returns if the "reviewed_by_identity_holder_id" field was cleared in this mutation.
+func (m *ScanMutation) ReviewedByIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[scan.FieldReviewedByIdentityHolderID]
+	return ok
+}
+
+// ResetReviewedByIdentityHolderID resets all changes to the "reviewed_by_identity_holder_id" field.
+func (m *ScanMutation) ResetReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder = nil
+	delete(m.clearedFields, scan.FieldReviewedByIdentityHolderID)
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (m *ScanMutation) SetAssignedTo(s string) {
 	m.assigned_to = &s
@@ -217127,6 +218708,55 @@ func (m *ScanMutation) AssignedToGroupIDCleared() bool {
 func (m *ScanMutation) ResetAssignedToGroupID() {
 	m.assigned_to_group = nil
 	delete(m.clearedFields, scan.FieldAssignedToGroupID)
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (m *ScanMutation) SetAssignedToIdentityHolderID(s string) {
+	m.assigned_to_identity_holder = &s
+}
+
+// AssignedToIdentityHolderID returns the value of the "assigned_to_identity_holder_id" field in the mutation.
+func (m *ScanMutation) AssignedToIdentityHolderID() (r string, exists bool) {
+	v := m.assigned_to_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAssignedToIdentityHolderID returns the old "assigned_to_identity_holder_id" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldAssignedToIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAssignedToIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAssignedToIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAssignedToIdentityHolderID: %w", err)
+	}
+	return oldValue.AssignedToIdentityHolderID, nil
+}
+
+// ClearAssignedToIdentityHolderID clears the value of the "assigned_to_identity_holder_id" field.
+func (m *ScanMutation) ClearAssignedToIdentityHolderID() {
+	m.assigned_to_identity_holder = nil
+	m.clearedFields[scan.FieldAssignedToIdentityHolderID] = struct{}{}
+}
+
+// AssignedToIdentityHolderIDCleared returns if the "assigned_to_identity_holder_id" field was cleared in this mutation.
+func (m *ScanMutation) AssignedToIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[scan.FieldAssignedToIdentityHolderID]
+	return ok
+}
+
+// ResetAssignedToIdentityHolderID resets all changes to the "assigned_to_identity_holder_id" field.
+func (m *ScanMutation) ResetAssignedToIdentityHolderID() {
+	m.assigned_to_identity_holder = nil
+	delete(m.clearedFields, scan.FieldAssignedToIdentityHolderID)
 }
 
 // SetEnvironmentName sets the "environment_name" field.
@@ -218079,6 +219709,33 @@ func (m *ScanMutation) ResetReviewedByGroup() {
 	m.clearedreviewed_by_group = false
 }
 
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (m *ScanMutation) ClearReviewedByIdentityHolder() {
+	m.clearedreviewed_by_identity_holder = true
+	m.clearedFields[scan.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderCleared reports if the "reviewed_by_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *ScanMutation) ReviewedByIdentityHolderCleared() bool {
+	return m.ReviewedByIdentityHolderIDCleared() || m.clearedreviewed_by_identity_holder
+}
+
+// ReviewedByIdentityHolderIDs returns the "reviewed_by_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ReviewedByIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *ScanMutation) ReviewedByIdentityHolderIDs() (ids []string) {
+	if id := m.reviewed_by_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetReviewedByIdentityHolder resets all changes to the "reviewed_by_identity_holder" edge.
+func (m *ScanMutation) ResetReviewedByIdentityHolder() {
+	m.reviewed_by_identity_holder = nil
+	m.clearedreviewed_by_identity_holder = false
+}
+
 // ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
 func (m *ScanMutation) ClearAssignedToUser() {
 	m.clearedassigned_to_user = true
@@ -218131,6 +219788,33 @@ func (m *ScanMutation) AssignedToGroupIDs() (ids []string) {
 func (m *ScanMutation) ResetAssignedToGroup() {
 	m.assigned_to_group = nil
 	m.clearedassigned_to_group = false
+}
+
+// ClearAssignedToIdentityHolder clears the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (m *ScanMutation) ClearAssignedToIdentityHolder() {
+	m.clearedassigned_to_identity_holder = true
+	m.clearedFields[scan.FieldAssignedToIdentityHolderID] = struct{}{}
+}
+
+// AssignedToIdentityHolderCleared reports if the "assigned_to_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *ScanMutation) AssignedToIdentityHolderCleared() bool {
+	return m.AssignedToIdentityHolderIDCleared() || m.clearedassigned_to_identity_holder
+}
+
+// AssignedToIdentityHolderIDs returns the "assigned_to_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AssignedToIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *ScanMutation) AssignedToIdentityHolderIDs() (ids []string) {
+	if id := m.assigned_to_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAssignedToIdentityHolder resets all changes to the "assigned_to_identity_holder" edge.
+func (m *ScanMutation) ResetAssignedToIdentityHolder() {
+	m.assigned_to_identity_holder = nil
+	m.clearedassigned_to_identity_holder = false
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -218950,7 +220634,7 @@ func (m *ScanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScanMutation) Fields() []string {
-	fields := make([]string, 0, 34)
+	fields := make([]string, 0, 36)
 	if m.created_at != nil {
 		fields = append(fields, scan.FieldCreatedAt)
 	}
@@ -218996,6 +220680,9 @@ func (m *ScanMutation) Fields() []string {
 	if m.reviewed_by_group != nil {
 		fields = append(fields, scan.FieldReviewedByGroupID)
 	}
+	if m.reviewed_by_identity_holder != nil {
+		fields = append(fields, scan.FieldReviewedByIdentityHolderID)
+	}
 	if m.assigned_to != nil {
 		fields = append(fields, scan.FieldAssignedTo)
 	}
@@ -219004,6 +220691,9 @@ func (m *ScanMutation) Fields() []string {
 	}
 	if m.assigned_to_group != nil {
 		fields = append(fields, scan.FieldAssignedToGroupID)
+	}
+	if m.assigned_to_identity_holder != nil {
+		fields = append(fields, scan.FieldAssignedToIdentityHolderID)
 	}
 	if m.environment_name != nil {
 		fields = append(fields, scan.FieldEnvironmentName)
@@ -219091,12 +220781,16 @@ func (m *ScanMutation) Field(name string) (ent.Value, bool) {
 		return m.ReviewedByUserID()
 	case scan.FieldReviewedByGroupID:
 		return m.ReviewedByGroupID()
+	case scan.FieldReviewedByIdentityHolderID:
+		return m.ReviewedByIdentityHolderID()
 	case scan.FieldAssignedTo:
 		return m.AssignedTo()
 	case scan.FieldAssignedToUserID:
 		return m.AssignedToUserID()
 	case scan.FieldAssignedToGroupID:
 		return m.AssignedToGroupID()
+	case scan.FieldAssignedToIdentityHolderID:
+		return m.AssignedToIdentityHolderID()
 	case scan.FieldEnvironmentName:
 		return m.EnvironmentName()
 	case scan.FieldEnvironmentID:
@@ -219168,12 +220862,16 @@ func (m *ScanMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldReviewedByUserID(ctx)
 	case scan.FieldReviewedByGroupID:
 		return m.OldReviewedByGroupID(ctx)
+	case scan.FieldReviewedByIdentityHolderID:
+		return m.OldReviewedByIdentityHolderID(ctx)
 	case scan.FieldAssignedTo:
 		return m.OldAssignedTo(ctx)
 	case scan.FieldAssignedToUserID:
 		return m.OldAssignedToUserID(ctx)
 	case scan.FieldAssignedToGroupID:
 		return m.OldAssignedToGroupID(ctx)
+	case scan.FieldAssignedToIdentityHolderID:
+		return m.OldAssignedToIdentityHolderID(ctx)
 	case scan.FieldEnvironmentName:
 		return m.OldEnvironmentName(ctx)
 	case scan.FieldEnvironmentID:
@@ -219320,6 +221018,13 @@ func (m *ScanMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetReviewedByGroupID(v)
 		return nil
+	case scan.FieldReviewedByIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewedByIdentityHolderID(v)
+		return nil
 	case scan.FieldAssignedTo:
 		v, ok := value.(string)
 		if !ok {
@@ -219340,6 +221045,13 @@ func (m *ScanMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAssignedToGroupID(v)
+		return nil
+	case scan.FieldAssignedToIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAssignedToIdentityHolderID(v)
 		return nil
 	case scan.FieldEnvironmentName:
 		v, ok := value.(string)
@@ -219528,6 +221240,9 @@ func (m *ScanMutation) ClearedFields() []string {
 	if m.FieldCleared(scan.FieldReviewedByGroupID) {
 		fields = append(fields, scan.FieldReviewedByGroupID)
 	}
+	if m.FieldCleared(scan.FieldReviewedByIdentityHolderID) {
+		fields = append(fields, scan.FieldReviewedByIdentityHolderID)
+	}
 	if m.FieldCleared(scan.FieldAssignedTo) {
 		fields = append(fields, scan.FieldAssignedTo)
 	}
@@ -219536,6 +221251,9 @@ func (m *ScanMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(scan.FieldAssignedToGroupID) {
 		fields = append(fields, scan.FieldAssignedToGroupID)
+	}
+	if m.FieldCleared(scan.FieldAssignedToIdentityHolderID) {
+		fields = append(fields, scan.FieldAssignedToIdentityHolderID)
 	}
 	if m.FieldCleared(scan.FieldEnvironmentName) {
 		fields = append(fields, scan.FieldEnvironmentName)
@@ -219635,6 +221353,9 @@ func (m *ScanMutation) ClearField(name string) error {
 	case scan.FieldReviewedByGroupID:
 		m.ClearReviewedByGroupID()
 		return nil
+	case scan.FieldReviewedByIdentityHolderID:
+		m.ClearReviewedByIdentityHolderID()
+		return nil
 	case scan.FieldAssignedTo:
 		m.ClearAssignedTo()
 		return nil
@@ -219643,6 +221364,9 @@ func (m *ScanMutation) ClearField(name string) error {
 		return nil
 	case scan.FieldAssignedToGroupID:
 		m.ClearAssignedToGroupID()
+		return nil
+	case scan.FieldAssignedToIdentityHolderID:
+		m.ClearAssignedToIdentityHolderID()
 		return nil
 	case scan.FieldEnvironmentName:
 		m.ClearEnvironmentName()
@@ -219736,6 +221460,9 @@ func (m *ScanMutation) ResetField(name string) error {
 	case scan.FieldReviewedByGroupID:
 		m.ResetReviewedByGroupID()
 		return nil
+	case scan.FieldReviewedByIdentityHolderID:
+		m.ResetReviewedByIdentityHolderID()
+		return nil
 	case scan.FieldAssignedTo:
 		m.ResetAssignedTo()
 		return nil
@@ -219744,6 +221471,9 @@ func (m *ScanMutation) ResetField(name string) error {
 		return nil
 	case scan.FieldAssignedToGroupID:
 		m.ResetAssignedToGroupID()
+		return nil
+	case scan.FieldAssignedToIdentityHolderID:
+		m.ResetAssignedToIdentityHolderID()
 		return nil
 	case scan.FieldEnvironmentName:
 		m.ResetEnvironmentName()
@@ -219799,7 +221529,7 @@ func (m *ScanMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ScanMutation) AddedEdges() []string {
-	edges := make([]string, 0, 24)
+	edges := make([]string, 0, 26)
 	if m.owner != nil {
 		edges = append(edges, scan.EdgeOwner)
 	}
@@ -219815,11 +221545,17 @@ func (m *ScanMutation) AddedEdges() []string {
 	if m.reviewed_by_group != nil {
 		edges = append(edges, scan.EdgeReviewedByGroup)
 	}
+	if m.reviewed_by_identity_holder != nil {
+		edges = append(edges, scan.EdgeReviewedByIdentityHolder)
+	}
 	if m.assigned_to_user != nil {
 		edges = append(edges, scan.EdgeAssignedToUser)
 	}
 	if m.assigned_to_group != nil {
 		edges = append(edges, scan.EdgeAssignedToGroup)
+	}
+	if m.assigned_to_identity_holder != nil {
+		edges = append(edges, scan.EdgeAssignedToIdentityHolder)
 	}
 	if m.environment != nil {
 		edges = append(edges, scan.EdgeEnvironment)
@@ -219903,12 +221639,20 @@ func (m *ScanMutation) AddedIDs(name string) []ent.Value {
 		if id := m.reviewed_by_group; id != nil {
 			return []ent.Value{*id}
 		}
+	case scan.EdgeReviewedByIdentityHolder:
+		if id := m.reviewed_by_identity_holder; id != nil {
+			return []ent.Value{*id}
+		}
 	case scan.EdgeAssignedToUser:
 		if id := m.assigned_to_user; id != nil {
 			return []ent.Value{*id}
 		}
 	case scan.EdgeAssignedToGroup:
 		if id := m.assigned_to_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case scan.EdgeAssignedToIdentityHolder:
+		if id := m.assigned_to_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case scan.EdgeEnvironment:
@@ -220009,7 +221753,7 @@ func (m *ScanMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ScanMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 24)
+	edges := make([]string, 0, 26)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, scan.EdgeBlockedGroups)
 	}
@@ -220149,7 +221893,7 @@ func (m *ScanMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ScanMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 24)
+	edges := make([]string, 0, 26)
 	if m.clearedowner {
 		edges = append(edges, scan.EdgeOwner)
 	}
@@ -220165,11 +221909,17 @@ func (m *ScanMutation) ClearedEdges() []string {
 	if m.clearedreviewed_by_group {
 		edges = append(edges, scan.EdgeReviewedByGroup)
 	}
+	if m.clearedreviewed_by_identity_holder {
+		edges = append(edges, scan.EdgeReviewedByIdentityHolder)
+	}
 	if m.clearedassigned_to_user {
 		edges = append(edges, scan.EdgeAssignedToUser)
 	}
 	if m.clearedassigned_to_group {
 		edges = append(edges, scan.EdgeAssignedToGroup)
+	}
+	if m.clearedassigned_to_identity_holder {
+		edges = append(edges, scan.EdgeAssignedToIdentityHolder)
 	}
 	if m.clearedenvironment {
 		edges = append(edges, scan.EdgeEnvironment)
@@ -220239,10 +221989,14 @@ func (m *ScanMutation) EdgeCleared(name string) bool {
 		return m.clearedreviewed_by_user
 	case scan.EdgeReviewedByGroup:
 		return m.clearedreviewed_by_group
+	case scan.EdgeReviewedByIdentityHolder:
+		return m.clearedreviewed_by_identity_holder
 	case scan.EdgeAssignedToUser:
 		return m.clearedassigned_to_user
 	case scan.EdgeAssignedToGroup:
 		return m.clearedassigned_to_group
+	case scan.EdgeAssignedToIdentityHolder:
+		return m.clearedassigned_to_identity_holder
 	case scan.EdgeEnvironment:
 		return m.clearedenvironment
 	case scan.EdgeScope:
@@ -220294,11 +222048,17 @@ func (m *ScanMutation) ClearEdge(name string) error {
 	case scan.EdgeReviewedByGroup:
 		m.ClearReviewedByGroup()
 		return nil
+	case scan.EdgeReviewedByIdentityHolder:
+		m.ClearReviewedByIdentityHolder()
+		return nil
 	case scan.EdgeAssignedToUser:
 		m.ClearAssignedToUser()
 		return nil
 	case scan.EdgeAssignedToGroup:
 		m.ClearAssignedToGroup()
+		return nil
+	case scan.EdgeAssignedToIdentityHolder:
+		m.ClearAssignedToIdentityHolder()
 		return nil
 	case scan.EdgeEnvironment:
 		m.ClearEnvironment()
@@ -220338,11 +222098,17 @@ func (m *ScanMutation) ResetEdge(name string) error {
 	case scan.EdgeReviewedByGroup:
 		m.ResetReviewedByGroup()
 		return nil
+	case scan.EdgeReviewedByIdentityHolder:
+		m.ResetReviewedByIdentityHolder()
+		return nil
 	case scan.EdgeAssignedToUser:
 		m.ResetAssignedToUser()
 		return nil
 	case scan.EdgeAssignedToGroup:
 		m.ResetAssignedToGroup()
+		return nil
+	case scan.EdgeAssignedToIdentityHolder:
+		m.ResetAssignedToIdentityHolder()
 		return nil
 	case scan.EdgeEnvironment:
 		m.ResetEnvironment()
@@ -272910,154 +274676,158 @@ func (m *VendorScoringConfigMutation) ResetEdge(name string) error {
 // VulnerabilityMutation represents an operation that mutates the Vulnerability nodes in the graph.
 type VulnerabilityMutation struct {
 	config
-	op                          Op
-	typ                         string
-	id                          *string
-	created_at                  *time.Time
-	updated_at                  *time.Time
-	created_by                  *string
-	updated_by                  *string
-	updated_by_impersonator     *string
-	deleted_at                  *time.Time
-	deleted_by                  *string
-	display_id                  *string
-	tags                        *[]string
-	appendtags                  []string
-	reviewed_by                 *string
-	assigned_to                 *string
-	system_owned                *bool
-	internal_notes              *string
-	system_internal_id          *string
-	environment_name            *string
-	scope_name                  *string
-	vulnerability_status_name   *string
-	workflow_eligible_marker    *bool
-	external_owner_id           *string
-	security_level              *enums.SecurityLevel
-	external_id                 *string
-	cve_id                      *string
-	source                      *string
-	display_name                *string
-	category                    *string
-	severity                    *string
-	score                       *float64
-	addscore                    *float64
-	impact                      *float64
-	addimpact                   *float64
-	exploitability              *float64
-	addexploitability           *float64
-	priority                    *string
-	summary                     *string
-	description                 *string
-	vector                      *string
-	remediation_sla             *int
-	addremediation_sla          *int
-	open                        *bool
-	blocking                    *bool
-	production                  *bool
-	public                      *bool
-	validated                   *bool
-	references                  *[]string
-	appendreferences            []string
-	impacts                     *[]string
-	appendimpacts               []string
-	cwe_ids                     *[]string
-	appendcwe_ids               []string
-	vulnerable_version_range    *string
-	first_patched_version       *string
-	fix_available               *bool
-	package_name                *string
-	package_ecosystem           *string
-	manifest_path               *string
-	dependency_scope            *string
-	published_at                *models.DateTime
-	discovered_at               *models.DateTime
-	source_updated_at           *models.DateTime
-	dismissed_at                *models.DateTime
-	dismissed_reason            *string
-	dismissed_comment           *string
-	fixed_at                    *models.DateTime
-	auto_dismissed_at           *models.DateTime
-	external_uri                *string
-	metadata                    *map[string]interface{}
-	raw_payload                 *map[string]interface{}
-	clearedFields               map[string]struct{}
-	owner                       *string
-	clearedowner                bool
-	blocked_groups              map[string]struct{}
-	removedblocked_groups       map[string]struct{}
-	clearedblocked_groups       bool
-	editors                     map[string]struct{}
-	removededitors              map[string]struct{}
-	clearededitors              bool
-	viewers                     map[string]struct{}
-	removedviewers              map[string]struct{}
-	clearedviewers              bool
-	reviewed_by_user            *string
-	clearedreviewed_by_user     bool
-	reviewed_by_group           *string
-	clearedreviewed_by_group    bool
-	assigned_to_user            *string
-	clearedassigned_to_user     bool
-	assigned_to_group           *string
-	clearedassigned_to_group    bool
-	environment                 *string
-	clearedenvironment          bool
-	scope                       *string
-	clearedscope                bool
-	vulnerability_status        *string
-	clearedvulnerability_status bool
-	integrations                map[string]struct{}
-	removedintegrations         map[string]struct{}
-	clearedintegrations         bool
-	findings                    map[string]struct{}
-	removedfindings             map[string]struct{}
-	clearedfindings             bool
-	action_plans                map[string]struct{}
-	removedaction_plans         map[string]struct{}
-	clearedaction_plans         bool
-	controls                    map[string]struct{}
-	removedcontrols             map[string]struct{}
-	clearedcontrols             bool
-	subcontrols                 map[string]struct{}
-	removedsubcontrols          map[string]struct{}
-	clearedsubcontrols          bool
-	risks                       map[string]struct{}
-	removedrisks                map[string]struct{}
-	clearedrisks                bool
-	programs                    map[string]struct{}
-	removedprograms             map[string]struct{}
-	clearedprograms             bool
-	assets                      map[string]struct{}
-	removedassets               map[string]struct{}
-	clearedassets               bool
-	entities                    map[string]struct{}
-	removedentities             map[string]struct{}
-	clearedentities             bool
-	scans                       map[string]struct{}
-	removedscans                map[string]struct{}
-	clearedscans                bool
-	tasks                       map[string]struct{}
-	removedtasks                map[string]struct{}
-	clearedtasks                bool
-	remediations                map[string]struct{}
-	removedremediations         map[string]struct{}
-	clearedremediations         bool
-	reviews                     map[string]struct{}
-	removedreviews              map[string]struct{}
-	clearedreviews              bool
-	comments                    map[string]struct{}
-	removedcomments             map[string]struct{}
-	clearedcomments             bool
-	files                       map[string]struct{}
-	removedfiles                map[string]struct{}
-	clearedfiles                bool
-	workflow_object_refs        map[string]struct{}
-	removedworkflow_object_refs map[string]struct{}
-	clearedworkflow_object_refs bool
-	done                        bool
-	oldValue                    func(context.Context) (*Vulnerability, error)
-	predicates                  []predicate.Vulnerability
+	op                                 Op
+	typ                                string
+	id                                 *string
+	created_at                         *time.Time
+	updated_at                         *time.Time
+	created_by                         *string
+	updated_by                         *string
+	updated_by_impersonator            *string
+	deleted_at                         *time.Time
+	deleted_by                         *string
+	display_id                         *string
+	tags                               *[]string
+	appendtags                         []string
+	reviewed_by                        *string
+	assigned_to                        *string
+	system_owned                       *bool
+	internal_notes                     *string
+	system_internal_id                 *string
+	environment_name                   *string
+	scope_name                         *string
+	vulnerability_status_name          *string
+	workflow_eligible_marker           *bool
+	external_owner_id                  *string
+	security_level                     *enums.SecurityLevel
+	external_id                        *string
+	cve_id                             *string
+	source                             *string
+	display_name                       *string
+	category                           *string
+	severity                           *string
+	score                              *float64
+	addscore                           *float64
+	impact                             *float64
+	addimpact                          *float64
+	exploitability                     *float64
+	addexploitability                  *float64
+	priority                           *string
+	summary                            *string
+	description                        *string
+	vector                             *string
+	remediation_sla                    *int
+	addremediation_sla                 *int
+	open                               *bool
+	blocking                           *bool
+	production                         *bool
+	public                             *bool
+	validated                          *bool
+	references                         *[]string
+	appendreferences                   []string
+	impacts                            *[]string
+	appendimpacts                      []string
+	cwe_ids                            *[]string
+	appendcwe_ids                      []string
+	vulnerable_version_range           *string
+	first_patched_version              *string
+	fix_available                      *bool
+	package_name                       *string
+	package_ecosystem                  *string
+	manifest_path                      *string
+	dependency_scope                   *string
+	published_at                       *models.DateTime
+	discovered_at                      *models.DateTime
+	source_updated_at                  *models.DateTime
+	dismissed_at                       *models.DateTime
+	dismissed_reason                   *string
+	dismissed_comment                  *string
+	fixed_at                           *models.DateTime
+	auto_dismissed_at                  *models.DateTime
+	external_uri                       *string
+	metadata                           *map[string]interface{}
+	raw_payload                        *map[string]interface{}
+	clearedFields                      map[string]struct{}
+	owner                              *string
+	clearedowner                       bool
+	blocked_groups                     map[string]struct{}
+	removedblocked_groups              map[string]struct{}
+	clearedblocked_groups              bool
+	editors                            map[string]struct{}
+	removededitors                     map[string]struct{}
+	clearededitors                     bool
+	viewers                            map[string]struct{}
+	removedviewers                     map[string]struct{}
+	clearedviewers                     bool
+	reviewed_by_user                   *string
+	clearedreviewed_by_user            bool
+	reviewed_by_group                  *string
+	clearedreviewed_by_group           bool
+	reviewed_by_identity_holder        *string
+	clearedreviewed_by_identity_holder bool
+	assigned_to_user                   *string
+	clearedassigned_to_user            bool
+	assigned_to_group                  *string
+	clearedassigned_to_group           bool
+	assigned_to_identity_holder        *string
+	clearedassigned_to_identity_holder bool
+	environment                        *string
+	clearedenvironment                 bool
+	scope                              *string
+	clearedscope                       bool
+	vulnerability_status               *string
+	clearedvulnerability_status        bool
+	integrations                       map[string]struct{}
+	removedintegrations                map[string]struct{}
+	clearedintegrations                bool
+	findings                           map[string]struct{}
+	removedfindings                    map[string]struct{}
+	clearedfindings                    bool
+	action_plans                       map[string]struct{}
+	removedaction_plans                map[string]struct{}
+	clearedaction_plans                bool
+	controls                           map[string]struct{}
+	removedcontrols                    map[string]struct{}
+	clearedcontrols                    bool
+	subcontrols                        map[string]struct{}
+	removedsubcontrols                 map[string]struct{}
+	clearedsubcontrols                 bool
+	risks                              map[string]struct{}
+	removedrisks                       map[string]struct{}
+	clearedrisks                       bool
+	programs                           map[string]struct{}
+	removedprograms                    map[string]struct{}
+	clearedprograms                    bool
+	assets                             map[string]struct{}
+	removedassets                      map[string]struct{}
+	clearedassets                      bool
+	entities                           map[string]struct{}
+	removedentities                    map[string]struct{}
+	clearedentities                    bool
+	scans                              map[string]struct{}
+	removedscans                       map[string]struct{}
+	clearedscans                       bool
+	tasks                              map[string]struct{}
+	removedtasks                       map[string]struct{}
+	clearedtasks                       bool
+	remediations                       map[string]struct{}
+	removedremediations                map[string]struct{}
+	clearedremediations                bool
+	reviews                            map[string]struct{}
+	removedreviews                     map[string]struct{}
+	clearedreviews                     bool
+	comments                           map[string]struct{}
+	removedcomments                    map[string]struct{}
+	clearedcomments                    bool
+	files                              map[string]struct{}
+	removedfiles                       map[string]struct{}
+	clearedfiles                       bool
+	workflow_object_refs               map[string]struct{}
+	removedworkflow_object_refs        map[string]struct{}
+	clearedworkflow_object_refs        bool
+	done                               bool
+	oldValue                           func(context.Context) (*Vulnerability, error)
+	predicates                         []predicate.Vulnerability
 }
 
 var _ ent.Mutation = (*VulnerabilityMutation)(nil)
@@ -273804,6 +275574,55 @@ func (m *VulnerabilityMutation) ResetReviewedByGroupID() {
 	delete(m.clearedFields, vulnerability.FieldReviewedByGroupID)
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (m *VulnerabilityMutation) SetReviewedByIdentityHolderID(s string) {
+	m.reviewed_by_identity_holder = &s
+}
+
+// ReviewedByIdentityHolderID returns the value of the "reviewed_by_identity_holder_id" field in the mutation.
+func (m *VulnerabilityMutation) ReviewedByIdentityHolderID() (r string, exists bool) {
+	v := m.reviewed_by_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldReviewedByIdentityHolderID returns the old "reviewed_by_identity_holder_id" field's value of the Vulnerability entity.
+// If the Vulnerability object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VulnerabilityMutation) OldReviewedByIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldReviewedByIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldReviewedByIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldReviewedByIdentityHolderID: %w", err)
+	}
+	return oldValue.ReviewedByIdentityHolderID, nil
+}
+
+// ClearReviewedByIdentityHolderID clears the value of the "reviewed_by_identity_holder_id" field.
+func (m *VulnerabilityMutation) ClearReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder = nil
+	m.clearedFields[vulnerability.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderIDCleared returns if the "reviewed_by_identity_holder_id" field was cleared in this mutation.
+func (m *VulnerabilityMutation) ReviewedByIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[vulnerability.FieldReviewedByIdentityHolderID]
+	return ok
+}
+
+// ResetReviewedByIdentityHolderID resets all changes to the "reviewed_by_identity_holder_id" field.
+func (m *VulnerabilityMutation) ResetReviewedByIdentityHolderID() {
+	m.reviewed_by_identity_holder = nil
+	delete(m.clearedFields, vulnerability.FieldReviewedByIdentityHolderID)
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (m *VulnerabilityMutation) SetAssignedTo(s string) {
 	m.assigned_to = &s
@@ -273949,6 +275768,55 @@ func (m *VulnerabilityMutation) AssignedToGroupIDCleared() bool {
 func (m *VulnerabilityMutation) ResetAssignedToGroupID() {
 	m.assigned_to_group = nil
 	delete(m.clearedFields, vulnerability.FieldAssignedToGroupID)
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (m *VulnerabilityMutation) SetAssignedToIdentityHolderID(s string) {
+	m.assigned_to_identity_holder = &s
+}
+
+// AssignedToIdentityHolderID returns the value of the "assigned_to_identity_holder_id" field in the mutation.
+func (m *VulnerabilityMutation) AssignedToIdentityHolderID() (r string, exists bool) {
+	v := m.assigned_to_identity_holder
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAssignedToIdentityHolderID returns the old "assigned_to_identity_holder_id" field's value of the Vulnerability entity.
+// If the Vulnerability object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *VulnerabilityMutation) OldAssignedToIdentityHolderID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAssignedToIdentityHolderID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAssignedToIdentityHolderID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAssignedToIdentityHolderID: %w", err)
+	}
+	return oldValue.AssignedToIdentityHolderID, nil
+}
+
+// ClearAssignedToIdentityHolderID clears the value of the "assigned_to_identity_holder_id" field.
+func (m *VulnerabilityMutation) ClearAssignedToIdentityHolderID() {
+	m.assigned_to_identity_holder = nil
+	m.clearedFields[vulnerability.FieldAssignedToIdentityHolderID] = struct{}{}
+}
+
+// AssignedToIdentityHolderIDCleared returns if the "assigned_to_identity_holder_id" field was cleared in this mutation.
+func (m *VulnerabilityMutation) AssignedToIdentityHolderIDCleared() bool {
+	_, ok := m.clearedFields[vulnerability.FieldAssignedToIdentityHolderID]
+	return ok
+}
+
+// ResetAssignedToIdentityHolderID resets all changes to the "assigned_to_identity_holder_id" field.
+func (m *VulnerabilityMutation) ResetAssignedToIdentityHolderID() {
+	m.assigned_to_identity_holder = nil
+	delete(m.clearedFields, vulnerability.FieldAssignedToIdentityHolderID)
 }
 
 // SetSystemOwned sets the "system_owned" field.
@@ -276861,6 +278729,33 @@ func (m *VulnerabilityMutation) ResetReviewedByGroup() {
 	m.clearedreviewed_by_group = false
 }
 
+// ClearReviewedByIdentityHolder clears the "reviewed_by_identity_holder" edge to the IdentityHolder entity.
+func (m *VulnerabilityMutation) ClearReviewedByIdentityHolder() {
+	m.clearedreviewed_by_identity_holder = true
+	m.clearedFields[vulnerability.FieldReviewedByIdentityHolderID] = struct{}{}
+}
+
+// ReviewedByIdentityHolderCleared reports if the "reviewed_by_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *VulnerabilityMutation) ReviewedByIdentityHolderCleared() bool {
+	return m.ReviewedByIdentityHolderIDCleared() || m.clearedreviewed_by_identity_holder
+}
+
+// ReviewedByIdentityHolderIDs returns the "reviewed_by_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ReviewedByIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *VulnerabilityMutation) ReviewedByIdentityHolderIDs() (ids []string) {
+	if id := m.reviewed_by_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetReviewedByIdentityHolder resets all changes to the "reviewed_by_identity_holder" edge.
+func (m *VulnerabilityMutation) ResetReviewedByIdentityHolder() {
+	m.reviewed_by_identity_holder = nil
+	m.clearedreviewed_by_identity_holder = false
+}
+
 // ClearAssignedToUser clears the "assigned_to_user" edge to the User entity.
 func (m *VulnerabilityMutation) ClearAssignedToUser() {
 	m.clearedassigned_to_user = true
@@ -276913,6 +278808,33 @@ func (m *VulnerabilityMutation) AssignedToGroupIDs() (ids []string) {
 func (m *VulnerabilityMutation) ResetAssignedToGroup() {
 	m.assigned_to_group = nil
 	m.clearedassigned_to_group = false
+}
+
+// ClearAssignedToIdentityHolder clears the "assigned_to_identity_holder" edge to the IdentityHolder entity.
+func (m *VulnerabilityMutation) ClearAssignedToIdentityHolder() {
+	m.clearedassigned_to_identity_holder = true
+	m.clearedFields[vulnerability.FieldAssignedToIdentityHolderID] = struct{}{}
+}
+
+// AssignedToIdentityHolderCleared reports if the "assigned_to_identity_holder" edge to the IdentityHolder entity was cleared.
+func (m *VulnerabilityMutation) AssignedToIdentityHolderCleared() bool {
+	return m.AssignedToIdentityHolderIDCleared() || m.clearedassigned_to_identity_holder
+}
+
+// AssignedToIdentityHolderIDs returns the "assigned_to_identity_holder" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// AssignedToIdentityHolderID instead. It exists only for internal usage by the builders.
+func (m *VulnerabilityMutation) AssignedToIdentityHolderIDs() (ids []string) {
+	if id := m.assigned_to_identity_holder; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetAssignedToIdentityHolder resets all changes to the "assigned_to_identity_holder" edge.
+func (m *VulnerabilityMutation) ResetAssignedToIdentityHolder() {
+	m.assigned_to_identity_holder = nil
+	m.clearedassigned_to_identity_holder = false
 }
 
 // ClearEnvironment clears the "environment" edge to the CustomTypeEnum entity.
@@ -277894,7 +279816,7 @@ func (m *VulnerabilityMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *VulnerabilityMutation) Fields() []string {
-	fields := make([]string, 0, 68)
+	fields := make([]string, 0, 70)
 	if m.created_at != nil {
 		fields = append(fields, vulnerability.FieldCreatedAt)
 	}
@@ -277934,6 +279856,9 @@ func (m *VulnerabilityMutation) Fields() []string {
 	if m.reviewed_by_group != nil {
 		fields = append(fields, vulnerability.FieldReviewedByGroupID)
 	}
+	if m.reviewed_by_identity_holder != nil {
+		fields = append(fields, vulnerability.FieldReviewedByIdentityHolderID)
+	}
 	if m.assigned_to != nil {
 		fields = append(fields, vulnerability.FieldAssignedTo)
 	}
@@ -277942,6 +279867,9 @@ func (m *VulnerabilityMutation) Fields() []string {
 	}
 	if m.assigned_to_group != nil {
 		fields = append(fields, vulnerability.FieldAssignedToGroupID)
+	}
+	if m.assigned_to_identity_holder != nil {
+		fields = append(fields, vulnerability.FieldAssignedToIdentityHolderID)
 	}
 	if m.system_owned != nil {
 		fields = append(fields, vulnerability.FieldSystemOwned)
@@ -278133,12 +280061,16 @@ func (m *VulnerabilityMutation) Field(name string) (ent.Value, bool) {
 		return m.ReviewedByUserID()
 	case vulnerability.FieldReviewedByGroupID:
 		return m.ReviewedByGroupID()
+	case vulnerability.FieldReviewedByIdentityHolderID:
+		return m.ReviewedByIdentityHolderID()
 	case vulnerability.FieldAssignedTo:
 		return m.AssignedTo()
 	case vulnerability.FieldAssignedToUserID:
 		return m.AssignedToUserID()
 	case vulnerability.FieldAssignedToGroupID:
 		return m.AssignedToGroupID()
+	case vulnerability.FieldAssignedToIdentityHolderID:
+		return m.AssignedToIdentityHolderID()
 	case vulnerability.FieldSystemOwned:
 		return m.SystemOwned()
 	case vulnerability.FieldInternalNotes:
@@ -278278,12 +280210,16 @@ func (m *VulnerabilityMutation) OldField(ctx context.Context, name string) (ent.
 		return m.OldReviewedByUserID(ctx)
 	case vulnerability.FieldReviewedByGroupID:
 		return m.OldReviewedByGroupID(ctx)
+	case vulnerability.FieldReviewedByIdentityHolderID:
+		return m.OldReviewedByIdentityHolderID(ctx)
 	case vulnerability.FieldAssignedTo:
 		return m.OldAssignedTo(ctx)
 	case vulnerability.FieldAssignedToUserID:
 		return m.OldAssignedToUserID(ctx)
 	case vulnerability.FieldAssignedToGroupID:
 		return m.OldAssignedToGroupID(ctx)
+	case vulnerability.FieldAssignedToIdentityHolderID:
+		return m.OldAssignedToIdentityHolderID(ctx)
 	case vulnerability.FieldSystemOwned:
 		return m.OldSystemOwned(ctx)
 	case vulnerability.FieldInternalNotes:
@@ -278488,6 +280424,13 @@ func (m *VulnerabilityMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetReviewedByGroupID(v)
 		return nil
+	case vulnerability.FieldReviewedByIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetReviewedByIdentityHolderID(v)
+		return nil
 	case vulnerability.FieldAssignedTo:
 		v, ok := value.(string)
 		if !ok {
@@ -278508,6 +280451,13 @@ func (m *VulnerabilityMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetAssignedToGroupID(v)
+		return nil
+	case vulnerability.FieldAssignedToIdentityHolderID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAssignedToIdentityHolderID(v)
 		return nil
 	case vulnerability.FieldSystemOwned:
 		v, ok := value.(bool)
@@ -278990,6 +280940,9 @@ func (m *VulnerabilityMutation) ClearedFields() []string {
 	if m.FieldCleared(vulnerability.FieldReviewedByGroupID) {
 		fields = append(fields, vulnerability.FieldReviewedByGroupID)
 	}
+	if m.FieldCleared(vulnerability.FieldReviewedByIdentityHolderID) {
+		fields = append(fields, vulnerability.FieldReviewedByIdentityHolderID)
+	}
 	if m.FieldCleared(vulnerability.FieldAssignedTo) {
 		fields = append(fields, vulnerability.FieldAssignedTo)
 	}
@@ -278998,6 +280951,9 @@ func (m *VulnerabilityMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(vulnerability.FieldAssignedToGroupID) {
 		fields = append(fields, vulnerability.FieldAssignedToGroupID)
+	}
+	if m.FieldCleared(vulnerability.FieldAssignedToIdentityHolderID) {
+		fields = append(fields, vulnerability.FieldAssignedToIdentityHolderID)
 	}
 	if m.FieldCleared(vulnerability.FieldSystemOwned) {
 		fields = append(fields, vulnerability.FieldSystemOwned)
@@ -279202,6 +281158,9 @@ func (m *VulnerabilityMutation) ClearField(name string) error {
 	case vulnerability.FieldReviewedByGroupID:
 		m.ClearReviewedByGroupID()
 		return nil
+	case vulnerability.FieldReviewedByIdentityHolderID:
+		m.ClearReviewedByIdentityHolderID()
+		return nil
 	case vulnerability.FieldAssignedTo:
 		m.ClearAssignedTo()
 		return nil
@@ -279210,6 +281169,9 @@ func (m *VulnerabilityMutation) ClearField(name string) error {
 		return nil
 	case vulnerability.FieldAssignedToGroupID:
 		m.ClearAssignedToGroupID()
+		return nil
+	case vulnerability.FieldAssignedToIdentityHolderID:
+		m.ClearAssignedToIdentityHolderID()
 		return nil
 	case vulnerability.FieldSystemOwned:
 		m.ClearSystemOwned()
@@ -279411,6 +281373,9 @@ func (m *VulnerabilityMutation) ResetField(name string) error {
 	case vulnerability.FieldReviewedByGroupID:
 		m.ResetReviewedByGroupID()
 		return nil
+	case vulnerability.FieldReviewedByIdentityHolderID:
+		m.ResetReviewedByIdentityHolderID()
+		return nil
 	case vulnerability.FieldAssignedTo:
 		m.ResetAssignedTo()
 		return nil
@@ -279419,6 +281384,9 @@ func (m *VulnerabilityMutation) ResetField(name string) error {
 		return nil
 	case vulnerability.FieldAssignedToGroupID:
 		m.ResetAssignedToGroupID()
+		return nil
+	case vulnerability.FieldAssignedToIdentityHolderID:
+		m.ResetAssignedToIdentityHolderID()
 		return nil
 	case vulnerability.FieldSystemOwned:
 		m.ResetSystemOwned()
@@ -279582,7 +281550,7 @@ func (m *VulnerabilityMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *VulnerabilityMutation) AddedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.owner != nil {
 		edges = append(edges, vulnerability.EdgeOwner)
 	}
@@ -279601,11 +281569,17 @@ func (m *VulnerabilityMutation) AddedEdges() []string {
 	if m.reviewed_by_group != nil {
 		edges = append(edges, vulnerability.EdgeReviewedByGroup)
 	}
+	if m.reviewed_by_identity_holder != nil {
+		edges = append(edges, vulnerability.EdgeReviewedByIdentityHolder)
+	}
 	if m.assigned_to_user != nil {
 		edges = append(edges, vulnerability.EdgeAssignedToUser)
 	}
 	if m.assigned_to_group != nil {
 		edges = append(edges, vulnerability.EdgeAssignedToGroup)
+	}
+	if m.assigned_to_identity_holder != nil {
+		edges = append(edges, vulnerability.EdgeAssignedToIdentityHolder)
 	}
 	if m.environment != nil {
 		edges = append(edges, vulnerability.EdgeEnvironment)
@@ -279701,12 +281675,20 @@ func (m *VulnerabilityMutation) AddedIDs(name string) []ent.Value {
 		if id := m.reviewed_by_group; id != nil {
 			return []ent.Value{*id}
 		}
+	case vulnerability.EdgeReviewedByIdentityHolder:
+		if id := m.reviewed_by_identity_holder; id != nil {
+			return []ent.Value{*id}
+		}
 	case vulnerability.EdgeAssignedToUser:
 		if id := m.assigned_to_user; id != nil {
 			return []ent.Value{*id}
 		}
 	case vulnerability.EdgeAssignedToGroup:
 		if id := m.assigned_to_group; id != nil {
+			return []ent.Value{*id}
+		}
+	case vulnerability.EdgeAssignedToIdentityHolder:
+		if id := m.assigned_to_identity_holder; id != nil {
 			return []ent.Value{*id}
 		}
 	case vulnerability.EdgeEnvironment:
@@ -279823,7 +281805,7 @@ func (m *VulnerabilityMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *VulnerabilityMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, vulnerability.EdgeBlockedGroups)
 	}
@@ -280008,7 +281990,7 @@ func (m *VulnerabilityMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *VulnerabilityMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.clearedowner {
 		edges = append(edges, vulnerability.EdgeOwner)
 	}
@@ -280027,11 +282009,17 @@ func (m *VulnerabilityMutation) ClearedEdges() []string {
 	if m.clearedreviewed_by_group {
 		edges = append(edges, vulnerability.EdgeReviewedByGroup)
 	}
+	if m.clearedreviewed_by_identity_holder {
+		edges = append(edges, vulnerability.EdgeReviewedByIdentityHolder)
+	}
 	if m.clearedassigned_to_user {
 		edges = append(edges, vulnerability.EdgeAssignedToUser)
 	}
 	if m.clearedassigned_to_group {
 		edges = append(edges, vulnerability.EdgeAssignedToGroup)
+	}
+	if m.clearedassigned_to_identity_holder {
+		edges = append(edges, vulnerability.EdgeAssignedToIdentityHolder)
 	}
 	if m.clearedenvironment {
 		edges = append(edges, vulnerability.EdgeEnvironment)
@@ -280109,10 +282097,14 @@ func (m *VulnerabilityMutation) EdgeCleared(name string) bool {
 		return m.clearedreviewed_by_user
 	case vulnerability.EdgeReviewedByGroup:
 		return m.clearedreviewed_by_group
+	case vulnerability.EdgeReviewedByIdentityHolder:
+		return m.clearedreviewed_by_identity_holder
 	case vulnerability.EdgeAssignedToUser:
 		return m.clearedassigned_to_user
 	case vulnerability.EdgeAssignedToGroup:
 		return m.clearedassigned_to_group
+	case vulnerability.EdgeAssignedToIdentityHolder:
+		return m.clearedassigned_to_identity_holder
 	case vulnerability.EdgeEnvironment:
 		return m.clearedenvironment
 	case vulnerability.EdgeScope:
@@ -280168,11 +282160,17 @@ func (m *VulnerabilityMutation) ClearEdge(name string) error {
 	case vulnerability.EdgeReviewedByGroup:
 		m.ClearReviewedByGroup()
 		return nil
+	case vulnerability.EdgeReviewedByIdentityHolder:
+		m.ClearReviewedByIdentityHolder()
+		return nil
 	case vulnerability.EdgeAssignedToUser:
 		m.ClearAssignedToUser()
 		return nil
 	case vulnerability.EdgeAssignedToGroup:
 		m.ClearAssignedToGroup()
+		return nil
+	case vulnerability.EdgeAssignedToIdentityHolder:
+		m.ClearAssignedToIdentityHolder()
 		return nil
 	case vulnerability.EdgeEnvironment:
 		m.ClearEnvironment()
@@ -280209,11 +282207,17 @@ func (m *VulnerabilityMutation) ResetEdge(name string) error {
 	case vulnerability.EdgeReviewedByGroup:
 		m.ResetReviewedByGroup()
 		return nil
+	case vulnerability.EdgeReviewedByIdentityHolder:
+		m.ResetReviewedByIdentityHolder()
+		return nil
 	case vulnerability.EdgeAssignedToUser:
 		m.ResetAssignedToUser()
 		return nil
 	case vulnerability.EdgeAssignedToGroup:
 		m.ResetAssignedToGroup()
+		return nil
+	case vulnerability.EdgeAssignedToIdentityHolder:
+		m.ResetAssignedToIdentityHolder()
 		return nil
 	case vulnerability.EdgeEnvironment:
 		m.ResetEnvironment()

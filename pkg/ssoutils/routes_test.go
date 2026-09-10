@@ -52,3 +52,23 @@ func TestSSOCallback(t *testing.T) {
 
 	assert.Equal(t, "/v1/sso/callback", SSOCallback(nil))
 }
+
+func TestSSOLoginGroupRegisteredRoute(t *testing.T) {
+	t.Parallel()
+
+	e := echo.New()
+	g := e.Group("v1")
+
+	_, err := g.AddRoute(echo.Route{
+		Name:   "SSOLogin",
+		Method: http.MethodPost,
+		Path:   "/sso/login",
+		Handler: func(c echo.Context) error {
+			return nil
+		},
+	})
+	assert.NoError(t, err)
+
+	const orgID = "abc123"
+	assert.Equal(t, "/v1/sso/login?organization_id="+orgID, SSOLogin(e, orgID))
+}

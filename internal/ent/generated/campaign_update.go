@@ -217,6 +217,26 @@ func (_u *CampaignUpdate) ClearInternalOwnerGroupID() *CampaignUpdate {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *CampaignUpdate) SetInternalOwnerIdentityHolderID(v string) *CampaignUpdate {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *CampaignUpdate) SetNillableInternalOwnerIdentityHolderID(v *string) *CampaignUpdate {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *CampaignUpdate) ClearInternalOwnerIdentityHolderID() *CampaignUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *CampaignUpdate) SetWorkflowEligibleMarker(v bool) *CampaignUpdate {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -835,6 +855,11 @@ func (_u *CampaignUpdate) SetInternalOwnerGroup(v *Group) *CampaignUpdate {
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *CampaignUpdate) SetInternalOwnerIdentityHolder(v *IdentityHolder) *CampaignUpdate {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetAssessment sets the "assessment" edge to the Assessment entity.
 func (_u *CampaignUpdate) SetAssessment(v *Assessment) *CampaignUpdate {
 	return _u.SetAssessmentID(v.ID)
@@ -1077,6 +1102,12 @@ func (_u *CampaignUpdate) ClearInternalOwnerUser() *CampaignUpdate {
 // ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
 func (_u *CampaignUpdate) ClearInternalOwnerGroup() *CampaignUpdate {
 	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *CampaignUpdate) ClearInternalOwnerIdentityHolder() *CampaignUpdate {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -1771,6 +1802,35 @@ func (_u *CampaignUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   campaign.InternalOwnerIdentityHolderTable,
+			Columns: []string{campaign.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   campaign.InternalOwnerIdentityHolderTable,
+			Columns: []string{campaign.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -2549,6 +2609,26 @@ func (_u *CampaignUpdateOne) ClearInternalOwnerGroupID() *CampaignUpdateOne {
 	return _u
 }
 
+// SetInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field.
+func (_u *CampaignUpdateOne) SetInternalOwnerIdentityHolderID(v string) *CampaignUpdateOne {
+	_u.mutation.SetInternalOwnerIdentityHolderID(v)
+	return _u
+}
+
+// SetNillableInternalOwnerIdentityHolderID sets the "internal_owner_identity_holder_id" field if the given value is not nil.
+func (_u *CampaignUpdateOne) SetNillableInternalOwnerIdentityHolderID(v *string) *CampaignUpdateOne {
+	if v != nil {
+		_u.SetInternalOwnerIdentityHolderID(*v)
+	}
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolderID clears the value of the "internal_owner_identity_holder_id" field.
+func (_u *CampaignUpdateOne) ClearInternalOwnerIdentityHolderID() *CampaignUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolderID()
+	return _u
+}
+
 // SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
 func (_u *CampaignUpdateOne) SetWorkflowEligibleMarker(v bool) *CampaignUpdateOne {
 	_u.mutation.SetWorkflowEligibleMarker(v)
@@ -3167,6 +3247,11 @@ func (_u *CampaignUpdateOne) SetInternalOwnerGroup(v *Group) *CampaignUpdateOne 
 	return _u.SetInternalOwnerGroupID(v.ID)
 }
 
+// SetInternalOwnerIdentityHolder sets the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *CampaignUpdateOne) SetInternalOwnerIdentityHolder(v *IdentityHolder) *CampaignUpdateOne {
+	return _u.SetInternalOwnerIdentityHolderID(v.ID)
+}
+
 // SetAssessment sets the "assessment" edge to the Assessment entity.
 func (_u *CampaignUpdateOne) SetAssessment(v *Assessment) *CampaignUpdateOne {
 	return _u.SetAssessmentID(v.ID)
@@ -3409,6 +3494,12 @@ func (_u *CampaignUpdateOne) ClearInternalOwnerUser() *CampaignUpdateOne {
 // ClearInternalOwnerGroup clears the "internal_owner_group" edge to the Group entity.
 func (_u *CampaignUpdateOne) ClearInternalOwnerGroup() *CampaignUpdateOne {
 	_u.mutation.ClearInternalOwnerGroup()
+	return _u
+}
+
+// ClearInternalOwnerIdentityHolder clears the "internal_owner_identity_holder" edge to the IdentityHolder entity.
+func (_u *CampaignUpdateOne) ClearInternalOwnerIdentityHolder() *CampaignUpdateOne {
+	_u.mutation.ClearInternalOwnerIdentityHolder()
 	return _u
 }
 
@@ -4133,6 +4224,35 @@ func (_u *CampaignUpdateOne) sqlSave(ctx context.Context) (_node *Campaign, err 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalOwnerIdentityHolderCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   campaign.InternalOwnerIdentityHolderTable,
+			Columns: []string{campaign.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalOwnerIdentityHolderIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   campaign.InternalOwnerIdentityHolderTable,
+			Columns: []string{campaign.InternalOwnerIdentityHolderColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

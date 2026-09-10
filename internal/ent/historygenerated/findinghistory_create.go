@@ -225,6 +225,20 @@ func (_c *FindingHistoryCreate) SetNillableReviewedByGroupID(v *string) *Finding
 	return _c
 }
 
+// SetReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field.
+func (_c *FindingHistoryCreate) SetReviewedByIdentityHolderID(v string) *FindingHistoryCreate {
+	_c.mutation.SetReviewedByIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableReviewedByIdentityHolderID sets the "reviewed_by_identity_holder_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableReviewedByIdentityHolderID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByIdentityHolderID(*v)
+	}
+	return _c
+}
+
 // SetAssignedTo sets the "assigned_to" field.
 func (_c *FindingHistoryCreate) SetAssignedTo(v string) *FindingHistoryCreate {
 	_c.mutation.SetAssignedTo(v)
@@ -263,6 +277,20 @@ func (_c *FindingHistoryCreate) SetAssignedToGroupID(v string) *FindingHistoryCr
 func (_c *FindingHistoryCreate) SetNillableAssignedToGroupID(v *string) *FindingHistoryCreate {
 	if v != nil {
 		_c.SetAssignedToGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field.
+func (_c *FindingHistoryCreate) SetAssignedToIdentityHolderID(v string) *FindingHistoryCreate {
+	_c.mutation.SetAssignedToIdentityHolderID(v)
+	return _c
+}
+
+// SetNillableAssignedToIdentityHolderID sets the "assigned_to_identity_holder_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableAssignedToIdentityHolderID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetAssignedToIdentityHolderID(*v)
 	}
 	return _c
 }
@@ -1107,6 +1135,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldReviewedByGroupID, field.TypeString, value)
 		_node.ReviewedByGroupID = value
 	}
+	if value, ok := _c.mutation.ReviewedByIdentityHolderID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByIdentityHolderID, field.TypeString, value)
+		_node.ReviewedByIdentityHolderID = value
+	}
 	if value, ok := _c.mutation.AssignedTo(); ok {
 		_spec.SetField(findinghistory.FieldAssignedTo, field.TypeString, value)
 		_node.AssignedTo = value
@@ -1118,6 +1150,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.AssignedToGroupID(); ok {
 		_spec.SetField(findinghistory.FieldAssignedToGroupID, field.TypeString, value)
 		_node.AssignedToGroupID = value
+	}
+	if value, ok := _c.mutation.AssignedToIdentityHolderID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToIdentityHolderID, field.TypeString, value)
+		_node.AssignedToIdentityHolderID = value
 	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(findinghistory.FieldSystemOwned, field.TypeBool, value)

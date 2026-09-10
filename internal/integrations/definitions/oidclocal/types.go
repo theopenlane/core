@@ -14,8 +14,6 @@ var (
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// oidcCredential is the auth-managed credential slot used by the local OIDC connection
 	_, oidcCredential = providerkit.CredentialSchema[oidcLocalCred]()
-	// healthCheckSchema is the operation ref for the local OIDC health check
-	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// claimsInspectSchema is the operation ref for the OIDC claims inspection operation
 	claimsInspectSchema, claimsInspectOperation = providerkit.OperationSchema[ClaimsInspect]()
 )

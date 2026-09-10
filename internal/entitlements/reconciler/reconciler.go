@@ -274,7 +274,7 @@ func (r *Reconciler) disableIntegrations(ctx context.Context, orgID string) erro
 		Where(
 			integration.OwnerID(orgID),
 			integration.DeletedAtIsNil(),
-			integration.StatusNotIn(enums.IntegrationStatusDisabled, enums.IntegrationStatusDeleted),
+			integration.StatusNotIn(enums.IntegrationStatusDisabled),
 		).
 		SetStatus(enums.IntegrationStatusDisabled).
 		Exec(rule.WithInternalContext(ctx))
@@ -389,7 +389,7 @@ func (r *Reconciler) analyzeOrg(ctx context.Context, org *ent.Organization) (str
 			Where(
 				integration.OwnerID(org.ID),
 				integration.DeletedAtIsNil(),
-				integration.StatusNotIn(enums.IntegrationStatusDisabled, enums.IntegrationStatusDeleted),
+				integration.StatusNotIn(enums.IntegrationStatusDisabled),
 			).
 			Count(rule.WithInternalContext(ctx))
 		if err != nil {

@@ -583,10 +583,6 @@ func (ec *executionContext) _GroupSettingUpdatePayload(ctx context.Context, sel 
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNGroupSettingBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupSettingBulkCreatePayload) graphql.Marshaler {
-	return ec._GroupSettingBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroupSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupSettingBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNGroupSettingBulkCreatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._GroupSettingBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupSettingBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupSettingBulkDeletePayload) graphql.Marshaler {
-	return ec._GroupSettingBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupSettingBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNGroupSettingBulkDeletePayload2ᚖgithubᚗco
 	return ec._GroupSettingBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupSettingBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupSettingBulkUpdatePayload) graphql.Marshaler {
-	return ec._GroupSettingBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroupSettingBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupSettingBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNGroupSettingBulkUpdatePayload2ᚖgithubᚗco
 		return graphql.Null
 	}
 	return ec._GroupSettingBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupSettingCreatePayload) graphql.Marshaler {
-	return ec._GroupSettingCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupSettingCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNGroupSettingCreatePayload2ᚖgithubᚗcomᚋ
 	return ec._GroupSettingCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupSettingDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupSettingDeletePayload) graphql.Marshaler {
-	return ec._GroupSettingDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroupSettingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupSettingDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNGroupSettingDeletePayload2ᚖgithubᚗcomᚋ
 		return graphql.Null
 	}
 	return ec._GroupSettingDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupSettingUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.GroupSettingUpdatePayload) graphql.Marshaler {
-	return ec._GroupSettingUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐGroupSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.GroupSettingUpdatePayload) graphql.Marshaler {

@@ -34,14 +34,6 @@ func Builder() registry.Builder {
 			},
 			Operations: []types.OperationRegistration{
 				{
-					Name:         healthCheckOperation.Name(),
-					Description:  "Report push-based SCIM health status",
-					Topic:        DefinitionID.OperationTopic(healthCheckOperation.Name()),
-					Policy:       types.ExecutionPolicy{Inline: true},
-					ConfigSchema: healthCheckSchema,
-					Handle:       providerkit.StaticHandler(HealthCheck{}.Run),
-				},
-				{
 					Name:         directorySyncOperation.Name(),
 					Description:  "Synchronize directory state through SCIM",
 					Topic:        DefinitionID.OperationTopic(directorySyncOperation.Name()),
