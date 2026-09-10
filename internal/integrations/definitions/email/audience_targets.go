@@ -9,12 +9,13 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/audiences"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/v2/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/v2/internal/ent/generated/subscriber"
 )
 
 const (
@@ -25,31 +26,19 @@ const (
 	audienceTargetMetadataFields  = 3
 )
 
-var errUnsupportedAudienceType = errors.New("unsupported audience type")
+var (
+	errUnsupportedAudienceType = errors.New("unsupported audience type")
+)
 
-type audienceRecipient struct {
-	email          string
-	fullName       string
-	contactID      string
-	userID         string
-	groupID        string
-	subscriberID   string
-	source         string
-	audienceID     string
-	sourceObjectID string
-	metadata       map[string]any
-}
-
-type audienceRecipientResolveOptions struct {
+type recipientResolveOptions struct {
 	audienceID   string
 	audienceType enums.AudienceType
 	audience     *generated.Audience
-	db           *generated.Client
-	orgID        string
+	client       *generated.Client
 	filters      map[string]any
 }
 
-type campaignRecipientHandlerFunc func([]audienceRecipient) error
+type recipientHandlerFunc func([]audiences.ResolvedRecipient) error
 
 func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *generated.Campaign) error {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -63,14 +52,13 @@ func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *
 		return nil
 	}
 
-	return snapshotCampaignRecipients(allowCtx, db, camp, func(handle campaignRecipientHandlerFunc) error {
+	return snapshotCampaignRecipients(allowCtx, db, camp, func(handle recipientHandlerFunc) error {
 		for _, aud := range records {
-			opts := audienceRecipientResolveOptions{
+			opts := recipientResolveOptions{
 				audienceID:   aud.ID,
 				audienceType: aud.AudienceType,
 				audience:     aud,
-				db:           db,
-				orgID:        camp.OwnerID,
+				client:       db,
 				filters:      aud.Filters,
 			}
 
@@ -83,7 +71,7 @@ func snapshotCampaignAudiences(ctx context.Context, db *generated.Client, camp *
 	})
 }
 
-func snapshotCampaignRecipients(ctx context.Context, db *generated.Client, camp *generated.Campaign, resolveFn func(campaignRecipientHandlerFunc) error) error {
+func snapshotCampaignRecipients(ctx context.Context, db *generated.Client, camp *generated.Campaign, resolveFn func(recipientHandlerFunc) error) error {
 	recipients := &set{
 		seen: map[string]struct{}{},
 	}
@@ -106,7 +94,7 @@ func snapshotCampaignRecipients(ctx context.Context, db *generated.Client, camp 
 		return nil
 	}
 
-	err := resolveFn(func(page []audienceRecipient) error {
+	err := resolveFn(func(page []audiences.ResolvedRecipient) error {
 		for _, recipient := range page {
 			if !recipients.add(recipient) {
 				continue
@@ -153,7 +141,7 @@ func (s *set) loadExistingCampaignTargets(ctx context.Context, db *generated.Cli
 
 		for _, target := range targets {
 			lastID = target.ID
-			key := normalizeAudienceEmail(target.Email)
+			key := canonicalizeEmail(target.Email)
 			if key != "" {
 				s.seen[key] = struct{}{}
 			}
@@ -167,8 +155,8 @@ func (s *set) loadExistingCampaignTargets(ctx context.Context, db *generated.Cli
 	return nil
 }
 
-func (s *set) add(recipient audienceRecipient) bool {
-	key := normalizeAudienceEmail(recipient.email)
+func (s *set) add(recipient audiences.ResolvedRecipient) bool {
+	key := canonicalizeEmail(recipient.Email)
 	if key == "" {
 		return false
 	}
@@ -178,14 +166,14 @@ func (s *set) add(recipient audienceRecipient) bool {
 	}
 
 	s.seen[key] = struct{}{}
-
 	return true
 }
 
-func resolveAudienceRecipients(ctx context.Context, opts audienceRecipientResolveOptions, handle campaignRecipientHandlerFunc) error {
+func resolveAudienceRecipients(ctx context.Context, opts recipientResolveOptions, handlerFn recipientHandlerFunc) error {
 	switch opts.audienceType {
 	case enums.AudienceTypeManual:
 		var lastID string
+
 		for {
 			query := opts.audience.QueryAudienceMembers().
 				Order(audiencemember.ByID()).
@@ -200,25 +188,27 @@ func resolveAudienceRecipients(ctx context.Context, opts audienceRecipientResolv
 				return err
 			}
 
-			recipients := make([]audienceRecipient, 0, len(members))
+			recipients := make([]audiences.ResolvedRecipient, 0, len(members))
 			for _, member := range members {
 				lastID = member.ID
-				recipients = append(recipients, audienceRecipient{
-					email:          member.Email,
-					fullName:       member.FullName,
-					contactID:      member.ContactID,
-					userID:         member.UserID,
-					groupID:        member.GroupID,
-					subscriberID:   member.SubscriberID,
-					source:         audiencemember.Label,
-					audienceID:     opts.audienceID,
-					sourceObjectID: member.ID,
-					metadata:       member.Metadata,
+				recipients = append(recipients, audiences.ResolvedRecipient{
+					AudienceMemberProjection: entityops.AudienceMemberProjection{
+						Email:        member.Email,
+						FullName:     member.FullName,
+						ContactID:    member.ContactID,
+						UserID:       member.UserID,
+						GroupID:      member.GroupID,
+						SubscriberID: member.SubscriberID,
+						AudienceID:   opts.audienceID,
+						Metadata:     member.Metadata,
+					},
+					Source:         audiencemember.Label,
+					SourceObjectID: member.ID,
 				})
 			}
 
 			if len(recipients) > 0 {
-				if err := handle(recipients); err != nil {
+				if err := handlerFn(recipients); err != nil {
 					return err
 				}
 			}
@@ -230,95 +220,47 @@ func resolveAudienceRecipients(ctx context.Context, opts audienceRecipientResolv
 
 		return nil
 	case enums.AudienceTypeDynamic:
-		return audiences.ResolveRecipients(ctx, opts.db, opts.orgID, opts.filters, func(page []audiences.Recipient) error {
-			recipients := make([]audienceRecipient, 0, len(page))
-			for _, recipient := range page {
-				recipients = append(recipients, audienceRecipient{
-					email:          recipient.Email,
-					fullName:       recipient.FullName,
-					contactID:      recipient.ContactID,
-					userID:         recipient.UserID,
-					groupID:        recipient.GroupID,
-					subscriberID:   recipient.SubscriberID,
-					source:         recipient.Source,
-					audienceID:     opts.audienceID,
-					sourceObjectID: recipient.SourceObjectID,
-					metadata:       recipient.Metadata,
-				})
+
+		return audiences.ResolveRecipients(ctx, opts.client, opts.filters, func(page []audiences.ResolvedRecipient) error {
+			for i := range page {
+				page[i].AudienceID = opts.audienceID
 			}
 
-			return handle(recipients)
+			return handlerFn(page)
+
 		})
 	default:
 		return fmt.Errorf("%w: %q", errUnsupportedAudienceType, opts.audienceType)
 	}
 }
 
-func resolveTrustCenterSubscriberRecipients(ctx context.Context, db *generated.Client, camp *generated.Campaign, handle campaignRecipientHandlerFunc) error {
-	var lastID string
-	for {
-		query := db.Subscriber.Query().
-			Where(
-				subscriber.TrustCenterID(camp.TrustCenterID),
-				subscriber.Active(true),
-				subscriber.VerifiedEmail(true),
-				subscriber.Unsubscribed(false),
-			).
-			Order(subscriber.ByID()).
-			Limit(audienceTargetBatchSize)
-
-		if lastID != "" {
-			query.Where(subscriber.IDGT(lastID))
-		}
-
-		subscribers, err := query.All(ctx)
-		if err != nil {
-			return err
-		}
-
-		recipients := make([]audienceRecipient, 0, len(subscribers))
-		for _, sub := range subscribers {
-			lastID = sub.ID
-			recipients = append(recipients, audienceRecipient{
-				email:          sub.Email,
-				subscriberID:   sub.ID,
-				source:         subscriber.Label,
-				sourceObjectID: sub.ID,
-				metadata: map[string]any{
-					MetadataUnsubscribeTokenKey: sub.Token,
-				},
-			})
-		}
-
-		if len(recipients) > 0 {
-			if err := handle(recipients); err != nil {
-				return err
-			}
-		}
-
-		if len(subscribers) < audienceTargetBatchSize {
-			break
-		}
+func resolveTrustCenterSubscriberRecipients(ctx context.Context, db *generated.Client, camp *generated.Campaign, handle recipientHandlerFunc) error {
+	filters := map[string]any{
+		"schema": entityops.SchemaSubscriber.Snake,
+		"expression": fmt.Sprintf(
+			"target.trust_center_id == %q && target.active && target.verified_email && !target.unsubscribed",
+			camp.TrustCenterID,
+		),
 	}
 
-	return nil
+	return audiences.ResolveRecipients(ctx, db, filters, handle)
 }
 
-func buildAudienceCampaignTarget(db *generated.Client, camp *generated.Campaign, recipient audienceRecipient) *generated.CampaignTargetCreate {
+func buildAudienceCampaignTarget(db *generated.Client, camp *generated.Campaign, recipient audiences.ResolvedRecipient) *generated.CampaignTargetCreate {
 	create := db.CampaignTarget.Create().
 		SetCampaignID(camp.ID).
 		SetOwnerID(camp.OwnerID).
-		SetEmail(recipient.email).
-		SetNillableContactID(lo.EmptyableToPtr(recipient.contactID)).
-		SetNillableUserID(lo.EmptyableToPtr(recipient.userID)).
-		SetNillableGroupID(lo.EmptyableToPtr(recipient.groupID)).
-		SetNillableSubscriberID(lo.EmptyableToPtr(recipient.subscriberID))
+		SetEmail(recipient.Email).
+		SetNillableContactID(lo.EmptyableToPtr(recipient.ContactID)).
+		SetNillableUserID(lo.EmptyableToPtr(recipient.UserID)).
+		SetNillableGroupID(lo.EmptyableToPtr(recipient.GroupID)).
+		SetNillableSubscriberID(lo.EmptyableToPtr(recipient.SubscriberID))
 
-	if strings.TrimSpace(recipient.fullName) != "" {
-		create.SetFullName(recipient.fullName)
+	if strings.TrimSpace(recipient.FullName) != "" {
+		create.SetFullName(recipient.FullName)
 	}
 
-	metadata := audienceTargetMetadata(recipient)
+	metadata := getAudienceMetadata(recipient)
 	if len(metadata) > 0 {
 		create.SetMetadata(metadata)
 	}
@@ -326,27 +268,25 @@ func buildAudienceCampaignTarget(db *generated.Client, camp *generated.Campaign,
 	return create
 }
 
-func audienceTargetMetadata(recipient audienceRecipient) map[string]any {
-	metadata := make(map[string]any, len(recipient.metadata)+audienceTargetMetadataFields)
-	for key, value := range recipient.metadata {
+func getAudienceMetadata(recipient audiences.ResolvedRecipient) map[string]any {
+	metadata := make(map[string]any, len(recipient.Metadata)+audienceTargetMetadataFields)
+	for key, value := range recipient.Metadata {
 		metadata[key] = value
 	}
 
-	if recipient.source != "" {
-		metadata[audienceTargetSourceKey] = recipient.source
+	if recipient.Source != "" {
+		metadata[audienceTargetSourceKey] = recipient.Source
 	}
 
-	if recipient.audienceID != "" {
-		metadata[audienceTargetAudienceIDKey] = recipient.audienceID
+	if recipient.AudienceID != "" {
+		metadata[audienceTargetAudienceIDKey] = recipient.AudienceID
 	}
 
-	if recipient.sourceObjectID != "" {
-		metadata[audienceTargetSourceObjectKey] = recipient.sourceObjectID
+	if recipient.SourceObjectID != "" {
+		metadata[audienceTargetSourceObjectKey] = recipient.SourceObjectID
 	}
 
 	return metadata
 }
 
-func normalizeAudienceEmail(email string) string {
-	return strings.ToLower(strings.TrimSpace(email))
-}
+func canonicalizeEmail(email string) string { return strings.ToLower(strings.TrimSpace(email)) }

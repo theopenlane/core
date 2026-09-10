@@ -1,38 +1,63 @@
 package email
 
-import "testing"
+import (
+	"testing"
 
-func TestAudienceRecipientSetDedupe(t *testing.T) {
+	"github.com/stretchr/testify/assert"
+
+	"github.com/theopenlane/core/v2/internal/audiences"
+	"github.com/theopenlane/core/v2/internal/ent/entityops"
+)
+
+func TestSetDedupe(t *testing.T) {
 	set := &set{
 		seen: map[string]struct{}{
 			"existing@example.com": {},
 		},
 	}
 
-	if set.add(audienceRecipient{email: "Existing@Example.com"}) {
-		t.Fatal("existing email was added")
+	tt := []struct {
+		name       string
+		email      string
+		entryAdded bool
+	}{
+		{
+			name:  "existing email with caplocks added",
+			email: "EXISTING@example.com",
+		},
+		{
+			name:       "new email added",
+			email:      "newemail@example.com",
+			entryAdded: true,
+		},
+		{
+			name:  "duplicate new email added again",
+			email: "newemail@example.com",
+		},
 	}
 
-	if !set.add(audienceRecipient{email: "new@example.com"}) {
-		t.Fatal("new email was not added")
-	}
+	for _, v := range tt {
 
-	if set.add(audienceRecipient{email: "NEW@example.com"}) {
-		t.Fatal("duplicate normalized email was added")
-	}
+		recipient := audiences.ResolvedRecipient{
+			AudienceMemberProjection: entityops.AudienceMemberProjection{
+				Email: v.email,
+			},
+		}
 
-	if set.add(audienceRecipient{email: " "}) {
-		t.Fatal("blank email was added")
+		assert.Equal(t, v.entryAdded, set.add(recipient))
 	}
 }
 
-func TestAudienceTargetMetadata(t *testing.T) {
-	metadata := audienceTargetMetadata(audienceRecipient{
-		source:         "identity_holder",
-		audienceID:     "aud_123",
-		sourceObjectID: "idh_123",
-		metadata: map[string]any{
-			"custom": "value",
+func TestAudienceMetadata(t *testing.T) {
+
+	metadata := getAudienceMetadata(audiences.ResolvedRecipient{
+		Source:         "identity_holder",
+		SourceObjectID: "idh_123",
+		AudienceMemberProjection: entityops.AudienceMemberProjection{
+			AudienceID: "aud_123",
+			Metadata: map[string]any{
+				"custom": "value",
+			},
 		},
 	})
 

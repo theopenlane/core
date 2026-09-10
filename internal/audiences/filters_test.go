@@ -3,15 +3,16 @@ package audiences
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/core/common/enums"
 )
 
-func TestValidateAudienceFilters(t *testing.T) {
-	tests := []struct {
+func TestValidateFilters(t *testing.T) {
+	tt := []struct {
 		name         string
 		audienceType enums.AudienceType
 		filters      map[string]any
-		wantErr      bool
+		hasError     bool
 	}{
 		{
 			name:         "manual audience without filters",
@@ -23,10 +24,10 @@ func TestValidateAudienceFilters(t *testing.T) {
 			filters: map[string]any{
 				"schema": "contact",
 			},
-			wantErr: true,
+			hasError: true,
 		},
 		{
-			name:         "dynamic employee audience",
+			name:         " employee audience",
 			audienceType: enums.AudienceTypeDynamic,
 			filters: map[string]any{
 				"schema":     "identity_holder",
@@ -34,7 +35,7 @@ func TestValidateAudienceFilters(t *testing.T) {
 			},
 		},
 		{
-			name:         "dynamic contact audience",
+			name:         " contact audience",
 			audienceType: enums.AudienceTypeDynamic,
 			filters: map[string]any{
 				"schema":     "contact",
@@ -42,7 +43,7 @@ func TestValidateAudienceFilters(t *testing.T) {
 			},
 		},
 		{
-			name:         "dynamic multiple selector audience",
+			name:         " multiple selector audience",
 			audienceType: enums.AudienceTypeDynamic,
 			filters: map[string]any{
 				"selectors": []map[string]any{
@@ -58,21 +59,36 @@ func TestValidateAudienceFilters(t *testing.T) {
 			},
 		},
 		{
-			name:         "dynamic audience without selector",
+			name:         " audience without selector",
 			audienceType: enums.AudienceTypeDynamic,
 			filters:      map[string]any{},
-			wantErr:      true,
+			hasError:     true,
 		},
 		{
-			name:         "dynamic audience with unsupported schema",
+			name:         " audience with unsupported schema",
 			audienceType: enums.AudienceTypeDynamic,
 			filters: map[string]any{
-				"schema": "user",
+				"schema": "asset",
 			},
-			wantErr: true,
+			hasError: true,
 		},
 		{
-			name:         "dynamic audience does not compile expression at save time",
+			name:         " user audience",
+			audienceType: enums.AudienceTypeDynamic,
+			filters:      map[string]any{"schema": "user"},
+		},
+		{
+			name:         " group audience",
+			audienceType: enums.AudienceTypeDynamic,
+			filters:      map[string]any{"schema": "group", "expression": "target.name == 'All Members'"},
+		},
+		{
+			name:         " subscriber audience",
+			audienceType: enums.AudienceTypeDynamic,
+			filters:      map[string]any{"schema": "subscriber"},
+		},
+		{
+			name:         " audience does not compile expression at save time",
 			audienceType: enums.AudienceTypeDynamic,
 			filters: map[string]any{
 				"schema":     "identity_holder",
@@ -80,7 +96,7 @@ func TestValidateAudienceFilters(t *testing.T) {
 			},
 		},
 		{
-			name:         "dynamic audience with key match",
+			name:         " audience with key match",
 			audienceType: enums.AudienceTypeDynamic,
 			filters: map[string]any{
 				"schema": "contact",
@@ -89,16 +105,15 @@ func TestValidateAudienceFilters(t *testing.T) {
 					"source_field": "email",
 				},
 			},
-			wantErr: true,
+			hasError: true,
 		},
 	}
 
-	for _, tt := range tests {
+	for _, tt := range tt {
 		t.Run(tt.name, func(t *testing.T) {
-			err := ValidateAudienceFilters(tt.audienceType, tt.filters)
-			if (err != nil) != tt.wantErr {
-				t.Fatalf("ValidateAudienceFilters() error = %v, wantErr %v", err, tt.wantErr)
-			}
+			err := ValidateFilters(tt.audienceType, tt.filters)
+
+			assert.Equal(t, err != nil, tt.hasError)
 		})
 	}
 }

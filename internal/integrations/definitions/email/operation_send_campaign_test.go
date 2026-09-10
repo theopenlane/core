@@ -6,16 +6,17 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/theopenlane/core/v2/internal/audiences"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
 )
 
 // TestUnsubscribeTokenFromMetadata verifies the per-recipient unsubscribe token is read from
 // campaign target metadata only when present and string-typed
 func TestUnsubscribeTokenFromMetadata(t *testing.T) {
-	assert.Equal(t, "tok_abc", unsubscribeTokenFromMetadata(map[string]any{MetadataUnsubscribeTokenKey: "tok_abc"}))
+	assert.Equal(t, "tok_abc", unsubscribeTokenFromMetadata(map[string]any{audiences.MetadataUnsubscribeTokenKey: "tok_abc"}))
 	assert.Empty(t, unsubscribeTokenFromMetadata(map[string]any{}))
 	assert.Empty(t, unsubscribeTokenFromMetadata(nil))
-	assert.Empty(t, unsubscribeTokenFromMetadata(map[string]any{MetadataUnsubscribeTokenKey: 123}))
+	assert.Empty(t, unsubscribeTokenFromMetadata(map[string]any{audiences.MetadataUnsubscribeTokenKey: 123}))
 }
 
 // TestUnsubscribeTokenInterpolatedIntoPayload verifies the per-recipient unsubscribe token is an

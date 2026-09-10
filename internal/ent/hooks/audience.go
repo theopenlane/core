@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/audiences"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -24,11 +25,12 @@ var (
 func HookAudienceValidateFilters() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.AudienceFunc(func(ctx context.Context, m *generated.AudienceMutation) (generated.Value, error) {
+
 			if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 				return next.Mutate(ctx, m)
 			}
 
-			audienceTyp, err := getAudienceType(ctx, m)
+			typ, err := getAudienceType(ctx, m)
 			if err != nil {
 				return nil, err
 			}
@@ -38,7 +40,7 @@ func HookAudienceValidateFilters() ent.Hook {
 				return nil, err
 			}
 
-			if err := audiences.ValidateAudienceFilters(audienceTyp, filters); err != nil {
+			if err := audiences.ValidateFilters(typ, filters); err != nil {
 				return nil, fmt.Errorf("%w: %w", ErrInvalidInput, err)
 			}
 

@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/newman"
 
 	"github.com/theopenlane/core/common/enums"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/integrations/templatekit"
@@ -24,7 +25,7 @@ func snapshotTrustCenterSubscribers(ctx context.Context, db *generated.Client, c
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	return snapshotCampaignRecipients(allowCtx, db, camp, func(handle campaignRecipientHandlerFunc) error {
+	return snapshotCampaignRecipients(allowCtx, db, camp, func(handle recipientHandlerFunc) error {
 		return resolveTrustCenterSubscriberRecipients(allowCtx, db, camp, handle)
 	})
 }
