@@ -13,7 +13,6 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 )
 
@@ -41,7 +40,6 @@ func createProgram(ctx context.Context, client *generated.Client, org *generated
 	newCaller.OrganizationID = org.ID
 
 	ctx = auth.WithCaller(ctx, &newCaller)
-	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	standards := make([]*generated.Standard, 0, len(frameworks))
 
@@ -66,7 +64,6 @@ func createProgram(ctx context.Context, client *generated.Client, org *generated
 				standard.StatusEQ(enums.StandardActive),
 				standard.SystemOwned(true),
 				standard.IsPublic(true),
-				standard.FrameworkNotIn("openlane-standard", "openlane-trust-center"),
 			).
 			Order(standard.ByVersion(sql.OrderDesc()), standard.ByID()).
 			First(ctx)
