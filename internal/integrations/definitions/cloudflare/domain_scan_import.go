@@ -227,49 +227,50 @@ func applyBrandingToTrustCenter(ctx context.Context, client *generated.Client, b
 	})
 }
 
+func chooseTrustCenterBrandColor(newColor, existingColor string) (string, bool) {
+	color := strings.TrimSpace(newColor)
+	if color == "" || validator.HexColorValidator(color) != nil {
+		return existingColor, false
+	}
+
+	return color, color != existingColor
+}
+
 func updateTrustcenterBrandDesignSetting(ctx context.Context, setting *generated.TrustCenterSetting, brandDesign DomainScanImportBranding) (bool, error) {
 	input := generated.UpdateTrustCenterSettingInput{}
 	isChanged := false
-	chooseColor := func(newColor, existingColor string) (string, bool) {
-		color := strings.TrimSpace(newColor)
-		if color == "" || validator.HexColorValidator(color) != nil {
-			return existingColor, false
-		}
 
-		return color, color != existingColor
-	}
-
-	primaryColor, shouldUpdate := chooseColor(brandDesign.PrimaryColor, setting.PrimaryColor)
+	primaryColor, shouldUpdate := chooseTrustCenterBrandColor(brandDesign.PrimaryColor, setting.PrimaryColor)
 	if shouldUpdate {
 		input.PrimaryColor = &primaryColor
 		isChanged = true
 	}
 
-	foregroundColor, shouldUpdate := chooseColor(brandDesign.ForegroundColor, setting.ForegroundColor)
+	foregroundColor, shouldUpdate := chooseTrustCenterBrandColor(brandDesign.ForegroundColor, setting.ForegroundColor)
 	if shouldUpdate {
 		input.ForegroundColor = &foregroundColor
 		isChanged = true
 	}
 
-	backgroundColor, shouldUpdate := chooseColor(brandDesign.BackgroundColor, setting.BackgroundColor)
+	backgroundColor, shouldUpdate := chooseTrustCenterBrandColor(brandDesign.BackgroundColor, setting.BackgroundColor)
 	if shouldUpdate {
 		input.BackgroundColor = &backgroundColor
 		isChanged = true
 	}
 
-	accentColor, shouldUpdate := chooseColor(brandDesign.AccentColor, setting.AccentColor)
+	accentColor, shouldUpdate := chooseTrustCenterBrandColor(brandDesign.AccentColor, setting.AccentColor)
 	if shouldUpdate {
 		input.AccentColor = &accentColor
 		isChanged = true
 	}
 
-	secondaryBackgroundColor, shouldUpdate := chooseColor(brandDesign.SecondaryBackgroundColor, setting.SecondaryBackgroundColor)
+	secondaryBackgroundColor, shouldUpdate := chooseTrustCenterBrandColor(brandDesign.SecondaryBackgroundColor, setting.SecondaryBackgroundColor)
 	if shouldUpdate {
 		input.SecondaryBackgroundColor = &secondaryBackgroundColor
 		isChanged = true
 	}
 
-	secondaryForegroundColor, shouldUpdate := chooseColor(brandDesign.SecondaryForegroundColor, setting.SecondaryForegroundColor)
+	secondaryForegroundColor, shouldUpdate := chooseTrustCenterBrandColor(brandDesign.SecondaryForegroundColor, setting.SecondaryForegroundColor)
 	if shouldUpdate {
 		input.SecondaryForegroundColor = &secondaryForegroundColor
 		isChanged = true
