@@ -85,7 +85,6 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, payload e
 	// if org settings has existing domains then no need to
 	applyBrandDesign := domains == nil || (ok && len(domains) == 0)
 
-
 	for idx, domain := range setting.Domains {
 		if err := dispatchDomainScan(inv.Context, rt, cloudflare.DefinitionID.OperationTopics().Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID), domain), cloudflare.DomainScanRequest{
 			OrganizationID:   setting.OrganizationID,
