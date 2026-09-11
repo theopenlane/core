@@ -107,7 +107,7 @@ type InstallationMetadata struct {
 // InstallationIdentity implements types.InstallationIdentifiable
 func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
 	return types.IntegrationInstallationIdentity{
-		ExternalID:   m.OrganizationName,
+		ExternalID:   m.InstallationID,
 		ExternalName: m.OrganizationName,
 	}
 }

@@ -19,6 +19,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.AccountType.Expr(`dyn('human' in payload ? "USER" : "SERVICE")`),
 	entityops.DirectoryAccountFields.AddedAt.Expr(`'details' in payload && 'creation_date' in payload.details ? payload.details.creation_date : null`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
 )
 
 // zitadelMappings returns the built-in Zitadel ingest mappings

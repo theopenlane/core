@@ -287,7 +287,7 @@ func TestFindingClaimActiveOtherInstallationKeepsPointers(t *testing.T) {
 		SetName("Finding Claim Active B").
 		SetKind("findclaimactiveb").
 		SetDefinitionID(sharedDefinitionID).
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-findclaimactiveb"}}).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-findclaimactivea"}}).
 		Save(ctx)
 	th.RequireNoError(t, err)
 
@@ -338,7 +338,7 @@ func TestFindingClaimGoneOtherInstallationRepoints(t *testing.T) {
 		SetName("Finding Claim Gone B").
 		SetKind("findclaimgoneb").
 		SetDefinitionID(sharedDefinitionID).
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-findclaimgoneb"}}).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-findclaimgonea"}}).
 		Save(ctx)
 	th.RequireNoError(t, err)
 

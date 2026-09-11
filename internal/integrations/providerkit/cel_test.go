@@ -138,7 +138,7 @@ func TestEvalMap(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			got, err := EvalMap(ctx, tc.expr, tc.envelope)
+			got, err := EvalMap(ctx, tc.expr, tc.envelope, types.MappingInstallation{})
 			if tc.wantErr != nil {
 				if err == nil {
 					t.Fatalf("expected error wrapping %v, got nil", tc.wantErr)
@@ -207,7 +207,7 @@ func TestEvalMap_PayloadTransform(t *testing.T) {
 		Payload:  json.RawMessage(`{"severity":"HIGH","id":42}`),
 	}
 
-	got, err := EvalMap(ctx, `{"sev": payload.severity, "src": resource}`, env)
+	got, err := EvalMap(ctx, `{"sev": payload.severity, "src": resource}`, env, types.MappingInstallation{})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

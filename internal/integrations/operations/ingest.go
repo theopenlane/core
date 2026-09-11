@@ -208,6 +208,14 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		return result, ErrIngestInstallationFilterConfigInvalid
 	}
 
+	mappingInstallation := types.MappingInstallation{
+		ID:             ic.Integration.ID,
+		Name:           ic.Integration.Name,
+		DefinitionID:   definition.ID,
+		DefinitionName: definition.DisplayName,
+		InstanceID:     ic.Integration.InstallationMetadata.Display.ExternalID,
+	}
+
 	batched := !policy.Fanout
 	preload := lo.SumBy(payloadSets, func(payloadSet types.IngestPayloadSet) int { return len(payloadSet.Envelopes) }) >= ingestPreloadMinRecords
 
@@ -262,7 +270,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 				continue
 			}
 
-			record, include, mapErr := mapIngestRecord(envCtx, mapping, payloadSet.Schema, envelope, installationFilterExpr)
+			record, include, mapErr := mapIngestRecord(envCtx, mapping, payloadSet.Schema, envelope, installationFilterExpr, mappingInstallation)
 			if mapErr != nil {
 				logx.FromContext(envCtx).Error().Err(mapErr).Msg("error mapping ingest record")
 
@@ -741,7 +749,7 @@ func stampProvenanceKey(doc map[string]json.RawMessage, key string, value any) b
 
 // mapIngestRecord applies the resolved mapping's filters and map expression to one data envelope,
 // returning the mapped record and whether the envelope passed the include filters
-func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema string, envelope types.MappingEnvelope, installationFilterExpr string) (mappedIngestRecord, bool, error) {
+func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema string, envelope types.MappingEnvelope, installationFilterExpr string, installation types.MappingInstallation) (mappedIngestRecord, bool, error) {
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("ingest filter failed")
@@ -751,7 +759,7 @@ func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema 
 		return mappedIngestRecord{}, false, nil
 	}
 
-	mapped, err := providerkit.EvalMap(ctx, mapping.MapExpr, envelope)
+	mapped, err := providerkit.EvalMap(ctx, mapping.MapExpr, envelope, installation)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("ingest transform failed")
 

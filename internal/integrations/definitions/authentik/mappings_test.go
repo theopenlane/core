@@ -57,6 +57,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "2026-05-08T01:54:15.179825Z", mapped["added_at"])
 		assert.Equal(t, "2026-05-09T08:11:37.941933Z", mapped["last_seen_at"])
 		assert.Equal(t, "2026-05-08T01:55:21.345631Z", mapped["observed_at"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["directory_name"])
 	})
 
 	t.Run("group_json", func(t *testing.T) {
@@ -71,6 +72,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["external_id"])
 		assert.Equal(t, "authentik Admins", mapped["display_name"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["directory_name"])
 	})
 
 	t.Run("member_json", func(t *testing.T) {
@@ -90,6 +92,7 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "772416add93e0b563b4ceb5c534f9b064f356bb2782d61d31bf1dc2c7cf1e3a5", mapped["directory_account_id"])
 		assert.Equal(t, "488f8a0c-c0b6-4dce-bf79-82db3af7cdac", mapped["directory_group_id"])
 		assert.Equal(t, "MEMBER", mapped["role"])
+		assert.Equal(t, mappingtest.Installation.Name, mapped["directory_name"])
 	})
 
 	t.Run("inactive_user", func(t *testing.T) {

@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/v2/internal/integrations/types"
 	"github.com/theopenlane/core/v2/pkg/celx"
+	"github.com/theopenlane/core/v2/pkg/jsonx"
 )
 
 const (
@@ -36,6 +37,8 @@ const (
 	celVarAction = "action"
 	// celVarPayload is the CEL variable name bound to the envelope payload field
 	celVarPayload = "payload"
+	// celVarInstallation is the CEL variable name bound to the writing installation in map expressions
+	celVarInstallation = "installation"
 
 	// maxSafeInteger is the largest float64 that can still hold every integer exactly (2^53)
 	maxSafeInteger = float64(1 << 53)
@@ -84,6 +87,7 @@ func buildEnvelopeEnv() (*cel.Env, error) {
 		decls.NewVariable(celVarResource, celtypes.DynType),
 		decls.NewVariable(celVarAction, celtypes.DynType),
 		decls.NewVariable(celVarPayload, celtypes.DynType),
+		decls.NewVariable(celVarInstallation, celtypes.DynType),
 	))
 }
 
@@ -170,10 +174,10 @@ func EvalFilter(ctx context.Context, expr string, envelope types.MappingEnvelope
 	return value, nil
 }
 
-// EvalMap evaluates a CEL map expression against a MappingEnvelope and returns a JSON payload
+// EvalMap evaluates a CEL map expression against a MappingEnvelope and the writing installation and returns a JSON payload
 // An empty expr returns the original envelope.Payload (pass-through)
 // Returns a wrapped ErrMapExprEval on failure
-func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope) (json.RawMessage, error) {
+func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope, installation types.MappingInstallation) (json.RawMessage, error) {
 	if expr == "" {
 		return envelope.Payload, nil
 	}
@@ -183,7 +187,15 @@ func EvalMap(ctx context.Context, expr string, envelope types.MappingEnvelope) (
 		return nil, fmt.Errorf("%w: %w", ErrMapExprEval, err)
 	}
 
-	result, err := ev.EvaluateJSONMap(ctx, expr, envelopeToVars(envelope))
+	installationVars, err := jsonx.ToMap(installation)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrMapExprEval, err)
+	}
+
+	vars := envelopeToVars(envelope)
+	vars[celVarInstallation] = installationVars
+
+	result, err := ev.EvaluateJSONMap(ctx, expr, vars)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", ErrMapExprEval, err)
 	}

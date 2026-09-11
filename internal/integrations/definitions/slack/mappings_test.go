@@ -56,7 +56,7 @@ func TestSlackMappingsUserExample(t *testing.T) {
 	assert.NilError(t, err)
 
 	envelope := providerkit.RawEnvelope(outer.User.TeamID+"/"+outer.User.ID, rawPayload)
-	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope)
+	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	mapped, err := jsonx.ToMap(result)
@@ -88,7 +88,7 @@ func TestSlackMappingsServiceExample(t *testing.T) {
 	assert.NilError(t, err)
 
 	envelope := providerkit.RawEnvelope(outer.User.TeamID+"/"+outer.User.ID, rawPayload)
-	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope)
+	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope, types.MappingInstallation{})
 	assert.NilError(t, err)
 
 	mapped, err := jsonx.ToMap(result)

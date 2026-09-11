@@ -25,6 +25,7 @@ var mapExprAssessment = providerkit.CelMapExpr(
 	entityops.VulnerabilityFields.DiscoveredAt.Expr(`'first_evaluated_at' in payload ? payload.first_evaluated_at : null`),
 	entityops.VulnerabilityFields.SourceUpdatedAt.Expr(`'status_changed_at' in payload ? payload.status_changed_at : null`),
 	entityops.VulnerabilityFields.RawPayload.Expr("payload"),
+	entityops.VulnerabilityFields.Source.Expr("installation.name"),
 )
 
 // mapExprSubAssessment maps SubAssessmentPayload fields to the Vulnerability schema.
@@ -52,4 +53,5 @@ var mapExprSubAssessment = providerkit.CelMapExpr(
 	entityops.VulnerabilityFields.DiscoveredAt.Expr(`'published_at' in payload ? payload.published_at : null`),
 	entityops.VulnerabilityFields.SourceUpdatedAt.Expr(`'time_generated' in payload ? payload.time_generated : null`),
 	entityops.VulnerabilityFields.RawPayload.Expr("payload"),
+	entityops.VulnerabilityFields.Source.Expr("installation.name"),
 )

@@ -12,6 +12,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.DisplayName.Expr(`'displayName' in payload && payload.displayName != "" ? payload.displayName : ('loginName' in payload ? payload.loginName : "")`),
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('status' in payload ? (payload.status == "active" ? "ACTIVE" : (payload.status == "suspended" ? "INACTIVE" : "INACTIVE")) : "INACTIVE")`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for Tailscale role group payloads mapped to DirectoryGroup
@@ -21,6 +22,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.DisplayName.Expr(`payload.name != "" ? payload.name : payload.id`),
 	entityops.DirectoryGroupFields.Status.Expr(`dyn("ACTIVE")`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprDirectoryMembership is the CEL mapping expression for Tailscale membership payloads mapped to DirectoryMembership
@@ -29,6 +31,7 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group_id' in payload ? payload.group_id : ""`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprAsset is the CEL mapping expression for Tailscale device payloads mapped to Asset

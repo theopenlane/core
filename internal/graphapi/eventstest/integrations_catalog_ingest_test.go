@@ -230,7 +230,7 @@ func TestCatalogClaimActiveOtherInstallationKeepsPointers(t *testing.T) {
 		SetName("Catalog Claim Active B").
 		SetKind("catclaimactiveb").
 		SetDefinitionID(sharedDefinitionID).
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-catclaimactiveb"}}).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-catclaimactivea"}}).
 		Save(ctx)
 	th.RequireNoError(t, err)
 
@@ -278,7 +278,7 @@ func TestCatalogClaimGoneOtherInstallationRepoints(t *testing.T) {
 		SetName("Catalog Claim Gone B").
 		SetKind("catclaimgoneb").
 		SetDefinitionID(sharedDefinitionID).
-		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-catclaimgoneb"}}).
+		SetInstallationMetadata(openapi.IntegrationInstallationMetadata{Display: openapi.IntegrationInstallationIdentity{ExternalID: "tenant-catclaimgonea"}}).
 		Save(ctx)
 	th.RequireNoError(t, err)
 

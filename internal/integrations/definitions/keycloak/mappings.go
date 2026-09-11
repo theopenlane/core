@@ -18,6 +18,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.Metadata.Expr(`'attributes' in payload ? payload.attributes : {}`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
 	entityops.DirectoryAccountFields.LastSeenAt.Expr(`'lastLogin' in payload && payload.lastLogin != null ? timestamp(int(payload.lastLogin) / 1000) : null`),
+	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for Keycloak group payloads mapped to DirectoryGroup
@@ -27,6 +28,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.Status.Expr(`dyn("ACTIVE")`),
 	entityops.DirectoryGroupFields.Metadata.Expr(`'attributes' in payload ? payload.attributes : {}`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprDirectoryMembership is the CEL mapping expression for Keycloak membership payloads mapped to DirectoryMembership
@@ -35,4 +37,5 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`resource != "" ? resource : ""`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
 )

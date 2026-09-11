@@ -402,7 +402,7 @@ func TestMapIngestRecord(t *testing.T) {
 			mapping, found := findMapping(definition.Mappings, tc.schema, tc.envelope.Variant)
 			assert.Assert(t, found)
 
-			record, include, err := mapIngestRecord(context.Background(), mapping, tc.schema, tc.envelope, "")
+			record, include, err := mapIngestRecord(context.Background(), mapping, tc.schema, tc.envelope, "", types.MappingInstallation{})
 			if tc.wantErr != nil {
 				assert.ErrorIs(t, err, tc.wantErr)
 				return
@@ -821,7 +821,8 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	ic := IngestContext{
 		Registry: reg,
 		Integration: &ent.Integration{
-			DefinitionID: "test-def",
+			DefinitionID:         "test-def",
+			InstallationMetadata: testInstallationMetadata,
 			Config: openapi.IntegrationConfig{
 				ClientConfig: json.RawMessage(`{"repoSync":{"filterExpr":"payload.is_private == true"}}`),
 			},
@@ -919,7 +920,8 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 	ic := IngestContext{
 		Registry: reg,
 		Integration: &ent.Integration{
-			DefinitionID: "test-def",
+			DefinitionID:         "test-def",
+			InstallationMetadata: testInstallationMetadata,
 			Config: openapi.IntegrationConfig{
 				ClientConfig: json.RawMessage(`{"findingSync":{"filterExpr":"payload.severity == \"CRITICAL\""},"directorySync":{}}`),
 			},

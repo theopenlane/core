@@ -20,6 +20,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.RemovedAt.Expr(`'employeeLeaveDateTime' in payload && payload.employeeLeaveDateTime != null ? payload.employeeLeaveDateTime : null`),
 	entityops.DirectoryAccountFields.Status.Expr(`dyn('accountEnabled' in payload && payload.accountEnabled ? "ACTIVE" : "INACTIVE")`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprDirectoryGroup maps Azure Entra ID group payloads to DirectoryGroup
@@ -30,6 +31,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.Classification.Expr(`dyn('groupTypes' in payload && payload.groupTypes != null && payload.groupTypes.exists(t, t == "Unified") ? "TEAM" : ('securityEnabled' in payload && payload.securityEnabled ? "SECURITY" : "DISTRIBUTION"))`),
 	entityops.DirectoryGroupFields.Status.Expr(`dyn("ACTIVE")`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprDirectoryMembership maps Azure Entra ID membership payloads to DirectoryMembership
@@ -38,4 +40,5 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`'group' in payload && payload.group != null && 'id' in payload.group ? payload.group.id : ""`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn("MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
 )

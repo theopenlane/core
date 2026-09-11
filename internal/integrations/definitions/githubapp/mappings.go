@@ -25,6 +25,7 @@ func webhookBaseEntries(category, externalIDExpr string) []entityops.MappingEntr
 		entityops.VulnerabilityFields.AutoDismissedAt.Expr(`'auto_dismissed_at' in payload ? payload.auto_dismissed_at : null`),
 		entityops.VulnerabilityFields.Open.Expr(`'state' in payload ? payload.state == "open" : false`),
 		entityops.VulnerabilityFields.RawPayload.Expr("payload"),
+		entityops.VulnerabilityFields.Source.Expr("installation.name"),
 	}
 }
 
@@ -46,6 +47,7 @@ func pollBaseEntries(category, externalIDExpr string) []entityops.MappingEntry {
 		entityops.VulnerabilityFields.AutoDismissedAt.Expr(`'AutoDismissedAt' in payload ? payload.AutoDismissedAt : null`),
 		entityops.VulnerabilityFields.Open.Expr(`'State' in payload ? payload.State == "OPEN" : false`),
 		entityops.VulnerabilityFields.RawPayload.Expr("payload"),
+		entityops.VulnerabilityFields.Source.Expr("installation.name"),
 	}
 }
 
@@ -141,6 +143,7 @@ var mapExprDirectoryAccount = providerkit.CelMapExpr(
 	entityops.DirectoryAccountFields.GivenName.Expr(`payload.GivenName`),
 	entityops.DirectoryAccountFields.FamilyName.Expr(`payload.FamilyName`),
 	entityops.DirectoryAccountFields.Profile.Expr("payload"),
+	entityops.DirectoryAccountFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprDirectoryGroup is the CEL mapping expression for GitHub teams mapped to DirectoryGroup
@@ -150,6 +153,7 @@ var mapExprDirectoryGroup = providerkit.CelMapExpr(
 	entityops.DirectoryGroupFields.Classification.Expr(`dyn("TEAM")`),
 	entityops.DirectoryGroupFields.Status.Expr(`dyn("ACTIVE")`),
 	entityops.DirectoryGroupFields.Profile.Expr("payload"),
+	entityops.DirectoryGroupFields.DirectoryName.Expr("installation.name"),
 )
 
 // mapExprDirectoryMembership is the CEL mapping expression for GitHub team memberships mapped to DirectoryMembership
@@ -158,4 +162,5 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr(
 	entityops.DirectoryMembershipFields.DirectoryGroupID.Expr(`payload.Team.DatabaseID != 0 ? string(payload.Team.DatabaseID) : payload.Team.Slug`),
 	entityops.DirectoryMembershipFields.Role.Expr(`dyn(payload.Role != "" ? payload.Role : "MEMBER")`),
 	entityops.DirectoryMembershipFields.Metadata.Expr("payload"),
+	entityops.DirectoryMembershipFields.DirectoryName.Expr("installation.name"),
 )
