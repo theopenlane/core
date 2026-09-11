@@ -12205,7 +12205,7 @@ func (m *AssetHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssetHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 58)
+	fields := make([]string, 0, 59)
 	if m.history_time != nil {
 		fields = append(fields, assethistory.FieldHistoryTime)
 	}

@@ -468104,10 +468104,6 @@ func (ec *executionContext) unmarshalNDirectoryMembershipWhereInput2ᚖgithubᚗ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDiscussion2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx context.Context, sel ast.SelectionSet, v generated.Discussion) graphql.Marshaler {
-	return ec._Discussion(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx context.Context, sel ast.SelectionSet, v *generated.Discussion) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -469063,10 +469059,6 @@ func (ec *executionContext) marshalNIntegrationOrderField2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return v
-}
-
-func (ec *executionContext) marshalNIntegrationRunConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationRunConnection(ctx context.Context, sel ast.SelectionSet, v generated.IntegrationRunConnection) graphql.Marshaler {
-	return ec._IntegrationRunConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIntegrationRunConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationRunConnection(ctx context.Context, sel ast.SelectionSet, v *generated.IntegrationRunConnection) graphql.Marshaler {

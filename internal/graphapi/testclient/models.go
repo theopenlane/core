@@ -36316,11 +36316,12 @@ type UpdateAssetInput struct {
 	// id of the integration installation managing the record, empty when the record is unclaimed
 	ManagedBy      *string `json:"managedBy,omitempty"`
 	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// the internal owner for the asset when no user, group, or identity holder is linked
+	// id of the integration run that last wrote this record
 	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
 	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
-	InternalOwner         *string `json:"internalOwner,omitempty"`
-	ClearInternalOwner    *bool   `json:"clearInternalOwner,omitempty"`
+	// the internal owner for the asset when no user, group, or identity holder is linked
+	InternalOwner      *string `json:"internalOwner,omitempty"`
+	ClearInternalOwner *bool   `json:"clearInternalOwner,omitempty"`
 	// the subtype of the asset
 	AssetSubtypeName      *string `json:"assetSubtypeName,omitempty"`
 	ClearAssetSubtypeName *bool   `json:"clearAssetSubtypeName,omitempty"`
@@ -37676,11 +37677,12 @@ type UpdateEntityInput struct {
 	// id of the integration installation managing the record, empty when the record is unclaimed
 	ManagedBy      *string `json:"managedBy,omitempty"`
 	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// the internal owner for the entity when no user, group, or identity holder is linked
+	// id of the integration run that last wrote this record
 	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
 	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
-	InternalOwner         *string `json:"internalOwner,omitempty"`
-	ClearInternalOwner    *bool   `json:"clearInternalOwner,omitempty"`
+	// the internal owner for the entity when no user, group, or identity holder is linked
+	InternalOwner      *string `json:"internalOwner,omitempty"`
+	ClearInternalOwner *bool   `json:"clearInternalOwner,omitempty"`
 	// who reviewed the entity when no user, group, or identity holder is linked
 	ReviewedBy      *string `json:"reviewedBy,omitempty"`
 	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
@@ -38291,11 +38293,12 @@ type UpdateFindingInput struct {
 	// id of the integration installation managing the record, empty when the record is unclaimed
 	ManagedBy      *string `json:"managedBy,omitempty"`
 	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// who reviewed the finding when no user, group, or identity holder is linked
+	// id of the integration run that last wrote this record
 	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
 	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
-	ReviewedBy            *string `json:"reviewedBy,omitempty"`
-	ClearReviewedBy       *bool   `json:"clearReviewedBy,omitempty"`
+	// who reviewed the finding when no user, group, or identity holder is linked
+	ReviewedBy      *string `json:"reviewedBy,omitempty"`
+	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
 	// who the finding is assigned to when no user, group, or identity holder is linked
 	AssignedTo      *string `json:"assignedTo,omitempty"`
 	ClearAssignedTo *bool   `json:"clearAssignedTo,omitempty"`
@@ -42320,11 +42323,12 @@ type UpdateVulnerabilityInput struct {
 	// id of the integration installation managing the record, empty when the record is unclaimed
 	ManagedBy      *string `json:"managedBy,omitempty"`
 	ClearManagedBy *bool   `json:"clearManagedBy,omitempty"`
-	// who reviewed the vulnerability when no user, group, or identity holder is linked
+	// id of the integration run that last wrote this record
 	IntegrationRunID      *string `json:"integrationRunID,omitempty"`
 	ClearIntegrationRunID *bool   `json:"clearIntegrationRunID,omitempty"`
-	ReviewedBy            *string `json:"reviewedBy,omitempty"`
-	ClearReviewedBy       *bool   `json:"clearReviewedBy,omitempty"`
+	// who reviewed the vulnerability when no user, group, or identity holder is linked
+	ReviewedBy      *string `json:"reviewedBy,omitempty"`
+	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
 	// who the vulnerability is assigned to when no user, group, or identity holder is linked
 	AssignedTo      *string `json:"assignedTo,omitempty"`
 	ClearAssignedTo *bool   `json:"clearAssignedTo,omitempty"`
@@ -49870,7 +49874,7 @@ func (e *IntegrationRunOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e IntegrationRunOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *IntegrationRunOrderField) UnmarshalJSON(b []byte) error {

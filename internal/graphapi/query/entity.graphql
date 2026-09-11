@@ -192,6 +192,7 @@ query GetEntities($where: EntityWhereInput) {
     }
   }
 }
+
 query GetEntityByID($entityId: ID!) {
   entity(id: $entityId) {
     aliases

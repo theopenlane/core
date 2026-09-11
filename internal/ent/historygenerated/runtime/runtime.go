@@ -302,11 +302,11 @@ func init() {
 	// assethistory.DefaultTags holds the default value on creation for the tags field.
 	assethistory.DefaultTags = assethistoryDescTags.Default.([]string)
 	// assethistoryDescSystemOwned is the schema descriptor for system_owned field.
-	assethistoryDescSystemOwned := assethistoryFields[37].Descriptor()
+	assethistoryDescSystemOwned := assethistoryFields[38].Descriptor()
 	// assethistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
 	assethistory.DefaultSystemOwned = assethistoryDescSystemOwned.Default.(bool)
 	// assethistoryDescContainsPii is the schema descriptor for contains_pii field.
-	assethistoryDescContainsPii := assethistoryFields[48].Descriptor()
+	assethistoryDescContainsPii := assethistoryFields[49].Descriptor()
 	// assethistory.DefaultContainsPii holds the default value on creation for the contains_pii field.
 	assethistory.DefaultContainsPii = assethistoryDescContainsPii.Default.(bool)
 	// assethistoryDescID is the schema descriptor for id field.

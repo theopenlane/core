@@ -479,8 +479,14 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assets_users_internal_owner_user",
-				Columns:    []*schema.Column{AssetsColumns[44]},
+				Columns:    []*schema.Column{AssetsColumns[43]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_groups_internal_owner_group",
+				Columns:    []*schema.Column{AssetsColumns[44]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2276,8 +2282,14 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "entities_users_internal_owner_user",
-				Columns:    []*schema.Column{EntitiesColumns[61]},
+				Columns:    []*schema.Column{EntitiesColumns[60]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_groups_internal_owner_group",
+				Columns:    []*schema.Column{EntitiesColumns[61]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2337,7 +2349,7 @@ var (
 			{
 				Symbol:     "entities_entity_types_entity_type",
 				Columns:    []*schema.Column{EntitiesColumns[71]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
+				RefColumns: []*schema.Column{EntityTypesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -2904,8 +2916,14 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "findings_users_reviewed_by_user",
-				Columns:    []*schema.Column{FindingsColumns[62]},
+				Columns:    []*schema.Column{FindingsColumns[61]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "findings_groups_reviewed_by_group",
+				Columns:    []*schema.Column{FindingsColumns[62]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -8644,14 +8662,20 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "vulnerabilities_organizations_vulnerabilities",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[67]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[66]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_users_reviewed_by_user",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[68]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[67]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vulnerabilities_groups_reviewed_by_group",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[68]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
@@ -8701,7 +8725,7 @@ var (
 			{
 				Name:    "vulnerability_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[8], VulnerabilitiesColumns[67]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[8], VulnerabilitiesColumns[66]},
 			},
 			{
 				Name:    "vulnerability_source_instance_id",
@@ -8716,12 +8740,12 @@ var (
 			{
 				Name:    "vulnerability_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{VulnerabilitiesColumns[67]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[66]},
 			},
 			{
 				Name:    "vulnerability_external_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[27], VulnerabilitiesColumns[67]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[26], VulnerabilitiesColumns[66]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8729,7 +8753,7 @@ var (
 			{
 				Name:    "vulnerability_cve_id_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{VulnerabilitiesColumns[28], VulnerabilitiesColumns[67]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[27], VulnerabilitiesColumns[66]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

@@ -17584,7 +17584,7 @@ func (m *AssetMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AssetMutation) Fields() []string {
-	fields := make([]string, 0, 55)
+	fields := make([]string, 0, 56)
 	if m.created_at != nil {
 		fields = append(fields, asset.FieldCreatedAt)
 	}
@@ -187402,7 +187402,7 @@ func (m *PlatformMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PlatformMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 50)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, platform.EdgeBlockedGroups)
 	}
