@@ -4160,7 +4160,7 @@ func (e *ControlCategoryOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlCategoryOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlCategoryOrderField) UnmarshalJSON(b []byte) error {
@@ -4227,7 +4227,7 @@ func (e *ControlReportOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlReportOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlReportOrderField) UnmarshalJSON(b []byte) error {
@@ -4285,7 +4285,7 @@ func (e *GroupPermissionOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e GroupPermissionOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *GroupPermissionOrderField) UnmarshalJSON(b []byte) error {

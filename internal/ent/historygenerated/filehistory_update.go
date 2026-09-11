@@ -142,9 +142,6 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.StoreKeyCleared() {
 		_spec.ClearField(filehistory.FieldStoreKey, field.TypeString)
 	}
-	if _u.mutation.CategoryTypeCleared() {
-		_spec.ClearField(filehistory.FieldCategoryType, field.TypeString)
-	}
 	if _u.mutation.URICleared() {
 		_spec.ClearField(filehistory.FieldURI, field.TypeString)
 	}
@@ -337,9 +334,6 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.StoreKeyCleared() {
 		_spec.ClearField(filehistory.FieldStoreKey, field.TypeString)
-	}
-	if _u.mutation.CategoryTypeCleared() {
-		_spec.ClearField(filehistory.FieldCategoryType, field.TypeString)
 	}
 	if _u.mutation.URICleared() {
 		_spec.ClearField(filehistory.FieldURI, field.TypeString)

@@ -583,10 +583,6 @@ func (ec *executionContext) _NotificationPreferenceUpdatePayload(ctx context.Con
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNNotificationPreferenceBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationPreferenceBulkCreatePayload) graphql.Marshaler {
-	return ec._NotificationPreferenceBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNotificationPreferenceBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationPreferenceBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNNotificationPreferenceBulkCreatePayload2ᚖg
 		return graphql.Null
 	}
 	return ec._NotificationPreferenceBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNotificationPreferenceBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationPreferenceBulkDeletePayload) graphql.Marshaler {
-	return ec._NotificationPreferenceBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotificationPreferenceBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationPreferenceBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNNotificationPreferenceBulkDeletePayload2ᚖg
 	return ec._NotificationPreferenceBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNotificationPreferenceBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationPreferenceBulkUpdatePayload) graphql.Marshaler {
-	return ec._NotificationPreferenceBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNotificationPreferenceBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationPreferenceBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNNotificationPreferenceBulkUpdatePayload2ᚖg
 		return graphql.Null
 	}
 	return ec._NotificationPreferenceBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNotificationPreferenceCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationPreferenceCreatePayload) graphql.Marshaler {
-	return ec._NotificationPreferenceCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotificationPreferenceCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationPreferenceCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNNotificationPreferenceCreatePayload2ᚖgithu
 	return ec._NotificationPreferenceCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNotificationPreferenceDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationPreferenceDeletePayload) graphql.Marshaler {
-	return ec._NotificationPreferenceDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNotificationPreferenceDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationPreferenceDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNNotificationPreferenceDeletePayload2ᚖgithu
 		return graphql.Null
 	}
 	return ec._NotificationPreferenceDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNotificationPreferenceUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.NotificationPreferenceUpdatePayload) graphql.Marshaler {
-	return ec._NotificationPreferenceUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotificationPreferenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNotificationPreferenceUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.NotificationPreferenceUpdatePayload) graphql.Marshaler {

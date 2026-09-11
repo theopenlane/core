@@ -26626,11 +26626,6 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, file.FieldStoreKey)
 				fieldSeen[file.FieldStoreKey] = struct{}{}
 			}
-		case "categoryType":
-			if _, ok := fieldSeen[file.FieldCategoryType]; !ok {
-				selectedFields = append(selectedFields, file.FieldCategoryType)
-				fieldSeen[file.FieldCategoryType] = struct{}{}
-			}
 		case "uri":
 			if _, ok := fieldSeen[file.FieldURI]; !ok {
 				selectedFields = append(selectedFields, file.FieldURI)

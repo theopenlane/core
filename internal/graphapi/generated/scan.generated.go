@@ -583,10 +583,6 @@ func (ec *executionContext) _ScanUpdatePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNScanBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkCreatePayload) graphql.Marshaler {
-	return ec._ScanBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNScanBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNScanBulkCreatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._ScanBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNScanBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkDeletePayload) graphql.Marshaler {
-	return ec._ScanBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNScanBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNScanBulkDeletePayload2ᚖgithubᚗcomᚋtheo
 	return ec._ScanBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNScanBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanBulkUpdatePayload) graphql.Marshaler {
-	return ec._ScanBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNScanBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNScanBulkUpdatePayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._ScanBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNScanCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanCreatePayload) graphql.Marshaler {
-	return ec._ScanCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNScanCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNScanCreatePayload2ᚖgithubᚗcomᚋtheopenl
 	return ec._ScanCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNScanDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanDeletePayload) graphql.Marshaler {
-	return ec._ScanDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNScanDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNScanDeletePayload2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._ScanDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNScanUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ScanUpdatePayload) graphql.Marshaler {
-	return ec._ScanUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNScanUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐScanUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScanUpdatePayload) graphql.Marshaler {

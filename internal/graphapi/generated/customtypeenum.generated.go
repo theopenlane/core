@@ -312,10 +312,6 @@ func (ec *executionContext) _CustomTypeEnumUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumBulkCreatePayload) graphql.Marshaler {
-	return ec._CustomTypeEnumBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -324,10 +320,6 @@ func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._CustomTypeEnumBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumCreatePayload) graphql.Marshaler {
-	return ec._CustomTypeEnumCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumCreatePayload) graphql.Marshaler {
@@ -340,10 +332,6 @@ func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2ᚖgithubᚗcom�
 	return ec._CustomTypeEnumCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumDeletePayload) graphql.Marshaler {
-	return ec._CustomTypeEnumDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -352,10 +340,6 @@ func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._CustomTypeEnumDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCustomTypeEnumUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.CustomTypeEnumUpdatePayload) graphql.Marshaler {
-	return ec._CustomTypeEnumUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCustomTypeEnumUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumUpdatePayload) graphql.Marshaler {

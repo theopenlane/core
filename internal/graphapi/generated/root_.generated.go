@@ -2337,7 +2337,6 @@ type ComplexityRoot struct {
 		Category               func(childComplexity int) int
 		CategoryID             func(childComplexity int) int
 		CategoryName           func(childComplexity int) int
-		CategoryType           func(childComplexity int) int
 		Contact                func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
@@ -18360,12 +18359,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.File.CategoryName(childComplexity), true
-	case "File.categoryType":
-		if e.ComplexityRoot.File.CategoryType == nil {
-			break
-		}
-
-		return e.ComplexityRoot.File.CategoryType(childComplexity), true
 	case "File.contact":
 		if e.ComplexityRoot.File.Contact == nil {
 			break
@@ -68310,10 +68303,6 @@ input CreateFileInput {
   """
   storeKey: String
   """
-  the category type of the file, if any (e.g. evidence, invoice, etc.)
-  """
-  categoryType: String
-  """
   the full URI of the file
   """
   uri: String
@@ -82306,10 +82295,6 @@ type File implements Node {
   """
   storeKey: String
   """
-  the category type of the file, if any (e.g. evidence, invoice, etc.)
-  """
-  categoryType: String @deprecated(reason: "use category_status_name instead")
-  """
   the full URI of the file
   """
   uri: String
@@ -82873,20 +82858,6 @@ input FileWhereInput {
   storeKeyNotNil: Boolean
   storeKeyEqualFold: String
   storeKeyContainsFold: String
-  """
-  category_type field predicates
-  """
-  categoryType: String
-  categoryTypeNEQ: String
-  categoryTypeIn: [String!]
-  categoryTypeNotIn: [String!]
-  categoryTypeContains: String
-  categoryTypeHasPrefix: String
-  categoryTypeHasSuffix: String
-  categoryTypeIsNil: Boolean
-  categoryTypeNotNil: Boolean
-  categoryTypeEqualFold: String
-  categoryTypeContainsFold: String
   """
   uri field predicates
   """
@@ -128688,11 +128659,6 @@ input UpdateFileInput {
   storeKey: String
   clearStoreKey: Boolean
   """
-  the category type of the file, if any (e.g. evidence, invoice, etc.)
-  """
-  categoryType: String
-  clearCategoryType: Boolean
-  """
   the full URI of the file
   """
   uri: String
@@ -158662,8 +158628,6 @@ func (ec *executionContext) childFields_File(ctx context.Context, field graphql.
 		return ec.fieldContext_File_detectedContentType(ctx, field)
 	case "storeKey":
 		return ec.fieldContext_File_storeKey(ctx, field)
-	case "categoryType":
-		return ec.fieldContext_File_categoryType(ctx, field)
 	case "uri":
 		return ec.fieldContext_File_uri(ctx, field)
 	case "storageScheme":

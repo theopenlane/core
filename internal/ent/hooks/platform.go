@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	"github.com/theopenlane/core/v2/internal/ent/generated/file"
 	"github.com/theopenlane/core/v2/internal/ent/generated/hook"
@@ -45,7 +46,12 @@ func HookPlatformFiles() ent.Hook {
 						}
 
 						m.AddArchitectureDiagramIDs(archFiles...)
-						if err := m.Client().File.Update().Where(file.IDIn(archFiles...)).SetCategoryType("architecture_diagram").Exec(allowCtx); err != nil {
+
+						err := m.Client().File.Update().
+							Where(file.IDIn(archFiles...)).
+							Exec(allowCtx)
+
+						if err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for architecture diagram files")
 							return nil, err
 						}
@@ -57,7 +63,11 @@ func HookPlatformFiles() ent.Hook {
 						}
 
 						m.AddDataFlowDiagramIDs(dataFlowFiles...)
-						if err := m.Client().File.Update().Where(file.IDIn(dataFlowFiles...)).SetCategoryType("data_flow_diagram").Exec(allowCtx); err != nil {
+
+						err := m.Client().File.Update().
+							Where(file.IDIn(dataFlowFiles...)).
+							Exec(allowCtx)
+						if err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for data flow diagram files")
 							return nil, err
 						}
@@ -69,7 +79,11 @@ func HookPlatformFiles() ent.Hook {
 						}
 
 						m.AddTrustBoundaryDiagramIDs(trustBoundaryFiles...)
-						if err := m.Client().File.Update().Where(file.IDIn(trustBoundaryFiles...)).SetCategoryType("trust_boundary_diagram").Exec(allowCtx); err != nil {
+
+						err := m.Client().File.Update().
+							Where(file.IDIn(trustBoundaryFiles...)).
+							Exec(allowCtx)
+						if err != nil {
 							logx.FromContext(ctx).Error().Err(err).Msg("unable to set file category type for trust boundary diagram files")
 							return nil, err
 						}

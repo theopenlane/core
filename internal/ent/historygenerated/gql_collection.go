@@ -4251,11 +4251,6 @@ func (_q *FileHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, filehistory.FieldStoreKey)
 				fieldSeen[filehistory.FieldStoreKey] = struct{}{}
 			}
-		case "categoryType":
-			if _, ok := fieldSeen[filehistory.FieldCategoryType]; !ok {
-				selectedFields = append(selectedFields, filehistory.FieldCategoryType)
-				fieldSeen[filehistory.FieldCategoryType] = struct{}{}
-			}
 		case "uri":
 			if _, ok := fieldSeen[filehistory.FieldURI]; !ok {
 				selectedFields = append(selectedFields, filehistory.FieldURI)

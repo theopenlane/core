@@ -6946,8 +6946,6 @@ type CreateFileInput struct {
 	DetectedContentType string `json:"detectedContentType"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey *string `json:"storeKey,omitempty"`
-	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
 	URI *string `json:"uri,omitempty"`
 	// the storage scheme of the file, e.g. file://, s3://, etc.
@@ -15309,8 +15307,6 @@ type File struct {
 	DetectedContentType string `json:"detectedContentType"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey *string `json:"storeKey,omitempty"`
-	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType *string `json:"categoryType,omitempty"`
 	// the full URI of the file
 	URI *string `json:"uri,omitempty"`
 	// the storage scheme of the file, e.g. file://, s3://, etc.
@@ -15654,18 +15650,6 @@ type FileWhereInput struct {
 	StoreKeyNotNil       *bool    `json:"storeKeyNotNil,omitempty"`
 	StoreKeyEqualFold    *string  `json:"storeKeyEqualFold,omitempty"`
 	StoreKeyContainsFold *string  `json:"storeKeyContainsFold,omitempty"`
-	// category_type field predicates
-	CategoryType             *string  `json:"categoryType,omitempty"`
-	CategoryTypeNeq          *string  `json:"categoryTypeNEQ,omitempty"`
-	CategoryTypeIn           []string `json:"categoryTypeIn,omitempty"`
-	CategoryTypeNotIn        []string `json:"categoryTypeNotIn,omitempty"`
-	CategoryTypeContains     *string  `json:"categoryTypeContains,omitempty"`
-	CategoryTypeHasPrefix    *string  `json:"categoryTypeHasPrefix,omitempty"`
-	CategoryTypeHasSuffix    *string  `json:"categoryTypeHasSuffix,omitempty"`
-	CategoryTypeIsNil        *bool    `json:"categoryTypeIsNil,omitempty"`
-	CategoryTypeNotNil       *bool    `json:"categoryTypeNotNil,omitempty"`
-	CategoryTypeEqualFold    *string  `json:"categoryTypeEqualFold,omitempty"`
-	CategoryTypeContainsFold *string  `json:"categoryTypeContainsFold,omitempty"`
 	// uri field predicates
 	URI             *string  `json:"uri,omitempty"`
 	URINeq          *string  `json:"uriNEQ,omitempty"`
@@ -37292,9 +37276,6 @@ type UpdateFileInput struct {
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey      *string `json:"storeKey,omitempty"`
 	ClearStoreKey *bool   `json:"clearStoreKey,omitempty"`
-	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType      *string `json:"categoryType,omitempty"`
-	ClearCategoryType *bool   `json:"clearCategoryType,omitempty"`
 	// the full URI of the file
 	URI      *string `json:"uri,omitempty"`
 	ClearURI *bool   `json:"clearURI,omitempty"`
@@ -46301,7 +46282,7 @@ func (e *APITokenOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e APITokenOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *APITokenOrderField) UnmarshalJSON(b []byte) error {
@@ -46377,7 +46358,7 @@ func (e *ActionPlanOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ActionPlanOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ActionPlanOrderField) UnmarshalJSON(b []byte) error {
@@ -46439,7 +46420,7 @@ func (e *AssessmentOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e AssessmentOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *AssessmentOrderField) UnmarshalJSON(b []byte) error {
@@ -46525,7 +46506,7 @@ func (e *AssessmentResponseOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e AssessmentResponseOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *AssessmentResponseOrderField) UnmarshalJSON(b []byte) error {
@@ -46607,7 +46588,7 @@ func (e *AssetOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e AssetOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *AssetOrderField) UnmarshalJSON(b []byte) error {
@@ -46701,7 +46682,7 @@ func (e *CampaignOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e CampaignOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *CampaignOrderField) UnmarshalJSON(b []byte) error {
@@ -46767,7 +46748,7 @@ func (e *CampaignTargetOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e CampaignTargetOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *CampaignTargetOrderField) UnmarshalJSON(b []byte) error {
@@ -46829,7 +46810,7 @@ func (e *CheckResultOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e CheckResultOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *CheckResultOrderField) UnmarshalJSON(b []byte) error {
@@ -46899,7 +46880,7 @@ func (e *ContactOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ContactOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ContactOrderField) UnmarshalJSON(b []byte) error {
@@ -46955,7 +46936,7 @@ func (e *ControlCategoryOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlCategoryOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlCategoryOrderField) UnmarshalJSON(b []byte) error {
@@ -47019,7 +47000,7 @@ func (e *ControlImplementationOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlImplementationOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlImplementationOrderField) UnmarshalJSON(b []byte) error {
@@ -47089,7 +47070,7 @@ func (e *ControlObjectiveOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlObjectiveOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlObjectiveOrderField) UnmarshalJSON(b []byte) error {
@@ -47165,7 +47146,7 @@ func (e *ControlOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlOrderField) UnmarshalJSON(b []byte) error {
@@ -47232,7 +47213,7 @@ func (e *ControlReportOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ControlReportOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ControlReportOrderField) UnmarshalJSON(b []byte) error {
@@ -47290,7 +47271,7 @@ func (e *CustomDomainOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e CustomDomainOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *CustomDomainOrderField) UnmarshalJSON(b []byte) error {
@@ -47352,7 +47333,7 @@ func (e *CustomTypeEnumOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e CustomTypeEnumOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *CustomTypeEnumOrderField) UnmarshalJSON(b []byte) error {
@@ -47408,7 +47389,7 @@ func (e *DNSVerificationOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e DNSVerificationOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *DNSVerificationOrderField) UnmarshalJSON(b []byte) error {
@@ -47474,7 +47455,7 @@ func (e *DirectoryAccountOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e DirectoryAccountOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *DirectoryAccountOrderField) UnmarshalJSON(b []byte) error {
@@ -47540,7 +47521,7 @@ func (e *DirectoryGroupOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e DirectoryGroupOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *DirectoryGroupOrderField) UnmarshalJSON(b []byte) error {
@@ -47598,7 +47579,7 @@ func (e *DirectoryMembershipOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e DirectoryMembershipOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *DirectoryMembershipOrderField) UnmarshalJSON(b []byte) error {
@@ -47656,7 +47637,7 @@ func (e *DirectorySyncRunOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e DirectorySyncRunOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *DirectorySyncRunOrderField) UnmarshalJSON(b []byte) error {
@@ -47712,7 +47693,7 @@ func (e *DiscussionOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e DiscussionOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *DiscussionOrderField) UnmarshalJSON(b []byte) error {
@@ -47768,7 +47749,7 @@ func (e *DocumentDataOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e DocumentDataOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *DocumentDataOrderField) UnmarshalJSON(b []byte) error {
@@ -47840,7 +47821,7 @@ func (e *EmailTemplateOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e EmailTemplateOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *EmailTemplateOrderField) UnmarshalJSON(b []byte) error {
@@ -47956,7 +47937,7 @@ func (e *EntityOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e EntityOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *EntityOrderField) UnmarshalJSON(b []byte) error {
@@ -48014,7 +47995,7 @@ func (e *EntityTypeOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e EntityTypeOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *EntityTypeOrderField) UnmarshalJSON(b []byte) error {
@@ -48070,7 +48051,7 @@ func (e *EventOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e EventOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *EventOrderField) UnmarshalJSON(b []byte) error {
@@ -48136,7 +48117,7 @@ func (e *EvidenceOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e EvidenceOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *EvidenceOrderField) UnmarshalJSON(b []byte) error {
@@ -48200,7 +48181,7 @@ func (e *ExportOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ExportOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ExportOrderField) UnmarshalJSON(b []byte) error {
@@ -48258,7 +48239,7 @@ func (e *FileOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e FileOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *FileOrderField) UnmarshalJSON(b []byte) error {
@@ -48314,7 +48295,7 @@ func (e *FindingControlOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e FindingControlOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *FindingControlOrderField) UnmarshalJSON(b []byte) error {
@@ -48384,7 +48365,7 @@ func (e *FindingOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e FindingOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *FindingOrderField) UnmarshalJSON(b []byte) error {
@@ -48442,7 +48423,7 @@ func (e *GroupMembershipOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e GroupMembershipOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *GroupMembershipOrderField) UnmarshalJSON(b []byte) error {
@@ -48502,7 +48483,7 @@ func (e *GroupOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e GroupOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *GroupOrderField) UnmarshalJSON(b []byte) error {
@@ -48560,7 +48541,7 @@ func (e *GroupPermissionOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e GroupPermissionOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *GroupPermissionOrderField) UnmarshalJSON(b []byte) error {
@@ -48616,7 +48597,7 @@ func (e *GroupSettingOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e GroupSettingOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *GroupSettingOrderField) UnmarshalJSON(b []byte) error {
@@ -48680,7 +48661,7 @@ func (e *HushOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e HushOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *HushOrderField) UnmarshalJSON(b []byte) error {
@@ -48768,7 +48749,7 @@ func (e *IdentityHolderOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e IdentityHolderOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *IdentityHolderOrderField) UnmarshalJSON(b []byte) error {
@@ -48842,7 +48823,7 @@ func (e *IntegrationOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e IntegrationOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *IntegrationOrderField) UnmarshalJSON(b []byte) error {
@@ -48910,7 +48891,7 @@ func (e *InternalPolicyOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e InternalPolicyOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *InternalPolicyOrderField) UnmarshalJSON(b []byte) error {
@@ -48972,7 +48953,7 @@ func (e *InviteOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e InviteOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *InviteOrderField) UnmarshalJSON(b []byte) error {
@@ -49030,7 +49011,7 @@ func (e *MappableDomainOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e MappableDomainOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *MappableDomainOrderField) UnmarshalJSON(b []byte) error {
@@ -49090,7 +49071,7 @@ func (e *MappedControlOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e MappedControlOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *MappedControlOrderField) UnmarshalJSON(b []byte) error {
@@ -49148,7 +49129,7 @@ func (e *NarrativeOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e NarrativeOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *NarrativeOrderField) UnmarshalJSON(b []byte) error {
@@ -49204,7 +49185,7 @@ func (e *NoteOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e NoteOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *NoteOrderField) UnmarshalJSON(b []byte) error {
@@ -49260,7 +49241,7 @@ func (e *NotificationOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e NotificationOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *NotificationOrderField) UnmarshalJSON(b []byte) error {
@@ -49322,7 +49303,7 @@ func (e *NotificationPreferenceOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e NotificationPreferenceOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *NotificationPreferenceOrderField) UnmarshalJSON(b []byte) error {
@@ -49398,7 +49379,7 @@ func (e *NotificationTemplateOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e NotificationTemplateOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *NotificationTemplateOrderField) UnmarshalJSON(b []byte) error {
@@ -49456,7 +49437,7 @@ func (e *OrderDirection) UnmarshalGQL(v any) error {
 }
 
 func (e OrderDirection) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *OrderDirection) UnmarshalJSON(b []byte) error {
@@ -49514,7 +49495,7 @@ func (e *OrgMembershipOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e OrgMembershipOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *OrgMembershipOrderField) UnmarshalJSON(b []byte) error {
@@ -49580,7 +49561,7 @@ func (e *OrgSubscriptionOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e OrgSubscriptionOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *OrgSubscriptionOrderField) UnmarshalJSON(b []byte) error {
@@ -49640,7 +49621,7 @@ func (e *OrganizationOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e OrganizationOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *OrganizationOrderField) UnmarshalJSON(b []byte) error {
@@ -49696,7 +49677,7 @@ func (e *OrganizationSettingOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e OrganizationSettingOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *OrganizationSettingOrderField) UnmarshalJSON(b []byte) error {
@@ -49760,7 +49741,7 @@ func (e *PersonalAccessTokenOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e PersonalAccessTokenOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *PersonalAccessTokenOrderField) UnmarshalJSON(b []byte) error {
@@ -49848,7 +49829,7 @@ func (e *PlatformOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e PlatformOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *PlatformOrderField) UnmarshalJSON(b []byte) error {
@@ -49916,7 +49897,7 @@ func (e *ProcedureOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ProcedureOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ProcedureOrderField) UnmarshalJSON(b []byte) error {
@@ -49974,7 +49955,7 @@ func (e *ProgramMembershipOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ProgramMembershipOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ProgramMembershipOrderField) UnmarshalJSON(b []byte) error {
@@ -50048,7 +50029,7 @@ func (e *ProgramOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ProgramOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ProgramOrderField) UnmarshalJSON(b []byte) error {
@@ -50114,7 +50095,7 @@ func (e *RemediationOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e RemediationOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *RemediationOrderField) UnmarshalJSON(b []byte) error {
@@ -50178,7 +50159,7 @@ func (e *ReviewOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ReviewOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ReviewOrderField) UnmarshalJSON(b []byte) error {
@@ -50266,7 +50247,7 @@ func (e *RiskOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e RiskOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *RiskOrderField) UnmarshalJSON(b []byte) error {
@@ -50326,7 +50307,7 @@ func (e *SLADefinitionOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e SLADefinitionOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *SLADefinitionOrderField) UnmarshalJSON(b []byte) error {
@@ -50390,7 +50371,7 @@ func (e *ScanOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e ScanOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *ScanOrderField) UnmarshalJSON(b []byte) error {
@@ -50460,7 +50441,7 @@ func (e *StandardOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e StandardOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *StandardOrderField) UnmarshalJSON(b []byte) error {
@@ -50536,7 +50517,7 @@ func (e *SubcontrolOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e SubcontrolOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *SubcontrolOrderField) UnmarshalJSON(b []byte) error {
@@ -50594,7 +50575,7 @@ func (e *SubprocessorOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e SubprocessorOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *SubprocessorOrderField) UnmarshalJSON(b []byte) error {
@@ -50658,7 +50639,7 @@ func (e *SubscriberOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e SubscriberOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *SubscriberOrderField) UnmarshalJSON(b []byte) error {
@@ -50716,7 +50697,7 @@ func (e *SystemDetailOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e SystemDetailOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *SystemDetailOrderField) UnmarshalJSON(b []byte) error {
@@ -50772,7 +50753,7 @@ func (e *TFASettingOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TFASettingOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TFASettingOrderField) UnmarshalJSON(b []byte) error {
@@ -50832,7 +50813,7 @@ func (e *TagDefinitionOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TagDefinitionOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TagDefinitionOrderField) UnmarshalJSON(b []byte) error {
@@ -50902,7 +50883,7 @@ func (e *TaskOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TaskOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TaskOrderField) UnmarshalJSON(b []byte) error {
@@ -50964,7 +50945,7 @@ func (e *TemplateOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TemplateOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TemplateOrderField) UnmarshalJSON(b []byte) error {
@@ -51020,7 +51001,7 @@ func (e *TrustCenterComplianceOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterComplianceOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterComplianceOrderField) UnmarshalJSON(b []byte) error {
@@ -51076,7 +51057,7 @@ func (e *TrustCenterDocOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterDocOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterDocOrderField) UnmarshalJSON(b []byte) error {
@@ -51134,7 +51115,7 @@ func (e *TrustCenterEntityOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterEntityOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterEntityOrderField) UnmarshalJSON(b []byte) error {
@@ -51192,7 +51173,7 @@ func (e *TrustCenterFAQOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterFAQOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterFAQOrderField) UnmarshalJSON(b []byte) error {
@@ -51248,7 +51229,7 @@ func (e *TrustCenterNDARequestOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterNDARequestOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterNDARequestOrderField) UnmarshalJSON(b []byte) error {
@@ -51304,7 +51285,7 @@ func (e *TrustCenterOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterOrderField) UnmarshalJSON(b []byte) error {
@@ -51360,7 +51341,7 @@ func (e *TrustCenterSettingOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterSettingOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterSettingOrderField) UnmarshalJSON(b []byte) error {
@@ -51416,7 +51397,7 @@ func (e *TrustCenterSubprocessorOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterSubprocessorOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterSubprocessorOrderField) UnmarshalJSON(b []byte) error {
@@ -51472,7 +51453,7 @@ func (e *TrustCenterWatermarkConfigOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e TrustCenterWatermarkConfigOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *TrustCenterWatermarkConfigOrderField) UnmarshalJSON(b []byte) error {
@@ -51534,7 +51515,7 @@ func (e *UserOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e UserOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *UserOrderField) UnmarshalJSON(b []byte) error {
@@ -51590,7 +51571,7 @@ func (e *UserSettingOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e UserSettingOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *UserSettingOrderField) UnmarshalJSON(b []byte) error {
@@ -51656,7 +51637,7 @@ func (e *VendorRiskScoreOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e VendorRiskScoreOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *VendorRiskScoreOrderField) UnmarshalJSON(b []byte) error {
@@ -51714,7 +51695,7 @@ func (e *VendorScoringConfigOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e VendorScoringConfigOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *VendorScoringConfigOrderField) UnmarshalJSON(b []byte) error {
@@ -51784,7 +51765,7 @@ func (e *VulnerabilityOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e VulnerabilityOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *VulnerabilityOrderField) UnmarshalJSON(b []byte) error {
@@ -51840,7 +51821,7 @@ func (e *WebauthnOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e WebauthnOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *WebauthnOrderField) UnmarshalJSON(b []byte) error {
@@ -51896,7 +51877,7 @@ func (e *WorkflowAssignmentOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e WorkflowAssignmentOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *WorkflowAssignmentOrderField) UnmarshalJSON(b []byte) error {
@@ -51952,7 +51933,7 @@ func (e *WorkflowAssignmentTargetOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e WorkflowAssignmentTargetOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *WorkflowAssignmentTargetOrderField) UnmarshalJSON(b []byte) error {
@@ -52008,7 +51989,7 @@ func (e *WorkflowDefinitionOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e WorkflowDefinitionOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *WorkflowDefinitionOrderField) UnmarshalJSON(b []byte) error {
@@ -52064,7 +52045,7 @@ func (e *WorkflowEventOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e WorkflowEventOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *WorkflowEventOrderField) UnmarshalJSON(b []byte) error {
@@ -52120,7 +52101,7 @@ func (e *WorkflowInstanceOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e WorkflowInstanceOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *WorkflowInstanceOrderField) UnmarshalJSON(b []byte) error {
@@ -52176,7 +52157,7 @@ func (e *WorkflowObjectRefOrderField) UnmarshalGQL(v any) error {
 }
 
 func (e WorkflowObjectRefOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
+	_, _ = fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 func (e *WorkflowObjectRefOrderField) UnmarshalJSON(b []byte) error {

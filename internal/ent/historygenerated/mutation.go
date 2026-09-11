@@ -45369,7 +45369,6 @@ type FileHistoryMutation struct {
 	md5_hash                *string
 	detected_content_type   *string
 	store_key               *string
-	category_type           *string
 	uri                     *string
 	storage_scheme          *string
 	storage_volume          *string
@@ -46904,55 +46903,6 @@ func (m *FileHistoryMutation) ResetStoreKey() {
 	delete(m.clearedFields, filehistory.FieldStoreKey)
 }
 
-// SetCategoryType sets the "category_type" field.
-func (m *FileHistoryMutation) SetCategoryType(s string) {
-	m.category_type = &s
-}
-
-// CategoryType returns the value of the "category_type" field in the mutation.
-func (m *FileHistoryMutation) CategoryType() (r string, exists bool) {
-	v := m.category_type
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldCategoryType returns the old "category_type" field's value of the FileHistory entity.
-// If the FileHistory object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *FileHistoryMutation) OldCategoryType(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldCategoryType is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldCategoryType requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCategoryType: %w", err)
-	}
-	return oldValue.CategoryType, nil
-}
-
-// ClearCategoryType clears the value of the "category_type" field.
-func (m *FileHistoryMutation) ClearCategoryType() {
-	m.category_type = nil
-	m.clearedFields[filehistory.FieldCategoryType] = struct{}{}
-}
-
-// CategoryTypeCleared returns if the "category_type" field was cleared in this mutation.
-func (m *FileHistoryMutation) CategoryTypeCleared() bool {
-	_, ok := m.clearedFields[filehistory.FieldCategoryType]
-	return ok
-}
-
-// ResetCategoryType resets all changes to the "category_type" field.
-func (m *FileHistoryMutation) ResetCategoryType() {
-	m.category_type = nil
-	delete(m.clearedFields, filehistory.FieldCategoryType)
-}
-
 // SetURI sets the "uri" field.
 func (m *FileHistoryMutation) SetURI(s string) {
 	m.uri = &s
@@ -47477,7 +47427,7 @@ func (m *FileHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FileHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 40)
+	fields := make([]string, 0, 39)
 	if m.history_time != nil {
 		fields = append(fields, filehistory.FieldHistoryTime)
 	}
@@ -47564,9 +47514,6 @@ func (m *FileHistoryMutation) Fields() []string {
 	}
 	if m.store_key != nil {
 		fields = append(fields, filehistory.FieldStoreKey)
-	}
-	if m.category_type != nil {
-		fields = append(fields, filehistory.FieldCategoryType)
 	}
 	if m.uri != nil {
 		fields = append(fields, filehistory.FieldURI)
@@ -47664,8 +47611,6 @@ func (m *FileHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.DetectedContentType()
 	case filehistory.FieldStoreKey:
 		return m.StoreKey()
-	case filehistory.FieldCategoryType:
-		return m.CategoryType()
 	case filehistory.FieldURI:
 		return m.URI()
 	case filehistory.FieldStorageScheme:
@@ -47753,8 +47698,6 @@ func (m *FileHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDetectedContentType(ctx)
 	case filehistory.FieldStoreKey:
 		return m.OldStoreKey(ctx)
-	case filehistory.FieldCategoryType:
-		return m.OldCategoryType(ctx)
 	case filehistory.FieldURI:
 		return m.OldURI(ctx)
 	case filehistory.FieldStorageScheme:
@@ -47987,13 +47930,6 @@ func (m *FileHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetStoreKey(v)
 		return nil
-	case filehistory.FieldCategoryType:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetCategoryType(v)
-		return nil
 	case filehistory.FieldURI:
 		v, ok := value.(string)
 		if !ok {
@@ -48193,9 +48129,6 @@ func (m *FileHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(filehistory.FieldStoreKey) {
 		fields = append(fields, filehistory.FieldStoreKey)
 	}
-	if m.FieldCleared(filehistory.FieldCategoryType) {
-		fields = append(fields, filehistory.FieldCategoryType)
-	}
 	if m.FieldCleared(filehistory.FieldURI) {
 		fields = append(fields, filehistory.FieldURI)
 	}
@@ -48311,9 +48244,6 @@ func (m *FileHistoryMutation) ClearField(name string) error {
 		return nil
 	case filehistory.FieldStoreKey:
 		m.ClearStoreKey()
-		return nil
-	case filehistory.FieldCategoryType:
-		m.ClearCategoryType()
 		return nil
 	case filehistory.FieldURI:
 		m.ClearURI()
@@ -48439,9 +48369,6 @@ func (m *FileHistoryMutation) ResetField(name string) error {
 		return nil
 	case filehistory.FieldStoreKey:
 		m.ResetStoreKey()
-		return nil
-	case filehistory.FieldCategoryType:
-		m.ResetCategoryType()
 		return nil
 	case filehistory.FieldURI:
 		m.ResetURI()

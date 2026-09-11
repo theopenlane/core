@@ -67,14 +67,6 @@ func (File) Fields() []ent.Field {
 		field.String("store_key").
 			Comment("the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key").
 			Optional(),
-		field.String("category_type").
-			Comment("the category type of the file, if any (e.g. evidence, invoice, etc.)").
-			Annotations(
-				entgql.Directives(
-					entgql.Deprecated("use category_status_name instead"),
-				),
-			).
-			Optional(),
 		field.String("uri").
 			Comment("the full URI of the file").
 			Optional(),

@@ -34793,19 +34793,6 @@ type FileWhereInput struct {
 	StoreKeyEqualFold    *string  `json:"storeKeyEqualFold,omitempty"`
 	StoreKeyContainsFold *string  `json:"storeKeyContainsFold,omitempty"`
 
-	// "category_type" field predicates.
-	CategoryType             *string  `json:"categoryType,omitempty"`
-	CategoryTypeNEQ          *string  `json:"categoryTypeNEQ,omitempty"`
-	CategoryTypeIn           []string `json:"categoryTypeIn,omitempty"`
-	CategoryTypeNotIn        []string `json:"categoryTypeNotIn,omitempty"`
-	CategoryTypeContains     *string  `json:"categoryTypeContains,omitempty"`
-	CategoryTypeHasPrefix    *string  `json:"categoryTypeHasPrefix,omitempty"`
-	CategoryTypeHasSuffix    *string  `json:"categoryTypeHasSuffix,omitempty"`
-	CategoryTypeIsNil        bool     `json:"categoryTypeIsNil,omitempty"`
-	CategoryTypeNotNil       bool     `json:"categoryTypeNotNil,omitempty"`
-	CategoryTypeEqualFold    *string  `json:"categoryTypeEqualFold,omitempty"`
-	CategoryTypeContainsFold *string  `json:"categoryTypeContainsFold,omitempty"`
-
 	// "uri" field predicates.
 	URI             *string  `json:"uri,omitempty"`
 	URINEQ          *string  `json:"uriNEQ,omitempty"`
@@ -35747,39 +35734,6 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	}
 	if i.StoreKeyContainsFold != nil {
 		predicates = append(predicates, file.StoreKeyContainsFold(*i.StoreKeyContainsFold))
-	}
-	if i.CategoryType != nil {
-		predicates = append(predicates, file.CategoryTypeEQ(*i.CategoryType))
-	}
-	if i.CategoryTypeNEQ != nil {
-		predicates = append(predicates, file.CategoryTypeNEQ(*i.CategoryTypeNEQ))
-	}
-	if len(i.CategoryTypeIn) > 0 {
-		predicates = append(predicates, file.CategoryTypeIn(i.CategoryTypeIn...))
-	}
-	if len(i.CategoryTypeNotIn) > 0 {
-		predicates = append(predicates, file.CategoryTypeNotIn(i.CategoryTypeNotIn...))
-	}
-	if i.CategoryTypeContains != nil {
-		predicates = append(predicates, file.CategoryTypeContains(*i.CategoryTypeContains))
-	}
-	if i.CategoryTypeHasPrefix != nil {
-		predicates = append(predicates, file.CategoryTypeHasPrefix(*i.CategoryTypeHasPrefix))
-	}
-	if i.CategoryTypeHasSuffix != nil {
-		predicates = append(predicates, file.CategoryTypeHasSuffix(*i.CategoryTypeHasSuffix))
-	}
-	if i.CategoryTypeIsNil {
-		predicates = append(predicates, file.CategoryTypeIsNil())
-	}
-	if i.CategoryTypeNotNil {
-		predicates = append(predicates, file.CategoryTypeNotNil())
-	}
-	if i.CategoryTypeEqualFold != nil {
-		predicates = append(predicates, file.CategoryTypeEqualFold(*i.CategoryTypeEqualFold))
-	}
-	if i.CategoryTypeContainsFold != nil {
-		predicates = append(predicates, file.CategoryTypeContainsFold(*i.CategoryTypeContainsFold))
 	}
 	if i.URI != nil {
 		predicates = append(predicates, file.URIEQ(*i.URI))
