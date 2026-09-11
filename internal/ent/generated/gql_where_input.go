@@ -705,7 +705,7 @@ func (i *APITokenWhereInput) P() (predicate.APIToken, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(apitoken.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(apitoken.FieldTags), v))
 		})
 	}
 
@@ -2229,7 +2229,7 @@ func (i *ActionPlanWhereInput) P() (predicate.ActionPlan, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(actionplan.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(actionplan.FieldTags), v))
 		})
 	}
 
@@ -3305,7 +3305,7 @@ func (i *AssessmentWhereInput) P() (predicate.Assessment, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(assessment.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(assessment.FieldTags), v))
 		})
 	}
 
@@ -6864,7 +6864,7 @@ func (i *AssetWhereInput) P() (predicate.Asset, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(asset.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(asset.FieldTags), v))
 		})
 	}
 
@@ -9049,7 +9049,7 @@ func (i *CampaignWhereInput) P() (predicate.Campaign, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(campaign.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(campaign.FieldTags), v))
 		})
 	}
 
@@ -10995,7 +10995,7 @@ func (i *CheckResultWhereInput) P() (predicate.CheckResult, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(checkresult.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(checkresult.FieldTags), v))
 		})
 	}
 
@@ -11919,7 +11919,7 @@ func (i *ContactWhereInput) P() (predicate.Contact, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(contact.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(contact.FieldTags), v))
 		})
 	}
 
@@ -13940,7 +13940,7 @@ func (i *ControlWhereInput) P() (predicate.Control, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(control.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(control.FieldTags), v))
 		})
 	}
 
@@ -15301,7 +15301,7 @@ func (i *ControlImplementationWhereInput) P() (predicate.ControlImplementation, 
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(controlimplementation.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(controlimplementation.FieldTags), v))
 		})
 	}
 
@@ -16324,7 +16324,7 @@ func (i *ControlObjectiveWhereInput) P() (predicate.ControlObjective, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(controlobjective.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(controlobjective.FieldTags), v))
 		})
 	}
 
@@ -17249,7 +17249,7 @@ func (i *CustomDomainWhereInput) P() (predicate.CustomDomain, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(customdomain.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(customdomain.FieldTags), v))
 		})
 	}
 
@@ -18993,7 +18993,7 @@ func (i *DNSVerificationWhereInput) P() (predicate.DNSVerification, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(dnsverification.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(dnsverification.FieldTags), v))
 		})
 	}
 
@@ -20898,7 +20898,7 @@ func (i *DirectoryAccountWhereInput) P() (predicate.DirectoryAccount, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(directoryaccount.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(directoryaccount.FieldTags), v))
 		})
 	}
 
@@ -22415,7 +22415,7 @@ func (i *DirectoryGroupWhereInput) P() (predicate.DirectoryGroup, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(directorygroup.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(directorygroup.FieldTags), v))
 		})
 	}
 
@@ -26293,7 +26293,7 @@ func (i *DocumentDataWhereInput) P() (predicate.DocumentData, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(documentdata.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(documentdata.FieldTags), v))
 		})
 	}
 
@@ -30371,7 +30371,7 @@ func (i *EntityWhereInput) P() (predicate.Entity, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(entity.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(entity.FieldTags), v))
 		})
 	}
 
@@ -31711,7 +31711,7 @@ func (i *EntityTypeWhereInput) P() (predicate.EntityType, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(entitytype.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(entitytype.FieldTags), v))
 		})
 	}
 
@@ -32205,7 +32205,7 @@ func (i *EventWhereInput) P() (predicate.Event, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(event.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(event.FieldTags), v))
 		})
 	}
 
@@ -33541,7 +33541,7 @@ func (i *EvidenceWhereInput) P() (predicate.Evidence, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(evidence.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(evidence.FieldTags), v))
 		})
 	}
 
@@ -36004,7 +36004,7 @@ func (i *FileWhereInput) P() (predicate.File, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(file.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(file.FieldTags), v))
 		})
 	}
 
@@ -38875,7 +38875,7 @@ func (i *FindingWhereInput) P() (predicate.Finding, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(finding.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(finding.FieldTags), v))
 		})
 	}
 
@@ -41307,7 +41307,7 @@ func (i *GroupWhereInput) P() (predicate.Group, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(group.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(group.FieldTags), v))
 		})
 	}
 
@@ -45612,7 +45612,7 @@ func (i *IdentityHolderWhereInput) P() (predicate.IdentityHolder, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(identityholder.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(identityholder.FieldTags), v))
 		})
 	}
 
@@ -47318,7 +47318,7 @@ func (i *IntegrationWhereInput) P() (predicate.Integration, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(integration.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(integration.FieldTags), v))
 		})
 	}
 
@@ -49281,7 +49281,7 @@ func (i *InternalPolicyWhereInput) P() (predicate.InternalPolicy, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(internalpolicy.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(internalpolicy.FieldTags), v))
 		})
 	}
 
@@ -50860,7 +50860,7 @@ func (i *MappableDomainWhereInput) P() (predicate.MappableDomain, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(mappabledomain.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(mappabledomain.FieldTags), v))
 		})
 	}
 
@@ -51511,7 +51511,7 @@ func (i *MappedControlWhereInput) P() (predicate.MappedControl, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(mappedcontrol.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(mappedcontrol.FieldTags), v))
 		})
 	}
 
@@ -52324,7 +52324,7 @@ func (i *NarrativeWhereInput) P() (predicate.Narrative, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(narrative.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(narrative.FieldTags), v))
 		})
 	}
 
@@ -57226,7 +57226,7 @@ func (i *OrgSubscriptionWhereInput) P() (predicate.OrgSubscription, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(orgsubscription.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(orgsubscription.FieldTags), v))
 		})
 	}
 
@@ -58457,7 +58457,7 @@ func (i *OrganizationWhereInput) P() (predicate.Organization, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(organization.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(organization.FieldTags), v))
 		})
 	}
 
@@ -62476,7 +62476,7 @@ func (i *OrganizationSettingWhereInput) P() (predicate.OrganizationSetting, erro
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(organizationsetting.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(organizationsetting.FieldTags), v))
 		})
 	}
 
@@ -63119,7 +63119,7 @@ func (i *PersonalAccessTokenWhereInput) P() (predicate.PersonalAccessToken, erro
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(personalaccesstoken.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(personalaccesstoken.FieldTags), v))
 		})
 	}
 
@@ -65862,7 +65862,7 @@ func (i *PlatformWhereInput) P() (predicate.Platform, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(platform.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(platform.FieldTags), v))
 		})
 	}
 
@@ -68264,7 +68264,7 @@ func (i *ProcedureWhereInput) P() (predicate.Procedure, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(procedure.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(procedure.FieldTags), v))
 		})
 	}
 
@@ -69854,7 +69854,7 @@ func (i *ProgramWhereInput) P() (predicate.Program, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(program.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(program.FieldTags), v))
 		})
 	}
 
@@ -72392,7 +72392,7 @@ func (i *RemediationWhereInput) P() (predicate.Remediation, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(remediation.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(remediation.FieldTags), v))
 		})
 	}
 
@@ -74216,7 +74216,7 @@ func (i *ReviewWhereInput) P() (predicate.Review, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(review.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(review.FieldTags), v))
 		})
 	}
 
@@ -76293,7 +76293,7 @@ func (i *RiskWhereInput) P() (predicate.Risk, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(risk.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(risk.FieldTags), v))
 		})
 	}
 
@@ -77288,7 +77288,7 @@ func (i *SLADefinitionWhereInput) P() (predicate.SLADefinition, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(sladefinition.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(sladefinition.FieldTags), v))
 		})
 	}
 
@@ -78802,7 +78802,7 @@ func (i *ScanWhereInput) P() (predicate.Scan, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(scan.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(scan.FieldTags), v))
 		})
 	}
 
@@ -80370,7 +80370,7 @@ func (i *StandardWhereInput) P() (predicate.Standard, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(standard.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(standard.FieldTags), v))
 		})
 	}
 
@@ -82128,7 +82128,7 @@ func (i *SubcontrolWhereInput) P() (predicate.Subcontrol, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(subcontrol.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(subcontrol.FieldTags), v))
 		})
 	}
 
@@ -83314,7 +83314,7 @@ func (i *SubprocessorWhereInput) P() (predicate.Subprocessor, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(subprocessor.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(subprocessor.FieldTags), v))
 		})
 	}
 
@@ -84075,7 +84075,7 @@ func (i *SubscriberWhereInput) P() (predicate.Subscriber, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(subscriber.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(subscriber.FieldTags), v))
 		})
 	}
 
@@ -84848,7 +84848,7 @@ func (i *SystemDetailWhereInput) P() (predicate.SystemDetail, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(systemdetail.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(systemdetail.FieldTags), v))
 		})
 	}
 
@@ -87336,7 +87336,7 @@ func (i *TaskWhereInput) P() (predicate.Task, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(task.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(task.FieldTags), v))
 		})
 	}
 
@@ -88710,7 +88710,7 @@ func (i *TemplateWhereInput) P() (predicate.Template, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(template.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(template.FieldTags), v))
 		})
 	}
 
@@ -89675,7 +89675,7 @@ func (i *TrustCenterWhereInput) P() (predicate.TrustCenter, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(trustcenter.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(trustcenter.FieldTags), v))
 		})
 	}
 
@@ -90487,7 +90487,7 @@ func (i *TrustCenterComplianceWhereInput) P() (predicate.TrustCenterCompliance, 
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(trustcentercompliance.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(trustcentercompliance.FieldTags), v))
 		})
 	}
 
@@ -91299,7 +91299,7 @@ func (i *TrustCenterDocWhereInput) P() (predicate.TrustCenterDoc, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(trustcenterdoc.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(trustcenterdoc.FieldTags), v))
 		})
 	}
 
@@ -93576,7 +93576,7 @@ func (i *TrustCenterNDARequestWhereInput) P() (predicate.TrustCenterNDARequest, 
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(trustcenterndarequest.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(trustcenterndarequest.FieldTags), v))
 		})
 	}
 
@@ -97816,7 +97816,7 @@ func (i *UserWhereInput) P() (predicate.User, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(user.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(user.FieldTags), v))
 		})
 	}
 
@@ -98829,7 +98829,7 @@ func (i *UserSettingWhereInput) P() (predicate.UserSetting, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(usersetting.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(usersetting.FieldTags), v))
 		})
 	}
 
@@ -99703,7 +99703,7 @@ func (i *VendorRiskScoreWhereInput) P() (predicate.VendorRiskScore, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(vendorriskscore.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(vendorriskscore.FieldTags), v))
 		})
 	}
 
@@ -100175,7 +100175,7 @@ func (i *VendorScoringConfigWhereInput) P() (predicate.VendorScoringConfig, erro
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(vendorscoringconfig.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(vendorscoringconfig.FieldTags), v))
 		})
 	}
 
@@ -102904,7 +102904,7 @@ func (i *VulnerabilityWhereInput) P() (predicate.Vulnerability, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(vulnerability.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(vulnerability.FieldTags), v))
 		})
 	}
 
@@ -103757,7 +103757,7 @@ func (i *WebauthnWhereInput) P() (predicate.Webauthn, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(webauthn.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(webauthn.FieldTags), v))
 		})
 	}
 
@@ -104590,7 +104590,7 @@ func (i *WorkflowAssignmentWhereInput) P() (predicate.WorkflowAssignment, error)
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(workflowassignment.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(workflowassignment.FieldTags), v))
 		})
 	}
 
@@ -105303,7 +105303,7 @@ func (i *WorkflowAssignmentTargetWhereInput) P() (predicate.WorkflowAssignmentTa
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(workflowassignmenttarget.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(workflowassignmenttarget.FieldTags), v))
 		})
 	}
 
@@ -106184,7 +106184,7 @@ func (i *WorkflowDefinitionWhereInput) P() (predicate.WorkflowDefinition, error)
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(workflowdefinition.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(workflowdefinition.FieldTags), v))
 		})
 	}
 
@@ -106815,7 +106815,7 @@ func (i *WorkflowEventWhereInput) P() (predicate.WorkflowEvent, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(workflowevent.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(workflowevent.FieldTags), v))
 		})
 	}
 
@@ -108343,7 +108343,7 @@ func (i *WorkflowInstanceWhereInput) P() (predicate.WorkflowInstance, error) {
 	if i.TagsHas != nil {
 		v := *i.TagsHas
 		predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains(workflowinstance.FieldTags, v))
+			s.Where(schemautil.TagsHasFold(s.C(workflowinstance.FieldTags), v))
 		})
 	}
 

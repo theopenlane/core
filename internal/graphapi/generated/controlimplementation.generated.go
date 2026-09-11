@@ -583,10 +583,6 @@ func (ec *executionContext) _ControlImplementationUpdatePayload(ctx context.Cont
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNControlImplementationBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlImplementationBulkCreatePayload) graphql.Marshaler {
-	return ec._ControlImplementationBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlImplementationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlImplementationBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNControlImplementationBulkCreatePayload2ᚖgi
 		return graphql.Null
 	}
 	return ec._ControlImplementationBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlImplementationBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlImplementationBulkDeletePayload) graphql.Marshaler {
-	return ec._ControlImplementationBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlImplementationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlImplementationBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNControlImplementationBulkDeletePayload2ᚖgi
 	return ec._ControlImplementationBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlImplementationBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlImplementationBulkUpdatePayload) graphql.Marshaler {
-	return ec._ControlImplementationBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlImplementationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlImplementationBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNControlImplementationBulkUpdatePayload2ᚖgi
 		return graphql.Null
 	}
 	return ec._ControlImplementationBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlImplementationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlImplementationCreatePayload) graphql.Marshaler {
-	return ec._ControlImplementationCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlImplementationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlImplementationCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNControlImplementationCreatePayload2ᚖgithub
 	return ec._ControlImplementationCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNControlImplementationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlImplementationDeletePayload) graphql.Marshaler {
-	return ec._ControlImplementationDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlImplementationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlImplementationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNControlImplementationDeletePayload2ᚖgithub
 		return graphql.Null
 	}
 	return ec._ControlImplementationDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlImplementationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.ControlImplementationUpdatePayload) graphql.Marshaler {
-	return ec._ControlImplementationUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlImplementationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐControlImplementationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ControlImplementationUpdatePayload) graphql.Marshaler {

@@ -583,10 +583,6 @@ func (ec *executionContext) _InternalPolicyUpdatePayload(ctx context.Context, se
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNInternalPolicyBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyBulkCreatePayload) graphql.Marshaler {
-	return ec._InternalPolicyBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInternalPolicyBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InternalPolicyBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNInternalPolicyBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._InternalPolicyBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInternalPolicyBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyBulkDeletePayload) graphql.Marshaler {
-	return ec._InternalPolicyBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInternalPolicyBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InternalPolicyBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNInternalPolicyBulkDeletePayload2ᚖgithubᚗ
 	return ec._InternalPolicyBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInternalPolicyBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyBulkUpdatePayload) graphql.Marshaler {
-	return ec._InternalPolicyBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInternalPolicyBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InternalPolicyBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNInternalPolicyBulkUpdatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._InternalPolicyBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInternalPolicyCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyCreatePayload) graphql.Marshaler {
-	return ec._InternalPolicyCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInternalPolicyCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InternalPolicyCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNInternalPolicyCreatePayload2ᚖgithubᚗcom�
 	return ec._InternalPolicyCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNInternalPolicyDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyDeletePayload) graphql.Marshaler {
-	return ec._InternalPolicyDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInternalPolicyDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.InternalPolicyDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNInternalPolicyDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._InternalPolicyDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInternalPolicyUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.InternalPolicyUpdatePayload) graphql.Marshaler {
-	return ec._InternalPolicyUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInternalPolicyUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.InternalPolicyUpdatePayload) graphql.Marshaler {

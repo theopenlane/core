@@ -457257,10 +457257,6 @@ func (ec *executionContext) _WorkflowProposal(ctx context.Context, sel ast.Selec
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAPIToken2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx context.Context, sel ast.SelectionSet, v generated.APIToken) graphql.Marshaler {
-	return ec._APIToken(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPIToken(ctx context.Context, sel ast.SelectionSet, v *generated.APIToken) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457269,10 +457265,6 @@ func (ec *executionContext) marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._APIToken(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAPITokenConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenConnection(ctx context.Context, sel ast.SelectionSet, v generated.APITokenConnection) graphql.Marshaler {
-	return ec._APITokenConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAPITokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAPITokenConnection(ctx context.Context, sel ast.SelectionSet, v *generated.APITokenConnection) graphql.Marshaler {
@@ -457311,10 +457303,6 @@ func (ec *executionContext) unmarshalNAPITokenWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNActionPlan2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlan(ctx context.Context, sel ast.SelectionSet, v generated.ActionPlan) graphql.Marshaler {
-	return ec._ActionPlan(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlan(ctx context.Context, sel ast.SelectionSet, v *generated.ActionPlan) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457323,10 +457311,6 @@ func (ec *executionContext) marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._ActionPlan(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNActionPlanConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx context.Context, sel ast.SelectionSet, v generated.ActionPlanConnection) graphql.Marshaler {
-	return ec._ActionPlanConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐActionPlanConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ActionPlanConnection) graphql.Marshaler {
@@ -457405,10 +457389,6 @@ func (ec *executionContext) unmarshalNActionPlanWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAssessment2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessment(ctx context.Context, sel ast.SelectionSet, v generated.Assessment) graphql.Marshaler {
-	return ec._Assessment(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssessment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessment(ctx context.Context, sel ast.SelectionSet, v *generated.Assessment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457427,10 +457407,6 @@ func (ec *executionContext) unmarshalNAssessmentAssessmentType2githubᚗcomᚋth
 
 func (ec *executionContext) marshalNAssessmentAssessmentType2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentType(ctx context.Context, sel ast.SelectionSet, v enums.AssessmentType) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNAssessmentConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx context.Context, sel ast.SelectionSet, v generated.AssessmentConnection) graphql.Marshaler {
-	return ec._AssessmentConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentConnection) graphql.Marshaler {
@@ -457464,10 +457440,6 @@ func (ec *executionContext) marshalNAssessmentOrderField2ᚖgithubᚗcomᚋtheop
 	return v
 }
 
-func (ec *executionContext) marshalNAssessmentResponse2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx context.Context, sel ast.SelectionSet, v generated.AssessmentResponse) graphql.Marshaler {
-	return ec._AssessmentResponse(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponse(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457486,10 +457458,6 @@ func (ec *executionContext) unmarshalNAssessmentResponseAssessmentResponseStatus
 
 func (ec *executionContext) marshalNAssessmentResponseAssessmentResponseStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentResponseStatus(ctx context.Context, sel ast.SelectionSet, v enums.AssessmentResponseStatus) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNAssessmentResponseConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx context.Context, sel ast.SelectionSet, v generated.AssessmentResponseConnection) graphql.Marshaler {
-	return ec._AssessmentResponseConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AssessmentResponseConnection) graphql.Marshaler {
@@ -457533,10 +457501,6 @@ func (ec *executionContext) unmarshalNAssessmentWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAsset2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAsset(ctx context.Context, sel ast.SelectionSet, v generated.Asset) graphql.Marshaler {
-	return ec._Asset(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAsset2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAsset(ctx context.Context, sel ast.SelectionSet, v *generated.Asset) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457555,10 +457519,6 @@ func (ec *executionContext) unmarshalNAssetAssetType2githubᚗcomᚋtheopenlane�
 
 func (ec *executionContext) marshalNAssetAssetType2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssetType(ctx context.Context, sel ast.SelectionSet, v enums.AssetType) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNAssetConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx context.Context, sel ast.SelectionSet, v generated.AssetConnection) graphql.Marshaler {
-	return ec._AssetConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐAssetConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AssetConnection) graphql.Marshaler {
@@ -457607,10 +457567,6 @@ func (ec *executionContext) unmarshalNAssetWhereInput2ᚖgithubᚗcomᚋtheopenl
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCampaign2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaign(ctx context.Context, sel ast.SelectionSet, v generated.Campaign) graphql.Marshaler {
-	return ec._Campaign(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCampaign2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaign(ctx context.Context, sel ast.SelectionSet, v *generated.Campaign) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457639,10 +457595,6 @@ func (ec *executionContext) unmarshalNCampaignCampaignType2githubᚗcomᚋtheope
 
 func (ec *executionContext) marshalNCampaignCampaignType2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCampaignType(ctx context.Context, sel ast.SelectionSet, v enums.CampaignType) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNCampaignConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignConnection(ctx context.Context, sel ast.SelectionSet, v generated.CampaignConnection) graphql.Marshaler {
-	return ec._CampaignConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCampaignConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CampaignConnection) graphql.Marshaler {
@@ -457686,10 +457638,6 @@ func (ec *executionContext) marshalNCampaignOrderField2ᚖgithubᚗcomᚋtheopen
 	return v
 }
 
-func (ec *executionContext) marshalNCampaignTarget2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTarget(ctx context.Context, sel ast.SelectionSet, v generated.CampaignTarget) graphql.Marshaler {
-	return ec._CampaignTarget(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCampaignTarget2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTarget(ctx context.Context, sel ast.SelectionSet, v *generated.CampaignTarget) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457708,10 +457656,6 @@ func (ec *executionContext) unmarshalNCampaignTargetAssessmentResponseStatus2git
 
 func (ec *executionContext) marshalNCampaignTargetAssessmentResponseStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentResponseStatus(ctx context.Context, sel ast.SelectionSet, v enums.AssessmentResponseStatus) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNCampaignTargetConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection(ctx context.Context, sel ast.SelectionSet, v generated.CampaignTargetConnection) graphql.Marshaler {
-	return ec._CampaignTargetConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCampaignTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCampaignTargetConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CampaignTargetConnection) graphql.Marshaler {
@@ -457755,10 +457699,6 @@ func (ec *executionContext) unmarshalNCampaignWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCheckResult2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCheckResult(ctx context.Context, sel ast.SelectionSet, v generated.CheckResult) graphql.Marshaler {
-	return ec._CheckResult(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCheckResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCheckResult(ctx context.Context, sel ast.SelectionSet, v *generated.CheckResult) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457777,10 +457717,6 @@ func (ec *executionContext) unmarshalNCheckResultCheckStatus2githubᚗcomᚋtheo
 
 func (ec *executionContext) marshalNCheckResultCheckStatus2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCheckStatus(ctx context.Context, sel ast.SelectionSet, v enums.CheckStatus) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNCheckResultConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCheckResultConnection(ctx context.Context, sel ast.SelectionSet, v generated.CheckResultConnection) graphql.Marshaler {
-	return ec._CheckResultConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCheckResultConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCheckResultConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CheckResultConnection) graphql.Marshaler {
@@ -457819,10 +457755,6 @@ func (ec *executionContext) unmarshalNCheckResultWhereInput2ᚖgithubᚗcomᚋth
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNContact2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContact(ctx context.Context, sel ast.SelectionSet, v generated.Contact) graphql.Marshaler {
-	return ec._Contact(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContact(ctx context.Context, sel ast.SelectionSet, v *generated.Contact) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457831,10 +457763,6 @@ func (ec *executionContext) marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return ec._Contact(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNContactConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx context.Context, sel ast.SelectionSet, v generated.ContactConnection) graphql.Marshaler {
-	return ec._ContactConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐContactConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ContactConnection) graphql.Marshaler {
@@ -457883,10 +457811,6 @@ func (ec *executionContext) unmarshalNContactWhereInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNControl2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControl(ctx context.Context, sel ast.SelectionSet, v generated.Control) graphql.Marshaler {
-	return ec._Control(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControl(ctx context.Context, sel ast.SelectionSet, v *generated.Control) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457895,10 +457819,6 @@ func (ec *executionContext) marshalNControl2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return ec._Control(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx context.Context, sel ast.SelectionSet, v generated.ControlConnection) graphql.Marshaler {
-	return ec._ControlConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ControlConnection) graphql.Marshaler {
@@ -457941,10 +457861,6 @@ func (ec *executionContext) marshalNControlControlStatus2githubᚗcomᚋtheopenl
 	return v
 }
 
-func (ec *executionContext) marshalNControlImplementation2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementation(ctx context.Context, sel ast.SelectionSet, v generated.ControlImplementation) graphql.Marshaler {
-	return ec._ControlImplementation(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlImplementation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementation(ctx context.Context, sel ast.SelectionSet, v *generated.ControlImplementation) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -457953,10 +457869,6 @@ func (ec *executionContext) marshalNControlImplementation2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._ControlImplementation(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlImplementationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationConnection(ctx context.Context, sel ast.SelectionSet, v generated.ControlImplementationConnection) graphql.Marshaler {
-	return ec._ControlImplementationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlImplementationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlImplementationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ControlImplementationConnection) graphql.Marshaler {
@@ -458005,10 +457917,6 @@ func (ec *executionContext) unmarshalNControlImplementationWhereInput2ᚖgithub�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNControlObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjective(ctx context.Context, sel ast.SelectionSet, v generated.ControlObjective) graphql.Marshaler {
-	return ec._ControlObjective(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNControlObjective2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjective(ctx context.Context, sel ast.SelectionSet, v *generated.ControlObjective) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -458017,10 +457925,6 @@ func (ec *executionContext) marshalNControlObjective2ᚖgithubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return ec._ControlObjective(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNControlObjectiveConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx context.Context, sel ast.SelectionSet, v generated.ControlObjectiveConnection) graphql.Marshaler {
-	return ec._ControlObjectiveConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ControlObjectiveConnection) graphql.Marshaler {
@@ -458860,10 +458764,6 @@ func (ec *executionContext) marshalNCursor2entgoᚗioᚋcontribᚋentgqlᚐCurso
 	return v
 }
 
-func (ec *executionContext) marshalNCustomDomain2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx context.Context, sel ast.SelectionSet, v generated.CustomDomain) graphql.Marshaler {
-	return ec._CustomDomain(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomain(ctx context.Context, sel ast.SelectionSet, v *generated.CustomDomain) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -458872,10 +458772,6 @@ func (ec *executionContext) marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._CustomDomain(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCustomDomainConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainConnection(ctx context.Context, sel ast.SelectionSet, v generated.CustomDomainConnection) graphql.Marshaler {
-	return ec._CustomDomainConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCustomDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomDomainConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CustomDomainConnection) graphql.Marshaler {
@@ -458924,10 +458820,6 @@ func (ec *executionContext) unmarshalNCustomDomainWhereInput2ᚖgithubᚗcomᚋt
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNCustomTypeEnum2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx context.Context, sel ast.SelectionSet, v generated.CustomTypeEnum) graphql.Marshaler {
-	return ec._CustomTypeEnum(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum(ctx context.Context, sel ast.SelectionSet, v *generated.CustomTypeEnum) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -458936,10 +458828,6 @@ func (ec *executionContext) marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._CustomTypeEnum(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCustomTypeEnumConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection(ctx context.Context, sel ast.SelectionSet, v generated.CustomTypeEnumConnection) graphql.Marshaler {
-	return ec._CustomTypeEnumConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection(ctx context.Context, sel ast.SelectionSet, v *generated.CustomTypeEnumConnection) graphql.Marshaler {
@@ -458978,10 +458866,6 @@ func (ec *executionContext) unmarshalNCustomTypeEnumWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDNSVerification2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx context.Context, sel ast.SelectionSet, v generated.DNSVerification) graphql.Marshaler {
-	return ec._DNSVerification(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerification(ctx context.Context, sel ast.SelectionSet, v *generated.DNSVerification) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -458990,10 +458874,6 @@ func (ec *executionContext) marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlan
 		return graphql.Null
 	}
 	return ec._DNSVerification(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDNSVerificationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationConnection(ctx context.Context, sel ast.SelectionSet, v generated.DNSVerificationConnection) graphql.Marshaler {
-	return ec._DNSVerificationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDNSVerificationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDNSVerificationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DNSVerificationConnection) graphql.Marshaler {
@@ -459052,10 +458932,6 @@ func (ec *executionContext) unmarshalNDNSVerificationWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDirectoryAccount2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccount(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryAccount) graphql.Marshaler {
-	return ec._DirectoryAccount(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccount(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryAccount) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459064,10 +458940,6 @@ func (ec *executionContext) marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return ec._DirectoryAccount(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectoryAccountConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccountConnection(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryAccountConnection) graphql.Marshaler {
-	return ec._DirectoryAccountConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectoryAccountConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryAccountConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryAccountConnection) graphql.Marshaler {
@@ -459136,10 +459008,6 @@ func (ec *executionContext) unmarshalNDirectoryAccountWhereInput2ᚖgithubᚗcom
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDirectoryGroup2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroup(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryGroup) graphql.Marshaler {
-	return ec._DirectoryGroup(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroup(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryGroup) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459148,10 +459016,6 @@ func (ec *executionContext) marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._DirectoryGroup(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectoryGroupConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroupConnection(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryGroupConnection) graphql.Marshaler {
-	return ec._DirectoryGroupConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectoryGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryGroupConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryGroupConnection) graphql.Marshaler {
@@ -459210,10 +459074,6 @@ func (ec *executionContext) unmarshalNDirectoryGroupWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDirectoryMembership2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembership(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryMembership) graphql.Marshaler {
-	return ec._DirectoryMembership(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembership(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryMembership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459222,10 +459082,6 @@ func (ec *executionContext) marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._DirectoryMembership(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectoryMembershipConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipConnection(ctx context.Context, sel ast.SelectionSet, v generated.DirectoryMembershipConnection) graphql.Marshaler {
-	return ec._DirectoryMembershipConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectoryMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DirectoryMembershipConnection) graphql.Marshaler {
@@ -459274,10 +459130,6 @@ func (ec *executionContext) unmarshalNDirectoryMembershipWhereInput2ᚖgithubᚗ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDirectorySyncRun2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx context.Context, sel ast.SelectionSet, v generated.DirectorySyncRun) graphql.Marshaler {
-	return ec._DirectorySyncRun(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun(ctx context.Context, sel ast.SelectionSet, v *generated.DirectorySyncRun) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459286,10 +459138,6 @@ func (ec *executionContext) marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return ec._DirectorySyncRun(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDirectorySyncRunConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunConnection(ctx context.Context, sel ast.SelectionSet, v generated.DirectorySyncRunConnection) graphql.Marshaler {
-	return ec._DirectorySyncRunConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDirectorySyncRunConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DirectorySyncRunConnection) graphql.Marshaler {
@@ -459338,10 +459186,6 @@ func (ec *executionContext) unmarshalNDirectorySyncRunWhereInput2ᚖgithubᚗcom
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDiscussion2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx context.Context, sel ast.SelectionSet, v generated.Discussion) graphql.Marshaler {
-	return ec._Discussion(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussion(ctx context.Context, sel ast.SelectionSet, v *generated.Discussion) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459350,10 +459194,6 @@ func (ec *executionContext) marshalNDiscussion2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._Discussion(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDiscussionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionConnection(ctx context.Context, sel ast.SelectionSet, v generated.DiscussionConnection) graphql.Marshaler {
-	return ec._DiscussionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDiscussionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDiscussionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DiscussionConnection) graphql.Marshaler {
@@ -459392,10 +459232,6 @@ func (ec *executionContext) unmarshalNDiscussionWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDocumentData2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx context.Context, sel ast.SelectionSet, v generated.DocumentData) graphql.Marshaler {
-	return ec._DocumentData(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentData(ctx context.Context, sel ast.SelectionSet, v *generated.DocumentData) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459404,10 +459240,6 @@ func (ec *executionContext) marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._DocumentData(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNDocumentDataConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataConnection(ctx context.Context, sel ast.SelectionSet, v generated.DocumentDataConnection) graphql.Marshaler {
-	return ec._DocumentDataConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNDocumentDataConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐDocumentDataConnection(ctx context.Context, sel ast.SelectionSet, v *generated.DocumentDataConnection) graphql.Marshaler {
@@ -459446,10 +459278,6 @@ func (ec *executionContext) unmarshalNDocumentDataWhereInput2ᚖgithubᚗcomᚋt
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNEmailTemplate2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx context.Context, sel ast.SelectionSet, v generated.EmailTemplate) graphql.Marshaler {
-	return ec._EmailTemplate(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplate(ctx context.Context, sel ast.SelectionSet, v *generated.EmailTemplate) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459458,10 +459286,6 @@ func (ec *executionContext) marshalNEmailTemplate2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._EmailTemplate(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEmailTemplateConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection(ctx context.Context, sel ast.SelectionSet, v generated.EmailTemplateConnection) graphql.Marshaler {
-	return ec._EmailTemplateConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEmailTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEmailTemplateConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EmailTemplateConnection) graphql.Marshaler {
@@ -459520,10 +459344,6 @@ func (ec *executionContext) unmarshalNEmailTemplateWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNEntity2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntity(ctx context.Context, sel ast.SelectionSet, v generated.Entity) graphql.Marshaler {
-	return ec._Entity(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntity(ctx context.Context, sel ast.SelectionSet, v *generated.Entity) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459532,10 +459352,6 @@ func (ec *executionContext) marshalNEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Entity(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEntityConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx context.Context, sel ast.SelectionSet, v generated.EntityConnection) graphql.Marshaler {
-	return ec._EntityConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EntityConnection) graphql.Marshaler {
@@ -459589,10 +459405,6 @@ func (ec *executionContext) marshalNEntityOrderField2ᚖgithubᚗcomᚋtheopenla
 	return v
 }
 
-func (ec *executionContext) marshalNEntityType2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityType(ctx context.Context, sel ast.SelectionSet, v generated.EntityType) graphql.Marshaler {
-	return ec._EntityType(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityType(ctx context.Context, sel ast.SelectionSet, v *generated.EntityType) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459601,10 +459413,6 @@ func (ec *executionContext) marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._EntityType(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEntityTypeConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityTypeConnection(ctx context.Context, sel ast.SelectionSet, v generated.EntityTypeConnection) graphql.Marshaler {
-	return ec._EntityTypeConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEntityTypeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEntityTypeConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EntityTypeConnection) graphql.Marshaler {
@@ -459658,10 +459466,6 @@ func (ec *executionContext) unmarshalNEntityWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNEvent2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvent(ctx context.Context, sel ast.SelectionSet, v generated.Event) graphql.Marshaler {
-	return ec._Event(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvent(ctx context.Context, sel ast.SelectionSet, v *generated.Event) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459670,10 +459474,6 @@ func (ec *executionContext) marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Event(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEventConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEventConnection(ctx context.Context, sel ast.SelectionSet, v generated.EventConnection) graphql.Marshaler {
-	return ec._EventConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEventConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EventConnection) graphql.Marshaler {
@@ -459712,10 +459512,6 @@ func (ec *executionContext) unmarshalNEventWhereInput2ᚖgithubᚗcomᚋtheopenl
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidence(ctx context.Context, sel ast.SelectionSet, v generated.Evidence) graphql.Marshaler {
-	return ec._Evidence(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidence(ctx context.Context, sel ast.SelectionSet, v *generated.Evidence) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459724,10 +459520,6 @@ func (ec *executionContext) marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._Evidence(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNEvidenceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx context.Context, sel ast.SelectionSet, v generated.EvidenceConnection) graphql.Marshaler {
-	return ec._EvidenceConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐEvidenceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.EvidenceConnection) graphql.Marshaler {
@@ -459786,10 +459578,6 @@ func (ec *executionContext) unmarshalNEvidenceWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNExport2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExport(ctx context.Context, sel ast.SelectionSet, v generated.Export) graphql.Marshaler {
-	return ec._Export(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNExport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExport(ctx context.Context, sel ast.SelectionSet, v *generated.Export) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459798,10 +459586,6 @@ func (ec *executionContext) marshalNExport2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Export(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNExportConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExportConnection(ctx context.Context, sel ast.SelectionSet, v generated.ExportConnection) graphql.Marshaler {
-	return ec._ExportConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNExportConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐExportConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ExportConnection) graphql.Marshaler {
@@ -459880,10 +459664,6 @@ func (ec *executionContext) unmarshalNExportWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNFile2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFile(ctx context.Context, sel ast.SelectionSet, v generated.File) graphql.Marshaler {
-	return ec._File(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFile2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFile(ctx context.Context, sel ast.SelectionSet, v *generated.File) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459892,10 +459672,6 @@ func (ec *executionContext) marshalNFile2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._File(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFileConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFileConnection(ctx context.Context, sel ast.SelectionSet, v generated.FileConnection) graphql.Marshaler {
-	return ec._FileConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFileConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFileConnection(ctx context.Context, sel ast.SelectionSet, v *generated.FileConnection) graphql.Marshaler {
@@ -459934,10 +459710,6 @@ func (ec *executionContext) unmarshalNFileWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNFinding2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFinding(ctx context.Context, sel ast.SelectionSet, v generated.Finding) graphql.Marshaler {
-	return ec._Finding(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFinding(ctx context.Context, sel ast.SelectionSet, v *generated.Finding) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459946,10 +459718,6 @@ func (ec *executionContext) marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return ec._Finding(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx context.Context, sel ast.SelectionSet, v generated.FindingConnection) graphql.Marshaler {
-	return ec._FindingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
@@ -459962,10 +459730,6 @@ func (ec *executionContext) marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenl
 	return ec._FindingConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNFindingControl2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControl(ctx context.Context, sel ast.SelectionSet, v generated.FindingControl) graphql.Marshaler {
-	return ec._FindingControl(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControl(ctx context.Context, sel ast.SelectionSet, v *generated.FindingControl) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -459974,10 +459738,6 @@ func (ec *executionContext) marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._FindingControl(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNFindingControlConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControlConnection(ctx context.Context, sel ast.SelectionSet, v generated.FindingControlConnection) graphql.Marshaler {
-	return ec._FindingControlConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNFindingControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐFindingControlConnection(ctx context.Context, sel ast.SelectionSet, v *generated.FindingControlConnection) graphql.Marshaler {
@@ -460052,10 +459812,6 @@ func (ec *executionContext) unmarshalNFindingWhereInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNGroup2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx context.Context, sel ast.SelectionSet, v generated.Group) graphql.Marshaler {
-	return ec._Group(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroup(ctx context.Context, sel ast.SelectionSet, v *generated.Group) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460064,10 +459820,6 @@ func (ec *executionContext) marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Group(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx context.Context, sel ast.SelectionSet, v generated.GroupConnection) graphql.Marshaler {
-	return ec._GroupConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupConnection(ctx context.Context, sel ast.SelectionSet, v *generated.GroupConnection) graphql.Marshaler {
@@ -460080,10 +459832,6 @@ func (ec *executionContext) marshalNGroupConnection2ᚖgithubᚗcomᚋtheopenlan
 	return ec._GroupConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNGroupMembership2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupMembership(ctx context.Context, sel ast.SelectionSet, v generated.GroupMembership) graphql.Marshaler {
-	return ec._GroupMembership(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupMembership(ctx context.Context, sel ast.SelectionSet, v *generated.GroupMembership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460092,10 +459840,6 @@ func (ec *executionContext) marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlan
 		return graphql.Null
 	}
 	return ec._GroupMembership(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupMembershipConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupMembershipConnection(ctx context.Context, sel ast.SelectionSet, v generated.GroupMembershipConnection) graphql.Marshaler {
-	return ec._GroupMembershipConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupMembershipConnection(ctx context.Context, sel ast.SelectionSet, v *generated.GroupMembershipConnection) graphql.Marshaler {
@@ -460165,10 +459909,6 @@ func (ec *executionContext) marshalNGroupOrderField2ᚖgithubᚗcomᚋtheopenlan
 	return v
 }
 
-func (ec *executionContext) marshalNGroupSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupSetting(ctx context.Context, sel ast.SelectionSet, v generated.GroupSetting) graphql.Marshaler {
-	return ec._GroupSetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupSetting(ctx context.Context, sel ast.SelectionSet, v *generated.GroupSetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460177,10 +459917,6 @@ func (ec *executionContext) marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._GroupSetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupSettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupSettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.GroupSettingConnection) graphql.Marshaler {
-	return ec._GroupSettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNGroupSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐGroupSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.GroupSettingConnection) graphql.Marshaler {
@@ -460244,10 +459980,6 @@ func (ec *executionContext) unmarshalNGroupWhereInput2ᚖgithubᚗcomᚋtheopenl
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNHush2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHush(ctx context.Context, sel ast.SelectionSet, v generated.Hush) graphql.Marshaler {
-	return ec._Hush(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHush(ctx context.Context, sel ast.SelectionSet, v *generated.Hush) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460256,10 +459988,6 @@ func (ec *executionContext) marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Hush(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNHushConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushConnection(ctx context.Context, sel ast.SelectionSet, v generated.HushConnection) graphql.Marshaler {
-	return ec._HushConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNHushConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐHushConnection(ctx context.Context, sel ast.SelectionSet, v *generated.HushConnection) graphql.Marshaler {
@@ -460298,10 +460026,6 @@ func (ec *executionContext) unmarshalNHushWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNIdentityHolder2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx context.Context, sel ast.SelectionSet, v generated.IdentityHolder) graphql.Marshaler {
-	return ec._IdentityHolder(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNIdentityHolder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolder(ctx context.Context, sel ast.SelectionSet, v *generated.IdentityHolder) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460310,10 +460034,6 @@ func (ec *executionContext) marshalNIdentityHolder2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._IdentityHolder(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNIdentityHolderConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection(ctx context.Context, sel ast.SelectionSet, v generated.IdentityHolderConnection) graphql.Marshaler {
-	return ec._IdentityHolderConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIdentityHolderConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIdentityHolderConnection(ctx context.Context, sel ast.SelectionSet, v *generated.IdentityHolderConnection) graphql.Marshaler {
@@ -460372,10 +460092,6 @@ func (ec *executionContext) unmarshalNIdentityHolderWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNIntegration2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegration(ctx context.Context, sel ast.SelectionSet, v generated.Integration) graphql.Marshaler {
-	return ec._Integration(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNIntegration2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegration(ctx context.Context, sel ast.SelectionSet, v *generated.Integration) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460384,10 +460100,6 @@ func (ec *executionContext) marshalNIntegration2ᚖgithubᚗcomᚋtheopenlaneᚋ
 		return graphql.Null
 	}
 	return ec._Integration(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNIntegrationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx context.Context, sel ast.SelectionSet, v generated.IntegrationConnection) graphql.Marshaler {
-	return ec._IntegrationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNIntegrationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐIntegrationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.IntegrationConnection) graphql.Marshaler {
@@ -460436,10 +460148,6 @@ func (ec *executionContext) unmarshalNIntegrationWhereInput2ᚖgithubᚗcomᚋth
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNInternalPolicy2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx context.Context, sel ast.SelectionSet, v generated.InternalPolicy) graphql.Marshaler {
-	return ec._InternalPolicy(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicy(ctx context.Context, sel ast.SelectionSet, v *generated.InternalPolicy) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460448,10 +460156,6 @@ func (ec *executionContext) marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._InternalPolicy(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInternalPolicyConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx context.Context, sel ast.SelectionSet, v generated.InternalPolicyConnection) graphql.Marshaler {
-	return ec._InternalPolicyConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection(ctx context.Context, sel ast.SelectionSet, v *generated.InternalPolicyConnection) graphql.Marshaler {
@@ -460520,10 +460224,6 @@ func (ec *executionContext) unmarshalNInternalPolicyWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNInvite2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInvite(ctx context.Context, sel ast.SelectionSet, v generated.Invite) graphql.Marshaler {
-	return ec._Invite(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInvite(ctx context.Context, sel ast.SelectionSet, v *generated.Invite) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460532,10 +460232,6 @@ func (ec *executionContext) marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Invite(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNInviteConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInviteConnection(ctx context.Context, sel ast.SelectionSet, v generated.InviteConnection) graphql.Marshaler {
-	return ec._InviteConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐInviteConnection(ctx context.Context, sel ast.SelectionSet, v *generated.InviteConnection) graphql.Marshaler {
@@ -460616,10 +460312,6 @@ func (ec *executionContext) marshalNMap2map(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNMappableDomain2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx context.Context, sel ast.SelectionSet, v generated.MappableDomain) graphql.Marshaler {
-	return ec._MappableDomain(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomain(ctx context.Context, sel ast.SelectionSet, v *generated.MappableDomain) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460628,10 +460320,6 @@ func (ec *executionContext) marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._MappableDomain(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappableDomainConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainConnection(ctx context.Context, sel ast.SelectionSet, v generated.MappableDomainConnection) graphql.Marshaler {
-	return ec._MappableDomainConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappableDomainConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappableDomainConnection(ctx context.Context, sel ast.SelectionSet, v *generated.MappableDomainConnection) graphql.Marshaler {
@@ -460670,10 +460358,6 @@ func (ec *executionContext) unmarshalNMappableDomainWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNMappedControl2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControl(ctx context.Context, sel ast.SelectionSet, v generated.MappedControl) graphql.Marshaler {
-	return ec._MappedControl(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControl(ctx context.Context, sel ast.SelectionSet, v *generated.MappedControl) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460682,10 +460366,6 @@ func (ec *executionContext) marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._MappedControl(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNMappedControlConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControlConnection(ctx context.Context, sel ast.SelectionSet, v generated.MappedControlConnection) graphql.Marshaler {
-	return ec._MappedControlConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNMappedControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐMappedControlConnection(ctx context.Context, sel ast.SelectionSet, v *generated.MappedControlConnection) graphql.Marshaler {
@@ -460744,10 +460424,6 @@ func (ec *executionContext) unmarshalNMappedControlWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNNarrative2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrative(ctx context.Context, sel ast.SelectionSet, v generated.Narrative) graphql.Marshaler {
-	return ec._Narrative(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrative(ctx context.Context, sel ast.SelectionSet, v *generated.Narrative) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460756,10 +460432,6 @@ func (ec *executionContext) marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋco
 		return graphql.Null
 	}
 	return ec._Narrative(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNarrativeConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx context.Context, sel ast.SelectionSet, v generated.NarrativeConnection) graphql.Marshaler {
-	return ec._NarrativeConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNarrativeConnection(ctx context.Context, sel ast.SelectionSet, v *generated.NarrativeConnection) graphql.Marshaler {
@@ -460808,10 +460480,6 @@ func (ec *executionContext) marshalNNode2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalNNote2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNote(ctx context.Context, sel ast.SelectionSet, v generated.Note) graphql.Marshaler {
-	return ec._Note(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNote2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNote(ctx context.Context, sel ast.SelectionSet, v *generated.Note) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460820,10 +460488,6 @@ func (ec *executionContext) marshalNNote2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Note(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNNoteConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteConnection(ctx context.Context, sel ast.SelectionSet, v generated.NoteConnection) graphql.Marshaler {
-	return ec._NoteConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNoteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteConnection(ctx context.Context, sel ast.SelectionSet, v *generated.NoteConnection) graphql.Marshaler {
@@ -460860,10 +460524,6 @@ func (ec *executionContext) marshalNNoteOrderField2ᚖgithubᚗcomᚋtheopenlane
 func (ec *executionContext) unmarshalNNoteWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNoteWhereInput(ctx context.Context, v any) (*generated.NoteWhereInput, error) {
 	res, err := ec.unmarshalInputNoteWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNNotification2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotification(ctx context.Context, sel ast.SelectionSet, v generated.Notification) graphql.Marshaler {
-	return ec._Notification(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotification(ctx context.Context, sel ast.SelectionSet, v *generated.Notification) graphql.Marshaler {
@@ -460912,10 +460572,6 @@ func (ec *executionContext) marshalNNotificationOrderField2ᚖgithubᚗcomᚋthe
 	return v
 }
 
-func (ec *executionContext) marshalNNotificationPreference2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreference(ctx context.Context, sel ast.SelectionSet, v generated.NotificationPreference) graphql.Marshaler {
-	return ec._NotificationPreference(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNotificationPreference2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreference(ctx context.Context, sel ast.SelectionSet, v *generated.NotificationPreference) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -460934,10 +460590,6 @@ func (ec *executionContext) unmarshalNNotificationPreferenceChannel2githubᚗcom
 
 func (ec *executionContext) marshalNNotificationPreferenceChannel2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐChannel(ctx context.Context, sel ast.SelectionSet, v enums.Channel) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNNotificationPreferenceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceConnection(ctx context.Context, sel ast.SelectionSet, v generated.NotificationPreferenceConnection) graphql.Marshaler {
-	return ec._NotificationPreferenceConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotificationPreferenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationPreferenceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.NotificationPreferenceConnection) graphql.Marshaler {
@@ -461006,10 +460658,6 @@ func (ec *executionContext) unmarshalNNotificationPreferenceWhereInput2ᚖgithub
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNNotificationTemplate2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplate(ctx context.Context, sel ast.SelectionSet, v generated.NotificationTemplate) graphql.Marshaler {
-	return ec._NotificationTemplate(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNotificationTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplate(ctx context.Context, sel ast.SelectionSet, v *generated.NotificationTemplate) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461028,10 +460676,6 @@ func (ec *executionContext) unmarshalNNotificationTemplateChannel2githubᚗcom�
 
 func (ec *executionContext) marshalNNotificationTemplateChannel2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐChannel(ctx context.Context, sel ast.SelectionSet, v enums.Channel) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNNotificationTemplateConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection(ctx context.Context, sel ast.SelectionSet, v generated.NotificationTemplateConnection) graphql.Marshaler {
-	return ec._NotificationTemplateConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNNotificationTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐNotificationTemplateConnection(ctx context.Context, sel ast.SelectionSet, v *generated.NotificationTemplateConnection) graphql.Marshaler {
@@ -461115,10 +460759,6 @@ func (ec *executionContext) marshalNOrderDirection2entgoᚗioᚋcontribᚋentgql
 	return v
 }
 
-func (ec *executionContext) marshalNOrgMembership2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgMembership(ctx context.Context, sel ast.SelectionSet, v generated.OrgMembership) graphql.Marshaler {
-	return ec._OrgMembership(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgMembership(ctx context.Context, sel ast.SelectionSet, v *generated.OrgMembership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461127,10 +460767,6 @@ func (ec *executionContext) marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._OrgMembership(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrgMembershipConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgMembershipConnection(ctx context.Context, sel ast.SelectionSet, v generated.OrgMembershipConnection) graphql.Marshaler {
-	return ec._OrgMembershipConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrgMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgMembershipConnection(ctx context.Context, sel ast.SelectionSet, v *generated.OrgMembershipConnection) graphql.Marshaler {
@@ -461179,10 +460815,6 @@ func (ec *executionContext) unmarshalNOrgMembershipWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrgSubscription2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgSubscription(ctx context.Context, sel ast.SelectionSet, v generated.OrgSubscription) graphql.Marshaler {
-	return ec._OrgSubscription(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrgSubscription2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgSubscription(ctx context.Context, sel ast.SelectionSet, v *generated.OrgSubscription) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461191,10 +460823,6 @@ func (ec *executionContext) marshalNOrgSubscription2ᚖgithubᚗcomᚋtheopenlan
 		return graphql.Null
 	}
 	return ec._OrgSubscription(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrgSubscriptionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgSubscriptionConnection(ctx context.Context, sel ast.SelectionSet, v generated.OrgSubscriptionConnection) graphql.Marshaler {
-	return ec._OrgSubscriptionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrgSubscriptionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrgSubscriptionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.OrgSubscriptionConnection) graphql.Marshaler {
@@ -461228,10 +460856,6 @@ func (ec *executionContext) unmarshalNOrgSubscriptionWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNOrganization2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx context.Context, sel ast.SelectionSet, v generated.Organization) graphql.Marshaler {
-	return ec._Organization(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganization(ctx context.Context, sel ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461240,10 +460864,6 @@ func (ec *executionContext) marshalNOrganization2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._Organization(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrganizationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationConnection(ctx context.Context, sel ast.SelectionSet, v generated.OrganizationConnection) graphql.Marshaler {
-	return ec._OrganizationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.OrganizationConnection) graphql.Marshaler {
@@ -461277,10 +460897,6 @@ func (ec *executionContext) marshalNOrganizationOrderField2ᚖgithubᚗcomᚋthe
 	return v
 }
 
-func (ec *executionContext) marshalNOrganizationSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx context.Context, sel ast.SelectionSet, v generated.OrganizationSetting) graphql.Marshaler {
-	return ec._OrganizationSetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSetting(ctx context.Context, sel ast.SelectionSet, v *generated.OrganizationSetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461289,10 +460905,6 @@ func (ec *executionContext) marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._OrganizationSetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNOrganizationSettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.OrganizationSettingConnection) graphql.Marshaler {
-	return ec._OrganizationSettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNOrganizationSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐOrganizationSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.OrganizationSettingConnection) graphql.Marshaler {
@@ -461370,10 +460982,6 @@ func (ec *executionContext) marshalNPageInfo2ᚖentgoᚗioᚋcontribᚋentgqlᚐ
 	return ec._PageInfo(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNPersonalAccessToken2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken(ctx context.Context, sel ast.SelectionSet, v generated.PersonalAccessToken) graphql.Marshaler {
-	return ec._PersonalAccessToken(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken(ctx context.Context, sel ast.SelectionSet, v *generated.PersonalAccessToken) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461382,10 +460990,6 @@ func (ec *executionContext) marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._PersonalAccessToken(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNPersonalAccessTokenConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenConnection(ctx context.Context, sel ast.SelectionSet, v generated.PersonalAccessTokenConnection) graphql.Marshaler {
-	return ec._PersonalAccessTokenConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPersonalAccessTokenConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenConnection(ctx context.Context, sel ast.SelectionSet, v *generated.PersonalAccessTokenConnection) graphql.Marshaler {
@@ -461424,10 +461028,6 @@ func (ec *executionContext) unmarshalNPersonalAccessTokenWhereInput2ᚖgithubᚗ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPlatform2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatform(ctx context.Context, sel ast.SelectionSet, v generated.Platform) graphql.Marshaler {
-	return ec._Platform(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNPlatform2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatform(ctx context.Context, sel ast.SelectionSet, v *generated.Platform) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461436,10 +461036,6 @@ func (ec *executionContext) marshalNPlatform2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._Platform(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNPlatformConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformConnection(ctx context.Context, sel ast.SelectionSet, v generated.PlatformConnection) graphql.Marshaler {
-	return ec._PlatformConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNPlatformConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐPlatformConnection(ctx context.Context, sel ast.SelectionSet, v *generated.PlatformConnection) graphql.Marshaler {
@@ -461498,10 +461094,6 @@ func (ec *executionContext) unmarshalNPlatformWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProcedure2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedure(ctx context.Context, sel ast.SelectionSet, v generated.Procedure) graphql.Marshaler {
-	return ec._Procedure(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedure(ctx context.Context, sel ast.SelectionSet, v *generated.Procedure) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461510,10 +461102,6 @@ func (ec *executionContext) marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋco
 		return graphql.Null
 	}
 	return ec._Procedure(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProcedureConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx context.Context, sel ast.SelectionSet, v generated.ProcedureConnection) graphql.Marshaler {
-	return ec._ProcedureConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProcedureConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ProcedureConnection) graphql.Marshaler {
@@ -461582,10 +461170,6 @@ func (ec *executionContext) unmarshalNProcedureWhereInput2ᚖgithubᚗcomᚋtheo
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNProgram2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgram(ctx context.Context, sel ast.SelectionSet, v generated.Program) graphql.Marshaler {
-	return ec._Program(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgram(ctx context.Context, sel ast.SelectionSet, v *generated.Program) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461594,10 +461178,6 @@ func (ec *executionContext) marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcore
 		return graphql.Null
 	}
 	return ec._Program(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProgramConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx context.Context, sel ast.SelectionSet, v generated.ProgramConnection) graphql.Marshaler {
-	return ec._ProgramConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ProgramConnection) graphql.Marshaler {
@@ -461610,10 +461190,6 @@ func (ec *executionContext) marshalNProgramConnection2ᚖgithubᚗcomᚋtheopenl
 	return ec._ProgramConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNProgramMembership2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramMembership(ctx context.Context, sel ast.SelectionSet, v generated.ProgramMembership) graphql.Marshaler {
-	return ec._ProgramMembership(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramMembership(ctx context.Context, sel ast.SelectionSet, v *generated.ProgramMembership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461622,10 +461198,6 @@ func (ec *executionContext) marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._ProgramMembership(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNProgramMembershipConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramMembershipConnection(ctx context.Context, sel ast.SelectionSet, v generated.ProgramMembershipConnection) graphql.Marshaler {
-	return ec._ProgramMembershipConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNProgramMembershipConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐProgramMembershipConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ProgramMembershipConnection) graphql.Marshaler {
@@ -461710,10 +461282,6 @@ func (ec *executionContext) unmarshalNProgramWhereInput2ᚖgithubᚗcomᚋtheope
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRemediation2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediation(ctx context.Context, sel ast.SelectionSet, v generated.Remediation) graphql.Marshaler {
-	return ec._Remediation(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRemediation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediation(ctx context.Context, sel ast.SelectionSet, v *generated.Remediation) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461722,10 +461290,6 @@ func (ec *executionContext) marshalNRemediation2ᚖgithubᚗcomᚋtheopenlaneᚋ
 		return graphql.Null
 	}
 	return ec._Remediation(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRemediationConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx context.Context, sel ast.SelectionSet, v generated.RemediationConnection) graphql.Marshaler {
-	return ec._RemediationConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx context.Context, sel ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
@@ -461774,10 +461338,6 @@ func (ec *executionContext) unmarshalNRemediationWhereInput2ᚖgithubᚗcomᚋth
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNReview2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReview(ctx context.Context, sel ast.SelectionSet, v generated.Review) graphql.Marshaler {
-	return ec._Review(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReview(ctx context.Context, sel ast.SelectionSet, v *generated.Review) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461786,10 +461346,6 @@ func (ec *executionContext) marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 		return graphql.Null
 	}
 	return ec._Review(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNReviewConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx context.Context, sel ast.SelectionSet, v generated.ReviewConnection) graphql.Marshaler {
-	return ec._ReviewConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ReviewConnection) graphql.Marshaler {
@@ -461838,10 +461394,6 @@ func (ec *executionContext) unmarshalNReviewWhereInput2ᚖgithubᚗcomᚋtheopen
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNRisk2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRisk(ctx context.Context, sel ast.SelectionSet, v generated.Risk) graphql.Marshaler {
-	return ec._Risk(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRisk(ctx context.Context, sel ast.SelectionSet, v *generated.Risk) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461850,10 +461402,6 @@ func (ec *executionContext) marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Risk(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRiskConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx context.Context, sel ast.SelectionSet, v generated.RiskConnection) graphql.Marshaler {
-	return ec._RiskConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐRiskConnection(ctx context.Context, sel ast.SelectionSet, v *generated.RiskConnection) graphql.Marshaler {
@@ -461942,10 +461490,6 @@ func (ec *executionContext) unmarshalNRiskWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSLADefinition2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinition(ctx context.Context, sel ast.SelectionSet, v generated.SLADefinition) graphql.Marshaler {
-	return ec._SLADefinition(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSLADefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinition(ctx context.Context, sel ast.SelectionSet, v *generated.SLADefinition) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -461954,10 +461498,6 @@ func (ec *executionContext) marshalNSLADefinition2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._SLADefinition(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSLADefinitionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinitionConnection(ctx context.Context, sel ast.SelectionSet, v generated.SLADefinitionConnection) graphql.Marshaler {
-	return ec._SLADefinitionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSLADefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSLADefinitionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SLADefinitionConnection) graphql.Marshaler {
@@ -462006,10 +461546,6 @@ func (ec *executionContext) unmarshalNSLADefinitionWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNScan2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScan(ctx context.Context, sel ast.SelectionSet, v generated.Scan) graphql.Marshaler {
-	return ec._Scan(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScan(ctx context.Context, sel ast.SelectionSet, v *generated.Scan) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462018,10 +461554,6 @@ func (ec *executionContext) marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Scan(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNScanConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx context.Context, sel ast.SelectionSet, v generated.ScanConnection) graphql.Marshaler {
-	return ec._ScanConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐScanConnection(ctx context.Context, sel ast.SelectionSet, v *generated.ScanConnection) graphql.Marshaler {
@@ -462080,10 +461612,6 @@ func (ec *executionContext) unmarshalNScanWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNStandard2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandard(ctx context.Context, sel ast.SelectionSet, v generated.Standard) graphql.Marshaler {
-	return ec._Standard(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandard(ctx context.Context, sel ast.SelectionSet, v *generated.Standard) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462092,10 +461620,6 @@ func (ec *executionContext) marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._Standard(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNStandardConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx context.Context, sel ast.SelectionSet, v generated.StandardConnection) graphql.Marshaler {
-	return ec._StandardConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐStandardConnection(ctx context.Context, sel ast.SelectionSet, v *generated.StandardConnection) graphql.Marshaler {
@@ -462144,10 +461668,6 @@ func (ec *executionContext) unmarshalNStandardWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSubcontrol2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrol(ctx context.Context, sel ast.SelectionSet, v generated.Subcontrol) graphql.Marshaler {
-	return ec._Subcontrol(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrol(ctx context.Context, sel ast.SelectionSet, v *generated.Subcontrol) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462156,10 +461676,6 @@ func (ec *executionContext) marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._Subcontrol(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSubcontrolConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx context.Context, sel ast.SelectionSet, v generated.SubcontrolConnection) graphql.Marshaler {
-	return ec._SubcontrolConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SubcontrolConnection) graphql.Marshaler {
@@ -462228,10 +461744,6 @@ func (ec *executionContext) unmarshalNSubcontrolWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSubprocessor2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessor(ctx context.Context, sel ast.SelectionSet, v generated.Subprocessor) graphql.Marshaler {
-	return ec._Subprocessor(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessor(ctx context.Context, sel ast.SelectionSet, v *generated.Subprocessor) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462240,10 +461752,6 @@ func (ec *executionContext) marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._Subprocessor(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSubprocessorConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx context.Context, sel ast.SelectionSet, v generated.SubprocessorConnection) graphql.Marshaler {
-	return ec._SubprocessorConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SubprocessorConnection) graphql.Marshaler {
@@ -462282,10 +461790,6 @@ func (ec *executionContext) unmarshalNSubprocessorWhereInput2ᚖgithubᚗcomᚋt
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSubscriber2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx context.Context, sel ast.SelectionSet, v generated.Subscriber) graphql.Marshaler {
-	return ec._Subscriber(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriber(ctx context.Context, sel ast.SelectionSet, v *generated.Subscriber) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462294,10 +461798,6 @@ func (ec *executionContext) marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._Subscriber(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSubscriberConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx context.Context, sel ast.SelectionSet, v generated.SubscriberConnection) graphql.Marshaler {
-	return ec._SubscriberConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSubscriberConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SubscriberConnection) graphql.Marshaler {
@@ -462336,10 +461836,6 @@ func (ec *executionContext) unmarshalNSubscriberWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNSystemDetail2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetail(ctx context.Context, sel ast.SelectionSet, v generated.SystemDetail) graphql.Marshaler {
-	return ec._SystemDetail(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNSystemDetail2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetail(ctx context.Context, sel ast.SelectionSet, v *generated.SystemDetail) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462348,10 +461844,6 @@ func (ec *executionContext) marshalNSystemDetail2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._SystemDetail(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNSystemDetailConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection(ctx context.Context, sel ast.SelectionSet, v generated.SystemDetailConnection) graphql.Marshaler {
-	return ec._SystemDetailConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNSystemDetailConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐSystemDetailConnection(ctx context.Context, sel ast.SelectionSet, v *generated.SystemDetailConnection) graphql.Marshaler {
@@ -462400,10 +461892,6 @@ func (ec *executionContext) unmarshalNSystemDetailWhereInput2ᚖgithubᚗcomᚋt
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTFASetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASetting(ctx context.Context, sel ast.SelectionSet, v generated.TFASetting) graphql.Marshaler {
-	return ec._TFASetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASetting(ctx context.Context, sel ast.SelectionSet, v *generated.TFASetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462412,10 +461900,6 @@ func (ec *executionContext) marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋc
 		return graphql.Null
 	}
 	return ec._TFASetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTFASettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.TFASettingConnection) graphql.Marshaler {
-	return ec._TFASettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTFASettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTFASettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TFASettingConnection) graphql.Marshaler {
@@ -462454,10 +461938,6 @@ func (ec *executionContext) unmarshalNTFASettingWhereInput2ᚖgithubᚗcomᚋthe
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTagDefinition2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx context.Context, sel ast.SelectionSet, v generated.TagDefinition) graphql.Marshaler {
-	return ec._TagDefinition(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinition(ctx context.Context, sel ast.SelectionSet, v *generated.TagDefinition) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462466,10 +461946,6 @@ func (ec *executionContext) marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._TagDefinition(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTagDefinitionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection(ctx context.Context, sel ast.SelectionSet, v generated.TagDefinitionConnection) graphql.Marshaler {
-	return ec._TagDefinitionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TagDefinitionConnection) graphql.Marshaler {
@@ -462508,10 +461984,6 @@ func (ec *executionContext) unmarshalNTagDefinitionWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTask2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTask(ctx context.Context, sel ast.SelectionSet, v generated.Task) graphql.Marshaler {
-	return ec._Task(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTask(ctx context.Context, sel ast.SelectionSet, v *generated.Task) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462520,10 +461992,6 @@ func (ec *executionContext) marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋ
 		return graphql.Null
 	}
 	return ec._Task(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTaskConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx context.Context, sel ast.SelectionSet, v generated.TaskConnection) graphql.Marshaler {
-	return ec._TaskConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTaskConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TaskConnection) graphql.Marshaler {
@@ -462572,10 +462040,6 @@ func (ec *executionContext) unmarshalNTaskWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTemplate2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplate(ctx context.Context, sel ast.SelectionSet, v generated.Template) graphql.Marshaler {
-	return ec._Template(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplate(ctx context.Context, sel ast.SelectionSet, v *generated.Template) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462584,10 +462048,6 @@ func (ec *executionContext) marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcor
 		return graphql.Null
 	}
 	return ec._Template(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTemplateConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx context.Context, sel ast.SelectionSet, v generated.TemplateConnection) graphql.Marshaler {
-	return ec._TemplateConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTemplateConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TemplateConnection) graphql.Marshaler {
@@ -462662,10 +462122,6 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalNTrustCenter2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenter(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenter) graphql.Marshaler {
-	return ec._TrustCenter(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenter2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenter(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenter) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462676,10 +462132,6 @@ func (ec *executionContext) marshalNTrustCenter2ᚖgithubᚗcomᚋtheopenlaneᚋ
 	return ec._TrustCenter(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterCompliance2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterCompliance) graphql.Marshaler {
-	return ec._TrustCenterCompliance(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterCompliance) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462688,10 +462140,6 @@ func (ec *executionContext) marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._TrustCenterCompliance(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterComplianceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterComplianceConnection) graphql.Marshaler {
-	return ec._TrustCenterComplianceConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterComplianceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterComplianceConnection) graphql.Marshaler {
@@ -462730,10 +462178,6 @@ func (ec *executionContext) unmarshalNTrustCenterComplianceWhereInput2ᚖgithub�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterConnection) graphql.Marshaler {
-	return ec._TrustCenterConnection(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462744,10 +462188,6 @@ func (ec *executionContext) marshalNTrustCenterConnection2ᚖgithubᚗcomᚋtheo
 	return ec._TrustCenterConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNTrustCenterDoc2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterDoc) graphql.Marshaler {
-	return ec._TrustCenterDoc(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterDoc) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462756,10 +462196,6 @@ func (ec *executionContext) marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._TrustCenterDoc(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterDocConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterDocConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterDocConnection) graphql.Marshaler {
-	return ec._TrustCenterDocConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterDocConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterDocConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterDocConnection) graphql.Marshaler {
@@ -462818,10 +462254,6 @@ func (ec *executionContext) unmarshalNTrustCenterDocWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterEntity2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntity(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterEntity) graphql.Marshaler {
-	return ec._TrustCenterEntity(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntity(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterEntity) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462830,10 +462262,6 @@ func (ec *executionContext) marshalNTrustCenterEntity2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._TrustCenterEntity(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterEntityConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterEntityConnection) graphql.Marshaler {
-	return ec._TrustCenterEntityConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterEntityConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterEntityConnection) graphql.Marshaler {
@@ -462872,10 +462300,6 @@ func (ec *executionContext) unmarshalNTrustCenterEntityWhereInput2ᚖgithubᚗco
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterFAQ2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterFAQ(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterFAQ) graphql.Marshaler {
-	return ec._TrustCenterFAQ(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterFAQ2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterFAQ(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterFAQ) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462884,10 +462308,6 @@ func (ec *executionContext) marshalNTrustCenterFAQ2ᚖgithubᚗcomᚋtheopenlane
 		return graphql.Null
 	}
 	return ec._TrustCenterFAQ(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterFAQConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterFAQConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterFAQConnection) graphql.Marshaler {
-	return ec._TrustCenterFAQConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterFAQConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterFAQConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterFAQConnection) graphql.Marshaler {
@@ -462926,10 +462346,6 @@ func (ec *executionContext) unmarshalNTrustCenterFAQWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterNDARequest2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequest(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterNDARequest) graphql.Marshaler {
-	return ec._TrustCenterNDARequest(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterNDARequest2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequest(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequest) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -462938,10 +462354,6 @@ func (ec *executionContext) marshalNTrustCenterNDARequest2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._TrustCenterNDARequest(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterNDARequestConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterNDARequestConnection) graphql.Marshaler {
-	return ec._TrustCenterNDARequestConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterNDARequestConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterNDARequestConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterNDARequestConnection) graphql.Marshaler {
@@ -463021,10 +462433,6 @@ func (ec *executionContext) marshalNTrustCenterOrderField2ᚖgithubᚗcomᚋtheo
 	return v
 }
 
-func (ec *executionContext) marshalNTrustCenterSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterSetting) graphql.Marshaler {
-	return ec._TrustCenterSetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterSetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463033,10 +462441,6 @@ func (ec *executionContext) marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopen
 		return graphql.Null
 	}
 	return ec._TrustCenterSetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterSettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterSettingConnection) graphql.Marshaler {
-	return ec._TrustCenterSettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterSettingConnection) graphql.Marshaler {
@@ -463095,10 +462499,6 @@ func (ec *executionContext) unmarshalNTrustCenterSettingWhereInput2ᚖgithubᚗc
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterSubprocessor2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterSubprocessor) graphql.Marshaler {
-	return ec._TrustCenterSubprocessor(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterSubprocessor) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463107,10 +462507,6 @@ func (ec *executionContext) marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._TrustCenterSubprocessor(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterSubprocessorConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterSubprocessorConnection) graphql.Marshaler {
-	return ec._TrustCenterSubprocessorConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterSubprocessorConnection) graphql.Marshaler {
@@ -463159,10 +462555,6 @@ func (ec *executionContext) marshalNTrustCenterTrustCenterPreviewStatus2github�
 	return v
 }
 
-func (ec *executionContext) marshalNTrustCenterWatermarkConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterWatermarkConfig) graphql.Marshaler {
-	return ec._TrustCenterWatermarkConfig(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterWatermarkConfig) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463171,10 +462563,6 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._TrustCenterWatermarkConfig(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNTrustCenterWatermarkConfigConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigConnection(ctx context.Context, sel ast.SelectionSet, v generated.TrustCenterWatermarkConfigConnection) graphql.Marshaler {
-	return ec._TrustCenterWatermarkConfigConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNTrustCenterWatermarkConfigConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigConnection(ctx context.Context, sel ast.SelectionSet, v *generated.TrustCenterWatermarkConfigConnection) graphql.Marshaler {
@@ -463628,10 +463016,6 @@ func (ec *executionContext) unmarshalNUpdateWorkflowDefinitionInput2githubᚗcom
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUser(ctx context.Context, sel ast.SelectionSet, v generated.User) graphql.Marshaler {
-	return ec._User(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUser(ctx context.Context, sel ast.SelectionSet, v *generated.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463650,10 +463034,6 @@ func (ec *executionContext) unmarshalNUserAuthProvider2githubᚗcomᚋtheopenlan
 
 func (ec *executionContext) marshalNUserAuthProvider2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAuthProvider(ctx context.Context, sel ast.SelectionSet, v enums.AuthProvider) graphql.Marshaler {
 	return v
-}
-
-func (ec *executionContext) marshalNUserConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserConnection(ctx context.Context, sel ast.SelectionSet, v generated.UserConnection) graphql.Marshaler {
-	return ec._UserConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUserConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserConnection(ctx context.Context, sel ast.SelectionSet, v *generated.UserConnection) graphql.Marshaler {
@@ -463697,10 +463077,6 @@ func (ec *executionContext) marshalNUserRole2githubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
-func (ec *executionContext) marshalNUserSetting2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v generated.UserSetting) graphql.Marshaler {
-	return ec._UserSetting(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSetting(ctx context.Context, sel ast.SelectionSet, v *generated.UserSetting) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463709,10 +463085,6 @@ func (ec *executionContext) marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋ
 		return graphql.Null
 	}
 	return ec._UserSetting(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNUserSettingConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSettingConnection(ctx context.Context, sel ast.SelectionSet, v generated.UserSettingConnection) graphql.Marshaler {
-	return ec._UserSettingConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNUserSettingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐUserSettingConnection(ctx context.Context, sel ast.SelectionSet, v *generated.UserSettingConnection) graphql.Marshaler {
@@ -463766,10 +463138,6 @@ func (ec *executionContext) unmarshalNUserWhereInput2ᚖgithubᚗcomᚋtheopenla
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNVendorRiskScore2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScore(ctx context.Context, sel ast.SelectionSet, v generated.VendorRiskScore) graphql.Marshaler {
-	return ec._VendorRiskScore(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorRiskScore2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScore(ctx context.Context, sel ast.SelectionSet, v *generated.VendorRiskScore) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463778,10 +463146,6 @@ func (ec *executionContext) marshalNVendorRiskScore2ᚖgithubᚗcomᚋtheopenlan
 		return graphql.Null
 	}
 	return ec._VendorRiskScore(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorRiskScoreConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreConnection(ctx context.Context, sel ast.SelectionSet, v generated.VendorRiskScoreConnection) graphql.Marshaler {
-	return ec._VendorRiskScoreConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorRiskScoreConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreConnection(ctx context.Context, sel ast.SelectionSet, v *generated.VendorRiskScoreConnection) graphql.Marshaler {
@@ -463860,10 +463224,6 @@ func (ec *executionContext) unmarshalNVendorRiskScoreWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNVendorScoringConfig2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfig(ctx context.Context, sel ast.SelectionSet, v generated.VendorScoringConfig) graphql.Marshaler {
-	return ec._VendorScoringConfig(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVendorScoringConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfig(ctx context.Context, sel ast.SelectionSet, v *generated.VendorScoringConfig) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463872,10 +463232,6 @@ func (ec *executionContext) marshalNVendorScoringConfig2ᚖgithubᚗcomᚋtheope
 		return graphql.Null
 	}
 	return ec._VendorScoringConfig(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVendorScoringConfigConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigConnection(ctx context.Context, sel ast.SelectionSet, v generated.VendorScoringConfigConnection) graphql.Marshaler {
-	return ec._VendorScoringConfigConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVendorScoringConfigConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVendorScoringConfigConnection(ctx context.Context, sel ast.SelectionSet, v *generated.VendorScoringConfigConnection) graphql.Marshaler {
@@ -463924,10 +463280,6 @@ func (ec *executionContext) unmarshalNVendorScoringConfigWhereInput2ᚖgithubᚗ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNVulnerability2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerability(ctx context.Context, sel ast.SelectionSet, v generated.Vulnerability) graphql.Marshaler {
-	return ec._Vulnerability(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNVulnerability2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerability(ctx context.Context, sel ast.SelectionSet, v *generated.Vulnerability) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -463936,10 +463288,6 @@ func (ec *executionContext) marshalNVulnerability2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._Vulnerability(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNVulnerabilityConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx context.Context, sel ast.SelectionSet, v generated.VulnerabilityConnection) graphql.Marshaler {
-	return ec._VulnerabilityConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx context.Context, sel ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
@@ -463988,10 +463336,6 @@ func (ec *executionContext) unmarshalNVulnerabilityWhereInput2ᚖgithubᚗcomᚋ
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWebauthnConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWebauthnConnection(ctx context.Context, sel ast.SelectionSet, v generated.WebauthnConnection) graphql.Marshaler {
-	return ec._WebauthnConnection(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWebauthnConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWebauthnConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WebauthnConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464023,10 +463367,6 @@ func (ec *executionContext) unmarshalNWebauthnWhereInput2ᚖgithubᚗcomᚋtheop
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNWorkflowAssignment2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowAssignment) graphql.Marshaler {
-	return ec._WorkflowAssignment(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowAssignment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464035,10 +463375,6 @@ func (ec *executionContext) marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopen
 		return graphql.Null
 	}
 	return ec._WorkflowAssignment(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowAssignmentConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowAssignmentConnection) graphql.Marshaler {
-	return ec._WorkflowAssignmentConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowAssignmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowAssignmentConnection) graphql.Marshaler {
@@ -464072,10 +463408,6 @@ func (ec *executionContext) marshalNWorkflowAssignmentOrderField2ᚖgithubᚗcom
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowAssignmentTarget2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTarget(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowAssignmentTarget) graphql.Marshaler {
-	return ec._WorkflowAssignmentTarget(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowAssignmentTarget2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTarget(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowAssignmentTarget) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464084,10 +463416,6 @@ func (ec *executionContext) marshalNWorkflowAssignmentTarget2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._WorkflowAssignmentTarget(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowAssignmentTargetConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTargetConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowAssignmentTargetConnection) graphql.Marshaler {
-	return ec._WorkflowAssignmentTargetConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowAssignmentTargetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentTargetConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowAssignmentTargetConnection) graphql.Marshaler {
@@ -464151,10 +463479,6 @@ func (ec *executionContext) marshalNWorkflowAssignmentWorkflowAssignmentStatus2g
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowDefinition2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowDefinition) graphql.Marshaler {
-	return ec._WorkflowDefinition(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowDefinition) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464163,10 +463487,6 @@ func (ec *executionContext) marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopen
 		return graphql.Null
 	}
 	return ec._WorkflowDefinition(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowDefinitionConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowDefinitionConnection) graphql.Marshaler {
-	return ec._WorkflowDefinitionConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowDefinitionConnection) graphql.Marshaler {
@@ -464215,10 +463535,6 @@ func (ec *executionContext) marshalNWorkflowDefinitionWorkflowKind2githubᚗcom�
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowEvent2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEvent(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowEvent) graphql.Marshaler {
-	return ec._WorkflowEvent(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEvent(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowEvent) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464227,10 +463543,6 @@ func (ec *executionContext) marshalNWorkflowEvent2ᚖgithubᚗcomᚋtheopenlane�
 		return graphql.Null
 	}
 	return ec._WorkflowEvent(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowEventConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEventConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowEventConnection) graphql.Marshaler {
-	return ec._WorkflowEventConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowEventConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowEventConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowEventConnection) graphql.Marshaler {
@@ -464279,10 +463591,6 @@ func (ec *executionContext) marshalNWorkflowEventWorkflowEventType2githubᚗcom�
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowInstance2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstance(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowInstance) graphql.Marshaler {
-	return ec._WorkflowInstance(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowInstance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.WorkflowInstance) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
@@ -464307,10 +463615,6 @@ func (ec *executionContext) marshalNWorkflowInstance2ᚖgithubᚗcomᚋtheopenla
 		return graphql.Null
 	}
 	return ec._WorkflowInstance(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowInstanceConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowInstanceConnection) graphql.Marshaler {
-	return ec._WorkflowInstanceConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowInstanceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowInstanceConnection) graphql.Marshaler {
@@ -464359,10 +463663,6 @@ func (ec *executionContext) marshalNWorkflowInstanceWorkflowInstanceState2github
 	return v
 }
 
-func (ec *executionContext) marshalNWorkflowObjectRef2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRef(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowObjectRef) graphql.Marshaler {
-	return ec._WorkflowObjectRef(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRef(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowObjectRef) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -464371,10 +463671,6 @@ func (ec *executionContext) marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenl
 		return graphql.Null
 	}
 	return ec._WorkflowObjectRef(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNWorkflowObjectRefConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefConnection(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowObjectRefConnection) graphql.Marshaler {
-	return ec._WorkflowObjectRefConnection(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowObjectRefConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefConnection(ctx context.Context, sel ast.SelectionSet, v *generated.WorkflowObjectRefConnection) graphql.Marshaler {
@@ -464411,10 +463707,6 @@ func (ec *executionContext) marshalNWorkflowObjectRefOrderField2ᚖgithubᚗcom�
 func (ec *executionContext) unmarshalNWorkflowObjectRefWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefWhereInput(ctx context.Context, v any) (*generated.WorkflowObjectRefWhereInput, error) {
 	res, err := ec.unmarshalInputWorkflowObjectRefWhereInput(ctx, v)
 	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNWorkflowProposal2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowProposal(ctx context.Context, sel ast.SelectionSet, v generated.WorkflowProposal) graphql.Marshaler {
-	return ec._WorkflowProposal(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNWorkflowProposal2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋentᚋgeneratedᚐWorkflowProposalᚄ(ctx context.Context, sel ast.SelectionSet, v []*generated.WorkflowProposal) graphql.Marshaler {

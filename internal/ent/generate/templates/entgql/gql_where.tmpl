@@ -243,7 +243,11 @@ import (
 		if i.{{ $f.StructField }}Has != nil {
 			v := *i.{{ $f.StructField }}Has
 			predicates = append(predicates, func(s *sql.Selector) {
-			s.Where(sqljson.ValueContains({{ $col }}, v))
+				{{- if eq $f.Name "tags" }}
+				s.Where(schemautil.TagsHasFold(s.C({{ $col }}), v))
+				{{- else }}
+				s.Where(sqljson.ValueContains({{ $col }}, v))
+				{{- end }}
 			})
 		}
 		{{- end }}

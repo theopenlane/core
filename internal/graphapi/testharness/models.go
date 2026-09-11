@@ -22,6 +22,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+
 	"github.com/theopenlane/core/v2/internal/consts"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
 	ent "github.com/theopenlane/core/v2/internal/ent/generated"
@@ -338,6 +339,7 @@ type EvidenceBuilder struct {
 	ProcedureID      string
 	IncludeFile      bool
 	Status           *enums.EvidenceStatus
+	Tags             []string
 }
 
 type StandardBuilder struct {
@@ -1507,6 +1509,10 @@ func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 		file := (&FileBuilder{Client: e.Client, Name: e.Name}).MustNew(ctx, t)
 
 		mutation.AddFileIDs(file.ID)
+	}
+
+	if len(e.Tags) > 0 {
+		mutation.SetTags(e.Tags)
 	}
 
 	ev, err := mutation.

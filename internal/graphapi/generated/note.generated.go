@@ -138,10 +138,6 @@ func (ec *executionContext) _NoteDeletePayload(ctx context.Context, sel ast.Sele
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNNoteDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.NoteDeletePayload) graphql.Marshaler {
-	return ec._NoteDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNNoteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NoteDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

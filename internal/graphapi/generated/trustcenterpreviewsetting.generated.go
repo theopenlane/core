@@ -236,10 +236,6 @@ func (ec *executionContext) unmarshalNCreateTrustCenterPreviewSettingInput2githu
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterPreviewSettingCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterPreviewSettingCreatePayload) graphql.Marshaler {
-	return ec._TrustCenterPreviewSettingCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterPreviewSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterPreviewSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterPreviewSettingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
