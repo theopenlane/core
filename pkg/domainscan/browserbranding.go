@@ -179,10 +179,6 @@ func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesi
 		return nil, err
 	}
 
-	if target.Scheme != "http" && target.Scheme != "https" {
-		return nil, errBrandingURLScheme
-	}
-
 	client := cloudflare.NewClient(c.clientOptions()...)
 
 	devToolBrowser, err := client.BrowserRendering.Devtools.Browser.New(ctx, browser_rendering.DevtoolBrowserNewParams{
@@ -290,7 +286,11 @@ func (c *Config) browserBranding(ctx context.Context, domain string) (*BrandDesi
 		return nil, err
 	}
 
-	meta := cdp.loadedDocuments[navigation.FrameID]
+	meta, ok := cdp.loadedDocuments[navigation.FrameID]
+	if !ok {
+		return nil, errBrandingNoDocument
+	}
+
 	meta.Title = pageInfo.Title
 	meta.FinalURL = pageInfo.URL
 
