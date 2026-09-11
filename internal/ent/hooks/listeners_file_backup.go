@@ -21,6 +21,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/metrics"
 )
 
+// init registers the file backup listeners so gala setup picks them up automatically
+func init() { registerListeners(FileBackupListeners) }
+
 // FileBackupRequest asks for a single file to be replicated to its backup provider
 type FileBackupRequest struct {
 	FileID string `json:"file_id"`

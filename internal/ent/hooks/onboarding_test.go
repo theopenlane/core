@@ -1,7 +1,9 @@
 package hooks_test
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
@@ -193,6 +195,13 @@ func (suite *HookTestSuite) TestOnboardingProgramFrameworkSelections() {
 
 			if tc.programCount > 0 {
 				assert.Len(t, programs[0].Edges.Controls, tc.controlCount)
+				year := time.Now().Year()
+				expectedName := fmt.Sprintf("Compliance Program %d", year)
+				if tc.name == "single framework" {
+					expectedName = fmt.Sprintf("%s Program %d", framework, year)
+				}
+				assert.Equal(t, expectedName, programs[0].Name)
+				assert.Equal(t, fmt.Sprintf("Track %s compliance activities, evidence, and audit readiness for %d.", programs[0].FrameworkName, year), programs[0].Description)
 			}
 
 			taskCount, err := suite.client.Task.Query().Where(

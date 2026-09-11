@@ -9,6 +9,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the integration cleanup listeners so gala setup picks them up automatically
+func init() { registerListeners(IntegrationCleanupListeners) }
+
 // IntegrationCleanupListeners purges queued integration jobs on removal or disconnect
 // and reseeds them on reconnect
 func IntegrationCleanupListeners() []gala.Registration {

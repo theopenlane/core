@@ -32,6 +32,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the trust center cache listeners so gala setup picks them up automatically
+func init() { registerListeners(TrustCenterCacheListeners) }
+
 // trustCenterSoftDeleteKeys lets cache listeners load soft-deleted rows
 var trustCenterSoftDeleteKeys = []func(context.Context) context.Context{entx.SkipSoftDelete}
 

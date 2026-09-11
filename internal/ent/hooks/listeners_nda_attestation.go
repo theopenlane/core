@@ -14,6 +14,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/logx"
 )
 
+// init registers the NDA attestation listeners so gala setup picks them up automatically
+func init() { registerListeners(NDAAttestationListeners) }
+
 // NDAAttestationListeners attests signed trust center NDAs after document data creation
 func NDAAttestationListeners() []gala.Registration {
 	return []gala.Registration{

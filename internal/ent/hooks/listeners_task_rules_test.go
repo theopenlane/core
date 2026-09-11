@@ -4,6 +4,8 @@ package hooks_test
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
@@ -167,6 +169,8 @@ func (suite *HookTestSuite) TestOnboardingCreatesProgramWithSelectedFrameworks()
 		WithMembers().Only(ctx)
 	require.NoError(t, err)
 	assert.Equal(t, "SOC 2, ISO 27001", created.FrameworkName)
+	assert.Equal(t, fmt.Sprintf("Compliance Program %d", time.Now().Year()), created.Name)
+	assert.Equal(t, fmt.Sprintf("Track SOC 2, ISO 27001 compliance activities, evidence, and audit readiness for %d.", time.Now().Year()), created.Description)
 	assert.Equal(t, "Jane Doe", created.Auditor)
 	assert.Equal(t, "jane@example.com", created.AuditorEmail)
 	require.Len(t, created.Edges.Members, 1)

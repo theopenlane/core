@@ -26,6 +26,9 @@ import (
 	"github.com/theopenlane/core/v2/pkg/mapx"
 )
 
+// init registers the questionnaire transform listeners so gala setup picks them up automatically
+func init() { registerListeners(QuestionnaireTransformListeners) }
+
 // QuestionnaireTransformListeners transforms completed questionnaire document data into
 // entities using the template's transform configuration
 func QuestionnaireTransformListeners() []gala.Registration {

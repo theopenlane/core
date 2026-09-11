@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/iam/auth"
@@ -14,11 +15,12 @@ import (
 	"github.com/theopenlane/core/v2/internal/controls"
 	"github.com/theopenlane/core/v2/internal/ent/entityops"
 	"github.com/theopenlane/core/v2/internal/ent/generated"
-	"github.com/theopenlane/core/v2/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/v2/internal/ent/generated/standard"
 	"github.com/theopenlane/core/v2/internal/workflows"
 	"github.com/theopenlane/core/v2/pkg/gala"
 )
+
+func init() { registerListeners(OnboardingProgramListeners) }
 
 // OnboardingProgramListeners sets up gala to process onboarding requests such as creating programs
 // and cloning them in the background
@@ -27,52 +29,61 @@ func OnboardingProgramListeners() []gala.Registration {
 		entityops.MutationListener{
 			Schema:     entityops.SchemaOnboarding,
 			Operations: []string{entityops.OpCreate},
-			Handle:     handleOnboardingProgram,
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation)
+			},
+			Handle: handleOnboardingProgram,
 		},
 	}
 }
 
 func handleOnboardingProgram(inv entityops.Invocation, _ entityops.MutationPayload) error {
-	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
-
-	onboarding, ok, err := entityops.LoadEntity(allowCtx, inv.EntityID, inv.Client.Onboarding.Get)
-	if err != nil || !ok || onboarding.OrganizationID == "" {
+	record, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.Onboarding.Get)
+	if err != nil || !ok {
 		return err
 	}
 
+	if len(record.Compliance) == 0 {
+		return nil
+	}
+
 	caller := *inv.Caller
-	caller.OrganizationID = onboarding.OrganizationID
+	caller.OrganizationID = record.OrganizationID
 	ctx := auth.WithCaller(inv.Context, &caller)
 
-	org, ok, err := entityops.LoadEntity(ctx, onboarding.OrganizationID, inv.Client.Organization.Get)
+	org, ok, err := entityops.LoadEntity(ctx, record.OrganizationID, inv.Client.Organization.Get)
 	if err != nil || !ok {
 		return err
 	}
 
 	_, err = workflows.WithTx(ctx, inv.Client, nil, func(tx *generated.Tx) (struct{}, error) {
-		return struct{}{}, createProgram(ctx, tx.Client(), org, onboarding.Compliance)
+		return struct{}{}, createProgram(ctx, tx.Client(), org, record.Compliance)
 	})
 
 	return err
 }
 
+func generateProgramName(standards []*generated.Standard, year int) string {
+	if len(standards) == 1 {
+		return fmt.Sprintf("%s Program %d", standards[0].ShortName, year)
+	}
+
+	return fmt.Sprintf("Compliance Program %d", year)
+}
+
 func createProgram(ctx context.Context, client *generated.Client, org *generated.Organization, complianceData map[string]interface{}) error {
-	standards, labels, err := resolveOnboardingStandards(ctx, client, org.ID, complianceData)
+	standards, labels, err := resolveOnboardingStandards(ctx, client, complianceData)
 	if err != nil || len(labels) == 0 {
 		return err
 	}
 
-	caller, _ := auth.CallerFromContext(ctx)
-
-	newCaller := *caller
-	newCaller.OrganizationID = org.ID
-
-	ctx = auth.WithCaller(ctx, &newCaller)
-
+	year := time.Now().Year()
+	frameworks := strings.Join(labels, ", ")
 	builder := client.Program.Create().
 		SetOwnerID(org.ID).
-		SetName(org.DisplayName + " Compliance Program").
-		SetFrameworkName(strings.Join(labels, ", "))
+		SetName(generateProgramName(standards, year)).
+		SetDescription(fmt.Sprintf("Track %s compliance activities, evidence, and audit readiness for %d.", frameworks, year)).
+		SetFrameworkName(frameworks)
 
 	if auditor, ok := complianceData["auditor_name"].(string); ok && auditor != "" {
 		builder.SetAuditor(auditor)
@@ -137,7 +148,7 @@ func getOnboardingFrameworks(complianceData map[string]interface{}) ([]string, e
 	return frameworks, nil
 }
 
-func resolveOnboardingStandards(ctx context.Context, client *generated.Client, orgID string, complianceData map[string]interface{}) ([]*generated.Standard, []string, error) {
+func resolveOnboardingStandards(ctx context.Context, client *generated.Client, complianceData map[string]interface{}) ([]*generated.Standard, []string, error) {
 	frameworks, err := getOnboardingFrameworks(complianceData)
 	if err != nil || len(frameworks) == 0 {
 		return nil, nil, err
@@ -147,10 +158,6 @@ func resolveOnboardingStandards(ctx context.Context, client *generated.Client, o
 	if !ok || caller == nil {
 		return nil, nil, auth.ErrNoAuthUser
 	}
-
-	newCaller := *caller
-	newCaller.OrganizationID = orgID
-	ctx = auth.WithCaller(ctx, &newCaller)
 
 	standards := make([]*generated.Standard, 0, len(frameworks))
 
