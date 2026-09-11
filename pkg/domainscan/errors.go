@@ -7,7 +7,6 @@ var (
 	errBrandingCDP          = errors.New("branding CDP")
 	errBrandingProbe        = errors.New("branding probe failed")
 	errBrandingProbeNoValue = errors.New("branding probe returned no value")
-	errBrandingURLScheme    = errors.New("branding requires an HTTP or HTTPS URL")
 	errBrandingNavigation   = errors.New("branding navigation failed")
 	errBrandingNoDocument   = errors.New("branding navigation did not load a document")
 	errBrandingNoWebsite    = errors.New("branding navigation did not reach a website")
