@@ -30,10 +30,10 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.20.3
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.23.3
 	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.4.3
-	github.com/aws/aws-sdk-go-v2/service/configservice v1.70.1
-	github.com/aws/aws-sdk-go-v2/service/iam v1.61.1
+	github.com/aws/aws-sdk-go-v2/service/configservice v1.73.0
+	github.com/aws/aws-sdk-go-v2/service/iam v1.63.0
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.111.0
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.78.1
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.80.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.49.0
 	github.com/brianvoe/gofakeit/v7 v7.16.0
 	github.com/cenkalti/backoff/v5 v5.0.3
