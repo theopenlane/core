@@ -814,7 +814,6 @@ type FileProjection struct {
 	ID                    string                 `json:"id,omitempty"`
 	CategoryID            string                 `json:"category_id,omitempty"`
 	CategoryName          string                 `json:"category_name,omitempty"`
-	CategoryType          string                 `json:"category_type,omitempty"`
 	CreatedAt             time.Time              `json:"created_at,omitempty"`
 	CreatedBy             string                 `json:"created_by,omitempty"`
 	DetectedContentType   string                 `json:"detected_content_type,omitempty"`

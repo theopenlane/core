@@ -480,10 +480,6 @@ func (ec *executionContext) _AssessmentUpdatePayload(ctx context.Context, sel as
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAssessmentBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentBulkDeletePayload) graphql.Marshaler {
-	return ec._AssessmentBulkDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssessmentBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -492,10 +488,6 @@ func (ec *executionContext) marshalNAssessmentBulkDeletePayload2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._AssessmentBulkDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAssessmentCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentCreatePayload) graphql.Marshaler {
-	return ec._AssessmentCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssessmentCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentCreatePayload) graphql.Marshaler {
@@ -508,10 +500,6 @@ func (ec *executionContext) marshalNAssessmentCreatePayload2ᚖgithubᚗcomᚋth
 	return ec._AssessmentCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAssessmentDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentDeletePayload) graphql.Marshaler {
-	return ec._AssessmentDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssessmentDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -522,10 +510,6 @@ func (ec *executionContext) marshalNAssessmentDeletePayload2ᚖgithubᚗcomᚋth
 	return ec._AssessmentDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNAssessmentTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentTemplateCreatePayload) graphql.Marshaler {
-	return ec._AssessmentTemplateCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNAssessmentTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentTemplateCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -534,10 +518,6 @@ func (ec *executionContext) marshalNAssessmentTemplateCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._AssessmentTemplateCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAssessmentUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentUpdatePayload) graphql.Marshaler {
-	return ec._AssessmentUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNAssessmentUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐAssessmentUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentUpdatePayload) graphql.Marshaler {

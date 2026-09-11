@@ -72,8 +72,6 @@ type File struct {
 	DetectedContentType string `json:"detected_content_type,omitempty"`
 	// the key parsed out of a multipart-form request; if we allow multiple files to be uploaded we may want our API specifications to require the use of different keys allowing us to perform easier conditional evaluation on the key and what to do with the file based on key
 	StoreKey string `json:"store_key,omitempty"`
-	// the category type of the file, if any (e.g. evidence, invoice, etc.)
-	CategoryType string `json:"category_type,omitempty"`
 	// the full URI of the file
 	URI string `json:"uri,omitempty"`
 	// the storage scheme of the file, e.g. file://, s3://, etc.
@@ -392,7 +390,7 @@ func (*File) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case file.FieldProvidedFileSize, file.FieldPersistedFileSize:
 			values[i] = new(sql.NullInt64)
-		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldUpdatedByImpersonator, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldCategoryName, file.FieldCategoryID, file.FieldName, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldCategoryType, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
+		case file.FieldID, file.FieldCreatedBy, file.FieldUpdatedBy, file.FieldUpdatedByImpersonator, file.FieldDeletedBy, file.FieldInternalNotes, file.FieldSystemInternalID, file.FieldEnvironmentName, file.FieldEnvironmentID, file.FieldScopeName, file.FieldScopeID, file.FieldCategoryName, file.FieldCategoryID, file.FieldName, file.FieldProvidedFileName, file.FieldProvidedFileExtension, file.FieldDetectedMimeType, file.FieldMd5Hash, file.FieldDetectedContentType, file.FieldStoreKey, file.FieldURI, file.FieldStorageScheme, file.FieldStorageVolume, file.FieldStoragePath, file.FieldStorageRegion, file.FieldStorageProvider:
 			values[i] = new(sql.NullString)
 		case file.FieldCreatedAt, file.FieldUpdatedAt, file.FieldDeletedAt, file.FieldLastAccessedAt:
 			values[i] = new(sql.NullTime)
@@ -599,12 +597,6 @@ func (_m *File) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field store_key", values[i])
 			} else if value.Valid {
 				_m.StoreKey = value.String
-			}
-		case file.FieldCategoryType:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field category_type", values[i])
-			} else if value.Valid {
-				_m.CategoryType = value.String
 			}
 		case file.FieldURI:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -972,9 +964,6 @@ func (_m *File) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("store_key=")
 	builder.WriteString(_m.StoreKey)
-	builder.WriteString(", ")
-	builder.WriteString("category_type=")
-	builder.WriteString(_m.CategoryType)
 	builder.WriteString(", ")
 	builder.WriteString("uri=")
 	builder.WriteString(_m.URI)

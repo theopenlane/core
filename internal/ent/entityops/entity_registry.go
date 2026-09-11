@@ -5964,7 +5964,6 @@ func init() {
 		{Name: "backup_state", Label: "BackupState", Type: "models.FileBackupState", Clearable: true},
 		{Name: "category_id", Label: "CategoryID", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "category_name", Label: "CategoryName", Type: "string", MatchKey: true, Clearable: true},
-		{Name: "category_type", Label: "CategoryType", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time", Clearable: true},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true, Clearable: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time", Clearable: true},

@@ -583,10 +583,6 @@ func (ec *executionContext) _RemediationUpdatePayload(ctx context.Context, sel a
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNRemediationBulkCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationBulkCreatePayload) graphql.Marshaler {
-	return ec._RemediationBulkCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRemediationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -595,10 +591,6 @@ func (ec *executionContext) marshalNRemediationBulkCreatePayload2ᚖgithubᚗcom
 		return graphql.Null
 	}
 	return ec._RemediationBulkCreatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRemediationBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationBulkDeletePayload) graphql.Marshaler {
-	return ec._RemediationBulkDeletePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRemediationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationBulkDeletePayload) graphql.Marshaler {
@@ -611,10 +603,6 @@ func (ec *executionContext) marshalNRemediationBulkDeletePayload2ᚖgithubᚗcom
 	return ec._RemediationBulkDeletePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRemediationBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationBulkUpdatePayload) graphql.Marshaler {
-	return ec._RemediationBulkUpdatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRemediationBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -623,10 +611,6 @@ func (ec *executionContext) marshalNRemediationBulkUpdatePayload2ᚖgithubᚗcom
 		return graphql.Null
 	}
 	return ec._RemediationBulkUpdatePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRemediationCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationCreatePayload) graphql.Marshaler {
-	return ec._RemediationCreatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRemediationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationCreatePayload) graphql.Marshaler {
@@ -639,10 +623,6 @@ func (ec *executionContext) marshalNRemediationCreatePayload2ᚖgithubᚗcomᚋt
 	return ec._RemediationCreatePayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNRemediationDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationDeletePayload) graphql.Marshaler {
-	return ec._RemediationDeletePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNRemediationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -651,10 +631,6 @@ func (ec *executionContext) marshalNRemediationDeletePayload2ᚖgithubᚗcomᚋt
 		return graphql.Null
 	}
 	return ec._RemediationDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNRemediationUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.RemediationUpdatePayload) graphql.Marshaler {
-	return ec._RemediationUpdatePayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNRemediationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐRemediationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationUpdatePayload) graphql.Marshaler {

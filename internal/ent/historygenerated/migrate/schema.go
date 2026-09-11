@@ -890,7 +890,6 @@ var (
 		{Name: "md5_hash", Type: field.TypeString, Nullable: true},
 		{Name: "detected_content_type", Type: field.TypeString},
 		{Name: "store_key", Type: field.TypeString, Nullable: true},
-		{Name: "category_type", Type: field.TypeString, Nullable: true},
 		{Name: "uri", Type: field.TypeString, Nullable: true},
 		{Name: "storage_scheme", Type: field.TypeString, Nullable: true},
 		{Name: "storage_volume", Type: field.TypeString, Nullable: true},

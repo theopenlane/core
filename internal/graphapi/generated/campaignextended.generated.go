@@ -555,10 +555,6 @@ func (ec *executionContext) _CampaignTestEmailPayload(ctx context.Context, sel a
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNCampaignCreateWithTargetsPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignCreateWithTargetsPayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignCreateWithTargetsPayload) graphql.Marshaler {
-	return ec._CampaignCreateWithTargetsPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCampaignCreateWithTargetsPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignCreateWithTargetsPayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignCreateWithTargetsPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -569,10 +565,6 @@ func (ec *executionContext) marshalNCampaignCreateWithTargetsPayload2ᚖgithub�
 	return ec._CampaignCreateWithTargetsPayload(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNCampaignLaunchPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignLaunchPayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignLaunchPayload) graphql.Marshaler {
-	return ec._CampaignLaunchPayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNCampaignLaunchPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignLaunchPayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignLaunchPayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -581,10 +573,6 @@ func (ec *executionContext) marshalNCampaignLaunchPayload2ᚖgithubᚗcomᚋtheo
 		return graphql.Null
 	}
 	return ec._CampaignLaunchPayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNCampaignTestEmailPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTestEmailPayload(ctx context.Context, sel ast.SelectionSet, v model.CampaignTestEmailPayload) graphql.Marshaler {
-	return ec._CampaignTestEmailPayload(ctx, sel, &v)
 }
 
 func (ec *executionContext) marshalNCampaignTestEmailPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐCampaignTestEmailPayload(ctx context.Context, sel ast.SelectionSet, v *model.CampaignTestEmailPayload) graphql.Marshaler {

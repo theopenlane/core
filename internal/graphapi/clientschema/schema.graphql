@@ -13842,10 +13842,6 @@ input CreateFileInput {
 	"""
 	storeKey: String
 	"""
-	the category type of the file, if any (e.g. evidence, invoice, etc.)
-	"""
-	categoryType: String
-	"""
 	the full URI of the file
 	"""
 	uri: String
@@ -28954,10 +28950,6 @@ type File implements Node {
 	"""
 	storeKey: String
 	"""
-	the category type of the file, if any (e.g. evidence, invoice, etc.)
-	"""
-	categoryType: String @deprecated(reason: "use category_status_name instead")
-	"""
 	the full URI of the file
 	"""
 	uri: String
@@ -29542,20 +29534,6 @@ input FileWhereInput {
 	storeKeyNotNil: Boolean
 	storeKeyEqualFold: String
 	storeKeyContainsFold: String
-	"""
-	category_type field predicates
-	"""
-	categoryType: String
-	categoryTypeNEQ: String
-	categoryTypeIn: [String!]
-	categoryTypeNotIn: [String!]
-	categoryTypeContains: String
-	categoryTypeHasPrefix: String
-	categoryTypeHasSuffix: String
-	categoryTypeIsNil: Boolean
-	categoryTypeNotNil: Boolean
-	categoryTypeEqualFold: String
-	categoryTypeContainsFold: String
 	"""
 	uri field predicates
 	"""
@@ -87589,11 +87567,6 @@ input UpdateFileInput {
 	"""
 	storeKey: String
 	clearStoreKey: Boolean
-	"""
-	the category type of the file, if any (e.g. evidence, invoice, etc.)
-	"""
-	categoryType: String
-	clearCategoryType: Boolean
 	"""
 	the full URI of the file
 	"""

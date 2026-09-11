@@ -190,11 +190,6 @@ func StoreKey(v string) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldStoreKey, v))
 }
 
-// CategoryType applies equality check predicate on the "category_type" field. It's identical to CategoryTypeEQ.
-func CategoryType(v string) predicate.File {
-	return predicate.File(sql.FieldEQ(FieldCategoryType, v))
-}
-
 // URI applies equality check predicate on the "uri" field. It's identical to URIEQ.
 func URI(v string) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldURI, v))
@@ -1908,81 +1903,6 @@ func StoreKeyEqualFold(v string) predicate.File {
 // StoreKeyContainsFold applies the ContainsFold predicate on the "store_key" field.
 func StoreKeyContainsFold(v string) predicate.File {
 	return predicate.File(sql.FieldContainsFold(FieldStoreKey, v))
-}
-
-// CategoryTypeEQ applies the EQ predicate on the "category_type" field.
-func CategoryTypeEQ(v string) predicate.File {
-	return predicate.File(sql.FieldEQ(FieldCategoryType, v))
-}
-
-// CategoryTypeNEQ applies the NEQ predicate on the "category_type" field.
-func CategoryTypeNEQ(v string) predicate.File {
-	return predicate.File(sql.FieldNEQ(FieldCategoryType, v))
-}
-
-// CategoryTypeIn applies the In predicate on the "category_type" field.
-func CategoryTypeIn(vs ...string) predicate.File {
-	return predicate.File(sql.FieldIn(FieldCategoryType, vs...))
-}
-
-// CategoryTypeNotIn applies the NotIn predicate on the "category_type" field.
-func CategoryTypeNotIn(vs ...string) predicate.File {
-	return predicate.File(sql.FieldNotIn(FieldCategoryType, vs...))
-}
-
-// CategoryTypeGT applies the GT predicate on the "category_type" field.
-func CategoryTypeGT(v string) predicate.File {
-	return predicate.File(sql.FieldGT(FieldCategoryType, v))
-}
-
-// CategoryTypeGTE applies the GTE predicate on the "category_type" field.
-func CategoryTypeGTE(v string) predicate.File {
-	return predicate.File(sql.FieldGTE(FieldCategoryType, v))
-}
-
-// CategoryTypeLT applies the LT predicate on the "category_type" field.
-func CategoryTypeLT(v string) predicate.File {
-	return predicate.File(sql.FieldLT(FieldCategoryType, v))
-}
-
-// CategoryTypeLTE applies the LTE predicate on the "category_type" field.
-func CategoryTypeLTE(v string) predicate.File {
-	return predicate.File(sql.FieldLTE(FieldCategoryType, v))
-}
-
-// CategoryTypeContains applies the Contains predicate on the "category_type" field.
-func CategoryTypeContains(v string) predicate.File {
-	return predicate.File(sql.FieldContains(FieldCategoryType, v))
-}
-
-// CategoryTypeHasPrefix applies the HasPrefix predicate on the "category_type" field.
-func CategoryTypeHasPrefix(v string) predicate.File {
-	return predicate.File(sql.FieldHasPrefix(FieldCategoryType, v))
-}
-
-// CategoryTypeHasSuffix applies the HasSuffix predicate on the "category_type" field.
-func CategoryTypeHasSuffix(v string) predicate.File {
-	return predicate.File(sql.FieldHasSuffix(FieldCategoryType, v))
-}
-
-// CategoryTypeIsNil applies the IsNil predicate on the "category_type" field.
-func CategoryTypeIsNil() predicate.File {
-	return predicate.File(sql.FieldIsNull(FieldCategoryType))
-}
-
-// CategoryTypeNotNil applies the NotNil predicate on the "category_type" field.
-func CategoryTypeNotNil() predicate.File {
-	return predicate.File(sql.FieldNotNull(FieldCategoryType))
-}
-
-// CategoryTypeEqualFold applies the EqualFold predicate on the "category_type" field.
-func CategoryTypeEqualFold(v string) predicate.File {
-	return predicate.File(sql.FieldEqualFold(FieldCategoryType, v))
-}
-
-// CategoryTypeContainsFold applies the ContainsFold predicate on the "category_type" field.
-func CategoryTypeContainsFold(v string) predicate.File {
-	return predicate.File(sql.FieldContainsFold(FieldCategoryType, v))
 }
 
 // URIEQ applies the EQ predicate on the "uri" field.

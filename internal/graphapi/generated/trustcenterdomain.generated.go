@@ -159,10 +159,6 @@ func (ec *executionContext) unmarshalNCreateTrustCenterDomainInput2githubᚗcom�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterDomainCreatePayload) graphql.Marshaler {
-	return ec._TrustCenterDomainCreatePayload(ctx, sel, &v)
-}
-
 func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋv2ᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDomainCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {

@@ -495,26 +495,6 @@ func (_u *FileUpdate) ClearStoreKey() *FileUpdate {
 	return _u
 }
 
-// SetCategoryType sets the "category_type" field.
-func (_u *FileUpdate) SetCategoryType(v string) *FileUpdate {
-	_u.mutation.SetCategoryType(v)
-	return _u
-}
-
-// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
-func (_u *FileUpdate) SetNillableCategoryType(v *string) *FileUpdate {
-	if v != nil {
-		_u.SetCategoryType(*v)
-	}
-	return _u
-}
-
-// ClearCategoryType clears the value of the "category_type" field.
-func (_u *FileUpdate) ClearCategoryType() *FileUpdate {
-	_u.mutation.ClearCategoryType()
-	return _u
-}
-
 // SetURI sets the "uri" field.
 func (_u *FileUpdate) SetURI(v string) *FileUpdate {
 	_u.mutation.SetURI(v)
@@ -1590,12 +1570,6 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StoreKeyCleared() {
 		_spec.ClearField(file.FieldStoreKey, field.TypeString)
-	}
-	if value, ok := _u.mutation.CategoryType(); ok {
-		_spec.SetField(file.FieldCategoryType, field.TypeString, value)
-	}
-	if _u.mutation.CategoryTypeCleared() {
-		_spec.ClearField(file.FieldCategoryType, field.TypeString)
 	}
 	if value, ok := _u.mutation.URI(); ok {
 		_spec.SetField(file.FieldURI, field.TypeString, value)
@@ -3022,26 +2996,6 @@ func (_u *FileUpdateOne) ClearStoreKey() *FileUpdateOne {
 	return _u
 }
 
-// SetCategoryType sets the "category_type" field.
-func (_u *FileUpdateOne) SetCategoryType(v string) *FileUpdateOne {
-	_u.mutation.SetCategoryType(v)
-	return _u
-}
-
-// SetNillableCategoryType sets the "category_type" field if the given value is not nil.
-func (_u *FileUpdateOne) SetNillableCategoryType(v *string) *FileUpdateOne {
-	if v != nil {
-		_u.SetCategoryType(*v)
-	}
-	return _u
-}
-
-// ClearCategoryType clears the value of the "category_type" field.
-func (_u *FileUpdateOne) ClearCategoryType() *FileUpdateOne {
-	_u.mutation.ClearCategoryType()
-	return _u
-}
-
 // SetURI sets the "uri" field.
 func (_u *FileUpdateOne) SetURI(v string) *FileUpdateOne {
 	_u.mutation.SetURI(v)
@@ -4147,12 +4101,6 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	}
 	if _u.mutation.StoreKeyCleared() {
 		_spec.ClearField(file.FieldStoreKey, field.TypeString)
-	}
-	if value, ok := _u.mutation.CategoryType(); ok {
-		_spec.SetField(file.FieldCategoryType, field.TypeString, value)
-	}
-	if _u.mutation.CategoryTypeCleared() {
-		_spec.ClearField(file.FieldCategoryType, field.TypeString)
 	}
 	if value, ok := _u.mutation.URI(); ok {
 		_spec.SetField(file.FieldURI, field.TypeString, value)
