@@ -23,7 +23,6 @@ import (
 		"{{ $.Config.Package }}/{{ $n.Package }}"
 	{{- end }}
 	"entgo.io/ent/dialect/sql"
- 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/theopenlane/core/v2/internal/ent/schemautil"
 )
 {{ template "import" $ }}
@@ -243,11 +242,7 @@ import (
 		if i.{{ $f.StructField }}Has != nil {
 			v := *i.{{ $f.StructField }}Has
 			predicates = append(predicates, func(s *sql.Selector) {
-				{{- if eq $f.Name "tags" }}
-				s.Where(schemautil.TagsHasFold(s.C({{ $col }}), v))
-				{{- else }}
-				s.Where(sqljson.ValueContains({{ $col }}, v))
-				{{- end }}
+				s.Where(schemautil.ValueContainsFold(s.C({{ $col }}), v))
 			})
 		}
 		{{- end }}
