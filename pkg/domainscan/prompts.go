@@ -30,7 +30,7 @@ Systems: the small number of distinct technical surfaces that make up the compan
 
 Customers: named customers, clients, or case study companies referenced in logos, a "trusted by" section, testimonials, or case studies.
 
-Technologies: third-party SaaS technologies or vendors the company itself relies on (e.g. analytics, CRM, hosting, payments).
+Technologies: at most 15 distinct third-party SaaS vendors the company itself relies on to run its business (e.g. analytics, CRM, hosting, payments). Canonical names only, no aliases or "X API" variants. Do NOT list the integrations or connectors the company's product offers to its customers.
 
 Social links: LinkedIn, Twitter/X, GitHub, Discord, Instagram, YouTube, and Facebook profile links found in the header, footer, or about page.
 

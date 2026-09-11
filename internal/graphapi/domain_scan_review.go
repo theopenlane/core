@@ -6,6 +6,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/v2/internal/ent/generated/scan"
 	"github.com/theopenlane/core/v2/internal/graphapi/common"
@@ -167,6 +169,20 @@ func buildDomainScanImportEnvelope(organizationID string, input model.ImportDoma
 		ScanIDs:        input.ScanIDs,
 		Vendors:        make([]cloudflare.DomainScanImportVendor, 0, len(input.Vendors)),
 		Assets:         make([]cloudflare.DomainScanImportAsset, 0, len(input.Assets)),
+	}
+
+	if input.Branding != nil {
+		envelope.Branding = &cloudflare.DomainScanImportBranding{
+			LogoURL:                  lo.FromPtr(input.Branding.LogoURL),
+			FaviconURL:               lo.FromPtr(input.Branding.FaviconURL),
+			PrimaryColor:             lo.FromPtr(input.Branding.PrimaryColor),
+			Font:                     lo.FromPtr(input.Branding.Font),
+			ForegroundColor:          lo.FromPtr(input.Branding.ForegroundColor),
+			BackgroundColor:          lo.FromPtr(input.Branding.BackgroundColor),
+			AccentColor:              lo.FromPtr(input.Branding.AccentColor),
+			SecondaryBackgroundColor: lo.FromPtr(input.Branding.SecondaryBackgroundColor),
+			SecondaryForegroundColor: lo.FromPtr(input.Branding.SecondaryForegroundColor),
+		}
 	}
 
 	for _, vendor := range input.Vendors {

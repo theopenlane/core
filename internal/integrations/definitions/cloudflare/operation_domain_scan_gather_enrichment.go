@@ -12,20 +12,23 @@ import (
 )
 
 // domainScanEnrichmentTimeout bounds how long to spend gathering company profile,
-// compliance, and DNS vendor data before finalizing the scan without it
+// branding, compliance, and DNS vendor data before finalizing the scan without it
 const domainScanEnrichmentTimeout = 5 * time.Minute
 
-// DomainScanGatherEnrichment gathers company profile, compliance, and DNS vendor data for a domain
+// DomainScanGatherEnrichment gathers company profile, branding, compliance, and DNS vendor data for a domain
 type DomainScanGatherEnrichment struct {
 	// Domain is the domain to gather enrichment for
 	Domain string `json:"domain"`
 	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
 	ForceRefresh bool `json:"forceRefresh,omitempty"`
+	// BrandDesignOnly instructs the scanning process to only extract the brand design not the entire
+	// domain scan
+	BrandDesignOnly bool `json:"brandDesignOnly,omitempty"`
 }
 
 // DomainScanGatherEnrichmentResult carries the gathered enrichment data
 type DomainScanGatherEnrichmentResult struct {
-	// Enrichment is the gathered company profile, compliance, and DNS vendor data
+	// Enrichment is the gathered company profile, branding, compliance, and DNS vendor data
 	Enrichment domainscan.Enrichment `json:"enrichment"`
 }
 
@@ -41,7 +44,7 @@ func (e DomainScanGatherEnrichment) Handle() types.OperationHandler {
 	})
 }
 
-// Run gathers company profile, compliance, and DNS vendor data for the domain
+// Run gathers company profile, branding, compliance, and DNS vendor data for the domain
 func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanGatherEnrichment) (DomainScanGatherEnrichmentResult, error) {
 	ctx = logx.WithFields(ctx, logx.LogFields{
 		"domain": cfg.Domain,
@@ -58,6 +61,26 @@ func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareCli
 		CacheTTL:  cacheTTL,
 	}
 
+	if cfg.BrandDesignOnly {
+		brandDesignCtx, cancel := context.WithTimeout(ctx, domainScanEnrichmentTimeout)
+		defer cancel()
+
+		branding, err := enrichmentCfg.GetBrandingData(brandDesignCtx, cfg.Domain)
+		if err != nil {
+			logx.FromContext(ctx).Warn().Err(err).Msg("domain scan: failed to get brand design data")
+
+			return DomainScanGatherEnrichmentResult{}, nil
+		}
+
+		if branding.IsEmpty() {
+			return DomainScanGatherEnrichmentResult{}, nil
+		}
+
+		return DomainScanGatherEnrichmentResult{
+			Enrichment: domainscan.Enrichment{Branding: branding},
+		}, nil
+	}
+
 	enrichment, enrichmentErrs := enrichmentCfg.GatherEnrichment(ctx, cfg.Domain, domainScanEnrichmentTimeout)
 	logDomainScanEnrichmentErrors(ctx, enrichmentErrs)
 
@@ -69,6 +92,10 @@ func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareCli
 func logDomainScanEnrichmentErrors(ctx context.Context, errs domainscan.EnrichmentErrors) {
 	if errs.Company != nil {
 		logx.FromContext(ctx).Warn().Err(errs.Company).Msg("domain scan: failed to get company profile")
+	}
+
+	if errs.Branding != nil {
+		logx.FromContext(ctx).Warn().Err(errs.Branding).Msg("domain scan: failed to get branding data")
 	}
 
 	if errs.Compliance != nil {
